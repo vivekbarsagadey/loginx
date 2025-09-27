@@ -1,53 +1,131 @@
-> Edited for use in IDX on 07/09/12
+# LoginX
 
-# Welcome to your Expo app 👋
+LoginX is a modern, cross-platform mobile application built with React Native and Expo. It provides a seamless and secure user authentication experience, including registration, login, and profile management.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Table of Contents
 
-## Get started
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Available Scripts](#available-scripts)
+- [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
+- [Configuration](#configuration)
+- [Contributing](#contributing)
 
-#### Android
+## Features
 
-Android previews are defined as a `workspace.onStart` hook and started as a vscode task when the workspace is opened/started.
+- **User Authentication:** Secure user registration and login functionality using Firebase Authentication.
+- **Multi-Step Registration:** A guided, multi-step registration process for a smooth user onboarding experience.
+- **Profile Management:** Users can view and manage their profile information.
+- **Settings:** A dedicated screen for application settings.
+- **Theming:** Light and dark mode support with a customizable theme.
+- **Cross-Platform:** Built with Expo, LoginX runs on Android, iOS, and the web from a single codebase.
 
-Note, if you can't find the task, either:
-- Rebuild the environment (using command palette: `IDX: Rebuild Environment`), or
-- Run `npm run android -- --tunnel` command manually run android and see the output in your terminal. The device should pick up this new command and switch to start displaying the output from it.
+## Getting Started
 
-In the output of this command/task, you'll find options to open the app in a
+Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Prerequisites
 
-You'll also find options to open the app's developer menu, reload the app, and more.
+- [Node.js](https://nodejs.org/) (v18 or newer)
+- [npm](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/)
+- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+- An account on [Firebase](https://firebase.google.com/) to set up authentication.
 
-#### Web
+### Installation
 
-Web previews will be started and managred automatically. Use the toolbar to manually refresh.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/loginx.git
+   cd loginx
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+   or
+   ```bash
+   yarn install
+   ```
 
-## Get a fresh project
+3. **Set up environment variables:**
+   Create a `.env` file in the root of the project and add your Firebase configuration:
+   ```
+   FIREBASE_API_KEY=your-api-key
+   FIREBASE_AUTH_DOMAIN=your-auth-domain
+   FIREBASE_PROJECT_ID=your-project-id
+   FIREBASE_STORAGE_BUCKET=your-storage-bucket
+   FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+   FIREBASE_APP_ID=your-app-id
+   ```
 
-When you're ready, run:
+## Available Scripts
 
-```bash
-npm run reset-project
+In the project directory, you can run the following commands:
+
+- `npm start`: Runs the app in development mode with Expo Dev Tools.
+- `npm run android`: Runs the app on a connected Android device or emulator.
+- `npm run ios`: Runs the app on the iOS simulator.
+- `npm run web`: Runs the app in a web browser.
+- `npm run lint`: Lints the code using ESLint to check for code quality and style issues.
+
+## Technologies Used
+
+- **Core:**
+  - [React Native](https://reactnative.dev/)
+  - [Expo](https://expo.dev/)
+- **Navigation:**
+  - [React Navigation](https://reactnavigation.org/)
+  - [Expo Router](https://expo.github.io/router/)
+- **Authentication:**
+  - [Firebase](https://firebase.google.com/)
+- **State Management & Data:**
+  - React Hooks
+  - [AsyncStorage](https://react-native-async-storage.github.io/async-storage/)
+- **UI/UX:**
+  - [Expo Vector Icons](https://docs.expo.dev/guides/icons/)
+  - [Expo Haptics](https://docs.expo.dev/versions/latest/sdk/haptics/)
+- **Form Handling:**
+  - [React Hook Form](https://react-hook-form.com/)
+  - [Zod](https://zod.dev/) for schema validation
+- **Tooling:**
+  - [TypeScript](https://www.typescriptlang.org/)
+  - [ESLint](https://eslint.org/)
+
+## Project Structure
+
+The project follows a standard Expo and React Native project structure:
+
+```
+.
+├── actions/         # Redux-like actions for state management
+├── app/             # Main application source code, structured with Expo Router
+│   ├── (auth)/      # Authentication-related screens (login, register, etc.)
+│   ├── (tabs)/      # Screens accessible after login (home, profile, settings)
+│   └── _layout.tsx  # Root layout of the application
+├── assets/          # Static assets like fonts and images
+├── components/      # Reusable UI components
+├── constants/       # Global constants like colors and theme settings
+├── hooks/           # Custom React hooks
+├── scripts/         # Helper scripts for the project
+└── types/           # TypeScript type definitions
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Configuration
 
-## Learn more
+The project uses a `firebase-config.ts` file to initialize Firebase. This file reads the environment variables from the `.env` file at build time. Make sure to provide all the required Firebase credentials in your `.env` file before running the application.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Contributing
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-## Join the community
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
