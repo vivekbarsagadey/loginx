@@ -7,11 +7,18 @@ export const getSettings = async (): Promise<Setting | null> => {
     return await db.getFirstAsync<Setting>('SELECT * FROM settings WHERE id = 0');
 }
 
-export const saveSettings = async (theme: Theme, notifications: boolean) => {
+export const saveSettings = async (settings: {
+    theme: Theme;
+    pushEnabled: boolean;
+    emailUpdates: boolean;
+    marketingTips: boolean;
+}) => {
     const db = await dbPromise;
     return await db.runAsync(
-        'INSERT OR REPLACE INTO settings (id, theme, notifications) VALUES (0, ?, ?)',
-        theme,
-        notifications ? 1 : 0
+        'INSERT OR REPLACE INTO settings (id, theme, pushEnabled, emailUpdates, marketingTips) VALUES (0, ?, ?, ?, ?)',
+        settings.theme,
+        settings.pushEnabled ? 1 : 0,
+        settings.emailUpdates ? 1 : 0,
+        settings.marketingTips ? 1 : 0
     );
 }

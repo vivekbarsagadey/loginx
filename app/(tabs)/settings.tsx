@@ -1,184 +1,77 @@
 
-import { StyleSheet, useColorScheme, View, TouchableOpacity, Modal, TextInput, Button, Alert, Switch } from 'react-native';
+import { StyleSheet, Switch, TouchableOpacity, View } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
+import { settingsSections } from '@/config/settings';
+import { Feather } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
-import { useState, useEffect } from 'react';
-import { getAuth, updatePassword } from 'firebase/auth';
-import { auth } from '@/firebase-config';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { useEffect, useState } from 'react';
 import { getSettings, saveSettings } from '@/actions/setting.action';
 import { Theme } from '@/types/setting';
-import { useNavigation } from '@react-navigation/native';
 
 export default function SettingsScreen() {
   const colorScheme = useColorScheme();
   const [theme, setTheme] = useState<Theme>(colorScheme as Theme);
-  const [notifications, setNotifications] = useState(false);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [isUnsaved, setIsUnsaved] = useState(false);
-  const navigation = useNavigation();
+  const [pushEnabled, setPushEnabled] = useState(false);
+  const [emailUpdates, setEmailUpdates] = useState(false);
+  const [marketingTips, setMarketingTips] = useState(false);
 
   useEffect(() => {
-    console.log('settings_view');
     getSettings().then(settings => {
-        if (settings) {
-            if (settings.theme) {
-                setTheme(settings.theme);
-            }
-            setNotifications(settings.notifications === 1);
-        }
+      if (settings) {
+        setTheme(settings.theme);
+        setPushEnabled(settings.pushEnabled === 1);
+        setEmailUpdates(settings.emailUpdates === 1);
+        setMarketingTips(settings.marketingTips === 1);
+      }
     });
   }, []);
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-      if (!isUnsaved) {
-        return;
-      }
-
-      e.preventDefault();
-
-      Alert.alert(
-        'Discard changes?',
-        'You have unsaved changes. Are you sure you want to discard them?',
-        [
-          { text: "Don't leave", style: 'cancel', onPress: () => {} },
-          {
-            text: 'Discard',
-            style: 'destructive',
-            onPress: () => navigation.dispatch(e.data.action),
-          },
-        ]
-      );
-    });
-
-    return unsubscribe;
-  }, [navigation, isUnsaved]);
-
-  const handleThemeChange = (newTheme: Theme) => {
-    setTheme(newTheme);
-    setIsUnsaved(true);
-  };
-
-  const handleNotificationsChange = (value: boolean) => {
-    setNotifications(value);
-    setIsUnsaved(true);
-  };
-
-  const handleSave = () => {
-    saveSettings(theme, notifications);
-    setIsUnsaved(false);
-    Alert.alert('Success', 'Settings saved successfully.');
-  };
-
-  const handleSignOut = () => {
-    console.log('sign_out_confirm');
-    Alert.alert(
-      "Sign Out",
-      "Are you sure you want to sign out?",
-      [
-        { text: "Cancel", style: "cancel" },
-        { text: "OK", onPress: () => auth.signOut() }
-      ]
-    );
-  };
-  
-  const handleChangePassword = async () => {
-    if (newPassword !== confirmPassword) {
-      Alert.alert("Passwords don't match");
-      return;
-    }
-    try {
-        const user = auth.currentUser;
-        if (user) {
-            await updatePassword(user, newPassword);
-            Alert.alert('Success', 'Password updated successfully.');
-            setModalVisible(false);
-            setNewPassword('');
-            setConfirmPassword('');
-        } else {
-            Alert.alert('Error', 'No user is signed in.');
-        }
-    } catch (error: any) {
-        Alert.alert('Error', error.message);
-    }
-  };
+  const handleSave = (newValues: any) => {
+    const newSettings = {
+        theme,
+        pushEnabled,
+        emailUpdates,
+        marketingTips,
+        ...newValues
+    };
+    saveSettings(newSettings);
+  }
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="h1">Settings</ThemedText>
-      
-      <ThemedText type="h2">Appearance</ThemedText>
-      <View style={styles.settingRow}>
-        <ThemedText>Theme</ThemedText>
-        <View style={styles.themeOptions}>
-          <TouchableOpacity onPress={() => handleThemeChange('light')} style={[styles.themeChip, theme === 'light' && styles.activeTheme]}>
-            <ThemedText>Light</ThemedText>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleThemeChange('dark')} style={[styles.themeChip, theme === 'dark' && styles.activeTheme]}>
-            <ThemedText>Dark</ThemedText>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleThemeChange('system')} style={[styles.themeChip, theme === 'system' && styles.activeTheme]}>
-            <ThemedText>System</ThemedText>
-          </TouchableOpacity>
+      {settingsSections.map((section) => (
+        <View key={section.title} style={styles.section}>
+          {section.title && <ThemedText type="h2">{section.title}</ThemedText>}
+          {section.items.map((item) => (
+            <TouchableOpacity key={item.title} style={styles.settingRow}>
+              <Feather name={item.icon as any} size={24} color={Colors[colorScheme ?? 'light'].text} />
+              <View style={styles.settingInfo}>
+                <ThemedText>{item.title}</ThemedText>
+                {item.subtitle && <ThemedText type="sm" style={{ color: Colors[colorScheme ?? 'light'].gray }}>{item.subtitle}</ThemedText>}
+              </View>
+              {item.type === 'toggle' && (
+                <Switch
+                  value={item.key === 'pushEnabled' ? pushEnabled : item.key === 'emailUpdates' ? emailUpdates : marketingTips}
+                  onValueChange={(value) => {
+                    if (item.key === 'pushEnabled') setPushEnabled(value);
+                    if (item.key === 'emailUpdates') setEmailUpdates(value);
+                    if (item.key === 'marketingTips') setMarketingTips(value);
+                    handleSave({ [item.key]: value });
+                  }}
+                />
+              )}
+              {item.type === 'label' && (
+                <ThemedText type="sm" style={{ color: Colors[colorScheme ?? 'light'].gray }}>{item.value}</ThemedText>
+              )}
+              {(item.type === 'link' || item.type === 'danger') && (
+                <Feather name="chevron-right" size={24} color={Colors[colorScheme ?? 'light'].gray} />
+              )}
+            </TouchableOpacity>
+          ))}
         </View>
-      </View>
-
-      <ThemedText type="h2">Notifications</ThemedText>
-      <View style={styles.settingRow}>
-        <ThemedText>Enable Notifications</ThemedText>
-        <Switch
-            onValueChange={handleNotificationsChange}
-            value={notifications}
-        />
-      </View>
-
-      {isUnsaved && (
-        <Button title="Save Changes" onPress={handleSave} />
-      )}
-
-      <ThemedText type="h2">Account</ThemedText>
-      <TouchableOpacity style={styles.settingRow} onPress={() => setModalVisible(true)}>
-        <ThemedText>Change Password</ThemedText>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.settingRow} onPress={handleSignOut}>
-        <ThemedText>Sign Out</ThemedText>
-      </TouchableOpacity>
-      
-      <ThemedText type="h2">Legal</ThemedText>
-      <TouchableOpacity style={styles.settingRow} onPress={() => Alert.alert("Terms of Service", "This would open in-app webview.")}>
-        <ThemedText>Terms</ThemedText>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.settingRow} onPress={() => Alert.alert("Privacy Policy", "This would open in-app webview.")}>
-        <ThemedText>Privacy</ThemedText>
-      </TouchableOpacity>
-      
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isModalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalView}>
-          <ThemedText type="h2">Change Password</ThemedText>
-          <TextInput
-            style={styles.input}
-            placeholder="New Password"
-            secureTextEntry
-            onChangeText={setNewPassword}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Confirm New Password"
-            secureTextEntry
-            onChangeText={setConfirmPassword}
-          />
-          <Button title="Change Password" onPress={handleChangePassword} />
-          <Button title="Cancel" onPress={() => setModalVisible(false)} />
-        </View>
-      </Modal>
+      ))}
     </ThemedView>
   );
 }
@@ -188,45 +81,16 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
+  section: {
+    marginBottom: 24,
+  },
   settingRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 12,
   },
-  themeOptions: {
-    flexDirection: 'row',
-  },
-  themeChip: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    marginHorizontal: 4,
-  },
-  activeTheme: {
-    backgroundColor: Colors.light.tint,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    width: '100%',
-    padding: 10,
+  settingInfo: {
+    flex: 1,
+    marginLeft: 16,
   },
 });
