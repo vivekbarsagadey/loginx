@@ -1,22 +1,37 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
+import { getAnalytics, isSupported, Analytics } from "firebase/analytics";
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { getFirestore } from "firebase/firestore";
 import Constants from "expo-constants";
 
-const firebaseConfig = {
+const firebaseConfig: { [key: string]: string | undefined } = {
   apiKey: Constants.expoConfig?.extra?.apiKey,
   authDomain: Constants.expoConfig?.extra?.authDomain,
   projectId: Constants.expoConfig?.extra?.projectId,
   storageBucket: Constants.expoConfig?.extra?.storageBucket,
   messagingSenderId: Constants.expoConfig?.extra?.messagingSenderId,
   appId: Constants.expoConfig?.extra?.appId,
-  measurementId: Constants.expoConfig?.extra?.measurementId
 };
 
+if (Constants.expoConfig?.extra?.measurementId) {
+  firebaseConfig.measurementId = Constants.expoConfig.extra.measurementId;
+}
+
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const auth = getAuth(app);
+
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+});
+
 const firestore = getFirestore(app);
+
+let analytics: Analytics | undefined;
+// Check if analytics is supported in the current environment
+isSupported().then((isSupported) => {
+  if (isSupported && firebaseConfig.measurementId) {
+    analytics = getAnalytics(app);
+  }
+});
 
 export { app, analytics, auth, firestore };

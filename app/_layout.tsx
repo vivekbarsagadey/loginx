@@ -22,7 +22,7 @@ function RootLayoutNav() {
     if (user && inAuthGroup) {
       router.replace('/(tabs)/index');
     } else if (!user && !inAuthGroup) {
-      router.replace('/(auth)/index');
+      router.replace('/(auth)/login');
     }
 
   }, [user, segments, router]);

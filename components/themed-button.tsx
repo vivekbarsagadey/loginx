@@ -1,26 +1,34 @@
 
-import { TouchableOpacity, StyleSheet } from 'react-native';
-import { ThemedText } from './themed-text';
-import { ThemedView } from './themed-view';
+import { TouchableOpacity, TouchableOpacityProps, Text, StyleSheet } from 'react-native';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
-export function ThemedButton({title, onPress}: {title: string, onPress: () => void}) {
+export type ThemedButtonProps = TouchableOpacityProps & {
+  title: string;
+  lightColor?: string;
+  darkColor?: string;
+};
+
+export function ThemedButton({ title, style, lightColor, darkColor, ...rest }: ThemedButtonProps) {
+  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'primary');
+
   return (
-    <TouchableOpacity onPress={onPress}>
-      <ThemedView style={styles.button}>
-        <ThemedText style={styles.buttonText}>{title}</ThemedText>
-      </ThemedView>
+    <TouchableOpacity style={[{ backgroundColor }, styles.button, style]} {...rest}>
+      <Text style={styles.text}>{title}</Text>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    padding: 10,
+    height: 50,
     borderRadius: 5,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 5,
   },
-  buttonText: {
+  text: {
+    color: '#fff',
     fontSize: 16,
+    fontWeight: 'bold',
   },
 });
