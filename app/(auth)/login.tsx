@@ -4,26 +4,42 @@ import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { auth } from '@/firebase-config';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
+import { z } from 'zod';
+
+const schema = z.object({
+  email: z.string().email('Please enter a valid email address.'),
+  password: z.string().min(1, 'Password is required.'),
+});
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const router = useRouter();
+  const [submissionError, setSubmissionError] = useState('');
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      setError('Please enter both email and password.');
-      return;
-    }
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = async (data: z.infer<typeof schema>) => {
+    setSubmissionError('');
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, data.email, data.password);
+      // The user will be redirected to the main app by the root layout observer
     } catch (error: any) {
-      setError(error.message);
+      setSubmissionError(error.message);
     }
   };
 
@@ -36,23 +52,40 @@ export default function LoginScreen() {
         Sign in to continue
       </ThemedText>
 
-      {error ? <ThemedText style={styles.error}>{error}</ThemedText> : null}
+      <Controller
+        control={control}
+        name="email"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <ThemedInput
+            placeholder="Email"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            style={styles.input}
+          />
+        )}
+      />
+      {errors.email && <ThemedText style={styles.error}>{errors.email.message}</ThemedText>}
 
-      <ThemedInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        style={styles.input}
+      <Controller
+        control={control}
+        name="password"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <ThemedInput
+            placeholder="Password"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            secureTextEntry
+            style={styles.input}
+          />
+        )}
       />
-      <ThemedInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-      />
+      {errors.password && <ThemedText style={styles.error}>{errors.password.message}</ThemedText>}
+      {submissionError ? <ThemedText style={styles.error}>{submissionError}</ThemedText> : null}
+
 
       <ThemedButton
         title="Forgot Password?"
@@ -61,7 +94,7 @@ export default function LoginScreen() {
         style={styles.linkButton}
       />
 
-      <ThemedButton title="Login" onPress={handleLogin} style={styles.button} />
+      <ThemedButton title="Login" onPress={handleSubmit(onSubmit)} style={styles.button} />
 
       <ThemedButton
         title="Don't have an account? Register"
@@ -99,7 +132,8 @@ const styles = StyleSheet.create({
   },
   error: {
     color: 'red',
+    alignSelf: 'stretch',
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: 8,
   },
 });

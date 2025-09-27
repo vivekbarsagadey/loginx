@@ -20,6 +20,7 @@ export default function RegisterStep3Screen() {
   const router = useRouter();
   const { email, password, displayName } = useLocalSearchParams();
   const [submissionError, setSubmissionError] = useState('');
+  const [loading, setLoading] = useState(false);
   const {
     control,
     handleSubmit,
@@ -30,9 +31,18 @@ export default function RegisterStep3Screen() {
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
     setSubmissionError('');
+    setLoading(true);
+
     if (!auth) {
       setSubmissionError('Firebase authentication is not configured correctly.');
+      setLoading(false);
       return;
+    }
+
+    if (!email || !password || !displayName) {
+        setSubmissionError('Missing required registration information. Please go back and fill out all fields.');
+        setLoading(false);
+        return;
     }
 
     try {
@@ -42,10 +52,12 @@ export default function RegisterStep3Screen() {
           displayName: displayName as string,
         });
         // You would typically save the age (data.age) to a database like Firestore here
-        router.push('/(auth)/register/welcome');
+        router.replace('/(tabs)/index');
       }
     } catch (error: any) {
       setSubmissionError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,7 +87,7 @@ export default function RegisterStep3Screen() {
       {errors.age && <ThemedText style={styles.error}>{errors.age.message}</ThemedText>}
       {submissionError ? <ThemedText style={styles.error}>{submissionError}</ThemedText> : null}
 
-      <ThemedButton title="Complete Registration" onPress={handleSubmit(onSubmit)} style={styles.button} />
+      <ThemedButton title={loading ? 'Completing Registration...' : 'Complete Registration'} onPress={handleSubmit(onSubmit)} disabled={loading} style={styles.button} />
       <ThemedButton title="Back" variant="secondary" onPress={() => router.back()} style={styles.backButton} />
     </ThemedView>
   );
