@@ -11,7 +11,9 @@ import { z } from 'zod';
 
 const schema = z.object({
   email: z.string().email('Please enter a valid email address.'),
-  password: z.string().min(6, 'Password must be at least 6 characters long.'),
+  password: z.string()
+    .min(5, 'Password must be at least 5 characters long.')
+    .regex(/^[a-zA-Z0-9@$]*$/, 'Password can only contain alphanumeric characters, @, and $.'),
 });
 
 export default function RegisterStep1Screen() {

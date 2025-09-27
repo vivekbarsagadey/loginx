@@ -14,7 +14,9 @@ import { z } from 'zod';
 
 const schema = z.object({
   email: z.string().email('Please enter a valid email address.'),
-  password: z.string().min(1, 'Password is required.'),
+  password: z.string()
+    .min(5, 'Password must be at least 5 characters long.')
+    .regex(/^[a-zA-Z0-9@$]*$/, 'Password can only contain alphanumeric characters, @, and $.'),
 });
 
 export default function LoginScreen() {
@@ -97,7 +99,7 @@ export default function LoginScreen() {
       <ThemedButton title="Login" onPress={handleSubmit(onSubmit)} style={styles.button} />
 
       <ThemedButton
-        title="Don't have an account? Register"
+        title="Don\'t have an account? Register"
         variant="link"
         onPress={() => router.push('/(auth)/register')}
         style={styles.linkButton}
