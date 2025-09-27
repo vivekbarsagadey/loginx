@@ -4,12 +4,12 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedButton } from '@/components/themed-button';
 import { useAuth } from '@/hooks/use-auth-provider';
 
-export default function IndexScreen() {
+export default function AuthScreen() {
   const { setUser } = useAuth();
   return (
     <ThemedView>
-      <ThemedText>Welcome!</ThemedText>
-      <ThemedButton title="Logout" onPress={() => setUser(null)} />
+      <ThemedText>Auth Screen</ThemedText>
+      <ThemedButton title="Login" onPress={() => setUser({name: 'Test User'})} />
     </ThemedView>
   )
 }
