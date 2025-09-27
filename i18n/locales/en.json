@@ -1,0 +1,24 @@
+{
+  "onb": {
+    "welcome": {
+      "title": "Welcome to {app}",
+      "body": "Sign in securely and keep your data synced."
+    },
+    "features": {
+      "title": "Stay organized, securely",
+      "secure": "Your data is protected.",
+      "sync": "Access anywhere.",
+      "fast": "Add & manage items quickly."
+    },
+    "personalize": {
+      "title": "Make it yours",
+      "theme": "Theme",
+      "language": "Language"
+    },
+    "cta": {
+      "next": "Next",
+      "skip": "Skip",
+      "start": "Get started"
+    }
+  }
+}

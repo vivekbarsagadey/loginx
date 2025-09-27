@@ -1,0 +1,24 @@
+{
+  "onb": {
+    "welcome": {
+      "title": "Bienvenido a {app}",
+      "body": "Inicia sesión de forma segura y mantén tus datos sincronizados."
+    },
+    "features": {
+      "title": "Mantente organizado y seguro",
+      "secure": "Tus datos están protegidos.",
+      "sync": "Accede desde cualquier lugar.",
+      "fast": "Añade y gestiona elementos rápidamente."
+    },
+    "personalize": {
+      "title": "Hazlo tuyo",
+      "theme": "Tema",
+      "language": "Idioma"
+    },
+    "cta": {
+      "next": "Siguiente",
+      "skip": "Saltar",
+      "start": "Empezar"
+    }
+  }
+}
