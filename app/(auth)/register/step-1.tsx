@@ -3,29 +3,35 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
+import { z } from 'zod';
+
+const schema = z.object({
+  email: z.string().email('Please enter a valid email address.'),
+  password: z.string().min(6, 'Password must be at least 6 characters long.'),
+});
 
 export default function RegisterStep1Screen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const router = useRouter();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
-  const handleContinue = () => {
-    if (!email || !password) {
-      setError('Please enter both email and password.');
-      return;
-    }
-    if (!/\S+@\S+\.\S+$/.test(email)) {
-      setError('Please enter a valid email address.');
-      return;
-    }
-    setError('');
+  const onSubmit = (data: z.infer<typeof schema>) => {
     router.push({
       pathname: '/(auth)/register/step-2',
-      params: { email, password },
+      params: { email: data.email, password: data.password },
     });
   };
 
@@ -38,24 +44,40 @@ export default function RegisterStep1Screen() {
         Start your journey with us
       </ThemedText>
 
-      {error ? <ThemedText style={styles.error}>{error}</ThemedText> : null}
+      <Controller
+        control={control}
+        name="email"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <ThemedInput
+            placeholder="Email"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            style={styles.input}
+          />
+        )}
+      />
+      {errors.email && <ThemedText style={styles.error}>{errors.email.message}</ThemedText>}
 
-      <ThemedInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        style={styles.input}
+      <Controller
+        control={control}
+        name="password"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <ThemedInput
+            placeholder="Password"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            secureTextEntry
+            style={styles.input}
+          />
+        )}
       />
-      <ThemedInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-      />
-      <ThemedButton title="Continue" onPress={handleContinue} style={styles.button} />
+      {errors.password && <ThemedText style={styles.error}>{errors.password.message}</ThemedText>}
+
+      <ThemedButton title="Continue" onPress={handleSubmit(onSubmit)} style={styles.button} />
 
       <ThemedButton
         title="Already have an account? Login"
@@ -93,7 +115,8 @@ const styles = StyleSheet.create({
   },
   error: {
     color: 'red',
+    alignSelf: 'stretch',
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: 8,
   },
 });

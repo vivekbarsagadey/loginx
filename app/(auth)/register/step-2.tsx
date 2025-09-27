@@ -3,25 +3,34 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
+import { z } from 'zod';
+
+const schema = z.object({
+  displayName: z.string().min(2, 'Please enter your name.'),
+});
 
 export default function RegisterStep2Screen() {
-  const [displayName, setDisplayName] = useState('');
-  const [error, setError] = useState('');
   const router = useRouter();
   const { email, password } = useLocalSearchParams();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      displayName: '',
+    },
+  });
 
-  const handleContinue = () => {
-    if (!displayName) {
-      setError('Please enter your name.');
-      return;
-    }
-    setError('');
+  const onSubmit = (data: z.infer<typeof schema>) => {
     router.push({
       pathname: '/(auth)/register/step-3',
-      params: { email, password, displayName },
+      params: { email, password, displayName: data.displayName },
     });
   };
 
@@ -34,17 +43,23 @@ export default function RegisterStep2Screen() {
         Tell us a bit more about yourself
       </ThemedText>
 
-      {error ? <ThemedText style={styles.error}>{error}</ThemedText> : null}
-
-      <ThemedInput
-        placeholder="Full Name"
-        value={displayName}
-        onChangeText={setDisplayName}
-        autoCapitalize="words"
-        style={styles.input}
+      <Controller
+        control={control}
+        name="displayName"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <ThemedInput
+            placeholder="Full Name"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            autoCapitalize="words"
+            style={styles.input}
+          />
+        )}
       />
+      {errors.displayName && <ThemedText style={styles.error}>{errors.displayName.message}</ThemedText>}
 
-      <ThemedButton title="Continue" onPress={handleContinue} style={styles.button} />
+      <ThemedButton title="Continue" onPress={handleSubmit(onSubmit)} style={styles.button} />
       <ThemedButton title="Back" variant="secondary" onPress={() => router.back()} style={styles.backButton} />
     </ThemedView>
   );
@@ -75,7 +90,8 @@ const styles = StyleSheet.create({
   },
   error: {
     color: 'red',
+    alignSelf: 'stretch',
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: 8,
   },
 });
