@@ -1,9 +1,9 @@
 
 export type SettingsItem =
   | { type: "link"; icon: string; title: string; subtitle?: string; href: string }
-  | { type: "toggle"; icon: string; title: string; key: "pushEnabled"|"emailUpdates"|"marketingTips" }
-  | { type: "label"; icon: string; title: string; value: string }
-  | { type: "danger"; icon: string; title: string; action: "logout" };
+  | { type: "toggle"; icon: string; title: string; subtitle?: string; key: "pushEnabled"|"emailUpdates"|"marketingTips" }
+  | { type: "label"; icon: string; title: string; subtitle?: string; value: string }
+  | { type: "danger"; icon: string; title: string; subtitle?: string; action: "logout" };
 
 export const settingsSections: { title?: string; items: SettingsItem[] }[] = [
   {
