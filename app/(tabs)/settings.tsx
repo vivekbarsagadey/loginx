@@ -2,7 +2,7 @@
 import { StyleSheet, Switch, TouchableOpacity, View, Image } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
-import { settingsSections } from '@/config/settings';
+import { settingsSections, SettingsItem } from '@/config/settings';
 import { Feather } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { getSettings, saveSettings } from '@/actions/setting.action';
 import { Theme } from '@/types/setting';
 import { auth } from '@/firebase-config';
+import { useRouter } from 'expo-router';
 
 export default function SettingsScreen() {
   const colorScheme = useColorScheme();
@@ -17,6 +18,7 @@ export default function SettingsScreen() {
   const [pushEnabled, setPushEnabled] = useState(false);
   const [emailUpdates, setEmailUpdates] = useState(false);
   const [marketingTips, setMarketingTips] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     getSettings().then(settings => {
@@ -40,6 +42,22 @@ export default function SettingsScreen() {
     saveSettings(newSettings);
   }
 
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+    } catch (error) {
+      console.error('Logout error', error);
+    }
+  };
+
+  const handlePress = (item: SettingsItem) => {
+    if (item.type === 'link' && item.href) {
+      router.push(item.href);
+    } else if (item.type === 'danger' && item.action === 'logout') {
+      handleLogout();
+    }
+  };
+
   const user = auth.currentUser;
 
   return (
@@ -49,7 +67,7 @@ export default function SettingsScreen() {
             <View>
                 <ThemedText type="h2">{user?.displayName}</ThemedText>
                 <ThemedText style={{ color: Colors[colorScheme ?? 'light'].gray }}>{user?.email}</ThemedText>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push('/profile/edit')}>
                     <ThemedText style={{ color: Colors[colorScheme ?? 'light'].tint }}>Edit profile ›</ThemedText>
                 </TouchableOpacity>
             </View>
@@ -60,10 +78,10 @@ export default function SettingsScreen() {
           {section.title && <ThemedText type="h2">{section.title}</ThemedText>}
           <View style={styles.sectionItems}>
             {section.items.map((item) => (
-                <TouchableOpacity key={item.title} style={styles.settingRow}>
-                <Feather name={item.icon as any} size={20} color={Colors[colorScheme ?? 'light'].text} />
+                <TouchableOpacity key={item.title} style={styles.settingRow} onPress={() => handlePress(item)} disabled={item.type === 'toggle' || item.type === 'label'}>
+                <Feather name={item.icon as any} size={20} color={item.type === 'danger' ? Colors[colorScheme ?? 'light'].error : Colors[colorScheme ?? 'light'].text} />
                 <View style={styles.settingInfo}>
-                    <ThemedText>{item.title}</ThemedText>
+                    <ThemedText style={{ color: item.type === 'danger' ? Colors[colorScheme ?? 'light'].error : Colors[colorScheme ?? 'light'].text }}>{item.title}</ThemedText>
                     {item.subtitle && <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light'].gray }}>{item.subtitle}</ThemedText>}
                 </View>
                 {item.type === 'toggle' && (
