@@ -1,5 +1,5 @@
 
-import { StyleSheet, Switch, TouchableOpacity, View, Image } from 'react-native';
+import { StyleSheet, Switch, TouchableOpacity, View, Image, Alert } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { settingsSections, SettingsItem } from '@/config/settings';
@@ -11,6 +11,7 @@ import { getSettings, saveSettings } from '@/actions/setting.action';
 import { Theme } from '@/types/setting';
 import { auth } from '@/firebase-config';
 import { useRouter } from 'expo-router';
+import { deleteUser } from 'firebase/auth';
 
 export default function SettingsScreen() {
   const colorScheme = useColorScheme();
@@ -47,14 +48,50 @@ export default function SettingsScreen() {
       await auth.signOut();
     } catch (error) {
       console.error('Logout error', error);
+      Alert.alert('Error', 'An error occurred while logging out.');
     }
+  };
+
+  const handleDeleteAccount = async () => {
+    Alert.alert(
+      'Delete Account',
+      'Are you sure you want to permanently delete your account? This action is irreversible.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            const user = auth.currentUser;
+            if (user) {
+              try {
+                await deleteUser(user);
+              } catch (error: any) {
+                if (error.code === 'auth/requires-recent-login') {
+                  Alert.alert(
+                    'Re-authentication Required',
+                    'Please log out and log back in before deleting your account.'
+                  );
+                } else {
+                  Alert.alert('Error', 'An error occurred while deleting your account.');
+                }
+              }
+            }
+          },
+        },
+      ]
+    );
   };
 
   const handlePress = (item: SettingsItem) => {
     if (item.type === 'link' && item.href) {
       router.push(item.href);
-    } else if (item.type === 'danger' && item.action === 'logout') {
-      handleLogout();
+    } else if (item.type === 'danger') {
+      if (item.action === 'logout') {
+        handleLogout();
+      } else if (item.action === 'deleteAccount') {
+        handleDeleteAccount();
+      }
     }
   };
 
@@ -63,7 +100,7 @@ export default function SettingsScreen() {
   return (
     <ThemedView style={styles.container}>
         <View style={styles.header}>
-            <Image source={{ uri: user?.photoURL ?? '' }} style={styles.avatar} />
+            <Image source={{ uri: user?.photoURL ?? 'https://www.gravatar.com/avatar/?d=mp' }} style={styles.avatar} />
             <View>
                 <ThemedText type="h2">{user?.displayName}</ThemedText>
                 <ThemedText style={{ color: Colors[colorScheme ?? 'light'].gray }}>{user?.email}</ThemedText>
@@ -125,6 +162,7 @@ const styles = StyleSheet.create({
     height: 64,
     borderRadius: 32,
     marginRight: 16,
+    backgroundColor: '#ccc',
   },
   section: {
     marginBottom: 24,

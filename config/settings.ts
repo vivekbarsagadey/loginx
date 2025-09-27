@@ -3,7 +3,7 @@ export type SettingsItem =
   | { type: "link"; icon: string; title: string; subtitle?: string; href: string }
   | { type: "toggle"; icon: string; title: string; subtitle?: string; key: "pushEnabled"|"emailUpdates"|"marketingTips" }
   | { type: "label"; icon: string; title: string; subtitle?: string; value: string }
-  | { type: "danger"; icon: string; title: string; subtitle?: string; action: "logout" };
+  | { type: "danger"; icon: string; title: string; subtitle?: string; action: "logout" | "deleteAccount" };
 
 export const settingsSections: { title?: string; items: SettingsItem[] }[] = [
   {
@@ -47,6 +47,9 @@ export const settingsSections: { title?: string; items: SettingsItem[] }[] = [
     ],
   },
   {
-    items: [{ type: "danger", icon: "log-out", title: "Log out", action: "logout" }],
+    items: [
+        { type: "danger", icon: "trash-2", title: "Delete Account", action: "deleteAccount" },
+        { type: "danger", icon: "log-out", title: "Log out", action: "logout" }
+    ],
   },
 ];

@@ -28,6 +28,9 @@ export default function ForgotPasswordScreen() {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      email: '',
+    },
   });
 
   const onSubmit = async (data: { email: string }) => {
@@ -37,8 +40,12 @@ export default function ForgotPasswordScreen() {
     try {
       await sendPasswordResetEmail(auth, data.email);
       setMessage('Password reset email sent. Please check your inbox.');
-    } catch (error: any) {
-      setError(error.message);
+    } catch (err: any) {
+      if (err.code === 'auth/user-not-found') {
+        setError('No user found with this email address. Please register.');
+      } else {
+        setError('An unexpected error occurred. Please try again later.');
+      }
     } finally {
       setLoading(false);
     }
@@ -52,9 +59,6 @@ export default function ForgotPasswordScreen() {
       <ThemedText type="body" style={styles.subtitle}>
         Enter your email to receive a reset link
       </ThemedText>
-
-      {message && <ThemedText style={styles.message}>{message}</ThemedText>}
-      {error && <ThemedText style={styles.error}>{error}</ThemedText>}
 
       <Controller
         control={control}
@@ -72,6 +76,8 @@ export default function ForgotPasswordScreen() {
         )}
       />
       {errors.email && <ThemedText style={styles.error}>{`${errors.email.message}`}</ThemedText>}
+      {error && <ThemedText style={styles.error}>{error}</ThemedText>}
+      {message && <ThemedText style={styles.message}>{message}</ThemedText>}
 
       <ThemedButton
         title={loading ? 'Sending...' : 'Send Reset Link'}

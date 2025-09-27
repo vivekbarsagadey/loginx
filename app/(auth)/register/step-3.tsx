@@ -6,7 +6,7 @@ import { ThemedView } from '@/components/themed-view';
 import { auth } from '@/firebase-config';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
@@ -46,13 +46,14 @@ export default function RegisterStep3Screen() {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email as string, password as string);
-      if (auth.currentUser) {
-        await updateProfile(auth.currentUser, {
+      const userCredential = await createUserWithEmailAndPassword(auth, email as string, password as string);
+      if (userCredential.user) {
+        await updateProfile(userCredential.user, {
           displayName: displayName as string,
         });
+        await sendEmailVerification(userCredential.user);
         // You would typically save the age (data.age) to a database like Firestore here
-        router.replace('/(tabs)/index');
+        router.replace('/(auth)/verify-email');
       }
     } catch (error: any) {
       setSubmissionError(error.message);
