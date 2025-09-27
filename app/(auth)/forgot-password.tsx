@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -16,10 +16,17 @@ const schema = z.object({
   email: z.string().email('Invalid email address'),
 });
 
+const getFirebaseAuthErrorMessage = (errorCode: string) => {
+  switch (errorCode) {
+    case 'auth/user-not-found':
+      return 'No user found with this email address. Please register or try a different email.';
+    default:
+      return 'An unexpected error occurred. Please try again later.';
+  }
+};
+
 export default function ForgotPasswordScreen() {
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const {
@@ -35,17 +42,16 @@ export default function ForgotPasswordScreen() {
 
   const onSubmit = async (data: { email: string }) => {
     setLoading(true);
-    setError(null);
-    setMessage(null);
     try {
       await sendPasswordResetEmail(auth, data.email);
-      setMessage('Password reset email sent. Please check your inbox.');
+      Alert.alert(
+        'Password Reset Email Sent',
+        'Please check your inbox for a link to reset your password.',
+        [{ text: 'OK', onPress: () => router.push('/(auth)/login') }]
+      );
     } catch (err: any) {
-      if (err.code === 'auth/user-not-found') {
-        setError('No user found with this email address. Please register.');
-      } else {
-        setError('An unexpected error occurred. Please try again later.');
-      }
+      const friendlyMessage = getFirebaseAuthErrorMessage(err.code);
+      Alert.alert('Error', friendlyMessage);
     } finally {
       setLoading(false);
     }
@@ -71,13 +77,11 @@ export default function ForgotPasswordScreen() {
             value={value}
             autoCapitalize="none"
             keyboardType="email-address"
+            errorMessage={errors.email?.message}
             style={styles.input}
           />
         )}
       />
-      {errors.email && <ThemedText style={styles.error}>{`${errors.email.message}`}</ThemedText>}
-      {error && <ThemedText style={styles.error}>{error}</ThemedText>}
-      {message && <ThemedText style={styles.message}>{message}</ThemedText>}
 
       <ThemedButton
         title={loading ? 'Sending...' : 'Send Reset Link'}
@@ -85,6 +89,7 @@ export default function ForgotPasswordScreen() {
         disabled={loading}
         style={styles.button}
       />
+      {loading && <ActivityIndicator style={styles.loading} />}
 
       <ThemedButton
         title="Back to Login"
@@ -120,14 +125,9 @@ const styles = StyleSheet.create({
     marginTop: 16,
     alignSelf: 'center',
   },
-  message: {
-    color: 'green',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  error: {
-    color: 'red',
-    textAlign: 'center',
-    marginBottom: 16,
+  loading: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
   },
 });

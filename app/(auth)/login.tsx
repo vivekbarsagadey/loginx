@@ -9,7 +9,7 @@ import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -19,9 +19,24 @@ const schema = z.object({
     .regex(/^[a-zA-Z0-9@$]*$/, 'Password can only contain alphanumeric characters, @, and $.'),
 });
 
+const getFirebaseAuthErrorMessage = (errorCode: string) => {
+  switch (errorCode) {
+    case 'auth/invalid-credential':
+      return 'Invalid email or password. Please try again.';
+    case 'auth/user-not-found':
+      return 'No user found with this email. Please register or try a different email.';
+    case 'auth/wrong-password':
+      return 'Incorrect password. Please try again.';
+    case 'auth/user-disabled':
+      return 'This user account has been disabled. Please contact support.';
+    default:
+      return 'An unexpected error occurred during login. Please try again.';
+  }
+};
+
 export default function LoginScreen() {
   const router = useRouter();
-  const [submissionError, setSubmissionError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const {
     control,
@@ -36,18 +51,15 @@ export default function LoginScreen() {
   });
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
-    setSubmissionError('');
+    setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, data.email, data.password);
       // The user will be redirected to the main app by the root layout observer
     } catch (error: any) {
-      if (error.code === 'auth/invalid-credential') {
-        setSubmissionError("Invalid email or password. Please try again.");
-      } else if (error.code === 'auth/user-not-found') {
-        setSubmissionError("No user found with this email address. Please register.");
-      } else {
-        setSubmissionError("An unexpected error occurred. Please try again later.");
-      }
+      const friendlyMessage = getFirebaseAuthErrorMessage(error.code);
+      Alert.alert('Login Error', friendlyMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,11 +83,11 @@ export default function LoginScreen() {
             value={value}
             keyboardType="email-address"
             autoCapitalize="none"
+            errorMessage={errors.email?.message}
             style={styles.input}
           />
         )}
       />
-      {errors.email && <ThemedText style={styles.error}>{errors.email.message}</ThemedText>}
 
       <Controller
         control={control}
@@ -87,13 +99,11 @@ export default function LoginScreen() {
             onChangeText={onChange}
             value={value}
             secureTextEntry
+            errorMessage={errors.password?.message}
             style={styles.input}
           />
         )}
       />
-      {errors.password && <ThemedText style={styles.error}>{errors.password.message}</ThemedText>}
-      {submissionError ? <ThemedText style={styles.error}>{submissionError}</ThemedText> : null}
-
 
       <ThemedButton
         title="Forgot Password?"
@@ -102,7 +112,8 @@ export default function LoginScreen() {
         style={styles.linkButton}
       />
 
-      <ThemedButton title="Login" onPress={handleSubmit(onSubmit)} style={styles.button} />
+      <ThemedButton title={loading ? 'Logging in...' : 'Login'} onPress={handleSubmit(onSubmit)} disabled={loading} style={styles.button} />
+      {loading && <ActivityIndicator style={styles.loading} />}
 
       <ThemedButton
         title="Don\'t have an account? Register"
@@ -138,10 +149,9 @@ const styles = StyleSheet.create({
     marginTop: 16,
     alignSelf: 'center',
   },
-  error: {
-    color: 'red',
-    alignSelf: 'stretch',
-    textAlign: 'center',
-    marginBottom: 8,
+  loading: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
   },
 });

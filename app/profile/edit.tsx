@@ -1,5 +1,5 @@
 
-import { View, TextInput, Button, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
+import { View, Button, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -11,19 +11,29 @@ import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { updateUserProfile } from '@/actions/user.action';
+import { ThemedInput } from '@/components/themed-input';
 
 export default function EditProfileScreen() {
   const colorScheme = useColorScheme();
   const user = auth.currentUser;
   const router = useRouter();
   const [displayName, setDisplayName] = useState(user?.displayName ?? '');
+  const [displayNameError, setDisplayNameError] = useState('');
   const [photoURL, setPhotoURL] = useState(user?.photoURL ?? '');
   const [loading, setLoading] = useState(false);
 
   const handleUpdate = async () => {
     if (!user) return;
 
+    // Validate input
+    if (!displayName.trim()) {
+      setDisplayNameError('Display name cannot be empty.');
+      return;
+    }
+
     setLoading(true);
+    setDisplayNameError('');
+
     try {
       // Update Firebase Auth profile
       await updateProfile(user, { displayName, photoURL });
@@ -34,10 +44,12 @@ export default function EditProfileScreen() {
         photoURL,
       });
 
-      router.back();
+      Alert.alert('Success', 'Your profile has been updated.', [
+        { text: 'OK', onPress: () => router.back() },
+      ]);
     } catch (error) {
       console.error("Error updating profile: ", error);
-      Alert.alert('Error', 'Failed to update profile.');
+      Alert.alert('Error', 'Failed to update profile. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -69,7 +81,7 @@ export default function EditProfileScreen() {
         setPhotoURL(downloadURL);
       } catch (error) {
         console.error("Error uploading image: ", error);
-        Alert.alert('Error', 'Failed to upload image.');
+        Alert.alert('Error', 'Failed to upload image. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -83,14 +95,18 @@ export default function EditProfileScreen() {
         <ThemedText style={{ color: Colors[colorScheme ?? 'light'].tint }}>Change Photo</ThemedText>
       </TouchableOpacity>
 
-      <View style={styles.inputContainer}>
-        <ThemedText>Name</ThemedText>
-        <TextInput
-          value={displayName}
-          onChangeText={setDisplayName}
-          style={[styles.input, { color: Colors[colorScheme ?? 'light'].text, borderColor: Colors[colorScheme ?? 'light'].gray }]}
-        />
-      </View>
+      <ThemedInput
+        label="Name"
+        value={displayName}
+        onChangeText={(text) => {
+          setDisplayName(text);
+          if (displayNameError) {
+            setDisplayNameError('');
+          }
+        }}
+        errorMessage={displayNameError}
+        containerStyle={styles.inputContainer}
+      />
 
       <Button title={loading ? 'Saving...' : 'Save'} onPress={handleUpdate} disabled={loading} />
       {loading && <ActivityIndicator style={styles.loading} />}
@@ -116,12 +132,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: 16,
-  },
-  input: {
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 8,
-    marginTop: 8,
   },
   loading: {
     position: 'absolute',

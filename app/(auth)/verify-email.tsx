@@ -3,49 +3,58 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { auth } from '@/firebase-config';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { sendEmailVerification, signOut } from 'firebase/auth';
-import { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { useState, useEffect } from 'react';
+import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
+
+const getFirebaseAuthErrorMessage = (errorCode: string) => {
+  switch (errorCode) {
+    case 'auth/too-many-requests':
+      return 'You have requested to resend the verification email too many times. Please try again later.';
+    default:
+      return 'An unexpected error occurred. Please try again.';
+  }
+};
 
 export default function VerifyEmailScreen() {
   const router = useRouter();
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
+  const { email } = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
+  const [isResending, setIsResending] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (auth.currentUser) {
+        await auth.currentUser.reload();
+        if (auth.currentUser.emailVerified) {
+          clearInterval(interval);
+          router.replace('/(tabs)');
+        }
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [router]);
 
   const handleResend = async () => {
     if (!auth.currentUser) {
-      setError('No user is currently signed in.');
+      Alert.alert('Error', 'No user is currently signed in.');
       return;
     }
-    setLoading(true);
-    setError('');
-    setMessage('');
+    setIsResending(true);
     try {
       await sendEmailVerification(auth.currentUser);
-      setMessage('A new verification email has been sent.');
+      Alert.alert('Email Sent', 'A new verification email has been sent to your inbox.');
     } catch (err: any) {
-      setError(err.message);
+      const friendlyMessage = getFirebaseAuthErrorMessage(err.code);
+      Alert.alert('Error', friendlyMessage);
     } finally {
-      setLoading(false);
+      setIsResending(false);
     }
   };
 
-  const handleContinue = async () => {
-    if (!auth.currentUser) {
-      router.replace('/(auth)/login');
-      return;
-    }
-    await auth.currentUser.reload();
-    if (auth.currentUser.emailVerified) {
-      router.replace('/(tabs)');
-    } else {
-      setError('Please verify your email before continuing.');
-    }
-  };
-
-  const handleLogout = async () => {
+  const handleLoginRedirect = async () => {
     await signOut(auth);
     router.replace('/(auth)/login');
   };
@@ -56,21 +65,25 @@ export default function VerifyEmailScreen() {
         Verify Your Email
       </ThemedText>
       <ThemedText style={styles.subtitle}>
-        A verification email has been sent to {auth.currentUser?.email}. Please check your inbox and follow the instructions to verify your account.
+        We've sent a verification link to your email address:
+      </ThemedText>
+      <ThemedText type="h2" style={styles.email}>
+        {email}
+      </ThemedText>
+      <ThemedText style={styles.subtitle}>
+        Please check your inbox and follow the instructions to verify your account. This window will automatically update once you have been verified.
       </ThemedText>
 
-      {message ? <ThemedText style={styles.message}>{message}</ThemedText> : null}
-      {error ? <ThemedText style={styles.error}>{error}</ThemedText> : null}
+      {loading && <ActivityIndicator style={styles.loading} />}
 
-      <ThemedButton title="Continue" onPress={handleContinue} style={styles.button} />
       <ThemedButton
-        title={loading ? 'Sending...' : 'Resend Verification Email'}
+        title={isResending ? 'Sending...' : 'Resend Verification Email'}
         onPress={handleResend}
-        disabled={loading}
+        disabled={isResending}
         variant="secondary"
         style={styles.button}
       />
-      <ThemedButton title="Logout" onPress={handleLogout} variant="link" style={styles.linkButton} />
+      <ThemedButton title="Go to Login" onPress={handleLoginRedirect} variant="link" style={styles.linkButton} />
     </ThemedView>
   );
 }
@@ -80,30 +93,28 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: 16,
   },
   subtitle: {
     textAlign: 'center',
-    marginBottom: 32,
+    marginBottom: 16,
+  },
+  email: {
+    textAlign: 'center',
+    marginBottom: 16,
+    fontWeight: 'bold',
   },
   button: {
     marginTop: 16,
   },
   linkButton: {
     marginTop: 16,
-    alignSelf: 'center',
   },
-  message: {
-    color: 'green',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  error: {
-    color: 'red',
-    textAlign: 'center',
-    marginBottom: 16,
+  loading: {
+    marginTop: 16,
   },
 });
