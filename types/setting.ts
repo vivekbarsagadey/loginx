@@ -1,10 +1,11 @@
 
-export type Theme = 'light' | 'dark' | 'system';
-
-export interface Setting {
-  id: number;
-  theme: Theme;
-  pushEnabled: number;
-  emailUpdates: number;
-  marketingTips: number;
+export interface UserProfile {
+    displayName: string;
+    email: string;
+    age: number;
+    photoURL: string;
+    pushEnabled: boolean;
+    emailUpdates: boolean;
+    marketingTips: boolean;
+    deleted?: boolean;
 }

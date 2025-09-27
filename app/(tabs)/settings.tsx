@@ -7,41 +7,51 @@ import { Feather } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useEffect, useState } from 'react';
-import { getSettings, saveSettings } from '@/actions/setting.action';
-import { Theme } from '@/types/setting';
 import { auth } from '@/firebase-config';
 import { useRouter } from 'expo-router';
 import { deleteUser } from 'firebase/auth';
+import { getUserProfile, deleteUserAccount } from '@/actions/user.action';
+import { updateSetting } from '@/actions/setting.action';
 
 export default function SettingsScreen() {
   const colorScheme = useColorScheme();
-  const [theme, setTheme] = useState<Theme>(colorScheme as Theme);
   const [pushEnabled, setPushEnabled] = useState(false);
   const [emailUpdates, setEmailUpdates] = useState(false);
   const [marketingTips, setMarketingTips] = useState(false);
   const router = useRouter();
+  const user = auth.currentUser;
 
   useEffect(() => {
-    getSettings().then(settings => {
-      if (settings) {
-        setTheme(settings.theme);
-        setPushEnabled(settings.pushEnabled === 1);
-        setEmailUpdates(settings.emailUpdates === 1);
-        setMarketingTips(settings.marketingTips === 1);
+    const fetchSettings = async () => {
+      if (user) {
+        try {
+          const userProfile = await getUserProfile(user.uid);
+          if (userProfile) {
+            setPushEnabled(userProfile.pushEnabled);
+            setEmailUpdates(userProfile.emailUpdates);
+            setMarketingTips(userProfile.marketingTips);
+          }
+        } catch (error) {
+          Alert.alert('Error', 'Failed to fetch user settings.');
+        }
       }
-    });
-  }, []);
-
-  const handleSave = (newValues: any) => {
-    const newSettings = {
-        theme,
-        pushEnabled,
-        emailUpdates,
-        marketingTips,
-        ...newValues
     };
-    saveSettings(newSettings);
-  }
+    fetchSettings();
+  }, [user]);
+
+  const handleToggle = async (key: string, value: boolean) => {
+    if (user) {
+      try {
+        await updateSetting(user.uid, key, value);
+
+        if (key === 'pushEnabled') setPushEnabled(value);
+        if (key === 'emailUpdates') setEmailUpdates(value);
+        if (key === 'marketingTips') setMarketingTips(value);
+      } catch (error) {
+        Alert.alert('Error', 'Failed to update setting.');
+      }
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -62,9 +72,12 @@ export default function SettingsScreen() {
           text: 'Delete',
           style: 'destructive',
           onPress: async () => {
-            const user = auth.currentUser;
             if (user) {
               try {
+                // Soft delete the user's document from Firestore
+                await deleteUserAccount(user.uid);
+
+                // Then, delete the user from Firebase Auth
                 await deleteUser(user);
               } catch (error: any) {
                 if (error.code === 'auth/requires-recent-login') {
@@ -73,6 +86,7 @@ export default function SettingsScreen() {
                     'Please log out and log back in before deleting your account.'
                   );
                 } else {
+                  console.error("Error deleting account: ", error);
                   Alert.alert('Error', 'An error occurred while deleting your account.');
                 }
               }
@@ -94,8 +108,6 @@ export default function SettingsScreen() {
       }
     }
   };
-
-  const user = auth.currentUser;
 
   return (
     <ThemedView style={styles.container}>
@@ -124,12 +136,7 @@ export default function SettingsScreen() {
                 {item.type === 'toggle' && (
                     <Switch
                     value={item.key === 'pushEnabled' ? pushEnabled : item.key === 'emailUpdates' ? emailUpdates : marketingTips}
-                    onValueChange={(value) => {
-                        if (item.key === 'pushEnabled') setPushEnabled(value);
-                        if (item.key === 'emailUpdates') setEmailUpdates(value);
-                        if (item.key === 'marketingTips') setMarketingTips(value);
-                        handleSave({ [item.key]: value });
-                    }}
+                    onValueChange={(value) => handleToggle(item.key, value)}
                     />
                 )}
                 {item.type === 'label' && (

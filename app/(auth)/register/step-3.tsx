@@ -11,6 +11,8 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
 import { z } from 'zod';
+import { createUserProfile } from '@/actions/user.action';
+import { UserProfile } from '@/types/setting';
 
 const schema = z.object({
   age: z.coerce.number().min(13, 'You must be at least 13 years old.'),
@@ -34,7 +36,7 @@ export default function RegisterStep3Screen() {
     setLoading(true);
 
     if (!auth) {
-      setSubmissionError('Firebase authentication is not configured correctly.');
+      setSubmissionError('Firebase is not configured correctly.');
       setLoading(false);
       return;
     }
@@ -47,12 +49,27 @@ export default function RegisterStep3Screen() {
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email as string, password as string);
-      if (userCredential.user) {
-        await updateProfile(userCredential.user, {
+      const user = userCredential.user;
+
+      if (user) {
+        await updateProfile(user, {
           displayName: displayName as string,
         });
-        await sendEmailVerification(userCredential.user);
-        // You would typically save the age (data.age) to a database like Firestore here
+
+        // Save user data to Firestore
+        const userProfile: UserProfile = {
+            displayName: displayName as string,
+            email: email as string,
+            age: data.age,
+            photoURL: '',
+            pushEnabled: true,
+            emailUpdates: true,
+            marketingTips: true,
+        };
+        await createUserProfile(user.uid, userProfile);
+
+        await sendEmailVerification(user);
+
         router.replace('/(auth)/verify-email');
       }
     } catch (error: any) {
