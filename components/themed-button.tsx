@@ -8,8 +8,7 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { Colors } from '@/constants/theme';
+import { useThemeColor } from '@/hooks/use-theme-color';
 
 export type ThemedButtonProps = TouchableOpacityProps & {
   title: string;
@@ -27,8 +26,6 @@ export function ThemedButton({
 }: ThemedButtonProps) {
   const primaryColor = useThemeColor({}, 'primary');
   const onPrimaryColor = useThemeColor({}, 'on-primary');
-  const textColor = useThemeColor({}, 'text');
-  const borderColor = useThemeColor({}, 'border');
 
   const buttonStyles: { [key: string]: ViewStyle } = {
     primary: {

@@ -5,7 +5,7 @@ import { ThemedText } from '@/components/themed-text';
 import { settingsSections, SettingsItem } from '@/config/settings';
 import { Feather } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useEffect, useState } from 'react';
 import { auth } from '@/firebase-config';
 import { useRouter } from 'expo-router';
@@ -31,7 +31,7 @@ export default function SettingsScreen() {
             setEmailUpdates(userProfile.emailUpdates);
             setMarketingTips(userProfile.marketingTips);
           }
-        } catch (error) {
+        } catch {
           Alert.alert('Error', 'Failed to fetch user settings.');
         }
       }
@@ -47,7 +47,7 @@ export default function SettingsScreen() {
         if (key === 'pushEnabled') setPushEnabled(value);
         if (key === 'emailUpdates') setEmailUpdates(value);
         if (key === 'marketingTips') setMarketingTips(value);
-      } catch (error) {
+      } catch {
         Alert.alert('Error', 'Failed to update setting.');
       }
     }

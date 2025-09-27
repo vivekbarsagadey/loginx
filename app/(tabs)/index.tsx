@@ -5,7 +5,7 @@ import { ThemedText } from '@/components/themed-text';
 import { useAuth } from '@/hooks/use-auth-provider';
 import { useEffect, useState } from 'react';
 import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { getUserProfile } from '@/actions/user.action';
 import { UserProfile } from '@/types/setting';
 

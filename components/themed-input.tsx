@@ -7,10 +7,8 @@ import {
   Text,
   StyleSheet,
   ViewStyle,
-  TextStyle,
 } from 'react-native';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { Colors } from '@/constants/theme';
+import { useThemeColor } from '@/hooks/use-theme-color';
 
 export type ThemedInputProps = TextInputProps & {
   label?: string;

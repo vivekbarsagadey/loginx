@@ -6,7 +6,7 @@ import { auth } from '@/firebase-config';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { sendEmailVerification, signOut } from 'firebase/auth';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, Alert } from 'react-native';
 
 const getFirebaseAuthErrorMessage = (errorCode: string) => {
   switch (errorCode) {
@@ -20,7 +20,6 @@ const getFirebaseAuthErrorMessage = (errorCode: string) => {
 export default function VerifyEmailScreen() {
   const router = useRouter();
   const { email } = useLocalSearchParams();
-  const [loading, setLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
 
   useEffect(() => {
@@ -65,7 +64,7 @@ export default function VerifyEmailScreen() {
         Verify Your Email
       </ThemedText>
       <ThemedText style={styles.subtitle}>
-        We've sent a verification link to your email address:
+        We&apos;ve sent a verification link to your email address:
       </ThemedText>
       <ThemedText type="h2" style={styles.email}>
         {email}
@@ -73,8 +72,6 @@ export default function VerifyEmailScreen() {
       <ThemedText style={styles.subtitle}>
         Please check your inbox and follow the instructions to verify your account. This window will automatically update once you have been verified.
       </ThemedText>
-
-      {loading && <ActivityIndicator style={styles.loading} />}
 
       <ThemedButton
         title={isResending ? 'Sending...' : 'Resend Verification Email'}

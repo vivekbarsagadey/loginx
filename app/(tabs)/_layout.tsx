@@ -4,7 +4,7 @@ import React from 'react';
 import { ThemedButton } from '@/components/themed-button';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { auth } from '@/firebase-config';
 
 const HeaderRight = () => {

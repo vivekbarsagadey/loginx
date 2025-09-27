@@ -1,8 +1,8 @@
 
-import { View, Button, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
+import { Button, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/Colors';
 import { auth } from '@/firebase-config';
 import { useState } from 'react';

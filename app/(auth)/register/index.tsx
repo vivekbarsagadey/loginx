@@ -102,7 +102,7 @@ export default function RegisterScreen() {
 
   useEffect(() => {
     router.setParams({ title: STEPS[currentStep].title });
-  }, [currentStep]);
+  }, [currentStep, router]);
 
   return (
     <FormProvider {...methods}>

@@ -9,7 +9,7 @@ export type ThemedTextInputProps = TextInputProps & {
 
 export function ThemedTextInput({ style, lightColor, darkColor, ...rest }: ThemedTextInputProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background';
+  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
 
   return <TextInput style={[{ color, backgroundColor }, styles.input, style]} {...rest} />;
 }
