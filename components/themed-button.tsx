@@ -13,7 +13,7 @@ import { Colors } from '@/constants/theme';
 
 export type ThemedButtonProps = TouchableOpacityProps & {
   title: string;
-  variant?: 'primary' | 'secondary' | 'tertiary';
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'link';
   loading?: boolean;
 };
 
@@ -44,6 +44,11 @@ export function ThemedButton({
     tertiary: {
       backgroundColor: 'transparent',
     },
+    link: {
+      backgroundColor: 'transparent',
+      height: 'auto',
+      paddingHorizontal: 0,
+    },
   };
 
   const textStyles: { [key: string]: TextStyle } = {
@@ -55,6 +60,10 @@ export function ThemedButton({
     },
     tertiary: {
       color: primaryColor,
+    },
+    link: {
+      color: primaryColor,
+      textDecorationLine: 'underline',
     },
   };
 

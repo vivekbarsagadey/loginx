@@ -1,10 +1,11 @@
-
 import { initializeApp } from "firebase/app";
 import { getAnalytics, isSupported, Analytics } from "firebase/analytics";
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth/react-native';
+// @ts-ignore - This is the correct import path, but TypeScript is not resolving the types correctly.
+import { initializeAuth, getReactNativePersistence, indexedDBLocalPersistence } from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { getFirestore } from "firebase/firestore";
 import Constants from "expo-constants";
+import { Platform } from 'react-native';
 
 const firebaseConfig: { [key: string]: string | undefined } = {
   apiKey: Constants.expoConfig?.extra?.apiKey,
@@ -22,7 +23,7 @@ if (Constants.expoConfig?.extra?.measurementId) {
 const app = initializeApp(firebaseConfig);
 
 const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+  persistence: Platform.OS === 'web' ? indexedDBLocalPersistence : getReactNativePersistence(ReactNativeAsyncStorage)
 });
 
 const firestore = getFirestore(app);
