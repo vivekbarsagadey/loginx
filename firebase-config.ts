@@ -1,31 +1,53 @@
+// firebase-config.ts
+import Constants from "expo-constants";
+import { getApp, getApps, initializeApp } from "firebase/app";
+import {
+  browserLocalPersistence,
+  getAuth,
+  initializeAuth,
+  inMemoryPersistence,
+  setPersistence,
+  type Auth,
+} from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { Platform } from "react-native";
 
-import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
-import { initializeAuth, Auth } from "firebase/auth";
-import { getReactNativePersistence } from 'firebase/auth/react-native';
-import { getFirestore, Firestore } from "firebase/firestore";
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+// ---- config from app.json/app.config.ts -> extra ----
+const extra =
+  (Constants.expoConfig?.extra as Record<string, string> | undefined) ??
+  (Constants.manifest?.extra as Record<string, string> | undefined);
 
-// Directly configured Firebase credentials
 const firebaseConfig = {
-    apiKey: "AIzaSyAGR1vYM4qWGQNok2grOaLyyvHYq8xcxc0",
-    authDomain: "loginx-e289b.firebaseapp.com",
-    projectId: "loginx-e289b",
-    storageBucket: "loginx-e289b.firebasestorage.app",
-    messagingSenderId: "26103201207",
-    appId: "1:26103201207:web:d052568449b1bc63b53c32"
+  apiKey: extra?.apiKey,
+  authDomain: extra?.authDomain,
+  projectId: extra?.projectId,
+  storageBucket: extra?.storageBucket,
+  messagingSenderId: extra?.messagingSenderId,
+  appId: extra?.appId,
 };
 
-let app: FirebaseApp;
-if (!getApps().length) {
-  app = initializeApp(firebaseConfig);
+// ---- initialize (reuse if already created) ----
+export const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+
+// ---- Auth ----
+let auth: Auth;
+
+if (Platform.OS === "web") {
+  // Web: keep users signed in (local persistence)
+  auth = getAuth(app);
+  // Optional: use session-only persistence instead with browserSessionPersistence
+  setPersistence(auth, browserLocalPersistence).catch(() => {});
 } else {
-  app = getApp();
+  // React Native: explicit in-memory persistence (no disk, no AsyncStorage)
+  try {
+    auth = initializeAuth(app, {
+      persistence: inMemoryPersistence,
+    });
+  } catch {
+    // guard for Fast Refresh / already-initialized
+    auth = getAuth(app);
+  }
 }
 
-const auth: Auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage)
-});
-
-const firestore: Firestore = getFirestore(app);
-
-export { app, auth, firestore };
+export { auth };
+export const firestore = getFirestore(app);
