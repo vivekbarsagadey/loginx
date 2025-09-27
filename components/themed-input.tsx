@@ -28,7 +28,7 @@ export function ThemedInput({
   ...rest
 }: ThemedInputProps) {
   const textColor = useThemeColor({}, 'text');
-  const mutedColor = useThemeColor({}, 'text-muted';
+  const mutedColor = useThemeColor({}, 'text-muted');
   const errorColor = useThemeColor({}, 'error');
   const borderColor = useThemeColor({}, 'border');
   const primaryColor = useThemeColor({}, 'primary');
