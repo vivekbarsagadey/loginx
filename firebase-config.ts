@@ -1,39 +1,51 @@
-import { initializeApp } from "firebase/app";
-import { getAnalytics, isSupported, Analytics } from "firebase/analytics";
-// @ts-ignore - This is the correct import path, but TypeScript is not resolving the types correctly.
-import { initializeAuth, getReactNativePersistence, indexedDBLocalPersistence } from 'firebase/auth';
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import Constants from "expo-constants";
-import { Platform } from 'react-native';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 
-const firebaseConfig: { [key: string]: string | undefined } = {
-  apiKey: Constants.expoConfig?.extra?.apiKey,
-  authDomain: Constants.expoConfig?.extra?.authDomain,
-  projectId: Constants.expoConfig?.extra?.projectId,
-  storageBucket: Constants.expoConfig?.extra?.storageBucket,
-  messagingSenderId: Constants.expoConfig?.extra?.messagingSenderId,
-  appId: Constants.expoConfig?.extra?.appId,
+const firebaseConfig = {
+  apiKey: Constants.expoConfig.extra.apiKey,
+  authDomain: Constants.expoConfig.extra.authDomain,
+  projectId: Constants.expoConfig.extra.projectId,
+  storageBucket: Constants.expoConfig.extra.storageBucket,
+  messagingSenderId: Constants.expoConfig.extra.messagingSenderId,
+  appId: Constants.expoConfig.extra.appId,
 };
 
-if (Constants.expoConfig?.extra?.measurementId) {
-  firebaseConfig.measurementId = Constants.expoConfig.extra.measurementId;
+console.log("--- FIRING UP FIREBASE --- START");
+console.log("1. [firebase-config.ts] Configuration object being passed to initializeApp:", JSON.stringify(firebaseConfig, null, 2));
+
+let app;
+if (!getApps().length) {
+  try {
+    app = initializeApp(firebaseConfig);
+    console.log("2. [firebase-config.ts] Firebase app initialized successfully:", app.name);
+  } catch (e) {
+    console.error("2. [firebase-config.ts] FATAL ERROR during initializeApp:", e);
+  }
+} else {
+  app = getApp();
+  console.log("2. [firebase-config.ts] Existing Firebase app retrieved:", app.name);
 }
 
-const app = initializeApp(firebaseConfig);
-
-const auth = initializeAuth(app, {
-  persistence: Platform.OS === 'web' ? indexedDBLocalPersistence : getReactNativePersistence(ReactNativeAsyncStorage)
-});
-
-const firestore = getFirestore(app);
-
-let analytics: Analytics | undefined;
-// Check if analytics is supported in the current environment
-isSupported().then((isSupported) => {
-  if (isSupported && firebaseConfig.measurementId) {
-    analytics = getAnalytics(app);
+let auth;
+if (app) {
+  try {
+    auth = initializeAuth(app, {
+      persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+    });
+    console.log("3. [firebase-config.ts] Firebase auth initialized successfully.");
+  } catch(e) {
+    console.error("3. [firebase-config.ts] FATAL ERROR during initializeAuth:", e);
   }
-});
+} else {
+  console.error("3. [firebase-config.ts] Firebase app object is missing, cannot initialize auth.");
+}
 
-export { app, analytics, auth, firestore };
+console.log("--- FIRING UP FIREBASE --- END");
+
+const firestore = app ? getFirestore(app) : null;
+
+export { app, auth, firestore };

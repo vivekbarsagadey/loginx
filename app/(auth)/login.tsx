@@ -1,13 +1,13 @@
 
-import { useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { ThemedView } from '@/components/themed-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedInput } from '@/components/themed-input';
 import { ThemedButton } from '@/components/themed-button';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { ThemedInput } from '@/components/themed-input';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
 import { auth } from '@/firebase-config';
 import { useRouter } from 'expo-router';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useState } from 'react';
+import { StyleSheet } from 'react-native';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
