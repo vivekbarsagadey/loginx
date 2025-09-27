@@ -1,4 +1,5 @@
 
+import { StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedButton } from '@/components/themed-button';
@@ -8,9 +9,24 @@ export default function IndexScreen() {
   const { user, signOut } = useAuth();
 
   return (
-    <ThemedView>
-      <ThemedText>Welcome, {user?.email}</ThemedText>
-      <ThemedButton title="Logout" onPress={signOut} />
+    <ThemedView style={styles.container}>
+      <ThemedText type="h1">Welcome</ThemedText>
+      <ThemedText type="body" style={styles.email}>{user?.email}</ThemedText>
+      <ThemedButton title="Logout" onPress={signOut} style={styles.button} />
     </ThemedView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    justifyContent: 'center',
+  },
+  email: {
+    marginVertical: 16,
+  },
+  button: {
+    marginTop: 32,
+  },
+});

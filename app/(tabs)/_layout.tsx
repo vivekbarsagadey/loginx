@@ -1,10 +1,23 @@
 
 import { Tabs } from 'expo-router';
 import React from 'react';
-
+import { ThemedButton } from '@/components/themed-button';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { auth } from '@/firebase-config';
+
+const HeaderRight = () => {
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+    } catch (error) {
+      console.error('Logout error', error);
+    }
+  };
+
+  return <ThemedButton title="Logout" onPress={handleLogout} />;
+};
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -13,8 +26,9 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
+        headerShown: true,
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
@@ -22,6 +36,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
           ),
+          headerRight: () => <HeaderRight />,
         }}
       />
       <Tabs.Screen
@@ -31,6 +46,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
           ),
+          headerRight: () => <HeaderRight />,
         }}
       />
       <Tabs.Screen
@@ -40,8 +56,10 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'settings' : 'settings-outline'} color={color} />
           ),
+          headerRight: () => <HeaderRight />,
         }}
       />
     </Tabs>
   );
 }
+

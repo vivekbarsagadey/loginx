@@ -1,53 +1,58 @@
+
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * This file contains the color palette for the app, supporting light and dark modes.
+ * It's based on the new design system specification.
  */
-
-import { Platform } from 'react-native';
-
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    // Design System Tokens
+    bg: '#FFFFFF',
+    'bg-elevated': '#FFFFFF',
+    surface: '#FFFFFF',
+    'surface-variant': '#F6F7FA',
+    text: '#111827',
+    'text-muted': '#6B7280',
+    'inverse-text': '#F9FAFB',
+    primary: '#2563EB',
+    'on-primary': '#FFFFFF',
+    border: '#E5E7EB',
+    'border-strong': '#9CA3AF', // A slightly darker border
+    success: '#16A34A',
+    warning: '#D97706',
+    error: '#DC2626',
+    info: '#2563EB', // Using primary for info
+
+    // Legacy/Compatibility Aliases
+    background: '#FFFFFF',
+    tint: '#2563EB',
+    icon: '#6B7280',
+    tabIconDefault: '#6B7280',
+    tabIconSelected: '#2563EB',
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    // Design System Tokens
+    bg: '#0B1220',
+    'bg-elevated': '#111827',
+    surface: '#111827',
+    'surface-variant': '#0F172A',
+    text: '#F9FAFB',
+    'text-muted': '#94A3B8',
+    'inverse-text': '#111827',
+    primary: '#60A5FA',
+    'on-primary': '#0B1220',
+    border: '#1F2937',
+    'border-strong': '#4B5563', // A slightly darker border
+    success: '#34D399',
+    warning: '#FBBF24',
+    error: '#F87171',
+    info: '#60A5FA', // Using primary for info
+
+    // Legacy/Compatibility Aliases
+    background: '#0B1220',
+    tint: '#60A5FA',
+    icon: '#94A3B8',
+    tabIconDefault: '#94A3B8',
+    tabIconSelected: '#60A5FA',
   },
 };
-
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
-  },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-  },
-});

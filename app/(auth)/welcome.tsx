@@ -1,16 +1,33 @@
 
 import { StyleSheet } from 'react-native';
-import { Link } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
+import { ThemedButton } from '@/components/themed-button';
+import { useRouter } from 'expo-router';
 
 export default function WelcomeScreen() {
+  const router = useRouter();
+
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="title">MyApp</ThemedText>
-      <ThemedText type="subtitle">Your awesome app tagline</ThemedText>
-      <Link href="/(auth)/login" style={styles.link}>Login</Link>
-      <Link href="/(auth)/register" style={styles.link}>Create Account</Link>
+      <ThemedText type="h1" style={styles.title}>
+        MyApp
+      </ThemedText>
+      <ThemedText type="body" style={styles.subtitle}>
+        Your awesome app tagline
+      </ThemedText>
+
+      <ThemedButton
+        title="Login"
+        onPress={() => router.push('/(auth)/login')}
+        style={styles.button}
+      />
+      <ThemedButton
+        title="Create Account"
+        onPress={() => router.push('/(auth)/register')}
+        style={styles.button}
+        variant="secondary"
+      />
     </ThemedView>
   );
 }
@@ -18,17 +35,18 @@ export default function WelcomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    padding: 16,
     justifyContent: 'center',
-    padding: 20,
   },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
+  title: {
     textAlign: 'center',
-    width: '80%',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
+    marginBottom: 8,
+  },
+  subtitle: {
+    textAlign: 'center',
+    marginBottom: 32,
+  },
+  button: {
+    marginVertical: 8,
   },
 });
