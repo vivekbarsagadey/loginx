@@ -8,6 +8,7 @@ import { getAuth, updatePassword } from 'firebase/auth';
 import { auth } from '@/firebase-config';
 import { getSettings, saveSettings } from '@/actions/setting.action';
 import { Theme } from '@/types/setting';
+import { useNavigation } from '@react-navigation/native';
 
 export default function SettingsScreen() {
   const colorScheme = useColorScheme();
@@ -16,6 +17,8 @@ export default function SettingsScreen() {
   const [isModalVisible, setModalVisible] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isUnsaved, setIsUnsaved] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
     console.log('settings_view');
@@ -29,15 +32,45 @@ export default function SettingsScreen() {
     });
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+      if (!isUnsaved) {
+        return;
+      }
+
+      e.preventDefault();
+
+      Alert.alert(
+        'Discard changes?',
+        'You have unsaved changes. Are you sure you want to discard them?',
+        [
+          { text: "Don't leave", style: 'cancel', onPress: () => {} },
+          {
+            text: 'Discard',
+            style: 'destructive',
+            onPress: () => navigation.dispatch(e.data.action),
+          },
+        ]
+      );
+    });
+
+    return unsubscribe;
+  }, [navigation, isUnsaved]);
+
   const handleThemeChange = (newTheme: Theme) => {
     setTheme(newTheme);
-    saveSettings(newTheme, notifications);
-    console.log(`theme_changed: ${newTheme}`);
+    setIsUnsaved(true);
   };
 
   const handleNotificationsChange = (value: boolean) => {
     setNotifications(value);
-    saveSettings(theme, value);
+    setIsUnsaved(true);
+  };
+
+  const handleSave = () => {
+    saveSettings(theme, notifications);
+    setIsUnsaved(false);
+    Alert.alert('Success', 'Settings saved successfully.');
   };
 
   const handleSignOut = () => {
@@ -101,6 +134,10 @@ export default function SettingsScreen() {
             value={notifications}
         />
       </View>
+
+      {isUnsaved && (
+        <Button title="Save Changes" onPress={handleSave} />
+      )}
 
       <ThemedText type="h2">Account</ThemedText>
       <TouchableOpacity style={styles.settingRow} onPress={() => setModalVisible(true)}>

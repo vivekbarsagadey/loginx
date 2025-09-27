@@ -41,7 +41,13 @@ export default function LoginScreen() {
       await signInWithEmailAndPassword(auth, data.email, data.password);
       // The user will be redirected to the main app by the root layout observer
     } catch (error: any) {
-      setSubmissionError(error.message);
+      if (error.code === 'auth/invalid-credential') {
+        setSubmissionError("Invalid email or password. Please try again.");
+      } else if (error.code === 'auth/user-not-found') {
+        setSubmissionError("No user found with this email address. Please register.");
+      } else {
+        setSubmissionError("An unexpected error occurred. Please try again later.");
+      }
     }
   };
 
