@@ -10,7 +10,7 @@ export default function IndexScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="h1">Welcome</ThemedText>
+      <ThemedText type="h1">Welcome, {user?.displayName || 'User'}!</ThemedText>
       <ThemedText type="body" style={styles.email}>{user?.email}</ThemedText>
       <ThemedButton title="Logout" onPress={signOut} style={styles.button} />
     </ThemedView>
