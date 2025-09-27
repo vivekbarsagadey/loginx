@@ -9,7 +9,7 @@ export type ThemedButtonProps = TouchableOpacityProps & {
 };
 
 export function ThemedButton({ title, style, lightColor, darkColor, ...rest }: ThemedButtonProps) {
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'primary');
+  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'tint');
 
   return (
     <TouchableOpacity style={[{ backgroundColor }, styles.button, style]} {...rest}>

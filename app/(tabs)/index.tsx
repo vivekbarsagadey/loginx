@@ -5,11 +5,12 @@ import { ThemedButton } from '@/components/themed-button';
 import { useAuth } from '@/hooks/use-auth-provider';
 
 export default function IndexScreen() {
-  const { setUser } = useAuth();
+  const { user, signOut } = useAuth();
+
   return (
     <ThemedView>
-      <ThemedText>Welcome!</ThemedText>
-      <ThemedButton title="Logout" onPress={() => setUser(null)} />
+      <ThemedText>Welcome, {user?.email}</ThemedText>
+      <ThemedButton title="Logout" onPress={signOut} />
     </ThemedView>
-  )
+  );
 }
