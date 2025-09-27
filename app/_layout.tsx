@@ -21,7 +21,7 @@ function RootLayoutNav() {
 
     if (user && inAuthGroup) {
       router.replace('/(tabs)/index');
-    } else if (!user) {
+    } else if (!user && !inAuthGroup) {
       router.replace('/(auth)/welcome');
     }
 
