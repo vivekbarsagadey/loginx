@@ -12,11 +12,15 @@ import { AuthProvider, useAuth } from '@/hooks/use-auth-provider';
 SplashScreen.preventAutoHideAsync();
 
 function RootLayoutNav() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
+    if (loading) {
+      return;
+    }
+
     const inAuthGroup = segments[0] === '(auth)';
 
     if (user && inAuthGroup) {
@@ -25,7 +29,11 @@ function RootLayoutNav() {
       router.replace('/(auth)/welcome');
     }
 
-  }, [user, segments, router]);
+  }, [user, segments, router, loading]);
+
+  if (loading) {
+    return null; // Or a loading spinner
+  }
 
   return (
       <Stack>

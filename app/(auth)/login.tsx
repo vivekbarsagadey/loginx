@@ -22,7 +22,6 @@ export default function LoginScreen() {
     }
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.replace('/(tabs)');
     } catch (error: any) {
       setError(error.message);
     }

@@ -16,35 +16,20 @@ export default function RegisterScreen() {
   const router = useRouter();
 
   const handleRegister = async () => {
-    console.log("--- REGISTER BUTTON CLICKED --- START");
-    console.log("1. [register.tsx] Email value:", email);
-    console.log("2. [register.tsx] Password value (length only for security):", password.length);
-
     if (!auth) {
-      console.error("3. [register.tsx] FATAL: Auth object is undefined! This is the source of the error.");
       setError("Firebase authentication is not configured correctly.");
-      console.log("--- REGISTER BUTTON CLICKED --- END");
       return;
     }
-    console.log("3. [register.tsx] Auth object is present. App name:", auth.app.name);
 
     if (!email || !password) {
       setError('Please enter both email and password.');
-      console.log("4. [register.tsx] Error: Missing email or password.");
-      console.log("--- REGISTER BUTTON CLICKED --- END");
       return;
     }
     try {
-      console.log("5. [register.tsx] Calling createUserWithEmailAndPassword...");
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("6. [register.tsx] Registration successful! User UID:", userCredential.user.uid);
-      router.replace('/(tabs)');
+      await createUserWithEmailAndPassword(auth, email, password);
     } catch (error: any) {
-      console.log("7. [register.tsx] Error during registration:", error.code, error.message);
-      console.error("Full error object:", error);
       setError(error.message);
     }
-    console.log("--- REGISTER BUTTON CLICKED --- END");
   };
 
   return (
