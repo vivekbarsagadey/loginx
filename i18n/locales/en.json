@@ -38,5 +38,75 @@
       "start": "Get started",
       "back": "Back"
     }
+  },
+  "errors": {
+    "network": {
+      "title": "Network Error",
+      "message": "Please check your internet connection and try again."
+    },
+    "generic": {
+      "title": "Something Went Wrong",
+      "message": "We're sorry, but an unexpected error occurred. Please try again later."
+    },
+    "firebase": {
+      "title": "Authentication Error",
+      "invalid-credential": "Invalid email or password. Please try again.",
+      "user-not-found": "No user found with this email. Please register or try a different email.",
+      "wrong-password": "Incorrect password. Please try again.",
+      "user-disabled": "This user account has been disabled. Please contact support.",
+      "requires-recent-login": "This action requires recent authentication. Please log out and log back in to continue.",
+      "email-already-in-use": "This email address is already in use by another account.",
+      "invalid-email": "The email address is not valid.",
+      "operation-not-allowed": "Email/password accounts are not enabled.",
+      "weak-password": "The password is too weak."
+    },
+    "profile": {
+      "update": {
+        "title": "Update Error",
+        "message": "Failed to update profile. Please try again."
+      },
+      "permission": {
+        "title": "Permission needed",
+        "message": "Please grant permission to access your photo library."
+      },
+      "upload": {
+        "title": "Upload Error",
+        "message": "Failed to upload image. Please try again."
+      }
+    }
+  },
+  "success": {
+    "passwordReset": {
+      "title": "Password Reset Email Sent",
+      "message": "Please check your inbox for a link to reset your password."
+    },
+    "profileUpdate": {
+      "title": "Success",
+      "message": "Your profile has been updated."
+    }
+  },
+  "profile": {
+    "edit": {
+      "title": "Edit Profile",
+      "nameLabel": "Name",
+      "changePhoto": "Change Photo",
+      "saveButton": "Save",
+      "savingButton": "Saving..."
+    }
+  },
+  "register": {
+    "step1": {
+      "title": "Personal Information",
+      "firstNamePlaceholder": "First Name",
+      "lastNamePlaceholder": "Last Name"
+    }
+  },
+  "forgotPassword": {
+    "title": "Reset Password",
+    "subtitle": "Enter your email to receive a reset link",
+    "emailPlaceholder": "Email",
+    "sendButton": "Send Reset Link",
+    "sendingButton": "Sending...",
+    "backToLogin": "Back to Login"
   }
 }

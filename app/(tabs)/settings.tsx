@@ -1,5 +1,5 @@
 
-import { StyleSheet, Switch, TouchableOpacity, View, Image, Alert } from 'react-native';
+import { StyleSheet, Switch, TouchableOpacity, View, Image, Alert, ActivityIndicator } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { settingsSections, SettingsItem } from '@/config/settings';
@@ -12,12 +12,14 @@ import { useRouter } from 'expo-router';
 import { deleteUser } from 'firebase/auth';
 import { getUserProfile, deleteUserAccount } from '@/actions/user.action';
 import { updateSetting } from '@/actions/setting.action';
+import { showError } from '@/utils/error';
 
 export default function SettingsScreen() {
   const colorScheme = useColorScheme();
   const [pushEnabled, setPushEnabled] = useState(false);
   const [emailUpdates, setEmailUpdates] = useState(false);
   const [marketingTips, setMarketingTips] = useState(false);
+  const [loading, setLoading] = useState<Record<string, boolean>>({});
   const router = useRouter();
   const user = auth.currentUser;
 
@@ -31,8 +33,8 @@ export default function SettingsScreen() {
             setEmailUpdates(userProfile.emailUpdates);
             setMarketingTips(userProfile.marketingTips);
           }
-        } catch {
-          Alert.alert('Error', 'Failed to fetch user settings.');
+        } catch (error) {
+          showError(error);
         }
       }
     };
@@ -41,14 +43,17 @@ export default function SettingsScreen() {
 
   const handleToggle = async (key: string, value: boolean) => {
     if (user) {
+      setLoading((prev) => ({ ...prev, [key]: true }));
       try {
         await updateSetting(user.uid, key, value);
 
         if (key === 'pushEnabled') setPushEnabled(value);
         if (key === 'emailUpdates') setEmailUpdates(value);
         if (key === 'marketingTips') setMarketingTips(value);
-      } catch {
-        Alert.alert('Error', 'Failed to update setting.');
+      } catch (error) {
+        showError(error);
+      } finally {
+        setLoading((prev) => ({ ...prev, [key]: false }));
       }
     }
   };
@@ -57,8 +62,7 @@ export default function SettingsScreen() {
     try {
       await auth.signOut();
     } catch (error) {
-      console.error('Logout error', error);
-      Alert.alert('Error', 'An error occurred while logging out.');
+      showError(error);
     }
   };
 
@@ -80,15 +84,7 @@ export default function SettingsScreen() {
                 // Then, delete the user from Firebase Auth
                 await deleteUser(user);
               } catch (error: any) {
-                if (error.code === 'auth/requires-recent-login') {
-                  Alert.alert(
-                    'Re-authentication Required',
-                    'Please log out and log back in before deleting your account.'
-                  );
-                } else {
-                  console.error("Error deleting account: ", error);
-                  Alert.alert('Error', 'An error occurred while deleting your account.');
-                }
+                showError(error);
               }
             }
           },
@@ -134,10 +130,14 @@ export default function SettingsScreen() {
                     {item.subtitle && <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light'].gray }}>{item.subtitle}</ThemedText>}
                 </View>
                 {item.type === 'toggle' && (
+                  loading[item.key] ? (
+                    <ActivityIndicator />
+                  ) : (
                     <Switch
                     value={item.key === 'pushEnabled' ? pushEnabled : item.key === 'emailUpdates' ? emailUpdates : marketingTips}
                     onValueChange={(value) => handleToggle(item.key, value)}
                     />
+                  )
                 )}
                 {item.type === 'label' && (
                     <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light'].gray }}>{item.value}</ThemedText>

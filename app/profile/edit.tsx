@@ -1,5 +1,5 @@
 
-import { Button, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
+import { Button, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -12,6 +12,9 @@ import * as ImagePicker from 'expo-image-picker';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { updateUserProfile } from '@/actions/user.action';
 import { ThemedInput } from '@/components/themed-input';
+import { showSuccess } from '@/utils/success';
+import { showError } from '@/utils/error';
+import i18n from '@/i18n';
 
 export default function EditProfileScreen() {
   const colorScheme = useColorScheme();
@@ -44,12 +47,14 @@ export default function EditProfileScreen() {
         photoURL,
       });
 
-      Alert.alert('Success', 'Your profile has been updated.', [
-        { text: 'OK', onPress: () => router.back() },
-      ]);
+      showSuccess(
+        i18n.t('success.profileUpdate.title'),
+        i18n.t('success.profileUpdate.message'),
+        () => router.back()
+      );
     } catch (error) {
       console.error("Error updating profile: ", error);
-      Alert.alert('Error', 'Failed to update profile. Please try again.');
+      showError(error);
     } finally {
       setLoading(false);
     }
@@ -58,8 +63,8 @@ export default function EditProfileScreen() {
   const handleImagePick = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Please grant permission to access your photo library.');
-      return;
+        showError(new Error(i18n.t('errors.profile.permission.message')));
+        return;
     }
 
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -81,7 +86,7 @@ export default function EditProfileScreen() {
         setPhotoURL(downloadURL);
       } catch (error) {
         console.error("Error uploading image: ", error);
-        Alert.alert('Error', 'Failed to upload image. Please try again.');
+        showError(error);
       } finally {
         setLoading(false);
       }
@@ -92,11 +97,11 @@ export default function EditProfileScreen() {
     <ThemedView style={styles.container}>
       <TouchableOpacity onPress={handleImagePick} style={styles.avatarContainer}>
         <Image source={{ uri: photoURL || 'https://www.gravatar.com/avatar/?d=mp' }} style={styles.avatar} />
-        <ThemedText style={{ color: Colors[colorScheme ?? 'light'].tint }}>Change Photo</ThemedText>
+        <ThemedText style={{ color: Colors[colorScheme ?? 'light'].tint }}>{i18n.t('profile.edit.changePhoto')}</ThemedText>
       </TouchableOpacity>
 
       <ThemedInput
-        label="Name"
+        label={i18n.t('profile.edit.nameLabel')}
         value={displayName}
         onChangeText={(text) => {
           setDisplayName(text);
@@ -108,7 +113,7 @@ export default function EditProfileScreen() {
         containerStyle={styles.inputContainer}
       />
 
-      <Button title={loading ? 'Saving...' : 'Save'} onPress={handleUpdate} disabled={loading} />
+      <Button title={loading ? i18n.t('profile.edit.savingButton') : i18n.t('profile.edit.saveButton')} onPress={handleUpdate} disabled={loading} />
       {loading && <ActivityIndicator style={styles.loading} />}
     </ThemedView>
   );

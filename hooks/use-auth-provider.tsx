@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { onAuthStateChanged, User, signOut as firebaseSignOut } from 'firebase/auth';
 import { auth } from '../firebase-config';
+import { showError } from '@/utils/error';
 
 export const AuthContext = React.createContext<{ user: User | null; signOut: () => Promise<void>; loading: boolean; }>({
   user: null,
@@ -27,7 +28,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signOut = async () => {
-    await firebaseSignOut(auth);
+    try {
+      await firebaseSignOut(auth);
+    } catch (error) {
+      showError(error);
+    }
   };
 
   return (

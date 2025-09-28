@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -11,19 +11,13 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedButton } from '@/components/themed-button';
 import { useRouter } from 'expo-router';
+import { showError } from '@/utils/error';
+import { showSuccess } from '@/utils/success';
+import i18n from '@/i18n';
 
 const schema = z.object({
   email: z.string().email('Invalid email address'),
 });
-
-const getFirebaseAuthErrorMessage = (errorCode: string) => {
-  switch (errorCode) {
-    case 'auth/user-not-found':
-      return 'No user found with this email address. Please register or try a different email.';
-    default:
-      return 'An unexpected error occurred. Please try again later.';
-  }
-};
 
 export default function ForgotPasswordScreen() {
   const [loading, setLoading] = useState(false);
@@ -44,14 +38,13 @@ export default function ForgotPasswordScreen() {
     setLoading(true);
     try {
       await sendPasswordResetEmail(auth, data.email);
-      Alert.alert(
-        'Password Reset Email Sent',
-        'Please check your inbox for a link to reset your password.',
-        [{ text: 'OK', onPress: () => router.push('/(auth)/login') }]
+      showSuccess(
+        i18n.t('success.passwordReset.title'),
+        i18n.t('success.passwordReset.message'),
+        () => router.push('/(auth)/login')
       );
     } catch (err: any) {
-      const friendlyMessage = getFirebaseAuthErrorMessage(err.code);
-      Alert.alert('Error', friendlyMessage);
+      showError(err);
     } finally {
       setLoading(false);
     }
@@ -60,10 +53,10 @@ export default function ForgotPasswordScreen() {
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="h1" style={styles.title}>
-        Reset Password
+        {i18n.t('forgotPassword.title')}
       </ThemedText>
       <ThemedText type="body" style={styles.subtitle}>
-        Enter your email to receive a reset link
+        {i18n.t('forgotPassword.subtitle')}
       </ThemedText>
 
       <Controller
@@ -71,7 +64,7 @@ export default function ForgotPasswordScreen() {
         name="email"
         render={({ field: { onChange, onBlur, value } }) => (
           <ThemedInput
-            placeholder="Email"
+            placeholder={i18n.t('forgotPassword.emailPlaceholder')}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -84,7 +77,7 @@ export default function ForgotPasswordScreen() {
       />
 
       <ThemedButton
-        title={loading ? 'Sending...' : 'Send Reset Link'}
+        title={loading ? i18n.t('forgotPassword.sendingButton') : i18n.t('forgotPassword.sendButton')}
         onPress={handleSubmit(onSubmit)}
         disabled={loading}
         style={styles.button}
@@ -92,7 +85,7 @@ export default function ForgotPasswordScreen() {
       {loading && <ActivityIndicator style={styles.loading} />}
 
       <ThemedButton
-        title="Back to Login"
+        title={i18n.t('forgotPassword.backToLogin')}
         variant="link"
         onPress={() => router.push('/(auth)/login')}
         style={styles.linkButton}

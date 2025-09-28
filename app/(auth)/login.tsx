@@ -4,12 +4,13 @@ import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { auth } from '@/firebase-config';
+import { showError } from '@/utils/error';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -18,21 +19,6 @@ const schema = z.object({
     .min(5, 'Password must be at least 5 characters long.')
     .regex(/^[a-zA-Z0-9@$]*$/, 'Password can only contain alphanumeric characters, @, and $.'),
 });
-
-const getFirebaseAuthErrorMessage = (errorCode: string) => {
-  switch (errorCode) {
-    case 'auth/invalid-credential':
-      return 'Invalid email or password. Please try again.';
-    case 'auth/user-not-found':
-      return 'No user found with this email. Please register or try a different email.';
-    case 'auth/wrong-password':
-      return 'Incorrect password. Please try again.';
-    case 'auth/user-disabled':
-      return 'This user account has been disabled. Please contact support.';
-    default:
-      return 'An unexpected error occurred during login. Please try again.';
-  }
-};
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -56,8 +42,7 @@ export default function LoginScreen() {
       await signInWithEmailAndPassword(auth, data.email, data.password);
       // The user will be redirected to the main app by the root layout observer
     } catch (error: any) {
-      const friendlyMessage = getFirebaseAuthErrorMessage(error.code);
-      Alert.alert('Login Error', friendlyMessage);
+      showError(error);
     } finally {
       setLoading(false);
     }

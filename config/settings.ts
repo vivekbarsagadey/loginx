@@ -41,10 +41,17 @@ export const settingsSections: { title?: string; items: SettingsItem[] }[] = [
   {
     title: "About",
     items: [
-      { type: "label", icon: "info", title: "Version", value: "1.0.2 (72)" },
-      { type: "link", icon: "file-text", title: "Terms of Service", href: "/legal/terms" },
-      { type: "link", icon: "shield", title: "Privacy Policy", href: "/legal/privacy" },
+      { type: "label", icon: "info", title: "Version", value: "1.0.3 (73)" },
+      { type: "link", icon: "gift", title: "What's new", href: "/about/whats-new" },
     ],
+  },
+  {
+    title: "Legal",
+    items: [
+        { type: "link", icon: "file-text", title: "Terms of Service", href: "/legal/terms" },
+        { type: "link", icon: "shield", title: "Privacy Policy", href: "/legal/privacy" },
+        { type: "link", icon: "file", title: "License information", href: "/legal/license" },
+    ]
   },
   {
     items: [

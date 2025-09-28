@@ -38,5 +38,75 @@
       "start": "Empezar",
       "back": "Atrás"
     }
+  },
+  "errors": {
+    "network": {
+      "title": "Error de red",
+      "message": "Por favor, comprueba tu conexión a internet e inténtalo de nuevo."
+    },
+    "generic": {
+      "title": "Algo salió mal",
+      "message": "Lo sentimos, pero se ha producido un error inesperado. Por favor, inténtalo de nuevo más tarde."
+    },
+    "firebase": {
+      "title": "Error de autenticación",
+      "invalid-credential": "Correo electrónico o contraseña no válidos. Inténtalo de nuevo.",
+      "user-not-found": "No se encontró ningún usuario con este correo electrónico. Regístrate o prueba con un correo electrónico diferente.",
+      "wrong-password": "Contraseña incorrecta. Inténtalo de nuevo.",
+      "user-disabled": "Esta cuenta de usuario ha sido deshabilitada. Ponte en contacto con el soporte.",
+      "requires-recent-login": "Esta acción requiere autenticación reciente. Cierra la sesión y vuelve a iniciarla para continuar.",
+      "email-already-in-use": "Esta dirección de correo electrónico ya está en uso por otra cuenta.",
+      "invalid-email": "La dirección de correo electrónico no es válida.",
+      "operation-not-allowed": "Las cuentas de correo electrónico/contraseña no están habilitadas.",
+      "weak-password": "La contraseña es demasiado débil."
+    },
+    "profile": {
+      "update": {
+        "title": "Error al actualizar",
+        "message": "No se pudo actualizar el perfil. Inténtalo de nuevo."
+      },
+      "permission": {
+        "title": "Permiso necesario",
+        "message": "Por favor, concede permiso para acceder a tu biblioteca de fotos."
+      },
+      "upload": {
+        "title": "Error de subida",
+        "message": "No se pudo subir la imagen. Inténtalo de nuevo."
+      }
+    }
+  },
+  "success": {
+    "passwordReset": {
+      "title": "Correo de restablecimiento de contraseña enviado",
+      "message": "Por favor, revisa tu bandeja de entrada para encontrar un enlace para restablecer tu contraseña."
+    },
+    "profileUpdate": {
+      "title": "Éxito",
+      "message": "Tu perfil ha sido actualizado."
+    }
+  },
+  "profile": {
+    "edit": {
+      "title": "Editar perfil",
+      "nameLabel": "Nombre",
+      "changePhoto": "Cambiar foto",
+      "saveButton": "Guardar",
+      "savingButton": "Guardando..."
+    }
+  },
+  "register": {
+    "step1": {
+      "title": "Información personal",
+      "firstNamePlaceholder": "Nombre",
+      "lastNamePlaceholder": "Apellido"
+    }
+  },
+  "forgotPassword": {
+    "title": "Restablecer contraseña",
+    "subtitle": "Ingresa tu correo electrónico para recibir un enlace de restablecimiento",
+    "emailPlaceholder": "Correo electrónico",
+    "sendButton": "Enviar enlace de restablecimiento",
+    "sendingButton": "Enviando...",
+    "backToLogin": "Volver a iniciar sesión"
   }
 }

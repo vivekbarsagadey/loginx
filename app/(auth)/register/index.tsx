@@ -10,6 +10,9 @@ import { z } from 'zod';
 import RegisterStep1 from './step-1';
 import RegisterStep2 from './step-2';
 import RegisterStep3 from './step-3';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/firebase-config';
+import { showError } from '@/utils/error';
 
 const STEPS = [
   { id: 'step-1', title: 'Personal Information', component: RegisterStep1 },
@@ -86,14 +89,16 @@ export default function RegisterScreen() {
     }
   };
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    Alert.alert('Registration Successful', 'You have successfully registered.', [
-      { text: 'OK', onPress: () => router.replace({
+  const onSubmit = async (data: FormData) => {
+    try {
+      await createUserWithEmailAndPassword(auth, data.email, data.password);
+      router.replace({
         pathname: '/(auth)/welcome',
         params: { email: data.email },
-      }) },
-    ]);
+      });
+    } catch (error) {
+      showError(error);
+    }
   };
 
   const isFirstStep = useMemo(() => currentStep === 0, [currentStep]);

@@ -2,6 +2,7 @@
 import { doc, getDoc, updateDoc, setDoc } from 'firebase/firestore';
 import { firestore } from '@/firebase-config';
 import { UserProfile } from '@/types/setting';
+import { showError } from '@/utils/error';
 
 export const getUserProfile = async (uid: string): Promise<UserProfile | null> => {
   try {
@@ -13,8 +14,8 @@ export const getUserProfile = async (uid: string): Promise<UserProfile | null> =
     }
     return null;
   } catch (error) {
-    console.error("Error fetching user profile: ", error);
-    throw error;
+    showError(error);
+    return null;
   }
 };
 
@@ -23,8 +24,7 @@ export const updateUserProfile = async (uid: string, data: Partial<UserProfile>)
     const userDocRef = doc(firestore, 'users', uid);
     await updateDoc(userDocRef, data);
   } catch (error) {
-    console.error("Error updating user profile: ", error);
-    throw error;
+    showError(error);
   }
 };
 
@@ -33,8 +33,7 @@ export const createUserProfile = async (uid: string, data: UserProfile): Promise
         const userDocRef = doc(firestore, 'users', uid);
         await setDoc(userDocRef, data);
     } catch (error) {
-        console.error("Error creating user profile: ", error);
-        throw error;
+        showError(error);
     }
 };
 
@@ -43,7 +42,6 @@ export const deleteUserAccount = async (uid: string): Promise<void> => {
         const userDocRef = doc(firestore, 'users', uid);
         await updateDoc(userDocRef, { deleted: true });
     } catch (error) {
-        console.error("Error deleting user account: ", error);
-        throw error;
+        showError(error);
     }
 };

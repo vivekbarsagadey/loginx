@@ -4,19 +4,20 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedInput } from '@/components/themed-input';
 import { useFormContext, Controller } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
+import i18n from '@/i18n';
 
 export default function RegisterStep1() {
   const { control, formState: { errors } } = useFormContext();
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="h2" style={styles.title}>Personal Information</ThemedText>
+      <ThemedText type="h2" style={styles.title}>{i18n.t('register.step1.title')}</ThemedText>
       <Controller
         control={control}
         name="firstName"
         render={({ field: { onChange, onBlur, value } }) => (
           <ThemedInput
-            placeholder="First Name"
+            placeholder={i18n.t('register.step1.firstNamePlaceholder')}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -29,7 +30,7 @@ export default function RegisterStep1() {
         name="lastName"
         render={({ field: { onChange, onBlur, value } }) => (
           <ThemedInput
-            placeholder="Last Name"
+            placeholder={i18n.t('register.step1.lastNamePlaceholder')}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
