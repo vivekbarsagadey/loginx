@@ -2,13 +2,13 @@
 import {
   TouchableOpacity,
   TouchableOpacityProps,
-  Text,
   StyleSheet,
   ActivityIndicator,
   ViewStyle,
   TextStyle,
 } from 'react-native';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { ThemedText } from './themed-text';
 
 export type ThemedButtonProps = TouchableOpacityProps & {
   title: string;
@@ -77,7 +77,7 @@ export function ThemedButton({
       {loading ? (
         <ActivityIndicator color={variant === 'primary' ? onPrimaryColor : primaryColor} />
       ) : (
-        <Text style={[styles.text, textStyle]}>{title}</Text>
+        <ThemedText style={[styles.text, textStyle]}>{title}</ThemedText>
       )}
     </TouchableOpacity>
   );

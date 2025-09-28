@@ -1,10 +1,12 @@
 
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { useTheme } from '@/hooks/use-theme';
 import { Colors } from '@/constants/theme';
 import i18n from '@/i18n';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { ThemedView } from './themed-view';
+import { ThemedText } from './themed-text';
 
 const THEME_OPTIONS = ['system', 'light', 'dark'];
 
@@ -22,9 +24,9 @@ export const ThemeSelector = () => {
   const colors = getColors();
 
   return (
-    <View>
-      <Text style={[styles.label, { color: colors.text }]}>{i18n.t('onb.personalize.theme')}</Text>
-      <View style={styles.container}>
+    <ThemedView>
+      <ThemedText style={styles.label}>{i18n.t('onb.personalize.theme')}</ThemedText>
+      <ThemedView style={styles.container}>
         {THEME_OPTIONS.map((option) => (
           <Pressable
             key={option}
@@ -33,17 +35,17 @@ export const ThemeSelector = () => {
               { backgroundColor: theme === option ? colors.primary : colors.surface },
             ]}
             onPress={() => persistTheme(option as 'light' | 'dark' | 'system')}>
-            <Text
+            <ThemedText
               style={{
                 color: theme === option ? colors['on-primary'] : colors.text,
                 fontWeight: '600',
               }}>
               {option.charAt(0).toUpperCase() + option.slice(1)}
-            </Text>
+            </ThemedText>
           </Pressable>
         ))}
-      </View>
-    </View>
+      </ThemedView>
+    </ThemedView>
   );
 };
 
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.light.border,
     overflow: 'hidden',
+    backgroundColor: 'transparent',
   },
   chip: {
     flex: 1,

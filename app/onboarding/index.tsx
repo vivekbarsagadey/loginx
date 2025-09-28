@@ -9,6 +9,10 @@ import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import { Dimensions, FlatList, Pressable, Text, useColorScheme, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { WelcomeSlide } from "@/components/onboarding/welcome";
+import { FeaturesSlide } from "@/components/onboarding/features";
+import { ThemedView } from "@/components/themed-view";
+import { ThemedText } from "@/components/themed-text";
 
 const SLIDES = [
   { key: "welcome" },
@@ -50,54 +54,27 @@ export default function Onboarding() {
 
   const render = ({ item }: any) => {
     if (item.key === "welcome") {
-      return (
-        <View style={{ width, padding: 24, backgroundColor: theme.bg, flex: 1, justifyContent: 'center' }}>
-          <Text style={{ fontSize: 28, fontWeight: "700", color: theme.text }}>{i18n.t('onb.welcome.title', { app: 'YourApp' })}</Text>
-          <Text style={{ fontSize: 16, color: theme['text-muted'], marginTop: 8 }}>
-            {i18n.t('onb.welcome.body')}
-          </Text>
-        </View>
-      );
+      return <WelcomeSlide width={width} />;
     }
     if (item.key === "features") {
-      return (
-        <View style={{ width, padding: 24, backgroundColor: theme.bg, flex: 1, justifyContent: 'center' }}>
-          <Text style={{ fontSize: 24, fontWeight: "700", marginBottom: 12, color: theme.text }}>
-            {i18n.t('onb.features.title')}
-          </Text>
-          <View style={{ flexDirection: "row", gap: 12 }}>
-            <View style={{ flex: 1, padding: 16, borderRadius: 12, borderWidth: 1, borderColor: theme.border, backgroundColor: theme.surface }}>
-              <Text style={{ fontWeight: "600", color: theme.text }}>Secure account</Text>
-              <Text style={{ color: theme['text-muted'], marginTop: 6 }}>{i18n.t('onb.features.secure')}</Text>
-            </View>
-            <View style={{ flex: 1, padding: 16, borderRadius: 12, borderWidth: 1, borderColor: theme.border, backgroundColor: theme.surface }}>
-              <Text style={{ fontWeight: "600", color: theme.text }}>Cloud sync</Text>
-              <Text style={{ color: theme['text-muted'], marginTop: 6 }}>{i18n.t('onb.features.sync')}</Text>
-            </View>
-            <View style={{ flex: 1, padding: 16, borderRadius: 12, borderWidth: 1, borderColor: theme.border, backgroundColor: theme.surface }}>
-              <Text style={{ fontWeight: "600", color: theme.text }}>Fast capture</Text>
-              <Text style={{ color: theme['text-muted'], marginTop: 6 }}>{i18n.t('onb.features.fast')}</Text>
-            </View>
-          </View>
-        </View>
-      );
+      return <FeaturesSlide width={width} />;
     }
     return (
-      <View style={{ width, padding: 24, gap: 16, backgroundColor: theme.bg, flex: 1, justifyContent: 'center' }}>
-        <Text style={{ fontSize: 24, fontWeight: "700", color: theme.text }}>{i18n.t('onb.personalize.title')}</Text>
+      <ThemedView style={{ width, padding: 24, gap: 16, flex: 1, justifyContent: 'center' }}>
+        <ThemedText type="h2">{i18n.t('onb.personalize.title')}</ThemedText>
         <ThemeSelector />
         <LanguagePicker />
-        <Text style={{ fontSize: 13, color: theme['text-muted'] }}>
+        <ThemedText type="muted" style={{ fontSize: 13 }}>
           You can change this anytime in Settings.
-        </Text>
-      </View>
+        </ThemedText>
+      </ThemedView>
     );
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.bg }}>
+    <ThemedView style={{ flex: 1 }}>
       <Pressable onPress={skip} style={{ position: "absolute", right: 16, top: top + 16, zIndex: 1, padding: 8  }}>
-        <Text style={{ color: theme['text-muted'], fontSize: 16 }}>{i18n.t('onb.cta.skip')} </Text>
+        <ThemedText type="muted">{i18n.t('onb.cta.skip')} </ThemedText>
       </Pressable>
 
       <FlatList
@@ -115,7 +92,7 @@ export default function Onboarding() {
         style={{ flex: 1 }}
       />
 
-      <View style={{ paddingHorizontal: 16, paddingBottom: bottom + 16, backgroundColor: theme.bg }}>
+      <ThemedView style={{ paddingHorizontal: 16, paddingBottom: bottom + 16 }}>
         <View style={{ flexDirection: "row", justifyContent: "center", marginBottom: 12 }}>
           {SLIDES.map((_, idx) => (
             <View
@@ -130,18 +107,18 @@ export default function Onboarding() {
         <View style={{ flexDirection: 'row', gap: 12 }}>
             {i > 0 &&
                 <Pressable onPress={back} style={{ height: 48, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: theme.surface, flex: 1 }}>
-                    <Text style={{ color: theme.text, fontSize: 16, fontWeight: "600" }}>
+                    <ThemedText style={{ fontWeight: "600" }}>
                         {i18n.t('onb.cta.back')}
-                    </Text>
+                    </ThemedText>
                 </Pressable>
             }
             <Pressable onPress={next} style={{ height: 48, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: theme.primary, flex: i > 0 ? 2 : 1 }}>
-              <Text style={{ color: theme['on-primary'], fontSize: 16, fontWeight: "600" }}>
+              <ThemedText type="inverse" style={{ fontWeight: "600" }}>
                 {i < SLIDES.length - 1 ? i18n.t('onb.cta.next') : i18n.t('onb.cta.start')}
-              </Text>
+              </ThemedText>
             </Pressable>
         </View>
-      </View>
-    </View>
+      </ThemedView>
+    </ThemedView>
   );
 }
