@@ -18,7 +18,8 @@
     "cta": {
       "next": "Next",
       "skip": "Skip",
-      "start": "Get started"
+      "start": "Get started",
+      "back": "Back"
     }
   }
 }

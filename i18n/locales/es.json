@@ -5,10 +5,10 @@
       "body": "Inicia sesión de forma segura y mantén tus datos sincronizados."
     },
     "features": {
-      "title": "Mantente organizado y seguro",
+      "title": "Mantente organizado, de forma segura",
       "secure": "Tus datos están protegidos.",
       "sync": "Accede desde cualquier lugar.",
-      "fast": "Añade y gestiona elementos rápidamente."
+      "fast": "Agrega y administra elementos rápidamente."
     },
     "personalize": {
       "title": "Hazlo tuyo",
@@ -18,7 +18,8 @@
     "cta": {
       "next": "Siguiente",
       "skip": "Saltar",
-      "start": "Empezar"
+      "start": "Comenzar",
+      "back": "Atrás"
     }
   }
 }

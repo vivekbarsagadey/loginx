@@ -33,6 +33,14 @@ export default function Onboarding() {
       r.replace("/(auth)/login");
     }
   };
+
+  const back = async () => {
+    if (i > 0) {
+      ref.current?.scrollToIndex({ index: i - 1, animated: true });
+      setI(i - 1);
+    }
+  };
+
   const skip = async () => {
     await AsyncStorage.setItem("onboardingCompleted", "true");
     r.replace("/(auth)/login");
@@ -117,11 +125,20 @@ export default function Onboarding() {
             />
           ))}
         </View>
-        <Pressable onPress={next} style={{ height: 48, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: theme.primary }}>
-          <Text style={{ color: theme['on-primary'], fontSize: 16, fontWeight: "600" }}>
-            {i < SLIDES.length - 1 ? i18n.t('onb.cta.next') : i18n.t('onb.cta.start')}
-          </Text>
-        </Pressable>
+        <View style={{ flexDirection: 'row', gap: 12 }}>
+            {i > 0 &&
+                <Pressable onPress={back} style={{ height: 48, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: theme.surface, flex: 1 }}>
+                    <Text style={{ color: theme.text, fontSize: 16, fontWeight: "600" }}>
+                        {i18n.t('onb.cta.back')}
+                    </Text>
+                </Pressable>
+            }
+            <Pressable onPress={next} style={{ height: 48, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: theme.primary, flex: i > 0 ? 2 : 1 }}>
+              <Text style={{ color: theme['on-primary'], fontSize: 16, fontWeight: "600" }}>
+                {i < SLIDES.length - 1 ? i18n.t('onb.cta.next') : i18n.t('onb.cta.start')}
+              </Text>
+            </Pressable>
+        </View>
       </View>
     </View>
   );
