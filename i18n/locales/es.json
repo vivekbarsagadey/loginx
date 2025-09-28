@@ -141,5 +141,283 @@
     "licenseInformation": "Información de licencia",
     "deleteAccount": "Eliminar cuenta",
     "logOut": "Cerrar sesión"
+  },
+  "screens": {
+    "login": {
+      "title": "Bienvenido de Nuevo",
+      "subtitle": "Inicia sesión para continuar",
+      "emailPlaceholder": "Correo electrónico",
+      "passwordPlaceholder": "Contraseña",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "loginButton": "Iniciar sesión",
+      "loggingIn": "Iniciando sesión...",
+      "noAccount": "¿No tienes cuenta? Regístrate",
+      "validation": {
+        "invalidEmail": "Por favor ingresa una dirección de correo válida.",
+        "passwordTooShort": "La contraseña debe tener al menos 5 caracteres.",
+        "passwordInvalidChars": "La contraseña solo puede contener caracteres alfanuméricos, @ y $."
+      }
+    },
+    "welcome": {
+      "title": "¡Bienvenido!",
+      "subtitle": "Te has registrado exitosamente con el correo: {email}",
+      "goToLogin": "Ir a Iniciar Sesión"
+    },
+    "verifyEmail": {
+      "title": "Verifica tu Correo",
+      "subtitle": "Hemos enviado un enlace de verificación a tu dirección de correo:",
+      "instructions": "Por favor revisa tu bandeja de entrada y sigue las instrucciones para verificar tu cuenta. Esta ventana se actualizará automáticamente una vez que hayas sido verificado.",
+      "resendButton": "Reenviar Correo de Verificación",
+      "sending": "Enviando...",
+      "goToLogin": "Ir a Iniciar Sesión",
+      "errors": {
+        "noUser": "No hay usuario con sesión iniciada actualmente.",
+        "tooManyRequests": "Has solicitado reenviar el correo de verificación demasiadas veces. Por favor intenta más tarde.",
+        "generic": "Ocurrió un error inesperado. Por favor intenta de nuevo."
+      },
+      "success": {
+        "emailSent": "Correo Enviado",
+        "emailSentMessage": "Un nuevo correo de verificación ha sido enviado a tu bandeja de entrada."
+      }
+    },
+    "whatsNew": {
+      "title": "Novedades",
+      "version": "Versión 1.0.3",
+      "features": [
+        {
+          "title": "Seguridad Mejorada",
+          "description": "Autenticación de dos factores mejorada con soporte biométrico y algoritmos de cifrado más fuertes."
+        },
+        {
+          "title": "Mejor Rendimiento",
+          "description": "Tiempos de carga más rápidos y animaciones más fluidas en toda la aplicación."
+        },
+        {
+          "title": "Nuevas Opciones de Tema",
+          "description": "Se agregaron más opciones de personalización incluyendo nuevas variantes de modo oscuro y esquemas de color."
+        },
+        {
+          "title": "Accesibilidad Mejorada",
+          "description": "Mejor soporte para lectores de pantalla y navegación mejorada con teclado."
+        }
+      ],
+      "bugFixes": "Corrección de Errores",
+      "bugFixesList": [
+        "Corregidos problemas de inicio de sesión en conexiones lentas",
+        "Resueltos errores al cambiar de tema",
+        "Mejorado el flujo de verificación de correo",
+        "Corregido el escalado de texto en diferentes idiomas"
+      ],
+      "thankYou": "¡Gracias por usar nuestra aplicación! Trabajamos constantemente para mejorar tu experiencia."
+    },
+    "legal": {
+      "terms": {
+        "title": "Términos de Servicio",
+        "lastUpdated": "Última actualización: Diciembre 2024",
+        "sections": {
+          "acceptance": {
+            "title": "1. Aceptación de Términos",
+            "content": "Al acceder y usar esta aplicación, aceptas y acuerdas estar sujeto a los términos y disposiciones de este acuerdo."
+          },
+          "usePolicy": {
+            "title": "2. Política de Uso",
+            "content": "Aceptas usar esta aplicación solo para propósitos legales y de una manera que no infrinja los derechos de otros o restrinja el uso y disfrute de la aplicación por parte de otros."
+          },
+          "privacy": {
+            "title": "3. Política de Privacidad",
+            "content": "Tu privacidad es importante para nosotros. Por favor revisa nuestra Política de Privacidad, que también gobierna tu uso de la aplicación, para entender nuestras prácticas."
+          },
+          "modifications": {
+            "title": "4. Modificaciones",
+            "content": "Nos reservamos el derecho de modificar estos términos en cualquier momento. Notificaremos a los usuarios de cualquier cambio significativo."
+          },
+          "termination": {
+            "title": "5. Terminación",
+            "content": "Podemos terminar o suspender tu cuenta inmediatamente, sin aviso previo o responsabilidad, por cualquier razón, incluyendo sin limitación si violas los Términos."
+          },
+          "contact": {
+            "title": "6. Información de Contacto",
+            "content": "Si tienes preguntas sobre estos Términos, por favor contáctanos en legal@loginx.app"
+          }
+        }
+      },
+      "privacy": {
+        "title": "Política de Privacidad",
+        "lastUpdated": "Última actualización: Diciembre 2024",
+        "sections": {
+          "introduction": {
+            "title": "1. Introducción",
+            "content": "Respetamos tu privacidad y estamos comprometidos a proteger tus datos personales. Esta política de privacidad explica cómo recopilamos, usamos y protegemos tu información."
+          },
+          "dataCollection": {
+            "title": "2. Datos que Recopilamos",
+            "content": "Recopilamos información que nos proporcionas directamente, como cuando creas una cuenta, usas nuestros servicios o nos contactas para soporte."
+          },
+          "dataUse": {
+            "title": "3. Cómo Usamos tus Datos",
+            "content": "Usamos tu información para proporcionar, mantener y mejorar nuestros servicios, comunicarnos contigo y asegurar la seguridad de nuestra plataforma."
+          },
+          "dataSharing": {
+            "title": "4. Compartir Datos",
+            "content": "No vendemos, intercambiamos o transferimos tu información personal a terceros excepto como se describe en esta política."
+          },
+          "dataSecurity": {
+            "title": "5. Seguridad de Datos",
+            "content": "Implementamos medidas de seguridad apropiadas para proteger tu información personal contra acceso no autorizado, alteración, divulgación o destrucción."
+          },
+          "yourRights": {
+            "title": "6. Tus Derechos",
+            "content": "Tienes el derecho de acceder, actualizar o eliminar tu información personal. También puedes optar por no recibir ciertas comunicaciones de nuestra parte."
+          },
+          "contact": {
+            "title": "7. Contáctanos",
+            "content": "Si tienes preguntas sobre esta Política de Privacidad, por favor contáctanos en privacy@loginx.app"
+          }
+        }
+      },
+      "license": {
+        "title": "Información de Licencia",
+        "appLicense": {
+          "title": "Licencia de la Aplicación",
+          "content": "Esta aplicación es software propietario. Todos los derechos reservados. La copia, distribución o modificación no autorizada de este software está estrictamente prohibida."
+        },
+        "openSource": {
+          "title": "Librerías de Código Abierto",
+          "intro": "Esta aplicación usa las siguientes librerías de código abierto:",
+          "libraries": [
+            {
+              "name": "React Native",
+              "license": "Licencia MIT",
+              "description": "Un framework para construir aplicaciones nativas usando React"
+            },
+            {
+              "name": "Expo",
+              "license": "Licencia MIT",
+              "description": "Una plataforma de código abierto para hacer aplicaciones nativas universales"
+            },
+            {
+              "name": "Firebase",
+              "license": "Licencia Apache 2.0",
+              "description": "Una plataforma para construir aplicaciones móviles y web"
+            },
+            {
+              "name": "React Hook Form",
+              "license": "Licencia MIT",
+              "description": "Formularios flexibles y eficientes con validación fácil"
+            }
+          ]
+        },
+        "copyright": {
+          "title": "Aviso de Derechos de Autor",
+          "content": "© 2024 LoginX. Todos los derechos reservados. Este software y su documentación son productos propietarios de LoginX."
+        }
+      }
+    },
+    "security": {
+      "twoFactor": {
+        "title": "Autenticación de Dos Factores",
+        "subtitle": "Agrega una capa extra de seguridad a tu cuenta",
+        "notEnabled": {
+          "title": "2FA No Habilitado",
+          "description": "La autenticación de dos factores está actualmente deshabilitada para tu cuenta. Habilítala para agregar una capa extra de seguridad.",
+          "benefits": [
+            "Protege tu cuenta de accesos no autorizados",
+            "Asegura tu información personal",
+            "Tranquilidad con seguridad mejorada"
+          ],
+          "enableButton": "Habilitar Autenticación de Dos Factores"
+        },
+        "enabled": {
+          "title": "2FA Habilitado",
+          "description": "La autenticación de dos factores está activa en tu cuenta. Tu cuenta está protegida con una capa de seguridad adicional.",
+          "disableButton": "Deshabilitar Autenticación de Dos Factores",
+          "backupCodes": "Ver Códigos de Respaldo"
+        },
+        "setup": {
+          "step1": "Paso 1: Descarga una aplicación autenticadora",
+          "step2": "Paso 2: Escanea el código QR",
+          "step3": "Paso 3: Ingresa el código de verificación",
+          "apps": "Aplicaciones recomendadas: Google Authenticator, Authy, Microsoft Authenticator"
+        }
+      },
+      "changePassword": {
+        "title": "Cambiar Contraseña",
+        "subtitle": "Actualiza la contraseña de tu cuenta",
+        "currentPassword": "Contraseña Actual",
+        "newPassword": "Nueva Contraseña",
+        "confirmPassword": "Confirmar Nueva Contraseña",
+        "requirements": {
+          "title": "Requisitos de Contraseña:",
+          "minLength": "Al menos 8 caracteres de longitud",
+          "uppercase": "Contiene letras mayúsculas",
+          "lowercase": "Contiene letras minúsculas",
+          "numbers": "Contiene números",
+          "symbols": "Contiene caracteres especiales"
+        },
+        "changeButton": "Cambiar Contraseña",
+        "success": "¡Contraseña cambiada exitosamente!",
+        "lastChanged": "Contraseña cambiada por última vez: {date}"
+      },
+      "sessions": {
+        "title": "Sesiones Activas",
+        "subtitle": "Administra tus sesiones de inicio de sesión activas",
+        "currentSession": "Sesión Actual",
+        "otherSessions": "Otras Sesiones",
+        "noOtherSessions": "No hay otras sesiones activas",
+        "sessionInfo": {
+          "device": "Dispositivo: {device}",
+          "location": "Ubicación: {location}",
+          "lastActive": "Última actividad: {time}",
+          "ipAddress": "Dirección IP: {ip}"
+        },
+        "actions": {
+          "endSession": "Terminar Sesión",
+          "endAll": "Terminar Todas las Otras Sesiones"
+        },
+        "confirmEndAll": {
+          "title": "¿Terminar Todas las Sesiones?",
+          "message": "Esto te desconectará de todos los otros dispositivos. Necesitarás iniciar sesión nuevamente en esos dispositivos.",
+          "confirm": "Terminar Todas las Sesiones",
+          "cancel": "Cancelar"
+        }
+      }
+    },
+    "settings": {
+      "theme": {
+        "title": "Tema",
+        "subtitle": "Elige tu apariencia preferida",
+        "options": {
+          "system": {
+            "title": "Sistema",
+            "description": "Seguir la configuración de tema de tu dispositivo"
+          },
+          "light": {
+            "title": "Claro",
+            "description": "Usar tema claro"
+          },
+          "dark": {
+            "title": "Oscuro",
+            "description": "Usar tema oscuro"
+          }
+        },
+        "preview": "Vista Previa",
+        "applied": "¡Tema aplicado exitosamente!"
+      },
+      "textSize": {
+        "title": "Tamaño de Texto",
+        "subtitle": "Ajusta el tamaño del texto para mejor legibilidad",
+        "options": {
+          "small": "Pequeño",
+          "default": "Predeterminado",
+          "large": "Grande",
+          "extraLarge": "Extra Grande"
+        },
+        "preview": {
+          "title": "Texto de Vista Previa",
+          "content": "Así es como aparecerá tu texto en toda la aplicación. Elige el tamaño que sea más cómodo para leer."
+        },
+        "applied": "¡Tamaño de texto cambiado exitosamente!"
+      }
+    }
   }
 }
