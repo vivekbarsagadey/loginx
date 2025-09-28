@@ -1,13 +1,14 @@
 
 // app/onboarding/index.tsx
-import { useRef, useState } from "react";
-import { View, Text, FlatList, Pressable, useColorScheme, Dimensions } from "react-native";
-import { useRouter } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LanguagePicker } from "@/components/language-picker";
+import { ThemeSelector } from "@/components/theme-selector";
 import { Colors } from '@/constants/theme';
 import i18n from '@/i18n';
-import { ThemeSelector } from "@/components/theme-selector";
-import { LanguagePicker } from "@/components/language-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
+import { useRef, useState } from "react";
+import { Dimensions, FlatList, Pressable, Text, useColorScheme, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const SLIDES = [
   { key: "welcome" },
@@ -22,6 +23,7 @@ export default function Onboarding() {
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme || 'light'];
   const { width } = Dimensions.get('window');
+  const { top, bottom } = useSafeAreaInsets();
 
 
   const next = async () => {
@@ -94,8 +96,8 @@ export default function Onboarding() {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.bg }}>
-      <Pressable onPress={skip} style={{ position: "absolute", right: 16, top: 40, zIndex: 1, padding: 8 }}>
-        <Text style={{ color: theme['text-muted'] }}>{i18n.t('onb.cta.skip')}</Text>
+      <Pressable onPress={skip} style={{ position: "absolute", right: 16, top: top + 16, zIndex: 1, padding: 8  }}>
+        <Text style={{ color: theme['text-muted'], fontSize: 16 }}>{i18n.t('onb.cta.skip')} </Text>
       </Pressable>
 
       <FlatList
@@ -113,7 +115,7 @@ export default function Onboarding() {
         style={{ flex: 1 }}
       />
 
-      <View style={{ padding: 16, paddingBottom: 40, backgroundColor: theme.bg }}>
+      <View style={{ paddingHorizontal: 16, paddingBottom: bottom + 16, backgroundColor: theme.bg }}>
         <View style={{ flexDirection: "row", justifyContent: "center", marginBottom: 12 }}>
           {SLIDES.map((_, idx) => (
             <View
