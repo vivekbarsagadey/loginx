@@ -47,6 +47,9 @@ export default {
       "reactCompiler": true
     },
     "extra": {
+      "eas": {
+        "projectId": "524907f3-68cc-42d8-9b78-3561e304156d"
+      },
       "apiKey": process.env.API_KEY,
       "authDomain": process.env.AUTH_DOMAIN,
       "projectId": process.env.PROJECT_ID,
