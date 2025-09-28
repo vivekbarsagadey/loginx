@@ -12,12 +12,13 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StyleSheet, ActivityIndicator } from 'react-native';
 import { z } from 'zod';
+import i18n from '@/i18n';
 
 const schema = z.object({
-  email: z.string().email('Please enter a valid email address.'),
+  email: z.string().email(i18n.t('screens.login.validation.invalidEmail')),
   password: z.string()
-    .min(5, 'Password must be at least 5 characters long.')
-    .regex(/^[a-zA-Z0-9@$]*$/, 'Password can only contain alphanumeric characters, @, and $.'),
+    .min(5, i18n.t('screens.login.validation.passwordTooShort'))
+    .regex(/^[a-zA-Z0-9@$]*$/, i18n.t('screens.login.validation.passwordInvalidChars')),
 });
 
 export default function LoginScreen() {
@@ -51,10 +52,10 @@ export default function LoginScreen() {
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="h1" style={styles.title}>
-        Welcome Back
+        {i18n.t('screens.login.title')}
       </ThemedText>
       <ThemedText type="body" style={styles.subtitle}>
-        Sign in to continue
+        {i18n.t('screens.login.subtitle')}
       </ThemedText>
 
       <Controller
@@ -62,7 +63,7 @@ export default function LoginScreen() {
         name="email"
         render={({ field: { onChange, onBlur, value } }) => (
           <ThemedInput
-            placeholder="Email"
+            placeholder={i18n.t('screens.login.emailPlaceholder')}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -79,7 +80,7 @@ export default function LoginScreen() {
         name="password"
         render={({ field: { onChange, onBlur, value } }) => (
           <ThemedInput
-            placeholder="Password"
+            placeholder={i18n.t('screens.login.passwordPlaceholder')}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -91,17 +92,22 @@ export default function LoginScreen() {
       />
 
       <ThemedButton
-        title="Forgot Password?"
+        title={i18n.t('screens.login.forgotPassword')}
         variant="link"
         onPress={() => router.push('/(auth)/forgot-password')}
         style={styles.linkButton}
       />
 
-      <ThemedButton title={loading ? 'Logging in...' : 'Login'} onPress={handleSubmit(onSubmit)} disabled={loading} style={styles.button} />
+      <ThemedButton 
+        title={loading ? i18n.t('screens.login.loggingIn') : i18n.t('screens.login.loginButton')} 
+        onPress={handleSubmit(onSubmit)} 
+        disabled={loading} 
+        style={styles.button} 
+      />
       {loading && <ActivityIndicator style={styles.loading} />}
 
       <ThemedButton
-        title="Don\'t have an account? Register"
+        title={i18n.t('screens.login.noAccount')}
         variant="link"
         onPress={() => router.push('/(auth)/register')}
         style={styles.linkButton}
