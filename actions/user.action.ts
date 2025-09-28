@@ -19,7 +19,7 @@ export const getUserProfile = async (uid: string): Promise<UserProfile | null> =
   }
 };
 
-export const updateUserProfile = async (uid: string, data: Partial<UserProfile>): Promise<void> => {
+export const updateUser = async (uid: string, data: Partial<UserProfile>): Promise<void> => {
   try {
     const userDocRef = doc(firestore, 'users', uid);
     await updateDoc(userDocRef, data);

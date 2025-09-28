@@ -7,5 +7,6 @@ export interface UserProfile {
     pushEnabled: boolean;
     emailUpdates: boolean;
     marketingTips: boolean;
+    expoPushToken?: string;
     deleted?: boolean;
 }

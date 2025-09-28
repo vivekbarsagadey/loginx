@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { AuthProvider, useAuth } from '@/hooks/use-auth-provider';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { usePushNotifications } from '@/hooks/use-push-notifications';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -18,6 +19,8 @@ function RootLayoutNav() {
   const router = useRouter();
   const [onboardingCompleted, setOnboardingCompleted] = useState(false);
   const [checkingOnboarding, setCheckingOnboarding] = useState(true);
+
+  usePushNotifications(user?.uid);
 
   useEffect(() => {
     const checkOnboarding = async () => {
@@ -40,7 +43,7 @@ function RootLayoutNav() {
       router.replace('/onboarding');
     } else if (onboardingCompleted) {
       if (user && inAuthGroup) {
-        router.replace('/(tabs)/index');
+        router.replace('/(tabs)/index' as any);
       } else if (!user && !inAuthGroup) {
         router.replace('/(auth)/login');
       }

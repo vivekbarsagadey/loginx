@@ -10,9 +10,10 @@ import { useEffect, useState } from 'react';
 import { auth } from '@/firebase-config';
 import { useRouter } from 'expo-router';
 import { deleteUser } from 'firebase/auth';
-import { getUserProfile, deleteUserAccount } from '@/actions/user.action';
+import { getUserProfile, deleteUserAccount, updateUser } from '@/actions/user.action';
 import { updateSetting } from '@/actions/setting.action';
 import { showError } from '@/utils/error';
+import { usePushNotifications } from '@/hooks/use-push-notifications';
 
 export default function SettingsScreen() {
   const colorScheme = useColorScheme();
@@ -22,6 +23,7 @@ export default function SettingsScreen() {
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const router = useRouter();
   const user = auth.currentUser;
+  const { expoPushToken } = usePushNotifications(user?.uid);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -45,11 +47,28 @@ export default function SettingsScreen() {
     if (user) {
       setLoading((prev) => ({ ...prev, [key]: true }));
       try {
-        await updateSetting(user.uid, key, value);
+        if (key === 'pushEnabled') {
+          if (value) {
+            // If the user is enabling push notifications, we need to make sure we have a token
+            if (expoPushToken) {
+              await updateUser(user.uid, { pushEnabled: true, expoPushToken });
+              setPushEnabled(true);
+            } else {
+              // If there's no token, we can't enable push notifications
+              Alert.alert('Push Notifications', 'Could not get a push token. Please make sure you have granted permissions.');
+              setPushEnabled(false);
+            }
+          } else {
+            // If the user is disabling push notifications, we can just update the setting
+            await updateSetting(user.uid, 'pushEnabled', false);
+            setPushEnabled(false);
+          }
+        } else {
+          await updateSetting(user.uid, key, value);
 
-        if (key === 'pushEnabled') setPushEnabled(value);
-        if (key === 'emailUpdates') setEmailUpdates(value);
-        if (key === 'marketingTips') setMarketingTips(value);
+          if (key === 'emailUpdates') setEmailUpdates(value);
+          if (key === 'marketingTips') setMarketingTips(value);
+        }
       } catch (error) {
         showError(error);
       } finally {
