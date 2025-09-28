@@ -3,10 +3,10 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { StyleSheet } from 'react-native';
 
-export default function LicenseScreen() {
+export default function PrivacyScreen() {
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="h1">License Information Screen</ThemedText>
+      <ThemedText type="h1">Privacy Screen</ThemedText>
       <ThemedText>Coming Soon!</ThemedText>
     </ThemedView>
   );

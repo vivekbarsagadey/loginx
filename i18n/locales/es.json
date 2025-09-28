@@ -73,6 +73,10 @@
         "title": "Error de subida",
         "message": "No se pudo subir la imagen. Inténtalo de nuevo."
       }
+    },
+    "validation": {
+      "invalidEmail": "Dirección de correo electrónico no válida",
+      "emptyDisplayName": "El nombre de visualización no puede estar vacío."
     }
   },
   "success": {

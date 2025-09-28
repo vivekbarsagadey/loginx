@@ -73,6 +73,10 @@
         "title": "Upload Error",
         "message": "Failed to upload image. Please try again."
       }
+    },
+    "validation": {
+      "invalidEmail": "Invalid email address",
+      "emptyDisplayName": "Display name cannot be empty."
     }
   },
   "success": {

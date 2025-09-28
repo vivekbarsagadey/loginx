@@ -16,7 +16,7 @@ import { showSuccess } from '@/utils/success';
 import i18n from '@/i18n';
 
 const schema = z.object({
-  email: z.string().email('Invalid email address'),
+  email: z.string().email(i18n.t('errors.validation.invalidEmail')),
 });
 
 export default function ForgotPasswordScreen() {

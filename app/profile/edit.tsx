@@ -30,7 +30,7 @@ export default function EditProfileScreen() {
 
     // Validate input
     if (!displayName.trim()) {
-      setDisplayNameError('Display name cannot be empty.');
+      setDisplayNameError(i18n.t('errors.validation.emptyDisplayName'));
       return;
     }
 

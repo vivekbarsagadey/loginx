@@ -1,6 +1,8 @@
 
+import { Href } from "expo-router";
+
 export type SettingsItem =
-  | { type: "link"; icon: string; title: string; subtitle?: string; href: string }
+  | { type: "link"; icon: string; title: string; subtitle?: string; href: Href }
   | { type: "toggle"; icon: string; title: string; subtitle?: string; key: "pushEnabled"|"emailUpdates"|"marketingTips" }
   | { type: "label"; icon: string; title: string; subtitle?: string; value: string }
   | { type: "danger"; icon: string; title: string; subtitle?: string; action: "logout" | "deleteAccount" };
