@@ -2,7 +2,7 @@
   "onb": {
     "welcome": {
       "title": "{app} में आपका स्वागत है",
-      "body": "सुरक्षित रूप से साइन ان کریں اور اپنے ڈیٹا کو مطابقت پذیر رکھیں۔"
+      "body": "सुरक्षित रूप से साइन ان کریں اور अपने ڈیٹا کو مطابقت پذیر رکھیں۔"
     },
     "features": {
       "title": "मुख्य विशेषताएं",
@@ -112,5 +112,34 @@
     "sendButton": "रीसेट लिंक भेजें",
     "sendingButton": "भेज रहा है...",
     "backToLogin": "लॉगिन पर वापस"
+  },
+  "settings": {
+    "appearance": "दिखावट",
+    "theme": "थीम",
+    "themeSubtitle": "सिस्टम, लाइट, डार्क",
+    "textSize": "टेक्स्ट का आकार",
+    "textSizeSubtitle": "डिफ़ॉल्ट",
+    "notifications": "सूचनाएं",
+    "pushNotifications": "पुश सूचनाएं",
+    "emailUpdates": "ईमेल अपडेट",
+    "marketingTips": "विपणन युक्तियाँ",
+    "securityAndPrivacy": "सुरक्षा और गोपनीयता",
+    "changePassword": "पासवर्ड बदलें",
+    "activeSessions": "सक्रिय सत्र",
+    "twoFactorAuth": "दो-कारक प्रमाणीकरण",
+    "dataAndPrivacy": "डेटा और गोपनीयता",
+    "helpAndFeedback": "सहायता और प्रतिक्रिया",
+    "helpCenter": "सहायता केंद्र",
+    "giveFeedback": "प्रतिक्रिया दें",
+    "contactSupport": "समर्थन से संपर्क करें",
+    "about": "के बारे में",
+    "version": "संस्करण",
+    "whatsNew": "नया क्या है",
+    "legal": "कानूनी",
+    "termsOfService": "सेवा की शर्तें",
+    "privacyPolicy": "गोपनीयता नीति",
+    "licenseInformation": "लाइसेंस की जानकारी",
+    "deleteAccount": "अकाउंट डिलीट करें",
+    "logOut": "लॉग आउट"
   }
 }

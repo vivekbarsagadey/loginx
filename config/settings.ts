@@ -1,4 +1,5 @@
 
+import i18n from '@/i18n';
 import { Href } from "expo-router";
 
 export type SettingsItem =
@@ -9,56 +10,56 @@ export type SettingsItem =
 
 export const settingsSections: { title?: string; items: SettingsItem[] }[] = [
   {
-    title: "Appearance",
+    title: i18n.t('settings.appearance'),
     items: [
-      { type: "link", icon: "moon", title: "Theme", subtitle: "System, Light, Dark", href: "/settings/theme" },
-      { type: "link", icon: "type", title: "Text size", subtitle: "Default", href: "/settings/text-size" },
+      { type: "link", icon: "moon", title: i18n.t('settings.theme'), subtitle: i18n.t('settings.themeSubtitle'), href: "/settings/theme" },
+      { type: "link", icon: "type", title: i18n.t('settings.textSize'), subtitle: i18n.t('settings.textSizeSubtitle'), href: "/settings/text-size" },
     ],
   },
   {
-    title: "Notifications",
+    title: i18n.t('settings.notifications'),
     items: [
-      { type: "toggle", icon: "bell", title: "Push notifications", key: "pushEnabled" },
-      { type: "toggle", icon: "mail", title: "Email updates", key: "emailUpdates" },
-      { type: "toggle", icon: "megaphone", title: "Marketing tips", key: "marketingTips" },
+      { type: "toggle", icon: "bell", title: i18n.t('settings.pushNotifications'), key: "pushEnabled" },
+      { type: "toggle", icon: "mail", title: i18n.t('settings.emailUpdates'), key: "emailUpdates" },
+      { type: "toggle", icon: "megaphone", title: i18n.t('settings.marketingTips'), key: "marketingTips" },
     ],
   },
   {
-    title: "Security & Privacy",
+    title: i18n.t('settings.securityAndPrivacy'),
     items: [
-      { type: "link", icon: "key", title: "Change password", href: "/security/change-password" },
-      { type: "link", icon: "smartphone", title: "Active sessions", href: "/security/sessions" },
-      { type: "link", icon: "shield", title: "Two-factor authentication", href: "/security/2fa" },
-      { type: "link", icon: "lock", title: "Data & privacy", href: "/privacy" },
+      { type: "link", icon: "key", title: i18n.t('settings.changePassword'), href: "/security/change-password" },
+      { type: "link", icon: "smartphone", title: i18n.t('settings.activeSessions'), href: "/security/sessions" },
+      { type: "link", icon: "shield", title: i18n.t('settings.twoFactorAuth'), href: "/security/2fa" },
+      { type: "link", icon: "lock", title: i18n.t('settings.dataAndPrivacy'), href: "/privacy" },
     ],
   },
   {
-    title: "Help & Feedback",
+    title: i18n.t('settings.helpAndFeedback'),
     items: [
-      { type: "link", icon: "help-circle", title: "Help Center", href: "/help" },
-      { type: "link", icon: "message-square", title: "Give feedback", href: "/feedback" },
-      { type: "link", icon: "headphones", title: "Contact support", href: "/support" },
+      { type: "link", icon: "help-circle", title: i18n.t('settings.helpCenter'), href: "/help" },
+      { type: "link", icon: "message-square", title: i18n.t('settings.giveFeedback'), href: "/feedback" },
+      { type: "link", icon: "headphones", title: i18n.t('settings.contactSupport'), href: "/support" },
     ],
   },
   {
-    title: "About",
+    title: i18n.t('settings.about'),
     items: [
-      { type: "label", icon: "info", title: "Version", value: "1.0.3 (73)" },
-      { type: "link", icon: "gift", title: "What's new", href: "/about/whats-new" },
+      { type: "label", icon: "info", title: i18n.t('settings.version'), value: "1.0.3 (73)" },
+      { type: "link", icon: "gift", title: i18n.t('settings.whatsNew'), href: "/about/whats-new" },
     ],
   },
   {
-    title: "Legal",
+    title: i18n.t('settings.legal'),
     items: [
-        { type: "link", icon: "file-text", title: "Terms of Service", href: "/legal/terms" },
-        { type: "link", icon: "shield", title: "Privacy Policy", href: "/legal/privacy" },
-        { type: "link", icon: "file", title: "License information", href: "/legal/license" },
+        { type: "link", icon: "file-text", title: i18n.t('settings.termsOfService'), href: "/legal/terms" },
+        { type: "link", icon: "shield", title: i18n.t('settings.privacyPolicy'), href: "/legal/privacy" },
+        { type: "link", icon: "file", title: i18n.t('settings.licenseInformation'), href: "/legal/license" },
     ]
   },
   {
     items: [
-        { type: "danger", icon: "trash-2", title: "Delete Account", action: "deleteAccount" },
-        { type: "danger", icon: "log-out", title: "Log out", action: "logout" }
+        { type: "danger", icon: "trash-2", title: i18n.t('settings.deleteAccount'), action: "deleteAccount" },
+        { type: "danger", icon: "log-out", title: i18n.t('settings.logOut'), action: "logout" }
     ],
   },
 ];
