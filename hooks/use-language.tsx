@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from '../i18n';
 
 export const useLanguage = () => {
-  const [language, setLanguage] = useState(Localization.locale.split('-')[0]);
+  const [language, setLanguage] = useState(Localization.getLocales()[0].languageCode);
 
   useEffect(() => {
     const getLanguage = async () => {
