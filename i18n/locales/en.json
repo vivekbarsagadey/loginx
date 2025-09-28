@@ -141,5 +141,283 @@
     "licenseInformation": "License information",
     "deleteAccount": "Delete Account",
     "logOut": "Log out"
+  },
+  "screens": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to continue",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "forgotPassword": "Forgot Password?",
+      "loginButton": "Login",
+      "loggingIn": "Logging in...",
+      "noAccount": "Don't have an account? Register",
+      "validation": {
+        "invalidEmail": "Please enter a valid email address.",
+        "passwordTooShort": "Password must be at least 5 characters long.",
+        "passwordInvalidChars": "Password can only contain alphanumeric characters, @, and $."
+      }
+    },
+    "welcome": {
+      "title": "Welcome!",
+      "subtitle": "You have successfully registered with the email: {email}",
+      "goToLogin": "Go to Login"
+    },
+    "verifyEmail": {
+      "title": "Verify Your Email",
+      "subtitle": "We've sent a verification link to your email address:",
+      "instructions": "Please check your inbox and follow the instructions to verify your account. This window will automatically update once you have been verified.",
+      "resendButton": "Resend Verification Email",
+      "sending": "Sending...",
+      "goToLogin": "Go to Login",
+      "errors": {
+        "noUser": "No user is currently signed in.",
+        "tooManyRequests": "You have requested to resend the verification email too many times. Please try again later.",
+        "generic": "An unexpected error occurred. Please try again."
+      },
+      "success": {
+        "emailSent": "Email Sent",
+        "emailSentMessage": "A new verification email has been sent to your inbox."
+      }
+    },
+    "whatsNew": {
+      "title": "What's New",
+      "version": "Version 1.0.3",
+      "features": [
+        {
+          "title": "Enhanced Security",
+          "description": "Improved two-factor authentication with biometric support and stronger encryption algorithms."
+        },
+        {
+          "title": "Better Performance", 
+          "description": "Faster loading times and smoother animations throughout the app."
+        },
+        {
+          "title": "New Theme Options",
+          "description": "Added more customization options including new dark mode variants and color schemes."
+        },
+        {
+          "title": "Improved Accessibility",
+          "description": "Better screen reader support and enhanced keyboard navigation."
+        }
+      ],
+      "bugFixes": "Bug Fixes",
+      "bugFixesList": [
+        "Fixed login issues on slower network connections",
+        "Resolved theme switching glitches",
+        "Improved email verification flow",
+        "Fixed text scaling in different languages"
+      ],
+      "thankYou": "Thank you for using our app! We're constantly working to improve your experience."
+    },
+    "legal": {
+      "terms": {
+        "title": "Terms of Service",
+        "lastUpdated": "Last updated: December 2024",
+        "sections": {
+          "acceptance": {
+            "title": "1. Acceptance of Terms",
+            "content": "By accessing and using this application, you accept and agree to be bound by the terms and provision of this agreement."
+          },
+          "usePolicy": {
+            "title": "2. Use Policy",
+            "content": "You agree to use this application only for lawful purposes and in a way that does not infringe the rights of, restrict or inhibit anyone else's use and enjoyment of the application."
+          },
+          "privacy": {
+            "title": "3. Privacy Policy",
+            "content": "Your privacy is important to us. Please review our Privacy Policy, which also governs your use of the application, to understand our practices."
+          },
+          "modifications": {
+            "title": "4. Modifications",
+            "content": "We reserve the right to modify these terms at any time. We will notify users of any significant changes."
+          },
+          "termination": {
+            "title": "5. Termination",
+            "content": "We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms."
+          },
+          "contact": {
+            "title": "6. Contact Information",
+            "content": "If you have any questions about these Terms, please contact us at legal@loginx.app"
+          }
+        }
+      },
+      "privacy": {
+        "title": "Privacy Policy",
+        "lastUpdated": "Last updated: December 2024",
+        "sections": {
+          "introduction": {
+            "title": "1. Introduction",
+            "content": "We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use and protect your information."
+          },
+          "dataCollection": {
+            "title": "2. Data We Collect",
+            "content": "We collect information you provide directly to us, such as when you create an account, use our services, or contact us for support."
+          },
+          "dataUse": {
+            "title": "3. How We Use Your Data",
+            "content": "We use your information to provide, maintain, and improve our services, communicate with you, and ensure the security of our platform."
+          },
+          "dataSharing": {
+            "title": "4. Data Sharing",
+            "content": "We do not sell, trade, or otherwise transfer your personal information to outside parties except as described in this policy."
+          },
+          "dataSecurity": {
+            "title": "5. Data Security",
+            "content": "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction."
+          },
+          "yourRights": {
+            "title": "6. Your Rights",
+            "content": "You have the right to access, update, or delete your personal information. You may also opt out of certain communications from us."
+          },
+          "contact": {
+            "title": "7. Contact Us",
+            "content": "If you have any questions about this Privacy Policy, please contact us at privacy@loginx.app"
+          }
+        }
+      },
+      "license": {
+        "title": "License Information",
+        "appLicense": {
+          "title": "Application License",
+          "content": "This application is proprietary software. All rights reserved. Unauthorized copying, distribution, or modification of this software is strictly prohibited."
+        },
+        "openSource": {
+          "title": "Open Source Libraries",
+          "intro": "This application uses the following open source libraries:",
+          "libraries": [
+            {
+              "name": "React Native",
+              "license": "MIT License",
+              "description": "A framework for building native apps using React"
+            },
+            {
+              "name": "Expo",
+              "license": "MIT License", 
+              "description": "An open-source platform for making universal native apps"
+            },
+            {
+              "name": "Firebase",
+              "license": "Apache License 2.0",
+              "description": "A platform for building mobile and web applications"
+            },
+            {
+              "name": "React Hook Form",
+              "license": "MIT License",
+              "description": "Performant, flexible forms with easy validation"
+            }
+          ]
+        },
+        "copyright": {
+          "title": "Copyright Notice",
+          "content": "© 2024 LoginX. All rights reserved. This software and its documentation are proprietary products of LoginX."
+        }
+      }
+    },
+    "security": {
+      "twoFactor": {
+        "title": "Two-Factor Authentication",
+        "subtitle": "Add an extra layer of security to your account",
+        "notEnabled": {
+          "title": "2FA Not Enabled",
+          "description": "Two-factor authentication is currently disabled for your account. Enable it to add an extra layer of security.",
+          "benefits": [
+            "Protect your account from unauthorized access",
+            "Secure your personal information",
+            "Peace of mind with enhanced security"
+          ],
+          "enableButton": "Enable Two-Factor Authentication"
+        },
+        "enabled": {
+          "title": "2FA Enabled",
+          "description": "Two-factor authentication is active on your account. Your account is protected with an additional security layer.",
+          "disableButton": "Disable Two-Factor Authentication",
+          "backupCodes": "View Backup Codes"
+        },
+        "setup": {
+          "step1": "Step 1: Download an authenticator app",
+          "step2": "Step 2: Scan the QR code",
+          "step3": "Step 3: Enter the verification code",
+          "apps": "Recommended apps: Google Authenticator, Authy, Microsoft Authenticator"
+        }
+      },
+      "changePassword": {
+        "title": "Change Password",
+        "subtitle": "Update your account password",
+        "currentPassword": "Current Password",
+        "newPassword": "New Password",
+        "confirmPassword": "Confirm New Password",
+        "requirements": {
+          "title": "Password Requirements:",
+          "minLength": "At least 8 characters long",
+          "uppercase": "Contains uppercase letters",
+          "lowercase": "Contains lowercase letters", 
+          "numbers": "Contains numbers",
+          "symbols": "Contains special characters"
+        },
+        "changeButton": "Change Password",
+        "success": "Password changed successfully!",
+        "lastChanged": "Password last changed: {date}"
+      },
+      "sessions": {
+        "title": "Active Sessions",
+        "subtitle": "Manage your active login sessions",
+        "currentSession": "Current Session",
+        "otherSessions": "Other Sessions",
+        "noOtherSessions": "No other active sessions",
+        "sessionInfo": {
+          "device": "Device: {device}",
+          "location": "Location: {location}",
+          "lastActive": "Last active: {time}",
+          "ipAddress": "IP Address: {ip}"
+        },
+        "actions": {
+          "endSession": "End Session",
+          "endAll": "End All Other Sessions"
+        },
+        "confirmEndAll": {
+          "title": "End All Sessions?",
+          "message": "This will sign you out of all other devices. You'll need to sign in again on those devices.",
+          "confirm": "End All Sessions",
+          "cancel": "Cancel"
+        }
+      }
+    },
+    "settings": {
+      "theme": {
+        "title": "Theme",
+        "subtitle": "Choose your preferred appearance",
+        "options": {
+          "system": {
+            "title": "System",
+            "description": "Follow your device's theme setting"
+          },
+          "light": {
+            "title": "Light",
+            "description": "Use light theme"
+          },
+          "dark": {
+            "title": "Dark", 
+            "description": "Use dark theme"
+          }
+        },
+        "preview": "Preview",
+        "applied": "Theme applied successfully!"
+      },
+      "textSize": {
+        "title": "Text Size",
+        "subtitle": "Adjust the text size for better readability",
+        "options": {
+          "small": "Small",
+          "default": "Default",
+          "large": "Large",
+          "extraLarge": "Extra Large"
+        },
+        "preview": {
+          "title": "Preview Text",
+          "content": "This is how your text will appear throughout the app. Choose the size that's most comfortable for you to read."
+        },
+        "applied": "Text size changed successfully!"
+      }
+    }
   }
 }

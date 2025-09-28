@@ -7,13 +7,14 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { sendEmailVerification, signOut } from 'firebase/auth';
 import { useState, useEffect } from 'react';
 import { StyleSheet, Alert } from 'react-native';
+import i18n from '@/i18n';
 
 const getFirebaseAuthErrorMessage = (errorCode: string) => {
   switch (errorCode) {
     case 'auth/too-many-requests':
-      return 'You have requested to resend the verification email too many times. Please try again later.';
+      return i18n.t('screens.verifyEmail.errors.tooManyRequests');
     default:
-      return 'An unexpected error occurred. Please try again.';
+      return i18n.t('screens.verifyEmail.errors.generic');
   }
 };
 
@@ -38,16 +39,16 @@ export default function VerifyEmailScreen() {
 
   const handleResend = async () => {
     if (!auth.currentUser) {
-      Alert.alert('Error', 'No user is currently signed in.');
+      Alert.alert(i18n.t('errors.generic.title'), i18n.t('screens.verifyEmail.errors.noUser'));
       return;
     }
     setIsResending(true);
     try {
       await sendEmailVerification(auth.currentUser);
-      Alert.alert('Email Sent', 'A new verification email has been sent to your inbox.');
+      Alert.alert(i18n.t('screens.verifyEmail.success.emailSent'), i18n.t('screens.verifyEmail.success.emailSentMessage'));
     } catch (err: any) {
       const friendlyMessage = getFirebaseAuthErrorMessage(err.code);
-      Alert.alert('Error', friendlyMessage);
+      Alert.alert(i18n.t('errors.generic.title'), friendlyMessage);
     } finally {
       setIsResending(false);
     }
@@ -61,26 +62,31 @@ export default function VerifyEmailScreen() {
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="h1" style={styles.title}>
-        Verify Your Email
+        {i18n.t('screens.verifyEmail.title')}
       </ThemedText>
       <ThemedText style={styles.subtitle}>
-        We&apos;ve sent a verification link to your email address:
+        {i18n.t('screens.verifyEmail.subtitle')}
       </ThemedText>
       <ThemedText type="h2" style={styles.email}>
         {email}
       </ThemedText>
       <ThemedText style={styles.subtitle}>
-        Please check your inbox and follow the instructions to verify your account. This window will automatically update once you have been verified.
+        {i18n.t('screens.verifyEmail.instructions')}
       </ThemedText>
 
       <ThemedButton
-        title={isResending ? 'Sending...' : 'Resend Verification Email'}
+        title={isResending ? i18n.t('screens.verifyEmail.sending') : i18n.t('screens.verifyEmail.resendButton')}
         onPress={handleResend}
         disabled={isResending}
         variant="secondary"
         style={styles.button}
       />
-      <ThemedButton title="Go to Login" onPress={handleLoginRedirect} variant="link" style={styles.linkButton} />
+      <ThemedButton 
+        title={i18n.t('screens.verifyEmail.goToLogin')} 
+        onPress={handleLoginRedirect} 
+        variant="link" 
+        style={styles.linkButton} 
+      />
     </ThemedView>
   );
 }
