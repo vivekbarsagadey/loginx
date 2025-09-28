@@ -5,10 +5,27 @@
       "body": "Inicia sesión de forma segura y mantén tus datos sincronizados."
     },
     "features": {
-      "title": "Mantente organizado, de forma segura",
-      "secure": "Tus datos están protegidos.",
-      "sync": "Accede desde cualquier lugar.",
-      "fast": "Agrega y administra elementos rápidamente."
+      "title": "Características clave",
+      "slides": [
+        {
+          "title": "Sincronización multiplataforma",
+          "subtitle": "Siempre sincronizado",
+          "description": "Mantén tus datos sincronizados sin problemas en todos tus dispositivos. Empieza en tu teléfono, continúa en tu tableta y termina en tu escritorio.",
+          "icon": "https://img.icons8.com/plasticine/100/000000/two-smartphones.png"
+        },
+        {
+          "title": "Seguro y Privado",
+          "subtitle": "Tus datos son tuyos",
+          "description": "Con el cifrado de extremo a extremo, tus datos son solo para tus ojos. No podemos leerlos, y nadie más puede hacerlo tampoco.",
+          "icon": "https://img.icons8.com/plasticine/100/000000/privacy.png"
+        },
+        {
+          "title": "Acceso sin conexión",
+          "subtitle": "Trabaja en cualquier lugar, en cualquier momento",
+          "description": "¿No tienes internet? No hay problema. Accede y gestiona tus datos incluso cuando no estés conectado. Los cambios se sincronizarán automáticamente cuando te vuelvas a conectar.",
+          "icon": "https://img.icons8.com/plasticine/100/000000/signal-jamming.png"
+        }
+      ]
     },
     "personalize": {
       "title": "Hazlo tuyo",
@@ -17,8 +34,8 @@
     },
     "cta": {
       "next": "Siguiente",
-      "skip": "Saltar",
-      "start": "Comenzar",
+      "skip": "Omitir",
+      "start": "Empezar",
       "back": "Atrás"
     }
   }

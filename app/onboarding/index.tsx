@@ -1,18 +1,17 @@
 
 // app/onboarding/index.tsx
-import { LanguagePicker } from "@/components/language-picker";
-import { ThemeSelector } from "@/components/theme-selector";
 import { Colors } from '@/constants/theme';
 import i18n from '@/i18n';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
-import { Dimensions, FlatList, Pressable, Text, useColorScheme, View } from "react-native";
+import { Dimensions, FlatList, Pressable, useColorScheme, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { WelcomeSlide } from "@/components/onboarding/welcome";
-import { FeaturesSlide } from "@/components/onboarding/features";
+import { Features } from "@/components/onboarding/features";
 import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
+import { Personalize } from "@/components/onboarding/personalize";
 
 const SLIDES = [
   { key: "welcome" },
@@ -57,23 +56,17 @@ export default function Onboarding() {
       return <WelcomeSlide width={width} />;
     }
     if (item.key === "features") {
-      return <FeaturesSlide width={width} />;
+      return <Features />;
     }
-    return (
-      <ThemedView style={{ width, padding: 24, gap: 16, flex: 1, justifyContent: 'center' }}>
-        <ThemedText type="h2">{i18n.t('onb.personalize.title')}</ThemedText>
-        <ThemeSelector />
-        <LanguagePicker />
-        <ThemedText type="muted" style={{ fontSize: 13 }}>
-          You can change this anytime in Settings.
-        </ThemedText>
-      </ThemedView>
-    );
+    if (item.key === "personalize") {
+        return <Personalize width={width} />;
+    }
+    return null;
   };
 
   return (
     <ThemedView style={{ flex: 1 }}>
-      <Pressable onPress={skip} style={{ position: "absolute", right: 16, top: top + 16, zIndex: 1, padding: 8  }}>
+      <Pressable onPress={skip} style={{ position: "absolute", right: 16, top: top + 16, zIndex: 1, padding: 8 }}>
         <ThemedText type="muted">{i18n.t('onb.cta.skip')} </ThemedText>
       </Pressable>
 

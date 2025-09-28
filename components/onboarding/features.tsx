@@ -1,17 +1,24 @@
+import { FeaturesSlide } from '@/components/features-slide';
+import { ThemedView } from '@/components/themed-view';
 import i18n from '@/i18n';
-import { ThemedText } from '../themed-text';
-import { ThemedView } from '../themed-view';
-import { View } from 'react-native';
+import { FlatList, useWindowDimensions } from 'react-native';
 
-export const FeaturesSlide = ({ width }: { width: number }) => {
-    return (
-        <ThemedView style={{ width, padding: 24, flex: 1, justifyContent: 'center' }}>
-            <ThemedText type="h1">{i18n.t('onb.features.title')}</ThemedText>
-            <View style={{ marginTop: 16 }}>
-                <ThemedText type="body" style={{ marginBottom: 8 }}>- {i18n.t('onb.features.f1')}</ThemedText>
-                <ThemedText type="body" style={{ marginBottom: 8 }}>- {i18n.t('onb.features.f2')}</ThemedText>
-                <ThemedText type="body" style={{ marginBottom: 8 }}>- {i18n.t('onb.features.f3')}</ThemedText>
-            </View>
-        </ThemedView>
-    );
-};
+const features = i18n.t('onb.features.slides', { returnObjects: true }) as any[];
+
+export const Features = () => {
+  const { width } = useWindowDimensions();
+
+  return (
+    <ThemedView style={{ flex: 1 }}>
+      <FlatList
+        data={features}
+        renderItem={({ item }) => <FeaturesSlide slide={item} />}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        keyExtractor={(item) => item.title}
+        style={{ width }}
+      />
+    </ThemedView>
+  );
+}

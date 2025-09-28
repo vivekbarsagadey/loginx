@@ -5,10 +5,27 @@
       "body": "Sign in securely and keep your data synced."
     },
     "features": {
-      "title": "Stay organized, securely",
-      "secure": "Your data is protected.",
-      "sync": "Access anywhere.",
-      "fast": "Add & manage items quickly."
+      "title": "Key Features",
+      "slides": [
+        {
+          "title": "Cross-Platform Sync",
+          "subtitle": "Always in Sync",
+          "description": "Keep your data seamlessly synced across all your devices. Start on your phone, continue on your tablet, and finish on your desktop.",
+          "icon": "https://img.icons8.com/plasticine/100/000000/two-smartphones.png"
+        },
+        {
+          "title": "Secure & Private",
+          "subtitle": "Your Data is Yours",
+          "description": "With end-to-end encryption, your data is for your eyes only. We can't read it, and neither can anyone else.",
+          "icon": "https://img.icons8.com/plasticine/100/000000/privacy.png"
+        },
+        {
+          "title": "Offline Access",
+          "subtitle": "Work Anywhere, Anytime",
+          "description": "No internet? No problem. Access and manage your data even when you're offline. Changes will sync automatically when you reconnect.",
+          "icon": "https://img.icons8.com/plasticine/100/000000/signal-jamming.png"
+        }
+      ]
     },
     "personalize": {
       "title": "Make it yours",
