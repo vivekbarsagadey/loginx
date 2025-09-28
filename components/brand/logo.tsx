@@ -5,7 +5,7 @@ export function Logo() {
   return (
     <Image
       style={{ width: '100%', height: '100%' }}
-      source={require('@/assets/images/logo.png')}
+      source={require('@/assets/images/react-logo.png')}
       contentFit="contain"
     />
   );

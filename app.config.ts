@@ -6,7 +6,7 @@ export default {
     "slug": "loginx",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/logomark.png",
+    "icon": "./assets/images/icon.png",
     "scheme": "loginx",
     "userInterfaceStyle": "automatic",
     "ios": {
@@ -15,23 +15,23 @@ export default {
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/logomark.png",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/logomark.png"
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "package": "com.whizit.loginx",
       "minSdkVersion": 26
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/logomark.png"
+      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/logo.png",
+          "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
