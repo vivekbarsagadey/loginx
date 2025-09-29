@@ -1,7 +1,6 @@
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { ThemedButton } from '@/components/themed-button';
 import { StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import i18n from '@/i18n';
 import { useState } from 'react';

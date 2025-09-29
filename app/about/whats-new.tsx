@@ -5,7 +5,7 @@ import { StyleSheet, ScrollView } from 'react-native';
 import i18n from '@/i18n';
 
 export default function WhatsNewScreen() {
-  const features = i18n.t('screens.whatsNew.features', { returnObjects: true }) as Array<{title: string, description: string}>;
+  const features = i18n.t('screens.whatsNew.features', { returnObjects: true }) as {title: string, description: string}[];
   const bugFixes = i18n.t('screens.whatsNew.bugFixesList', { returnObjects: true }) as string[];
 
   return (

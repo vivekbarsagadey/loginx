@@ -5,7 +5,7 @@ import { StyleSheet, ScrollView } from 'react-native';
 import i18n from '@/i18n';
 
 export default function LicenseScreen() {
-  const libraries = i18n.t('screens.legal.license.openSource.libraries', { returnObjects: true }) as Array<{name: string, license: string, description: string}>;
+  const libraries = i18n.t('screens.legal.license.openSource.libraries', { returnObjects: true }) as {name: string, license: string, description: string}[];
 
   return (
     <ScrollView style={styles.scrollView}>

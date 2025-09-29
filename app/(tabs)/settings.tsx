@@ -1,6 +1,6 @@
 
 import { updateSetting } from '@/actions/setting.action';
-import { deleteUserAccount, getUserProfile, updateUser } from '@/actions/user.action';
+import { deleteUserAccount, getUserProfile } from '@/actions/user.action';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { SettingsItem, settingsSections } from '@/config/settings';
