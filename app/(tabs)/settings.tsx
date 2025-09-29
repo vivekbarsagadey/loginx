@@ -1,19 +1,19 @@
 
-import { StyleSheet, Switch, TouchableOpacity, View, Image, Alert, ActivityIndicator } from 'react-native';
-import { ThemedView } from '@/components/themed-view';
+import { updateSetting } from '@/actions/setting.action';
+import { deleteUserAccount, getUserProfile, updateUser } from '@/actions/user.action';
 import { ThemedText } from '@/components/themed-text';
-import { settingsSections, SettingsItem } from '@/config/settings';
-import { Feather } from '@expo/vector-icons';
+import { ThemedView } from '@/components/themed-view';
+import { SettingsItem, settingsSections } from '@/config/settings';
 import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { useEffect, useState } from 'react';
 import { auth } from '@/firebase-config';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { showError } from '@/utils/error';
+import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { deleteUser } from 'firebase/auth';
-import { getUserProfile, deleteUserAccount, updateUser } from '@/actions/user.action';
-import { updateSetting } from '@/actions/setting.action';
-import { showError } from '@/utils/error';
-import { usePushNotifications } from '@/hooks/use-push-notifications';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, Image, StyleSheet, Switch, TouchableOpacity, View } from 'react-native';
+//import { usePushNotifications } from '@/hooks/use-push-notifications';
 
 export default function SettingsScreen() {
   const colorScheme = useColorScheme();
@@ -23,7 +23,7 @@ export default function SettingsScreen() {
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const router = useRouter();
   const user = auth.currentUser;
-  const { expoPushToken } = usePushNotifications(user?.uid);
+  //const { expoPushToken } = usePushNotifications(user?.uid);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -50,14 +50,14 @@ export default function SettingsScreen() {
         if (key === 'pushEnabled') {
           if (value) {
             // If the user is enabling push notifications, we need to make sure we have a token
-            if (expoPushToken) {
+            /* if (expoPushToken) {
               await updateUser(user.uid, { pushEnabled: true, expoPushToken });
               setPushEnabled(true);
             } else {
               // If there's no token, we can't enable push notifications
               Alert.alert('Push Notifications', 'Could not get a push token. Please make sure you have granted permissions.');
               setPushEnabled(false);
-            }
+            }*/
           } else {
             // If the user is disabling push notifications, we can just update the setting
             await updateSetting(user.uid, 'pushEnabled', false);

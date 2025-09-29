@@ -10,7 +10,7 @@ import { updateProfile } from 'firebase/auth';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { updateUserProfile } from '@/actions/user.action';
+import { updateUser } from '@/actions/user.action';
 import { ThemedInput } from '@/components/themed-input';
 import { showSuccess } from '@/utils/success';
 import { showError } from '@/utils/error';
@@ -42,7 +42,7 @@ export default function EditProfileScreen() {
       await updateProfile(user, { displayName, photoURL });
 
       // Update Firestore
-      await updateUserProfile(user.uid, {
+      await updateUser(user.uid, {
         displayName,
         photoURL,
       });

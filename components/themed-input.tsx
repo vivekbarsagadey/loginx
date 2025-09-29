@@ -7,6 +7,7 @@ import {
   Text,
   StyleSheet,
   ViewStyle,
+  TextStyle,
 } from 'react-native';
 import { useThemeColor } from '@/hooks/use-theme-color';
 
@@ -34,8 +35,8 @@ export function ThemedInput({
 
   const [isFocused, setIsFocused] = React.useState(false);
 
-  const focusStyle: ViewStyle = isFocused ? { borderColor: primaryColor, borderWidth: 2 } : {};
-  const errorStyle: ViewStyle = errorMessage ? { borderColor: errorColor, borderWidth: 2 } : {};
+  const focusStyle: TextStyle = isFocused ? { borderColor: primaryColor, borderWidth: 2 } : {};
+  const errorStyle: TextStyle = errorMessage ? { borderColor: errorColor, borderWidth: 2 } : {};
 
   return (
     <View style={[styles.container, containerStyle]}>
