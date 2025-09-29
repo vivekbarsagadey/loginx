@@ -4,7 +4,7 @@ import { deleteUserAccount, getUserProfile } from '@/actions/user.action';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { SettingsItem, settingsSections } from '@/config/settings';
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/constants/theme';
 import { auth } from '@/firebase-config';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { showError } from '@/utils/error';
@@ -124,13 +124,53 @@ export default function SettingsScreen() {
     }
   };
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 16,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 24,
+    },
+    avatar: {
+      width: 64,
+      height: 64,
+      borderRadius: 32,
+      marginRight: 16,
+      backgroundColor: '#ccc',
+    },
+    section: {
+      marginBottom: 24,
+    },
+    sectionItems: {
+      borderRadius: 12,
+      overflow: 'hidden',
+      borderWidth: 1,
+      borderColor: Colors[colorScheme ?? 'light'].border,
+    },
+    settingRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 16,
+      minHeight: 56,
+      borderBottomWidth: 1,
+      borderBottomColor: Colors[colorScheme ?? 'light'].border,
+    },
+    settingInfo: {
+      flex: 1,
+      marginLeft: 16,
+    },
+  });
+
   return (
     <ThemedView style={styles.container}>
         <View style={styles.header}>
             <Image source={{ uri: user?.photoURL ?? 'https://www.gravatar.com/avatar/?d=mp' }} style={styles.avatar} />
             <View>
                 <ThemedText type="h2">{user?.displayName}</ThemedText>
-                <ThemedText style={{ color: Colors[colorScheme ?? 'light'].gray }}>{user?.email}</ThemedText>
+                <ThemedText style={{ color: Colors[colorScheme ?? 'light']['text-muted'] }}>{user?.email}</ThemedText>
                 <TouchableOpacity onPress={() => router.push('/profile/edit')}>
                     <ThemedText style={{ color: Colors[colorScheme ?? 'light'].tint }}>Edit profile ›</ThemedText>
                 </TouchableOpacity>
@@ -146,7 +186,7 @@ export default function SettingsScreen() {
                 <Feather name={item.icon as any} size={20} color={item.type === 'danger' ? Colors[colorScheme ?? 'light'].error : Colors[colorScheme ?? 'light'].text} />
                 <View style={styles.settingInfo}>
                     <ThemedText style={{ color: item.type === 'danger' ? Colors[colorScheme ?? 'light'].error : Colors[colorScheme ?? 'light'].text }}>{item.title}</ThemedText>
-                    {item.subtitle && <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light'].gray }}>{item.subtitle}</ThemedText>}
+                    {item.subtitle && <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light']['text-muted'] }}>{item.subtitle}</ThemedText>}
                 </View>
                 {item.type === 'toggle' && (
                   loading[item.key] ? (
@@ -159,10 +199,10 @@ export default function SettingsScreen() {
                   )
                 )}
                 {item.type === 'label' && (
-                    <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light'].gray }}>{item.value}</ThemedText>
+                    <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light']['text-muted'] }}>{item.value}</ThemedText>
                 )}
                 {(item.type === 'link' || item.type === 'danger') && (
-                    <Feather name="chevron-right" size={24} color={Colors[colorScheme ?? 'light'].gray} />
+                    <Feather name="chevron-right" size={24} color={Colors[colorScheme ?? 'light']['text-muted']} />
                 )}
                 </TouchableOpacity>
             ))}
@@ -172,43 +212,3 @@ export default function SettingsScreen() {
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  avatar: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    marginRight: 16,
-    backgroundColor: '#ccc',
-  },
-  section: {
-    marginBottom: 24,
-  },
-  sectionItems: {
-    borderRadius: 12,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: Colors.light.gray,
-  },
-  settingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    minHeight: 56,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.light.gray,
-  },
-  settingInfo: {
-    flex: 1,
-    marginLeft: 16,
-  },
-});

@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 import { useColorScheme } from 'react-native';
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/constants/theme';
 
 export default function ProfileLayout() {
   const colorScheme = useColorScheme();

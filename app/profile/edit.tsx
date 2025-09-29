@@ -3,7 +3,7 @@ import { Button, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from '
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/constants/theme';
 import { auth } from '@/firebase-config';
 import { useState } from 'react';
 import { updateProfile } from 'firebase/auth';

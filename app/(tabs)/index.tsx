@@ -4,7 +4,7 @@ import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { useAuth } from '@/hooks/use-auth-provider';
 import { useEffect, useState } from 'react';
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { getUserProfile } from '@/actions/user.action';
 import { UserProfile } from '@/types/setting';
@@ -53,7 +53,7 @@ export default function IndexScreen() {
           <ThemedText type="body" style={styles.email}>{userProfile.email}</ThemedText>
           <ThemedText type="body">Age: {userProfile.age}</ThemedText>
 
-          <View style={[styles.section, { borderColor: Colors[colorScheme ?? 'light'].gray }]}>
+          <View style={[styles.section, { borderColor: Colors[colorScheme ?? 'light'].border }]}>
             <ThemedText type="h2">Your Notification Preferences</ThemedText>
             <ThemedText>Push Notifications: {userProfile.pushEnabled ? 'Enabled' : 'Disabled'}</ThemedText>
             <ThemedText>Email Updates: {userProfile.emailUpdates ? 'Enabled' : 'Disabled'}</ThemedText>
