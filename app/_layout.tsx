@@ -1,14 +1,14 @@
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { AuthProvider, useAuth } from '@/hooks/use-auth-provider';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { usePushNotifications } from '@/hooks/use-push-notifications';
+//import { usePushNotifications } from '@/hooks/use-push-notifications';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -20,7 +20,7 @@ function RootLayoutNav() {
   const [onboardingCompleted, setOnboardingCompleted] = useState(false);
   const [checkingOnboarding, setCheckingOnboarding] = useState(true);
 
-  usePushNotifications(user?.uid);
+  //usePushNotifications(user?.uid);
 
   useEffect(() => {
     const checkOnboarding = async () => {
