@@ -1,4 +1,4 @@
-
+/*
 import { useState, useEffect, useRef } from 'react';
 import { Platform } from 'react-native';
 import * as Device from 'expo-device';
@@ -98,3 +98,4 @@ export const usePushNotifications = (uid?: string) => {
 
   return { expoPushToken, notification };
 };
+*/
