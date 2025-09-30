@@ -1,8 +1,8 @@
 
 import { updateSetting } from '@/actions/setting.action';
 import { deleteUserAccount, getUserProfile } from '@/actions/user.action';
+import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { SettingsItem, settingsSections } from '@/config/settings';
 import { Colors } from '@/constants/theme';
 import { auth } from '@/firebase-config';
@@ -13,7 +13,7 @@ import { Href, useRouter } from 'expo-router';
 import { deleteUser } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Image, StyleSheet, Switch, TouchableOpacity, View } from 'react-native';
-//import { usePushNotifications } from '@/hooks/use-push-notifications';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SettingsScreen() {
   const colorScheme = useColorScheme();
@@ -23,7 +23,6 @@ export default function SettingsScreen() {
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const router = useRouter();
   const user = auth.currentUser;
-  //const { expoPushToken } = usePushNotifications(user?.uid);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -47,28 +46,11 @@ export default function SettingsScreen() {
     if (user) {
       setLoading((prev) => ({ ...prev, [key]: true }));
       try {
-        if (key === 'pushEnabled') {
-          if (value) {
-            // If the user is enabling push notifications, we need to make sure we have a token
-            /* if (expoPushToken) {
-              await updateUser(user.uid, { pushEnabled: true, expoPushToken });
-              setPushEnabled(true);
-            } else {
-              // If there's no token, we can't enable push notifications
-              Alert.alert('Push Notifications', 'Could not get a push token. Please make sure you have granted permissions.');
-              setPushEnabled(false);
-            }*/
-          } else {
-            // If the user is disabling push notifications, we can just update the setting
-            await updateSetting(user.uid, 'pushEnabled', false);
-            setPushEnabled(false);
-          }
-        } else {
-          await updateSetting(user.uid, key, value);
+        await updateSetting(user.uid, key, value);
 
-          if (key === 'emailUpdates') setEmailUpdates(value);
-          if (key === 'marketingTips') setMarketingTips(value);
-        }
+        if (key === 'pushEnabled') setPushEnabled(value);
+        if (key === 'emailUpdates') setEmailUpdates(value);
+        if (key === 'marketingTips') setMarketingTips(value);
       } catch (error) {
         showError(error);
       } finally {
@@ -97,10 +79,7 @@ export default function SettingsScreen() {
           onPress: async () => {
             if (user) {
               try {
-                // Soft delete the user's document from Firestore
                 await deleteUserAccount(user.uid);
-
-                // Then, delete the user from Firebase Auth
                 await deleteUser(user);
               } catch (error: any) {
                 showError(error);
@@ -126,7 +105,6 @@ export default function SettingsScreen() {
 
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
       padding: 16,
     },
     header: {
@@ -165,50 +143,52 @@ export default function SettingsScreen() {
   });
 
   return (
-    <ThemedView style={styles.container}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ThemedScrollView contentContainerStyle={styles.container}>
         <View style={styles.header}>
-            <Image source={{ uri: user?.photoURL ?? 'https://www.gravatar.com/avatar/?d=mp' }} style={styles.avatar} />
-            <View>
-                <ThemedText type="h2">{user?.displayName}</ThemedText>
-                <ThemedText style={{ color: Colors[colorScheme ?? 'light']['text-muted'] }}>{user?.email}</ThemedText>
-                <TouchableOpacity onPress={() => router.push('/profile/edit')}>
-                    <ThemedText style={{ color: Colors[colorScheme ?? 'light'].tint }}>Edit profile ›</ThemedText>
-                </TouchableOpacity>
-            </View>
+          <Image source={{ uri: user?.photoURL ?? 'https://www.gravatar.com/avatar/?d=mp' }} style={styles.avatar} />
+          <View>
+            <ThemedText type="h2">{user?.displayName}</ThemedText>
+            <ThemedText style={{ color: Colors[colorScheme ?? 'light']['text-muted'] }}>{user?.email}</ThemedText>
+            <TouchableOpacity onPress={() => router.push('/profile/edit')}>
+              <ThemedText style={{ color: Colors[colorScheme ?? 'light'].tint }}>Edit profile ›</ThemedText>
+            </TouchableOpacity>
+          </View>
         </View>
 
-      {settingsSections.map((section) => (
-        <View key={section.title} style={styles.section}>
-          {section.title && <ThemedText type="h2">{section.title}</ThemedText>}
-          <View style={styles.sectionItems}>
-            {section.items.map((item) => (
+        {settingsSections.map((section) => (
+          <View key={section.title} style={styles.section}>
+            {section.title && <ThemedText type="h2">{section.title}</ThemedText>}
+            <View style={styles.sectionItems}>
+              {section.items.map((item) => (
                 <TouchableOpacity key={item.title} style={styles.settingRow} onPress={() => handlePress(item)} disabled={item.type === 'toggle' || item.type === 'label'}>
-                <Feather name={item.icon as any} size={20} color={item.type === 'danger' ? Colors[colorScheme ?? 'light'].error : Colors[colorScheme ?? 'light'].text} />
-                <View style={styles.settingInfo}>
+                  <Feather name={item.icon as any} size={20} color={item.type === 'danger' ? Colors[colorScheme ?? 'light'].error : Colors[colorScheme ?? 'light'].text} />
+                  <View style={styles.settingInfo}>
                     <ThemedText style={{ color: item.type === 'danger' ? Colors[colorScheme ?? 'light'].error : Colors[colorScheme ?? 'light'].text }}>{item.title}</ThemedText>
                     {item.subtitle && <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light']['text-muted'] }}>{item.subtitle}</ThemedText>}
-                </View>
-                {item.type === 'toggle' && (
-                  loading[item.key] ? (
-                    <ActivityIndicator />
-                  ) : (
-                    <Switch
-                    value={item.key === 'pushEnabled' ? pushEnabled : item.key === 'emailUpdates' ? emailUpdates : marketingTips}
-                    onValueChange={(value) => handleToggle(item.key, value)}
-                    />
-                  )
-                )}
-                {item.type === 'label' && (
+                  </View>
+                  {item.type === 'toggle' && (
+                    loading[item.key] ? (
+                      <ActivityIndicator />
+                    ) : (
+                      <Switch
+                        value={item.key === 'pushEnabled' ? pushEnabled : item.key === 'emailUpdates' ? emailUpdates : marketingTips}
+                        onValueChange={(value) => handleToggle(item.key, value)}
+                      />
+                    )
+                  )}
+                  {item.type === 'label' && (
                     <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light']['text-muted'] }}>{item.value}</ThemedText>
-                )}
-                {(item.type === 'link' || item.type === 'danger') && (
+                  )}
+                  {(item.type === 'link' || item.type === 'danger') && (
                     <Feather name="chevron-right" size={24} color={Colors[colorScheme ?? 'light']['text-muted']} />
-                )}
+                  )}
                 </TouchableOpacity>
-            ))}
+              ))}
             </View>
-        </View>
-      ))}
-    </ThemedView>
+          </View>
+        ))}
+      </ThemedScrollView>
+    </SafeAreaView>
   );
 }
