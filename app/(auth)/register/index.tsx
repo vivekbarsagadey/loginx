@@ -140,11 +140,11 @@ export default function RegisterScreen() {
           <Stack.Screen options={{ title: STEPS[currentStep].title }} />
           <CurrentStepComponent errors={formState.errors} />
           <ThemedView style={styles.buttonContainer}>
-            {!isFirstStep && <ThemedButton title="Previous" onPress={goPrev} />}
+            {!isFirstStep && <ThemedButton title="Previous" onPress={goPrev} style={styles.button} />}
             <ThemedButton
               title={isLastStep ? 'Submit' : 'Next'}
               onPress={goNext}
-              style={styles.nextButton}
+              style={styles.button}
             />
           </ThemedView>
         </ThemedView>
@@ -160,10 +160,10 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    gap: 16,
     marginTop: 32,
   },
-  nextButton: {
-    marginLeft: 'auto',
+  button: {
+    flex: 1,
   },
 });
