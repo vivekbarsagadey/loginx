@@ -15,9 +15,9 @@ import { auth } from '@/firebase-config';
 import { showError } from '@/utils/error';
 
 const STEPS = [
-  { id: 'step-1', title: 'Personal Information', component: RegisterStep1 },
-  { id: 'step-2', title: 'Account Security', component: RegisterStep2 },
-  { id: 'step-3', title: 'Address', component: RegisterStep3 },
+  { id: 'step-1', title: 'Personal Information', component: RegisterStep1, fields: ['firstName', 'lastName'] },
+  { id: 'step-2', title: 'Account Security', component: RegisterStep2, fields: ['email', 'password', 'confirmPassword'] },
+  { id: 'step-3', title: 'Address', component: RegisterStep3, fields: ['address', 'city', 'state', 'zipCode'] },
 ];
 
 const schema = z.object({
@@ -73,7 +73,8 @@ export default function RegisterScreen() {
   const { handleSubmit, trigger } = methods;
 
   const goNext = async () => {
-    const isValid = await trigger();
+    const fields = STEPS[currentStep].fields;
+    const isValid = await trigger(fields as any);
     if (isValid) {
       if (currentStep < STEPS.length - 1) {
         setCurrentStep(currentStep + 1);
