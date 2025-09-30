@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Stack, useRouter } from 'expo-router';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
 import { z } from 'zod';
 import RegisterStep1 from './step-1';
 import RegisterStep2 from './step-2';
@@ -136,32 +136,46 @@ export default function RegisterScreen() {
           isLastStep,
         }}
       >
-        <ThemedView style={styles.container}>
-          <Stack.Screen options={{ title: STEPS[currentStep].title }} />
-          <CurrentStepComponent errors={formState.errors} />
-          <ThemedView style={styles.buttonContainer}>
-            {!isFirstStep && <ThemedButton title="Previous" onPress={goPrev} style={styles.button} />}
-            <ThemedButton
-              title={isLastStep ? 'Submit' : 'Next'}
-              onPress={goNext}
-              style={styles.button}
-            />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.keyboardAvoidingView}
+        >
+          <ThemedView style={styles.container}>
+            <Stack.Screen options={{ title: STEPS[currentStep].title }} />
+            <ScrollView style={styles.scrollView}>
+              <CurrentStepComponent errors={formState.errors} />
+            </ScrollView>
+            <ThemedView style={styles.buttonContainer}>
+              {!isFirstStep && <ThemedButton title="Previous" onPress={goPrev} style={styles.button} />}
+              <ThemedButton
+                title={isLastStep ? 'Submit' : 'Next'}
+                onPress={goNext}
+                style={styles.button}
+              />
+            </ThemedView>
           </ThemedView>
-        </ThemedView>
+        </KeyboardAvoidingView>
       </RegisterContext.Provider>
     </FormProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     padding: 16,
+    flexDirection: 'column',
+  },
+  scrollView: {
+    flex: 1,
   },
   buttonContainer: {
     flexDirection: 'row',
     gap: 16,
-    marginTop: 32,
+    paddingTop: 16,
   },
   button: {
     flex: 1,

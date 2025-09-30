@@ -75,8 +75,13 @@
       }
     },
     "validation": {
+      "required": "Required",
       "invalidEmail": "Invalid email address",
-      "emptyDisplayName": "Display name cannot be empty."
+      "emptyDisplayName": "Display name cannot be empty.",
+      "passwordTooShort": "Password must be at least 8 characters long.",
+      "passwordMismatch": "Passwords do not match",
+      "passwordInvalid": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+      "zipCodeTooShort": "Zip code must be at least 5 characters long."
     }
   },
   "success": {

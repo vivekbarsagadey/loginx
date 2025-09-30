@@ -70,8 +70,7 @@ export default function RegisterStep3({ errors }: { errors: any }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 16,
+    // flex: 1, // Removed this line
   },
   title: {
     marginBottom: 16,

@@ -75,8 +75,13 @@
       }
     },
     "validation": {
+      "required": "Requerido",
       "invalidEmail": "Dirección de correo electrónico no válida",
-      "emptyDisplayName": "El nombre de visualización no puede estar vacío."
+      "emptyDisplayName": "El nombre de visualización no puede estar vacío.",
+      "passwordTooShort": "La contraseña debe tener al menos 8 caracteres.",
+      "passwordMismatch": "Las contraseñas no coinciden.",
+      "passwordInvalid": "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.",
+      "zipCodeTooShort": "El código postal debe tener al menos 5 caracteres."
     }
   },
   "success": {
