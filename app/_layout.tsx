@@ -1,38 +1,25 @@
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { AuthProvider, useAuth } from '@/hooks/use-auth-provider';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-//import { usePushNotifications } from '@/hooks/use-push-notifications';
+import { OnboardingProvider, useOnboarding } from '@/hooks/use-onboarding-provider';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 function RootLayoutNav() {
-  const { user, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const { onboardingCompleted, checkingOnboarding } = useOnboarding();
   const segments = useSegments();
   const router = useRouter();
-  const [onboardingCompleted, setOnboardingCompleted] = useState(false);
-  const [checkingOnboarding, setCheckingOnboarding] = useState(true);
-
-  //usePushNotifications(user?.uid);
 
   useEffect(() => {
-    const checkOnboarding = async () => {
-      const value = await AsyncStorage.getItem('onboardingCompleted');
-      setOnboardingCompleted(value === 'true');
-      setCheckingOnboarding(false);
-    };
-    checkOnboarding();
-  }, []);
-
-  useEffect(() => {
-    if (loading || checkingOnboarding) {
+    if (authLoading || checkingOnboarding) {
       return;
     }
 
@@ -42,16 +29,15 @@ function RootLayoutNav() {
     if (!onboardingCompleted && !inOnboardingGroup) {
       router.replace('/onboarding');
     } else if (onboardingCompleted) {
-      if (user && inAuthGroup) {
+      if (user && (inAuthGroup || inOnboardingGroup)) {
         router.replace('/(tabs)/index' as any);
       } else if (!user && !inAuthGroup) {
         router.replace('/(auth)/login');
       }
     }
+  }, [user, segments, router, authLoading, onboardingCompleted, checkingOnboarding]);
 
-  }, [user, segments, router, loading, onboardingCompleted, checkingOnboarding]);
-
-  if (loading || checkingOnboarding) {
+  if (authLoading || checkingOnboarding) {
     return null; // Or a loading spinner
   }
 
@@ -83,9 +69,11 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <RootLayoutNav />
-      </ThemeProvider>
+      <OnboardingProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <RootLayoutNav />
+        </ThemeProvider>
+      </OnboardingProvider>
     </AuthProvider>
   );
 }

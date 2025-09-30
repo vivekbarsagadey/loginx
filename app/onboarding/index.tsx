@@ -1,17 +1,17 @@
 
-// app/onboarding/index.tsx
 import { Colors } from '@/constants/theme';
 import i18n from '@/i18n';
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
-import { useRef, useState } from "react";
-import { Dimensions, FlatList, Pressable, useColorScheme, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { WelcomeSlide } from "@/components/onboarding/welcome";
-import { Features } from "@/components/onboarding/features";
-import { ThemedView } from "@/components/themed-view";
-import { ThemedText } from "@/components/themed-text";
-import { Personalize } from "@/components/onboarding/personalize";
+import { useRouter } from 'expo-router';
+import { useRef, useState } from 'react';
+import { Dimensions, FlatList, Pressable, useColorScheme, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { WelcomeSlide } from '@/components/onboarding/welcome';
+import { Features } from '@/components/onboarding/features';
+import { ThemedView } from '@/components/themed-view';
+import { ThemedText } from '@/components/themed-text';
+import { Personalize } from '@/components/onboarding/personalize';
+import { useOnboarding } from '@/hooks/use-onboarding-provider';
 
 const SLIDES = [
   { key: "welcome" },
@@ -21,6 +21,7 @@ const SLIDES = [
 
 export default function Onboarding() {
   const r = useRouter();
+  const { setOnboardingCompleted } = useOnboarding();
   const [i, setI] = useState(0);
   const ref = useRef<FlatList>(null);
   const colorScheme = useColorScheme();
@@ -28,13 +29,12 @@ export default function Onboarding() {
   const { width } = Dimensions.get('window');
   const { top, bottom } = useSafeAreaInsets();
 
-
   const next = async () => {
     if (i < SLIDES.length - 1) {
       ref.current?.scrollToIndex({ index: i + 1, animated: true });
       setI(i + 1);
     } else {
-      await AsyncStorage.setItem("onboardingCompleted", "true");
+      setOnboardingCompleted(true);
       r.replace("/(auth)/login");
     }
   };
@@ -47,7 +47,7 @@ export default function Onboarding() {
   };
 
   const skip = async () => {
-    await AsyncStorage.setItem("onboardingCompleted", "true");
+    setOnboardingCompleted(true);
     r.replace("/(auth)/login");
   };
 
