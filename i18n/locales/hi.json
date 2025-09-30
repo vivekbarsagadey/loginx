@@ -135,8 +135,13 @@
     "appearance": "दिखावट",
     "theme": "थीम",
     "themeSubtitle": "सिस्टम, लाइट, डार्क",
+    "language": "भाषा",
+    "languageSubtitle": "अंग्रेज़ी",
     "textSize": "पाठ का आकार",
     "textSizeSubtitle": "डिफ़ॉल्ट",
+    "account": "खाता",
+    "editProfile": "प्रोफ़ाइल संपादित करें",
+    "updateEmail": "ईमेल अपडेट करें",
     "notifications": "सूचनाएं",
     "pushNotifications": "पुश सूचनाएं",
     "emailUpdates": "ईमेल अपडेट",
@@ -156,6 +161,7 @@
     "legal": "कानूनी",
     "termsOfService": "सेवा की शर्तें",
     "privacyPolicy": "गोपनीयता नीति",
+    "license": "लाइसेंस",
     "licenseInformation": "लाइसेंस जानकारी",
     "deleteAccount": "खाता हटाएं",
     "logOut": "लॉग आउट"
@@ -173,7 +179,7 @@
       "validation": {
         "invalidEmail": "कृपया एक मान्य ईमेल पता दर्ज करें।",
         "passwordTooShort": "पासवर्ड कम से कम 5 वर्णों का होना चाहिए।",
-        "passwordInvalidChars": "पासワード में केवल अल्फ़ान्यूमेरिक वर्ण, @, और $ हो सकते हैं।"
+        "passwordInvalidChars": "पासवर्ड में केवल अल्फ़ान्यूमेरिक वर्ण, @, और $ हो सकते हैं।"
       }
     },
     "welcome": {
