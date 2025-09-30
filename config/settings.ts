@@ -1,4 +1,3 @@
-
 import i18n from '@/i18n';
 import { Href } from "expo-router";
 
@@ -13,15 +12,16 @@ export const settingsSections: { title?: string; items: SettingsItem[] }[] = [
     title: i18n.t('settings.appearance'),
     items: [
       { type: "link", icon: "moon", title: i18n.t('settings.theme'), subtitle: i18n.t('settings.themeSubtitle'), href: "/settings/theme" },
-      { type: "link", icon: "type", title: i18n.t('settings.textSize'), subtitle: i18n.t('settings.textSizeSubtitle'), href: "/settings/text-size" },
+      { type: "link", icon: "globe", title: i18n.t('settings.language'), subtitle: i18n.t('settings.languageSubtitle'), href: "/settings/language" },
+      { type: "link", icon: "type", title: i18n.t('settings.textSize'), href: "/settings/text-size" },
     ],
   },
   {
-    title: i18n.t('settings.notifications'),
+    title: i18n.t('settings.account'),
     items: [
-      { type: "toggle", icon: "bell", title: i18n.t('settings.pushNotifications'), key: "pushEnabled" },
-      { type: "toggle", icon: "mail", title: i18n.t('settings.emailUpdates'), key: "emailUpdates" },
-      { type: "toggle", icon: "megaphone", title: i18n.t('settings.marketingTips'), key: "marketingTips" },
+      { type: "link", icon: "user", title: i18n.t('settings.editProfile'), href: "/profile/edit" },
+      { type: "link", icon: "bell", title: i18n.t('settings.notifications'), href: "/settings/notifications" },
+      { type: "link", icon: "at-sign", title: i18n.t('settings.updateEmail'), href: "/profile/update-email" },
     ],
   },
   {
@@ -44,22 +44,10 @@ export const settingsSections: { title?: string; items: SettingsItem[] }[] = [
   {
     title: i18n.t('settings.about'),
     items: [
-      { type: "label", icon: "info", title: i18n.t('settings.version'), value: "1.0.3 (73)" },
-      { type: "link", icon: "gift", title: i18n.t('settings.whatsNew'), href: "/about/whats-new" },
-    ],
-  },
-  {
-    title: i18n.t('settings.legal'),
-    items: [
-        { type: "link", icon: "file-text", title: i18n.t('settings.termsOfService'), href: "/legal/terms" },
-        { type: "link", icon: "shield", title: i18n.t('settings.privacyPolicy'), href: "/legal/privacy" },
-        { type: "link", icon: "file", title: i18n.t('settings.licenseInformation'), href: "/legal/license" },
-    ]
-  },
-  {
-    items: [
-        { type: "danger", icon: "trash-2", title: i18n.t('settings.deleteAccount'), action: "deleteAccount" },
-        { type: "danger", icon: "log-out", title: i18n.t('settings.logOut'), action: "logout" }
+      { type: "link", icon: "info", title: i18n.t('settings.whatsNew'), href: "/about/whats-new" },
+      { type: "link", icon: "file-text", title: i18n.t('settings.termsOfService'), href: "/legal/terms" },
+      { type: "link", icon: "shield-check", title: i18n.t('settings.privacyPolicy'), href: "/legal/privacy" },
+      { type: "link", icon: "award", title: i18n.t('settings.license'), href: "/legal/license" },
     ],
   },
 ];

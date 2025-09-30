@@ -103,6 +103,19 @@
       "title": "Información personal",
       "firstNamePlaceholder": "Nombre",
       "lastNamePlaceholder": "Apellido"
+    },
+    "step2": {
+      "title": "Seguridad de la cuenta",
+      "emailPlaceholder": "Correo electrónico",
+      "passwordPlaceholder": "Contraseña",
+      "confirmPasswordPlaceholder": "Confirmar contraseña"
+    },
+    "step3": {
+      "title": "Dirección",
+      "addressPlaceholder": "Dirección",
+      "cityPlaceholder": "Ciudad",
+      "statePlaceholder": "Estado",
+      "zipCodePlaceholder": "Código postal"
     }
   },
   "forgotPassword": {
