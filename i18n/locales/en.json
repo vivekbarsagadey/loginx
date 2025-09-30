@@ -189,7 +189,7 @@
           "description": "Improved two-factor authentication with biometric support and stronger encryption algorithms."
         },
         {
-          "title": "Better Performance", 
+          "title": "Better Performance",
           "description": "Faster loading times and smoother animations throughout the app."
         },
         {
@@ -199,6 +199,10 @@
         {
           "title": "Improved Accessibility",
           "description": "Better screen reader support and enhanced keyboard navigation."
+        },
+        {
+          "title": "Design & UX",
+          "description": "Scalable typography, responsive grid, large touch targets. Skeletons/placeholders, pull-to-refresh, toast/snackbar, global error banner"
         }
       ],
       "bugFixes": "Bug Fixes",
@@ -292,7 +296,7 @@
             },
             {
               "name": "Expo",
-              "license": "MIT License", 
+              "license": "MIT License",
               "description": "An open-source platform for making universal native apps"
             },
             {
@@ -350,7 +354,7 @@
           "title": "Password Requirements:",
           "minLength": "At least 8 characters long",
           "uppercase": "Contains uppercase letters",
-          "lowercase": "Contains lowercase letters", 
+          "lowercase": "Contains lowercase letters",
           "numbers": "Contains numbers",
           "symbols": "Contains special characters"
         },
@@ -396,7 +400,7 @@
             "description": "Use light theme"
           },
           "dark": {
-            "title": "Dark", 
+            "title": "Dark",
             "description": "Use dark theme"
           }
         },

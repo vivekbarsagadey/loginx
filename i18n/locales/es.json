@@ -199,6 +199,10 @@
         {
           "title": "Accesibilidad Mejorada",
           "description": "Mejor soporte para lectores de pantalla y navegación mejorada con teclado."
+        },
+        {
+          "title": "Diseño y UX",
+          "description": "Tipografía escalable, cuadrícula receptiva, objetivos táctiles grandes. Esqueletos/marcadores de posición, tirar para actualizar, toast/snackbar, banner de error global"
         }
       ],
       "bugFixes": "Corrección de Errores",
