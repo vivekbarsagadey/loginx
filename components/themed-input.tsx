@@ -35,8 +35,14 @@ export function ThemedInput({
 
   const [isFocused, setIsFocused] = React.useState(false);
 
-  const focusStyle: TextStyle = isFocused ? { borderColor: primaryColor, borderWidth: 2 } : {};
-  const errorStyle: TextStyle = errorMessage ? { borderColor: errorColor, borderWidth: 2 } : {};
+  const dynamicStyle: TextStyle = {};
+  if (errorMessage) {
+    dynamicStyle.borderColor = errorColor;
+    dynamicStyle.borderWidth = 2;
+  } else if (isFocused) {
+    dynamicStyle.borderColor = primaryColor;
+    dynamicStyle.borderWidth = 2;
+  }
 
   return (
     <View style={[styles.container, containerStyle]}>
@@ -45,8 +51,7 @@ export function ThemedInput({
         style={[
           styles.input,
           { color: textColor, backgroundColor, borderColor },
-          focusStyle,
-          errorStyle,
+          dynamicStyle,
           style,
         ]}
         placeholderTextColor={mutedColor}
@@ -72,23 +77,23 @@ export function ThemedInput({
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 8, // Spacing scale
+    marginVertical: 8,
   },
   label: {
-    fontSize: 16, // Body
-    color: '#6B7280', // text-muted
-    marginBottom: 8, // Spacing scale
+    fontSize: 16,
+    color: '#6B7280',
+    marginBottom: 8,
   },
   input: {
-    height: 48, // Meets >= 44px tap target
+    height: 48,
     borderWidth: 1,
-    borderRadius: 12, // New radius spec
-    paddingHorizontal: 16, // Spacing scale
+    borderRadius: 12,
+    paddingHorizontal: 16,
     fontSize: 16,
   },
   helperText: {
-    fontSize: 13, // Caption
-    color: '#6B7280', // text-muted
-    marginTop: 8, // Spacing scale
+    fontSize: 13,
+    color: '#6B7280',
+    marginTop: 8,
   },
 });

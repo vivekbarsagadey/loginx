@@ -68,14 +68,14 @@ export default function RegisterScreen() {
 
   const methods = useForm<FormData>({
     resolver: zodResolver(schema),
-    mode: 'onChange',
+    mode: 'onTouched',
   });
 
-  const { handleSubmit, trigger } = methods;
+  const { handleSubmit, trigger, formState } = methods;
 
   const goNext = async () => {
     const fields = STEPS[currentStep].fields;
-    const isValid = await trigger(fields as any);
+    const isValid = await trigger(fields as (keyof FormData)[]);
     if (isValid) {
       if (currentStep < STEPS.length - 1) {
         setCurrentStep(currentStep + 1);
@@ -138,7 +138,7 @@ export default function RegisterScreen() {
       >
         <ThemedView style={styles.container}>
           <Stack.Screen options={{ title: STEPS[currentStep].title }} />
-          <CurrentStepComponent />
+          <CurrentStepComponent errors={formState.errors} />
           <ThemedView style={styles.buttonContainer}>
             {!isFirstStep && <ThemedButton title="Previous" onPress={goPrev} />}
             <ThemedButton

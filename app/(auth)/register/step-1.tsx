@@ -6,8 +6,8 @@ import { useFormContext, Controller } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
 import i18n from '@/i18n';
 
-export default function RegisterStep1() {
-  const { control, formState: { errors } } = useFormContext();
+export default function RegisterStep1({ errors }: { errors: any }) {
+  const { control } = useFormContext();
 
   return (
     <ThemedView style={styles.container}>

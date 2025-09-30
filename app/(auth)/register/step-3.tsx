@@ -4,19 +4,20 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedInput } from '@/components/themed-input';
 import { useFormContext, Controller } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
+import i18n from '@/i18n';
 
-export default function RegisterStep3() {
-  const { control, formState: { errors } } = useFormContext();
+export default function RegisterStep3({ errors }: { errors: any }) {
+  const { control } = useFormContext();
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="h2" style={styles.title}>Address</ThemedText>
+      <ThemedText type="h2" style={styles.title}>{i18n.t('register.step3.title')}</ThemedText>
       <Controller
         control={control}
         name="address"
         render={({ field: { onChange, onBlur, value } }) => (
           <ThemedInput
-            placeholder="Address"
+            placeholder={i18n.t('register.step3.addressPlaceholder')}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -29,7 +30,7 @@ export default function RegisterStep3() {
         name="city"
         render={({ field: { onChange, onBlur, value } }) => (
           <ThemedInput
-            placeholder="City"
+            placeholder={i18n.t('register.step3.cityPlaceholder')}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -42,7 +43,7 @@ export default function RegisterStep3() {
         name="state"
         render={({ field: { onChange, onBlur, value } }) => (
           <ThemedInput
-            placeholder="State"
+            placeholder={i18n.t('register.step3.statePlaceholder')}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -55,11 +56,10 @@ export default function RegisterStep3() {
         name="zipCode"
         render={({ field: { onChange, onBlur, value } }) => (
           <ThemedInput
-            placeholder="Zip Code"
+            placeholder={i18n.t('register.step3.zipCodePlaceholder')}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
-            keyboardType="numeric"
             errorMessage={errors.zipCode?.message as string}
           />
         )}
