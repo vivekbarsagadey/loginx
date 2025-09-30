@@ -9,7 +9,7 @@ import { auth } from '@/firebase-config';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { showError } from '@/utils/error';
 import { Feather } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { Href, useRouter } from 'expo-router';
 import { deleteUser } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Image, StyleSheet, Switch, TouchableOpacity, View } from 'react-native';
@@ -114,7 +114,7 @@ export default function SettingsScreen() {
 
   const handlePress = (item: SettingsItem) => {
     if (item.type === 'link' && item.href) {
-      router.push(item.href);
+      router.push(item.href as Href);
     } else if (item.type === 'danger') {
       if (item.action === 'logout') {
         handleLogout();
