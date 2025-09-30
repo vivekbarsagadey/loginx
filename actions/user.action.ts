@@ -1,9 +1,9 @@
 
-import { doc, getDoc, updateDoc, setDoc } from 'firebase/firestore';
 import { firestore } from '@/firebase-config';
-import { UserProfile } from '@/types/setting';
-import { showError } from '@/utils/error';
+import { UserProfile } from '@/types/user';
 import * as cache from '@/utils/cache';
+import { showError } from '@/utils/error';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 export const getUserProfile = async (uid: string): Promise<UserProfile | null> => {
   try {

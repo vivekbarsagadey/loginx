@@ -13,6 +13,7 @@ import RegisterStep3 from './step-3';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/firebase-config';
 import { showError } from '@/utils/error';
+import { createUserProfile } from '@/actions/user.action';
 
 const STEPS = [
   { id: 'step-1', title: 'Personal Information', component: RegisterStep1, fields: ['firstName', 'lastName'] },
@@ -92,7 +93,20 @@ export default function RegisterScreen() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      await createUserWithEmailAndPassword(auth, data.email, data.password);
+      const { user } = await createUserWithEmailAndPassword(auth, data.email, data.password);
+      await createUserProfile(user.uid, {
+        displayName: `${data.firstName} ${data.lastName}`,
+        email: data.email,
+        age: 0,
+        photoURL: '',
+        pushEnabled: false,
+        emailUpdates: false,
+        marketingTips: false,
+        address: data.address,
+        city: data.city,
+        state: data.state,
+        zipCode: data.zipCode,
+      });
       router.replace({
         pathname: '/(auth)/welcome',
         params: { email: data.email },

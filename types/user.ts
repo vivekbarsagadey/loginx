@@ -9,4 +9,8 @@ export interface UserProfile {
     marketingTips: boolean;
     expoPushToken?: string;
     deleted?: boolean;
+    address?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
 }

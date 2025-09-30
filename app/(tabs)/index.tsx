@@ -1,13 +1,13 @@
 
-import { StyleSheet, View, ActivityIndicator, Alert } from 'react-native';
-import { ThemedView } from '@/components/themed-view';
-import { ThemedText } from '@/components/themed-text';
-import { useAuth } from '@/hooks/use-auth-provider';
-import { useEffect, useState } from 'react';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { getUserProfile } from '@/actions/user.action';
-import { UserProfile } from '@/types/setting';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { Colors } from '@/constants/theme';
+import { useAuth } from '@/hooks/use-auth-provider';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { UserProfile } from '@/types/user';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
 
 export default function IndexScreen() {
   const { user } = useAuth();
