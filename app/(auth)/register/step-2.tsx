@@ -1,9 +1,9 @@
-import { ThemedView } from '@/components/themed-view';
-import { ThemedText } from '@/components/themed-text';
 import { ThemedInput } from '@/components/themed-input';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import i18n from '@/i18n';
 import { Controller, FieldErrors, useFormContext } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
-import i18n from '@/i18n';
 
 interface FormData {
   email: string;

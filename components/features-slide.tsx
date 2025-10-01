@@ -1,6 +1,6 @@
+import { Image, StyleSheet } from 'react-native';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
-import { Image, StyleSheet } from 'react-native';
 
 interface SlideProps {
   icon: string;

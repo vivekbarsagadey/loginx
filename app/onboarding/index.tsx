@@ -5,11 +5,11 @@ import { useRef, useState } from 'react';
 import { Dimensions, FlatList, Pressable, useColorScheme, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { WelcomeSlide } from '@/components/onboarding/welcome';
 import { Features } from '@/components/onboarding/features';
-import { ThemedView } from '@/components/themed-view';
-import { ThemedText } from '@/components/themed-text';
 import { Personalize } from '@/components/onboarding/personalize';
+import { WelcomeSlide } from '@/components/onboarding/welcome';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
 
 const SLIDES = [{ key: 'welcome' }, { key: 'features' }, { key: 'personalize' }];

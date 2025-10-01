@@ -2,11 +2,11 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { auth } from '@/firebase-config';
+import i18n from '@/i18n';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { sendEmailVerification, signOut } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { Alert, StyleSheet } from 'react-native';
-import i18n from '@/i18n';
 
 const getFirebaseAuthErrorMessage = (errorCode: string) => {
   switch (errorCode) {
