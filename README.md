@@ -61,6 +61,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 3. **Set up environment variables:**
    Create a `.env` file in the root of the project and add your Firebase configuration:
+
    ```
    FIREBASE_API_KEY=your-api-key
    FIREBASE_AUTH_DOMAIN=your-auth-domain
@@ -124,7 +125,8 @@ The project follows a standard Expo and React Native project structure:
 
 ## Configuration
 
-The project uses a `firebase-config.ts` file to initialize Firebase. This file reads the environment variables from the `.env` file at build time. Make sure to provide all the required Firebase credentials in your `.env` file before running the application.
+The project uses a `firebase-config.ts` file to initialize Firebase. This file reads the environment variables from the `.env` file at build time.
+Make sure to provide all the required Firebase credentials in your `.env` file before running the application.
 
 ## Contributing
 

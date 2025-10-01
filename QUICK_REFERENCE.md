@@ -121,7 +121,7 @@ Everything you had before still works exactly the same:
 
 ---
 
-## 🎉 You're All Set!
+## 🎉 You're All Set
 
 Your app is now more secure, reliable, accessible, and maintainable.
 

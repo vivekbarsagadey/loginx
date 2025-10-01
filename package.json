@@ -47,10 +47,15 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "lint:fix": "expo lint --fix",
+    "lint:md": "markdownlint \"**/*.md\" --ignore node_modules --ignore .expo",
+    "lint:md:fix": "markdownlint \"**/*.md\" --ignore node_modules --ignore .expo --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "format:md": "prettier --write \"**/*.md\"",
+    "format:md:check": "prettier --check \"**/*.md\"",
     "type-check": "tsc --noEmit",
-    "validate": "pnpm lint && pnpm format:check && pnpm type-check"
+    "validate": "pnpm lint && pnpm lint:md && pnpm format:check && pnpm type-check",
+    "validate:fix": "pnpm lint:fix && pnpm lint:md:fix && pnpm format"
   },
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",
@@ -102,7 +107,9 @@
     "@types/react": "~19.1.0",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
+    "markdownlint-cli": "^0.43.0",
     "prettier": "^3.6.2",
+    "prettier-plugin-organize-imports": "^4.1.0",
     "typescript": "~5.9.2"
   },
   "private": true
