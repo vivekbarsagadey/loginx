@@ -2,6 +2,7 @@ import { firestore } from "@/firebase-config";
 import { UserProfile } from "@/types/user";
 import * as cache from "@/utils/cache";
 import { showError } from "@/utils/error";
+import { withRetry } from "@/utils/retry";
 import { sanitizeUserProfile } from "@/utils/sanitize";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
@@ -26,7 +27,10 @@ export const getUserProfile = async (
     }
 
     const userDocRef = doc(firestore, "users", uid);
-    const userDoc = await getDoc(userDocRef);
+    const userDoc = await withRetry(() => getDoc(userDocRef), {
+      maxRetries: 2,
+      initialDelay: 500,
+    });
 
     if (userDoc.exists()) {
       const userProfile = userDoc.data() as UserProfile;
@@ -60,7 +64,10 @@ export const updateUser = async (
     const sanitizedData = sanitizeUserProfile(data);
 
     const userDocRef = doc(firestore, "users", uid);
-    await updateDoc(userDocRef, sanitizedData);
+    await withRetry(() => updateDoc(userDocRef, sanitizedData), {
+      maxRetries: 2,
+      initialDelay: 500,
+    });
 
     // Invalidate cache instead of setting partial data
     cache.invalidate(`user-profile-${uid}`);
