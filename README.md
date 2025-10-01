@@ -2,6 +2,10 @@
 
 LoginX is a modern, cross-platform mobile application built with React Native and Expo. It provides a seamless and secure user authentication experience, including registration, login, and profile management.
 
+> **⚠️ SECURITY UPDATE (October 2, 2025)**  
+> Critical security updates have been applied. **Environment variables are now required**.  
+> Please read [URGENT_READ_ME.md](./URGENT_READ_ME.md) before running the app.
+
 ## Table of Contents
 
 - [Features](#features)

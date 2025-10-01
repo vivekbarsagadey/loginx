@@ -3,14 +3,61 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Helper functions for validation
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidString(value, maxLength) {
+      return value is string && value.size() <= maxLength;
+    }
+
+    function isValidUserProfile() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['displayName', 'email', 'age']) &&
+             isValidString(data.displayName, 100) &&
+             isValidString(data.email, 254) &&
+             data.email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$') &&
+             data.age is int &&
+             data.age >= 0 &&
+             data.age <= 150 &&
+             (!('address' in data) || isValidString(data.address, 200)) &&
+             (!('city' in data) || isValidString(data.city, 100)) &&
+             (!('state' in data) || isValidString(data.state, 100)) &&
+             (!('zipCode' in data) || isValidString(data.zipCode, 20)) &&
+             (!('photoURL' in data) || isValidString(data.photoURL, 500));
+    }
+
     // By default, deny all reads and writes
     match /{document=**} {
       allow read, write: if false;
     }
 
-    // Allow users to read and write their own data
+    // Users can read and write their own data with validation
     match /users/{userId} {
-      allow read, write: if request.auth.uid == userId;
+      // Allow read if user is authenticated and owns the document or if not deleted
+      allow read: if isOwner(userId) && 
+                     (!('deleted' in resource.data) || resource.data.deleted == false);
+      
+      // Allow create with validation
+      allow create: if isOwner(userId) && 
+                       isValidUserProfile() &&
+                       !('deleted' in request.resource.data);
+      
+      // Allow update with validation, but prevent certain fields from being modified
+      allow update: if isOwner(userId) && 
+                       isValidUserProfile() &&
+                       request.resource.data.email == resource.data.email && // Prevent email change via Firestore
+                       // Allow soft delete
+                       (request.resource.data.deleted == resource.data.deleted || 
+                        request.resource.data.deleted == true);
+      
+      // Prevent direct deletion - use soft delete instead
+      allow delete: if false;
     }
   }
 }
