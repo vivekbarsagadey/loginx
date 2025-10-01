@@ -1,4 +1,3 @@
-
 import { useColorScheme as useRNColorScheme } from 'react-native';
 
 // The useColorScheme value is always either light or dark, but the built-in

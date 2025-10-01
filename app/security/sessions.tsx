@@ -1,8 +1,7 @@
-
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedButton } from '@/components/themed-button';
-import { StyleSheet, ScrollView, Alert } from 'react-native';
+import { Alert, ScrollView, StyleSheet } from 'react-native';
 import i18n from '@/i18n';
 import { useState } from 'react';
 
@@ -43,31 +42,27 @@ export default function SessionsScreen() {
     },
   ]);
 
-  const currentSessions = sessions.filter(s => s.isCurrent);
-  const otherSessions = sessions.filter(s => !s.isCurrent);
+  const currentSessions = sessions.filter((s) => s.isCurrent);
+  const otherSessions = sessions.filter((s) => !s.isCurrent);
 
   const handleEndSession = (sessionId: string) => {
-    setSessions(prevSessions => prevSessions.filter(s => s.id !== sessionId));
+    setSessions((prevSessions) => prevSessions.filter((s) => s.id !== sessionId));
   };
 
   const handleEndAllSessions = () => {
-    Alert.alert(
-      i18n.t('screens.security.sessions.confirmEndAll.title'),
-      i18n.t('screens.security.sessions.confirmEndAll.message'),
-      [
-        {
-          text: i18n.t('screens.security.sessions.confirmEndAll.cancel'),
-          style: 'cancel',
+    Alert.alert(i18n.t('screens.security.sessions.confirmEndAll.title'), i18n.t('screens.security.sessions.confirmEndAll.message'), [
+      {
+        text: i18n.t('screens.security.sessions.confirmEndAll.cancel'),
+        style: 'cancel',
+      },
+      {
+        text: i18n.t('screens.security.sessions.confirmEndAll.confirm'),
+        style: 'destructive',
+        onPress: () => {
+          setSessions((prevSessions) => prevSessions.filter((s) => s.isCurrent));
         },
-        {
-          text: i18n.t('screens.security.sessions.confirmEndAll.confirm'),
-          style: 'destructive',
-          onPress: () => {
-            setSessions(prevSessions => prevSessions.filter(s => s.isCurrent));
-          },
-        },
-      ]
-    );
+      },
+    ]);
   };
 
   const renderSession = (session: Session) => (
@@ -82,27 +77,14 @@ export default function SessionsScreen() {
           </ThemedView>
         )}
       </ThemedView>
-      
-      <ThemedText style={styles.sessionInfo}>
-        {i18n.t('screens.security.sessions.sessionInfo.device', { device: session.device })}
-      </ThemedText>
-      <ThemedText style={styles.sessionInfo}>
-        {i18n.t('screens.security.sessions.sessionInfo.location', { location: session.location })}
-      </ThemedText>
-      <ThemedText style={styles.sessionInfo}>
-        {i18n.t('screens.security.sessions.sessionInfo.lastActive', { time: session.lastActive })}
-      </ThemedText>
-      <ThemedText style={styles.sessionInfo}>
-        {i18n.t('screens.security.sessions.sessionInfo.ipAddress', { ip: session.ipAddress })}
-      </ThemedText>
+
+      <ThemedText style={styles.sessionInfo}>{i18n.t('screens.security.sessions.sessionInfo.device', { device: session.device })}</ThemedText>
+      <ThemedText style={styles.sessionInfo}>{i18n.t('screens.security.sessions.sessionInfo.location', { location: session.location })}</ThemedText>
+      <ThemedText style={styles.sessionInfo}>{i18n.t('screens.security.sessions.sessionInfo.lastActive', { time: session.lastActive })}</ThemedText>
+      <ThemedText style={styles.sessionInfo}>{i18n.t('screens.security.sessions.sessionInfo.ipAddress', { ip: session.ipAddress })}</ThemedText>
 
       {!session.isCurrent && (
-        <ThemedButton
-          title={i18n.t('screens.security.sessions.actions.endSession')}
-          variant="link"
-          onPress={() => handleEndSession(session.id)}
-          style={styles.endSessionButton}
-        />
+        <ThemedButton title={i18n.t('screens.security.sessions.actions.endSession')} variant="link" onPress={() => handleEndSession(session.id)} style={styles.endSessionButton} />
       )}
     </ThemedView>
   );
@@ -113,9 +95,7 @@ export default function SessionsScreen() {
         <ThemedText type="h1" style={styles.title}>
           {i18n.t('screens.security.sessions.title')}
         </ThemedText>
-        <ThemedText style={styles.subtitle}>
-          {i18n.t('screens.security.sessions.subtitle')}
-        </ThemedText>
+        <ThemedText style={styles.subtitle}>{i18n.t('screens.security.sessions.subtitle')}</ThemedText>
 
         <ThemedView style={styles.section}>
           <ThemedText type="h3" style={styles.sectionTitle}>
@@ -131,17 +111,10 @@ export default function SessionsScreen() {
           {otherSessions.length > 0 ? (
             <>
               {otherSessions.map(renderSession)}
-              <ThemedButton
-                title={i18n.t('screens.security.sessions.actions.endAll')}
-                variant="secondary"
-                onPress={handleEndAllSessions}
-                style={styles.endAllButton}
-              />
+              <ThemedButton title={i18n.t('screens.security.sessions.actions.endAll')} variant="secondary" onPress={handleEndAllSessions} style={styles.endAllButton} />
             </>
           ) : (
-            <ThemedText style={styles.noSessionsText}>
-              {i18n.t('screens.security.sessions.noOtherSessions')}
-            </ThemedText>
+            <ThemedText style={styles.noSessionsText}>{i18n.t('screens.security.sessions.noOtherSessions')}</ThemedText>
           )}
         </ThemedView>
       </ThemedView>

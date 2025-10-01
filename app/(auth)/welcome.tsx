@@ -1,8 +1,7 @@
-
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedButton } from '@/components/themed-button';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StyleSheet } from 'react-native';
 import i18n from '@/i18n';
 
@@ -12,15 +11,11 @@ export default function WelcomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="h1" style={styles.title}>{i18n.t('screens.welcome.title')}</ThemedText>
-      <ThemedText style={styles.subtitle}>
-        {i18n.t('screens.welcome.subtitle', { email })}
+      <ThemedText type="h1" style={styles.title}>
+        {i18n.t('screens.welcome.title')}
       </ThemedText>
-      <ThemedButton
-        title={i18n.t('screens.welcome.goToLogin')}
-        onPress={() => router.replace('/login')}
-        style={styles.button}
-      />
+      <ThemedText style={styles.subtitle}>{i18n.t('screens.welcome.subtitle', { email })}</ThemedText>
+      <ThemedButton title={i18n.t('screens.welcome.goToLogin')} onPress={() => router.replace('/login')} style={styles.button} />
     </ThemedView>
   );
 }

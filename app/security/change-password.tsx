@@ -1,9 +1,8 @@
-
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedButton } from '@/components/themed-button';
-import { StyleSheet, ScrollView, Alert } from 'react-native';
+import { Alert, ScrollView, StyleSheet } from 'react-native';
 import i18n from '@/i18n';
 import { useState } from 'react';
 
@@ -20,7 +19,7 @@ export default function ChangePasswordScreen() {
       Alert.alert(i18n.t('errors.generic.title'), 'Passwords do not match');
       return;
     }
-    
+
     setLoading(true);
     // Simulate password change
     setTimeout(() => {
@@ -38,34 +37,14 @@ export default function ChangePasswordScreen() {
         <ThemedText type="h1" style={styles.title}>
           {i18n.t('screens.security.changePassword.title')}
         </ThemedText>
-        <ThemedText style={styles.subtitle}>
-          {i18n.t('screens.security.changePassword.subtitle')}
-        </ThemedText>
+        <ThemedText style={styles.subtitle}>{i18n.t('screens.security.changePassword.subtitle')}</ThemedText>
 
         <ThemedView style={styles.form}>
-          <ThemedInput
-            placeholder={i18n.t('screens.security.changePassword.currentPassword')}
-            value={currentPassword}
-            onChangeText={setCurrentPassword}
-            secureTextEntry
-            style={styles.input}
-          />
+          <ThemedInput placeholder={i18n.t('screens.security.changePassword.currentPassword')} value={currentPassword} onChangeText={setCurrentPassword} secureTextEntry style={styles.input} />
 
-          <ThemedInput
-            placeholder={i18n.t('screens.security.changePassword.newPassword')}
-            value={newPassword}
-            onChangeText={setNewPassword}
-            secureTextEntry
-            style={styles.input}
-          />
+          <ThemedInput placeholder={i18n.t('screens.security.changePassword.newPassword')} value={newPassword} onChangeText={setNewPassword} secureTextEntry style={styles.input} />
 
-          <ThemedInput
-            placeholder={i18n.t('screens.security.changePassword.confirmPassword')}
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry
-            style={styles.input}
-          />
+          <ThemedInput placeholder={i18n.t('screens.security.changePassword.confirmPassword')} value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry style={styles.input} />
 
           <ThemedView style={styles.requirementsContainer}>
             <ThemedText type="h3" style={styles.requirementsTitle}>
@@ -85,9 +64,7 @@ export default function ChangePasswordScreen() {
             style={styles.changeButton}
           />
 
-          <ThemedText style={styles.lastChanged}>
-            {i18n.t('screens.security.changePassword.lastChanged', { date: 'November 15, 2024' })}
-          </ThemedText>
+          <ThemedText style={styles.lastChanged}>{i18n.t('screens.security.changePassword.lastChanged', { date: 'November 15, 2024' })}</ThemedText>
         </ThemedView>
       </ThemedView>
     </ScrollView>

@@ -1,11 +1,10 @@
-
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { StyleSheet, ScrollView } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import i18n from '@/i18n';
 
 export default function LicenseScreen() {
-  const libraries = i18n.t('screens.legal.license.openSource.libraries', { returnObjects: true }) as {name: string, license: string, description: string}[];
+  const libraries = i18n.t('screens.legal.license.openSource.libraries', { returnObjects: true }) as { name: string; license: string; description: string }[];
 
   return (
     <ScrollView style={styles.scrollView}>
@@ -18,30 +17,22 @@ export default function LicenseScreen() {
           <ThemedText type="h3" style={styles.sectionTitle}>
             {i18n.t('screens.legal.license.appLicense.title')}
           </ThemedText>
-          <ThemedText style={styles.sectionContent}>
-            {i18n.t('screens.legal.license.appLicense.content')}
-          </ThemedText>
+          <ThemedText style={styles.sectionContent}>{i18n.t('screens.legal.license.appLicense.content')}</ThemedText>
         </ThemedView>
 
         <ThemedView style={styles.section}>
           <ThemedText type="h3" style={styles.sectionTitle}>
             {i18n.t('screens.legal.license.openSource.title')}
           </ThemedText>
-          <ThemedText style={styles.sectionContent}>
-            {i18n.t('screens.legal.license.openSource.intro')}
-          </ThemedText>
-          
+          <ThemedText style={styles.sectionContent}>{i18n.t('screens.legal.license.openSource.intro')}</ThemedText>
+
           {libraries.map((library, index) => (
             <ThemedView key={index} style={styles.libraryItem}>
               <ThemedText type="body" style={styles.libraryName}>
                 {library.name}
               </ThemedText>
-              <ThemedText style={styles.libraryLicense}>
-                {library.license}
-              </ThemedText>
-              <ThemedText style={styles.libraryDescription}>
-                {library.description}
-              </ThemedText>
+              <ThemedText style={styles.libraryLicense}>{library.license}</ThemedText>
+              <ThemedText style={styles.libraryDescription}>{library.description}</ThemedText>
             </ThemedView>
           ))}
         </ThemedView>
@@ -50,9 +41,7 @@ export default function LicenseScreen() {
           <ThemedText type="h3" style={styles.sectionTitle}>
             {i18n.t('screens.legal.license.copyright.title')}
           </ThemedText>
-          <ThemedText style={styles.sectionContent}>
-            {i18n.t('screens.legal.license.copyright.content')}
-          </ThemedText>
+          <ThemedText style={styles.sectionContent}>{i18n.t('screens.legal.license.copyright.content')}</ThemedText>
         </ThemedView>
       </ThemedView>
     </ScrollView>

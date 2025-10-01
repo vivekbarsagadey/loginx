@@ -15,7 +15,7 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 export const set = (key: string, data: any): void => {
   try {
     if (!key) {
-      console.warn("[Cache] Attempted to set cache with empty key");
+      console.warn('[Cache] Attempted to set cache with empty key');
       return;
     }
 
@@ -25,7 +25,7 @@ export const set = (key: string, data: any): void => {
     };
     cache.set(key, entry);
   } catch (error) {
-    console.error("[Cache] Error setting cache:", error);
+    console.error('[Cache] Error setting cache:', error);
   }
 };
 
@@ -37,7 +37,7 @@ export const set = (key: string, data: any): void => {
 export const get = (key: string): any | null => {
   try {
     if (!key) {
-      console.warn("[Cache] Attempted to get cache with empty key");
+      console.warn('[Cache] Attempted to get cache with empty key');
       return null;
     }
 
@@ -54,7 +54,7 @@ export const get = (key: string): any | null => {
 
     return entry.data;
   } catch (error) {
-    console.error("[Cache] Error getting cache:", error);
+    console.error('[Cache] Error getting cache:', error);
     return null;
   }
 };
@@ -69,7 +69,7 @@ export const invalidate = (key: string): void => {
       cache.delete(key);
     }
   } catch (error) {
-    console.error("[Cache] Error invalidating cache:", error);
+    console.error('[Cache] Error invalidating cache:', error);
   }
 };
 
@@ -80,6 +80,6 @@ export const clear = (): void => {
   try {
     cache.clear();
   } catch (error) {
-    console.error("[Cache] Error clearing cache:", error);
+    console.error('[Cache] Error clearing cache:', error);
   }
 };

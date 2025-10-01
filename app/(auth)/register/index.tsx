@@ -1,4 +1,3 @@
-
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedView } from '@/components/themed-view';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,26 +20,28 @@ const STEPS = [
   { id: 'step-3', title: 'Address', component: RegisterStep3, fields: ['address', 'city', 'state', 'zipCode'] },
 ];
 
-const schema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
-  email: z.string().email('Please enter a valid email address.'),
-  password: z
-    .string()
-    .min(8, 'Password must be at least 8 characters long.')
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.'
-    ),
-  confirmPassword: z.string(),
-  address: z.string().min(1, 'Address is required'),
-  city: z.string().min(1, 'City is required'),
-  state: z.string().min(1, 'State is required'),
-  zipCode: z.string().min(5, 'Zip code must be at least 5 characters long.'),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Passwords do not match',
-  path: ['confirmPassword'],
-});
+const schema = z
+  .object({
+    firstName: z.string().min(1, 'First name is required'),
+    lastName: z.string().min(1, 'Last name is required'),
+    email: z.string().email('Please enter a valid email address.'),
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters long.')
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.'
+      ),
+    confirmPassword: z.string(),
+    address: z.string().min(1, 'Address is required'),
+    city: z.string().min(1, 'City is required'),
+    state: z.string().min(1, 'State is required'),
+    zipCode: z.string().min(5, 'Zip code must be at least 5 characters long.'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
 
 type FormData = z.infer<typeof schema>;
 
@@ -136,10 +137,7 @@ export default function RegisterScreen() {
           isLastStep,
         }}
       >
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.keyboardAvoidingView}
-        >
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardAvoidingView}>
           <ThemedView style={styles.container}>
             <Stack.Screen options={{ title: STEPS[currentStep].title }} />
             <ScrollView style={styles.scrollView}>
@@ -147,11 +145,7 @@ export default function RegisterScreen() {
             </ScrollView>
             <ThemedView style={styles.buttonContainer}>
               {!isFirstStep && <ThemedButton title="Previous" onPress={goPrev} style={styles.button} />}
-              <ThemedButton
-                title={isLastStep ? 'Submit' : 'Next'}
-                onPress={goNext}
-                style={styles.button}
-              />
+              <ThemedButton title={isLastStep ? 'Submit' : 'Next'} onPress={goNext} style={styles.button} />
             </ThemedView>
           </ThemedView>
         </KeyboardAvoidingView>

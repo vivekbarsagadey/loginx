@@ -1,11 +1,10 @@
-
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { StyleSheet, ScrollView } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import i18n from '@/i18n';
 
 export default function PrivacyScreen() {
-  const sections = i18n.t('screens.legal.privacy.sections', { returnObjects: true }) as Record<string, {title: string, content: string}>;
+  const sections = i18n.t('screens.legal.privacy.sections', { returnObjects: true }) as Record<string, { title: string; content: string }>;
 
   return (
     <ScrollView style={styles.scrollView}>
@@ -13,18 +12,14 @@ export default function PrivacyScreen() {
         <ThemedText type="h1" style={styles.title}>
           {i18n.t('screens.legal.privacy.title')}
         </ThemedText>
-        <ThemedText style={styles.lastUpdated}>
-          {i18n.t('screens.legal.privacy.lastUpdated')}
-        </ThemedText>
+        <ThemedText style={styles.lastUpdated}>{i18n.t('screens.legal.privacy.lastUpdated')}</ThemedText>
 
         {Object.entries(sections).map(([key, section]) => (
           <ThemedView key={key} style={styles.section}>
             <ThemedText type="h3" style={styles.sectionTitle}>
               {section.title}
             </ThemedText>
-            <ThemedText style={styles.sectionContent}>
-              {section.content}
-            </ThemedText>
+            <ThemedText style={styles.sectionContent}>{section.content}</ThemedText>
           </ThemedView>
         ))}
       </ThemedView>

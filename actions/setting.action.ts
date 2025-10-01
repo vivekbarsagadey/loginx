@@ -1,4 +1,3 @@
-
 import { doc, updateDoc } from 'firebase/firestore';
 import { firestore } from '@/firebase-config';
 import { showError } from '@/utils/error';

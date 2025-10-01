@@ -1,29 +1,17 @@
-
-import {
-  TouchableOpacity,
-  TouchableOpacityProps,
-  StyleSheet,
-  ActivityIndicator,
-  ViewStyle,
-  TextStyle,
-} from 'react-native';
+import { AccessibilityHints, AccessibilityRoles } from '@/constants/accessibility';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { ActivityIndicator, StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps, ViewStyle } from 'react-native';
 import { ThemedText } from './themed-text';
 
 export type ThemedButtonProps = TouchableOpacityProps & {
   title: string;
   variant?: 'primary' | 'secondary' | 'tertiary' | 'link';
   loading?: boolean;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
 };
 
-export function ThemedButton({
-  title,
-  style,
-  variant = 'primary',
-  disabled,
-  loading,
-  ...rest
-}: ThemedButtonProps) {
+export function ThemedButton({ title, style, variant = 'primary', disabled, loading, accessibilityLabel, accessibilityHint, ...rest }: ThemedButtonProps) {
   const primaryColor = useThemeColor({}, 'primary');
   const onPrimaryColor = useThemeColor({}, 'on-primary');
 
@@ -72,13 +60,14 @@ export function ThemedButton({
     <TouchableOpacity
       style={[styles.button, buttonStyle, disabledStyle, style]}
       disabled={disabled || loading}
+      accessible={true}
+      accessibilityRole={variant === 'link' ? AccessibilityRoles.LINK : AccessibilityRoles.BUTTON}
+      accessibilityLabel={accessibilityLabel || title}
+      accessibilityHint={accessibilityHint || (loading ? 'Loading' : AccessibilityHints.BUTTON_TAP)}
+      accessibilityState={{ disabled: disabled || loading, busy: loading }}
       {...rest}
     >
-      {loading ? (
-        <ActivityIndicator color={variant === 'primary' ? onPrimaryColor : primaryColor} />
-      ) : (
-        <ThemedText style={[styles.text, textStyle]}>{title}</ThemedText>
-      )}
+      {loading ? <ActivityIndicator color={variant === 'primary' ? onPrimaryColor : primaryColor} /> : <ThemedText style={[styles.text, textStyle]}>{title}</ThemedText>}
     </TouchableOpacity>
   );
 }

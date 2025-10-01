@@ -19,10 +19,10 @@ const DEFAULT_OPTIONS: Required<RetryOptions> = {
   backoffMultiplier: 2,
   shouldRetry: (error: unknown) => {
     // Retry on network errors, but not on auth errors
-    if (typeof error === "object" && error !== null && "code" in error) {
+    if (typeof error === 'object' && error !== null && 'code' in error) {
       const code = (error as { code: string }).code;
       // Don't retry authentication errors
-      if (code.startsWith("auth/")) {
+      if (code.startsWith('auth/')) {
         return false;
       }
     }
@@ -43,12 +43,8 @@ const sleep = (ms: number): Promise<void> => {
  * @param attempt - Current attempt number (0-indexed)
  * @param options - Retry options
  */
-const calculateDelay = (
-  attempt: number,
-  options: Required<RetryOptions>
-): number => {
-  const exponentialDelay =
-    options.initialDelay * Math.pow(options.backoffMultiplier, attempt);
+const calculateDelay = (attempt: number, options: Required<RetryOptions>): number => {
+  const exponentialDelay = options.initialDelay * Math.pow(options.backoffMultiplier, attempt);
   const cappedDelay = Math.min(exponentialDelay, options.maxDelay);
   // Add jitter (random 0-25% variation) to prevent thundering herd
   const jitter = cappedDelay * 0.25 * Math.random();
@@ -68,10 +64,7 @@ const calculateDelay = (
  * );
  * ```
  */
-export async function withRetry<T>(
-  fn: () => Promise<T>,
-  options: RetryOptions = {}
-): Promise<T> {
+export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions = {}): Promise<T> {
   const opts = { ...DEFAULT_OPTIONS, ...options };
   let lastError: unknown;
 
@@ -95,11 +88,7 @@ export async function withRetry<T>(
 
       // Calculate delay and wait
       const delay = calculateDelay(attempt, opts);
-      console.log(
-        `[Retry] Attempt ${attempt + 1}/${
-          opts.maxRetries + 1
-        } failed. Retrying in ${Math.round(delay)}ms...`
-      );
+      console.log(`[Retry] Attempt ${attempt + 1}/${opts.maxRetries + 1} failed. Retrying in ${Math.round(delay)}ms...`);
       await sleep(delay);
     }
   }
@@ -122,10 +111,7 @@ export async function withRetry<T>(
  * const user = await fetchWithRetry('user-123');
  * ```
  */
-export function retryable<T extends any[], R>(
-  fn: (...args: T) => Promise<R>,
-  options: RetryOptions = {}
-): (...args: T) => Promise<R> {
+export function retryable<T extends any[], R>(fn: (...args: T) => Promise<R>, options: RetryOptions = {}): (...args: T) => Promise<R> {
   return async (...args: T): Promise<R> => {
     return withRetry(() => fn(...args), options);
   };

@@ -1,7 +1,6 @@
-
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import i18n from '@/i18n';
 import { useState } from 'react';
 
@@ -33,10 +32,7 @@ export default function ThemeScreen() {
 
   const handleThemeSelect = (theme: ThemeOption) => {
     setSelectedTheme(theme);
-    Alert.alert(
-      i18n.t('success.profileUpdate.title'),
-      i18n.t('screens.settings.theme.applied')
-    );
+    Alert.alert(i18n.t('success.profileUpdate.title'), i18n.t('screens.settings.theme.applied'));
   };
 
   return (
@@ -44,33 +40,20 @@ export default function ThemeScreen() {
       <ThemedText type="h1" style={styles.title}>
         {i18n.t('screens.settings.theme.title')}
       </ThemedText>
-      <ThemedText style={styles.subtitle}>
-        {i18n.t('screens.settings.theme.subtitle')}
-      </ThemedText>
+      <ThemedText style={styles.subtitle}>{i18n.t('screens.settings.theme.subtitle')}</ThemedText>
 
       <ThemedView style={styles.optionsContainer}>
         {themeOptions.map((option) => (
-          <TouchableOpacity
-            key={option.key}
-            style={[
-              styles.optionItem,
-              selectedTheme === option.key && styles.selectedOption,
-            ]}
-            onPress={() => handleThemeSelect(option.key)}
-          >
+          <TouchableOpacity key={option.key} style={[styles.optionItem, selectedTheme === option.key && styles.selectedOption]} onPress={() => handleThemeSelect(option.key)}>
             <ThemedView style={styles.optionContent}>
               <ThemedText style={styles.optionIcon}>{option.icon}</ThemedText>
               <ThemedView style={styles.optionText}>
                 <ThemedText type="body" style={styles.optionTitle}>
                   {option.title}
                 </ThemedText>
-                <ThemedText style={styles.optionDescription}>
-                  {option.description}
-                </ThemedText>
+                <ThemedText style={styles.optionDescription}>{option.description}</ThemedText>
               </ThemedView>
-              {selectedTheme === option.key && (
-                <ThemedText style={styles.checkmark}>✓</ThemedText>
-              )}
+              {selectedTheme === option.key && <ThemedText style={styles.checkmark}>✓</ThemedText>}
             </ThemedView>
           </TouchableOpacity>
         ))}
@@ -83,9 +66,7 @@ export default function ThemeScreen() {
         <ThemedView style={styles.previewContainer}>
           <ThemedView style={styles.previewBox}>
             <ThemedText style={styles.previewText}>Sample Text</ThemedText>
-            <ThemedText style={styles.previewSubtext}>
-              This is how text will appear with the selected theme
-            </ThemedText>
+            <ThemedText style={styles.previewSubtext}>This is how text will appear with the selected theme</ThemedText>
           </ThemedView>
         </ThemedView>
       </ThemedView>

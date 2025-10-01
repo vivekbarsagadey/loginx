@@ -1,12 +1,11 @@
-
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { auth } from '@/firebase-config';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { sendEmailVerification, signOut } from 'firebase/auth';
-import { useState, useEffect } from 'react';
-import { StyleSheet, Alert } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Alert, StyleSheet } from 'react-native';
 import i18n from '@/i18n';
 
 const getFirebaseAuthErrorMessage = (errorCode: string) => {
@@ -46,8 +45,9 @@ export default function VerifyEmailScreen() {
     try {
       await sendEmailVerification(auth.currentUser);
       Alert.alert(i18n.t('screens.verifyEmail.success.emailSent'), i18n.t('screens.verifyEmail.success.emailSentMessage'));
-    } catch (err: any) {
-      const friendlyMessage = getFirebaseAuthErrorMessage(err.code);
+    } catch (err: unknown) {
+      const errorCode = (err as { code?: string })?.code ?? '';
+      const friendlyMessage = getFirebaseAuthErrorMessage(errorCode);
       Alert.alert(i18n.t('errors.generic.title'), friendlyMessage);
     } finally {
       setIsResending(false);
@@ -64,15 +64,11 @@ export default function VerifyEmailScreen() {
       <ThemedText type="h1" style={styles.title}>
         {i18n.t('screens.verifyEmail.title')}
       </ThemedText>
-      <ThemedText style={styles.subtitle}>
-        {i18n.t('screens.verifyEmail.subtitle')}
-      </ThemedText>
+      <ThemedText style={styles.subtitle}>{i18n.t('screens.verifyEmail.subtitle')}</ThemedText>
       <ThemedText type="h2" style={styles.email}>
         {email}
       </ThemedText>
-      <ThemedText style={styles.subtitle}>
-        {i18n.t('screens.verifyEmail.instructions')}
-      </ThemedText>
+      <ThemedText style={styles.subtitle}>{i18n.t('screens.verifyEmail.instructions')}</ThemedText>
 
       <ThemedButton
         title={isResending ? i18n.t('screens.verifyEmail.sending') : i18n.t('screens.verifyEmail.resendButton')}
@@ -81,12 +77,7 @@ export default function VerifyEmailScreen() {
         variant="secondary"
         style={styles.button}
       />
-      <ThemedButton 
-        title={i18n.t('screens.verifyEmail.goToLogin')} 
-        onPress={handleLoginRedirect} 
-        variant="link" 
-        style={styles.linkButton} 
-      />
+      <ThemedButton title={i18n.t('screens.verifyEmail.goToLogin')} onPress={handleLoginRedirect} variant="link" style={styles.linkButton} />
     </ThemedView>
   );
 }

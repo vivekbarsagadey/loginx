@@ -1,4 +1,3 @@
-
 import { updateSetting } from '@/actions/setting.action';
 import { deleteUserAccount, getUserProfile } from '@/actions/user.action';
 import { ThemedScrollView } from '@/components/themed-scroll-view';
@@ -48,9 +47,15 @@ export default function SettingsScreen() {
       try {
         await updateSetting(user.uid, key, value);
 
-        if (key === 'pushEnabled') setPushEnabled(value);
-        if (key === 'emailUpdates') setEmailUpdates(value);
-        if (key === 'marketingTips') setMarketingTips(value);
+        if (key === 'pushEnabled') {
+          setPushEnabled(value);
+        }
+        if (key === 'emailUpdates') {
+          setEmailUpdates(value);
+        }
+        if (key === 'marketingTips') {
+          setMarketingTips(value);
+        }
       } catch (error) {
         showError(error);
       } finally {
@@ -68,27 +73,23 @@ export default function SettingsScreen() {
   };
 
   const handleDeleteAccount = async () => {
-    Alert.alert(
-      'Delete Account',
-      'Are you sure you want to permanently delete your account? This action is irreversible.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            if (user) {
-              try {
-                await deleteUserAccount(user.uid);
-                await deleteUser(user);
-              } catch (error: any) {
-                showError(error);
-              }
+    Alert.alert('Delete Account', 'Are you sure you want to permanently delete your account? This action is irreversible.', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          if (user) {
+            try {
+              await deleteUserAccount(user.uid);
+              await deleteUser(user);
+            } catch (error: unknown) {
+              showError(error);
             }
-          },
+          }
         },
-      ]
-    );
+      },
+    ]);
   };
 
   const handlePress = (item: SettingsItem) => {
@@ -162,27 +163,31 @@ export default function SettingsScreen() {
             <View style={styles.sectionItems}>
               {section.items.map((item) => (
                 <TouchableOpacity key={item.title} style={styles.settingRow} onPress={() => handlePress(item)} disabled={item.type === 'toggle' || item.type === 'label'}>
-                  <Feather name={item.icon as any} size={20} color={item.type === 'danger' ? Colors[colorScheme ?? 'light'].error : Colors[colorScheme ?? 'light'].text} />
+                  <Feather
+                    name={item.icon as unknown as React.ComponentProps<typeof Feather>['name']}
+                    size={20}
+                    color={item.type === 'danger' ? Colors[colorScheme ?? 'light'].error : Colors[colorScheme ?? 'light'].text}
+                  />
                   <View style={styles.settingInfo}>
                     <ThemedText style={{ color: item.type === 'danger' ? Colors[colorScheme ?? 'light'].error : Colors[colorScheme ?? 'light'].text }}>{item.title}</ThemedText>
-                    {item.subtitle && <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light']['text-muted'] }}>{item.subtitle}</ThemedText>}
+                    {item.subtitle && (
+                      <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light']['text-muted'] }}>
+                        {item.subtitle}
+                      </ThemedText>
+                    )}
                   </View>
-                  {item.type === 'toggle' && (
-                    loading[item.key] ? (
+                  {item.type === 'toggle' &&
+                    (loading[item.key] ? (
                       <ActivityIndicator />
                     ) : (
-                      <Switch
-                        value={item.key === 'pushEnabled' ? pushEnabled : item.key === 'emailUpdates' ? emailUpdates : marketingTips}
-                        onValueChange={(value) => handleToggle(item.key, value)}
-                      />
-                    )
-                  )}
+                      <Switch value={item.key === 'pushEnabled' ? pushEnabled : item.key === 'emailUpdates' ? emailUpdates : marketingTips} onValueChange={(value) => handleToggle(item.key, value)} />
+                    ))}
                   {item.type === 'label' && (
-                    <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light']['text-muted'] }}>{item.value}</ThemedText>
+                    <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light']['text-muted'] }}>
+                      {item.value}
+                    </ThemedText>
                   )}
-                  {(item.type === 'link' || item.type === 'danger') && (
-                    <Feather name="chevron-right" size={24} color={Colors[colorScheme ?? 'light']['text-muted']} />
-                  )}
+                  {(item.type === 'link' || item.type === 'danger') && <Feather name="chevron-right" size={24} color={Colors[colorScheme ?? 'light']['text-muted']} />}
                 </TouchableOpacity>
               ))}
             </View>

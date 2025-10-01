@@ -1,5 +1,5 @@
-import i18n from "@/i18n";
-import { Alert } from "react-native";
+import i18n from '@/i18n';
+import { Alert } from 'react-native';
 
 interface ErrorInfo {
   title: string;
@@ -8,48 +8,41 @@ interface ErrorInfo {
 
 const getFirebaseError = (errorCode: string): string => {
   switch (errorCode) {
-    case "auth/invalid-credential":
-      return i18n.t("errors.firebase.invalid-credential");
-    case "auth/user-not-found":
-      return i18n.t("errors.firebase.user-not-found");
-    case "auth/wrong-password":
-      return i18n.t("errors.firebase.wrong-password");
-    case "auth/user-disabled":
-      return i18n.t("errors.firebase.user-disabled");
-    case "auth/requires-recent-login":
-      return i18n.t("errors.firebase.requires-recent-login");
-    case "auth/email-already-in-use":
-      return i18n.t("errors.firebase.email-already-in-use");
-    case "auth/invalid-email":
-      return i18n.t("errors.firebase.invalid-email");
-    case "auth/operation-not-allowed":
-      return i18n.t("errors.firebase.operation-not-allowed");
-    case "auth/weak-password":
-      return i18n.t("errors.firebase.weak-password");
+    case 'auth/invalid-credential':
+      return i18n.t('errors.firebase.invalid-credential');
+    case 'auth/user-not-found':
+      return i18n.t('errors.firebase.user-not-found');
+    case 'auth/wrong-password':
+      return i18n.t('errors.firebase.wrong-password');
+    case 'auth/user-disabled':
+      return i18n.t('errors.firebase.user-disabled');
+    case 'auth/requires-recent-login':
+      return i18n.t('errors.firebase.requires-recent-login');
+    case 'auth/email-already-in-use':
+      return i18n.t('errors.firebase.email-already-in-use');
+    case 'auth/invalid-email':
+      return i18n.t('errors.firebase.invalid-email');
+    case 'auth/operation-not-allowed':
+      return i18n.t('errors.firebase.operation-not-allowed');
+    case 'auth/weak-password':
+      return i18n.t('errors.firebase.weak-password');
     default:
-      return i18n.t("errors.generic.message");
+      return i18n.t('errors.generic.message');
   }
 };
 
 /**
  * Check if error is an Axios-like error
  */
-const isAxiosError = (
-  error: unknown
-): error is { isAxiosError: boolean; response?: unknown } => {
-  return typeof error === "object" && error !== null && "isAxiosError" in error;
+const isAxiosError = (error: unknown): error is { isAxiosError: boolean; response?: unknown } => {
+  return typeof error === 'object' && error !== null && 'isAxiosError' in error;
 };
 
 /**
  * Check if error has a code property (Firebase errors)
  */
 const hasErrorCode = (error: unknown): error is { code: string } => {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    "code" in error &&
-    typeof (error as { code: unknown }).code === "string"
-  );
+  return typeof error === 'object' && error !== null && 'code' in error && typeof (error as { code: unknown }).code === 'string';
 };
 
 /**
@@ -61,15 +54,15 @@ export const getErrorInfo = (error: unknown): ErrorInfo => {
   // Handle network/Axios errors
   if (isAxiosError(error) && !error.response) {
     return {
-      title: i18n.t("errors.network.title"),
-      message: i18n.t("errors.network.message"),
+      title: i18n.t('errors.network.title'),
+      message: i18n.t('errors.network.message'),
     };
   }
 
   // Handle Firebase auth errors
-  if (hasErrorCode(error) && error.code.startsWith("auth/")) {
+  if (hasErrorCode(error) && error.code.startsWith('auth/')) {
     return {
-      title: i18n.t("errors.firebase.title"),
+      title: i18n.t('errors.firebase.title'),
       message: getFirebaseError(error.code),
     };
   }
@@ -77,15 +70,15 @@ export const getErrorInfo = (error: unknown): ErrorInfo => {
   // Handle standard Error objects
   if (error instanceof Error) {
     return {
-      title: i18n.t("errors.generic.title"),
-      message: error.message || i18n.t("errors.generic.message"),
+      title: i18n.t('errors.generic.title'),
+      message: error.message || i18n.t('errors.generic.message'),
     };
   }
 
   // Fallback for unknown error types
   return {
-    title: i18n.t("errors.generic.title"),
-    message: i18n.t("errors.generic.message"),
+    title: i18n.t('errors.generic.title'),
+    message: i18n.t('errors.generic.message'),
   };
 };
 
@@ -99,10 +92,7 @@ export const showError = (error: unknown): void => {
     Alert.alert(title, message);
   } catch (displayError) {
     // Fallback if error display fails
-    console.error("[Error Display] Failed to show error:", displayError);
-    Alert.alert(
-      i18n.t("errors.generic.title"),
-      i18n.t("errors.generic.message")
-    );
+    console.error('[Error Display] Failed to show error:', displayError);
+    Alert.alert(i18n.t('errors.generic.title'), i18n.t('errors.generic.message'));
   }
 };

@@ -1,5 +1,4 @@
-
-import { Text, type TextProps, StyleSheet } from 'react-native';
+import { StyleSheet, Text, type TextProps } from 'react-native';
 import { useThemeColor } from '@/hooks/use-theme-color';
 
 export type ThemedTextProps = TextProps & {
@@ -8,13 +7,7 @@ export type ThemedTextProps = TextProps & {
   type?: 'h1' | 'h2' | 'h3' | 'body' | 'caption' | 'muted' | 'inverse';
 };
 
-export function ThemedText({ 
-  style, 
-  lightColor, 
-  darkColor, 
-  type = 'body', 
-  ...rest
-}: ThemedTextProps) {
+export function ThemedText({ style, lightColor, darkColor, type = 'body', ...rest }: ThemedTextProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
   const mutedColor = useThemeColor({ light: lightColor, dark: darkColor }, 'text-muted');
   const inverseColor = useThemeColor({ light: lightColor, dark: darkColor }, 'inverse-text');
@@ -30,16 +23,7 @@ export function ThemedText({
     }
   };
 
-  return (
-    <Text 
-      style={[
-        { color: colorForType() },
-        styles[type],
-        style,
-      ]}
-      {...rest} 
-    />
-  );
+  return <Text style={[{ color: colorForType() }, styles[type], style]} {...rest} />;
 }
 
 const styles = StyleSheet.create({

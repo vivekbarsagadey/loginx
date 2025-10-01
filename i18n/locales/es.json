@@ -348,11 +348,7 @@
         "notEnabled": {
           "title": "2FA No Habilitado",
           "description": "La autenticación de dos factores está actualmente deshabilitada para tu cuenta. Habilítala para agregar una capa extra de seguridad.",
-          "benefits": [
-            "Protege tu cuenta de accesos no autorizados",
-            "Asegura tu información personal",
-            "Tranquilidad con seguridad mejorada"
-          ],
+          "benefits": ["Protege tu cuenta de accesos no autorizados", "Asegura tu información personal", "Tranquilidad con seguridad mejorada"],
           "enableButton": "Habilitar Autenticación de Dos Factores"
         },
         "enabled": {

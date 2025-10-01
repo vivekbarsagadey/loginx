@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import * as Localization from 'expo-localization';
 import AsyncStorage from '@react-native-async-storage/async-storage';

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Pressable, StyleSheet, useColorScheme } from 'react-native';
 import { useLanguage } from '@/hooks/use-language';
@@ -14,25 +13,20 @@ export const LanguagePicker = () => {
   const { language, persistLanguage } = useLanguage();
   const { theme } = useTheme();
   const colorScheme = useColorScheme();
-  const colors = Colors[theme === 'system' ? (colorScheme || 'light') : theme];
+  const colors = Colors[theme === 'system' ? colorScheme || 'light' : theme];
 
   return (
     <ThemedView>
       <ThemedText style={styles.label}>{i18n.t('onb.personalize.language')}</ThemedText>
       <ThemedView style={styles.container}>
         {LANGUAGE_OPTIONS.map((option) => (
-          <Pressable
-            key={option}
-            style={[
-              styles.chip,
-              { backgroundColor: language === option ? colors.primary : colors.surface },
-            ]}
-            onPress={() => persistLanguage(option)}>
+          <Pressable key={option} style={[styles.chip, { backgroundColor: language === option ? colors.primary : colors.surface }]} onPress={() => persistLanguage(option)}>
             <ThemedText
               style={{
                 color: language === option ? colors['on-primary'] : colors.text,
                 fontWeight: '600',
-              }}>
+              }}
+            >
               {option.toUpperCase()}
             </ThemedText>
           </Pressable>

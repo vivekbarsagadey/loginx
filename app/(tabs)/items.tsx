@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native';
 import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';

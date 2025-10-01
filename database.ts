@@ -1,9 +1,9 @@
-import { openDatabaseAsync } from "expo-sqlite";
+import { openDatabaseAsync } from 'expo-sqlite';
 
 let dbInitialized = false;
 let dbInitPromise: Promise<void> | null = null;
 
-export const dbPromise = openDatabaseAsync("db.db");
+export const dbPromise = openDatabaseAsync('db.db');
 
 /**
  * Initialize the database schema and default data
@@ -33,22 +33,16 @@ async function setupDatabaseAsync(): Promise<void> {
       `);
 
       // Initialize default settings if not exists
-      const row = await db.getFirstAsync("SELECT * FROM settings WHERE id = 0");
+      const row = await db.getFirstAsync('SELECT * FROM settings WHERE id = 0');
       if (!row) {
-        await db.runAsync(
-          "INSERT INTO settings (id, theme, notifications) VALUES (0, ?, ?)",
-          "system",
-          0
-        );
+        await db.runAsync('INSERT INTO settings (id, theme, notifications) VALUES (0, ?, ?)', 'system', 0);
       }
 
       dbInitialized = true;
-      console.log("[Database] Initialization complete");
+      console.log('[Database] Initialization complete');
     } catch (error) {
-      console.error("[Database] Initialization error:", error);
-      throw new Error(
-        "Failed to initialize database: " + (error as Error).message
-      );
+      console.error('[Database] Initialization error:', error);
+      throw new Error('Failed to initialize database: ' + (error as Error).message);
     }
   })();
 
@@ -65,5 +59,5 @@ export const ensureDbInitialized = async (): Promise<void> => {
 
 // Start initialization on import, but don't block
 setupDatabaseAsync().catch((err) => {
-  console.error("[Database] Failed to initialize on startup:", err);
+  console.error('[Database] Failed to initialize on startup:', err);
 });

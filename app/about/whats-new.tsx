@@ -1,11 +1,10 @@
-
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { StyleSheet, ScrollView } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import i18n from '@/i18n';
 
 export default function WhatsNewScreen() {
-  const features = i18n.t('screens.whatsNew.features', { returnObjects: true }) as {title: string, description: string}[];
+  const features = i18n.t('screens.whatsNew.features', { returnObjects: true }) as { title: string; description: string }[];
   const bugFixes = i18n.t('screens.whatsNew.bugFixesList', { returnObjects: true }) as string[];
 
   return (
@@ -27,9 +26,7 @@ export default function WhatsNewScreen() {
               <ThemedText type="body" style={styles.featureTitle}>
                 {feature.title}
               </ThemedText>
-              <ThemedText style={styles.featureDescription}>
-                {feature.description}
-              </ThemedText>
+              <ThemedText style={styles.featureDescription}>{feature.description}</ThemedText>
             </ThemedView>
           ))}
         </ThemedView>
@@ -47,9 +44,7 @@ export default function WhatsNewScreen() {
         </ThemedView>
 
         <ThemedView style={styles.section}>
-          <ThemedText style={styles.thankYou}>
-            {i18n.t('screens.whatsNew.thankYou')}
-          </ThemedText>
+          <ThemedText style={styles.thankYou}>{i18n.t('screens.whatsNew.thankYou')}</ThemedText>
         </ThemedView>
       </ThemedView>
     </ScrollView>

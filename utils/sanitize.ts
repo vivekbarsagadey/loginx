@@ -1,4 +1,3 @@
-
 import { UserProfile } from '@/types/user';
 
 /**
@@ -13,14 +12,16 @@ export const sanitizeUserInput = (input: string, maxLength: number = 500): strin
     return '';
   }
 
-  return input
-    .trim()
-    // Remove HTML tags
-    .replace(/<[^>]*>/g, '')
-    // Remove script tags content
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    // Limit length to prevent DoS
-    .slice(0, maxLength);
+  return (
+    input
+      .trim()
+      // Remove HTML tags
+      .replace(/<[^>]*>/g, '')
+      // Remove script tags content
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+      // Limit length to prevent DoS
+      .slice(0, maxLength)
+  );
 };
 
 /**
@@ -32,7 +33,7 @@ export const sanitizeEmail = (email: string): string => {
   if (typeof email !== 'string') {
     return '';
   }
-  
+
   return email.toLowerCase().trim().slice(0, 254); // Max email length per RFC
 };
 
@@ -45,7 +46,7 @@ export const sanitizePhone = (phone: string): string => {
   if (typeof phone !== 'string') {
     return '';
   }
-  
+
   return phone.replace(/\D/g, '').slice(0, 15); // Max international phone length
 };
 
@@ -131,9 +132,9 @@ export const validatePassword = (password: string): { isValid: boolean; message?
   const hasSpecialChar = /[@$!%*?&]/.test(password);
 
   if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
-    return { 
-      isValid: false, 
-      message: 'Password must contain uppercase, lowercase, number, and special character (@$!%*?&)' 
+    return {
+      isValid: false,
+      message: 'Password must contain uppercase, lowercase, number, and special character (@$!%*?&)',
     };
   }
 

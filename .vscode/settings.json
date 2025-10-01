@@ -1,14 +1,68 @@
 {
   "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
   },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.rulers": [
+    200
+  ],
+  "editor.wordWrapColumn": 200,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "prettier.printWidth": 200,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "es5",
+  "[typescript]": {
+    "editor.rulers": [
+      200
+    ]
+  },
+  "[typescriptreact]": {
+    "editor.rulers": [
+      200
+    ]
+  },
+  "[javascript]": {
+    "editor.rulers": [
+      200
+    ]
+  },
+  "[javascriptreact]": {
+    "editor.rulers": [
+      200
+    ]
+  },
   "cSpell.words": [
+    "Centricity",
+    "checkmark",
+    "dbaeumer",
+    "Desaturate",
+    "desaturated",
+    "esbenp",
+    "Español",
     "firestore",
+    "Flexbox",
+    "foldables",
     "loginx",
     "myapp",
     "myappdb",
-    "whizit"
+    "Pressable",
+    "Roboto",
+    "Subviews",
+    "swipeable",
+    "tappable",
+    "uiux",
+    "vivek",
+    "WCAG",
+    "whizit",
+    "worklets",
+    "हिन्दी"
   ]
 }

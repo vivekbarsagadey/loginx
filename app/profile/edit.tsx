@@ -1,5 +1,4 @@
-
-import { Button, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Button, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -9,7 +8,7 @@ import { useState } from 'react';
 import { updateProfile } from 'firebase/auth';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { updateUser } from '@/actions/user.action';
 import { ThemedInput } from '@/components/themed-input';
 import { showSuccess } from '@/utils/success';
@@ -26,7 +25,9 @@ export default function EditProfileScreen() {
   const [loading, setLoading] = useState(false);
 
   const handleUpdate = async () => {
-    if (!user) return;
+    if (!user) {
+      return;
+    }
 
     // Validate input
     if (!displayName.trim()) {
@@ -47,13 +48,9 @@ export default function EditProfileScreen() {
         photoURL,
       });
 
-      showSuccess(
-        i18n.t('success.profileUpdate.title'),
-        i18n.t('success.profileUpdate.message'),
-        () => router.back()
-      );
+      showSuccess(i18n.t('success.profileUpdate.title'), i18n.t('success.profileUpdate.message'), () => router.back());
     } catch (error) {
-      console.error("Error updating profile: ", error);
+      console.error('Error updating profile: ', error);
       showError(error);
     } finally {
       setLoading(false);
@@ -63,11 +60,11 @@ export default function EditProfileScreen() {
   const handleImagePick = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-        showError(new Error(i18n.t('errors.profile.permission.message')));
-        return;
+      showError(new Error(i18n.t('errors.profile.permission.message')));
+      return;
     }
 
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
@@ -85,7 +82,7 @@ export default function EditProfileScreen() {
         const downloadURL = await getDownloadURL(storageRef);
         setPhotoURL(downloadURL);
       } catch (error) {
-        console.error("Error uploading image: ", error);
+        console.error('Error uploading image: ', error);
         showError(error);
       } finally {
         setLoading(false);
@@ -143,5 +140,5 @@ const styles = StyleSheet.create({
     top: '50%',
     left: '50%',
     transform: [{ translateX: -12 }, { translateY: -12 }],
-  }
+  },
 });

@@ -1,22 +1,20 @@
-import { firestore } from "@/firebase-config";
-import { UserProfile } from "@/types/user";
-import * as cache from "@/utils/cache";
-import { showError } from "@/utils/error";
-import { withRetry } from "@/utils/retry";
-import { sanitizeUserProfile } from "@/utils/sanitize";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { firestore } from '@/firebase-config';
+import { UserProfile } from '@/types/user';
+import * as cache from '@/utils/cache';
+import { showError } from '@/utils/error';
+import { withRetry } from '@/utils/retry';
+import { sanitizeUserProfile } from '@/utils/sanitize';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 /**
  * Get user profile from Firestore with caching
  * @param uid - User ID
  * @returns User profile or null if not found
  */
-export const getUserProfile = async (
-  uid: string
-): Promise<UserProfile | null> => {
+export const getUserProfile = async (uid: string): Promise<UserProfile | null> => {
   try {
     if (!uid) {
-      console.error("[UserAction] getUserProfile called with empty uid");
+      console.error('[UserAction] getUserProfile called with empty uid');
       return null;
     }
 
@@ -26,7 +24,7 @@ export const getUserProfile = async (
       return cachedProfile as UserProfile;
     }
 
-    const userDocRef = doc(firestore, "users", uid);
+    const userDocRef = doc(firestore, 'users', uid);
     const userDoc = await withRetry(() => getDoc(userDocRef), {
       maxRetries: 2,
       initialDelay: 500,
@@ -39,7 +37,7 @@ export const getUserProfile = async (
     }
     return null;
   } catch (error) {
-    console.error("[UserAction] Error getting user profile:", error);
+    console.error('[UserAction] Error getting user profile:', error);
     showError(error);
     return null;
   }
@@ -50,20 +48,17 @@ export const getUserProfile = async (
  * @param uid - User ID
  * @param data - Partial user profile data to update
  */
-export const updateUser = async (
-  uid: string,
-  data: Partial<UserProfile>
-): Promise<void> => {
+export const updateUser = async (uid: string, data: Partial<UserProfile>): Promise<void> => {
   try {
     if (!uid) {
-      console.error("[UserAction] updateUser called with empty uid");
+      console.error('[UserAction] updateUser called with empty uid');
       return;
     }
 
     // Sanitize user input before saving
     const sanitizedData = sanitizeUserProfile(data);
 
-    const userDocRef = doc(firestore, "users", uid);
+    const userDocRef = doc(firestore, 'users', uid);
     await withRetry(() => updateDoc(userDocRef, sanitizedData), {
       maxRetries: 2,
       initialDelay: 500,
@@ -72,7 +67,7 @@ export const updateUser = async (
     // Invalidate cache instead of setting partial data
     cache.invalidate(`user-profile-${uid}`);
   } catch (error) {
-    console.error("[UserAction] Error updating user:", error);
+    console.error('[UserAction] Error updating user:', error);
     showError(error);
   }
 };
@@ -82,24 +77,21 @@ export const updateUser = async (
  * @param uid - User ID
  * @param data - Complete user profile data
  */
-export const createUserProfile = async (
-  uid: string,
-  data: UserProfile
-): Promise<void> => {
+export const createUserProfile = async (uid: string, data: UserProfile): Promise<void> => {
   try {
     if (!uid) {
-      console.error("[UserAction] createUserProfile called with empty uid");
+      console.error('[UserAction] createUserProfile called with empty uid');
       return;
     }
 
     // Sanitize user input before saving
     const sanitizedData = sanitizeUserProfile(data);
 
-    const userDocRef = doc(firestore, "users", uid);
+    const userDocRef = doc(firestore, 'users', uid);
     await setDoc(userDocRef, sanitizedData);
     cache.set(`user-profile-${uid}`, sanitizedData);
   } catch (error) {
-    console.error("[UserAction] Error creating user profile:", error);
+    console.error('[UserAction] Error creating user profile:', error);
     showError(error);
   }
 };
@@ -111,11 +103,11 @@ export const createUserProfile = async (
 export const deleteUserAccount = async (uid: string): Promise<void> => {
   try {
     if (!uid) {
-      console.error("[UserAction] deleteUserAccount called with empty uid");
+      console.error('[UserAction] deleteUserAccount called with empty uid');
       return;
     }
 
-    const userDocRef = doc(firestore, "users", uid);
+    const userDocRef = doc(firestore, 'users', uid);
     await updateDoc(userDocRef, {
       deleted: true,
       deletedAt: new Date().toISOString(),
@@ -124,7 +116,7 @@ export const deleteUserAccount = async (uid: string): Promise<void> => {
     // Invalidate cache
     cache.invalidate(`user-profile-${uid}`);
   } catch (error) {
-    console.error("[UserAction] Error deleting user account:", error);
+    console.error('[UserAction] Error deleting user account:', error);
     showError(error);
   }
 };

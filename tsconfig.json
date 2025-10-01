@@ -3,20 +3,11 @@
   "compilerOptions": {
     "strict": true,
     "jsx": "react-native",
-    "types": [
-      "react-native"
-    ],
+    "types": ["react-native"],
     "skipLibCheck": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
 }

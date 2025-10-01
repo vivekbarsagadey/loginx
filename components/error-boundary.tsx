@@ -1,8 +1,8 @@
-import React, { Component, ErrorInfo, ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
-import { ThemedButton } from "./themed-button";
-import { ThemedText } from "./themed-text";
-import { ThemedView } from "./themed-view";
+import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { ThemedButton } from './themed-button';
+import { ThemedText } from './themed-text';
+import { ThemedView } from './themed-view';
 
 interface Props {
   children: ReactNode;
@@ -36,8 +36,8 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Log error to console for debugging
-    console.error("[ErrorBoundary] Caught error:", error);
-    console.error("[ErrorBoundary] Error info:", errorInfo);
+    console.error('[ErrorBoundary] Caught error:', error);
+    console.error('[ErrorBoundary] Error info:', errorInfo);
 
     // You can also log to an error reporting service here
     // Example: Sentry.captureException(error, { extra: errorInfo });
@@ -56,9 +56,7 @@ export class ErrorBoundary extends Component<Props, State> {
         return this.props.fallback;
       }
 
-      return (
-        <ErrorFallback error={this.state.error} onReset={this.handleReset} />
-      );
+      return <ErrorFallback error={this.state.error} onReset={this.handleReset} />;
     }
 
     return this.props.children;
@@ -68,13 +66,7 @@ export class ErrorBoundary extends Component<Props, State> {
 /**
  * Default fallback UI shown when an error is caught
  */
-function ErrorFallback({
-  error,
-  onReset,
-}: {
-  error: Error | null;
-  onReset: () => void;
-}) {
+function ErrorFallback({ error, onReset }: { error: Error | null; onReset: () => void }) {
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="h1" style={styles.title}>
@@ -103,32 +95,32 @@ function ErrorFallback({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 20,
   },
   title: {
     marginBottom: 16,
-    textAlign: "center",
+    textAlign: 'center',
   },
   message: {
     marginBottom: 24,
-    textAlign: "center",
+    textAlign: 'center',
     opacity: 0.7,
   },
   errorDetails: {
     marginBottom: 24,
     padding: 16,
-    backgroundColor: "rgba(255, 0, 0, 0.1)",
+    backgroundColor: 'rgba(255, 0, 0, 0.1)',
     borderRadius: 8,
-    maxWidth: "100%",
+    maxWidth: '100%',
   },
   errorText: {
-    color: "#ff0000",
+    color: '#ff0000',
     marginBottom: 8,
   },
   stackText: {
-    color: "#666",
+    color: '#666',
     fontSize: 10,
   },
   button: {

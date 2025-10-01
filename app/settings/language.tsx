@@ -1,12 +1,11 @@
-
-import i18n from '@/i18n';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { FlatList, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import i18n from '@/i18n';
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 
 const languages = [
   { code: 'en', name: 'English' },
@@ -48,9 +47,7 @@ export default function LanguageScreen() {
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.item} onPress={() => setLanguage(item.code)}>
             <ThemedText style={styles.itemText}>{item.name}</ThemedText>
-            {i18n.locale.startsWith(item.code) && (
-              <Feather name="check" size={24} color={Colors[colorScheme ?? 'light'].tint} />
-            )}
+            {i18n.locale.startsWith(item.code) && <Feather name="check" size={24} color={Colors[colorScheme ?? 'light'].tint} />}
           </TouchableOpacity>
         )}
       />

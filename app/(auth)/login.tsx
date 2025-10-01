@@ -1,22 +1,22 @@
-
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { auth } from '@/firebase-config';
+import i18n from '@/i18n';
 import { showError } from '@/utils/error';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { StyleSheet, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 import { z } from 'zod';
-import i18n from '@/i18n';
 
 const schema = z.object({
   email: z.string().email(i18n.t('screens.login.validation.invalidEmail')),
-  password: z.string()
+  password: z
+    .string()
     .min(5, i18n.t('screens.login.validation.passwordTooShort'))
     .regex(/^[a-zA-Z0-9@$]*$/, i18n.t('screens.login.validation.passwordInvalidChars')),
 });
@@ -42,7 +42,7 @@ export default function LoginScreen() {
     try {
       await signInWithEmailAndPassword(auth, data.email, data.password);
       // The user will be redirected to the main app by the root layout observer
-    } catch (error: any) {
+    } catch (error: unknown) {
       showError(error);
     } finally {
       setLoading(false);
@@ -91,27 +91,12 @@ export default function LoginScreen() {
         )}
       />
 
-      <ThemedButton
-        title={i18n.t('screens.login.forgotPassword')}
-        variant="link"
-        onPress={() => router.push('/(auth)/forgot-password')}
-        style={styles.linkButton}
-      />
+      <ThemedButton title={i18n.t('screens.login.forgotPassword')} variant="link" onPress={() => router.push('/(auth)/forgot-password')} style={styles.linkButton} />
 
-      <ThemedButton 
-        title={loading ? i18n.t('screens.login.loggingIn') : i18n.t('screens.login.loginButton')} 
-        onPress={handleSubmit(onSubmit)} 
-        disabled={loading} 
-        style={styles.button} 
-      />
+      <ThemedButton title={loading ? i18n.t('screens.login.loggingIn') : i18n.t('screens.login.loginButton')} onPress={handleSubmit(onSubmit)} disabled={loading} style={styles.button} />
       {loading && <ActivityIndicator style={styles.loading} />}
 
-      <ThemedButton
-        title={i18n.t('screens.login.noAccount')}
-        variant="link"
-        onPress={() => router.push('/(auth)/register')}
-        style={styles.linkButton}
-      />
+      <ThemedButton title={i18n.t('screens.login.noAccount')} variant="link" onPress={() => router.push('/(auth)/register')} style={styles.linkButton} />
     </ThemedView>
   );
 }

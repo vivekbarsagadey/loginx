@@ -1,8 +1,7 @@
-
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedButton } from '@/components/themed-button';
-import { StyleSheet, ScrollView } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import i18n from '@/i18n';
 import { useState } from 'react';
 
@@ -16,18 +15,14 @@ export default function TwoFactorAuthScreen() {
         <ThemedText type="h1" style={styles.title}>
           {i18n.t('screens.security.twoFactor.title')}
         </ThemedText>
-        <ThemedText style={styles.subtitle}>
-          {i18n.t('screens.security.twoFactor.subtitle')}
-        </ThemedText>
+        <ThemedText style={styles.subtitle}>{i18n.t('screens.security.twoFactor.subtitle')}</ThemedText>
 
         {!isEnabled ? (
           <ThemedView style={styles.section}>
             <ThemedText type="h3" style={styles.sectionTitle}>
               {i18n.t('screens.security.twoFactor.notEnabled.title')}
             </ThemedText>
-            <ThemedText style={styles.description}>
-              {i18n.t('screens.security.twoFactor.notEnabled.description')}
-            </ThemedText>
+            <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.notEnabled.description')}</ThemedText>
 
             <ThemedView style={styles.benefitsContainer}>
               {benefits.map((benefit, index) => (
@@ -38,48 +33,25 @@ export default function TwoFactorAuthScreen() {
               ))}
             </ThemedView>
 
-            <ThemedButton
-              title={i18n.t('screens.security.twoFactor.notEnabled.enableButton')}
-              onPress={() => setIsEnabled(true)}
-              style={styles.enableButton}
-            />
+            <ThemedButton title={i18n.t('screens.security.twoFactor.notEnabled.enableButton')} onPress={() => setIsEnabled(true)} style={styles.enableButton} />
           </ThemedView>
         ) : (
           <ThemedView style={styles.section}>
             <ThemedText type="h3" style={styles.sectionTitle}>
               {i18n.t('screens.security.twoFactor.enabled.title')}
             </ThemedText>
-            <ThemedText style={styles.description}>
-              {i18n.t('screens.security.twoFactor.enabled.description')}
-            </ThemedText>
+            <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.enabled.description')}</ThemedText>
 
             <ThemedView style={styles.setupContainer}>
-              <ThemedText style={styles.setupStep}>
-                {i18n.t('screens.security.twoFactor.setup.step1')}
-              </ThemedText>
-              <ThemedText style={styles.setupStep}>
-                {i18n.t('screens.security.twoFactor.setup.step2')}
-              </ThemedText>
-              <ThemedText style={styles.setupStep}>
-                {i18n.t('screens.security.twoFactor.setup.step3')}
-              </ThemedText>
-              <ThemedText style={styles.appsRecommendation}>
-                {i18n.t('screens.security.twoFactor.setup.apps')}
-              </ThemedText>
+              <ThemedText style={styles.setupStep}>{i18n.t('screens.security.twoFactor.setup.step1')}</ThemedText>
+              <ThemedText style={styles.setupStep}>{i18n.t('screens.security.twoFactor.setup.step2')}</ThemedText>
+              <ThemedText style={styles.setupStep}>{i18n.t('screens.security.twoFactor.setup.step3')}</ThemedText>
+              <ThemedText style={styles.appsRecommendation}>{i18n.t('screens.security.twoFactor.setup.apps')}</ThemedText>
             </ThemedView>
 
             <ThemedView style={styles.buttonContainer}>
-              <ThemedButton
-                title={i18n.t('screens.security.twoFactor.enabled.backupCodes')}
-                variant="secondary"
-                style={styles.button}
-              />
-              <ThemedButton
-                title={i18n.t('screens.security.twoFactor.enabled.disableButton')}
-                variant="link"
-                onPress={() => setIsEnabled(false)}
-                style={styles.button}
-              />
+              <ThemedButton title={i18n.t('screens.security.twoFactor.enabled.backupCodes')} variant="secondary" style={styles.button} />
+              <ThemedButton title={i18n.t('screens.security.twoFactor.enabled.disableButton')} variant="link" onPress={() => setIsEnabled(false)} style={styles.button} />
             </ThemedView>
           </ThemedView>
         )}

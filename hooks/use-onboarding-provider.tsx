@@ -1,4 +1,3 @@
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useContext, useEffect, useState } from 'react';
 
@@ -37,11 +36,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
     }
   };
 
-  return (
-    <OnboardingContext.Provider value={{ onboardingCompleted, setOnboardingCompleted: handleSetOnboardingCompleted, checkingOnboarding }}>
-      {children}
-    </OnboardingContext.Provider>
-  );
+  return <OnboardingContext.Provider value={{ onboardingCompleted, setOnboardingCompleted: handleSetOnboardingCompleted, checkingOnboarding }}>{children}</OnboardingContext.Provider>;
 }
 
 export function useOnboarding() {

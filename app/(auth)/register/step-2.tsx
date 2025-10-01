@@ -1,17 +1,24 @@
-
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedInput } from '@/components/themed-input';
-import { useFormContext, Controller } from 'react-hook-form';
+import { Controller, FieldErrors, useFormContext } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
 import i18n from '@/i18n';
 
-export default function RegisterStep2({ errors }: { errors: any }) {
+interface FormData {
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export default function RegisterStep2({ errors }: { errors: FieldErrors<FormData> }) {
   const { control } = useFormContext();
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="h2" style={styles.title}>{i18n.t('register.step2.title')}</ThemedText>
+      <ThemedText type="h2" style={styles.title}>
+        {i18n.t('register.step2.title')}
+      </ThemedText>
       <Controller
         control={control}
         name="email"

@@ -41,16 +41,20 @@ Follow these instructions to get a copy of the project up and running on your lo
 ### Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/your-username/loginx.git
    cd loginx
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
+
    or
+
    ```bash
    yarn install
    ```

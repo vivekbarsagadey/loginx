@@ -1,11 +1,7 @@
-import { showError } from "@/utils/error";
-import {
-  signOut as firebaseSignOut,
-  onAuthStateChanged,
-  User,
-} from "firebase/auth";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { auth } from "../firebase-config";
+import { showError } from '@/utils/error';
+import { signOut as firebaseSignOut, onAuthStateChanged, User } from 'firebase/auth';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { auth } from '../firebase-config';
 
 interface AuthContextType {
   user: User | null;
@@ -45,7 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       },
       (error) => {
         // Handle auth state change errors
-        console.error("[Auth] State change error:", error);
+        console.error('[Auth] State change error:', error);
         setLoading(false);
         showError(error);
       }
@@ -59,19 +55,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await firebaseSignOut(auth);
     } catch (error) {
-      console.error("[Auth] Sign out error:", error);
+      console.error('[Auth] Sign out error:', error);
       showError(error);
       throw error; // Re-throw so caller can handle if needed
     }
   }, []);
 
   // Memoize context value to prevent unnecessary re-renders
-  const contextValue = useMemo<AuthContextType>(
-    () => ({ user, signOut, loading }),
-    [user, signOut, loading]
-  );
+  const contextValue = useMemo<AuthContextType>(() => ({ user, signOut, loading }), [user, signOut, loading]);
 
-  return (
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 }

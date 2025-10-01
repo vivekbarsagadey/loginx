@@ -1,21 +1,12 @@
 // firebase-config.ts
-import Constants from "expo-constants";
-import { getApp, getApps, initializeApp } from "firebase/app";
-import {
-  browserLocalPersistence,
-  getAuth,
-  initializeAuth,
-  inMemoryPersistence,
-  setPersistence,
-  type Auth,
-} from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { Platform } from "react-native";
+import Constants from 'expo-constants';
+import { getApp, getApps, initializeApp } from 'firebase/app';
+import { browserLocalPersistence, getAuth, initializeAuth, inMemoryPersistence, setPersistence, type Auth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { Platform } from 'react-native';
 
 // ---- config from app.json/app.config.ts -> extra ----
-const extra =
-  (Constants.expoConfig?.extra as Record<string, string> | undefined) ??
-  (Constants.manifest?.extra as Record<string, string> | undefined);
+const extra = (Constants.expoConfig?.extra as Record<string, string> | undefined) ?? (Constants.manifest?.extra as Record<string, string> | undefined);
 
 const firebaseConfig = {
   apiKey: extra?.apiKey,
@@ -32,7 +23,7 @@ export const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 // ---- Auth ----
 let auth: Auth;
 
-if (Platform.OS === "web") {
+if (Platform.OS === 'web') {
   // Web: keep users signed in (local persistence)
   auth = getAuth(app);
   // Optional: use session-only persistence instead with browserSessionPersistence

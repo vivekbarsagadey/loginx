@@ -1,4 +1,3 @@
-
 /**
  * This file contains the color palette for the app, supporting light and dark modes.
  * It's based on the new design system specification.

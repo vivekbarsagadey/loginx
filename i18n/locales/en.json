@@ -230,12 +230,7 @@
         }
       ],
       "bugFixes": "Bug Fixes",
-      "bugFixesList": [
-        "Fixed login issues on slower network connections",
-        "Resolved theme switching glitches",
-        "Improved email verification flow",
-        "Fixed text scaling in different languages"
-      ],
+      "bugFixesList": ["Fixed login issues on slower network connections", "Resolved theme switching glitches", "Improved email verification flow", "Fixed text scaling in different languages"],
       "thankYou": "Thank you for using our app! We're constantly working to improve your experience."
     },
     "legal": {
@@ -348,11 +343,7 @@
         "notEnabled": {
           "title": "2FA Not Enabled",
           "description": "Two-factor authentication is currently disabled for your account. Enable it to add an extra layer of security.",
-          "benefits": [
-            "Protect your account from unauthorized access",
-            "Secure your personal information",
-            "Peace of mind with enhanced security"
-          ],
+          "benefits": ["Protect your account from unauthorized access", "Secure your personal information", "Peace of mind with enhanced security"],
           "enableButton": "Enable Two-Factor Authentication"
         },
         "enabled": {

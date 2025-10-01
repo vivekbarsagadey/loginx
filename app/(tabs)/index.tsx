@@ -1,4 +1,3 @@
-
 import { getUserProfile } from '@/actions/user.action';
 import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
@@ -28,7 +27,7 @@ export default function IndexScreen() {
             Alert.alert('Error', 'User profile not found.');
           }
         } catch (error) {
-          console.error("Error fetching user profile: ", error);
+          console.error('Error fetching user profile: ', error);
           Alert.alert('Error', 'Failed to fetch user profile.');
         } finally {
           setLoading(false);
@@ -55,7 +54,9 @@ export default function IndexScreen() {
         {userProfile ? (
           <>
             <ThemedText type="h1">Welcome, {userProfile.displayName}!</ThemedText>
-            <ThemedText type="body" style={styles.email}>{userProfile.email}</ThemedText>
+            <ThemedText type="body" style={styles.email}>
+              {userProfile.email}
+            </ThemedText>
             <ThemedText type="body">Age: {userProfile.age}</ThemedText>
 
             <View style={[styles.section, { borderColor: Colors[colorScheme ?? 'light'].border }]}>
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
   },
-  loaderContainer:{
+  loaderContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

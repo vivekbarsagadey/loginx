@@ -11,6 +11,7 @@ This document outlines the security measures implemented in LoginX and best prac
 **NEVER commit the `.env` file to version control!** It's already in `.gitignore`.
 
 #### Required Firebase Variables
+
 All Firebase configuration variables are **required** and the app will fail to start if they're missing:
 
 ```bash
@@ -41,6 +42,7 @@ openssl rand -base64 32
 ```
 
 Add it to your `.env`:
+
 ```bash
 DB_ENCRYPTION_KEY="your-generated-key-here"
 ```
@@ -54,6 +56,7 @@ firebase deploy --only firestore:rules
 ```
 
 **Key Security Features:**
+
 - Users can only read/write their own data
 - Input validation on all user profile fields
 - Email addresses validated with regex
@@ -83,6 +86,7 @@ This is handled by the `utils/sanitize.ts` module.
    - Never use production credentials in development
 
 2. **Keep dependencies updated**
+
    ```bash
    pnpm update
    pnpm audit
@@ -121,11 +125,12 @@ This is handled by the `utils/sanitize.ts` module.
 ### Password Requirements
 
 Passwords must meet these requirements (enforced by Zod validation):
+
 - Minimum 8 characters
 - At least one uppercase letter
 - At least one lowercase letter
 - At least one number
-- At least one special character (@$!%*?&)
+- At least one special character (@$!%\*?&)
 
 ### Authentication Persistence
 

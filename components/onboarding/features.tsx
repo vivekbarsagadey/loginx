@@ -3,7 +3,14 @@ import { ThemedView } from '@/components/themed-view';
 import i18n from '@/i18n';
 import { FlatList, useWindowDimensions } from 'react-native';
 
-const features = i18n.t('onb.features.slides', { returnObjects: true }) as any[];
+interface FeatureSlide {
+  icon: string;
+  title: string;
+  subtitle: string;
+  description: string;
+}
+
+const features = i18n.t('onb.features.slides', { returnObjects: true }) as FeatureSlide[];
 
 export const Features = () => {
   const { width } = useWindowDimensions();
@@ -21,4 +28,4 @@ export const Features = () => {
       />
     </ThemedView>
   );
-}
+};
