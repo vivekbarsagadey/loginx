@@ -1,7 +1,44 @@
 {
   "name": "loginx",
-  "main": "expo-router/entry",
   "version": "1.0.0",
+  "description": "A modern, secure authentication and user management mobile application built with Expo and React Native",
+  "main": "expo-router/entry",
+  "author": {
+    "name": "Vivek Barsagadey",
+    "email": "vivek@whizit.co.in"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vivekbarsagadey/loginx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vivekbarsagadey/loginx/issues"
+  },
+  "homepage": "https://github.com/vivekbarsagadey/loginx#readme",
+  "keywords": [
+    "expo",
+    "react-native",
+    "authentication",
+    "login",
+    "mobile-app",
+    "firebase",
+    "typescript",
+    "expo-router",
+    "user-management",
+    "2fa",
+    "biometric-authentication",
+    "secure-storage",
+    "i18n",
+    "dark-mode",
+    "accessibility",
+    "open-source",
+    "Whiz IT"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
   "scripts": {
     "start": "expo start --clear",
     "reset-project": "node ./scripts/reset-project.js",
