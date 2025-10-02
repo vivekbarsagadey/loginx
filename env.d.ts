@@ -20,5 +20,6 @@ declare namespace NodeJS {
     SENTRY_DSN: string;
     AMPLITUDE_KEY: string;
     GOOGLE_MAPS_API_KEY: string;
+    EXPO_PUBLIC_GOOGLE_PLACES_API_KEY: string;
   }
 }

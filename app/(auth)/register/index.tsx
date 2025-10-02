@@ -22,7 +22,7 @@ import RegisterStep3 from './step-3';
 import RegisterStep4 from './step-4';
 
 const STEPS = [
-  { id: 'step-1', title: 'Personal Information', component: RegisterStep1, fields: ['firstName', 'lastName'] },
+  { id: 'step-1', title: 'Personal Information', component: RegisterStep1, fields: ['firstName', 'lastName', 'photoURL', 'termsAccepted', 'referralCode'] },
   { id: 'step-2', title: 'Account Security', component: RegisterStep2, fields: ['email', 'password', 'confirmPassword'] },
   { id: 'step-3', title: 'Address', component: RegisterStep3, fields: ['address', 'city', 'state', 'zipCode'] },
   { id: 'step-4', title: 'Phone Verification', component: RegisterStep4, fields: ['phoneNumber'] },
@@ -32,6 +32,15 @@ const schema = z
   .object({
     firstName: z.string().min(1, 'First name is required').max(50, 'First name is too long'),
     lastName: z.string().min(1, 'Last name is required').max(50, 'Last name is too long'),
+    photoURL: z.string().optional().or(z.literal('')),
+    termsAccepted: z.boolean().refine((val) => val === true, {
+      message: 'You must accept the terms and privacy policy',
+    }),
+    referralCode: z
+      .string()
+      .regex(/^[A-Z0-9]{6,12}$/, 'Referral code must be 6-12 alphanumeric characters')
+      .optional()
+      .or(z.literal('')),
     email: z.string().email('Please enter a valid email address.').max(254, 'Email is too long'),
     password: z
       .string()
@@ -87,6 +96,9 @@ export default function RegisterScreen() {
     defaultValues: {
       firstName: '',
       lastName: '',
+      photoURL: '',
+      termsAccepted: false,
+      referralCode: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -154,6 +166,10 @@ export default function RegisterScreen() {
       const sanitizedData = {
         firstName: sanitizeUserInput(data.firstName, 50),
         lastName: sanitizeUserInput(data.lastName, 50),
+        photoURL: data.photoURL || '',
+        termsAccepted: data.termsAccepted,
+        termsAcceptedAt: new Date().toISOString(),
+        referralCode: data.referralCode ? sanitizeUserInput(data.referralCode, 12) : '',
         email: sanitizeEmail(data.email),
         password: data.password, // Don't sanitize password (Firebase handles it)
         address: data.address ? sanitizeUserInput(data.address, 200) : '',
@@ -180,7 +196,7 @@ export default function RegisterScreen() {
           displayName: `${sanitizedData.firstName} ${sanitizedData.lastName}`,
           email: sanitizedData.email,
           age: 0,
-          photoURL: '',
+          photoURL: sanitizedData.photoURL,
           pushEnabled: false,
           emailUpdates: false,
           marketingTips: false,
@@ -188,6 +204,8 @@ export default function RegisterScreen() {
           city: sanitizedData.city,
           state: sanitizedData.state,
           zipCode: sanitizedData.zipCode,
+          referralCode: sanitizedData.referralCode,
+          termsAcceptedAt: sanitizedData.termsAcceptedAt,
         });
       } catch (profileError) {
         console.error('[Registration] Failed to create user profile:', profileError);

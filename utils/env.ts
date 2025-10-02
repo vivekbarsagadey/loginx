@@ -69,7 +69,17 @@ export function isTest(): boolean {
  * Get the current environment name
  */
 export function getEnvironment(): 'development' | 'production' | 'test' {
-  if (isTest()) return 'test';
-  if (isProduction()) return 'production';
+  if (isTest()) {
+    return 'test';
+  }
+  if (isProduction()) {
+    return 'production';
+  }
   return 'development';
 }
+
+/**
+ * Google Places API Key (optional)
+ * Used for address autocomplete in registration
+ */
+export const GOOGLE_PLACES_API_KEY = getEnvVar('EXPO_PUBLIC_GOOGLE_PLACES_API_KEY', '');

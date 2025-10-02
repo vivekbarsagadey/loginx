@@ -1,6 +1,9 @@
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { PhotoUpload } from '@/components/ui/photo-upload';
+import { ReferralCodeInput } from '@/components/ui/referral-code-input';
+import { TermsCheckbox } from '@/components/ui/terms-checkbox';
 import i18n from '@/i18n';
 import { useEffect, useRef } from 'react';
 import { Controller, FieldErrors, useFormContext } from 'react-hook-form';
@@ -9,6 +12,9 @@ import { StyleSheet, TextInput } from 'react-native';
 interface FormData {
   firstName: string;
   lastName: string;
+  photoURL?: string;
+  termsAccepted: boolean;
+  referralCode?: string;
 }
 
 export default function RegisterStep1({ errors }: { errors: FieldErrors<FormData> }) {
@@ -32,6 +38,17 @@ export default function RegisterStep1({ errors }: { errors: FieldErrors<FormData
       <ThemedText type="caption" style={styles.description}>
         Let&apos;s start with your basic information
       </ThemedText>
+
+      {/* Profile Photo Upload */}
+      <Controller
+        control={control}
+        name="photoURL"
+        render={({ field: { onChange, value } }) => (
+          <ThemedView style={styles.photoContainer}>
+            <PhotoUpload value={value} onChange={onChange} />
+          </ThemedView>
+        )}
+      />
 
       <Controller
         control={control}
@@ -79,6 +96,20 @@ export default function RegisterStep1({ errors }: { errors: FieldErrors<FormData
           />
         )}
       />
+
+      {/* Referral Code Input */}
+      <Controller
+        control={control}
+        name="referralCode"
+        render={({ field: { onChange, onBlur, value } }) => <ReferralCodeInput value={value || ''} onChange={onChange} onBlur={onBlur} error={errors.referralCode?.message as string} />}
+      />
+
+      {/* Terms & Privacy Checkbox */}
+      <Controller
+        control={control}
+        name="termsAccepted"
+        render={({ field: { onChange, value } }) => <TermsCheckbox checked={value} onChange={onChange} error={errors.termsAccepted?.message as string} />}
+      />
     </ThemedView>
   );
 }
@@ -93,5 +124,9 @@ const styles = StyleSheet.create({
   description: {
     marginBottom: 16,
     opacity: 0.7,
+  },
+  photoContainer: {
+    alignSelf: 'center',
+    marginVertical: 16,
   },
 });

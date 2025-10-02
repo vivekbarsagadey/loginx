@@ -13,4 +13,6 @@ export interface UserProfile {
   city?: string;
   state?: string;
   zipCode?: string;
+  referralCode?: string;
+  termsAcceptedAt?: string;
 }
