@@ -45,7 +45,7 @@ export const settingsSections: { title?: string; items: SettingsItem[] }[] = [
     items: [
       { type: 'link', icon: 'info', title: i18n.t('settings.whatsNew'), href: '/about/whats-new' },
       { type: 'link', icon: 'file-text', title: i18n.t('settings.termsOfService'), href: '/legal/terms' },
-      { type: 'link', icon: 'shield-check', title: i18n.t('settings.privacyPolicy'), href: '/legal/privacy' },
+      { type: 'link', icon: 'shield', title: i18n.t('settings.privacyPolicy'), href: '/legal/privacy' },
       { type: 'link', icon: 'award', title: i18n.t('settings.license'), href: '/legal/license' },
     ],
   },

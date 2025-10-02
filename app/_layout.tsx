@@ -5,6 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
 import { ErrorBoundary } from '@/components/error-boundary';
+import { Routes } from '@/constants/routes';
 import { AuthProvider, useAuth } from '@/hooks/use-auth-provider';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { OnboardingProvider, useOnboarding } from '@/hooks/use-onboarding-provider';
@@ -27,12 +28,12 @@ function RootLayoutNav() {
     const inOnboardingGroup = segments[0] === 'onboarding';
 
     if (!onboardingCompleted && !inOnboardingGroup) {
-      router.replace('/onboarding');
+      router.replace(Routes.ONBOARDING.INDEX);
     } else if (onboardingCompleted) {
       if (user && (inAuthGroup || inOnboardingGroup)) {
-        router.replace('/(tabs)/index' as unknown as never);
+        router.replace(Routes.TABS.HOME);
       } else if (!user && !inAuthGroup) {
-        router.replace('/(auth)/login');
+        router.replace(Routes.AUTH.LOGIN);
       }
     }
   }, [user, segments, router, authLoading, onboardingCompleted, checkingOnboarding]);

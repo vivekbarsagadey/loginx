@@ -76,19 +76,19 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions =
 
       // Check if we should retry this error
       if (!opts.shouldRetry(error)) {
-        console.log(`[Retry] Not retrying error:`, error);
+        console.warn(`[Retry] Not retrying error:`, error);
         throw error;
       }
 
       // Don't retry if we've exhausted all attempts
       if (attempt === opts.maxRetries) {
-        console.error(`[Retry] Max retries (${opts.maxRetries}) exceeded`);
+        console.error(`[Retry] All ${opts.maxRetries + 1} attempts failed`);
         break;
       }
 
       // Calculate delay and wait
       const delay = calculateDelay(attempt, opts);
-      console.log(`[Retry] Attempt ${attempt + 1}/${opts.maxRetries + 1} failed. Retrying in ${Math.round(delay)}ms...`);
+      console.warn(`[Retry] Attempt ${attempt + 1}/${opts.maxRetries + 1} failed. Retrying in ${Math.round(delay)}ms...`);
       await sleep(delay);
     }
   }
@@ -111,7 +111,7 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions =
  * const user = await fetchWithRetry('user-123');
  * ```
  */
-export function retryable<T extends any[], R>(fn: (...args: T) => Promise<R>, options: RetryOptions = {}): (...args: T) => Promise<R> {
+export function retryable<T extends unknown[], R>(fn: (...args: T) => Promise<R>, options: RetryOptions = {}): (...args: T) => Promise<R> {
   return async (...args: T): Promise<R> => {
     return withRetry(() => fn(...args), options);
   };
