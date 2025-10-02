@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 interface OnboardingContextType {
   onboardingCompleted: boolean;
@@ -18,8 +18,8 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
       try {
         const value = await AsyncStorage.getItem('onboardingCompleted');
         setOnboardingCompleted(value === 'true');
-      } catch (e) {
-        // handle error
+      } catch (_error) {
+        // handle error silently
       } finally {
         setCheckingOnboarding(false);
       }
@@ -27,16 +27,21 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
     checkOnboarding();
   }, []);
 
-  const handleSetOnboardingCompleted = async (value: boolean) => {
+  const handleSetOnboardingCompleted = useCallback(async (value: boolean) => {
     try {
       await AsyncStorage.setItem('onboardingCompleted', String(value));
       setOnboardingCompleted(value);
-    } catch (e) {
-      // handle error
+    } catch (_error) {
+      // handle error silently
     }
-  };
+  }, []);
 
-  return <OnboardingContext.Provider value={{ onboardingCompleted, setOnboardingCompleted: handleSetOnboardingCompleted, checkingOnboarding }}>{children}</OnboardingContext.Provider>;
+  const contextValue = useMemo(
+    () => ({ onboardingCompleted, setOnboardingCompleted: handleSetOnboardingCompleted, checkingOnboarding }),
+    [onboardingCompleted, handleSetOnboardingCompleted, checkingOnboarding]
+  );
+
+  return <OnboardingContext.Provider value={contextValue}>{children}</OnboardingContext.Provider>;
 }
 
 export function useOnboarding() {

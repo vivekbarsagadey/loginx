@@ -12,6 +12,7 @@ export interface UseAsyncOperationOptions {
   showErrorToast?: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface UseAsyncOperationResult<T extends (...args: any[]) => Promise<any>> {
   loading: boolean;
   error: unknown;
@@ -30,6 +31,7 @@ export interface UseAsyncOperationResult<T extends (...args: any[]) => Promise<a
  * // Use it
  * await execute(myData);
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useAsyncOperation<T extends (...args: any[]) => Promise<any>>(asyncFunction: T, options: UseAsyncOperationOptions = {}): UseAsyncOperationResult<T> {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<unknown>(null);

@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Localization from 'expo-localization';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import i18n from '../i18n';
 
 export const useLanguage = () => {
@@ -17,11 +17,11 @@ export const useLanguage = () => {
     getLanguage();
   }, []);
 
-  const persistLanguage = async (newLanguage: string) => {
+  const persistLanguage = useCallback(async (newLanguage: string) => {
     setLanguage(newLanguage);
     i18n.locale = newLanguage;
     await AsyncStorage.setItem('language', newLanguage);
-  };
+  }, []);
 
   return { language, persistLanguage };
 };

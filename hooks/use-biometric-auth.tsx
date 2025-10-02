@@ -4,7 +4,7 @@
  */
 import { debugError, debugLog } from '@/utils/debug';
 import { BiometricStorage } from '@/utils/secure-storage';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics';
 
@@ -36,7 +36,7 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
   /**
    * Check if biometric authentication is available on the device
    */
-  const checkBiometricSupport = async (): Promise<void> => {
+  const checkBiometricSupport = useCallback(async (): Promise<void> => {
     try {
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
@@ -66,7 +66,7 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
         error: 'Failed to check biometric support',
       }));
     }
-  };
+  }, []);
 
   /**
    * Enable biometric authentication
@@ -220,7 +220,7 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
   // Initialize biometric support check on mount
   useEffect(() => {
     checkBiometricSupport();
-  }, []);
+  }, [checkBiometricSupport]);
 
   return {
     // State

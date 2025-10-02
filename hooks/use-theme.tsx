@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export const useTheme = () => {
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
@@ -14,10 +14,10 @@ export const useTheme = () => {
     getTheme();
   }, []);
 
-  const persistTheme = async (newTheme: 'light' | 'dark' | 'system') => {
+  const persistTheme = useCallback(async (newTheme: 'light' | 'dark' | 'system') => {
     setTheme(newTheme);
     await AsyncStorage.setItem('theme', newTheme);
-  };
+  }, []);
 
   return { theme, persistTheme };
 };
