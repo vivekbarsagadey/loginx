@@ -1,10 +1,14 @@
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { PasswordStrengthMeter } from '@/components/ui/password-strength-meter';
+import { useEmailAvailability } from '@/hooks/use-email-availability';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
-import { useEffect, useRef } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { useEffect, useRef, useState } from 'react';
 import { Controller, FieldErrors, useFormContext } from 'react-hook-form';
-import { StyleSheet, TextInput, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, TextInput, View } from 'react-native';
 
 interface FormData {
   email: string;
@@ -13,10 +17,20 @@ interface FormData {
 }
 
 export default function RegisterStep2({ errors }: { errors: FieldErrors<FormData> }) {
-  const { control } = useFormContext();
+  const { control, watch } = useFormContext();
   const emailRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
   const confirmPasswordRef = useRef<TextInput>(null);
+
+  const [passwordValue, setPasswordValue] = useState('');
+  const emailValue = watch('email');
+
+  // Email availability checking
+  const { status: emailStatus, message: emailMessage, checkEmail } = useEmailAvailability();
+
+  const successColor = useThemeColor({}, 'success');
+  const errorColor = useThemeColor({}, 'error');
+  const mutedColor = useThemeColor({}, 'text-muted');
 
   // Auto-focus email input on mount
   useEffect(() => {
@@ -25,6 +39,13 @@ export default function RegisterStep2({ errors }: { errors: FieldErrors<FormData
     }, 100);
     return () => clearTimeout(timer);
   }, []);
+
+  // Check email availability when email changes
+  useEffect(() => {
+    if (emailValue && typeof emailValue === 'string') {
+      checkEmail(emailValue);
+    }
+  }, [emailValue, checkEmail]);
 
   return (
     <ThemedView style={styles.container}>
@@ -39,24 +60,53 @@ export default function RegisterStep2({ errors }: { errors: FieldErrors<FormData
         control={control}
         name="email"
         render={({ field: { onChange, onBlur, value } }) => (
-          <ThemedInput
-            ref={emailRef}
-            placeholder={i18n.t('register.step2.emailPlaceholder')}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            errorMessage={errors.email?.message as string}
-            autoCapitalize="none"
-            autoCorrect={false}
-            keyboardType="email-address"
-            textContentType="emailAddress"
-            autoComplete="email"
-            returnKeyType="next"
-            onSubmitEditing={() => passwordRef.current?.focus()}
-            accessibilityLabel="Email address input"
-            accessibilityHint="Enter your email address for account login"
-            maxLength={254}
-          />
+          <View>
+            <View style={styles.inputWithIcon}>
+              <ThemedInput
+                ref={emailRef}
+                placeholder={i18n.t('register.step2.emailPlaceholder')}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                errorMessage={errors.email?.message as string}
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="email-address"
+                textContentType="emailAddress"
+                autoComplete="email"
+                returnKeyType="next"
+                onSubmitEditing={() => passwordRef.current?.focus()}
+                accessibilityLabel="Email address input"
+                accessibilityHint="Enter your email address for account login"
+                maxLength={254}
+              />
+              {emailStatus === 'checking' && (
+                <View style={styles.statusIcon}>
+                  <ActivityIndicator size="small" color={mutedColor} />
+                </View>
+              )}
+              {emailStatus === 'available' && !errors.email && (
+                <View style={styles.statusIcon}>
+                  <Ionicons name="checkmark-circle" size={20} color={successColor} />
+                </View>
+              )}
+              {emailStatus === 'unavailable' && (
+                <View style={styles.statusIcon}>
+                  <Ionicons name="close-circle" size={20} color={errorColor} />
+                </View>
+              )}
+            </View>
+            {emailStatus === 'available' && !errors.email && (
+              <ThemedText type="caption" style={[styles.statusText, { color: successColor }]}>
+                {emailMessage}
+              </ThemedText>
+            )}
+            {emailStatus === 'unavailable' && (
+              <ThemedText type="caption" style={[styles.statusText, { color: errorColor }]}>
+                {emailMessage}
+              </ThemedText>
+            )}
+          </View>
         )}
       />
 
@@ -65,24 +115,30 @@ export default function RegisterStep2({ errors }: { errors: FieldErrors<FormData
           control={control}
           name="password"
           render={({ field: { onChange, onBlur, value } }) => (
-            <ThemedInput
-              ref={passwordRef}
-              placeholder={i18n.t('register.step2.passwordPlaceholder')}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              errorMessage={errors.password?.message as string}
-              secureTextEntry
-              textContentType="newPassword"
-              autoComplete="password-new"
-              autoCapitalize="none"
-              autoCorrect={false}
-              returnKeyType="next"
-              onSubmitEditing={() => confirmPasswordRef.current?.focus()}
-              accessibilityLabel="Password input"
-              accessibilityHint="Create a strong password with at least 8 characters, including uppercase, lowercase, number, and special character"
-              maxLength={128}
-            />
+            <View>
+              <ThemedInput
+                ref={passwordRef}
+                placeholder={i18n.t('register.step2.passwordPlaceholder')}
+                onBlur={onBlur}
+                onChangeText={(text) => {
+                  onChange(text);
+                  setPasswordValue(text);
+                }}
+                value={value}
+                errorMessage={errors.password?.message as string}
+                secureTextEntry
+                textContentType="newPassword"
+                autoComplete="password-new"
+                autoCapitalize="none"
+                autoCorrect={false}
+                returnKeyType="next"
+                onSubmitEditing={() => confirmPasswordRef.current?.focus()}
+                accessibilityLabel="Password input"
+                accessibilityHint="Create a strong password with at least 8 characters, including uppercase, lowercase, number, and special character"
+                maxLength={128}
+              />
+              {passwordValue && <PasswordStrengthMeter password={passwordValue} />}
+            </View>
           )}
         />
 
@@ -132,6 +188,19 @@ const styles = StyleSheet.create({
   description: {
     marginBottom: 16,
     opacity: 0.7,
+  },
+  inputWithIcon: {
+    position: 'relative',
+  },
+  statusIcon: {
+    position: 'absolute',
+    right: 16,
+    top: 16,
+    zIndex: 10,
+  },
+  statusText: {
+    marginTop: 4,
+    fontSize: 12,
   },
   passwordSection: {
     gap: 8,

@@ -34,7 +34,7 @@ export default function RegisterStep3({ errors }: { errors: FieldErrors<FormData
         {i18n.t('register.step3.title')}
       </ThemedText>
       <ThemedText type="caption" style={styles.description}>
-        Provide your address information (optional - you can skip this step)
+        Provide your address information (optional - enhances your experience)
       </ThemedText>
 
       <Controller

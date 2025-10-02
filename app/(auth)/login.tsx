@@ -2,7 +2,9 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { SocialSignInButtons } from '@/components/ui/social-sign-in-buttons';
 import { auth } from '@/firebase-config';
+import { useSocialAuth } from '@/hooks/use-social-auth';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,6 +26,7 @@ const schema = z.object({
 export default function LoginScreen() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const { signInWithGoogle, signInWithApple, loading: socialLoading } = useSocialAuth();
 
   const {
     control,
@@ -95,6 +98,9 @@ export default function LoginScreen() {
 
       <ThemedButton title={loading ? i18n.t('screens.login.loggingIn') : i18n.t('screens.login.loginButton')} onPress={handleSubmit(onSubmit)} disabled={loading} style={styles.button} />
       {loading && <ActivityIndicator style={styles.loading} />}
+
+      {/* Social Sign-In */}
+      <SocialSignInButtons onGoogleSignIn={signInWithGoogle} onAppleSignIn={signInWithApple} loading={socialLoading} mode="login" />
 
       <ThemedButton title={i18n.t('screens.login.noAccount')} variant="link" onPress={() => router.push('/(auth)/register')} style={styles.linkButton} />
     </ThemedView>

@@ -2,7 +2,9 @@ import { createUserProfile } from '@/actions/user.action';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { SocialSignInButtons } from '@/components/ui/social-sign-in-buttons';
 import { auth } from '@/firebase-config';
+import { useSocialAuth } from '@/hooks/use-social-auth';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { showError } from '@/utils/error';
 import { sanitizeEmail, sanitizeUserInput } from '@/utils/sanitize';
@@ -17,11 +19,13 @@ import { z } from 'zod';
 import RegisterStep1 from './step-1';
 import RegisterStep2 from './step-2';
 import RegisterStep3 from './step-3';
+import RegisterStep4 from './step-4';
 
 const STEPS = [
   { id: 'step-1', title: 'Personal Information', component: RegisterStep1, fields: ['firstName', 'lastName'] },
   { id: 'step-2', title: 'Account Security', component: RegisterStep2, fields: ['email', 'password', 'confirmPassword'] },
   { id: 'step-3', title: 'Address', component: RegisterStep3, fields: ['address', 'city', 'state', 'zipCode'] },
+  { id: 'step-4', title: 'Phone Verification', component: RegisterStep4, fields: ['phoneNumber'] },
 ];
 
 const schema = z
@@ -42,6 +46,7 @@ const schema = z
     city: z.string().max(100, 'City is too long').optional().or(z.literal('')),
     state: z.string().max(100, 'State is too long').optional().or(z.literal('')),
     zipCode: z.string().max(10, 'Zip code is too long').optional().or(z.literal('')),
+    phoneNumber: z.string().max(20, 'Phone number is too long').optional().or(z.literal('')),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',
@@ -74,6 +79,7 @@ export default function RegisterScreen() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { signInWithGoogle, signInWithApple, loading: socialLoading } = useSocialAuth();
 
   const methods = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -88,6 +94,7 @@ export default function RegisterScreen() {
       city: '',
       state: '',
       zipCode: '',
+      phoneNumber: '',
     },
   });
 
@@ -153,6 +160,7 @@ export default function RegisterScreen() {
         city: data.city ? sanitizeUserInput(data.city, 100) : '',
         state: data.state ? sanitizeUserInput(data.state, 100) : '',
         zipCode: data.zipCode ? sanitizeUserInput(data.zipCode, 10) : '',
+        phoneNumber: data.phoneNumber ? sanitizeUserInput(data.phoneNumber, 20) : '',
       };
 
       // Step 1: Create user account
@@ -196,11 +204,20 @@ export default function RegisterScreen() {
       // Success haptic feedback
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
-      // Navigate to email verification screen with email parameter
-      router.replace({
-        pathname: '/(auth)/verify-email',
-        params: { email: sanitizedData.email },
-      });
+      // Navigate based on whether phone number was provided
+      if (sanitizedData.phoneNumber && sanitizedData.phoneNumber.trim()) {
+        // Phone verification flow
+        router.replace({
+          pathname: '/(auth)/verify-phone',
+          params: { phoneNumber: sanitizedData.phoneNumber },
+        });
+      } else {
+        // Email verification flow (no phone)
+        router.replace({
+          pathname: '/(auth)/verify-email',
+          params: { email: sanitizedData.email },
+        });
+      }
     } catch (error) {
       // Error haptic feedback
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
@@ -275,6 +292,9 @@ export default function RegisterScreen() {
 
             {/* Form Content */}
             <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+              {/* Social Sign-In - Show only on first step */}
+              {currentStep === 0 && <SocialSignInButtons onGoogleSignIn={signInWithGoogle} onAppleSignIn={signInWithApple} loading={socialLoading} mode="register" />}
+
               <CurrentStepComponent errors={formState.errors} />
             </ScrollView>
 
