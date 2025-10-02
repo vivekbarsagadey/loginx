@@ -1,5 +1,5 @@
 import { useThemeColor } from '@/hooks/use-theme-color';
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { StyleSheet, Text, TextInput, TextInputProps, TextStyle, View, ViewStyle } from 'react-native';
 
 export type ThemedInputProps = TextInputProps & {
@@ -9,7 +9,7 @@ export type ThemedInputProps = TextInputProps & {
   containerStyle?: ViewStyle;
 };
 
-export function ThemedInput({ label, helperText, errorMessage, style, containerStyle, ...rest }: ThemedInputProps) {
+export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(({ label, helperText, errorMessage, style, containerStyle, ...rest }, ref) => {
   const textColor = useThemeColor({}, 'text');
   const mutedColor = useThemeColor({}, 'text-muted');
   const errorColor = useThemeColor({}, 'error');
@@ -32,6 +32,7 @@ export function ThemedInput({ label, helperText, errorMessage, style, containerS
     <View style={[styles.container, containerStyle]}>
       {label && <Text style={styles.label}>{label}</Text>}
       <TextInput
+        ref={ref}
         style={[styles.input, { color: textColor, backgroundColor, borderColor }, dynamicStyle, style]}
         placeholderTextColor={mutedColor}
         onFocus={(e) => {
@@ -48,7 +49,9 @@ export function ThemedInput({ label, helperText, errorMessage, style, containerS
       {helperText && !errorMessage && <Text style={styles.helperText}>{helperText}</Text>}
     </View>
   );
-}
+});
+
+ThemedInput.displayName = 'ThemedInput';
 
 const styles = StyleSheet.create({
   container: {
