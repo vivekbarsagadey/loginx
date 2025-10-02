@@ -1,4 +1,6 @@
+import { debugError, debugLog } from '@/utils/debug';
 import { showError } from '@/utils/error';
+import { clearSecureStorage } from '@/utils/secure-storage';
 import { signOut as firebaseSignOut, onAuthStateChanged, User } from 'firebase/auth';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { auth } from '../firebase-config';
@@ -53,9 +55,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Memoize signOut to prevent unnecessary re-renders
   const signOut = useCallback(async () => {
     try {
+      debugLog('[Auth] Starting logout process...');
+
+      // Sign out from Firebase
       await firebaseSignOut(auth);
+
+      // Clear all secure storage on logout for security
+      try {
+        await clearSecureStorage();
+        debugLog('[Auth] Cleared secure storage on logout');
+      } catch (storageError) {
+        debugError('[Auth] Failed to clear secure storage on logout', storageError);
+        // Don't fail logout if storage clearing fails
+      }
+
+      debugLog('[Auth] Logout completed successfully');
     } catch (error) {
-      console.error('[Auth] Sign out error:', error);
+      debugError('[Auth] Sign out error', error);
       showError(error);
       throw error; // Re-throw so caller can handle if needed
     }
