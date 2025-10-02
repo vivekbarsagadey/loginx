@@ -151,6 +151,9 @@
     "activeSessions": "Sesiones activas",
     "twoFactorAuth": "Autenticación de dos factores",
     "dataAndPrivacy": "Datos y privacidad",
+    "dataAndStorage": "Datos y almacenamiento",
+    "clearCache": "Limpiar caché",
+    "clearCacheSubtitle": "Limpiar datos en caché para liberar espacio",
     "helpAndFeedback": "Ayuda y comentarios",
     "helpCenter": "Centro de ayuda",
     "giveFeedback": "Dar opinión",
@@ -164,6 +167,7 @@
     "license": "Licencia",
     "licenseInformation": "Información de licencia",
     "deleteAccount": "Eliminar cuenta",
+    "deleteAccountSubtitle": "Eliminar permanentemente su cuenta y datos",
     "logOut": "Cerrar sesión"
   },
   "screens": {

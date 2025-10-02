@@ -151,6 +151,9 @@
     "activeSessions": "सक्रिय सत्र",
     "twoFactorAuth": "दो-कारक प्रमाणीकरण",
     "dataAndPrivacy": "डेटा और गोपनीयता",
+    "dataAndStorage": "डेटा और संग्रहण",
+    "clearCache": "कैश साफ़ करें",
+    "clearCacheSubtitle": "जगह खाली करने के लिए कैश किया गया डेटा साफ़ करें",
     "helpAndFeedback": "सहायता और प्रतिक्रिया",
     "helpCenter": "सहायता केंद्र",
     "giveFeedback": "प्रतिक्रिया दें",
@@ -164,6 +167,7 @@
     "license": "लाइसेंस",
     "licenseInformation": "लाइसेंस जानकारी",
     "deleteAccount": "खाता हटाएं",
+    "deleteAccountSubtitle": "अपना खाता और डेटा स्थायी रूप से हटाएं",
     "logOut": "लॉग आउट"
   },
   "screens": {

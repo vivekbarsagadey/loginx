@@ -71,7 +71,16 @@
     "WCAG",
     "whizit",
     "worklets",
+    "xcuserdata",
     "yourkey",
     "हिन्दी"
+  ],
+  "cSpell.ignorePaths": [
+    "node_modules",
+    ".git",
+    ".expo",
+    "i18n/locales/*.json",
+    "custom-words.txt",
+    "**/*.md"
   ]
 }

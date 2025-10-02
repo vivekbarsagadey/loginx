@@ -1,100 +1,108 @@
-import { updateSetting } from '@/actions/setting.action';
-import { deleteUserAccount, getUserProfile } from '@/actions/user.action';
+import { deleteUserAccount } from '@/actions/user.action';
 import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { SettingsItem, settingsSections } from '@/config/settings';
 import { Colors } from '@/constants/theme';
 import { auth } from '@/firebase-config';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { clear as clearCache } from '@/utils/cache';
 import { showError } from '@/utils/error';
+import { showSuccess } from '@/utils/success';
 import { Feather } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 import { Href, useRouter } from 'expo-router';
 import { deleteUser } from 'firebase/auth';
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Image, StyleSheet, Switch, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SettingsScreen() {
   const colorScheme = useColorScheme();
-  const [pushEnabled, setPushEnabled] = useState(false);
-  const [emailUpdates, setEmailUpdates] = useState(false);
-  const [marketingTips, setMarketingTips] = useState(false);
-  const [loading, setLoading] = useState<Record<string, boolean>>({});
   const router = useRouter();
   const user = auth.currentUser;
 
-  useEffect(() => {
-    const fetchSettings = async () => {
-      if (user) {
-        try {
-          const userProfile = await getUserProfile(user.uid);
-          if (userProfile) {
-            setPushEnabled(userProfile.pushEnabled);
-            setEmailUpdates(userProfile.emailUpdates);
-            setMarketingTips(userProfile.marketingTips);
-          }
-        } catch (error) {
-          showError(error);
-        }
-      }
-    };
-    fetchSettings();
-  }, [user]);
-
-  const handleToggle = async (key: string, value: boolean) => {
-    if (user) {
-      setLoading((prev) => ({ ...prev, [key]: true }));
-      try {
-        await updateSetting(user.uid, key, value);
-
-        if (key === 'pushEnabled') {
-          setPushEnabled(value);
-        }
-        if (key === 'emailUpdates') {
-          setEmailUpdates(value);
-        }
-        if (key === 'marketingTips') {
-          setMarketingTips(value);
-        }
-      } catch (error) {
-        showError(error);
-      } finally {
-        setLoading((prev) => ({ ...prev, [key]: false }));
-      }
-    }
+  const handleLogout = async () => {
+    Alert.alert(
+      'Log Out',
+      'Are you sure you want to log out?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Log Out',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              await auth.signOut();
+            } catch (error) {
+              showError(error);
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
-  const handleLogout = async () => {
-    try {
-      await auth.signOut();
-    } catch (error) {
-      showError(error);
-    }
+  const handleClearCache = async () => {
+    Alert.alert(
+      'Clear Cache',
+      'This will clear all cached data. Your account data will remain safe. Continue?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Clear',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              clearCache();
+              showSuccess('Success', 'Cache cleared successfully');
+            } catch (error) {
+              showError(error);
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const handleDeleteAccount = async () => {
-    Alert.alert('Delete Account', 'Are you sure you want to permanently delete your account? This action is irreversible.', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: async () => {
-          if (user) {
-            try {
-              await deleteUserAccount(user.uid);
-              await deleteUser(user);
-            } catch (error: unknown) {
-              showError(error);
+    Alert.alert(
+      'Delete Account',
+      'Are you sure you want to permanently delete your account? This action cannot be undone and all your data will be lost.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            if (user) {
+              try {
+                await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                await deleteUserAccount(user.uid);
+                await deleteUser(user);
+              } catch (error: unknown) {
+                showError(error);
+              }
             }
-          }
+          },
         },
-      },
-    ]);
+      ],
+      { cancelable: true }
+    );
   };
 
-  const handlePress = (item: SettingsItem) => {
+  const handlePress = async (item: SettingsItem) => {
+    // Add haptic feedback for all interactions
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
     if (item.type === 'link' && item.href) {
       router.push(item.href as Href);
+    } else if (item.type === 'action') {
+      if (item.action === 'clearCache') {
+        handleClearCache();
+      }
     } else if (item.type === 'danger') {
       if (item.action === 'logout') {
         handleLogout();
@@ -137,6 +145,9 @@ export default function SettingsScreen() {
       borderBottomWidth: 1,
       borderBottomColor: Colors[colorScheme ?? 'light'].border,
     },
+    settingRowLast: {
+      borderBottomWidth: 0,
+    },
     settingInfo: {
       flex: 1,
       marginLeft: 16,
@@ -161,8 +172,8 @@ export default function SettingsScreen() {
           <View key={section.title} style={styles.section}>
             {section.title && <ThemedText type="h2">{section.title}</ThemedText>}
             <View style={styles.sectionItems}>
-              {section.items.map((item) => (
-                <TouchableOpacity key={item.title} style={styles.settingRow} onPress={() => handlePress(item)} disabled={item.type === 'toggle' || item.type === 'label'}>
+              {section.items.map((item, index) => (
+                <TouchableOpacity key={item.title} style={[styles.settingRow, index === section.items.length - 1 && styles.settingRowLast]} onPress={() => handlePress(item)}>
                   <Feather
                     name={item.icon as unknown as React.ComponentProps<typeof Feather>['name']}
                     size={20}
@@ -176,18 +187,7 @@ export default function SettingsScreen() {
                       </ThemedText>
                     )}
                   </View>
-                  {item.type === 'toggle' &&
-                    (loading[item.key] ? (
-                      <ActivityIndicator />
-                    ) : (
-                      <Switch value={item.key === 'pushEnabled' ? pushEnabled : item.key === 'emailUpdates' ? emailUpdates : marketingTips} onValueChange={(value) => handleToggle(item.key, value)} />
-                    ))}
-                  {item.type === 'label' && (
-                    <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light']['text-muted'] }}>
-                      {item.value}
-                    </ThemedText>
-                  )}
-                  {(item.type === 'link' || item.type === 'danger') && <Feather name="chevron-right" size={24} color={Colors[colorScheme ?? 'light']['text-muted']} />}
+                  {(item.type === 'link' || item.type === 'action' || item.type === 'danger') && <Feather name="chevron-right" size={24} color={Colors[colorScheme ?? 'light']['text-muted']} />}
                 </TouchableOpacity>
               ))}
             </View>

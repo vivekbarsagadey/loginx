@@ -151,6 +151,9 @@
     "activeSessions": "Active sessions",
     "twoFactorAuth": "Two-factor authentication",
     "dataAndPrivacy": "Data & privacy",
+    "dataAndStorage": "Data & Storage",
+    "clearCache": "Clear cache",
+    "clearCacheSubtitle": "Clear cached data to free up space",
     "helpAndFeedback": "Help & Feedback",
     "helpCenter": "Help Center",
     "giveFeedback": "Give feedback",
@@ -164,6 +167,7 @@
     "license": "License",
     "licenseInformation": "License information",
     "deleteAccount": "Delete Account",
+    "deleteAccountSubtitle": "Permanently delete your account and data",
     "logOut": "Log out"
   },
   "screens": {
