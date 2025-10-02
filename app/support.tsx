@@ -1,20 +1,200 @@
+import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { StyleSheet } from 'react-native';
+import { Collapsible } from '@/components/ui/collapsible';
+import i18n from '@/i18n';
+import * as Haptics from 'expo-haptics';
+import { Linking, Platform, ScrollView, StyleSheet } from 'react-native';
+import Constants from 'expo-constants';
+import * as Device from 'expo-device';
+import { useRouter } from 'expo-router';
 
 export default function SupportScreen() {
+  const router = useRouter();
+  const appVersion = Constants.expoConfig?.version || '1.0.0';
+  const platform = Platform.OS;
+  const osVersion = Device.osVersion || 'Unknown';
+
+  const faqItems = i18n.t('screens.support.faq.items', { returnObjects: true }) as Array<{
+    question: string;
+    answer: string;
+  }>;
+
+  const handleEmailPress = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    const email = i18n.t('screens.support.contact.email');
+    const subject = encodeURIComponent('Support Request - LoginX App');
+    const body = encodeURIComponent(
+      `App Version: ${appVersion}\nPlatform: ${platform}\nOS Version: ${osVersion}\n\n---\nPlease describe your issue below:\n\n`
+    );
+    const url = `mailto:${email}?subject=${subject}&body=${body}`;
+    
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        console.error('Email client not available');
+      }
+    } catch (error) {
+      console.error('Error opening email client:', error);
+    }
+  };
+
+  const handleNavigateToPrivacy = () => {
+    router.push('/legal/privacy');
+  };
+
+  const handleNavigateToTerms = () => {
+    router.push('/legal/terms');
+  };
+
+  const handleNavigateToLicense = () => {
+    router.push('/legal/license');
+  };
+
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="h1">Support Screen</ThemedText>
-      <ThemedText>Coming Soon!</ThemedText>
-    </ThemedView>
+    <ScrollView style={styles.scrollView}>
+      <ThemedView style={styles.container}>
+        <ThemedText type="h1" style={styles.title}>
+          {i18n.t('screens.support.title')}
+        </ThemedText>
+        <ThemedText style={styles.subtitle}>
+          {i18n.t('screens.support.subtitle')}
+        </ThemedText>
+
+        {/* Contact Section */}
+        <ThemedView style={styles.section}>
+          <ThemedText type="h3" style={styles.sectionTitle}>
+            {i18n.t('screens.support.contact.title')}
+          </ThemedText>
+          <ThemedText style={styles.contactInfo}>
+            {i18n.t('screens.support.contact.email')}
+          </ThemedText>
+          <ThemedText style={styles.contactInfo}>
+            {i18n.t('screens.support.contact.responseTime')}
+          </ThemedText>
+          <ThemedText style={styles.contactInfo}>
+            {i18n.t('screens.support.contact.hours')}
+          </ThemedText>
+          <ThemedButton
+            title={i18n.t('screens.support.contact.emailButton')}
+            onPress={handleEmailPress}
+            style={styles.emailButton}
+            accessibilityLabel="Send support email"
+            accessibilityHint="Opens your email client to send a support request"
+          />
+        </ThemedView>
+
+        {/* FAQ Section */}
+        <ThemedView style={styles.section}>
+          <ThemedText type="h3" style={styles.sectionTitle}>
+            {i18n.t('screens.support.faq.title')}
+          </ThemedText>
+          {faqItems.map((item, index) => (
+            <ThemedView key={index} style={styles.faqItem}>
+              <Collapsible title={item.question}>
+                <ThemedText style={styles.faqAnswer}>{item.answer}</ThemedText>
+              </Collapsible>
+            </ThemedView>
+          ))}
+        </ThemedView>
+
+        {/* Resources Section */}
+        <ThemedView style={styles.section}>
+          <ThemedText type="h3" style={styles.sectionTitle}>
+            {i18n.t('screens.support.resources.title')}
+          </ThemedText>
+          <ThemedButton
+            title={i18n.t('screens.support.resources.privacy')}
+            variant="secondary"
+            onPress={handleNavigateToPrivacy}
+            style={styles.resourceButton}
+          />
+          <ThemedButton
+            title={i18n.t('screens.support.resources.terms')}
+            variant="secondary"
+            onPress={handleNavigateToTerms}
+            style={styles.resourceButton}
+          />
+          <ThemedButton
+            title={i18n.t('screens.support.resources.license')}
+            variant="secondary"
+            onPress={handleNavigateToLicense}
+            style={styles.resourceButton}
+          />
+        </ThemedView>
+
+        {/* Device Info Section */}
+        <ThemedView style={styles.section}>
+          <ThemedText type="h3" style={styles.sectionTitle}>
+            {i18n.t('screens.support.deviceInfo.title')}
+          </ThemedText>
+          <ThemedText style={styles.deviceInfo}>
+            {i18n.t('screens.support.deviceInfo.version', { version: appVersion })}
+          </ThemedText>
+          <ThemedText style={styles.deviceInfo}>
+            {i18n.t('screens.support.deviceInfo.platform', { platform: platform })}
+          </ThemedText>
+          <ThemedText style={styles.deviceInfo}>
+            {i18n.t('screens.support.deviceInfo.os', { os: osVersion })}
+          </ThemedText>
+        </ThemedView>
+      </ThemedView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 16,
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  subtitle: {
+    textAlign: 'center',
+    marginBottom: 24,
+    opacity: 0.7,
+  },
+  section: {
+    marginBottom: 32,
+  },
+  sectionTitle: {
+    marginBottom: 16,
+    fontWeight: 'bold',
+  },
+  contactInfo: {
+    marginBottom: 8,
+    lineHeight: 22,
+    opacity: 0.9,
+  },
+  emailButton: {
+    marginTop: 16,
+  },
+  faqItem: {
+    marginBottom: 12,
+  },
+  faqAnswer: {
+    lineHeight: 22,
+    opacity: 0.9,
+    marginTop: 8,
+  },
+  resourceButton: {
+    marginBottom: 12,
+  },
+  deviceInfo: {
+    marginBottom: 6,
+    opacity: 0.8,
+    fontFamily: Platform.select({
+      ios: 'Courier',
+      android: 'monospace',
+      default: 'monospace',
+    }),
   },
 });

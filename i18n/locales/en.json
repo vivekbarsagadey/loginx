@@ -233,6 +233,82 @@
       "bugFixesList": ["Fixed login issues on slower network connections", "Resolved theme switching glitches", "Improved email verification flow", "Fixed text scaling in different languages"],
       "thankYou": "Thank you for using our app! We're constantly working to improve your experience."
     },
+    "support": {
+      "title": "Support",
+      "subtitle": "We're here to help",
+      "contact": {
+        "title": "Contact Us",
+        "email": "vivek@whizit.co.in",
+        "responseTime": "We typically respond within 24 hours",
+        "hours": "Support Hours: Monday-Friday, 9am-5pm IST",
+        "emailButton": "Send Email"
+      },
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "items": [
+          {
+            "question": "How do I reset my password?",
+            "answer": "Tap 'Forgot Password?' on the login screen, enter your email address, and we'll send you a reset link. Check your inbox and follow the instructions to create a new password."
+          },
+          {
+            "question": "How do I verify my email?",
+            "answer": "After registration, check your inbox for a verification email. Click the link in the email to verify your account. If you don't see it, check your spam folder or request a new verification email from the verification screen."
+          },
+          {
+            "question": "How do I enable Two-Factor Authentication (2FA)?",
+            "answer": "Go to Settings > Security & Privacy > Two-Factor Authentication. Follow the setup wizard to scan the QR code with your authenticator app (Google Authenticator, Authy, or Microsoft Authenticator) and enter the verification code."
+          },
+          {
+            "question": "How do I change my language or theme?",
+            "answer": "You can change your language and theme from the Settings screen. Tap on 'Language' to select from English, Spanish, or Hindi. Tap on 'Theme' to choose between System, Light, or Dark mode."
+          },
+          {
+            "question": "How do I delete my account?",
+            "answer": "Go to Settings and scroll to the bottom to find 'Delete Account'. This action performs a soft delete - your account will be marked for deletion but can be recovered within 30 days. After 30 days, all your data will be permanently deleted."
+          },
+          {
+            "question": "I'm having trouble logging in. What should I do?",
+            "answer": "First, check your internet connection. Ensure you're entering the correct email and password. If you've forgotten your password, use the 'Forgot Password?' link. If you're still having issues, try clearing the app cache or contact our support team."
+          },
+          {
+            "question": "How do I enable biometric authentication?",
+            "answer": "Biometric authentication (fingerprint or face recognition) is available if your device supports it. The app will prompt you to enable it during login. You can also enable it later from Settings > Security & Privacy."
+          },
+          {
+            "question": "Why is my email verification not working?",
+            "answer": "Make sure you're clicking the correct link from the verification email. The link may expire after 24 hours. If it's expired, request a new verification email from the verification screen. Also check your spam/junk folder."
+          },
+          {
+            "question": "How do I update my profile information?",
+            "answer": "Go to Settings > Edit Profile to update your name and profile photo. You can tap on your profile picture to change it by selecting a new photo from your device gallery."
+          },
+          {
+            "question": "Is my data secure?",
+            "answer": "Yes! We use Firebase Authentication for secure login, encrypted local storage for sensitive data, and follow industry best practices. Your biometric data never leaves your device. Review our Privacy Policy and Security documentation for more details."
+          }
+        ]
+      },
+      "categories": {
+        "title": "Help Categories",
+        "account": "Account & Login",
+        "security": "Security & Privacy",
+        "profile": "Profile Management",
+        "technical": "Technical Issues"
+      },
+      "resources": {
+        "title": "Additional Resources",
+        "documentation": "Documentation",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "license": "License Information"
+      },
+      "deviceInfo": {
+        "title": "Device Information",
+        "version": "App Version: {version}",
+        "platform": "Platform: {platform}",
+        "os": "OS Version: {os}"
+      }
+    },
     "legal": {
       "terms": {
         "title": "Terms of Service",
@@ -266,35 +342,55 @@
       },
       "privacy": {
         "title": "Privacy Policy",
-        "lastUpdated": "Last updated: December 2024",
+        "lastUpdated": "Last updated: January 2025",
         "sections": {
           "introduction": {
             "title": "1. Introduction",
-            "content": "We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use and protect your information."
+            "content": "We at Whiz IT are committed to protecting your privacy. This Privacy Policy explains how LoginX collects, uses, stores, and protects your personal information. By using our application, you agree to the collection and use of information in accordance with this policy."
           },
           "dataCollection": {
             "title": "2. Data We Collect",
-            "content": "We collect information you provide directly to us, such as when you create an account, use our services, or contact us for support."
+            "content": "We collect the following types of information:\n\n• Personal Information: Name, email address, and profile photo that you provide during registration.\n\n• Authentication Data: Login credentials managed securely through Firebase Authentication.\n\n• Device Information: Device type, operating system version, and unique device identifiers for push notifications.\n\n• Usage Data: App interactions, features used, and session information to improve our services.\n\n• Biometric Data: Fingerprint or face recognition data (stored locally on your device only, never transmitted to our servers).\n\n• Location Data: General location information if you grant permission (used for security purposes).\n\nWe do not collect sensitive personal information such as financial data, health records, or government-issued ID numbers."
+          },
+          "dataCollectionMethods": {
+            "title": "3. How We Collect Data",
+            "content": "We collect data through:\n\n• Account Registration: Information you provide when creating your account.\n\n• Profile Updates: Changes you make to your profile and settings.\n\n• App Usage: Interactions with app features and navigation patterns.\n\n• Firebase Services: Authentication, cloud storage, and analytics through Firebase/Google services.\n\n• Device Sensors: Biometric sensors (with your permission) for authentication.\n\n• Third-Party Integrations: Expo services for push notifications and app updates."
           },
           "dataUse": {
-            "title": "3. How We Use Your Data",
-            "content": "We use your information to provide, maintain, and improve our services, communicate with you, and ensure the security of our platform."
+            "title": "4. How We Use Your Data",
+            "content": "We use your information to:\n\n• Provide and maintain our authentication and user management services.\n\n• Verify your identity and secure your account access.\n\n• Send you push notifications about account activity (with your consent).\n\n• Communicate important updates, security alerts, and service announcements.\n\n• Improve app performance, fix bugs, and develop new features.\n\n• Analyze usage patterns to enhance user experience.\n\n• Comply with legal obligations and enforce our Terms of Service.\n\n• Prevent fraud, abuse, and unauthorized access.\n\nWe will never use your data for purposes other than those described in this policy without your explicit consent."
+          },
+          "dataStorage": {
+            "title": "5. Data Storage and Security",
+            "content": "Your data is stored securely using:\n\n• Firebase Firestore: Cloud-based database for user profiles and settings (encrypted at rest and in transit).\n\n• SQLite Database: Local encrypted database for offline access and caching.\n\n• Expo SecureStore: Hardware-backed encrypted storage for sensitive data like authentication tokens.\n\n• AsyncStorage: Local storage for app preferences (non-sensitive data only).\n\nSecurity Measures:\n• End-to-end encryption for data transmission\n• AES-256 encryption for local sensitive data\n• Secure password hashing (never stored in plain text)\n• Regular security audits and updates\n• Firebase Security Rules to prevent unauthorized access\n• Biometric data never leaves your device\n\nFor more details, please refer to our SECURITY.md documentation."
           },
           "dataSharing": {
-            "title": "4. Data Sharing",
-            "content": "We do not sell, trade, or otherwise transfer your personal information to outside parties except as described in this policy."
-          },
-          "dataSecurity": {
-            "title": "5. Data Security",
-            "content": "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction."
+            "title": "6. Data Sharing and Third Parties",
+            "content": "We share limited data with trusted third-party service providers:\n\n• Firebase/Google Cloud: Authentication, database, and analytics services. Subject to Google's Privacy Policy.\n\n• Expo Services: Push notification delivery and app update distribution.\n\n• Sentry: Error tracking and performance monitoring (anonymized data only).\n\nWe DO NOT:\n• Sell your personal information to anyone\n• Share your data with advertisers\n• Rent or trade your information\n• Use your data for marketing purposes without consent\n\nWe may disclose your information if required by law, court order, or to protect our legal rights and user safety."
           },
           "yourRights": {
-            "title": "6. Your Rights",
-            "content": "You have the right to access, update, or delete your personal information. You may also opt out of certain communications from us."
+            "title": "7. Your Rights (GDPR/CCPA Compliance)",
+            "content": "You have the following rights regarding your personal data:\n\n• Right to Access: Request a copy of all personal data we hold about you.\n\n• Right to Rectification: Update or correct inaccurate information through your profile settings.\n\n• Right to Deletion: Delete your account and associated data (soft delete with 30-day recovery period).\n\n• Right to Data Portability: Export your data in a machine-readable format.\n\n• Right to Withdraw Consent: Opt-out of push notifications and marketing communications.\n\n• Right to Object: Object to processing of your data for specific purposes.\n\n• Right to Restrict Processing: Request limitation on how we use your data.\n\nTo exercise these rights, contact us at privacy@loginx.app or vivek@whizit.co.in."
+          },
+          "cookies": {
+            "title": "8. Cookies and Tracking",
+            "content": "We use local storage mechanisms but do not use traditional web cookies:\n\n• AsyncStorage: For app preferences and non-sensitive settings\n• Session Management: Authentication tokens stored in SecureStore\n• Analytics: Anonymous usage statistics to improve the app\n\nYou can clear app data through your device settings, which will remove all locally stored information."
+          },
+          "childrenPrivacy": {
+            "title": "9. Children's Privacy",
+            "content": "LoginX is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately, and we will delete such information from our systems."
+          },
+          "international": {
+            "title": "10. International Data Transfers",
+            "content": "Your data may be transferred to and stored on servers located outside your country of residence. We use Firebase's global infrastructure, which complies with applicable data protection laws including GDPR and CCPA. Data is encrypted during transfer and storage to ensure security across borders."
+          },
+          "updates": {
+            "title": "11. Policy Updates",
+            "content": "We may update this Privacy Policy from time to time to reflect changes in our practices or legal requirements. We will notify you of any significant changes through:\n\n• In-app notifications\n• Email to your registered address\n• Notice on our website\n\nThe 'Last Updated' date at the top of this policy indicates when it was last revised. Your continued use of the app after changes constitutes acceptance of the updated policy."
           },
           "contact": {
-            "title": "7. Contact Us",
-            "content": "If you have any questions about this Privacy Policy, please contact us at privacy@loginx.app"
+            "title": "12. Contact Information",
+            "content": "For questions, concerns, or requests regarding this Privacy Policy or your personal data, please contact:\n\nPrivacy Officer: Vivek Barsagadey\nEmail: privacy@loginx.app or vivek@whizit.co.in\nOrganization: Whiz IT\nWebsite: https://whizit.co.in\n\nWe will respond to your inquiry within 30 days."
           }
         }
       },
@@ -302,37 +398,196 @@
         "title": "License Information",
         "appLicense": {
           "title": "Application License",
-          "content": "This application is proprietary software. All rights reserved. Unauthorized copying, distribution, or modification of this software is strictly prohibited."
+          "content": "MIT License\n\nCopyright (c) 2024-2025 Whiz IT - Vivek Barsagadey\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
         },
         "openSource": {
           "title": "Open Source Libraries",
-          "intro": "This application uses the following open source libraries:",
+          "intro": "This application uses the following open source libraries. We are grateful to the open source community for their contributions:",
           "libraries": [
             {
-              "name": "React Native",
+              "name": "React (19.1.0)",
               "license": "MIT License",
-              "description": "A framework for building native apps using React"
+              "description": "JavaScript library for building user interfaces"
             },
             {
-              "name": "Expo",
+              "name": "React Native (0.81.4)",
               "license": "MIT License",
-              "description": "An open-source platform for making universal native apps"
+              "description": "Framework for building native apps using React"
             },
             {
-              "name": "Firebase",
+              "name": "Expo (~54.0.10)",
+              "license": "MIT License",
+              "description": "Platform for building universal native apps"
+            },
+            {
+              "name": "Expo Router (~6.0.8)",
+              "license": "MIT License",
+              "description": "File-based routing for React Native and Expo apps"
+            },
+            {
+              "name": "Firebase (^12.3.0)",
               "license": "Apache License 2.0",
-              "description": "A platform for building mobile and web applications"
+              "description": "Platform for building mobile and web applications"
             },
             {
-              "name": "React Hook Form",
+              "name": "React Native Biometrics (^3.0.1)",
               "license": "MIT License",
-              "description": "Performant, flexible forms with easy validation"
+              "description": "Biometric authentication for React Native"
+            },
+            {
+              "name": "Expo Secure Store (^15.0.7)",
+              "license": "MIT License",
+              "description": "Encrypted key-value storage"
+            },
+            {
+              "name": "React Hook Form (^7.63.0)",
+              "license": "MIT License",
+              "description": "Performant forms with easy validation"
+            },
+            {
+              "name": "Zod (^3.25.76)",
+              "license": "MIT License",
+              "description": "TypeScript-first schema validation"
+            },
+            {
+              "name": "@hookform/resolvers (^5.2.2)",
+              "license": "MIT License",
+              "description": "Validation resolvers for React Hook Form"
+            },
+            {
+              "name": "React Native Reanimated (~4.1.1)",
+              "license": "MIT License",
+              "description": "Fluid animations and interactions"
+            },
+            {
+              "name": "React Native Gesture Handler (~2.28.0)",
+              "license": "MIT License",
+              "description": "Gesture management for React Native"
+            },
+            {
+              "name": "@expo/vector-icons (^15.0.2)",
+              "license": "MIT License",
+              "description": "Icon library for Expo and React Native"
+            },
+            {
+              "name": "Expo Haptics (~15.0.7)",
+              "license": "MIT License",
+              "description": "Haptic feedback for user interactions"
+            },
+            {
+              "name": "@react-navigation/native (^7.1.17)",
+              "license": "MIT License",
+              "description": "Routing and navigation for React Native"
+            },
+            {
+              "name": "@react-navigation/bottom-tabs (^7.4.0)",
+              "license": "MIT License",
+              "description": "Bottom tab navigation component"
+            },
+            {
+              "name": "React Native Screens (~4.16.0)",
+              "license": "MIT License",
+              "description": "Native navigation primitives"
+            },
+            {
+              "name": "@react-native-async-storage/async-storage (2.2.0)",
+              "license": "MIT License",
+              "description": "Persistent key-value storage"
+            },
+            {
+              "name": "Expo SQLite (^16.0.8)",
+              "license": "MIT License",
+              "description": "SQLite database for local storage"
+            },
+            {
+              "name": "i18n-js (^4.5.1)",
+              "license": "MIT License",
+              "description": "Internationalization framework"
+            },
+            {
+              "name": "Expo Localization (~17.0.7)",
+              "license": "MIT License",
+              "description": "Device locale and language information"
+            },
+            {
+              "name": "Expo Notifications (~0.32.11)",
+              "license": "MIT License",
+              "description": "Push notification support"
+            },
+            {
+              "name": "Expo Constants (~18.0.9)",
+              "license": "MIT License",
+              "description": "System constants and app configuration"
+            },
+            {
+              "name": "Expo Device (~8.0.8)",
+              "license": "MIT License",
+              "description": "Device information and capabilities"
+            },
+            {
+              "name": "Expo Image (~3.0.8)",
+              "license": "MIT License",
+              "description": "Optimized image component"
+            },
+            {
+              "name": "Expo Image Picker (~17.0.8)",
+              "license": "MIT License",
+              "description": "Image and video selection from device library"
+            },
+            {
+              "name": "Expo Linking (~8.0.8)",
+              "license": "MIT License",
+              "description": "URL and deep linking handling"
+            },
+            {
+              "name": "Expo Splash Screen (~31.0.10)",
+              "license": "MIT License",
+              "description": "Splash screen management"
+            },
+            {
+              "name": "Expo Status Bar (~3.0.8)",
+              "license": "MIT License",
+              "description": "Status bar styling and configuration"
+            },
+            {
+              "name": "Expo System UI (~6.0.7)",
+              "license": "MIT License",
+              "description": "System UI color and styling"
+            },
+            {
+              "name": "Expo Web Browser (~15.0.7)",
+              "license": "MIT License",
+              "description": "In-app browser for opening web content"
+            },
+            {
+              "name": "TypeScript (~5.9.2)",
+              "license": "Apache License 2.0",
+              "description": "Typed superset of JavaScript"
+            },
+            {
+              "name": "@sentry/react-native (^6.22.0)",
+              "license": "MIT License",
+              "description": "Error tracking and performance monitoring"
+            },
+            {
+              "name": "ESLint (^9.25.0)",
+              "license": "MIT License",
+              "description": "Code linting and quality tool"
+            },
+            {
+              "name": "Prettier (^3.6.2)",
+              "license": "MIT License",
+              "description": "Code formatter"
             }
           ]
         },
         "copyright": {
           "title": "Copyright Notice",
-          "content": "© 2024 LoginX. All rights reserved. This software and its documentation are proprietary products of LoginX."
+          "content": "© 2024-2025 Whiz IT - Vivek Barsagadey. All rights reserved.\n\nThis application is open-source software licensed under the MIT License. See the LICENSE file for the full license text.\n\nLoginX is a product of Whiz IT (https://whizit.co.in)."
+        },
+        "attribution": {
+          "title": "Attribution Guidelines",
+          "content": "If you fork, modify, or use this code:\n\n• Maintain the original copyright notice\n• Include a copy of the MIT License\n• Link to the original repository: https://github.com/vivekbarsagadey/loginx\n• Credit Whiz IT and Vivek Barsagadey in your documentation\n\nFor commercial use or questions about licensing, contact vivek@whizit.co.in."
         }
       }
     },
