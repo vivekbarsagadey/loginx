@@ -13,17 +13,28 @@ const requiredFields = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'm
 const missingFields = requiredFields.filter((field) => !extra?.[field]);
 
 if (missingFields.length > 0) {
-  console.error('[Firebase] Missing required configuration fields:', missingFields.join(', '));
-  console.error('[Firebase] Please check your .env file and app.config.ts');
+  const errorMessage = `[Firebase] Missing required configuration fields: ${missingFields.join(', ')}
+  
+Please create a .env file in the project root with the following variables:
+${missingFields.map((field) => `${field.replace(/([A-Z])/g, '_$1').toUpperCase()}="your-value-here"`).join('\n')}
+
+You can copy .env.example to .env and fill in your Firebase credentials.`;
+
+  console.error(errorMessage);
+
+  // Don't throw during initialization - let the app load and show a proper error screen
+  if (!__DEV__) {
+    throw new Error('Firebase configuration missing. Please contact support.');
+  }
 }
 
 const firebaseConfig = {
-  apiKey: extra?.apiKey,
-  authDomain: extra?.authDomain,
-  projectId: extra?.projectId,
-  storageBucket: extra?.storageBucket,
-  messagingSenderId: extra?.messagingSenderId,
-  appId: extra?.appId,
+  apiKey: extra?.apiKey || 'missing-api-key',
+  authDomain: extra?.authDomain || 'missing-auth-domain',
+  projectId: extra?.projectId || 'missing-project-id',
+  storageBucket: extra?.storageBucket || 'missing-storage-bucket',
+  messagingSenderId: extra?.messagingSenderId || 'missing-sender-id',
+  appId: extra?.appId || 'missing-app-id',
 };
 
 // Log Firebase configuration in development (without exposing sensitive data)
@@ -32,7 +43,15 @@ if (__DEV__) {
 }
 
 // ---- initialize (reuse if already created) ----
-export const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+let app: ReturnType<typeof initializeApp>;
+try {
+  app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+} catch (error) {
+  console.error('[Firebase] Failed to initialize app:', error);
+  throw new Error('Firebase initialization failed. Please check your configuration.');
+}
+
+export { app };
 
 // ---- Auth ----
 let auth: Auth;
@@ -57,85 +76,93 @@ if (Platform.OS === 'web') {
 export { auth };
 
 // ---- Firestore with error handling and emulator support ----
-let firestoreInstance: ReturnType<typeof getFirestore>;
+let firestoreInstance: ReturnType<typeof getFirestore> | undefined;
 let firestoreInitialized = false;
+let firestoreError: Error | null = null;
 
 try {
-  firestoreInstance = getFirestore(app);
+  if (missingFields.length === 0) {
+    firestoreInstance = getFirestore(app);
 
-  // Connect to Firestore emulator if enabled (development only)
-  if (__DEV__ && process.env.USE_FIREBASE_EMULATOR === 'true') {
-    try {
-      connectFirestoreEmulator(firestoreInstance, 'localhost', 8080);
-      console.warn('[Firebase] Connected to Firestore emulator at localhost:8080');
-    } catch (emulatorError) {
-      console.warn('[Firebase] Failed to connect to emulator:', emulatorError);
-    }
-  }
-
-  // Enable offline persistence for web
-  if (Platform.OS === 'web') {
-    // Try multi-tab persistence first, fall back to single-tab
-    enableMultiTabIndexedDbPersistence(firestoreInstance)
-      .then(() => {
-        console.warn('[Firebase] Multi-tab offline persistence enabled');
-        firestoreInitialized = true;
-      })
-      .catch((err) => {
-        if (err.code === 'failed-precondition') {
-          // Multiple tabs open, persistence can only be enabled in one tab at a time
-          console.warn('[Firebase] Multi-tab persistence failed, trying single-tab');
-          return enableIndexedDbPersistence(firestoreInstance);
-        } else if (err.code === 'unimplemented') {
-          // The current browser doesn't support persistence
-          console.warn('[Firebase] Offline persistence not supported in this browser');
-        } else {
-          console.error('[Firebase] Persistence error:', err);
-        }
-        firestoreInitialized = true;
-      })
-      .then(() => {
-        if (!firestoreInitialized) {
-          console.warn('[Firebase] Single-tab offline persistence enabled');
-          firestoreInitialized = true;
-        }
-      })
-      .catch((err) => {
-        console.warn('[Firebase] Could not enable offline persistence:', err);
-        firestoreInitialized = true;
-      });
-  } else {
-    // Native platforms have built-in offline support
-    firestoreInitialized = true;
-    if (__DEV__) {
-      console.warn('[Firebase] Native offline persistence enabled by default');
-    }
-  }
-
-  // Monitor connection state in development
-  if (__DEV__) {
-    // Set up connection monitoring
-    const checkConnection = () => {
-      if (typeof navigator !== 'undefined' && 'onLine' in navigator) {
-        if (navigator.onLine) {
-          console.warn('[Firebase] Network connection: ONLINE');
-        } else {
-          console.warn('[Firebase] Network connection: OFFLINE - Using cached data');
-        }
+    // Connect to Firestore emulator if enabled (development only)
+    if (__DEV__ && process.env.USE_FIREBASE_EMULATOR === 'true') {
+      try {
+        connectFirestoreEmulator(firestoreInstance, 'localhost', 8080);
+        console.warn('[Firebase] Connected to Firestore emulator at localhost:8080');
+      } catch (emulatorError) {
+        console.warn('[Firebase] Failed to connect to emulator:', emulatorError);
       }
-    };
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('online', () => {
-        console.warn('[Firebase] Network connection restored');
-      });
-      window.addEventListener('offline', () => {
-        console.warn('[Firebase] Network connection lost - Switching to offline mode');
-      });
-      checkConnection();
     }
+
+    // Enable offline persistence for web
+    if (Platform.OS === 'web') {
+      // Try multi-tab persistence first, fall back to single-tab
+      enableMultiTabIndexedDbPersistence(firestoreInstance)
+        .then(() => {
+          console.warn('[Firebase] Multi-tab offline persistence enabled');
+          firestoreInitialized = true;
+        })
+        .catch((err) => {
+          if (err.code === 'failed-precondition') {
+            // Multiple tabs open, persistence can only be enabled in one tab at a time
+            console.warn('[Firebase] Multi-tab persistence failed, trying single-tab');
+            return enableIndexedDbPersistence(firestoreInstance!);
+          } else if (err.code === 'unimplemented') {
+            // The current browser doesn't support persistence
+            console.warn('[Firebase] Offline persistence not supported in this browser');
+          } else {
+            console.error('[Firebase] Persistence error:', err);
+          }
+          firestoreInitialized = true;
+        })
+        .then(() => {
+          if (!firestoreInitialized) {
+            console.warn('[Firebase] Single-tab offline persistence enabled');
+            firestoreInitialized = true;
+          }
+        })
+        .catch((err) => {
+          console.warn('[Firebase] Could not enable offline persistence:', err);
+          firestoreInitialized = true;
+        });
+    } else {
+      // Native platforms have built-in offline support
+      firestoreInitialized = true;
+      if (__DEV__) {
+        console.warn('[Firebase] Native offline persistence enabled by default');
+      }
+    }
+
+    // Monitor connection state in development
+    if (__DEV__) {
+      // Set up connection monitoring
+      const checkConnection = () => {
+        if (typeof navigator !== 'undefined' && 'onLine' in navigator) {
+          if (navigator.onLine) {
+            console.warn('[Firebase] Network connection: ONLINE');
+          } else {
+            console.warn('[Firebase] Network connection: OFFLINE - Using cached data');
+          }
+        }
+      };
+
+      if (typeof window !== 'undefined') {
+        window.addEventListener('online', () => {
+          console.warn('[Firebase] Network connection restored');
+        });
+        window.addEventListener('offline', () => {
+          console.warn('[Firebase] Network connection lost - Switching to offline mode');
+        });
+        checkConnection();
+      }
+    }
+  } else {
+    // Configuration missing - don't initialize Firestore
+    firestoreError = new Error('Firebase configuration is incomplete. Please check your .env file.');
+    console.error('[Firebase] Skipping Firestore initialization due to missing configuration');
   }
 } catch (error) {
+  firestoreError = error instanceof Error ? error : new Error('Unknown Firestore initialization error');
   console.error('[Firebase] Failed to initialize Firestore:', error);
   if (error instanceof Error) {
     console.error('[Firebase] Error details:', {
@@ -143,18 +170,30 @@ try {
       stack: error.stack,
     });
   }
-  // Re-throw to prevent app from continuing with broken Firestore
-  throw new Error('Firebase Firestore initialization failed. Please check your configuration.');
+
+  // In development, don't crash - let the app show a proper error screen
+  if (!__DEV__) {
+    throw new Error('Firebase Firestore initialization failed. Please check your configuration.');
+  }
 }
 
-export const firestore = firestoreInstance;
+// Export firestore instance - will be undefined if initialization failed
+export const firestore = firestoreInstance as ReturnType<typeof getFirestore>;
+
+/**
+ * Get the Firestore initialization error if one occurred
+ * @returns Error object or null if no error
+ */
+export const getFirestoreError = (): Error | null => {
+  return firestoreError;
+};
 
 /**
  * Check if Firestore is properly initialized
  * @returns True if Firestore is ready to use
  */
 export const isFirestoreReady = (): boolean => {
-  return firestoreInitialized && firestoreInstance !== undefined;
+  return firestoreInitialized && firestoreInstance !== undefined && firestoreError === null;
 };
 
 /**
