@@ -6,17 +6,17 @@ applyTo: "**"
 
 ## Table of Contents
 
-1. [TypeScript Guidelines](#typescript-guidelines)
-2. [React & React Native Guidelines](#react--react-native-guidelines)
-3. [Expo Guidelines](#expo-guidelines)
-4. [Component Architecture](#component-architecture)
-5. [UI/UX Guidelines](#uiux-guidelines)
-6. [Code Style & Formatting](#code-style--formatting)
-7. [State Management](#state-management)
-8. [Performance Guidelines](#performance-guidelines)
-9. [Accessibility](#accessibility)
-10. [Testing](#testing)
-11. [Security](#security)
+1. TypeScript Guidelines
+2. React & React Native Guidelines
+3. Expo Guidelines
+4. Component Architecture
+5. UI/UX Guidelines
+6. Code Style & Formatting
+7. State Management
+8. Performance Guidelines
+9. Accessibility
+10. Testing
+11. Security
 
 ---
 
@@ -533,7 +533,8 @@ const adjustedFontSize = 16 * Math.min(fontScale, 1.3); // Cap at 1.3x
 
 #### Dark Mode Guidelines
 
-- **True blacks** (#000000) can cause eye strain - use dark grays (#121212)
+- **True blacks** (hex 000000) can cause eye strain - use dark grays
+  (hex 121212)
 - **Reduce elevation shadows** - Use lighter surfaces for hierarchy
 - **Desaturate colors** - Vibrant colors appear too bright
 - **Test readability** - Ensure sufficient contrast in dark theme
@@ -577,10 +578,10 @@ function MyComponent() {
 }
 
 // ❌ Bad - Hardcoded colors
-<View style={{ backgroundColor: "#FF0000" }}>
+<View style={{ backgroundColor: "red" }}>
   {" "}
   {/* Don't do this */}
-  <Text style={{ color: "#FFFFFF" }}>Error</Text>
+  <Text style={{ color: "white" }}>Error</Text>
 </View>;
 ```
 
@@ -1627,16 +1628,16 @@ export async function getUserProfile(
 
 ### Official Documentation
 
-- [React Native](https://reactnative.dev/docs/getting-started)
-- [Expo](https://docs.expo.dev/)
-- [TypeScript](https://www.typescriptlang.org/docs/)
-- [React Navigation](https://reactnavigation.org/docs/getting-started)
+- React Native Documentation: reactnative.dev/docs/getting-started
+- Expo Documentation: docs.expo.dev
+- TypeScript Documentation: typescriptlang.org/docs
+- React Navigation Documentation: reactnavigation.org/docs/getting-started
 
 ### Design Systems
 
-- [iOS Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
-- [Material Design](https://material.io/design)
-- [WCAG Accessibility Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
+- iOS Human Interface Guidelines: developer.apple.com/design/human-interface-guidelines
+- Material Design Guidelines: material.io/design
+- WCAG Accessibility Guidelines: w3.org/WAI/WCAG21/quickref
 
 ---
 
