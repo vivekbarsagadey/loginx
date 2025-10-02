@@ -7,6 +7,8 @@ import { auth } from '@/firebase-config';
 import { useSocialAuth } from '@/hooks/use-social-auth';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { showError } from '@/utils/error';
+import { logStateChange, runRegistrationDiagnostics } from '@/utils/registration-diagnostics';
+import { safeReplace } from '@/utils/safe-navigation';
 import { sanitizeEmail, sanitizeUserInput } from '@/utils/sanitize';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Haptics from 'expo-haptics';
@@ -89,6 +91,16 @@ export default function RegisterScreen() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { signInWithGoogle, signInWithApple, loading: socialLoading } = useSocialAuth();
+
+  // Run diagnostics on mount (development only)
+  useEffect(() => {
+    runRegistrationDiagnostics();
+  }, []);
+
+  // Log step changes for debugging
+  useEffect(() => {
+    logStateChange('RegisterScreen', 'currentStep', currentStep - 1, currentStep);
+  }, [currentStep]);
 
   const methods = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -225,15 +237,23 @@ export default function RegisterScreen() {
       // Navigate based on whether phone number was provided
       if (sanitizedData.phoneNumber && sanitizedData.phoneNumber.trim()) {
         // Phone verification flow
-        router.replace({
+        safeReplace({
           pathname: '/(auth)/verify-phone',
           params: { phoneNumber: sanitizedData.phoneNumber },
+          fallbackRoute: '/(auth)/verify-email',
+          onError: () => {
+            showError(new Error('Could not navigate to phone verification. Please check your email for verification link.'));
+          },
         });
       } else {
         // Email verification flow (no phone)
-        router.replace({
+        safeReplace({
           pathname: '/(auth)/verify-email',
           params: { email: sanitizedData.email },
+          fallbackRoute: '/(auth)/login',
+          onError: () => {
+            showError(new Error('Registration complete but navigation failed. Please log in with your email.'));
+          },
         });
       }
     } catch (error) {
@@ -296,7 +316,7 @@ export default function RegisterScreen() {
           isSubmitting,
         }}
       >
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardAvoidingView} keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardAvoidingView} keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 20} enabled={true}>
           <ThemedView style={styles.container}>
             <Stack.Screen
               options={{
@@ -347,11 +367,13 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   keyboardAvoidingView: {
     flex: 1,
+    backgroundColor: 'transparent',
   },
   container: {
     flex: 1,
     padding: 16,
     flexDirection: 'column',
+    justifyContent: 'space-between',
   },
   progressContainer: {
     paddingVertical: 16,
@@ -373,15 +395,18 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+    marginBottom: 16,
   },
   scrollViewContent: {
     flexGrow: 1,
+    paddingBottom: 20,
   },
   buttonContainer: {
     flexDirection: 'row',
     gap: 16,
     paddingTop: 16,
-    paddingBottom: Platform.OS === 'ios' ? 0 : 16,
+    paddingBottom: Platform.OS === 'ios' ? 8 : 16,
+    backgroundColor: 'transparent',
   },
   button: {
     flex: 1,
