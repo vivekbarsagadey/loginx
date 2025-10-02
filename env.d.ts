@@ -7,6 +7,7 @@ declare namespace NodeJS {
     MESSAGING_SENDER_ID: string;
     APP_ID: string;
     MEASUREMENT_ID: string;
+    EAS_PROJECT_ID: string;
     APP_NAME: string;
     APP_VERSION: string;
     APP_BUILD: string;

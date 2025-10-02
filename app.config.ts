@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
 // Validate required environment variables
-const requiredEnvVars = ['API_KEY', 'AUTH_DOMAIN', 'PROJECT_ID', 'STORAGE_BUCKET', 'MESSAGING_SENDER_ID', 'APP_ID'];
+const requiredEnvVars = ['API_KEY', 'AUTH_DOMAIN', 'PROJECT_ID', 'STORAGE_BUCKET', 'MESSAGING_SENDER_ID', 'APP_ID', 'EAS_PROJECT_ID'];
 
 const missingVars = requiredEnvVars.filter((varName) => !process.env[varName]);
 
@@ -59,7 +59,7 @@ export default {
     },
     extra: {
       eas: {
-        projectId: '524907f3-68cc-42d8-9b78-3561e304156d',
+        projectId: process.env.EAS_PROJECT_ID,
       },
       apiKey: process.env.API_KEY,
       authDomain: process.env.AUTH_DOMAIN,
