@@ -35,22 +35,7 @@ APP_ID="your-firebase-app-id"
 5. Select your web app or click "Add app" if none exists
 6. Copy the configuration values to your `.env` file
 
-### 2. Database Encryption Key
-
-If you're using the SQLite database with encryption, generate a secure key:
-
-```bash
-# Generate a secure random key
-openssl rand -base64 32
-```
-
-Add it to your `.env`:
-
-```bash
-DB_ENCRYPTION_KEY="your-generated-key-here"
-```
-
-### 3. Firestore Security Rules
+### 2. Firestore Security Rules
 
 The project includes comprehensive security rules in `firestore.rules`. Deploy
 them to Firebase:
@@ -158,10 +143,14 @@ Passwords must meet these requirements (enforced by Zod validation):
    - Encrypted in transit (TLS)
    - Access controlled by security rules
 
-2. **SQLite** - App settings (local only)
+2. **AsyncStorage** - App preferences (local only)
    - Stored on device
    - Not synced to cloud
-   - Can be encrypted with `DB_ENCRYPTION_KEY`
+   - For non-sensitive data only
+
+3. **Expo SecureStore** - Sensitive local data
+   - Hardware-backed encryption
+   - For authentication tokens and sensitive settings
 
 ### Data Deletion
 
@@ -200,7 +189,6 @@ Before deploying to production:
 - [ ] `.env` file is in `.gitignore`
 - [ ] Firebase security rules are deployed
 - [ ] Different Firebase projects for dev/staging/production
-- [ ] Strong database encryption key generated
 - [ ] Sentry or error monitoring configured
 - [ ] Firebase App Check enabled (recommended)
 - [ ] SSL/TLS certificates valid

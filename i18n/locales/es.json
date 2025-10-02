@@ -371,7 +371,7 @@
           },
           "dataStorage": {
             "title": "5. Almacenamiento y Seguridad de Datos",
-            "content": "Tus datos se almacenan de forma segura usando:\n\n• Firebase Firestore: Base de datos basada en la nube para perfiles de usuario y configuraciones (cifrada en reposo y en tránsito).\n\n• Base de Datos SQLite: Base de datos local cifrada para acceso sin conexión y caché.\n\n• Expo SecureStore: Almacenamiento cifrado respaldado por hardware para datos sensibles como tokens de autenticación.\n\n• AsyncStorage: Almacenamiento local para preferencias de la app (solo datos no sensibles).\n\nMedidas de Seguridad:\n• Cifrado de extremo a extremo para transmisión de datos\n• Cifrado AES-256 para datos sensibles locales\n• Hash seguro de contraseñas (nunca almacenadas en texto plano)\n• Auditorías y actualizaciones de seguridad regulares\n• Reglas de Seguridad de Firebase para prevenir acceso no autorizado\n• Los datos biométricos nunca salen de tu dispositivo\n\nPara más detalles, consulta nuestra documentación SECURITY.md."
+            "content": "Tus datos se almacenan de forma segura usando:\n\n• Firebase Firestore: Base de datos basada en la nube para perfiles de usuario y configuraciones (cifrada en reposo y en tránsito).\n\n• Expo SecureStore: Almacenamiento cifrado respaldado por hardware para datos sensibles como tokens de autenticación.\n\n• AsyncStorage: Almacenamiento local para preferencias de la app (solo datos no sensibles).\n\nMedidas de Seguridad:\n• Cifrado de extremo a extremo para transmisión de datos\n• Cifrado AES-256 para datos sensibles locales\n• Hash seguro de contraseñas (nunca almacenadas en texto plano)\n• Auditorías y actualizaciones de seguridad regulares\n• Reglas de Seguridad de Firebase para prevenir acceso no autorizado\n• Los datos biométricos nunca salen de tu dispositivo\n\nPara más detalles, consulta nuestra documentación SECURITY.md."
           },
           "dataSharing": {
             "title": "6. Compartir Datos y Terceros",
@@ -502,11 +502,6 @@
               "name": "@react-native-async-storage/async-storage (2.2.0)",
               "license": "Licencia MIT",
               "description": "Almacenamiento persistente de clave-valor"
-            },
-            {
-              "name": "Expo SQLite (^16.0.8)",
-              "license": "Licencia MIT",
-              "description": "Base de datos SQLite para almacenamiento local"
             },
             {
               "name": "i18n-js (^4.5.1)",

@@ -366,7 +366,7 @@
           },
           "dataStorage": {
             "title": "5. Data Storage and Security",
-            "content": "Your data is stored securely using:\n\n• Firebase Firestore: Cloud-based database for user profiles and settings (encrypted at rest and in transit).\n\n• SQLite Database: Local encrypted database for offline access and caching.\n\n• Expo SecureStore: Hardware-backed encrypted storage for sensitive data like authentication tokens.\n\n• AsyncStorage: Local storage for app preferences (non-sensitive data only).\n\nSecurity Measures:\n• End-to-end encryption for data transmission\n• AES-256 encryption for local sensitive data\n• Secure password hashing (never stored in plain text)\n• Regular security audits and updates\n• Firebase Security Rules to prevent unauthorized access\n• Biometric data never leaves your device\n\nFor more details, please refer to our SECURITY.md documentation."
+            "content": "Your data is stored securely using:\n\n• Firebase Firestore: Cloud-based database for user profiles and settings (encrypted at rest and in transit).\n\n• Expo SecureStore: Hardware-backed encrypted storage for sensitive data like authentication tokens.\n\n• AsyncStorage: Local storage for app preferences (non-sensitive data only).\n\nSecurity Measures:\n• End-to-end encryption for data transmission\n• AES-256 encryption for local sensitive data\n• Secure password hashing (never stored in plain text)\n• Regular security audits and updates\n• Firebase Security Rules to prevent unauthorized access\n• Biometric data never leaves your device\n\nFor more details, please refer to our SECURITY.md documentation."
           },
           "dataSharing": {
             "title": "6. Data Sharing and Third Parties",
@@ -497,11 +497,6 @@
               "name": "@react-native-async-storage/async-storage (2.2.0)",
               "license": "MIT License",
               "description": "Persistent key-value storage"
-            },
-            {
-              "name": "Expo SQLite (^16.0.8)",
-              "license": "MIT License",
-              "description": "SQLite database for local storage"
             },
             {
               "name": "i18n-js (^4.5.1)",
