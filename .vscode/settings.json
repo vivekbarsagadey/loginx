@@ -2,7 +2,8 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit",
-    "source.sortMembers": "explicit"
+    "source.sortMembers": "explicit",
+    "source.fixAll.markdownlint": "explicit"
   },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -80,7 +81,27 @@
     ".git",
     ".expo",
     "i18n/locales/*.json",
-    "custom-words.txt",
-    "**/*.md"
-  ]
+    "custom-words.txt"
+  ],
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.rulers": [
+      80
+    ],
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 80,
+    "editor.quickSuggestions": {
+      "comments": "off",
+      "strings": "off",
+      "other": "off"
+    },
+    "markdownlint.config": {
+      "extends": ".markdownlint.json"
+    }
+  },
+  "markdownlint.config": {
+    "extends": ".markdownlint.json"
+  },
+  "markdownlint.run": "onSave"
 }

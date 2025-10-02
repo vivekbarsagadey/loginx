@@ -1,19 +1,19 @@
-import { ActivityIndicator, Button, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { ThemedView } from '@/components/themed-view';
-import { ThemedText } from '@/components/themed-text';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { Colors } from '@/constants/theme';
-import { auth } from '@/firebase-config';
-import { useState } from 'react';
-import { updateProfile } from 'firebase/auth';
-import { useRouter } from 'expo-router';
-import * as ImagePicker from 'expo-image-picker';
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { updateUser } from '@/actions/user.action';
 import { ThemedInput } from '@/components/themed-input';
-import { showSuccess } from '@/utils/success';
-import { showError } from '@/utils/error';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { Colors } from '@/constants/theme';
+import { auth } from '@/firebase-config';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import i18n from '@/i18n';
+import { showError } from '@/utils/error';
+import { showSuccess } from '@/utils/success';
+import * as ImagePicker from 'expo-image-picker';
+import { useRouter } from 'expo-router';
+import { updateProfile } from 'firebase/auth';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
+import { useState } from 'react';
+import { ActivityIndicator, Button, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 export default function EditProfileScreen() {
   const colorScheme = useColorScheme();

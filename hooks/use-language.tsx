@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import * as Localization from 'expo-localization';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Localization from 'expo-localization';
+import { useEffect, useState } from 'react';
 import i18n from '../i18n';
 
 export const useLanguage = () => {

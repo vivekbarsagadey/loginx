@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { ScrollView, StyleSheet } from 'react-native';
 import i18n from '@/i18n';
+import { ScrollView, StyleSheet } from 'react-native';
 
 export default function WhatsNewScreen() {
   const features = i18n.t('screens.whatsNew.features', { returnObjects: true }) as { title: string; description: string }[];

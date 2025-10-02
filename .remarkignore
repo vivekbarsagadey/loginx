@@ -1,0 +1,38 @@
+# Ignore patterns for remark-cli
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+.expo/
+dist/
+build/
+out/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env*
+!.env.example
+
+# Cache directories
+.cache/
+.temp/
+.tmp/
+
+# Generated files
+coverage/
+*.tsbuildinfo

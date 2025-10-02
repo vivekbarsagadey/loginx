@@ -1,5 +1,5 @@
 ---
-applyTo: '**'
+applyTo: "**"
 ---
 
 # Project Development Guidelines
@@ -27,7 +27,8 @@ applyTo: '**'
 - **Always use explicit types** for function parameters and return values
 - **Never use `any`** - use `unknown` if type is truly unknown, then narrow it
 - **Use interfaces for objects** and types for unions/intersections
-- **Leverage utility types**: `Partial<T>`, `Required<T>`, `Pick<T>`, `Omit<T>`, `Record<K, V>`
+- **Leverage utility types**: `Partial<T>`, `Required<T>`, `Pick<T>`, `Omit<T>`,
+  `Record<K, V>`
 - **Use const assertions** for literal types: `as const`
 
 ```typescript
@@ -56,7 +57,11 @@ function getUser(userId: any): Promise<any> {
 
 ```typescript
 // ✅ Good - Discriminated Union
-type AsyncState<T> = { status: 'idle' } | { status: 'loading' } | { status: 'success'; data: T } | { status: 'error'; error: Error };
+type AsyncState<T> =
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "success"; data: T }
+  | { status: "error"; error: Error };
 ```
 
 ### Generics
@@ -87,11 +92,16 @@ function useAsync<TData, TError = Error>() {
 interface ButtonProps {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary';
+  variant?: "primary" | "secondary";
   disabled?: boolean;
 }
 
-export function Button({ title, onPress, variant = 'primary', disabled }: ButtonProps) {
+export function Button({
+  title,
+  onPress,
+  variant = "primary",
+  disabled
+}: ButtonProps) {
   // implementation
 }
 ```
@@ -194,14 +204,14 @@ app/
 
 ```typescript
 // ✅ Good
-import { useRouter } from 'expo-router';
+import { useRouter } from "expo-router";
 
 function LoginScreen() {
   const router = useRouter();
 
   const handleLogin = async () => {
     await login();
-    router.replace('/(tabs)');
+    router.replace("/(tabs)");
   };
 }
 ```
@@ -221,7 +231,7 @@ function LoginScreen() {
 
 ```typescript
 // env.d.ts
-declare module '@env' {
+declare module "@env" {
   export const API_URL: string;
   export const FIREBASE_API_KEY: string;
 }
@@ -311,7 +321,8 @@ export function Card({ title, subtitle, onPress, elevation = 1 }: CardProps) {
    - Use whitespace effectively to let content breathe
    - Avoid overwhelming users with too many elements simultaneously
 
-3. **Consistency and Familiarity** - Maintain uniform experience across all screens
+3. **Consistency and Familiarity** - Maintain uniform experience across all
+   screens
    - Follow platform conventions (iOS HIG, Android Material Design)
    - Use standard gestures and navigation patterns
    - Consistent visual design creates user confidence
@@ -357,24 +368,24 @@ export function Card({ title, subtitle, onPress, elevation = 1 }: CardProps) {
 
 ```typescript
 // ✅ Good - Platform-specific styles
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   button: {
     padding: 16,
     borderRadius: Platform.select({
       ios: 10, // Rounded corners on iOS
-      android: 4, // Less rounded on Android
+      android: 4 // Less rounded on Android
     }),
     elevation: Platform.select({
       ios: 0, // No elevation on iOS
-      android: 2, // Elevation shadow on Android
+      android: 2 // Elevation shadow on Android
     }),
     shadowOpacity: Platform.select({
       ios: 0.2, // Shadow on iOS
-      android: 0, // Use elevation on Android
-    }),
-  },
+      android: 0 // Use elevation on Android
+    })
+  }
 });
 ```
 
@@ -594,7 +605,8 @@ function MyComponent() {
 #### Haptic Feedback
 
 - **Use sparingly** - Only for meaningful interactions
-- **Match intensity** - Light for selections, medium for actions, heavy for errors
+- **Match intensity** - Light for selections, medium for actions, heavy for
+  errors
 - **Success actions** - Light impact
 - **Destructive actions** - Heavy impact (warning)
 - **Notifications** - Success, warning, or error notifications
@@ -856,7 +868,7 @@ function UploadProgress({ progress }: { progress: number }) {
 "We couldn't connect to the server. Please check your internet connection and try again.";
 
 // ❌ Bad - Technical error
-'Error: Network request failed at line 42';
+"Error: Network request failed at line 42";
 ```
 
 ### Forms & Validation (13 Best Practices)
@@ -1317,23 +1329,23 @@ async function login(email: string, password: string): Promise<User | null> {
 
 ```typescript
 // 1. React & React Native
-import React from 'react';
-import { View, Text } from 'react-native';
+import React from "react";
+import { View, Text } from "react-native";
 
 // 2. Third-party libraries
-import { useRouter } from 'expo-router';
-import * as Haptics from 'expo-haptics';
+import { useRouter } from "expo-router";
+import * as Haptics from "expo-haptics";
 
 // 3. Absolute imports - components
-import { ThemedView } from '@/components/themed-view';
+import { ThemedView } from "@/components/themed-view";
 
 // 4. Absolute imports - hooks, utils, types
-import { useAuth } from '@/hooks/use-auth-provider';
-import { sanitizeInput } from '@/utils/sanitize';
-import type { User } from '@/types/user';
+import { useAuth } from "@/hooks/use-auth-provider";
+import { sanitizeInput } from "@/utils/sanitize";
+import type { User } from "@/types/user";
 
 // 5. Relative imports
-import { LocalComponent } from './local-component';
+import { LocalComponent } from "./local-component";
 ```
 
 ---
@@ -1372,15 +1384,15 @@ export function AuthProvider({ children }: PropsWithChildren) {
 ```typescript
 // ✅ Good - Complete async state handling
 function useAsyncOperation<T>() {
-  const [state, setState] = useState<AsyncState<T>>({ status: 'idle' });
+  const [state, setState] = useState<AsyncState<T>>({ status: "idle" });
 
   const execute = async (operation: () => Promise<T>) => {
-    setState({ status: 'loading' });
+    setState({ status: "loading" });
     try {
       const data = await operation();
-      setState({ status: 'success', data });
+      setState({ status: "success", data });
     } catch (error) {
-      setState({ status: 'error', error: error as Error });
+      setState({ status: "error", error: error as Error });
     }
   };
 
@@ -1396,7 +1408,8 @@ function useAsyncOperation<T>() {
 
 1. **Memoization** - Use `React.memo`, `useMemo`, `useCallback`
 2. **Lazy loading** - Code splitting with dynamic imports
-3. **List optimization** - Use `FlatList` with `keyExtractor` and `getItemLayout`
+3. **List optimization** - Use `FlatList` with `keyExtractor` and
+   `getItemLayout`
 4. **Image optimization** - Compress images, use appropriate formats
 5. **Avoid inline functions** - In render or as props
 
@@ -1509,7 +1522,7 @@ describe("LoginScreen", () => {
 
 ```typescript
 // ✅ Good - Input sanitization
-import { sanitizeInput } from '@/utils/sanitize';
+import { sanitizeInput } from "@/utils/sanitize";
 
 const handleSubmit = (rawInput: string) => {
   const sanitized = sanitizeInput(rawInput);
@@ -1531,7 +1544,8 @@ const handleSubmit = (rawInput: string) => {
    - Implement error boundaries around route groups
    - Provide user-friendly fallback UI
    - Log errors to monitoring service (e.g., Sentry)
-3. **Logging strategy** - Log everything in development, only errors in production
+3. **Logging strategy** - Log everything in development, only errors in
+   production
    - Use `utils/debug.ts` for conditional logging
    - Never log sensitive user data
    - Include context in error logs (user ID, action, timestamp)
@@ -1562,16 +1576,18 @@ const handleSubmit = (rawInput: string) => {
  *   console.log(profile.displayName);
  * }
  */
-export async function getUserProfile(userId: string): Promise<UserProfile | null> {
+export async function getUserProfile(
+  userId: string
+): Promise<UserProfile | null> {
   try {
     const response = await api.get(`/users/${userId}`);
     return response.data;
   } catch (error: unknown) {
     if (error instanceof NetworkError) {
-      logError('Failed to fetch user profile', { userId, error });
+      logError("Failed to fetch user profile", { userId, error });
       throw error;
     }
-    throw new UnexpectedError('Unknown error occurred', { cause: error });
+    throw new UnexpectedError("Unknown error occurred", { cause: error });
   }
 }
 ```

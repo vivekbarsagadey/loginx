@@ -2,17 +2,20 @@
 
 ## 🔒 Overview
 
-This document outlines the security measures implemented in LoginX and best practices for maintaining security.
+This document outlines the security measures implemented in LoginX and best
+practices for maintaining security.
 
 ## Critical Security Setup
 
 ### 1. Environment Variables
 
-**NEVER commit the `.env` file to version control!** It's already in `.gitignore`.
+**NEVER commit the `.env` file to version control!** It's already in
+`.gitignore`.
 
 #### Required Firebase Variables
 
-All Firebase configuration variables are **required** and the app will fail to start if they're missing:
+All Firebase configuration variables are **required** and the app will fail to
+start if they're missing:
 
 ```bash
 API_KEY="your-firebase-api-key"
@@ -49,7 +52,8 @@ DB_ENCRYPTION_KEY="your-generated-key-here"
 
 ### 3. Firestore Security Rules
 
-The project includes comprehensive security rules in `firestore.rules`. Deploy them to Firebase:
+The project includes comprehensive security rules in `firestore.rules`. Deploy
+them to Firebase:
 
 ```bash
 firebase deploy --only firestore:rules
@@ -207,7 +211,7 @@ Before deploying to production:
 ## Reporting Security Issues
 
 If you discover a security vulnerability, please email:
-**[your-security-email@example.com]**
+**\[<your-security-email@example.com>]**
 
 Do NOT open a public issue for security vulnerabilities.
 

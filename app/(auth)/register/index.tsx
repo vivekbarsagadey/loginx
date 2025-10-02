@@ -1,7 +1,11 @@
+import { createUserProfile } from '@/actions/user.action';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedView } from '@/components/themed-view';
+import { auth } from '@/firebase-config';
+import { showError } from '@/utils/error';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Stack, useRouter } from 'expo-router';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
@@ -9,10 +13,6 @@ import { z } from 'zod';
 import RegisterStep1 from './step-1';
 import RegisterStep2 from './step-2';
 import RegisterStep3 from './step-3';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/firebase-config';
-import { showError } from '@/utils/error';
-import { createUserProfile } from '@/actions/user.action';
 
 const STEPS = [
   { id: 'step-1', title: 'Personal Information', component: RegisterStep1, fields: ['firstName', 'lastName'] },

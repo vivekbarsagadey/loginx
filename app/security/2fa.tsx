@@ -1,9 +1,9 @@
+import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { ThemedButton } from '@/components/themed-button';
-import { ScrollView, StyleSheet } from 'react-native';
 import i18n from '@/i18n';
 import { useState } from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
 
 export default function TwoFactorAuthScreen() {
   const [isEnabled, setIsEnabled] = useState(false);

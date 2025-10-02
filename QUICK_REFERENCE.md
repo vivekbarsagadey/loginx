@@ -24,7 +24,7 @@ Your buttons and inputs now have full accessibility support:
 ### 2. Route Constants (Prevent Typos)
 
 ```tsx
-import { Routes } from '@/constants';
+import { Routes } from "@/constants";
 
 // Before: router.push('/(auth)/login');
 // After:
@@ -36,54 +36,69 @@ router.push(Routes.PROFILE.EDIT);
 ### 3. Async Operations Hook (Reduce Boilerplate)
 
 ```tsx
-import { useAsyncOperation } from '@/hooks/use-async-operation';
+import { useAsyncOperation } from "@/hooks/use-async-operation";
 
 // Before: 15+ lines of useState, try-catch, etc.
 // After:
-const { loading, execute } = useAsyncOperation(async (data) => await saveProfile(data), { onSuccess: () => router.back() });
+const { loading, execute } = useAsyncOperation(
+  async (data) => await saveProfile(data),
+  { onSuccess: () => router.back() }
+);
 
 // Use it:
-<ThemedButton title="Save" loading={loading} onPress={() => execute(formData)} />;
+<ThemedButton
+  title="Save"
+  loading={loading}
+  onPress={() => execute(formData)}
+/>;
 ```
 
 ### 4. Debug Utilities (Development Only)
 
 ```tsx
-import { debugLog, debugTime, debugObject } from '@/utils/debug';
+import { debugLog, debugTime, debugObject } from "@/utils/debug";
 
 // Simple logging (only shows in dev)
-debugLog('User action', userData);
+debugLog("User action", userData);
 
 // Measure performance
-await debugTime('fetchProfile', () => getUserProfile());
+await debugTime("fetchProfile", () => getUserProfile());
 
 // Pretty print objects
-debugObject('API Response', response);
+debugObject("API Response", response);
 ```
 
 ### 5. Environment Variables (Type-Safe)
 
 ```tsx
-import { getRequiredEnvVar, isDevelopment } from '@/utils/env';
+import { getRequiredEnvVar, isDevelopment } from "@/utils/env";
 
 // Safe access (throws if missing)
-const apiKey = getRequiredEnvVar('EXPO_PUBLIC_API_KEY');
+const apiKey = getRequiredEnvVar("EXPO_PUBLIC_API_KEY");
 
 // Environment checks
 if (isDevelopment()) {
-  console.log('Running in dev mode');
+  console.log("Running in dev mode");
 }
 ```
 
 ### 6. Validation Constants
 
 ```tsx
-import { ValidationConstants, ValidationMessages } from '@/constants';
+import { ValidationConstants, ValidationMessages } from "@/constants";
 
 // Use in Zod schemas:
 const schema = z.object({
-  password: z.string().min(ValidationConstants.PASSWORD_MIN_LENGTH, ValidationMessages.PASSWORD_TOO_SHORT),
-  age: z.number().min(ValidationConstants.MIN_AGE, ValidationMessages.AGE_TOO_LOW).max(ValidationConstants.MAX_AGE, ValidationMessages.AGE_TOO_HIGH),
+  password: z
+    .string()
+    .min(
+      ValidationConstants.PASSWORD_MIN_LENGTH,
+      ValidationMessages.PASSWORD_TOO_SHORT
+    ),
+  age: z
+    .number()
+    .min(ValidationConstants.MIN_AGE, ValidationMessages.AGE_TOO_LOW)
+    .max(ValidationConstants.MAX_AGE, ValidationMessages.AGE_TOO_HIGH)
 });
 ```
 
@@ -127,4 +142,5 @@ Your app is now more secure, reliable, accessible, and maintainable.
 
 **No action needed** - everything works automatically!
 
-**Optional:** Start using the new constants and hooks to make your code even cleaner.
+**Optional:** Start using the new constants and hooks to make your code even
+cleaner.

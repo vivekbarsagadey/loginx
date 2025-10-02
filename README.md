@@ -2,13 +2,15 @@
 
 **Version 1.0.0** | Built with ❤️ by [Whiz IT](https://whizit.co.in)
 
-LoginX is a modern, enterprise-grade, cross-platform mobile authentication application built with
-React Native and Expo. It provides a seamless, secure, and accessible user authentication experience
-with support for multiple languages, biometric authentication, two-factor authentication, and
+LoginX is a modern, enterprise-grade, cross-platform mobile authentication
+application built with React Native and Expo. It provides a seamless, secure,
+and accessible user authentication experience with support for multiple
+languages, biometric authentication, two-factor authentication, and
 comprehensive profile management.
 
-> **⚠️ SECURITY NOTICE (October 2, 2025)**  
-> Critical security updates have been implemented. **Environment variables are now mandatory**.  
+> **⚠️ SECURITY NOTICE (October 2, 2025)**\
+> Critical security updates have been implemented. **Environment variables are
+> now mandatory**.\
 > Please read [SECURITY.md](./SECURITY.md) before running the app in production.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -45,13 +47,18 @@ comprehensive profile management.
 ### 🔐 Authentication & Security
 
 - **Firebase Authentication Integration** - Secure email/password authentication
-- **Multi-Step Registration Flow** - Guided 3-step onboarding process with validation
-- **Email Verification** - Automated verification emails with secure token handling
+- **Multi-Step Registration Flow** - Guided 3-step onboarding process with
+  validation
+- **Email Verification** - Automated verification emails with secure token
+  handling
 - **Password Reset** - Secure forgot password flow with email validation
-- **Biometric Authentication** - Support for Face ID, Touch ID, and fingerprint (iOS/Android)
-- **Two-Factor Authentication (2FA)** - Additional security layer for user accounts
+- **Biometric Authentication** - Support for Face ID, Touch ID, and fingerprint
+  (iOS/Android)
+- **Two-Factor Authentication (2FA)** - Additional security layer for user
+  accounts
 - **Session Management** - Active session monitoring and management
-- **Input Sanitization** - All user inputs are sanitized to prevent XSS and injection attacks
+- **Input Sanitization** - All user inputs are sanitized to prevent XSS and
+  injection attacks
 - **Firestore Security Rules** - Comprehensive backend security rules
 
 ### 👤 User Profile Management
@@ -66,7 +73,8 @@ comprehensive profile management.
 
 - **Multi-Language Support** - English (en), Spanish (es), Hindi (hi)
 - **Dynamic Language Switching** - Change language without app restart
-- **Locale-Aware Formatting** - Date, time, and number formatting based on locale
+- **Locale-Aware Formatting** - Date, time, and number formatting based on
+  locale
 - **RTL Support Ready** - Architecture supports right-to-left languages
 
 ### 🎨 Theming & Accessibility
@@ -77,7 +85,8 @@ comprehensive profile management.
 - **Dynamic Text Sizing** - Adjustable text sizes for better readability
 - **Accessibility Labels** - Full VoiceOver/TalkBack support
 - **High Contrast Support** - Optimized for accessibility standards
-- **Platform-Specific Design** - Follows iOS HIG and Android Material Design guidelines
+- **Platform-Specific Design** - Follows iOS HIG and Android Material Design
+  guidelines
 
 ### 📱 User Experience
 
@@ -155,13 +164,15 @@ comprehensive profile management.
 
 ## Getting Started
 
-Follow these instructions to get LoginX running on your local machine for development and testing.
+Follow these instructions to get LoginX running on your local machine for
+development and testing.
 
 ### Prerequisites
 
 Ensure you have the following installed on your system:
 
 - **[Node.js](https://nodejs.org/)** (v18.0.0 or newer)
+
 - **[pnpm](https://pnpm.io/)** (v8.0.0 or newer)
 
   ```bash
@@ -175,8 +186,12 @@ Ensure you have the following installed on your system:
   ```
 
 - **[Git](https://git-scm.com/)**
-- **Firebase Account** - Create a free account at [Firebase Console](https://console.firebase.google.com/)
+
+- **Firebase Account** - Create a free account at
+  [Firebase Console](https://console.firebase.google.com/)
+
 - **iOS Simulator** (Mac only) or **Android Emulator** for mobile development
+
 - **EAS CLI** (optional, for builds)
 
   ```bash
@@ -198,8 +213,8 @@ Ensure you have the following installed on your system:
    pnpm install
    ```
 
-   > **Note:** This project uses pnpm as the package manager for better performance
-   > and disk space efficiency.
+   > **Note:** This project uses pnpm as the package manager for better
+   > performance and disk space efficiency.
 
 3. **Set up Firebase:**
    - Go to [Firebase Console](https://console.firebase.google.com/)
@@ -298,12 +313,13 @@ Ensure you have the following installed on your system:
    - `i` for iOS
    - `w` for web
 
-> **⚠️ Important:** Never commit the `.env` file to version control.
-> It's already included in `.gitignore` for your security.
+> **⚠️ Important:** Never commit the `.env` file to version control. It's
+> already included in `.gitignore` for your security.
 
 ## Available Scripts
 
-The following npm scripts are available for development and production workflows:
+The following npm scripts are available for development and production
+workflows:
 
 ### Development
 
@@ -332,12 +348,14 @@ The following npm scripts are available for development and production workflows
 
 ### Validation
 
-- **`pnpm validate`** - Run all checks (lint, markdown lint, format check, type check)
+- **`pnpm validate`** - Run all checks (lint, markdown lint, format check, type
+  check)
 - **`pnpm validate:fix`** - Fix all auto-fixable issues
 
 ### Utility
 
-- **`pnpm reset-project`** - Reset project to initial state (removes example code)
+- **`pnpm reset-project`** - Reset project to initial state (removes example
+  code)
 
 ### Recommended Workflow
 
@@ -361,14 +379,19 @@ pnpm start         # Start development server
 
 - **[React](https://react.dev/)** (19.1.0) - UI library
 - **[React Native](https://reactnative.dev/)** (0.81.4) - Mobile framework
-- **[Expo](https://expo.dev/)** (~54.0.10) - React Native framework and platform
-- **[TypeScript](https://www.typescriptlang.org/)** (~5.9.2) - Type-safe JavaScript
+- **[Expo](https://expo.dev/)** (\~54.0.10) - React Native framework and
+  platform
+- **[TypeScript](https://www.typescriptlang.org/)** (\~5.9.2) - Type-safe
+  JavaScript
 
 ### Navigation & Routing
 
-- **[Expo Router](https://docs.expo.dev/router/introduction/)** (~6.0.8) - File-based routing
-- **[React Navigation](https://reactnavigation.org/)** (^7.1.17) - Navigation library
-- **[@react-navigation/bottom-tabs](https://reactnavigation.org/docs/bottom-tab-navigator/)** (^7.4.0)
+- **[Expo Router](https://docs.expo.dev/router/introduction/)** (\~6.0.8) -
+  File-based routing
+- **[React Navigation](https://reactnavigation.org/)** (^7.1.17) - Navigation
+  library
+- **[@react-navigation/bottom-tabs](https://reactnavigation.org/docs/bottom-tab-navigator/)**
+  (^7.4.0)
 - Tab navigation
 
 ### Authentication & Backend
@@ -376,42 +399,56 @@ pnpm start         # Start development server
 - **[Firebase](https://firebase.google.com/)** (^12.3.0) - Backend services
   - Firebase Authentication - User authentication
   - Firebase Firestore - NoSQL cloud database
-- **[Firebase Admin SDK Integration](https://firebase.google.com/docs/admin/setup)** - Server-side operations
+- **[Firebase Admin SDK Integration](https://firebase.google.com/docs/admin/setup)** -
+  Server-side operations
 
 ### Forms & Validation
 
-- **[React Hook Form](https://react-hook-form.com/)** (^7.63.0) - Performant form management
+- **[React Hook Form](https://react-hook-form.com/)** (^7.63.0) - Performant
+  form management
 - **[Zod](https://zod.dev/)** (^3.25.76) - TypeScript-first schema validation
-- **[@hookform/resolvers](https://github.com/react-hook-form/resolvers)** (^5.2.2) - Zod integration
+- **[@hookform/resolvers](https://github.com/react-hook-form/resolvers)**
+  (^5.2.2) - Zod integration
 
 ### Storage & Data Persistence
 
 - **[AsyncStorage](https://react-native-async-storage.github.io/async-storage/)**
   (2.2.0) - Persistent storage
-- **[expo-secure-store](https://docs.expo.dev/versions/latest/sdk/securestore/)** (^15.0.7) - Encrypted storage
-- **[expo-sqlite](https://docs.expo.dev/versions/latest/sdk/sqlite/)** (^16.0.8) - Local SQL database
+- **[expo-secure-store](https://docs.expo.dev/versions/latest/sdk/securestore/)**
+  (^15.0.7) - Encrypted storage
+- **[expo-sqlite](https://docs.expo.dev/versions/latest/sdk/sqlite/)**
+  (^16.0.8) - Local SQL database
 
 ### Internationalization
 
-- **[i18n-js](https://github.com/fnando/i18n)** (^4.5.1) - Internationalization framework
-- **[expo-localization](https://docs.expo.dev/versions/latest/sdk/localization/)** (~17.0.7) - Locale detection
+- **[i18n-js](https://github.com/fnando/i18n)** (^4.5.1) - Internationalization
+  framework
+- **[expo-localization](https://docs.expo.dev/versions/latest/sdk/localization/)**
+  (\~17.0.7) - Locale detection
 
 ### UI Components & Styling
 
-- **[@expo/vector-icons](https://docs.expo.dev/guides/icons/)** (^15.0.2) - Icon library
-- **[expo-symbols](https://docs.expo.dev/versions/latest/sdk/symbols/)** (~1.0.7) - SF Symbols (iOS)
-- **[expo-image](https://docs.expo.dev/versions/latest/sdk/image/)** (~3.0.8) - Optimized image component
-- **[react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/)** (~4.1.1) - Animations
+- **[@expo/vector-icons](https://docs.expo.dev/guides/icons/)** (^15.0.2) - Icon
+  library
+- **[expo-symbols](https://docs.expo.dev/versions/latest/sdk/symbols/)**
+  (\~1.0.7) - SF Symbols (iOS)
+- **[expo-image](https://docs.expo.dev/versions/latest/sdk/image/)** (\~3.0.8) -
+  Optimized image component
+- **[react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/)**
+  (\~4.1.1) - Animations
 - **[react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/)**
-  (~2.28.0) - Gesture handling
+  (\~2.28.0) - Gesture handling
 
 ### User Experience
 
-- **[expo-haptics](https://docs.expo.dev/versions/latest/sdk/haptics/)** (~15.0.7) - Haptic feedback
+- **[expo-haptics](https://docs.expo.dev/versions/latest/sdk/haptics/)**
+  (\~15.0.7) - Haptic feedback
 - **[expo-splash-screen](https://docs.expo.dev/versions/latest/sdk/splash-screen/)**
-  (~31.0.10) - Splash screen API
-- **[expo-status-bar](https://docs.expo.dev/versions/latest/sdk/status-bar/)** (~3.0.8) - Status bar control
-- **[expo-system-ui](https://docs.expo.dev/versions/latest/sdk/system-ui/)** (~6.0.7) - System UI control
+  (\~31.0.10) - Splash screen API
+- **[expo-status-bar](https://docs.expo.dev/versions/latest/sdk/status-bar/)**
+  (\~3.0.8) - Status bar control
+- **[expo-system-ui](https://docs.expo.dev/versions/latest/sdk/system-ui/)**
+  (\~6.0.7) - System UI control
 
 ### Security & Biometrics
 
@@ -420,42 +457,55 @@ pnpm start         # Start development server
 
 ### Notifications & Communication
 
-- **[expo-notifications](https://docs.expo.dev/versions/latest/sdk/notifications/)** (~0.32.11) - Push notifications
-- **[expo-device](https://docs.expo.dev/versions/latest/sdk/device/)** (~8.0.8) - Device information
+- **[expo-notifications](https://docs.expo.dev/versions/latest/sdk/notifications/)**
+  (\~0.32.11) - Push notifications
+- **[expo-device](https://docs.expo.dev/versions/latest/sdk/device/)**
+  (\~8.0.8) - Device information
 
 ### Monitoring & Analytics
 
-- **[@sentry/react-native](https://docs.sentry.io/platforms/react-native/)** (^6.22.0) - Error tracking
+- **[@sentry/react-native](https://docs.sentry.io/platforms/react-native/)**
+  (^6.22.0) - Error tracking
 
 ### Media & Assets
 
-- **[expo-image-picker](https://docs.expo.dev/versions/latest/sdk/imagepicker/)** (~17.0.8) - Image selection
-- **[expo-font](https://docs.expo.dev/versions/latest/sdk/font/)** (~14.0.8) - Custom fonts
+- **[expo-image-picker](https://docs.expo.dev/versions/latest/sdk/imagepicker/)**
+  (\~17.0.8) - Image selection
+- **[expo-font](https://docs.expo.dev/versions/latest/sdk/font/)** (\~14.0.8) -
+  Custom fonts
 
 ### Utilities
 
-- **[expo-constants](https://docs.expo.dev/versions/latest/sdk/constants/)** (~18.0.9) - App constants
-- **[expo-linking](https://docs.expo.dev/versions/latest/sdk/linking/)** (~8.0.8) - Deep linking
-- **[expo-web-browser](https://docs.expo.dev/versions/latest/sdk/webbrowser/)** (~15.0.7) - In-app browser
-- **[dotenv](https://github.com/motdotla/dotenv)** (^17.2.3) - Environment variables
+- **[expo-constants](https://docs.expo.dev/versions/latest/sdk/constants/)**
+  (\~18.0.9) - App constants
+- **[expo-linking](https://docs.expo.dev/versions/latest/sdk/linking/)**
+  (\~8.0.8) - Deep linking
+- **[expo-web-browser](https://docs.expo.dev/versions/latest/sdk/webbrowser/)**
+  (\~15.0.7) - In-app browser
+- **[dotenv](https://github.com/motdotla/dotenv)** (^17.2.3) - Environment
+  variables
 
 ### Development Tools
 
 - **[ESLint](https://eslint.org/)** (^9.25.0) - JavaScript linter
-- **[eslint-config-expo](https://github.com/expo/expo/tree/main/packages/eslint-config-expo)** (~10.0.0)
+- **[eslint-config-expo](https://github.com/expo/expo/tree/main/packages/eslint-config-expo)**
+  (\~10.0.0)
 - Expo ESLint config
 - **[Prettier](https://prettier.io/)** (^3.6.2) - Code formatter
 - **[prettier-plugin-organize-imports](https://github.com/simonhaenisch/prettier-plugin-organize-imports)**
   (^4.1.0) - Auto-organize imports
-- **[markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli)** (^0.43.0) - Markdown linter
+- **[markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli)**
+  (^0.43.0) - Markdown linter
 
 ### Package Manager
 
-- **[pnpm](https://pnpm.io/)** (>=8.0.0) - Fast, disk space efficient package manager
+- **[pnpm](https://pnpm.io/)** (>=8.0.0) - Fast, disk space efficient package
+  manager
 
 ## Project Structure
 
-LoginX follows a well-organized, feature-based structure optimized for scalability and maintainability:
+LoginX follows a well-organized, feature-based structure optimized for
+scalability and maintainability:
 
 ```text
 loginx/
@@ -618,14 +668,15 @@ loginx/
 All UI components use the themed system for automatic light/dark mode support:
 
 ```typescript
-import { ThemedView, ThemedText } from '@/components/themed-*';
+import { ThemedView, ThemedText } from "@/components/themed-*";
 ```
 
 ## Configuration
 
 ### Firebase Setup
 
-LoginX uses Firebase for authentication and data storage. Configuration is managed through environment variables.
+LoginX uses Firebase for authentication and data storage. Configuration is
+managed through environment variables.
 
 #### Firebase Console Setup
 
@@ -712,8 +763,8 @@ See `env.d.ts` for the complete list of optional configuration variables.
 
 ## Security
 
-LoginX implements enterprise-grade security practices. For complete security documentation,
-see [SECURITY.md](./SECURITY.md).
+LoginX implements enterprise-grade security practices. For complete security
+documentation, see [SECURITY.md](./SECURITY.md).
 
 ### Security Highlights
 
@@ -745,7 +796,8 @@ Before deploying to production:
 
 ## Development Guidelines
 
-LoginX follows comprehensive development guidelines to ensure code quality, maintainability, and consistency.
+LoginX follows comprehensive development guidelines to ensure code quality,
+maintainability, and consistency.
 
 ### Code Style
 
@@ -917,7 +969,8 @@ All contributions go through code review. Reviewers will check:
 
 ## License
 
-This project is licensed under the **MIT License** - see the [LICENSE](./LICENSE) file for details.
+This project is licensed under the **MIT License** - see the
+[LICENSE](./LICENSE) file for details.
 
 ### MIT License Summary
 
@@ -947,20 +1000,20 @@ Need help? Here are your options:
 
 - 💬 **GitHub Discussions** - Ask questions, share ideas
 - 🐛 **GitHub Issues** - Report bugs or request features
-- 📧 **Email** - [vivek@whizit.co.in](mailto:vivek@whizit.co.in)
-- 🌐 **Website** - [https://whizit.co.in](https://whizit.co.in)
+- 📧 **Email** - <vivek@whizit.co.in>
+- 🌐 **Website** - <https://whizit.co.in>
 
 ### Useful Links
 
-- **Expo Documentation** - [https://docs.expo.dev/](https://docs.expo.dev/)
-- **React Native Docs** - [https://reactnative.dev/docs/getting-started](https://reactnative.dev/docs/getting-started)
-- **Firebase Docs** - [https://firebase.google.com/docs](https://firebase.google.com/docs)
-- **TypeScript Handbook** - [https://www.typescriptlang.org/docs/](https://www.typescriptlang.org/docs/)
+- **Expo Documentation** - <https://docs.expo.dev/>
+- **React Native Docs** - <https://reactnative.dev/docs/getting-started>
+- **Firebase Docs** - <https://firebase.google.com/docs>
+- **TypeScript Handbook** - <https://www.typescriptlang.org/docs/>
 
 ### Reporting Security Issues
 
-For security vulnerabilities, please **DO NOT** open a public issue.
-Email security concerns directly to [vivek@whizit.co.in](mailto:vivek@whizit.co.in).
+For security vulnerabilities, please **DO NOT** open a public issue. Email
+security concerns directly to <vivek@whizit.co.in>.
 
 ---
 
@@ -968,10 +1021,11 @@ Email security concerns directly to [vivek@whizit.co.in](mailto:vivek@whizit.co.
 
 ### About Vivek Barsagadey
 
-**Vivek Barsagadey** is a passionate software engineer and mobile app developer specializing in
-React Native, Expo, and modern JavaScript/TypeScript technologies. With a focus on creating
-intuitive, accessible, and high-performance mobile applications, Vivek brings enterprise-grade
-solutions to life with clean code and best practices.
+**Vivek Barsagadey** is a passionate software engineer and mobile app developer
+specializing in React Native, Expo, and modern JavaScript/TypeScript
+technologies. With a focus on creating intuitive, accessible, and
+high-performance mobile applications, Vivek brings enterprise-grade solutions to
+life with clean code and best practices.
 
 **Expertise:**
 
@@ -984,17 +1038,21 @@ solutions to life with clean code and best practices.
 
 **Connect with Vivek:**
 
-- 🌐 **Website:** [https://vivekbarsagadey.com](https://vivekbarsagadey.com) _(if available)_
-- 💼 **LinkedIn:** [linkedin.com/in/vivekbarsagadey](https://linkedin.com/in/vivekbarsagadey) _(if available)_
+- 🌐 **Website:** <https://vivekbarsagadey.com> _(if available)_
+- 💼 **LinkedIn:**
+  [linkedin.com/in/vivekbarsagadey](https://linkedin.com/in/vivekbarsagadey)
+  _(if available)_
 - 🐙 **GitHub:** [@vivekbarsagadey](https://github.com/vivekbarsagadey)
-- 📧 **Email:** [vivek@whizit.co.in](mailto:vivek@whizit.co.in)
-- 🐦 **Twitter/X:** [@vivekbarsagadey](https://twitter.com/vivekbarsagadey) _(if available)_
+- 📧 **Email:** <vivek@whizit.co.in>
+- 🐦 **Twitter/X:** [@vivekbarsagadey](https://twitter.com/vivekbarsagadey) _(if
+  available)_
 
 ### About Whiz IT
 
-**[Whiz IT](https://whizit.co.in)** is a forward-thinking software development company specializing
-in innovative digital solutions. We create cutting-edge mobile and web applications that help
-businesses transform their ideas into reality.
+**[Whiz IT](https://whizit.co.in)** is a forward-thinking software development
+company specializing in innovative digital solutions. We create cutting-edge
+mobile and web applications that help businesses transform their ideas into
+reality.
 
 **What We Do:**
 
@@ -1016,27 +1074,29 @@ businesses transform their ideas into reality.
 
 **Technologies We Love:**
 
-React Native • Expo • TypeScript • Node.js • Firebase • AWS • React • Next.js • PostgreSQL •
-MongoDB • GraphQL • Docker • Kubernetes
+React Native • Expo • TypeScript • Node.js • Firebase • AWS • React • Next.js •
+PostgreSQL • MongoDB • GraphQL • Docker • Kubernetes
 
 **Get in Touch:**
 
-- 🌐 **Website:** [https://whizit.co.in](https://whizit.co.in)
-- 📧 **Email:** [hello@whizit.co.in](mailto:hello@whizit.co.in) or
-  [vivek@whizit.co.in](mailto:vivek@whizit.co.in)
-- 💼 **LinkedIn:** [linkedin.com/company/whizit](https://linkedin.com/company/whizit) _(if available)_
+- 🌐 **Website:** <https://whizit.co.in>
+- 📧 **Email:** <hello@whizit.co.in> or <vivek@whizit.co.in>
+- 💼 **LinkedIn:**
+  [linkedin.com/company/whizit](https://linkedin.com/company/whizit) _(if
+  available)_
 - 🐙 **GitHub:** [@whizit](https://github.com/whizit) _(if available)_
 
 **Project Portfolio:**
 
-LoginX is just one of many innovative projects from Whiz IT. We're committed to open-source
-development and contributing back to the developer community. Check out our other projects and
-contributions on our website and GitHub.
+LoginX is just one of many innovative projects from Whiz IT. We're committed to
+open-source development and contributing back to the developer community. Check
+out our other projects and contributions on our website and GitHub.
 
 ---
 
-**Interested in working with us?** Whether you need a mobile app, web platform, or custom software
-solution, we'd love to hear from you. Contact us to discuss your next project!
+**Interested in working with us?** Whether you need a mobile app, web platform,
+or custom software solution, we'd love to hear from you. Contact us to discuss
+your next project!
 
 ---
 
@@ -1061,10 +1121,11 @@ Special thanks to:
 [![GitHub stars](https://img.shields.io/github/stars/vivekbarsagadey/loginx)](https://github.com/vivekbarsagadey/loginx/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/vivekbarsagadey/loginx)](https://github.com/vivekbarsagadey/loginx/network)
 
-**Current Version:** 1.0.0  
-**Status:** Active Development  
+**Current Version:** 1.0.0\
+**Status:** Active Development\
 **Last Updated:** October 2, 2025
 
 ---
 
-Made with ❤️ using [Expo](https://expo.dev) and [React Native](https://reactnative.dev)
+Made with ❤️ using [Expo](https://expo.dev) and
+[React Native](https://reactnative.dev)

@@ -1,11 +1,11 @@
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useTheme } from '@/hooks/use-theme';
+import i18n from '@/i18n';
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-import { useTheme } from '@/hooks/use-theme';
-import { Colors } from '@/constants/theme';
-import i18n from '@/i18n';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { ThemedView } from './themed-view';
 import { ThemedText } from './themed-text';
+import { ThemedView } from './themed-view';
 
 const THEME_OPTIONS = ['system', 'light', 'dark'];
 

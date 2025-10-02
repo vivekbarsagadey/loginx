@@ -1,8 +1,8 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import i18n from '@/i18n';
 import { useState } from 'react';
+import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 
 type TextSizeOption = 'small' | 'default' | 'large' | 'extraLarge';
 

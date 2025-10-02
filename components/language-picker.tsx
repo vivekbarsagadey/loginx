@@ -1,11 +1,11 @@
-import React from 'react';
-import { Pressable, StyleSheet, useColorScheme } from 'react-native';
+import { Colors } from '@/constants/theme';
 import { useLanguage } from '@/hooks/use-language';
 import { useTheme } from '@/hooks/use-theme';
 import i18n from '@/i18n';
-import { ThemedView } from './themed-view';
+import React from 'react';
+import { Pressable, StyleSheet, useColorScheme } from 'react-native';
 import { ThemedText } from './themed-text';
-import { Colors } from '@/constants/theme';
+import { ThemedView } from './themed-view';
 
 const LANGUAGE_OPTIONS = ['en', 'es', 'hi'];
 

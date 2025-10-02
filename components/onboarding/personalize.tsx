@@ -1,8 +1,8 @@
+import i18n from '@/i18n';
 import { LanguagePicker } from '../language-picker';
 import { ThemeSelector } from '../theme-selector';
 import { ThemedText } from '../themed-text';
 import { ThemedView } from '../themed-view';
-import i18n from '@/i18n';
 
 export const Personalize = ({ width }: { width: number }) => {
   return (
