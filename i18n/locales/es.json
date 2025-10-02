@@ -238,6 +238,82 @@
       ],
       "thankYou": "¡Gracias por usar nuestra aplicación! Trabajamos constantemente para mejorar tu experiencia."
     },
+    "support": {
+      "title": "Soporte",
+      "subtitle": "Estamos aquí para ayudarte",
+      "contact": {
+        "title": "Contáctanos",
+        "email": "vivek@whizit.co.in",
+        "responseTime": "Normalmente respondemos en 24 horas",
+        "hours": "Horario de Soporte: Lunes-Viernes, 9am-5pm IST",
+        "emailButton": "Enviar Correo"
+      },
+      "faq": {
+        "title": "Preguntas Frecuentes",
+        "items": [
+          {
+            "question": "¿Cómo restablezco mi contraseña?",
+            "answer": "Toca '¿Olvidaste tu contraseña?' en la pantalla de inicio de sesión, ingresa tu dirección de correo y te enviaremos un enlace de restablecimiento. Revisa tu bandeja de entrada y sigue las instrucciones para crear una nueva contraseña."
+          },
+          {
+            "question": "¿Cómo verifico mi correo electrónico?",
+            "answer": "Después del registro, revisa tu bandeja de entrada para un correo de verificación. Haz clic en el enlace del correo para verificar tu cuenta. Si no lo ves, revisa tu carpeta de spam o solicita un nuevo correo de verificación desde la pantalla de verificación."
+          },
+          {
+            "question": "¿Cómo habilito la Autenticación de Dos Factores (2FA)?",
+            "answer": "Ve a Configuración > Seguridad y Privacidad > Autenticación de Dos Factores. Sigue el asistente de configuración para escanear el código QR con tu aplicación de autenticación (Google Authenticator, Authy o Microsoft Authenticator) e ingresa el código de verificación."
+          },
+          {
+            "question": "¿Cómo cambio mi idioma o tema?",
+            "answer": "Puedes cambiar tu idioma y tema desde la pantalla de Configuración. Toca 'Idioma' para seleccionar entre Inglés, Español o Hindi. Toca 'Tema' para elegir entre modo Sistema, Claro u Oscuro."
+          },
+          {
+            "question": "¿Cómo elimino mi cuenta?",
+            "answer": "Ve a Configuración y desplázate hasta el final para encontrar 'Eliminar Cuenta'. Esta acción realiza una eliminación suave: tu cuenta se marcará para eliminación pero puede recuperarse dentro de 30 días. Después de 30 días, todos tus datos se eliminarán permanentemente."
+          },
+          {
+            "question": "Tengo problemas para iniciar sesión. ¿Qué debo hacer?",
+            "answer": "Primero, verifica tu conexión a internet. Asegúrate de ingresar el correo y contraseña correctos. Si olvidaste tu contraseña, usa el enlace '¿Olvidaste tu contraseña?'. Si aún tienes problemas, intenta limpiar la caché de la aplicación o contacta a nuestro equipo de soporte."
+          },
+          {
+            "question": "¿Cómo habilito la autenticación biométrica?",
+            "answer": "La autenticación biométrica (huella digital o reconocimiento facial) está disponible si tu dispositivo la admite. La aplicación te pedirá habilitarla durante el inicio de sesión. También puedes habilitarla más tarde desde Configuración > Seguridad y Privacidad."
+          },
+          {
+            "question": "¿Por qué no funciona mi verificación de correo?",
+            "answer": "Asegúrate de hacer clic en el enlace correcto del correo de verificación. El enlace puede expirar después de 24 horas. Si expiró, solicita un nuevo correo de verificación desde la pantalla de verificación. También revisa tu carpeta de spam/correo no deseado."
+          },
+          {
+            "question": "¿Cómo actualizo mi información de perfil?",
+            "answer": "Ve a Configuración > Editar Perfil para actualizar tu nombre y foto de perfil. Puedes tocar tu foto de perfil para cambiarla seleccionando una nueva foto de tu galería del dispositivo."
+          },
+          {
+            "question": "¿Mis datos están seguros?",
+            "answer": "¡Sí! Usamos Firebase Authentication para inicio de sesión seguro, almacenamiento local cifrado para datos sensibles y seguimos las mejores prácticas de la industria. Tus datos biométricos nunca salen de tu dispositivo. Revisa nuestra Política de Privacidad y documentación de Seguridad para más detalles."
+          }
+        ]
+      },
+      "categories": {
+        "title": "Categorías de Ayuda",
+        "account": "Cuenta e Inicio de Sesión",
+        "security": "Seguridad y Privacidad",
+        "profile": "Gestión de Perfil",
+        "technical": "Problemas Técnicos"
+      },
+      "resources": {
+        "title": "Recursos Adicionales",
+        "documentation": "Documentación",
+        "privacy": "Política de Privacidad",
+        "terms": "Términos de Servicio",
+        "license": "Información de Licencia"
+      },
+      "deviceInfo": {
+        "title": "Información del Dispositivo",
+        "version": "Versión de la App: {version}",
+        "platform": "Plataforma: {platform}",
+        "os": "Versión del SO: {os}"
+      }
+    },
     "legal": {
       "terms": {
         "title": "Términos de Servicio",
@@ -271,35 +347,55 @@
       },
       "privacy": {
         "title": "Política de Privacidad",
-        "lastUpdated": "Última actualización: Diciembre 2024",
+        "lastUpdated": "Última actualización: Enero 2025",
         "sections": {
           "introduction": {
             "title": "1. Introducción",
-            "content": "Respetamos tu privacidad y estamos comprometidos a proteger tus datos personales. Esta política de privacidad explica cómo recopilamos, usamos y protegemos tu información."
+            "content": "En Whiz IT estamos comprometidos a proteger tu privacidad. Esta Política de Privacidad explica cómo LoginX recopila, usa, almacena y protege tu información personal. Al usar nuestra aplicación, aceptas la recopilación y uso de información de acuerdo con esta política."
           },
           "dataCollection": {
             "title": "2. Datos que Recopilamos",
-            "content": "Recopilamos información que nos proporcionas directamente, como cuando creas una cuenta, usas nuestros servicios o nos contactas para soporte."
+            "content": "Recopilamos los siguientes tipos de información:\n\n• Información Personal: Nombre, dirección de correo electrónico y foto de perfil que proporcionas durante el registro.\n\n• Datos de Autenticación: Credenciales de inicio de sesión gestionadas de forma segura a través de Firebase Authentication.\n\n• Información del Dispositivo: Tipo de dispositivo, versión del sistema operativo e identificadores únicos del dispositivo para notificaciones push.\n\n• Datos de Uso: Interacciones con la app, funciones utilizadas e información de sesión para mejorar nuestros servicios.\n\n• Datos Biométricos: Huella digital o datos de reconocimiento facial (almacenados localmente solo en tu dispositivo, nunca transmitidos a nuestros servidores).\n\n• Datos de Ubicación: Información general de ubicación si otorgas permiso (usada para fines de seguridad).\n\nNo recopilamos información personal sensible como datos financieros, registros de salud o números de identificación emitidos por el gobierno."
+          },
+          "dataCollectionMethods": {
+            "title": "3. Cómo Recopilamos Datos",
+            "content": "Recopilamos datos a través de:\n\n• Registro de Cuenta: Información que proporcionas al crear tu cuenta.\n\n• Actualizaciones de Perfil: Cambios que haces en tu perfil y configuración.\n\n• Uso de la App: Interacciones con funciones de la app y patrones de navegación.\n\n• Servicios de Firebase: Autenticación, almacenamiento en la nube y análisis a través de servicios de Firebase/Google.\n\n• Sensores del Dispositivo: Sensores biométricos (con tu permiso) para autenticación.\n\n• Integraciones de Terceros: Servicios de Expo para notificaciones push y actualizaciones de la app."
           },
           "dataUse": {
-            "title": "3. Cómo Usamos tus Datos",
-            "content": "Usamos tu información para proporcionar, mantener y mejorar nuestros servicios, comunicarnos contigo y asegurar la seguridad de nuestra plataforma."
+            "title": "4. Cómo Usamos tus Datos",
+            "content": "Usamos tu información para:\n\n• Proporcionar y mantener nuestros servicios de autenticación y gestión de usuarios.\n\n• Verificar tu identidad y asegurar el acceso a tu cuenta.\n\n• Enviarte notificaciones push sobre actividad de la cuenta (con tu consentimiento).\n\n• Comunicar actualizaciones importantes, alertas de seguridad y anuncios de servicio.\n\n• Mejorar el rendimiento de la app, corregir errores y desarrollar nuevas funciones.\n\n• Analizar patrones de uso para mejorar la experiencia del usuario.\n\n• Cumplir con obligaciones legales y hacer cumplir nuestros Términos de Servicio.\n\n• Prevenir fraude, abuso y acceso no autorizado.\n\nNunca usaremos tus datos para fines distintos a los descritos en esta política sin tu consentimiento explícito."
+          },
+          "dataStorage": {
+            "title": "5. Almacenamiento y Seguridad de Datos",
+            "content": "Tus datos se almacenan de forma segura usando:\n\n• Firebase Firestore: Base de datos basada en la nube para perfiles de usuario y configuraciones (cifrada en reposo y en tránsito).\n\n• Base de Datos SQLite: Base de datos local cifrada para acceso sin conexión y caché.\n\n• Expo SecureStore: Almacenamiento cifrado respaldado por hardware para datos sensibles como tokens de autenticación.\n\n• AsyncStorage: Almacenamiento local para preferencias de la app (solo datos no sensibles).\n\nMedidas de Seguridad:\n• Cifrado de extremo a extremo para transmisión de datos\n• Cifrado AES-256 para datos sensibles locales\n• Hash seguro de contraseñas (nunca almacenadas en texto plano)\n• Auditorías y actualizaciones de seguridad regulares\n• Reglas de Seguridad de Firebase para prevenir acceso no autorizado\n• Los datos biométricos nunca salen de tu dispositivo\n\nPara más detalles, consulta nuestra documentación SECURITY.md."
           },
           "dataSharing": {
-            "title": "4. Compartir Datos",
-            "content": "No vendemos, intercambiamos o transferimos tu información personal a terceros excepto como se describe en esta política."
-          },
-          "dataSecurity": {
-            "title": "5. Seguridad de Datos",
-            "content": "Implementamos medidas de seguridad apropiadas para proteger tu información personal contra acceso no autorizado, alteración, divulgación o destrucción."
+            "title": "6. Compartir Datos y Terceros",
+            "content": "Compartimos datos limitados con proveedores de servicios de terceros confiables:\n\n• Firebase/Google Cloud: Servicios de autenticación, base de datos y análisis. Sujeto a la Política de Privacidad de Google.\n\n• Servicios de Expo: Entrega de notificaciones push y distribución de actualizaciones de la app.\n\n• Sentry: Seguimiento de errores y monitoreo de rendimiento (solo datos anonimizados).\n\nNO:\n• Vendemos tu información personal a nadie\n• Compartimos tus datos con anunciantes\n• Alquilamos o intercambiamos tu información\n• Usamos tus datos para marketing sin consentimiento\n\nPodemos divulgar tu información si lo requiere la ley, orden judicial, o para proteger nuestros derechos legales y la seguridad del usuario."
           },
           "yourRights": {
-            "title": "6. Tus Derechos",
-            "content": "Tienes el derecho de acceder, actualizar o eliminar tu información personal. También puedes optar por no recibir ciertas comunicaciones de nuestra parte."
+            "title": "7. Tus Derechos (Cumplimiento GDPR/CCPA)",
+            "content": "Tienes los siguientes derechos respecto a tus datos personales:\n\n• Derecho de Acceso: Solicitar una copia de todos los datos personales que tenemos sobre ti.\n\n• Derecho de Rectificación: Actualizar o corregir información incorrecta a través de tu configuración de perfil.\n\n• Derecho de Eliminación: Eliminar tu cuenta y datos asociados (eliminación suave con período de recuperación de 30 días).\n\n• Derecho a la Portabilidad de Datos: Exportar tus datos en formato legible por máquina.\n\n• Derecho a Retirar Consentimiento: Optar por no recibir notificaciones push y comunicaciones de marketing.\n\n• Derecho a Objetar: Objetar el procesamiento de tus datos para propósitos específicos.\n\n• Derecho a Restringir el Procesamiento: Solicitar limitación en cómo usamos tus datos.\n\nPara ejercer estos derechos, contáctanos en privacy@loginx.app o vivek@whizit.co.in."
+          },
+          "cookies": {
+            "title": "8. Cookies y Seguimiento",
+            "content": "Usamos mecanismos de almacenamiento local pero no usamos cookies web tradicionales:\n\n• AsyncStorage: Para preferencias de la app y configuraciones no sensibles\n• Gestión de Sesión: Tokens de autenticación almacenados en SecureStore\n• Análisis: Estadísticas de uso anónimas para mejorar la app\n\nPuedes borrar los datos de la app a través de la configuración de tu dispositivo, lo que eliminará toda la información almacenada localmente."
+          },
+          "childrenPrivacy": {
+            "title": "9. Privacidad de Menores",
+            "content": "LoginX no está destinada a menores de 13 años. No recopilamos información personal de menores de 13 años a sabiendas. Si eres padre o tutor y crees que tu hijo nos ha proporcionado información personal, contáctanos inmediatamente y eliminaremos dicha información de nuestros sistemas."
+          },
+          "international": {
+            "title": "10. Transferencias Internacionales de Datos",
+            "content": "Tus datos pueden ser transferidos y almacenados en servidores ubicados fuera de tu país de residencia. Usamos la infraestructura global de Firebase, que cumple con las leyes de protección de datos aplicables incluyendo GDPR y CCPA. Los datos se cifran durante la transferencia y almacenamiento para garantizar la seguridad a través de las fronteras."
+          },
+          "updates": {
+            "title": "11. Actualizaciones de la Política",
+            "content": "Podemos actualizar esta Política de Privacidad de vez en cuando para reflejar cambios en nuestras prácticas o requisitos legales. Te notificaremos de cualquier cambio significativo a través de:\n\n• Notificaciones en la app\n• Correo electrónico a tu dirección registrada\n• Aviso en nuestro sitio web\n\nLa fecha de 'Última actualización' en la parte superior de esta política indica cuándo fue revisada por última vez. Tu uso continuado de la app después de los cambios constituye la aceptación de la política actualizada."
           },
           "contact": {
-            "title": "7. Contáctanos",
-            "content": "Si tienes preguntas sobre esta Política de Privacidad, por favor contáctanos en privacy@loginx.app"
+            "title": "12. Información de Contacto",
+            "content": "Para preguntas, inquietudes o solicitudes sobre esta Política de Privacidad o tus datos personales, contáctanos:\n\nOficial de Privacidad: Vivek Barsagadey\nCorreo: privacy@loginx.app o vivek@whizit.co.in\nOrganización: Whiz IT\nSitio web: https://whizit.co.in\n\nResponderemos a tu consulta dentro de 30 días."
           }
         }
       },
@@ -307,37 +403,196 @@
         "title": "Información de Licencia",
         "appLicense": {
           "title": "Licencia de la Aplicación",
-          "content": "Esta aplicación es software propietario. Todos los derechos reservados. La copia, distribución o modificación no autorizada de este software está estrictamente prohibida."
+          "content": "Licencia MIT\n\nCopyright (c) 2024-2025 Whiz IT - Vivek Barsagadey\n\nPor la presente se concede permiso, sin cargo, a cualquier persona que obtenga una copia de este software y los archivos de documentación asociados (el \"Software\"), para operar con el Software sin restricciones, incluidos, entre otros, los derechos de usar, copiar, modificar, fusionar, publicar, distribuir, sublicenciar y/o vender copias del Software, y permitir a las personas a quienes se les proporcione el Software que lo hagan, sujeto a las siguientes condiciones:\n\nEl aviso de copyright anterior y este aviso de permiso se incluirán en todas las copias o partes sustanciales del Software.\n\nEL SOFTWARE SE PROPORCIONA \"TAL CUAL\", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O IMPLÍCITA, INCLUYENDO PERO NO LIMITADO A LAS GARANTÍAS DE COMERCIABILIDAD, IDONEIDAD PARA UN PROPÓSITO PARTICULAR Y NO INFRACCIÓN. EN NINGÚN CASO LOS AUTORES O TITULARES DE LOS DERECHOS DE AUTOR SERÁN RESPONSABLES DE CUALQUIER RECLAMO, DAÑO U OTRA RESPONSABILIDAD, YA SEA EN UNA ACCIÓN DE CONTRATO, AGRAVIO O DE OTRO MODO, QUE SURJA DE, FUERA DE O EN CONEXIÓN CON EL SOFTWARE O EL USO U OTROS TRATOS EN EL SOFTWARE."
         },
         "openSource": {
           "title": "Librerías de Código Abierto",
-          "intro": "Esta aplicación usa las siguientes librerías de código abierto:",
+          "intro": "Esta aplicación usa las siguientes librerías de código abierto. Estamos agradecidos con la comunidad de código abierto por sus contribuciones:",
           "libraries": [
             {
-              "name": "React Native",
+              "name": "React (19.1.0)",
               "license": "Licencia MIT",
-              "description": "Un framework para construir aplicaciones nativas usando React"
+              "description": "Librería JavaScript para construir interfaces de usuario"
             },
             {
-              "name": "Expo",
+              "name": "React Native (0.81.4)",
               "license": "Licencia MIT",
-              "description": "Una plataforma de código abierto para hacer aplicaciones nativas universales"
+              "description": "Framework para construir aplicaciones nativas usando React"
             },
             {
-              "name": "Firebase",
+              "name": "Expo (~54.0.10)",
+              "license": "Licencia MIT",
+              "description": "Plataforma para construir aplicaciones nativas universales"
+            },
+            {
+              "name": "Expo Router (~6.0.8)",
+              "license": "Licencia MIT",
+              "description": "Enrutamiento basado en archivos para React Native y Expo"
+            },
+            {
+              "name": "Firebase (^12.3.0)",
               "license": "Licencia Apache 2.0",
-              "description": "Una plataforma para construir aplicaciones móviles y web"
+              "description": "Plataforma para construir aplicaciones móviles y web"
             },
             {
-              "name": "React Hook Form",
+              "name": "React Native Biometrics (^3.0.1)",
               "license": "Licencia MIT",
-              "description": "Formularios flexibles y eficientes con validación fácil"
+              "description": "Autenticación biométrica para React Native"
+            },
+            {
+              "name": "Expo Secure Store (^15.0.7)",
+              "license": "Licencia MIT",
+              "description": "Almacenamiento cifrado de clave-valor"
+            },
+            {
+              "name": "React Hook Form (^7.63.0)",
+              "license": "Licencia MIT",
+              "description": "Formularios eficientes con validación fácil"
+            },
+            {
+              "name": "Zod (^3.25.76)",
+              "license": "Licencia MIT",
+              "description": "Validación de esquemas con TypeScript"
+            },
+            {
+              "name": "@hookform/resolvers (^5.2.2)",
+              "license": "Licencia MIT",
+              "description": "Resolvers de validación para React Hook Form"
+            },
+            {
+              "name": "React Native Reanimated (~4.1.1)",
+              "license": "Licencia MIT",
+              "description": "Animaciones e interacciones fluidas"
+            },
+            {
+              "name": "React Native Gesture Handler (~2.28.0)",
+              "license": "Licencia MIT",
+              "description": "Gestión de gestos para React Native"
+            },
+            {
+              "name": "@expo/vector-icons (^15.0.2)",
+              "license": "Licencia MIT",
+              "description": "Librería de iconos para Expo y React Native"
+            },
+            {
+              "name": "Expo Haptics (~15.0.7)",
+              "license": "Licencia MIT",
+              "description": "Feedback háptico para interacciones del usuario"
+            },
+            {
+              "name": "@react-navigation/native (^7.1.17)",
+              "license": "Licencia MIT",
+              "description": "Enrutamiento y navegación para React Native"
+            },
+            {
+              "name": "@react-navigation/bottom-tabs (^7.4.0)",
+              "license": "Licencia MIT",
+              "description": "Componente de navegación con pestañas inferiores"
+            },
+            {
+              "name": "React Native Screens (~4.16.0)",
+              "license": "Licencia MIT",
+              "description": "Primitivas de navegación nativa"
+            },
+            {
+              "name": "@react-native-async-storage/async-storage (2.2.0)",
+              "license": "Licencia MIT",
+              "description": "Almacenamiento persistente de clave-valor"
+            },
+            {
+              "name": "Expo SQLite (^16.0.8)",
+              "license": "Licencia MIT",
+              "description": "Base de datos SQLite para almacenamiento local"
+            },
+            {
+              "name": "i18n-js (^4.5.1)",
+              "license": "Licencia MIT",
+              "description": "Framework de internacionalización"
+            },
+            {
+              "name": "Expo Localization (~17.0.7)",
+              "license": "Licencia MIT",
+              "description": "Información de configuración regional e idioma del dispositivo"
+            },
+            {
+              "name": "Expo Notifications (~0.32.11)",
+              "license": "Licencia MIT",
+              "description": "Soporte para notificaciones push"
+            },
+            {
+              "name": "Expo Constants (~18.0.9)",
+              "license": "Licencia MIT",
+              "description": "Constantes del sistema y configuración de la app"
+            },
+            {
+              "name": "Expo Device (~8.0.8)",
+              "license": "Licencia MIT",
+              "description": "Información y capacidades del dispositivo"
+            },
+            {
+              "name": "Expo Image (~3.0.8)",
+              "license": "Licencia MIT",
+              "description": "Componente de imagen optimizado"
+            },
+            {
+              "name": "Expo Image Picker (~17.0.8)",
+              "license": "Licencia MIT",
+              "description": "Selección de imágenes y videos de la librería del dispositivo"
+            },
+            {
+              "name": "Expo Linking (~8.0.8)",
+              "license": "Licencia MIT",
+              "description": "Manejo de URL y deep linking"
+            },
+            {
+              "name": "Expo Splash Screen (~31.0.10)",
+              "license": "Licencia MIT",
+              "description": "Gestión de pantalla de inicio"
+            },
+            {
+              "name": "Expo Status Bar (~3.0.8)",
+              "license": "Licencia MIT",
+              "description": "Estilo y configuración de la barra de estado"
+            },
+            {
+              "name": "Expo System UI (~6.0.7)",
+              "license": "Licencia MIT",
+              "description": "Color y estilo de la interfaz del sistema"
+            },
+            {
+              "name": "Expo Web Browser (~15.0.7)",
+              "license": "Licencia MIT",
+              "description": "Navegador en la app para abrir contenido web"
+            },
+            {
+              "name": "TypeScript (~5.9.2)",
+              "license": "Licencia Apache 2.0",
+              "description": "Superconjunto tipado de JavaScript"
+            },
+            {
+              "name": "@sentry/react-native (^6.22.0)",
+              "license": "Licencia MIT",
+              "description": "Seguimiento de errores y monitoreo de rendimiento"
+            },
+            {
+              "name": "ESLint (^9.25.0)",
+              "license": "Licencia MIT",
+              "description": "Herramienta de linting y calidad de código"
+            },
+            {
+              "name": "Prettier (^3.6.2)",
+              "license": "Licencia MIT",
+              "description": "Formateador de código"
             }
           ]
         },
         "copyright": {
           "title": "Aviso de Derechos de Autor",
-          "content": "© 2024 LoginX. Todos los derechos reservados. Este software y su documentación son productos propietarios de LoginX."
+          "content": "© 2024-2025 Whiz IT - Vivek Barsagadey. Todos los derechos reservados.\n\nEsta aplicación es software de código abierto licenciado bajo la Licencia MIT. Consulta el archivo LICENSE para el texto completo de la licencia.\n\nLoginX es un producto de Whiz IT (https://whizit.co.in)."
+        },
+        "attribution": {
+          "title": "Directrices de Atribución",
+          "content": "Si bifurcas, modificas o usas este código:\n\n• Mantén el aviso de copyright original\n• Incluye una copia de la Licencia MIT\n• Enlaza al repositorio original: https://github.com/vivekbarsagadey/loginx\n• Acredita a Whiz IT y Vivek Barsagadey en tu documentación\n\nPara uso comercial o preguntas sobre licencias, contacta vivek@whizit.co.in."
         }
       }
     },

@@ -43,6 +43,13 @@ export default function LicenseScreen() {
           </ThemedText>
           <ThemedText style={styles.sectionContent}>{i18n.t('screens.legal.license.copyright.content')}</ThemedText>
         </ThemedView>
+
+        <ThemedView style={styles.section}>
+          <ThemedText type="h3" style={styles.sectionTitle}>
+            {i18n.t('screens.legal.license.attribution.title')}
+          </ThemedText>
+          <ThemedText style={styles.sectionContent}>{i18n.t('screens.legal.license.attribution.content')}</ThemedText>
+        </ThemedView>
       </ThemedView>
     </ScrollView>
   );
