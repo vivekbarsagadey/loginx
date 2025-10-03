@@ -29,7 +29,7 @@
     "punctuation": ".,;:!?"
   },
   "MD029": {
-    "style": "ordered"
+    "style": "one_or_ordered"
   },
   "MD030": {
     "ul_single": 1,

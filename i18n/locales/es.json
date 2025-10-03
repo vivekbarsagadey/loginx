@@ -32,11 +32,208 @@
       "theme": "Tema",
       "language": "Idioma"
     },
+    "biometric": {
+      "title": "Inicio de Sesión Seguro",
+      "faceId": "Habilita Face ID para acceso rápido y seguro a tu cuenta",
+      "touchId": "Habilita Touch ID para acceso rápido y seguro a tu cuenta",
+      "fingerprint": "Habilita huella digital para acceso rápido y seguro a tu cuenta",
+      "generic": "Habilita autenticación biométrica para acceso seguro",
+      "notSupported": "La autenticación biométrica no está disponible en este dispositivo. Aún puedes usar el inicio de sesión con contraseña para acceso seguro.",
+      "benefits": {
+        "title": "¿Por qué habilitar el inicio biométrico?",
+        "items": [
+          "Inicia sesión más rápido con solo un toque o vistazo",
+          "Seguridad mejorada con protección a nivel del dispositivo",
+          "No necesitas recordar o escribir contraseñas",
+          "Tus datos biométricos nunca salen de tu dispositivo"
+        ]
+      },
+      "enable": "Habilitar {biometricType}",
+      "skipButton": "Solo usar contraseña",
+      "notAvailable": "Continuar con contraseña",
+      "success": {
+        "title": "¡Inicio biométrico habilitado!",
+        "message": "Ahora puedes usar {biometricType} para iniciar sesión rápida y seguramente."
+      },
+      "error": {
+        "title": "Configuración falló",
+        "message": "No se pudo configurar la autenticación biométrica. Inténtalo de nuevo o continúa con inicio de sesión por contraseña.",
+        "unexpected": "Ocurrió un error inesperado. Inténtalo de nuevo."
+      },
+      "tryAgain": "Intentar de nuevo",
+      "skipConfirm": {
+        "title": "¿Omitir configuración biométrica?",
+        "message": "Siempre puedes habilitar el inicio biométrico más tarde en Configuración para acceso más rápido y seguro.",
+        "cancel": "Configurar ahora",
+        "skip": "Omitir por ahora"
+      }
+    },
+    "notifications": {
+      "title": "Mantente actualizado y seguro",
+      "description": "Recibe alertas de seguridad importantes y actualizaciones para mantener tu cuenta segura",
+      "checking": "Verificando permisos de notificación...",
+      "alreadyEnabled": "¡Las notificaciones ya están habilitadas! Recibirás alertas de seguridad importantes y actualizaciones.",
+      "benefits": {
+        "title": "Lo que recibirás:",
+        "items": [
+          "Alertas de seguridad por intentos de inicio sospechosos",
+          "Actualizaciones importantes de la app y nuevas funciones",
+          "Notificaciones de actividad de la cuenta",
+          "Confirmaciones de inicio de sesión desde nuevos dispositivos"
+        ]
+      },
+      "enable": "Habilitar notificaciones",
+      "skipButton": "Omitir por ahora",
+      "success": {
+        "title": "¡Notificaciones habilitadas!",
+        "message": "Ahora recibirás alertas de seguridad importantes y actualizaciones."
+      },
+      "denied": {
+        "title": "Notificaciones bloqueadas",
+        "message": "Para recibir alertas de seguridad, habilita las notificaciones en la configuración de tu dispositivo."
+      },
+      "error": {
+        "title": "Error de permisos",
+        "message": "No se pudo solicitar permisos de notificación. Inténtalo de nuevo.",
+        "emulator": "Las notificaciones requieren un dispositivo físico. Puedes omitir este paso por ahora."
+      },
+      "openSettings": "Abrir configuración",
+      "settings": {
+        "title": "Habilitar en configuración",
+        "message": "Ve a Configuración de tu dispositivo > Notificaciones > LoginX para habilitar notificaciones para alertas de seguridad."
+      },
+      "settingsNote": "Puedes habilitar notificaciones más tarde en la configuración de tu dispositivo",
+      "skipConfirm": {
+        "title": "¿Omitir notificaciones?",
+        "message": "No recibirás alertas de seguridad importantes sobre tu cuenta. Puedes habilitarlas más tarde en Configuración.",
+        "cancel": "Habilitar ahora",
+        "skip": "Omitir por ahora"
+      }
+    },
+    "privacy": {
+      "title": "Tu privacidad y seguridad",
+      "description": "Conoce cómo protegemos tus datos con medidas de seguridad líderes en la industria",
+      "security": {
+        "title": "Características de seguridad"
+      },
+      "features": {
+        "encryption": {
+          "title": "Cifrado de extremo a extremo",
+          "description": "Tus datos están cifrados usando cifrado AES-256, el mismo estándar usado por bancos y agencias gubernamentales"
+        },
+        "localStorage": {
+          "title": "Almacenamiento local de datos",
+          "description": "Información sensible como datos biométricos y tokens de autenticación se almacenan de forma segura solo en tu dispositivo"
+        },
+        "cloudStorage": {
+          "title": "Sincronización segura en la nube",
+          "description": "La sincronización opcional en la nube usa la seguridad de nivel empresarial de Firebase con transmisión de datos cifrada"
+        },
+        "biometrics": {
+          "title": "Protección biométrica",
+          "description": "Tus datos de huella digital y facial nunca salen de tu dispositivo y están protegidos por el hardware seguro de tu dispositivo"
+        }
+      },
+      "compliance": {
+        "title": "Cumplimiento de privacidad",
+        "gdpr": {
+          "title": "Cumple con GDPR y CCPA",
+          "description": "Cumplimiento total con regulaciones globales de privacidad. Tienes control completo sobre tus datos personales"
+        },
+        "noTracking": {
+          "title": "Sin seguimiento de terceros",
+          "description": "No vendemos tus datos ni los compartimos con anunciantes. Tu información se usa únicamente para proporcionar nuestros servicios"
+        },
+        "dataControl": {
+          "title": "Control de datos",
+          "description": "Exporta, modifica o elimina tus datos en cualquier momento. Eres completamente dueño de tu información"
+        }
+      },
+      "links": {
+        "title": "Más información",
+        "privacyPolicy": "Política de privacidad",
+        "securityDetails": "Documentación de seguridad"
+      },
+      "trustBadge": "Tus datos son seguros y privados"
+    },
+    "completion": {
+      "title": "¡Todo listo!",
+      "subtitle": "Bienvenido a {app}. ¡Comencemos!",
+      "summary": "Configuración completada:",
+      "features": {
+        "account": "Cuenta creada",
+        "security": "Seguridad configurada",
+        "preferences": "Preferencias establecidas",
+        "notifications": "Notificaciones habilitadas"
+      },
+      "start": "Comenzar a usar {app}",
+      "footerText": "Siempre puedes cambiar estas configuraciones más tarde en las preferencias de tu cuenta."
+    },
+    "tutorials": {
+      "title": "Tutorial rápido",
+      "subtitle": "Aprende cómo aprovechar al máximo LoginX",
+      "of": "de",
+      "tryItOut": "Pruébalo",
+      "tapToTry": "Toca para probar esta función",
+      "running": "Ejecutando demo...",
+      "howItWorks": "Cómo funciona",
+      "skip": "Omitir tutoriales",
+      "nextTutorial": "Siguiente tutorial",
+      "biometric": {
+        "title": "Inicio biométrico",
+        "description": "Inicia sesión rápida y seguramente con tu huella digital o rostro",
+        "steps": [
+          "Ve a Configuración y toca Seguridad y privacidad",
+          "Selecciona Autenticación de dos factores",
+          "Elige tu método biométrico preferido",
+          "Sigue las instrucciones de configuración",
+          "Prueba tu inicio biométrico en la pantalla de inicio de sesión"
+        ]
+      },
+      "theme": {
+        "title": "Personalizar apariencia",
+        "description": "Cambia entre temas claro y oscuro para que coincida con tu estilo",
+        "steps": ["Navega a Configuración desde la pantalla principal", "Toca en Apariencia o Tema", "Elige entre modo Sistema, Claro u Oscuro", "Ve los cambios aplicados instantáneamente"]
+      },
+      "security": {
+        "title": "Características de seguridad",
+        "description": "Explora opciones avanzadas de seguridad para proteger tu cuenta",
+        "steps": [
+          "Accede a Seguridad y privacidad en Configuración",
+          "Revisa sesiones activas y dispositivos",
+          "Habilita autenticación de dos factores",
+          "Configura métodos de recuperación de respaldo",
+          "Monitorea la actividad de la cuenta regularmente"
+        ]
+      },
+      "profile": {
+        "title": "Gestión de perfil",
+        "description": "Mantén actualizada la información de tu perfil",
+        "steps": ["Toca tu foto de perfil o nombre", "Selecciona Editar perfil", "Actualiza tu nombre de visualización", "Cambia tu foto de perfil", "Guarda tus cambios"]
+      }
+    },
+    "profile": {
+      "title": "Completa tu perfil",
+      "subtitle": "Ayúdanos a personalizar tu experiencia",
+      "displayName": "Nombre de visualización",
+      "avatar": "Foto de perfil",
+      "complete": "Completar perfil",
+      "skip": "Omitir por ahora"
+    },
     "cta": {
       "next": "Siguiente",
       "skip": "Omitir",
       "start": "Empezar",
       "back": "Atrás"
+    },
+    "accessibility": {
+      "slideAnnouncement": "Diapositiva {{current}} de {{total}}",
+      "sessionRecovered": "Tu sesión anterior ha sido restaurada",
+      "onboardingComplete": "Incorporación completada exitosamente",
+      "slideContainer": "Diapositivas de incorporación",
+      "swipeHint": "Desliza hacia la izquierda o derecha para navegar entre diapositivas",
+      "progress": "Progreso: {{current}} de {{total}} pasos completados",
+      "slideIndicators": "Indicadores de navegación de diapositivas"
     }
   },
   "errors": {

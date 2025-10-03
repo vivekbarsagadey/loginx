@@ -57,6 +57,7 @@
     "swipeable",
     "tappable",
     "toplevel",
+    "UICT",
     "uiux",
     "vivek",
     "vivekbarsagadey",
@@ -70,5 +71,12 @@
     "हिन्दी"
   ],
   "flagWords": [],
-  "enabledLanguageIds": ["typescript", "typescriptreact", "javascript", "javascriptreact", "json", "jsonc"]
+  "enabledLanguageIds": [
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact",
+    "json",
+    "jsonc"
+  ]
 }

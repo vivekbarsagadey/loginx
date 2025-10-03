@@ -1,5 +1,6 @@
 import { debugError, debugLog } from '@/utils/debug';
 import { showError } from '@/utils/error';
+import { applyPendingProfileData, clearPendingProfileData } from '@/utils/pending-profile';
 import { clearSecureStorage } from '@/utils/secure-storage';
 import { signOut as firebaseSignOut, onAuthStateChanged, User } from 'firebase/auth';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -37,7 +38,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Subscribe to auth state changes
     const unsubscribe = onAuthStateChanged(
       auth,
-      (user) => {
+      async (user) => {
+        if (user) {
+          // Apply any pending profile data from onboarding
+          try {
+            const applied = await applyPendingProfileData(user);
+            if (applied) {
+              debugLog('[Auth] Applied pending profile data from onboarding');
+            }
+          } catch (error) {
+            console.error('[Auth] Failed to apply pending profile data:', error);
+            // Don't fail authentication for profile data issues
+          }
+        }
+
         setUser(user);
         setLoading(false);
       },
@@ -67,6 +81,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch (storageError) {
         debugError('[Auth] Failed to clear secure storage on logout', storageError);
         // Don't fail logout if storage clearing fails
+      }
+
+      // Clear any pending profile data on logout
+      try {
+        await clearPendingProfileData();
+        debugLog('[Auth] Cleared pending profile data on logout');
+      } catch (profileError) {
+        debugError('[Auth] Failed to clear pending profile data on logout', profileError);
+        // Don't fail logout if profile clearing fails
       }
 
       debugLog('[Auth] Logout completed successfully');

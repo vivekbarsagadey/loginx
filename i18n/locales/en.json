@@ -1,4 +1,13 @@
 {
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "retry": "Retry",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  },
   "onb": {
     "welcome": {
       "title": "Welcome to {app}",
@@ -32,11 +41,203 @@
       "theme": "Theme",
       "language": "Language"
     },
+    "biometric": {
+      "title": "Secure Login",
+      "faceId": "Enable Face ID for quick, secure access to your account",
+      "touchId": "Enable Touch ID for quick, secure access to your account",
+      "fingerprint": "Enable Fingerprint for quick, secure access to your account",
+      "generic": "Enable biometric authentication for secure access",
+      "notSupported": "Biometric authentication is not available on this device. You can still use password login for secure access.",
+      "benefits": {
+        "title": "Why Enable Biometric Login?",
+        "items": [
+          "Sign in faster with just a touch or glance",
+          "Enhanced security with device-level protection",
+          "No need to remember or type passwords",
+          "Your biometric data never leaves your device"
+        ]
+      },
+      "enable": "Enable {biometricType}",
+      "skipButton": "Use Password Only",
+      "notAvailable": "Continue with Password",
+      "success": {
+        "title": "Biometric Login Enabled!",
+        "message": "You can now use {biometricType} to sign in quickly and securely."
+      },
+      "error": {
+        "title": "Setup Failed",
+        "message": "Unable to set up biometric authentication. Please try again or continue with password login.",
+        "unexpected": "An unexpected error occurred. Please try again."
+      },
+      "tryAgain": "Try Again",
+      "skipConfirm": {
+        "title": "Skip Biometric Setup?",
+        "message": "You can always enable biometric login later in Settings for faster, more secure access.",
+        "cancel": "Set Up Now",
+        "skip": "Skip for Now"
+      }
+    },
+    "notifications": {
+      "title": "Stay Updated & Secure",
+      "description": "Get important security alerts and updates to keep your account safe",
+      "checking": "Checking notification permissions...",
+      "alreadyEnabled": "Notifications are already enabled! You'll receive important security alerts and updates.",
+      "benefits": {
+        "title": "What You'll Get:",
+        "items": ["Security alerts for suspicious login attempts", "Important app updates and new features", "Account activity notifications", "Login confirmations from new devices"]
+      },
+      "enable": "Enable Notifications",
+      "skipButton": "Skip for Now",
+      "success": {
+        "title": "Notifications Enabled!",
+        "message": "You'll now receive important security alerts and updates."
+      },
+      "denied": {
+        "title": "Notifications Blocked",
+        "message": "To receive security alerts, please enable notifications in your device settings."
+      },
+      "error": {
+        "title": "Permission Error",
+        "message": "Unable to request notification permissions. Please try again.",
+        "emulator": "Notifications require a physical device. You can skip this step for now."
+      },
+      "openSettings": "Open Settings",
+      "settings": {
+        "title": "Enable in Settings",
+        "message": "Go to your device Settings > Notifications > LoginX to enable notifications for security alerts."
+      },
+      "settingsNote": "You can enable notifications later in your device settings",
+      "skipConfirm": {
+        "title": "Skip Notifications?",
+        "message": "You won't receive important security alerts about your account. You can enable them later in Settings.",
+        "cancel": "Enable Now",
+        "skip": "Skip for Now"
+      }
+    },
+    "privacy": {
+      "title": "Your Privacy & Security",
+      "description": "Learn how we protect your data with industry-leading security measures",
+      "security": {
+        "title": "Security Features"
+      },
+      "features": {
+        "encryption": {
+          "title": "End-to-End Encryption",
+          "description": "Your data is encrypted using AES-256 encryption, the same standard used by banks and government agencies"
+        },
+        "localStorage": {
+          "title": "Local Data Storage",
+          "description": "Sensitive information like biometric data and authentication tokens are stored securely on your device only"
+        },
+        "cloudStorage": {
+          "title": "Secure Cloud Sync",
+          "description": "Optional cloud synchronization uses Firebase's enterprise-grade security with encrypted data transmission"
+        },
+        "biometrics": {
+          "title": "Biometric Protection",
+          "description": "Your fingerprint and face data never leave your device and are protected by your device's secure hardware"
+        }
+      },
+      "compliance": {
+        "title": "Privacy Compliance",
+        "gdpr": {
+          "title": "GDPR & CCPA Compliant",
+          "description": "Full compliance with global privacy regulations. You have complete control over your personal data"
+        },
+        "noTracking": {
+          "title": "No Third-Party Tracking",
+          "description": "We don't sell your data or share it with advertisers. Your information is used solely to provide our services"
+        },
+        "dataControl": {
+          "title": "Data Control",
+          "description": "Export, modify, or delete your data at any time. You own your information completely"
+        }
+      },
+      "links": {
+        "title": "Learn More",
+        "privacyPolicy": "Privacy Policy",
+        "securityDetails": "Security Documentation"
+      },
+      "trustBadge": "Your data is secure and private"
+    },
+    "completion": {
+      "title": "You're All Set!",
+      "subtitle": "Welcome to {app}. Let's get started!",
+      "summary": "Setup completed:",
+      "features": {
+        "account": "Account created",
+        "security": "Security configured",
+        "preferences": "Preferences set",
+        "notifications": "Notifications enabled"
+      },
+      "start": "Start Using {app}",
+      "footerText": "You can always change these settings later in your account preferences."
+    },
+    "tutorials": {
+      "title": "Quick Tutorial",
+      "subtitle": "Learn how to make the most of LoginX",
+      "of": "of",
+      "tryItOut": "Try it out",
+      "tapToTry": "Tap to try this feature",
+      "running": "Running demo...",
+      "howItWorks": "How it works",
+      "skip": "Skip Tutorials",
+      "nextTutorial": "Next Tutorial",
+      "biometric": {
+        "title": "Biometric Login",
+        "description": "Sign in quickly and securely with your fingerprint or face",
+        "steps": [
+          "Go to Settings and tap Security & Privacy",
+          "Select Two-Factor Authentication",
+          "Choose your preferred biometric method",
+          "Follow the setup instructions",
+          "Test your biometric login on the login screen"
+        ]
+      },
+      "theme": {
+        "title": "Customize Appearance",
+        "description": "Switch between light and dark themes to match your style",
+        "steps": ["Navigate to Settings from the main screen", "Tap on Appearance or Theme", "Choose from System, Light, or Dark mode", "See the changes applied instantly"]
+      },
+      "security": {
+        "title": "Security Features",
+        "description": "Explore advanced security options to protect your account",
+        "steps": [
+          "Access Security & Privacy in Settings",
+          "Review active sessions and devices",
+          "Enable two-factor authentication",
+          "Set up backup recovery methods",
+          "Monitor account activity regularly"
+        ]
+      },
+      "profile": {
+        "title": "Profile Management",
+        "description": "Keep your profile information up to date",
+        "steps": ["Tap on your profile picture or name", "Select Edit Profile", "Update your display name", "Change your profile photo", "Save your changes"]
+      }
+    },
+    "profile": {
+      "title": "Complete Your Profile",
+      "subtitle": "Help us personalize your experience",
+      "displayName": "Display Name",
+      "avatar": "Profile Picture",
+      "complete": "Complete Profile",
+      "skip": "Skip for now"
+    },
     "cta": {
       "next": "Next",
       "skip": "Skip",
       "start": "Get started",
       "back": "Back"
+    },
+    "accessibility": {
+      "slideAnnouncement": "Slide {{current}} of {{total}}",
+      "sessionRecovered": "Your previous session has been restored",
+      "onboardingComplete": "Onboarding completed successfully",
+      "slideContainer": "Onboarding slides",
+      "swipeHint": "Swipe left or right to navigate between slides",
+      "progress": "Progress: {{current}} of {{total}} steps completed",
+      "slideIndicators": "Slide navigation indicators"
     }
   },
   "errors": {
