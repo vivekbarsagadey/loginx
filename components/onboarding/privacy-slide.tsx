@@ -140,7 +140,7 @@ export const PrivacySlide = ({ width, onNext }: PrivacySlideProps) => {
               <Ionicons name="chevron-forward" size={16} color={theme['text-muted']} />
             </ExternalLink>
 
-            <ExternalLink href="/security" style={[styles.link, { borderColor: theme.border }]}>
+            <ExternalLink href="/security/sessions" style={[styles.link, { borderColor: theme.border }]}>
               <Ionicons name="shield-checkmark" size={20} color={theme.primary} />
               <ThemedText type="body" style={[styles.linkText, { color: theme.primary }]}>
                 {i18n.t('onb.privacy.links.securityDetails')}
