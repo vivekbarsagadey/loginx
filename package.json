@@ -128,5 +128,12 @@
     "remark-preset-lint-recommended": "^7.0.0",
     "typescript": "~5.9.2"
   },
-  "private": true
+  "private": true,
+  "pnpm": {
+    "overrides": {
+      "@types/react": "~19.1.0",
+      "@types/react-native": "npm:react-native@0.81.4",
+      "@react-native-async-storage/async-storage": "^2.2.0"
+    }
+  }
 }

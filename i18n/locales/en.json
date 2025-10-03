@@ -302,6 +302,10 @@
       "changePhoto": "Change Photo",
       "saveButton": "Save",
       "savingButton": "Saving..."
+    },
+    "updateEmail": {
+      "title": "Update Email Address",
+      "subtitle": "Enter your new email address to update your account."
     }
   },
   "register": {

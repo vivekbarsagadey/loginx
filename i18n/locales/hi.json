@@ -290,9 +290,13 @@
     "edit": {
       "title": "प्रोफ़ाइल संपादित करें",
       "nameLabel": "नाम",
-      "changePhoto": "फोटो बदलें",
+      "changePhoto": "फ़ोटो बदलें",
       "saveButton": "सहेजें",
-      "savingButton": "सहेजा जा रहा है..."
+      "savingButton": "सहेज रहे हैं..."
+    },
+    "updateEmail": {
+      "title": "ईमेल पता अपडेट करें",
+      "subtitle": "अपना खाता अपडेट करने के लिए अपना नया ईमेल पता दर्ज करें।"
     }
   },
   "register": {

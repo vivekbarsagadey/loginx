@@ -298,6 +298,10 @@
       "changePhoto": "Cambiar foto",
       "saveButton": "Guardar",
       "savingButton": "Guardando..."
+    },
+    "updateEmail": {
+      "title": "Actualizar dirección de correo electrónico",
+      "subtitle": "Ingresa tu nueva dirección de correo electrónico para actualizar tu cuenta."
     }
   },
   "register": {

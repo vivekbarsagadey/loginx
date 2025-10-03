@@ -1,20 +1,36 @@
-import { Colors } from '@/constants/theme';
+import { useThemeColor } from '@/hooks/use-theme-color';
+import i18n from '@/i18n';
 import { Stack } from 'expo-router';
-import { useColorScheme } from 'react-native';
 
 export default function ProfileLayout() {
-  const colorScheme = useColorScheme();
+  const backgroundColor = useThemeColor({}, 'bg');
+  const textColor = useThemeColor({}, 'text');
 
   return (
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background,
+          backgroundColor,
         },
-        headerTintColor: colorScheme === 'dark' ? Colors.dark.text : Colors.light.text,
+        headerTintColor: textColor,
+        presentation: 'card',
+        animation: 'slide_from_right',
       }}
     >
-      <Stack.Screen name="edit" options={{ title: 'Edit Profile' }} />
+      <Stack.Screen
+        name="edit"
+        options={{
+          title: i18n.t('profile.edit.title'),
+          headerBackTitle: 'Back',
+        }}
+      />
+      <Stack.Screen
+        name="update-email"
+        options={{
+          title: i18n.t('profile.updateEmail.title'),
+          headerBackTitle: 'Back',
+        }}
+      />
     </Stack>
   );
 }
