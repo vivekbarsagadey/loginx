@@ -125,16 +125,13 @@ export const validatePassword = (password: string): { isValid: boolean; message?
     return { isValid: false, message: 'Password is too long' };
   }
 
-  // Check for at least one uppercase, lowercase, number, and special character
-  const hasUpperCase = /[A-Z]/.test(password);
-  const hasLowerCase = /[a-z]/.test(password);
-  const hasNumber = /\d/.test(password);
-  const hasSpecialChar = /[@$!%*?&]/.test(password);
+  // Use the same regex pattern as in the schema validation for consistency
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-  if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
+  if (!passwordRegex.test(password)) {
     return {
       isValid: false,
-      message: 'Password must contain uppercase, lowercase, number, and special character (@$!%*?&)',
+      message: 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&)',
     };
   }
 
