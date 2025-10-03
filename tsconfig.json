@@ -43,6 +43,5 @@
     "**/*.test.tsx",
     "**/*.spec.ts",
     "**/*.spec.tsx",
-    "hooks/use-enhanced-onboarding-provider.tsx"
   ]
 }
