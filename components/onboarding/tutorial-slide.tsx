@@ -1,4 +1,4 @@
-import { Colors } from '@/constants/theme';
+import { AnimationDurations, Colors } from '@/constants';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
 import i18n from '@/i18n';
@@ -107,7 +107,7 @@ export const TutorialSlide = ({ width, onNext }: TutorialSlideProps) => {
 
           // Reset animations
           demoScale.value = withSpring(1);
-          demoOpacity.value = withTiming(1, { duration: 200 });
+          demoOpacity.value = withTiming(1, { duration: AnimationDurations.NORMAL });
           progressWidth.value = 0;
         })();
       }

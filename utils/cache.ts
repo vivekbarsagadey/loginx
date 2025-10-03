@@ -1,18 +1,20 @@
+import { CacheConstants } from '@/constants';
+
 interface CacheEntry {
-  data: any;
+  data: unknown;
   timestamp: number;
 }
 
 const cache = new Map<string, CacheEntry>();
 
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const CACHE_DURATION = CacheConstants.DEFAULT_DURATION;
 
 /**
  * Set a value in the cache with current timestamp
  * @param key - Cache key
  * @param data - Data to cache (can be null to invalidate)
  */
-export const set = (key: string, data: any): void => {
+export const set = (key: string, data: unknown): void => {
   try {
     if (!key) {
       console.warn('[Cache] Attempted to set cache with empty key');
@@ -34,7 +36,7 @@ export const set = (key: string, data: any): void => {
  * @param key - Cache key
  * @returns Cached data or null if not found/expired
  */
-export const get = (key: string): any | null => {
+export const get = (key: string): unknown => {
   try {
     if (!key) {
       console.warn('[Cache] Attempted to get cache with empty key');

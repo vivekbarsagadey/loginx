@@ -1,3 +1,5 @@
+import { ApiConstants } from '@/constants';
+
 /**
  * Retry configuration options
  */
@@ -13,10 +15,10 @@ interface RetryOptions {
  * Default retry configuration
  */
 const DEFAULT_OPTIONS: Required<RetryOptions> = {
-  maxRetries: 3,
-  initialDelay: 1000, // 1 second
-  maxDelay: 10000, // 10 seconds
-  backoffMultiplier: 2,
+  maxRetries: ApiConstants.MAX_RETRIES,
+  initialDelay: ApiConstants.INITIAL_DELAY,
+  maxDelay: ApiConstants.MAX_DELAY,
+  backoffMultiplier: ApiConstants.BACKOFF_MULTIPLIER,
   shouldRetry: (error: unknown) => {
     // Retry on network errors, but not on auth errors
     if (typeof error === 'object' && error !== null && 'code' in error) {

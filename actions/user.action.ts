@@ -1,3 +1,4 @@
+import { ApiConstants, FirebaseCollections } from '@/constants';
 import { firestore } from '@/firebase-config';
 import { UserProfile } from '@/types/user';
 import * as cache from '@/utils/cache';
@@ -26,8 +27,8 @@ export const getUserProfile = async (uid: string): Promise<UserProfile | null> =
 
     const userDocRef = doc(firestore, 'users', uid);
     const userDoc = await withRetry(() => getDoc(userDocRef), {
-      maxRetries: 2,
-      initialDelay: 500,
+      maxRetries: ApiConstants.MAX_RETRIES,
+      initialDelay: ApiConstants.INITIAL_DELAY,
     });
 
     if (userDoc.exists()) {
@@ -58,10 +59,10 @@ export const updateUser = async (uid: string, data: Partial<UserProfile>): Promi
     // Sanitize user input before saving
     const sanitizedData = sanitizeUserProfile(data);
 
-    const userDocRef = doc(firestore, 'users', uid);
+    const userDocRef = doc(firestore, FirebaseCollections.USERS, uid);
     await withRetry(() => updateDoc(userDocRef, sanitizedData), {
-      maxRetries: 2,
-      initialDelay: 500,
+      maxRetries: ApiConstants.MAX_RETRIES,
+      initialDelay: ApiConstants.INITIAL_DELAY,
     });
 
     // Invalidate cache instead of setting partial data

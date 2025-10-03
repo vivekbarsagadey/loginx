@@ -68,7 +68,7 @@ export default function LoginScreen() {
     };
 
     // Small delay to allow UI to render first
-    const timer = setTimeout(attemptBiometricAuth, 100);
+    const timer = setTimeout(attemptBiometricAuth, 100); // Small delay for UI stabilization
     return () => clearTimeout(timer);
   }, [biometricAvailable, biometricEnabled, biometricAttempted, authenticateWithBiometric, biometricTypeName, router]);
 

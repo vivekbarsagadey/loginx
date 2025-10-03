@@ -65,7 +65,7 @@ export default function Verify2FAScreen() {
       }
 
       // Mock validation - in production, validate against TOTP server
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Keep as is for UX delay
 
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       showSuccess('Success', '2FA code verified successfully!', () => {

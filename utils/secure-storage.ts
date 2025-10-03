@@ -2,22 +2,15 @@
  * Secure Storage Utilities
  * Provides encrypted storage for sensitive data using Expo SecureStore
  */
+import { SecureStorageKeys } from '@/constants';
 import * as SecureStore from 'expo-secure-store';
 import { debugError, debugLog, debugWarn } from './debug';
 
 /**
  * Secure storage keys for different types of sensitive data
+ * @deprecated Use SecureStorageKeys from constants instead
  */
-export const SECURE_KEYS = {
-  BIOMETRIC_ENABLED: 'biometric_enabled',
-  BIOMETRIC_TYPE: 'biometric_type',
-  TWO_FA_BACKUP_CODES: '2fa_backup_codes',
-  TWO_FA_ENABLED: '2fa_enabled',
-  AUTO_LOCK_ENABLED: 'auto_lock_enabled',
-  AUTO_LOCK_TIMEOUT: 'auto_lock_timeout',
-  SECURITY_NOTIFICATIONS: 'security_notifications',
-  LOGIN_ATTEMPTS: 'login_attempts',
-} as const;
+export const SECURE_KEYS = SecureStorageKeys;
 
 /**
  * Securely save a string value to encrypted storage
@@ -162,7 +155,7 @@ export const isSecureStoreAvailable = async (): Promise<boolean> => {
  * @param keys - Optional array of specific keys to clear. If not provided, clears all known keys
  */
 export const clearSecureStorage = async (keys?: string[]): Promise<void> => {
-  const keysToDelete = keys || Object.values(SECURE_KEYS);
+  const keysToDelete = keys || Object.values(SecureStorageKeys);
 
   try {
     await Promise.all(keysToDelete.map((key) => securelyDeleteItem(key)));
@@ -195,8 +188,8 @@ export const BiometricStorage = {
    * @returns Promise that resolves to biometric settings
    */
   getBiometricSettings: async (): Promise<{ enabled: boolean; type?: string }> => {
-    const enabled = await securelyGetBoolean(SECURE_KEYS.BIOMETRIC_ENABLED);
-    const type = await securelyGetItem(SECURE_KEYS.BIOMETRIC_TYPE);
+    const enabled = await securelyGetBoolean(SecureStorageKeys.BIOMETRIC_ENABLED);
+    const type = await securelyGetItem(SecureStorageKeys.BIOMETRIC_TYPE);
     return { enabled, type: type || undefined };
   },
 
@@ -204,8 +197,8 @@ export const BiometricStorage = {
    * Clear biometric preferences
    */
   clearBiometricSettings: async (): Promise<void> => {
-    await securelyDeleteItem(SECURE_KEYS.BIOMETRIC_ENABLED);
-    await securelyDeleteItem(SECURE_KEYS.BIOMETRIC_TYPE);
+    await securelyDeleteItem(SecureStorageKeys.BIOMETRIC_ENABLED);
+    await securelyDeleteItem(SecureStorageKeys.BIOMETRIC_TYPE);
     debugLog('[BiometricStorage] Cleared biometric settings');
   },
 };
@@ -219,7 +212,7 @@ export const TwoFactorStorage = {
    * @param enabled - Whether 2FA is enabled
    */
   setTwoFactorEnabled: async (enabled: boolean): Promise<void> => {
-    await securelySetBoolean(SECURE_KEYS.TWO_FA_ENABLED, enabled);
+    await securelySetBoolean(SecureStorageKeys.TWO_FA_ENABLED, enabled);
     debugLog(`[TwoFactorStorage] 2FA ${enabled ? 'enabled' : 'disabled'}`);
   },
 
@@ -228,7 +221,7 @@ export const TwoFactorStorage = {
    * @returns Promise that resolves to whether 2FA is enabled
    */
   getTwoFactorEnabled: async (): Promise<boolean> => {
-    return await securelyGetBoolean(SECURE_KEYS.TWO_FA_ENABLED);
+    return await securelyGetBoolean(SecureStorageKeys.TWO_FA_ENABLED);
   },
 
   /**
@@ -236,7 +229,7 @@ export const TwoFactorStorage = {
    * @param codes - Array of backup codes
    */
   setBackupCodes: async (codes: string[]): Promise<void> => {
-    await securelySetObject(SECURE_KEYS.TWO_FA_BACKUP_CODES, codes);
+    await securelySetObject(SecureStorageKeys.TWO_FA_BACKUP_CODES, codes);
     debugLog(`[TwoFactorStorage] Saved ${codes.length} backup codes`);
   },
 
@@ -293,7 +286,7 @@ export const SecurityStorage = {
    */
   getAutoLockSettings: async (): Promise<{ enabled: boolean; timeout: number }> => {
     const enabled = await securelyGetBoolean(SECURE_KEYS.AUTO_LOCK_ENABLED);
-    const timeout = await securelyGetNumber(SECURE_KEYS.AUTO_LOCK_TIMEOUT, 5); // Default 5 minutes
+    const timeout = await securelyGetNumber(SecureStorageKeys.AUTO_LOCK_TIMEOUT, 5); // Default 5 minutes
     return { enabled, timeout };
   },
 

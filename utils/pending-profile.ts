@@ -1,4 +1,5 @@
 import { updateUser } from '@/actions/user.action';
+import { CacheConstants } from '@/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updateProfile, User } from 'firebase/auth';
 
@@ -47,7 +48,7 @@ export async function applyPendingProfileData(user: User): Promise<boolean> {
     }
 
     // Check if data is not too old (24 hours)
-    const isDataFresh = Date.now() - pendingData.completedAt < 24 * 60 * 60 * 1000;
+    const isDataFresh = Date.now() - pendingData.completedAt < CacheConstants.PERSISTENT_DURATION;
 
     if (!isDataFresh) {
       await clearPendingProfileData();

@@ -1,4 +1,4 @@
-import { Colors } from '@/constants/theme';
+import { AnimationDurations, Colors } from '@/constants';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useEffect } from 'react';
 import { DimensionValue, StyleSheet, View, ViewStyle } from 'react-native';
@@ -18,7 +18,7 @@ export const SkeletonLoader = ({ width = '100%', height = 20, borderRadius = 4, 
 
   useEffect(() => {
     opacity.value = withRepeat(
-      withTiming(0.8, { duration: 1000 }),
+      withTiming(0.8, { duration: AnimationDurations.SKELETON_SHIMMER / 1.5 }),
       -1, // Infinite
       true // Reverse
     );

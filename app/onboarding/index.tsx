@@ -1,4 +1,4 @@
-import { Colors } from '@/constants/theme';
+import { AnimationDurations, Colors } from '@/constants';
 import i18n from '@/i18n';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
@@ -125,9 +125,9 @@ export default function Onboarding() {
     // Hide skip button on completion slide or non-skippable slides
     const currentSlide = SLIDES[i];
     if (i === SLIDES.length - 1 || !canSkipSlide(currentSlide?.key || '')) {
-      skipButtonOpacity.value = withTiming(0, { duration: 300 });
+      skipButtonOpacity.value = withTiming(0, { duration: AnimationDurations.MEDIUM });
     } else {
-      skipButtonOpacity.value = withTiming(1, { duration: 300 });
+      skipButtonOpacity.value = withTiming(1, { duration: AnimationDurations.MEDIUM });
     }
 
     // Mark recovery complete if this is a recovered session
@@ -180,8 +180,8 @@ export default function Onboarding() {
     }
 
     // Enhanced transition animation
-    slideOpacity.value = withTiming(0.7, { duration: 150 }, () => {
-      slideOpacity.value = withTiming(1, { duration: 200 });
+    slideOpacity.value = withTiming(0.7, { duration: AnimationDurations.FAST }, () => {
+      slideOpacity.value = withTiming(1, { duration: AnimationDurations.NORMAL });
     });
     slideScale.value = withSpring(0.95, { damping: 15 }, () => {
       slideScale.value = withSpring(1, { damping: 20 });
