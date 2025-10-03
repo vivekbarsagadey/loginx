@@ -1,13 +1,17 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 
 type TextSizeOption = 'small' | 'default' | 'large' | 'extraLarge';
 
 export default function TextSizeScreen() {
   const [selectedSize, setSelectedSize] = useState<TextSizeOption>('default');
+
+  const primaryColor = useThemeColor({}, 'primary');
+  const surfaceVariant = useThemeColor({}, 'surface-variant');
 
   const sizeOptions = [
     { key: 'small' as TextSizeOption, title: i18n.t('screens.settings.textSize.options.small'), multiplier: 0.85 },
@@ -35,10 +39,24 @@ export default function TextSizeScreen() {
 
       <ThemedView style={styles.optionsContainer}>
         {sizeOptions.map((option) => (
-          <TouchableOpacity key={option.key} style={[styles.optionItem, selectedSize === option.key && styles.selectedOption]} onPress={() => handleSizeSelect(option.key)}>
+          <TouchableOpacity
+            key={option.key}
+            style={[
+              styles.option,
+              { backgroundColor: surfaceVariant },
+              selectedSize === option.key && [
+                styles.selectedOption,
+                {
+                  borderColor: primaryColor,
+                  backgroundColor: primaryColor + '1A',
+                },
+              ],
+            ]}
+            onPress={() => handleSizeSelect(option.key)}
+          >
             <ThemedView style={styles.optionContent}>
               <ThemedText style={[styles.optionTitle, getPreviewStyles(option.multiplier)]}>{option.title}</ThemedText>
-              {selectedSize === option.key && <ThemedText style={styles.checkmark}>✓</ThemedText>}
+              {selectedSize === option.key && <ThemedText style={[styles.checkmark, { color: primaryColor }]}>✓</ThemedText>}
             </ThemedView>
           </TouchableOpacity>
         ))}
@@ -75,16 +93,14 @@ const styles = StyleSheet.create({
   optionsContainer: {
     marginBottom: 32,
   },
-  optionItem: {
+  option: {
+    padding: 16,
     marginBottom: 12,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: 'transparent',
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    borderRadius: 8,
+    borderWidth: 1,
   },
   selectedOption: {
-    borderColor: '#007AFF',
-    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+    borderWidth: 2,
   },
   optionContent: {
     flexDirection: 'row',
@@ -97,7 +113,7 @@ const styles = StyleSheet.create({
   },
   checkmark: {
     fontSize: 20,
-    color: '#007AFF',
+    // Color applied inline with theme
     fontWeight: 'bold',
   },
   previewSection: {
@@ -110,7 +126,7 @@ const styles = StyleSheet.create({
   previewContainer: {
     padding: 20,
     borderRadius: 12,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    // Background handled by theme
   },
   previewText: {
     textAlign: 'center',

@@ -2,6 +2,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
@@ -12,6 +13,12 @@ export default function TwoFactorAuthScreen() {
   const { isEnabled, backupCodes, isLoading, error, enableTwoFactor, disableTwoFactor, generateBackupCodes, backupCodesCount, isBackupCodesLow, formatBackupCode } = useTwoFactorAuth();
 
   const { isAvailable: biometricAvailable, isEnabled: biometricEnabled, biometricTypeName, enableBiometric, disableBiometric, isLoading: biometricLoading } = useBiometricAuth();
+
+  const errorColor = useThemeColor({}, 'error');
+  const primaryColor = useThemeColor({}, 'primary');
+  const successColor = useThemeColor({}, 'success');
+  const warningColor = useThemeColor({}, 'warning');
+  const surfaceVariant = useThemeColor({}, 'surface-variant');
 
   const benefits = i18n.t('screens.security.twoFactor.notEnabled.benefits', { returnObjects: true }) as string[];
 
@@ -94,7 +101,7 @@ export default function TwoFactorAuthScreen() {
   if (error) {
     return (
       <ThemedView style={styles.errorContainer}>
-        <ThemedText style={styles.errorText}>Error: {error}</ThemedText>
+        <ThemedText style={[styles.errorText, { color: errorColor }]}>Error: {error}</ThemedText>
         <ThemedButton title="Retry" onPress={() => window.location.reload()} />
       </ThemedView>
     );
@@ -111,11 +118,11 @@ export default function TwoFactorAuthScreen() {
         {/* Biometric Authentication Section */}
         {biometricAvailable && (
           <ThemedView style={styles.section}>
-            <ThemedText type="h3" style={styles.sectionTitle}>
+            <ThemedText type="h3" style={[styles.sectionTitle, { color: primaryColor }]}>
               {biometricTypeName} Authentication
             </ThemedText>
             <ThemedText style={styles.description}>Use {biometricTypeName.toLowerCase()} to quickly and securely access your account.</ThemedText>
-            <View style={styles.switchContainer}>
+            <View style={[styles.switchContainer, { backgroundColor: surfaceVariant }]}>
               <ThemedText>Enable {biometricTypeName}</ThemedText>
               <Switch value={biometricEnabled} onValueChange={handleToggleBiometric} disabled={biometricLoading} />
             </View>
@@ -125,7 +132,7 @@ export default function TwoFactorAuthScreen() {
         {/* 2FA Section */}
         {!isEnabled ? (
           <ThemedView style={styles.section}>
-            <ThemedText type="h3" style={styles.sectionTitle}>
+            <ThemedText type="h3" style={[styles.sectionTitle, { color: primaryColor }]}>
               {i18n.t('screens.security.twoFactor.notEnabled.title')}
             </ThemedText>
             <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.notEnabled.description')}</ThemedText>
@@ -133,7 +140,7 @@ export default function TwoFactorAuthScreen() {
             <ThemedView style={styles.benefitsContainer}>
               {benefits.map((benefit, index) => (
                 <ThemedView key={index} style={styles.benefitItem}>
-                  <ThemedText style={styles.bulletPoint}>✓</ThemedText>
+                  <ThemedText style={[styles.bulletPoint, { color: successColor }]}>✓</ThemedText>
                   <ThemedText style={styles.benefitText}>{benefit}</ThemedText>
                 </ThemedView>
               ))}
@@ -143,8 +150,8 @@ export default function TwoFactorAuthScreen() {
           </ThemedView>
         ) : (
           <ThemedView style={styles.section}>
-            <ThemedText type="h3" style={styles.sectionTitle}>
-              {i18n.t('screens.security.twoFactor.enabled.title')}
+            <ThemedText type="h3" style={[styles.sectionTitle, { color: primaryColor }]}>
+              {i18n.t('screens.security.twoFactor.enabled.setup.title')}
             </ThemedText>
             <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.enabled.description')}</ThemedText>
 
@@ -156,9 +163,19 @@ export default function TwoFactorAuthScreen() {
             </ThemedView>
 
             {/* Backup Codes Section */}
-            <ThemedView style={[styles.backupCodesContainer, isBackupCodesLow && styles.lowBackupCodes]}>
-              <ThemedText style={styles.backupCodesTitle}>Backup Codes ({backupCodesCount} remaining)</ThemedText>
-              {isBackupCodesLow && <ThemedText style={styles.warningText}>You&apos;re running low on backup codes. Consider generating new ones.</ThemedText>}
+            <ThemedView
+              style={[
+                styles.backupCodesContainer,
+                {
+                  backgroundColor: isBackupCodesLow ? warningColor + '1A' : successColor + '1A',
+                  borderColor: isBackupCodesLow ? warningColor + '4D' : successColor + '4D',
+                },
+              ]}
+            >
+              <ThemedText style={[styles.backupCodesTitle, { color: isBackupCodesLow ? warningColor : successColor }]}>
+                {i18n.t('screens.security.twoFactor.enabled.backupCodes.title')} ({backupCodesCount} remaining)
+              </ThemedText>
+              {isBackupCodesLow && <ThemedText style={[styles.warningText, { color: warningColor }]}>You&apos;re running low on backup codes. Consider generating new ones.</ThemedText>}
               <View style={styles.backupButtonsContainer}>
                 <ThemedButton title="View Codes" variant="secondary" onPress={handleShowBackupCodes} style={styles.backupButton} />
                 <ThemedButton title="Generate New" variant="secondary" onPress={handleGenerateNewBackupCodes} style={styles.backupButton} />
@@ -209,7 +226,6 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   errorText: {
-    color: '#FF3B30',
     textAlign: 'center',
     marginBottom: 16,
   },
@@ -219,7 +235,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     marginBottom: 12,
     fontWeight: 'bold',
-    color: '#007AFF',
   },
   description: {
     lineHeight: 22,
@@ -232,7 +247,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
     borderRadius: 8,
   },
   benefitsContainer: {
@@ -245,7 +259,6 @@ const styles = StyleSheet.create({
   },
   bulletPoint: {
     marginRight: 12,
-    color: '#34C759',
     fontWeight: 'bold',
     fontSize: 16,
   },
@@ -260,7 +273,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     padding: 16,
     borderRadius: 8,
-    backgroundColor: 'rgba(0, 122, 255, 0.1)',
   },
   setupStep: {
     marginBottom: 12,
@@ -275,21 +287,16 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     padding: 16,
     borderRadius: 8,
-    backgroundColor: 'rgba(52, 199, 89, 0.1)',
     borderWidth: 1,
-    borderColor: 'rgba(52, 199, 89, 0.3)',
   },
   lowBackupCodes: {
-    backgroundColor: 'rgba(255, 149, 0, 0.1)',
-    borderColor: 'rgba(255, 149, 0, 0.3)',
+    // Styles applied inline with theme colors
   },
   backupCodesTitle: {
     fontWeight: 'bold',
     marginBottom: 8,
-    color: '#34C759',
   },
   warningText: {
-    color: '#FF9500',
     fontSize: 14,
     marginBottom: 12,
     fontStyle: 'italic',

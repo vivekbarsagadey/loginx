@@ -30,7 +30,7 @@ export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(({ label, hel
 
   return (
     <View style={[styles.container, containerStyle]}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <Text style={[styles.label, { color: mutedColor }]}>{label}</Text>}
       <TextInput
         ref={ref}
         style={[styles.input, { color: textColor, backgroundColor, borderColor }, dynamicStyle, style]}
@@ -46,7 +46,7 @@ export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(({ label, hel
         {...rest}
       />
       {errorMessage && <Text style={[styles.helperText, { color: errorColor }]}>{errorMessage}</Text>}
-      {helperText && !errorMessage && <Text style={styles.helperText}>{helperText}</Text>}
+      {helperText && !errorMessage && <Text style={[styles.helperText, { color: mutedColor }]}>{helperText}</Text>}
     </View>
   );
 });
@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    color: '#6B7280',
     marginBottom: 8,
   },
   input: {
@@ -71,7 +70,6 @@ const styles = StyleSheet.create({
   },
   helperText: {
     fontSize: 13,
-    color: '#6B7280',
     marginTop: 8,
   },
 });

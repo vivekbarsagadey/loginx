@@ -22,6 +22,7 @@ export function TermsCheckbox({ checked, onChange, error }: TermsCheckboxProps) 
   const errorColor = useThemeColor({}, 'error');
   const borderColor = useThemeColor({}, 'border');
   const textColor = useThemeColor({}, 'text');
+  const onPrimaryColor = useThemeColor({}, 'on-primary');
 
   const [isPressed, setIsPressed] = useState(false);
 
@@ -52,7 +53,7 @@ export function TermsCheckbox({ checked, onChange, error }: TermsCheckboxProps) 
         accessibilityHint="Required to create an account"
         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
       >
-        {checked ? <Ionicons name="checkmark" size={18} color="white" /> : null}
+        {checked ? <Ionicons name="checkmark" size={18} color={onPrimaryColor} /> : null}
       </Pressable>
 
       <ThemedView style={styles.textContainer}>

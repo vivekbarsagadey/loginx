@@ -130,7 +130,9 @@ const styles = StyleSheet.create({
     height: 128,
     borderRadius: 64,
     marginBottom: 16,
-    backgroundColor: '#ccc',
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    // Use theme border color in component
   },
   inputContainer: {
     marginBottom: 16,

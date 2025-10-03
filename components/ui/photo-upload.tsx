@@ -23,6 +23,7 @@ export function PhotoUpload({ value, onChange, onError }: PhotoUploadProps) {
   const borderColor = useThemeColor({}, 'border');
   const bgColor = useThemeColor({}, 'surface-variant');
   const textColor = useThemeColor({}, 'text');
+  const onPrimaryColor = useThemeColor({}, 'on-primary');
 
   const requestPermissions = async () => {
     if (Platform.OS !== 'web') {
@@ -141,7 +142,7 @@ export function PhotoUpload({ value, onChange, onError }: PhotoUploadProps) {
 
         {value && !loading && (
           <Pressable style={[styles.removeButton, { backgroundColor: primaryColor }]} onPress={removePhoto} accessibilityLabel="Remove profile photo" accessibilityRole="button">
-            <Ionicons name="close" size={20} color="white" />
+            <Ionicons name="close" size={20} color={onPrimaryColor} />
           </Pressable>
         )}
       </View>
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
+    // Shadow color handled by platform defaults
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,

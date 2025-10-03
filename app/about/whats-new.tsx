@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     padding: 16,
     borderRadius: 8,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    // Background handled by theme
   },
   featureTitle: {
     fontWeight: 'bold',

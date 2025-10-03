@@ -1,11 +1,12 @@
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Platform, StyleSheet } from 'react-native';
 import { ThemedButton } from '../themed-button';
 import { ThemedText } from '../themed-text';
@@ -21,6 +22,9 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme || 'light'];
   const { setNotificationPermission, trackSlideSkip } = useOnboarding();
+
+  const warningColor = useThemeColor({}, 'warning');
+  const shadowColor = useThemeColor({}, 'text');
 
   const [permissionStatus, setPermissionStatus] = useState<'undetermined' | 'granted' | 'denied'>('undetermined');
   const [isLoading, setIsLoading] = useState(false);
@@ -186,7 +190,7 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
   return (
     <ThemedView style={[styles.container, { width }]}>
       <ThemedView style={styles.iconContainer}>
-        <ThemedView style={[styles.iconCircle, { backgroundColor: getStatusColor() }]}>
+        <ThemedView style={[styles.iconCircle, { backgroundColor: getStatusColor(), shadowColor }]}>
           <Ionicons name={getStatusIcon() as keyof typeof Ionicons.glyphMap} size={64} color={theme.background} />
         </ThemedView>
       </ThemedView>
@@ -198,7 +202,7 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
       {renderContent()}
 
       {permissionStatus === 'denied' && (
-        <ThemedView style={styles.warningContainer}>
+        <ThemedView style={[styles.warningContainer, { backgroundColor: warningColor + '1A' }]}>
           <Ionicons name="warning" size={20} color={theme.warning} />
           <ThemedText type="caption" style={[styles.warningText, { color: theme.warning }]}>
             {i18n.t('onb.notifications.settingsNote')}
@@ -225,7 +229,6 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
@@ -278,7 +281,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: 'rgba(255, 193, 7, 0.1)',
   },
   warningText: {
     marginLeft: 8,

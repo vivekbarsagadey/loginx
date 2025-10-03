@@ -7,6 +7,7 @@ import { auth } from '@/firebase-config';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
 import { useSecuritySettings } from '@/hooks/use-security-settings';
 import { useSocialAuth } from '@/hooks/use-social-auth';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
 
@@ -36,6 +37,9 @@ export default function LoginScreen() {
   const { isAvailable: biometricAvailable, isEnabled: biometricEnabled, authenticateWithBiometric, biometricTypeName } = useBiometricAuth();
 
   const { isAccountLocked, remainingAttempts, incrementLoginAttempts, resetLoginAttempts, getTimeUntilUnlock } = useSecuritySettings();
+
+  const warningColor = useThemeColor({}, 'warning');
+  const errorColor = useThemeColor({}, 'error');
 
   const {
     control,
@@ -195,15 +199,31 @@ export default function LoginScreen() {
 
       {/* Security Warning */}
       {remainingAttempts < 5 && remainingAttempts > 0 && !isAccountLocked() && (
-        <View style={styles.warningContainer}>
-          <ThemedText style={styles.warningText}>⚠️ {remainingAttempts} login attempts remaining</ThemedText>
+        <View
+          style={[
+            styles.warningContainer,
+            {
+              backgroundColor: warningColor + '1A',
+              borderColor: warningColor + '4D',
+            },
+          ]}
+        >
+          <ThemedText style={[styles.warningText, { color: warningColor }]}>⚠️ {remainingAttempts} login attempts remaining</ThemedText>
         </View>
       )}
 
       {/* Account Locked Warning */}
       {isAccountLocked() && (
-        <View style={styles.lockoutContainer}>
-          <ThemedText style={styles.lockoutText}>🔒 Account temporarily locked. Try again in {getTimeUntilUnlock()} minutes.</ThemedText>
+        <View
+          style={[
+            styles.lockoutContainer,
+            {
+              backgroundColor: errorColor + '1A',
+              borderColor: errorColor + '4D',
+            },
+          ]}
+        >
+          <ThemedText style={[styles.lockoutText, { color: errorColor }]}>🔒 Account temporarily locked. Try again in {getTimeUntilUnlock()} minutes.</ThemedText>
         </View>
       )}
 
@@ -253,27 +273,21 @@ const styles = StyleSheet.create({
   warningContainer: {
     marginTop: 16,
     padding: 12,
-    backgroundColor: 'rgba(255, 149, 0, 0.1)',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: 'rgba(255, 149, 0, 0.3)',
   },
   warningText: {
     textAlign: 'center',
-    color: '#ff9500',
     fontSize: 14,
   },
   lockoutContainer: {
     marginTop: 16,
     padding: 12,
-    backgroundColor: 'rgba(255, 59, 48, 0.1)',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: 'rgba(255, 59, 48, 0.3)',
   },
   lockoutText: {
     textAlign: 'center',
-    color: '#ff3b30',
     fontSize: 14,
   },
   linkButton: {

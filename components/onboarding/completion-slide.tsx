@@ -1,6 +1,7 @@
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet } from 'react-native';
@@ -17,6 +18,7 @@ export const CompletionSlide = ({ width, onComplete }: CompletionSlideProps) => 
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme || 'light'];
   const { permissions, analytics } = useOnboarding();
+  const shadowColor = useThemeColor({}, 'text');
 
   const completedFeatures = [
     {
@@ -48,7 +50,7 @@ export const CompletionSlide = ({ width, onComplete }: CompletionSlideProps) => 
   return (
     <ThemedView style={[styles.container, { width }]}>
       <ThemedView style={styles.header}>
-        <ThemedView style={[styles.iconCircle, { backgroundColor: theme.success }]}>
+        <ThemedView style={[styles.iconCircle, { backgroundColor: theme.success, shadowColor }]}>
           <Ionicons name="checkmark-circle" size={64} color={theme.background} />
         </ThemedView>
 
@@ -107,7 +109,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 24,
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,

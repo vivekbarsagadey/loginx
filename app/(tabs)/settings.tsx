@@ -126,7 +126,7 @@ export default function SettingsScreen() {
       height: 64,
       borderRadius: 32,
       marginRight: 16,
-      backgroundColor: '#ccc',
+      opacity: 0.5,
     },
     section: {
       marginBottom: 24,

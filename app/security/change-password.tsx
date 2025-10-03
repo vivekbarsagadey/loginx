@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     padding: 16,
     borderRadius: 8,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    // Background handled by theme
   },
   requirementsTitle: {
     marginBottom: 12,

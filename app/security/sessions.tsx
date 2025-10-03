@@ -1,6 +1,7 @@
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { useState } from 'react';
 import { Alert, ScrollView, StyleSheet } from 'react-native';
@@ -15,13 +16,16 @@ interface Session {
 }
 
 export default function SessionsScreen() {
+  const successColor = useThemeColor({}, 'success');
+  const onSuccessColor = useThemeColor({}, 'on-primary'); // Using on-primary for contrast
+
   const [sessions, setSessions] = useState<Session[]>([
     {
       id: '1',
       device: 'iPhone 15 Pro',
-      location: 'New York, NY',
-      lastActive: '2 minutes ago',
-      ipAddress: '192.168.1.100',
+      location: 'San Francisco, CA',
+      lastActive: 'Active now',
+      ipAddress: '192.168.1.1',
       isCurrent: true,
     },
     {
@@ -72,8 +76,8 @@ export default function SessionsScreen() {
           {session.device}
         </ThemedText>
         {session.isCurrent && (
-          <ThemedView style={styles.currentBadge}>
-            <ThemedText style={styles.currentBadgeText}>Current</ThemedText>
+          <ThemedView style={[styles.currentBadge, { backgroundColor: successColor }]}>
+            <ThemedText style={[styles.currentBadgeText, { color: onSuccessColor }]}>Current</ThemedText>
           </ThemedView>
         )}
       </ThemedView>
@@ -150,7 +154,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     padding: 16,
     borderRadius: 8,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    // Background handled by theme
   },
   sessionHeader: {
     flexDirection: 'row',
@@ -163,13 +167,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   currentBadge: {
-    backgroundColor: '#34C759',
+    // Use theme success color in component
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
   },
   currentBadgeText: {
-    color: 'white',
     fontSize: 12,
     fontWeight: 'bold',
   },

@@ -1,3 +1,4 @@
+import { useThemeColor } from '@/hooks/use-theme-color';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ThemedButton } from './themed-button';
@@ -67,6 +68,9 @@ export class ErrorBoundary extends Component<Props, State> {
  * Default fallback UI shown when an error is caught
  */
 function ErrorFallback({ error, onReset }: { error: Error | null; onReset: () => void }) {
+  const errorColor = useThemeColor({}, 'error');
+  const mutedColor = useThemeColor({}, 'text-muted');
+
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="h1" style={styles.title}>
@@ -76,12 +80,12 @@ function ErrorFallback({ error, onReset }: { error: Error | null; onReset: () =>
         We encountered an unexpected error. Don&apos;t worry, your data is safe.
       </ThemedText>
       {__DEV__ && error && (
-        <View style={styles.errorDetails}>
-          <ThemedText type="caption" style={styles.errorText}>
+        <View style={[styles.errorDetails, { backgroundColor: errorColor + '1A' }]}>
+          <ThemedText type="caption" style={[styles.errorText, { color: errorColor }]}>
             {error.message}
           </ThemedText>
           {error.stack && (
-            <ThemedText type="caption" style={styles.stackText}>
+            <ThemedText type="caption" style={[styles.stackText, { color: mutedColor }]}>
               {error.stack.slice(0, 500)}
             </ThemedText>
           )}
@@ -111,16 +115,13 @@ const styles = StyleSheet.create({
   errorDetails: {
     marginBottom: 24,
     padding: 16,
-    backgroundColor: 'rgba(255, 0, 0, 0.1)',
     borderRadius: 8,
     maxWidth: '100%',
   },
   errorText: {
-    color: '#ff0000',
     marginBottom: 8,
   },
   stackText: {
-    color: '#666',
     fontSize: 10,
   },
   button: {

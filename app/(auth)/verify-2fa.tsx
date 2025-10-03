@@ -2,6 +2,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
@@ -24,6 +25,7 @@ export default function Verify2FAScreen() {
   const [backupCode, setBackupCode] = useState('');
 
   const { consumeBackupCode, isBackupCodesLow, backupCodesCount } = useTwoFactorAuth();
+  const warningColor = useThemeColor({}, 'warning');
 
   const codeRef = useRef<TextInput>(null);
   const backupCodeRef = useRef<TextInput>(null);
@@ -180,7 +182,7 @@ export default function Verify2FAScreen() {
               ⚠️ Backup codes can only be used once
             </ThemedText>
             {isBackupCodesLow && (
-              <ThemedText type="caption" style={styles.lowCodesWarning}>
+              <ThemedText type="caption" style={[styles.lowCodesWarning, { color: warningColor }]}>
                 Only {backupCodesCount} backup codes remaining
               </ThemedText>
             )}
@@ -293,7 +295,6 @@ const styles = StyleSheet.create({
   },
   lowCodesWarning: {
     textAlign: 'center',
-    color: '#ff9500',
     marginTop: 4,
   },
   button: {
