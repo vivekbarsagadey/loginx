@@ -307,7 +307,8 @@
       "upload": {
         "title": "Upload Error",
         "message": "Failed to upload image. Please try again."
-      }
+      },
+      "imageTooLarge": "Image must be smaller than 5MB. Please select a smaller image."
     },
     "validation": {
       "required": "Required",
@@ -332,10 +333,34 @@
   "profile": {
     "edit": {
       "title": "Edit Profile",
-      "nameLabel": "Name",
+      "basicInfo": "Basic Information",
+      "addressInfo": "Address (Optional)",
+      "nameLabel": "Display Name",
+      "emailLabel": "Email Address",
+      "ageLabel": "Age",
+      "addressLabel": "Street Address",
+      "cityLabel": "City",
+      "stateLabel": "State",
+      "zipCodeLabel": "Zip Code",
+      "agePlaceholder": "Enter your age",
+      "addressPlaceholder": "123 Main St",
+      "cityPlaceholder": "City",
+      "statePlaceholder": "CA",
+      "zipCodePlaceholder": "12345",
       "changePhoto": "Change Photo",
-      "saveButton": "Save",
-      "savingButton": "Saving..."
+      "uploading": "Uploading...",
+      "saveButton": "Save Changes",
+      "savingButton": "Saving...",
+      "unsavedChanges": "You have unsaved changes",
+      "emailHelperText": "To change your email, use the Update Email option in Settings",
+      "nameAccessibility": "Display name input field",
+      "emailAccessibility": "Email address (read-only)",
+      "ageAccessibility": "Age input field",
+      "addressAccessibility": "Street address input field",
+      "cityAccessibility": "City input field",
+      "stateAccessibility": "State code input field",
+      "zipCodeAccessibility": "Zip code input field",
+      "changePhotoAccessibility": "Change profile photo button"
     },
     "updateEmail": {
       "title": "Update Email Address",
