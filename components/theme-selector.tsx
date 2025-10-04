@@ -1,6 +1,5 @@
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useTheme } from '@/hooks/use-theme';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
@@ -11,26 +10,21 @@ const THEME_OPTIONS = ['system', 'light', 'dark'];
 
 export const ThemeSelector = () => {
   const { theme, persistTheme } = useTheme();
-  const colorScheme = useColorScheme();
-
-  const getColors = () => {
-    if (theme === 'system') {
-      return Colors[colorScheme || 'light'];
-    }
-    return Colors[theme];
-  };
-
-  const colors = getColors();
+  const primaryColor = useThemeColor({}, 'primary');
+  const onPrimaryColor = useThemeColor({}, 'on-primary');
+  const surfaceColor = useThemeColor({}, 'surface');
+  const textColor = useThemeColor({}, 'text');
+  const borderColor = useThemeColor({}, 'border');
 
   return (
     <ThemedView>
       <ThemedText style={styles.label}>{i18n.t('onb.personalize.theme')}</ThemedText>
-      <ThemedView style={styles.container}>
+      <ThemedView style={[styles.container, { borderColor: borderColor }]}>
         {THEME_OPTIONS.map((option) => (
-          <Pressable key={option} style={[styles.chip, { backgroundColor: theme === option ? colors.primary : colors.surface }]} onPress={() => persistTheme(option as 'light' | 'dark' | 'system')}>
+          <Pressable key={option} style={[styles.chip, { backgroundColor: theme === option ? primaryColor : surfaceColor }]} onPress={() => persistTheme(option as 'light' | 'dark' | 'system')}>
             <ThemedText
               style={{
-                color: theme === option ? colors['on-primary'] : colors.text,
+                color: theme === option ? onPrimaryColor : textColor,
                 fontWeight: '600',
               }}
             >
@@ -53,7 +47,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: Colors.light.border,
     overflow: 'hidden',
     backgroundColor: 'transparent',
   },

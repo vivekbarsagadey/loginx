@@ -29,6 +29,7 @@ export default function EditProfileScreen() {
 
   // Theme colors
   const tintColor = useThemeColor({}, 'primary');
+  const overlayColor = useThemeColor({}, 'text');
   const borderColor = useThemeColor({}, 'border');
 
   const handleUpdate = useCallback(async () => {
@@ -145,7 +146,7 @@ export default function EditProfileScreen() {
         >
           <Image source={{ uri: photoURL || defaultAvatarUri }} style={[styles.avatar, { borderColor }]} accessibilityIgnoresInvertColors={true} />
           {imageLoading && (
-            <ThemedView style={styles.imageLoadingOverlay}>
+            <ThemedView style={[styles.imageLoadingOverlay, { backgroundColor: overlayColor + '4D' }]}>
               <ActivityIndicator size="large" color={tintColor} />
             </ThemedView>
           )}
@@ -227,7 +228,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
     borderRadius: 64,
   },
   changePhotoText: {

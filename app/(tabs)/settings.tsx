@@ -2,9 +2,8 @@ import { deleteUserAccount } from '@/actions/user.action';
 import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { SettingsItem, settingsSections } from '@/config/settings';
-import { Colors } from '@/constants/theme';
 import { auth } from '@/firebase-config';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import { clear as clearCache } from '@/utils/cache';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
@@ -16,9 +15,13 @@ import { Alert, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SettingsScreen() {
-  const colorScheme = useColorScheme();
   const router = useRouter();
   const user = auth.currentUser;
+  const borderColor = useThemeColor({}, 'border');
+  const textMutedColor = useThemeColor({}, 'text-muted');
+  const tintColor = useThemeColor({}, 'primary');
+  const errorColor = useThemeColor({}, 'error');
+  const textColor = useThemeColor({}, 'text');
 
   const handleLogout = async () => {
     Alert.alert(
@@ -135,7 +138,7 @@ export default function SettingsScreen() {
       borderRadius: 12,
       overflow: 'hidden',
       borderWidth: 1,
-      borderColor: Colors[colorScheme ?? 'light'].border,
+      borderColor: borderColor,
     },
     settingRow: {
       flexDirection: 'row',
@@ -143,7 +146,7 @@ export default function SettingsScreen() {
       padding: 16,
       minHeight: 56,
       borderBottomWidth: 1,
-      borderBottomColor: Colors[colorScheme ?? 'light'].border,
+      borderBottomColor: borderColor,
     },
     settingRowLast: {
       borderBottomWidth: 0,
@@ -161,9 +164,9 @@ export default function SettingsScreen() {
           <Image source={{ uri: user?.photoURL ?? 'https://www.gravatar.com/avatar/?d=mp' }} style={styles.avatar} />
           <View>
             <ThemedText type="h2">{user?.displayName}</ThemedText>
-            <ThemedText style={{ color: Colors[colorScheme ?? 'light']['text-muted'] }}>{user?.email}</ThemedText>
+            <ThemedText style={{ color: textMutedColor }}>{user?.email}</ThemedText>
             <TouchableOpacity onPress={() => router.push('/profile/edit')}>
-              <ThemedText style={{ color: Colors[colorScheme ?? 'light'].tint }}>Edit profile ›</ThemedText>
+              <ThemedText style={{ color: tintColor }}>Edit profile ›</ThemedText>
             </TouchableOpacity>
           </View>
         </View>
@@ -178,20 +181,16 @@ export default function SettingsScreen() {
                   style={[styles.settingRow, itemIndex === section.items.length - 1 && styles.settingRowLast]}
                   onPress={() => handlePress(item)}
                 >
-                  <Feather
-                    name={item.icon as unknown as React.ComponentProps<typeof Feather>['name']}
-                    size={20}
-                    color={item.type === 'danger' ? Colors[colorScheme ?? 'light'].error : Colors[colorScheme ?? 'light'].text}
-                  />
+                  <Feather name={item.icon as React.ComponentProps<typeof Feather>['name']} size={24} color={item.type === 'danger' ? errorColor : textColor} />
                   <View style={styles.settingInfo}>
-                    <ThemedText style={{ color: item.type === 'danger' ? Colors[colorScheme ?? 'light'].error : Colors[colorScheme ?? 'light'].text }}>{item.title}</ThemedText>
+                    <ThemedText style={{ color: item.type === 'danger' ? errorColor : textColor }}>{item.title}</ThemedText>
                     {item.subtitle && (
-                      <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light']['text-muted'] }}>
+                      <ThemedText type="caption" style={{ color: textMutedColor }}>
                         {item.subtitle}
                       </ThemedText>
                     )}
                   </View>
-                  {(item.type === 'link' || item.type === 'action' || item.type === 'danger') && <Feather name="chevron-right" size={24} color={Colors[colorScheme ?? 'light']['text-muted']} />}
+                  {(item.type === 'link' || item.type === 'action' || item.type === 'danger') && <Feather name="chevron-right" size={24} color={textMutedColor} />}
                 </TouchableOpacity>
               ))}
             </View>

@@ -2,9 +2,8 @@ import { getUserProfile } from '@/actions/user.action';
 import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Colors } from '@/constants/theme';
 import { useAuth } from '@/hooks/use-auth-provider';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import { UserProfile } from '@/types/user';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
@@ -12,7 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function IndexScreen() {
   const { user } = useAuth();
-  const colorScheme = useColorScheme();
+  const borderColor = useThemeColor({}, 'border');
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -59,7 +58,7 @@ export default function IndexScreen() {
             </ThemedText>
             <ThemedText type="body">Age: {userProfile.age}</ThemedText>
 
-            <View style={[styles.section, { borderColor: Colors[colorScheme ?? 'light'].border }]}>
+            <View style={[styles.section, { borderColor: borderColor }]}>
               <ThemedText type="h2">Your Notification Preferences</ThemedText>
               <ThemedText>Push Notifications: {userProfile.pushEnabled ? 'Enabled' : 'Disabled'}</ThemedText>
               <ThemedText>Email Updates: {userProfile.emailUpdates ? 'Enabled' : 'Disabled'}</ThemedText>

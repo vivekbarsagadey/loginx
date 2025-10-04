@@ -1,7 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -14,8 +13,9 @@ const languages = [
 ];
 
 export default function LanguageScreen() {
-  const colorScheme = useColorScheme();
   const router = useRouter();
+  const borderColor = useThemeColor({}, 'border');
+  const tintColor = useThemeColor({}, 'primary');
 
   const setLanguage = (code: string) => {
     i18n.locale = code;
@@ -31,7 +31,7 @@ export default function LanguageScreen() {
       alignItems: 'center',
       padding: 16,
       borderBottomWidth: 1,
-      borderBottomColor: Colors[colorScheme ?? 'light'].border,
+      borderBottomColor: borderColor,
     },
     itemText: {
       flex: 1,
@@ -47,7 +47,7 @@ export default function LanguageScreen() {
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.item} onPress={() => setLanguage(item.code)}>
             <ThemedText style={styles.itemText}>{item.name}</ThemedText>
-            {i18n.locale.startsWith(item.code) && <Feather name="check" size={24} color={Colors[colorScheme ?? 'light'].tint} />}
+            {i18n.locale.startsWith(item.code) && <Feather name="check" size={24} color={tintColor} />}
           </TouchableOpacity>
         )}
       />

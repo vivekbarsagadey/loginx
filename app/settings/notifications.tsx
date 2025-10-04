@@ -2,12 +2,11 @@ import { updateSetting } from '@/actions/setting.action';
 import { getUserProfile } from '@/actions/user.action';
 import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
-import { Colors } from '@/constants/theme';
 import { auth } from '@/firebase-config';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import { showError } from '@/utils/error';
 import { Feather } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Switch, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -40,7 +39,12 @@ const notificationSettings: NotificationSetting[] = [
 ];
 
 export default function NotificationsScreen() {
-  const colorScheme = useColorScheme();
+  const user = auth.currentUser;
+  const borderColor = useThemeColor({}, 'border');
+  const backgroundColor = useThemeColor({}, 'bg');
+  const tintColor = useThemeColor({}, 'primary');
+  const textMutedColor = useThemeColor({}, 'text-muted');
+
   const [settings, setSettings] = useState<Record<string, boolean>>({
     pushEnabled: false,
     emailUpdates: false,
@@ -48,7 +52,6 @@ export default function NotificationsScreen() {
   });
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const [initialLoading, setInitialLoading] = useState(true);
-  const user = auth.currentUser;
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -104,15 +107,15 @@ export default function NotificationsScreen() {
       borderRadius: 12,
       overflow: 'hidden',
       borderWidth: 1,
-      borderColor: Colors[colorScheme ?? 'light'].border,
+      borderColor: borderColor,
     },
     settingRow: {
       flexDirection: 'row',
       alignItems: 'center',
       padding: 16,
       borderBottomWidth: 1,
-      borderBottomColor: Colors[colorScheme ?? 'light'].border,
-      backgroundColor: Colors[colorScheme ?? 'light'].background,
+      borderBottomColor: borderColor,
+      backgroundColor: backgroundColor,
     },
     settingRowLast: {
       borderBottomWidth: 0,
@@ -121,7 +124,7 @@ export default function NotificationsScreen() {
       width: 40,
       height: 40,
       borderRadius: 20,
-      backgroundColor: Colors[colorScheme ?? 'light'].tint + '20',
+      backgroundColor: tintColor + '20',
       justifyContent: 'center',
       alignItems: 'center',
       marginRight: 12,
@@ -142,7 +145,7 @@ export default function NotificationsScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={Colors[colorScheme ?? 'light'].tint} />
+          <ActivityIndicator size="large" color={tintColor} />
           <ThemedText style={{ marginTop: 16 }}>Loading settings...</ThemedText>
         </View>
       </SafeAreaView>
@@ -154,7 +157,7 @@ export default function NotificationsScreen() {
       <ThemedScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.header}>
           <ThemedText type="h2">Notification Preferences</ThemedText>
-          <ThemedText type="caption" style={{ marginTop: 8, color: Colors[colorScheme ?? 'light']['text-muted'] }}>
+          <ThemedText type="caption" style={{ marginTop: 8, color: textMutedColor }}>
             Choose what notifications you want to receive
           </ThemedText>
         </View>
@@ -163,11 +166,11 @@ export default function NotificationsScreen() {
           {notificationSettings.map((setting, index) => (
             <View key={setting.key} style={[styles.settingRow, index === notificationSettings.length - 1 && styles.settingRowLast]}>
               <View style={styles.iconContainer}>
-                <Feather name={setting.icon as React.ComponentProps<typeof Feather>['name']} size={20} color={Colors[colorScheme ?? 'light'].tint} />
+                <Feather name={setting.icon as React.ComponentProps<typeof Feather>['name']} size={20} color={tintColor} />
               </View>
               <View style={styles.settingInfo}>
                 <ThemedText style={{ fontWeight: '600', marginBottom: 4 }}>{setting.title}</ThemedText>
-                <ThemedText type="caption" style={{ color: Colors[colorScheme ?? 'light']['text-muted'] }}>
+                <ThemedText type="caption" style={{ color: textMutedColor }}>
                   {setting.description}
                 </ThemedText>
               </View>
@@ -178,8 +181,8 @@ export default function NotificationsScreen() {
                   value={settings[setting.key]}
                   onValueChange={(value) => handleToggle(setting.key, value)}
                   trackColor={{
-                    false: Colors[colorScheme ?? 'light'].border,
-                    true: Colors[colorScheme ?? 'light'].tint,
+                    false: borderColor,
+                    true: tintColor,
                   }}
                 />
               )}
