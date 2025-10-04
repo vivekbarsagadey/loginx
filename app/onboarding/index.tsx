@@ -3,8 +3,8 @@ import { BorderRadius, Spacing, TouchTarget } from '@/constants/layout';
 import i18n from '@/i18n';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { AccessibilityInfo, Dimensions, FlatList, Platform, Pressable, useColorScheme, View } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { AccessibilityInfo, Dimensions, FlatList, Platform, Pressable, StyleSheet, useColorScheme, View } from 'react-native';
 import Animated, { Extrapolation, interpolate, runOnJS, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -255,14 +255,14 @@ export default function Onboarding() {
   };
 
   return (
-    <ThemedView style={{ flex: 1 }}>
-      <Animated.View style={[{ position: 'absolute', right: Spacing.md, top: top + Spacing.md, zIndex: 1 }, skipButtonAnimatedStyle]}>
-        <Pressable onPress={skip} style={{ padding: Spacing.sm }}>
+    <ThemedView style={styles.container}>
+      <Animated.View style={[styles.skipButton, { top: top + Spacing.md }, skipButtonAnimatedStyle]}>
+        <Pressable onPress={skip} style={styles.skipButtonTouchable}>
           <ThemedText type="muted">{i18n.t('onb.cta.skip')} </ThemedText>
         </Pressable>
       </Animated.View>
 
-      <Animated.View style={[{ flex: 1 }, slideContainerStyle]}>
+      <Animated.View style={[styles.slideContainer, slideContainerStyle]}>
         <Animated.FlatList
           ref={ref}
           data={SLIDES}
@@ -276,7 +276,7 @@ export default function Onboarding() {
           decelerationRate="fast"
           snapToInterval={width}
           snapToAlignment="start"
-          style={{ flex: 1 }}
+          style={styles.flatList}
           accessible={true}
           accessibilityRole="tablist"
           accessibilityLabel={i18n.t('onb.accessibility.slideContainer')}
@@ -294,16 +294,11 @@ export default function Onboarding() {
         />
       </Animated.View>
 
-      <ThemedView style={{ paddingHorizontal: 16, paddingBottom: bottom + 16 }}>
+      <ThemedView style={{ paddingHorizontal: Spacing.md, paddingBottom: bottom + Spacing.md }}>
         {/* Enhanced Progress Indicator with Accessibility */}
-        <View style={{ marginBottom: 16 }}>
+        <View style={styles.progressWrapper}>
           <View
-            style={{
-              height: 4,
-              backgroundColor: theme['border-strong'],
-              borderRadius: 2,
-              marginBottom: 12,
-            }}
+            style={[styles.progressBar, { backgroundColor: theme['border-strong'] }]}
             accessible={true}
             accessibilityRole="progressbar"
             accessibilityLabel={i18n.t('onb.accessibility.progress', {
@@ -316,19 +311,10 @@ export default function Onboarding() {
               now: i + 1,
             }}
           >
-            <Animated.View
-              style={[
-                {
-                  height: '100%',
-                  backgroundColor: theme.primary,
-                  borderRadius: 2,
-                },
-                progressBarAnimatedStyle,
-              ]}
-            />
+            <Animated.View style={[styles.progressFill, { backgroundColor: theme.primary }, progressBarAnimatedStyle]} />
           </View>
 
-          <View style={{ flexDirection: 'row', justifyContent: 'center' }} accessible={true} accessibilityRole="tablist" accessibilityLabel={i18n.t('onb.accessibility.slideIndicators')}>
+          <View style={styles.indicatorsContainer} accessible={true} accessibilityRole="tablist" accessibilityLabel={i18n.t('onb.accessibility.slideIndicators')}>
             {SLIDES.map((slide, idx) => {
               const isActive = idx === i;
               const isCompleted = idx < i;
@@ -340,7 +326,7 @@ export default function Onboarding() {
                     width: isActive ? 12 : 8,
                     height: isActive ? 12 : 8,
                     borderRadius: isActive ? 6 : 4,
-                    marginHorizontal: 4,
+                    marginHorizontal: Spacing.xs,
                     backgroundColor: isCompleted || isActive ? theme.primary : theme['border-strong'],
                     transform: [{ scale: isActive ? 1.2 : 1 }],
                   }}
@@ -356,20 +342,14 @@ export default function Onboarding() {
             })}
           </View>
         </View>
-        <View style={{ flexDirection: 'row', gap: Spacing.md }}>
+        <View style={styles.buttonContainer}>
           {i > 0 && (
-            <Pressable
-              onPress={back}
-              style={{ height: TouchTarget.comfortable, borderRadius: BorderRadius.md, alignItems: 'center', justifyContent: 'center', backgroundColor: theme.surface, flex: 1 }}
-            >
-              <ThemedText style={{ fontWeight: '600' }}>{i18n.t('onb.cta.back')}</ThemedText>
+            <Pressable onPress={back} style={[styles.backButton, { backgroundColor: theme.surface }]}>
+              <ThemedText style={styles.buttonText}>{i18n.t('onb.cta.back')}</ThemedText>
             </Pressable>
           )}
-          <Pressable
-            onPress={next}
-            style={{ height: TouchTarget.comfortable, borderRadius: BorderRadius.md, alignItems: 'center', justifyContent: 'center', backgroundColor: theme.primary, flex: i > 0 ? 2 : 1 }}
-          >
-            <ThemedText type="inverse" style={{ fontWeight: '600' }}>
+          <Pressable onPress={next} style={[styles.nextButton, { backgroundColor: theme.primary, flex: i > 0 ? 2 : 1 }]}>
+            <ThemedText type="inverse" style={styles.buttonText}>
               {i < SLIDES.length - 1 ? i18n.t('onb.cta.next') : i18n.t('onb.cta.start')}
             </ThemedText>
           </Pressable>
@@ -378,3 +358,59 @@ export default function Onboarding() {
     </ThemedView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  skipButton: {
+    position: 'absolute',
+    right: Spacing.md,
+    zIndex: 1,
+  },
+  skipButtonTouchable: {
+    padding: Spacing.sm,
+  },
+  slideContainer: {
+    flex: 1,
+  },
+  flatList: {
+    flex: 1,
+  },
+  progressWrapper: {
+    marginBottom: Spacing.md,
+  },
+  progressBar: {
+    height: 4,
+    borderRadius: 2,
+    marginBottom: Spacing.xs + Spacing.sm,
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 2,
+  },
+  indicatorsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+  },
+  backButton: {
+    height: TouchTarget.comfortable,
+    borderRadius: BorderRadius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
+  nextButton: {
+    height: TouchTarget.comfortable,
+    borderRadius: BorderRadius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    fontWeight: '600',
+  },
+});

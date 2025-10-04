@@ -12,6 +12,7 @@ import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { Href, useRouter } from 'expo-router';
 import { deleteUser } from 'firebase/auth';
+import React from 'react';
 import { Alert, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 export default function SettingsScreen() {
@@ -115,44 +116,63 @@ export default function SettingsScreen() {
     }
   };
 
-  const styles = StyleSheet.create({
-    header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: Spacing.lg,
-    },
-    avatar: {
-      width: 64,
-      height: 64,
-      borderRadius: Spacing.xl,
-      marginRight: Spacing.md,
-      opacity: 0.5,
-    },
-    section: {
-      marginBottom: Spacing.lg,
-    },
-    sectionItems: {
-      borderRadius: BorderRadius.md,
-      overflow: 'hidden',
-      borderWidth: 1,
-      borderColor: borderColor,
-    },
-    settingRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: Spacing.md,
-      minHeight: TouchTarget.large,
-      borderBottomWidth: 1,
-      borderBottomColor: borderColor,
-    },
-    settingRowLast: {
-      borderBottomWidth: 0,
-    },
-    settingInfo: {
-      flex: 1,
-      marginLeft: Spacing.md,
-    },
-  });
+  const styles = React.useMemo(
+    () =>
+      StyleSheet.create({
+        header: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginBottom: Spacing.lg,
+        },
+        avatar: {
+          width: 64,
+          height: 64,
+          borderRadius: Spacing.xl,
+          marginRight: Spacing.md,
+          opacity: 0.5,
+        },
+        userInfo: {
+          color: textMutedColor,
+        },
+        editProfile: {
+          color: tintColor,
+        },
+        section: {
+          marginBottom: Spacing.lg,
+        },
+        sectionItems: {
+          borderRadius: BorderRadius.md,
+          overflow: 'hidden',
+          borderWidth: 1,
+          borderColor: borderColor,
+        },
+        settingRow: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          padding: Spacing.md,
+          minHeight: TouchTarget.large,
+          borderBottomWidth: 1,
+          borderBottomColor: borderColor,
+        },
+        settingRowLast: {
+          borderBottomWidth: 0,
+        },
+        settingInfo: {
+          flex: 1,
+          marginLeft: Spacing.md,
+        },
+        settingTitle: {
+          color: textColor,
+        },
+        settingTitleDanger: {
+          color: errorColor,
+        },
+        settingSubtitle: {
+          color: textMutedColor,
+        },
+      }),
+    [borderColor, textMutedColor, tintColor, textColor, errorColor]
+  );
 
   return (
     <ScreenContainer scrollable noPadding={false}>
@@ -160,9 +180,9 @@ export default function SettingsScreen() {
         <Image source={{ uri: user?.photoURL ?? 'https://www.gravatar.com/avatar/?d=mp' }} style={styles.avatar} />
         <View>
           <ThemedText type="h2">{user?.displayName}</ThemedText>
-          <ThemedText style={{ color: textMutedColor }}>{user?.email}</ThemedText>
+          <ThemedText style={styles.userInfo}>{user?.email}</ThemedText>
           <TouchableOpacity onPress={() => router.push('/profile/edit')}>
-            <ThemedText style={{ color: tintColor }}>Edit profile ›</ThemedText>
+            <ThemedText style={styles.editProfile}>Edit profile ›</ThemedText>
           </TouchableOpacity>
         </View>
       </View>
@@ -179,9 +199,9 @@ export default function SettingsScreen() {
               >
                 <Feather name={item.icon as React.ComponentProps<typeof Feather>['name']} size={24} color={item.type === 'danger' ? errorColor : textColor} />
                 <View style={styles.settingInfo}>
-                  <ThemedText style={{ color: item.type === 'danger' ? errorColor : textColor }}>{item.title}</ThemedText>
+                  <ThemedText style={item.type === 'danger' ? styles.settingTitleDanger : styles.settingTitle}>{item.title}</ThemedText>
                   {item.subtitle && (
-                    <ThemedText type="caption" style={{ color: textMutedColor }}>
+                    <ThemedText type="caption" style={styles.settingSubtitle}>
                       {item.subtitle}
                     </ThemedText>
                   )}

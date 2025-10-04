@@ -53,6 +53,66 @@ export default function NotificationsScreen() {
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const [initialLoading, setInitialLoading] = useState(true);
 
+  const styles = React.useMemo(
+    () =>
+      StyleSheet.create({
+        header: {
+          marginBottom: Spacing.lg,
+        },
+        headerSubtitle: {
+          marginTop: Spacing.sm,
+          color: textMutedColor,
+        },
+        settingsContainer: {
+          borderRadius: BorderRadius.md,
+          overflow: 'hidden',
+          borderWidth: 1,
+          borderColor: borderColor,
+        },
+        settingRow: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          padding: Spacing.md,
+          borderBottomWidth: 1,
+          borderBottomColor: borderColor,
+          backgroundColor: backgroundColor,
+        },
+        settingRowLast: {
+          borderBottomWidth: 0,
+        },
+        iconContainer: {
+          width: 40,
+          height: 40,
+          borderRadius: 20,
+          backgroundColor: tintColor + '20',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginRight: Spacing.md,
+        },
+        settingInfo: {
+          flex: 1,
+          marginRight: Spacing.md,
+        },
+        settingTitle: {
+          fontWeight: '600',
+          marginBottom: 4,
+        },
+        settingDescription: {
+          color: textMutedColor,
+        },
+        loadingContainer: {
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: Spacing.lg,
+        },
+        loadingText: {
+          marginTop: Spacing.md,
+        },
+      }),
+    [borderColor, backgroundColor, tintColor, textMutedColor]
+  );
+
   useEffect(() => {
     const fetchSettings = async () => {
       if (user) {
@@ -93,53 +153,11 @@ export default function NotificationsScreen() {
     }
   };
 
-  const styles = StyleSheet.create({
-    header: {
-      marginBottom: Spacing.lg,
-    },
-    settingsContainer: {
-      borderRadius: BorderRadius.md,
-      overflow: 'hidden',
-      borderWidth: 1,
-      borderColor: borderColor,
-    },
-    settingRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: Spacing.md,
-      borderBottomWidth: 1,
-      borderBottomColor: borderColor,
-      backgroundColor: backgroundColor,
-    },
-    settingRowLast: {
-      borderBottomWidth: 0,
-    },
-    iconContainer: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
-      backgroundColor: tintColor + '20',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginRight: Spacing.md,
-    },
-    settingInfo: {
-      flex: 1,
-      marginRight: Spacing.md,
-    },
-    loadingContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: Spacing.lg,
-    },
-  });
-
   if (initialLoading) {
     return (
       <ScreenContainer centerContent>
         <ActivityIndicator size="large" color={tintColor} />
-        <ThemedText style={{ marginTop: 16 }}>Loading settings...</ThemedText>
+        <ThemedText style={styles.loadingText}>Loading settings...</ThemedText>
       </ScreenContainer>
     );
   }
@@ -148,7 +166,7 @@ export default function NotificationsScreen() {
     <ScreenContainer scrollable>
       <View style={styles.header}>
         <ThemedText type="h2">Notification Preferences</ThemedText>
-        <ThemedText type="caption" style={{ marginTop: Spacing.sm, color: textMutedColor }}>
+        <ThemedText type="caption" style={styles.headerSubtitle}>
           Choose what notifications you want to receive
         </ThemedText>
       </View>
@@ -160,8 +178,8 @@ export default function NotificationsScreen() {
               <Feather name={setting.icon as React.ComponentProps<typeof Feather>['name']} size={20} color={tintColor} />
             </View>
             <View style={styles.settingInfo}>
-              <ThemedText style={{ fontWeight: '600', marginBottom: 4 }}>{setting.title}</ThemedText>
-              <ThemedText type="caption" style={{ color: textMutedColor }}>
+              <ThemedText style={styles.settingTitle}>{setting.title}</ThemedText>
+              <ThemedText type="caption" style={styles.settingDescription}>
                 {setting.description}
               </ThemedText>
             </View>

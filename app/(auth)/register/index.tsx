@@ -273,7 +273,6 @@ export default function RegisterScreen() {
   const progressColor = useThemeColor({}, 'primary');
   const progressBgColor = useThemeColor({}, 'border');
   const textColor = useThemeColor({}, 'text');
-  const mutedColor = useThemeColor({}, 'text-muted');
 
   useEffect(() => {
     router.setParams({ title: STEPS[currentStep].title });
@@ -282,7 +281,7 @@ export default function RegisterScreen() {
   // Progress Indicator Component
   const ProgressIndicator = () => (
     <ThemedView style={styles.progressContainer}>
-      <ThemedText type="caption" style={{ color: mutedColor }}>
+      <ThemedText type="caption" style={styles.progressText}>
         Step {currentStep + 1} of {STEPS.length}
       </ThemedText>
       <View style={styles.progressBarContainer}>
@@ -379,6 +378,9 @@ const styles = StyleSheet.create({
   progressContainer: {
     paddingVertical: Spacing.md,
     gap: Spacing.sm,
+  },
+  progressText: {
+    // Color will be set by ThemedText's 'caption' type
   },
   stepTitle: {
     fontWeight: '600',

@@ -5,6 +5,7 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import React from 'react';
 import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 
 const languages = [
@@ -23,22 +24,26 @@ export default function LanguageScreen() {
     router.back();
   };
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-    item: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: Spacing.md,
-      borderBottomWidth: 1,
-      borderBottomColor: borderColor,
-    },
-    itemText: {
-      flex: 1,
-      marginLeft: Spacing.md,
-    },
-  });
+  const styles = React.useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          flex: 1,
+        },
+        item: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          padding: Spacing.md,
+          borderBottomWidth: 1,
+          borderBottomColor: borderColor,
+        },
+        itemText: {
+          flex: 1,
+          marginLeft: Spacing.md,
+        },
+      }),
+    [borderColor]
+  );
 
   return (
     <ThemedView style={styles.container}>
