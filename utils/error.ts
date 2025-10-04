@@ -1,5 +1,14 @@
 import i18n from '@/i18n';
-import { Alert } from 'react-native';
+
+// Global error handler callback (set by root component)
+let globalErrorHandler: ((title: string, message: string) => void) | null = null;
+
+/**
+ * Set the global error handler (called from root component)
+ */
+export const setGlobalErrorHandler = (handler: (title: string, message: string) => void) => {
+  globalErrorHandler = handler;
+};
 
 interface ErrorInfo {
   title: string;
@@ -89,10 +98,19 @@ export const getErrorInfo = (error: unknown): ErrorInfo => {
 export const showError = (error: unknown): void => {
   try {
     const { title, message } = getErrorInfo(error);
-    Alert.alert(title, message);
+    if (globalErrorHandler) {
+      globalErrorHandler(title, message);
+    } else {
+      // Fallback to console if no handler is set
+      console.error(`[${title}] ${message}`);
+    }
   } catch (displayError) {
     // Fallback if error display fails
     console.error('[Error Display] Failed to show error:', displayError);
-    Alert.alert(i18n.t('errors.generic.title'), i18n.t('errors.generic.message'));
+    if (globalErrorHandler) {
+      globalErrorHandler(i18n.t('errors.generic.title'), i18n.t('errors.generic.message'));
+    } else {
+      console.error('[Error] An unexpected error occurred');
+    }
   }
 };

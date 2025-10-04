@@ -236,6 +236,49 @@
       "slideIndicators": "Indicadores de navegación de diapositivas"
     }
   },
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancelar",
+    "continue": "Continuar",
+    "retry": "Reintentar",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito"
+  },
+  "dialogs": {
+    "buttons": {
+      "ok": "OK",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar",
+      "delete": "Eliminar",
+      "clear": "Limpiar",
+      "logOut": "Cerrar Sesión"
+    },
+    "settings": {
+      "logout": {
+        "title": "Cerrar Sesión",
+        "message": "¿Estás seguro de que quieres cerrar sesión?"
+      },
+      "clearCache": {
+        "title": "Limpiar Caché",
+        "message": "Esto borrará todos los datos en caché. Los datos de tu cuenta permanecerán seguros. ¿Continuar?"
+      },
+      "deleteAccount": {
+        "title": "Eliminar Cuenta",
+        "message": "¿Estás seguro de que quieres eliminar permanentemente tu cuenta? Esta acción no se puede deshacer y todos tus datos se perderán."
+      }
+    },
+    "examples": {
+      "alert": {
+        "title": "Éxito",
+        "message": "¡Tu acción se completó exitosamente!"
+      },
+      "confirmation": {
+        "title": "Confirmar Acción",
+        "message": "¿Estás seguro de que quieres continuar con esta acción?"
+      }
+    }
+  },
   "errors": {
     "network": {
       "title": "Error de red",

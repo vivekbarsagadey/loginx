@@ -2,10 +2,13 @@ import { deleteUserAccount } from '@/actions/user.action';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
+import { ConfirmationDialog } from '@/components/ui/dialog';
 import { SettingsItem, settingsSections } from '@/config/settings';
 import { Spacing, TouchTarget } from '@/constants/layout';
 import { auth } from '@/firebase-config';
+import { useConfirmation } from '@/hooks/use-dialog';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import i18n from '@/i18n';
 import { clear as clearCache } from '@/utils/cache';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
@@ -14,7 +17,7 @@ import * as Haptics from 'expo-haptics';
 import { Href, useRouter } from 'expo-router';
 import { deleteUser } from 'firebase/auth';
 import React from 'react';
-import { Alert, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -25,77 +28,65 @@ export default function SettingsScreen() {
   const errorColor = useThemeColor({}, 'error');
   const textColor = useThemeColor({}, 'text');
 
+  // Dialog states
+  const logoutDialog = useConfirmation();
+  const clearCacheDialog = useConfirmation();
+  const deleteAccountDialog = useConfirmation();
+  const [isDeleting, setIsDeleting] = React.useState(false);
+
   const handleLogout = async () => {
-    Alert.alert(
-      'Log Out',
-      'Are you sure you want to log out?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Log Out',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              await auth.signOut();
-            } catch (error) {
-              showError(error);
-            }
-          },
-        },
-      ],
-      { cancelable: true }
-    );
+    logoutDialog.show({
+      title: i18n.t('dialogs.settings.logout.title'),
+      message: i18n.t('dialogs.settings.logout.message'),
+      destructive: false,
+      onConfirm: async () => {
+        try {
+          await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          await auth.signOut();
+        } catch (error) {
+          showError(error);
+        }
+      },
+    });
   };
 
   const handleClearCache = async () => {
-    Alert.alert(
-      'Clear Cache',
-      'This will clear all cached data. Your account data will remain safe. Continue?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Clear',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              clearCache();
-              showSuccess('Success', 'Cache cleared successfully');
-            } catch (error) {
-              showError(error);
-            }
-          },
-        },
-      ],
-      { cancelable: true }
-    );
+    clearCacheDialog.show({
+      title: i18n.t('dialogs.settings.clearCache.title'),
+      message: i18n.t('dialogs.settings.clearCache.message'),
+      destructive: false,
+      onConfirm: async () => {
+        try {
+          await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          clearCache();
+          showSuccess('Success', 'Cache cleared successfully');
+        } catch (error) {
+          showError(error);
+        }
+      },
+    });
   };
 
   const handleDeleteAccount = async () => {
-    Alert.alert(
-      'Delete Account',
-      'Are you sure you want to permanently delete your account? This action cannot be undone and all your data will be lost.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            if (user) {
-              try {
-                await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-                await deleteUserAccount(user.uid);
-                await deleteUser(user);
-              } catch (error: unknown) {
-                showError(error);
-              }
-            }
-          },
-        },
-      ],
-      { cancelable: true }
-    );
+    deleteAccountDialog.show({
+      title: i18n.t('dialogs.settings.deleteAccount.title'),
+      message: i18n.t('dialogs.settings.deleteAccount.message'),
+      destructive: true,
+      onConfirm: async () => {
+        if (user) {
+          try {
+            setIsDeleting(true);
+            await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+            await deleteUserAccount(user.uid);
+            await deleteUser(user);
+          } catch (error: unknown) {
+            showError(error);
+          } finally {
+            setIsDeleting(false);
+          }
+        }
+      },
+    });
   };
 
   const handlePress = async (item: SettingsItem) => {
@@ -223,6 +214,47 @@ export default function SettingsScreen() {
           </Card>
         </View>
       ))}
+
+      {/* Confirmation Dialogs */}
+      {logoutDialog.config && (
+        <ConfirmationDialog
+          visible={logoutDialog.visible}
+          onClose={logoutDialog.hide}
+          title={logoutDialog.config.title}
+          message={logoutDialog.config.message}
+          confirmText={i18n.t('dialogs.buttons.logOut')}
+          cancelText={i18n.t('dialogs.buttons.cancel')}
+          onConfirm={logoutDialog.config.onConfirm}
+          destructive={logoutDialog.config.destructive}
+        />
+      )}
+
+      {clearCacheDialog.config && (
+        <ConfirmationDialog
+          visible={clearCacheDialog.visible}
+          onClose={clearCacheDialog.hide}
+          title={clearCacheDialog.config.title}
+          message={clearCacheDialog.config.message}
+          confirmText={i18n.t('dialogs.buttons.clear')}
+          cancelText={i18n.t('dialogs.buttons.cancel')}
+          onConfirm={clearCacheDialog.config.onConfirm}
+          destructive={clearCacheDialog.config.destructive}
+        />
+      )}
+
+      {deleteAccountDialog.config && (
+        <ConfirmationDialog
+          visible={deleteAccountDialog.visible}
+          onClose={deleteAccountDialog.hide}
+          title={deleteAccountDialog.config.title}
+          message={deleteAccountDialog.config.message}
+          confirmText={i18n.t('dialogs.buttons.delete')}
+          cancelText={i18n.t('dialogs.buttons.cancel')}
+          onConfirm={deleteAccountDialog.config.onConfirm}
+          destructive={deleteAccountDialog.config.destructive}
+          loading={isDeleting}
+        />
+      )}
     </ScreenContainer>
   );
 }

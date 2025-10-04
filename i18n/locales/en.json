@@ -8,6 +8,40 @@
     "error": "Error",
     "success": "Success"
   },
+  "dialogs": {
+    "buttons": {
+      "ok": "OK",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "delete": "Delete",
+      "clear": "Clear",
+      "logOut": "Log Out"
+    },
+    "settings": {
+      "logout": {
+        "title": "Log Out",
+        "message": "Are you sure you want to log out?"
+      },
+      "clearCache": {
+        "title": "Clear Cache",
+        "message": "This will clear all cached data. Your account data will remain safe. Continue?"
+      },
+      "deleteAccount": {
+        "title": "Delete Account",
+        "message": "Are you sure you want to permanently delete your account? This action cannot be undone and all your data will be lost."
+      }
+    },
+    "examples": {
+      "alert": {
+        "title": "Success",
+        "message": "Your action was completed successfully!"
+      },
+      "confirmation": {
+        "title": "Confirm Action",
+        "message": "Are you sure you want to proceed with this action?"
+      }
+    }
+  },
   "onb": {
     "welcome": {
       "title": "Welcome to {app}",

@@ -5,6 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
 import { ErrorBoundary } from '@/components/error-boundary';
+import { GlobalDialogProvider } from '@/components/global-dialog-provider';
 import { Routes } from '@/constants/routes';
 import { AuthProvider, useAuth } from '@/hooks/use-auth-provider';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -76,13 +77,15 @@ export default function RootLayout() {
 
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <OnboardingProvider>
-          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-            <RootLayoutNav />
-          </ThemeProvider>
-        </OnboardingProvider>
-      </AuthProvider>
+      <GlobalDialogProvider>
+        <AuthProvider>
+          <OnboardingProvider>
+            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+              <RootLayoutNav />
+            </ThemeProvider>
+          </OnboardingProvider>
+        </AuthProvider>
+      </GlobalDialogProvider>
     </ErrorBoundary>
   );
 }
