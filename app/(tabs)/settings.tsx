@@ -1,8 +1,9 @@
 import { deleteUserAccount } from '@/actions/user.action';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
+import { Card } from '@/components/ui/card';
 import { SettingsItem, settingsSections } from '@/config/settings';
-import { BorderRadius, Spacing, TouchTarget } from '@/constants/layout';
+import { Spacing, TouchTarget } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { clear as clearCache } from '@/utils/cache';
@@ -119,33 +120,36 @@ export default function SettingsScreen() {
   const styles = React.useMemo(
     () =>
       StyleSheet.create({
+        profileCard: {
+          marginBottom: Spacing.lg,
+        },
         header: {
           flexDirection: 'row',
           alignItems: 'center',
-          marginBottom: Spacing.lg,
         },
         avatar: {
           width: 64,
           height: 64,
-          borderRadius: Spacing.xl,
+          borderRadius: 32,
           marginRight: Spacing.md,
           opacity: 0.5,
         },
-        userInfo: {
+        userDetails: {
           flex: 1,
+        },
+        userInfo: {
           color: textMutedColor,
+          marginTop: Spacing.xs,
         },
         editProfile: {
           color: tintColor,
+          marginTop: Spacing.sm,
         },
         section: {
           marginBottom: Spacing.lg,
         },
-        sectionItems: {
-          borderRadius: BorderRadius.md,
-          overflow: 'hidden',
-          borderWidth: 1,
-          borderColor: borderColor,
+        sectionTitle: {
+          marginBottom: Spacing.sm,
         },
         settingRow: {
           flexDirection: 'row',
@@ -177,21 +181,27 @@ export default function SettingsScreen() {
 
   return (
     <ScreenContainer scrollable noPadding={false}>
-      <View style={styles.header}>
-        <Image source={{ uri: user?.photoURL ?? 'https://www.gravatar.com/avatar/?d=mp' }} style={styles.avatar} />
-        <View>
-          <ThemedText type="h2">{user?.displayName}</ThemedText>
-          <ThemedText style={styles.userInfo}>{user?.email}</ThemedText>
-          <TouchableOpacity onPress={() => router.push('/profile/edit')}>
-            <ThemedText style={styles.editProfile}>Edit profile ›</ThemedText>
-          </TouchableOpacity>
+      <Card elevation={1} style={styles.profileCard}>
+        <View style={styles.header}>
+          <Image source={{ uri: user?.photoURL ?? 'https://www.gravatar.com/avatar/?d=mp' }} style={styles.avatar} />
+          <View style={styles.userDetails}>
+            <ThemedText type="h2">{user?.displayName}</ThemedText>
+            <ThemedText style={styles.userInfo}>{user?.email}</ThemedText>
+            <TouchableOpacity onPress={() => router.push('/profile/edit')}>
+              <ThemedText style={styles.editProfile}>Edit profile ›</ThemedText>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </Card>
 
       {settingsSections.map((section, sectionIndex) => (
         <View key={section.title || `section-${sectionIndex}`} style={styles.section}>
-          {section.title && <ThemedText type="h2">{section.title}</ThemedText>}
-          <View style={styles.sectionItems}>
+          {section.title && (
+            <ThemedText type="h2" style={styles.sectionTitle}>
+              {section.title}
+            </ThemedText>
+          )}
+          <Card elevation={1} noPadding>
             {section.items.map((item, itemIndex) => (
               <TouchableOpacity
                 key={`${sectionIndex}-${itemIndex}-${item.title}`}
@@ -210,7 +220,7 @@ export default function SettingsScreen() {
                 {(item.type === 'link' || item.type === 'action' || item.type === 'danger') && <Feather name="chevron-right" size={24} color={textMutedColor} />}
               </TouchableOpacity>
             ))}
-          </View>
+          </Card>
         </View>
       ))}
     </ScreenContainer>

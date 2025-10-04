@@ -1,16 +1,15 @@
 import { getUserProfile } from '@/actions/user.action';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
-import { BorderRadius, Spacing } from '@/constants/layout';
+import { Card } from '@/components/ui/card';
+import { Spacing } from '@/constants/layout';
 import { useAuth } from '@/hooks/use-auth-provider';
-import { useThemeColor } from '@/hooks/use-theme-color';
 import { UserProfile } from '@/types/user';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
 
 export default function IndexScreen() {
   const { user } = useAuth();
-  const borderColor = useThemeColor({}, 'border');
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -48,18 +47,42 @@ export default function IndexScreen() {
     <ScreenContainer scrollable>
       {userProfile ? (
         <>
-          <ThemedText type="h1">Welcome, {userProfile.displayName}!</ThemedText>
-          <ThemedText type="body" style={styles.email}>
-            {userProfile.email}
-          </ThemedText>
-          <ThemedText type="body">Age: {userProfile.age}</ThemedText>
-
-          <View style={[styles.section, { borderColor: borderColor }]}>
-            <ThemedText type="h2">Your Notification Preferences</ThemedText>
-            <ThemedText>Push Notifications: {userProfile.pushEnabled ? 'Enabled' : 'Disabled'}</ThemedText>
-            <ThemedText>Email Updates: {userProfile.emailUpdates ? 'Enabled' : 'Disabled'}</ThemedText>
-            <ThemedText>Marketing Tips: {userProfile.marketingTips ? 'Enabled' : 'Disabled'}</ThemedText>
+          <View style={styles.welcomeSection}>
+            <ThemedText type="h1">Welcome, {userProfile.displayName}!</ThemedText>
+            <ThemedText type="body" style={styles.email}>
+              {userProfile.email}
+            </ThemedText>
+            <ThemedText type="body" style={styles.age}>
+              Age: {userProfile.age}
+            </ThemedText>
           </View>
+
+          <Card elevation={1} style={styles.card}>
+            <ThemedText type="h2" style={styles.cardTitle}>
+              Your Notification Preferences
+            </ThemedText>
+
+            <View style={styles.preferenceRow}>
+              <ThemedText type="body">Push Notifications</ThemedText>
+              <ThemedText type="body" style={styles.preferenceValue}>
+                {userProfile.pushEnabled ? '✓ Enabled' : '✗ Disabled'}
+              </ThemedText>
+            </View>
+
+            <View style={styles.preferenceRow}>
+              <ThemedText type="body">Email Updates</ThemedText>
+              <ThemedText type="body" style={styles.preferenceValue}>
+                {userProfile.emailUpdates ? '✓ Enabled' : '✗ Disabled'}
+              </ThemedText>
+            </View>
+
+            <View style={styles.preferenceRow}>
+              <ThemedText type="body">Marketing Tips</ThemedText>
+              <ThemedText type="body" style={styles.preferenceValue}>
+                {userProfile.marketingTips ? '✓ Enabled' : '✗ Disabled'}
+              </ThemedText>
+            </View>
+          </Card>
         </>
       ) : (
         <ThemedText type="h1">Welcome!</ThemedText>
@@ -69,13 +92,30 @@ export default function IndexScreen() {
 }
 
 const styles = StyleSheet.create({
-  email: {
-    marginVertical: Spacing.md,
+  welcomeSection: {
+    marginBottom: Spacing.lg,
   },
-  section: {
-    marginTop: Spacing.xl,
-    padding: Spacing.md,
-    borderWidth: 1,
-    borderRadius: BorderRadius.sm,
+  email: {
+    marginTop: Spacing.sm,
+    opacity: 0.8,
+  },
+  age: {
+    marginTop: Spacing.xs,
+    opacity: 0.7,
+  },
+  card: {
+    marginBottom: Spacing.lg,
+  },
+  cardTitle: {
+    marginBottom: Spacing.md,
+  },
+  preferenceRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: Spacing.sm,
+  },
+  preferenceValue: {
+    opacity: 0.8,
   },
 });

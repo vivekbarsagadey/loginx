@@ -5,11 +5,11 @@
 
 export const Colors = {
   light: {
-    // Design System Tokens
-    bg: '#FFFFFF',
-    'bg-elevated': '#FFFFFF',
-    surface: '#FFFFFF',
-    'surface-variant': '#F6F7FA',
+    // Design System Tokens - Layered Surface System
+    bg: '#F9FAFB', // Base background (lowest layer)
+    'bg-elevated': '#FFFFFF', // Elevated background (slightly raised)
+    surface: '#FFFFFF', // Card surfaces (floating above bg)
+    'surface-variant': '#F3F4F6', // Alternative surface for nested content
     text: '#111827',
     'text-muted': '#6B7280',
     'inverse-text': '#F9FAFB',
@@ -30,11 +30,11 @@ export const Colors = {
     tabIconSelected: '#2563EB',
   },
   dark: {
-    // Design System Tokens
-    bg: '#0B1220',
-    'bg-elevated': '#111827',
-    surface: '#111827',
-    'surface-variant': '#0F172A',
+    // Design System Tokens - Layered Surface System
+    bg: '#0B1220', // Base background (lowest layer)
+    'bg-elevated': '#111827', // Elevated background (slightly lighter)
+    surface: '#1F2937', // Card surfaces (more elevated, lighter)
+    'surface-variant': '#374151', // Alternative surface (highest, lightest)
     text: '#F9FAFB',
     'text-muted': '#94A3B8',
     'inverse-text': '#111827',
