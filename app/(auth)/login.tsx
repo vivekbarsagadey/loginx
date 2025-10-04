@@ -259,12 +259,21 @@ const styles = StyleSheet.create({
   },
   input: {
     marginVertical: Spacing.sm,
+    width: '100%',
+    maxWidth: 500,
+    alignSelf: 'center',
   },
   button: {
     marginTop: Spacing.xl,
+    width: '100%',
+    maxWidth: 500,
+    alignSelf: 'center',
   },
   biometricButton: {
     marginTop: Spacing.md,
+    width: '100%',
+    maxWidth: 500,
+    alignSelf: 'center',
   },
   warningContainer: {
     marginTop: Spacing.md,

@@ -4,7 +4,7 @@ import i18n from '@/i18n';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { AccessibilityInfo, Dimensions, FlatList, Platform, Pressable, StyleSheet, useColorScheme, View } from 'react-native';
+import { AccessibilityInfo, FlatList, Platform, Pressable, StyleSheet, useColorScheme, useWindowDimensions, View } from 'react-native';
 import Animated, { Extrapolation, interpolate, runOnJS, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -43,7 +43,7 @@ export default function Onboarding() {
   const ref = useRef<FlatList>(null);
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme || 'light'];
-  const { width } = Dimensions.get('window');
+  const { width } = useWindowDimensions();
   const { top, bottom } = useSafeAreaInsets();
 
   // Enhanced Animation values

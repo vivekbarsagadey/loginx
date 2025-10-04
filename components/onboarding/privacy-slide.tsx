@@ -67,7 +67,7 @@ export const PrivacySlide = ({ width, onNext }: PrivacySlideProps) => {
 
   return (
     <ThemedView style={[styles.container, { width }]}>
-      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} bounces={false}>
         <ThemedView style={styles.header}>
           <ThemedView style={[styles.iconCircle, { backgroundColor: theme.primary }]}>
             <Ionicons name="lock-closed" size={64} color={theme.background} />
@@ -173,12 +173,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
+    flexGrow: 1,
     paddingHorizontal: 24,
     paddingTop: 24,
+    paddingBottom: 16,
+    alignItems: 'center',
   },
   header: {
     alignItems: 'center',
     marginBottom: 32,
+    width: '100%',
+    maxWidth: 600,
   },
   iconCircle: {
     width: 100,
@@ -204,6 +209,8 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 32,
+    width: '100%',
+    maxWidth: 600,
   },
   sectionTitle: {
     marginBottom: 16,
@@ -235,6 +242,8 @@ const styles = StyleSheet.create({
   },
   linksSection: {
     marginBottom: 24,
+    width: '100%',
+    maxWidth: 600,
   },
   linksSectionTitle: {
     marginBottom: 16,
@@ -260,6 +269,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingBottom: 24,
     paddingTop: 16,
+    width: '100%',
+    maxWidth: 600,
+    alignSelf: 'center',
   },
   trustBadge: {
     flexDirection: 'row',

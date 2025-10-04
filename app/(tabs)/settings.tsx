@@ -132,6 +132,7 @@ export default function SettingsScreen() {
           opacity: 0.5,
         },
         userInfo: {
+          flex: 1,
           color: textMutedColor,
         },
         editProfile: {

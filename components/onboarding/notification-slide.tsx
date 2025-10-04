@@ -221,26 +221,28 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
 
   return (
     <ThemedView style={[styles.container, { width }]}>
-      <ThemedView style={styles.iconContainer}>
-        <ThemedView style={[styles.iconCircle, { backgroundColor: getStatusColor(), shadowColor }]}>
-          <Ionicons name={getStatusIcon() as keyof typeof Ionicons.glyphMap} size={64} color={theme.background} />
+      <ThemedView style={styles.content}>
+        <ThemedView style={styles.iconContainer}>
+          <ThemedView style={[styles.iconCircle, { backgroundColor: getStatusColor(), shadowColor }]}>
+            <Ionicons name={getStatusIcon() as keyof typeof Ionicons.glyphMap} size={64} color={theme.background} />
+          </ThemedView>
         </ThemedView>
+
+        <ThemedText type="h1" style={styles.title}>
+          {i18n.t('onb.notifications.title')}
+        </ThemedText>
+
+        {renderContent()}
+
+        {permissionStatus === 'denied' && (
+          <ThemedView style={[styles.warningContainer, { backgroundColor: warningColor + '1A' }]}>
+            <Ionicons name="warning" size={20} color={theme.warning} />
+            <ThemedText type="caption" style={[styles.warningText, { color: theme.warning }]}>
+              {i18n.t('onb.notifications.settingsNote')}
+            </ThemedText>
+          </ThemedView>
+        )}
       </ThemedView>
-
-      <ThemedText type="h1" style={styles.title}>
-        {i18n.t('onb.notifications.title')}
-      </ThemedText>
-
-      {renderContent()}
-
-      {permissionStatus === 'denied' && (
-        <ThemedView style={[styles.warningContainer, { backgroundColor: warningColor + '1A' }]}>
-          <Ionicons name="warning" size={20} color={theme.warning} />
-          <ThemedText type="caption" style={[styles.warningText, { color: theme.warning }]}>
-            {i18n.t('onb.notifications.settingsNote')}
-          </ThemedText>
-        </ThemedView>
-      )}
     </ThemedView>
   );
 };
@@ -250,6 +252,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  content: {
+    width: '100%',
+    maxWidth: 600,
     alignItems: 'center',
   },
   iconContainer: {
@@ -295,6 +302,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     flex: 1,
     lineHeight: 20,
+    flexShrink: 1,
   },
   buttonContainer: {
     width: '100%',

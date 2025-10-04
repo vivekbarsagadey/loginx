@@ -9,12 +9,16 @@ import { ThemedView } from '../themed-view';
 export const Personalize = ({ width }: { width: number }) => {
   return (
     <ThemedView style={[styles.container, { width }]}>
-      <ThemedText type="h2">{i18n.t('onb.personalize.title')}</ThemedText>
-      <ThemeSelector />
-      <LanguagePicker />
-      <ThemedText type="muted" style={styles.note}>
-        You can change this anytime in Settings.
-      </ThemedText>
+      <ThemedView style={styles.content}>
+        <ThemedText type="h2" style={styles.title}>
+          {i18n.t('onb.personalize.title')}
+        </ThemedText>
+        <ThemeSelector />
+        <LanguagePicker />
+        <ThemedText type="muted" style={styles.note}>
+          You can change this anytime in Settings.
+        </ThemedText>
+      </ThemedView>
     </ThemedView>
   );
 };
@@ -22,11 +26,22 @@ export const Personalize = ({ width }: { width: number }) => {
 const styles = StyleSheet.create({
   container: {
     padding: Spacing.lg,
-    gap: Spacing.md,
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  content: {
+    width: '100%',
+    maxWidth: 600,
+    gap: Spacing.md,
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: Spacing.md,
   },
   note: {
     fontSize: 13,
+    textAlign: 'center',
+    marginTop: Spacing.sm,
   },
 });

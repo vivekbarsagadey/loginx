@@ -90,61 +90,63 @@ export const BiometricSlide = ({ width, onNext, onSkip }: BiometricSlideProps) =
 
   return (
     <ThemedView style={[styles.container, { width }]}>
-      <ThemedView style={styles.iconContainer}>
-        <ThemedView style={[styles.iconCircle, { backgroundColor: theme.primary }]}>
-          <Ionicons name={getBiometricIcon() as keyof typeof Ionicons.glyphMap} size={64} color={theme.background} />
+      <ThemedView style={styles.content}>
+        <ThemedView style={styles.iconContainer}>
+          <ThemedView style={[styles.iconCircle, { backgroundColor: theme.primary }]}>
+            <Ionicons name={getBiometricIcon() as keyof typeof Ionicons.glyphMap} size={64} color={theme.background} />
+          </ThemedView>
         </ThemedView>
-      </ThemedView>
 
-      <ThemedText type="h1" style={styles.title}>
-        {i18n.t('onb.biometric.title')}
-      </ThemedText>
+        <ThemedText type="h1" style={styles.title}>
+          {i18n.t('onb.biometric.title')}
+        </ThemedText>
 
-      <ThemedText type="body" style={styles.description}>
-        {getBiometricDescription()}
-      </ThemedText>
+        <ThemedText type="body" style={styles.description}>
+          {getBiometricDescription()}
+        </ThemedText>
 
-      {isAvailable && (
-        <ThemedView style={styles.benefitsContainer}>
-          <ThemedText type="h3" style={styles.benefitsTitle}>
-            {i18n.t('onb.biometric.benefits.title')}
-          </ThemedText>
-          {(i18n.t('onb.biometric.benefits.items', { returnObjects: true }) as string[]).map((benefit, index) => (
-            <ThemedView key={index} style={styles.benefitItem}>
-              <Ionicons name="checkmark-circle" size={20} color={theme.success} />
-              <ThemedText type="body" style={styles.benefitText}>
-                {benefit}
-              </ThemedText>
-            </ThemedView>
-          ))}
-        </ThemedView>
-      )}
-
-      <ThemedView style={styles.buttonContainer}>
-        {isAvailable && !isEnabled ? (
-          <ThemedButton
-            title={i18n.t('onb.biometric.enable', { biometricType: biometricTypeName })}
-            onPress={handleEnableBiometric}
-            disabled={isLoading || setupAttempted}
-            loading={isLoading}
-            style={styles.primaryButton}
-          />
-        ) : isEnabled ? (
-          <ThemedButton title={i18n.t('onb.cta.next')} onPress={onNext} style={styles.primaryButton} />
-        ) : (
-          <ThemedButton title={i18n.t('onb.biometric.notAvailable')} onPress={onNext} style={styles.primaryButton} />
+        {isAvailable && (
+          <ThemedView style={styles.benefitsContainer}>
+            <ThemedText type="h3" style={styles.benefitsTitle}>
+              {i18n.t('onb.biometric.benefits.title')}
+            </ThemedText>
+            {(i18n.t('onb.biometric.benefits.items', { returnObjects: true }) as string[]).map((benefit, index) => (
+              <ThemedView key={index} style={styles.benefitItem}>
+                <Ionicons name="checkmark-circle" size={20} color={theme.success} />
+                <ThemedText type="body" style={styles.benefitText}>
+                  {benefit}
+                </ThemedText>
+              </ThemedView>
+            ))}
+          </ThemedView>
         )}
 
-        <ThemedButton title={i18n.t('onb.biometric.skipButton')} onPress={handleSkip} variant="secondary" style={styles.secondaryButton} />
-      </ThemedView>
+        <ThemedView style={styles.buttonContainer}>
+          {isAvailable && !isEnabled ? (
+            <ThemedButton
+              title={i18n.t('onb.biometric.enable', { biometricType: biometricTypeName })}
+              onPress={handleEnableBiometric}
+              disabled={isLoading || setupAttempted}
+              loading={isLoading}
+              style={styles.primaryButton}
+            />
+          ) : isEnabled ? (
+            <ThemedButton title={i18n.t('onb.cta.next')} onPress={onNext} style={styles.primaryButton} />
+          ) : (
+            <ThemedButton title={i18n.t('onb.biometric.notAvailable')} onPress={onNext} style={styles.primaryButton} />
+          )}
 
-      {error && (
-        <ThemedView style={styles.errorContainer}>
-          <ThemedText type="caption" style={[styles.errorText, { color: theme.error }]}>
-            {error}
-          </ThemedText>
+          <ThemedButton title={i18n.t('onb.biometric.skipButton')} onPress={handleSkip} variant="secondary" style={styles.secondaryButton} />
         </ThemedView>
-      )}
+
+        {error && (
+          <ThemedView style={styles.errorContainer}>
+            <ThemedText type="caption" style={[styles.errorText, { color: theme.error }]}>
+              {error}
+            </ThemedText>
+          </ThemedView>
+        )}
+      </ThemedView>
     </ThemedView>
   );
 };
@@ -154,6 +156,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  content: {
+    width: '100%',
+    maxWidth: 600,
     alignItems: 'center',
   },
   iconContainer: {

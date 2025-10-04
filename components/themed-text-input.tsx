@@ -38,5 +38,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: InputField.paddingHorizontal,
     fontSize: InputField.fontSize,
     marginVertical: Spacing.sm,
+    width: '100%',
   },
 });

@@ -134,7 +134,7 @@ export const TutorialSlide = ({ width, onNext }: TutorialSlideProps) => {
 
   return (
     <ThemedView style={[styles.container, { width }]}>
-      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} bounces={false}>
         <ThemedView style={styles.header}>
           <ThemedText type="h1" style={styles.title}>
             {i18n.t('onb.tutorials.title')}
@@ -274,8 +274,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
+    flexGrow: 1,
     paddingHorizontal: 24,
     paddingTop: 24,
+    paddingBottom: 16,
   },
   header: {
     alignItems: 'center',
@@ -352,7 +354,9 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center',
     minHeight: 120,
+    maxHeight: 180,
     justifyContent: 'center',
+    overflow: 'hidden',
   },
   demoContent: {
     alignItems: 'center',

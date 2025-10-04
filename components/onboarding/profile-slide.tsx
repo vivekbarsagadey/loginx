@@ -68,7 +68,7 @@ export const ProfileSlide = ({ width, onNext, onSkip }: ProfileSlideProps) => {
 
   return (
     <ThemedView style={[styles.container, { width }]}>
-      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} bounces={false}>
         <ThemedView style={styles.header}>
           <ThemedView style={[styles.iconContainer, { backgroundColor: `${theme.primary}20` }]}>
             <Ionicons name="person-circle" size={48} color={theme.primary} />
@@ -214,8 +214,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
+    flexGrow: 1,
     paddingHorizontal: 24,
     paddingTop: 24,
+    paddingBottom: 16,
   },
   header: {
     alignItems: 'center',

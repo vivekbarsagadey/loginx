@@ -7,10 +7,14 @@ import { ThemedView } from '../themed-view';
 export const WelcomeSlide = ({ width }: { width: number }) => {
   return (
     <ThemedView style={[styles.container, { width }]}>
-      <ThemedText type="h1">{i18n.t('onb.welcome.title', { app: 'YourApp' })}</ThemedText>
-      <ThemedText type="muted" style={styles.body}>
-        {i18n.t('onb.welcome.body')}
-      </ThemedText>
+      <ThemedView style={styles.content}>
+        <ThemedText type="h1" style={styles.title}>
+          {i18n.t('onb.welcome.title', { app: 'YourApp' })}
+        </ThemedText>
+        <ThemedText type="muted" style={styles.body}>
+          {i18n.t('onb.welcome.body')}
+        </ThemedText>
+      </ThemedView>
     </ThemedView>
   );
 };
@@ -20,8 +24,18 @@ const styles = StyleSheet.create({
     padding: Spacing.lg,
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  content: {
+    width: '100%',
+    maxWidth: 600,
+    paddingHorizontal: Spacing.md,
+  },
+  title: {
+    textAlign: 'center',
   },
   body: {
     marginTop: Spacing.sm,
+    textAlign: 'center',
   },
 });

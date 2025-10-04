@@ -49,44 +49,46 @@ export const CompletionSlide = ({ width, onComplete }: CompletionSlideProps) => 
 
   return (
     <ThemedView style={[styles.container, { width }]}>
-      <ThemedView style={styles.header}>
-        <ThemedView style={[styles.iconCircle, { backgroundColor: theme.success, shadowColor }]}>
-          <Ionicons name="checkmark-circle" size={64} color={theme.background} />
+      <ThemedView style={styles.content}>
+        <ThemedView style={styles.header}>
+          <ThemedView style={[styles.iconCircle, { backgroundColor: theme.success, shadowColor }]}>
+            <Ionicons name="checkmark-circle" size={64} color={theme.background} />
+          </ThemedView>
+
+          <ThemedText type="h1" style={styles.title}>
+            {i18n.t('onb.completion.title')}
+          </ThemedText>
+
+          <ThemedText type="body" style={styles.subtitle}>
+            {i18n.t('onb.completion.subtitle', { app: 'LoginX' })}
+          </ThemedText>
         </ThemedView>
 
-        <ThemedText type="h1" style={styles.title}>
-          {i18n.t('onb.completion.title')}
-        </ThemedText>
+        <ThemedView style={styles.summarySection}>
+          <ThemedText type="h2" style={styles.summaryTitle}>
+            {i18n.t('onb.completion.summary')}
+          </ThemedText>
 
-        <ThemedText type="body" style={styles.subtitle}>
-          {i18n.t('onb.completion.subtitle', { app: 'LoginX' })}
-        </ThemedText>
-      </ThemedView>
-
-      <ThemedView style={styles.summarySection}>
-        <ThemedText type="h2" style={styles.summaryTitle}>
-          {i18n.t('onb.completion.summary')}
-        </ThemedText>
-
-        {completedFeatures.map((feature) => (
-          <ThemedView key={feature.key} style={styles.featureItem}>
-            <ThemedView style={[styles.featureIcon, { backgroundColor: feature.completed ? `${theme.success}20` : `${theme['text-muted']}20` }]}>
-              <Ionicons name={feature.icon} size={20} color={feature.completed ? theme.success : theme['text-muted']} />
+          {completedFeatures.map((feature) => (
+            <ThemedView key={feature.key} style={styles.featureItem}>
+              <ThemedView style={[styles.featureIcon, { backgroundColor: feature.completed ? `${theme.success}20` : `${theme['text-muted']}20` }]}>
+                <Ionicons name={feature.icon} size={20} color={feature.completed ? theme.success : theme['text-muted']} />
+              </ThemedView>
+              <ThemedText type="body" style={[styles.featureTitle, { opacity: feature.completed ? 1 : 0.6 }]}>
+                {feature.title}
+              </ThemedText>
+              <Ionicons name={feature.completed ? 'checkmark-circle' : 'ellipse-outline'} size={20} color={feature.completed ? theme.success : theme['text-muted']} />
             </ThemedView>
-            <ThemedText type="body" style={[styles.featureTitle, { opacity: feature.completed ? 1 : 0.6 }]}>
-              {feature.title}
-            </ThemedText>
-            <Ionicons name={feature.completed ? 'checkmark-circle' : 'ellipse-outline'} size={20} color={feature.completed ? theme.success : theme['text-muted']} />
-          </ThemedView>
-        ))}
-      </ThemedView>
+          ))}
+        </ThemedView>
 
-      <ThemedView style={styles.footer}>
-        <ThemedButton title={i18n.t('onb.completion.start', { app: 'LoginX' })} onPress={onComplete} style={styles.completeButton} />
+        <ThemedView style={styles.footer}>
+          <ThemedButton title={i18n.t('onb.completion.start', { app: 'LoginX' })} onPress={onComplete} style={styles.completeButton} />
 
-        <ThemedText type="caption" style={styles.footerText}>
-          {i18n.t('onb.completion.footerText')}
-        </ThemedText>
+          <ThemedText type="caption" style={styles.footerText}>
+            {i18n.t('onb.completion.footerText')}
+          </ThemedText>
+        </ThemedView>
       </ThemedView>
     </ThemedView>
   );
@@ -96,6 +98,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  content: {
+    width: '100%',
+    maxWidth: 600,
+    flex: 1,
     justifyContent: 'space-between',
   },
   header: {

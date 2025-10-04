@@ -121,6 +121,9 @@ export function ScreenContainer({
     flex: centerContent ? 1 : undefined,
     padding: containerPadding,
     justifyContent: centerContent ? 'center' : undefined,
+    width: '100%',
+    maxWidth: 1200,
+    alignSelf: 'center',
   };
 
   // Render content based on scrollable prop
