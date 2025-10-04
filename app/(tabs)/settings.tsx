@@ -149,7 +149,7 @@ export default function SettingsScreen() {
           marginBottom: Spacing.lg,
         },
         sectionTitle: {
-          marginBottom: Spacing.sm,
+          marginBottom: Spacing.md,
         },
         settingRow: {
           flexDirection: 'row',
