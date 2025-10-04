@@ -940,6 +940,129 @@
         },
         "applied": "¡Tamaño de texto cambiado exitosamente!"
       }
+    },
+    "help": {
+      "title": "Centro de Ayuda",
+      "subtitle": "Encuentra respuestas, obtén soporte y aprende a usar la aplicación",
+      "quickActions": {
+        "title": "Acciones Rápidas",
+        "contactSupport": {
+          "title": "Contactar Soporte",
+          "description": "Obtén ayuda de nuestro equipo de soporte"
+        },
+        "sendFeedback": {
+          "title": "Enviar Comentarios",
+          "description": "Comparte tus pensamientos y sugerencias"
+        },
+        "visitWebsite": {
+          "title": "Visitar Sitio Web",
+          "description": "Aprende más sobre LoginX"
+        },
+        "privacySecurity": {
+          "title": "Privacidad y Seguridad",
+          "description": "Revisa nuestras prácticas de privacidad"
+        }
+      },
+      "gettingStarted": {
+        "title": "Comenzando",
+        "createAccount": {
+          "question": "¿Cómo creo una cuenta?",
+          "answer": "Para crear una cuenta:\n\n1. Toca &ldquo;Registrarse&rdquo; en la pantalla de inicio de sesión\n2. Ingresa tu correo electrónico y crea una contraseña segura\n3. Verifica tu dirección de correo electrónico\n4. Completa la configuración de tu perfil\n\nLuego puedes habilitar el inicio de sesión biométrico y personalizar tus preferencias en Configuración."
+        },
+        "enableBiometric": {
+          "question": "¿Cómo habilito el inicio de sesión biométrico?",
+          "answer": "Habilita Face ID/Touch ID para acceso rápido y seguro:\n\n1. Ve a Configuración → Seguridad\n2. Toca &ldquo;Autenticación Biométrica&rdquo;\n3. Sigue las instrucciones en pantalla\n\nTus datos biométricos se almacenan de forma segura solo en tu dispositivo y nunca lo abandonan."
+        },
+        "resetPassword": {
+          "question": "¿Cómo restablezco mi contraseña?",
+          "answer": "Si olvidaste tu contraseña:\n\n1. Toca &ldquo;¿Olvidaste tu contraseña?&rdquo; en la pantalla de inicio de sesión\n2. Ingresa tu dirección de correo electrónico\n3. Revisa tu correo para obtener un enlace de restablecimiento de contraseña\n4. Crea una nueva contraseña segura\n\nAsegúrate de usar una contraseña única que no uses en otro lugar."
+        }
+      },
+      "accountSecurity": {
+        "title": "Cuenta y Seguridad",
+        "changeEmail": {
+          "question": "¿Cómo cambio mi correo electrónico?",
+          "answer": "Para actualizar tu dirección de correo electrónico:\n\n1. Ve a Configuración → Perfil\n2. Toca tu correo electrónico actual\n3. Ingresa tu nueva dirección de correo electrónico\n4. Verifica el nuevo correo electrónico\n\nDeberás verificar el nuevo correo electrónico antes de que el cambio surta efecto."
+        },
+        "twoFactor": {
+          "question": "¿Cómo habilito la autenticación de dos factores?",
+          "answer": "Agrega una capa adicional de seguridad:\n\n1. Ve a Configuración → Seguridad\n2. Toca &ldquo;Autenticación de Dos Factores&rdquo;\n3. Elige tu método preferido (SMS o Aplicación Autenticadora)\n4. Sigue las instrucciones de configuración\n\nRecomendamos encarecidamente habilitar 2FA para proteger tu cuenta."
+        },
+        "dataSecure": {
+          "question": "¿Mis datos están seguros?",
+          "answer": "¡Sí! Tomamos la seguridad en serio:\n\n• Cifrado de extremo a extremo para todos los datos\n• Soporte de autenticación biométrica\n• Sincronización segura en la nube\n• Sin compartir datos con terceros\n• Cumple con GDPR y CCPA\n\nTus datos biométricos nunca abandonan tu dispositivo, y todos los datos en la nube están cifrados."
+        },
+        "deleteAccount": {
+          "question": "¿Cómo elimino mi cuenta?",
+          "answer": "Para eliminar permanentemente tu cuenta:\n\n1. Ve a Configuración → Cuenta\n2. Desplázate hacia abajo y toca &ldquo;Eliminar Cuenta&rdquo;\n3. Confirma tu decisión\n\n⚠️ Advertencia: Esta acción es permanente y no se puede deshacer. Todos tus datos se eliminarán permanentemente."
+        }
+      },
+      "troubleshooting": {
+        "title": "Solución de Problemas",
+        "appCrashing": {
+          "question": "La aplicación no carga o se bloquea",
+          "answer": "Prueba estos pasos:\n\n1. Fuerza el cierre de la aplicación y vuelve a abrirla\n2. Verifica tu conexión a internet\n3. Limpia la caché de la aplicación (Configuración → Limpiar Caché)\n4. Actualiza a la última versión\n5. Reinicia tu dispositivo\n\nSi el problema persiste, contacta a soporte con detalles sobre cuándo ocurre el bloqueo."
+        },
+        "biometricNotWorking": {
+          "question": "El inicio de sesión biométrico no funciona",
+          "answer": "Soluciones comunes:\n\n1. Asegúrate de que la biometría esté habilitada en la Configuración del dispositivo\n2. Vuelve a registrar tus datos biométricos en la Configuración del dispositivo\n3. Activa y desactiva el inicio de sesión biométrico en la Configuración de la aplicación\n4. Actualiza el sistema operativo de tu dispositivo\n\nSi aún no funciona, usa el inicio de sesión con contraseña y contacta a soporte."
+        },
+        "noNotifications": {
+          "question": "No recibo notificaciones",
+          "answer": "Verifica estas configuraciones:\n\n1. Habilita las notificaciones en Configuración del dispositivo → Notificaciones → LoginX\n2. Asegúrate de que &ldquo;No Molestar&rdquo; esté desactivado\n3. Verifica la configuración de notificaciones en la aplicación\n4. Vuelve a habilitar los permisos de notificación en la aplicación\n\n{platformNote}"
+        },
+        "syncIssues": {
+          "question": "Problemas de sincronización entre dispositivos",
+          "answer": "Para solucionar problemas de sincronización:\n\n1. Asegúrate de haber iniciado sesión con la misma cuenta\n2. Verifica tu conexión a internet\n3. Desliza hacia abajo para actualizar en la pantalla principal\n4. Cierra sesión y vuelve a iniciar sesión\n\nLos cambios normalmente se sincronizan en unos segundos cuando estás conectado a internet."
+        },
+        "emailVerification": {
+          "question": "No recibí el correo de verificación",
+          "answer": "¿No encuentras el correo de verificación?\n\n1. Revisa tu carpeta de spam/correo no deseado\n2. Asegúrate de que la dirección de correo electrónico sea correcta\n3. Toca &ldquo;Reenviar Correo de Verificación&rdquo;\n4. Espera unos minutos y verifica nuevamente\n5. Agrega nuestro dominio de correo a tus remitentes seguros\n\nSi aún no lo recibes, contacta a soporte."
+        }
+      },
+      "features": {
+        "title": "Funciones y Configuración",
+        "changeTheme": {
+          "question": "¿Cómo cambio el tema?",
+          "answer": "Personaliza la apariencia de tu aplicación:\n\n1. Ve a Configuración → Apariencia\n2. Elige entre tema Claro, Oscuro o Sistema\n\nEl tema del sistema se ajustará automáticamente a la configuración de tema de tu dispositivo."
+        },
+        "changeLanguage": {
+          "question": "¿Cómo cambio el idioma?",
+          "answer": "Cambia a tu idioma preferido:\n\n1. Ve a Configuración → Idioma\n2. Selecciona entre los idiomas disponibles\n3. La aplicación se actualizará al instante\n\nActualmente compatible con: Inglés, Español, Hindi"
+        },
+        "offlineData": {
+          "question": "¿Qué datos se almacenan sin conexión?",
+          "answer": "La aplicación funciona sin conexión con estas funciones:\n\n• Tu información de perfil\n• Configuración de seguridad\n• Preferencias de la aplicación (tema, idioma)\n• Actividad reciente\n\nLos cambios realizados sin conexión se sincronizarán automáticamente cuando te vuelvas a conectar a internet."
+        },
+        "clearCache": {
+          "question": "¿Cómo limpio la caché de la aplicación?",
+          "answer": "Para limpiar los datos en caché:\n\n1. Ve a Configuración → Almacenamiento\n2. Toca &ldquo;Limpiar Caché&rdquo;\n3. Confirma la acción\n\nEsto limpia los archivos temporales pero mantiene tus datos de cuenta seguros. Permanecerás conectado."
+        }
+      },
+      "privacy": {
+        "title": "Privacidad y Legal",
+        "dataUsage": {
+          "question": "¿Cómo se usa mi información?",
+          "answer": "Respetamos tu privacidad:\n\n• Tus datos se usan solo para proporcionar nuestros servicios\n• Nunca vendemos tus datos a terceros\n• Sin publicidad ni rastreo\n• Puedes exportar o eliminar tus datos en cualquier momento\n\nLee nuestra Política de Privacidad completa para más detalles."
+        },
+        "exportData": {
+          "question": "¿Puedo exportar mis datos?",
+          "answer": "¡Sí! Tú eres dueño de tus datos:\n\n1. Ve a Configuración → Privacidad\n2. Toca &ldquo;Exportar Mis Datos&rdquo;\n3. Elige el formato de exportación (JSON o CSV)\n4. Descarga o envía por correo electrónico la exportación\n\nEsto incluye toda tu información de perfil e historial de actividad."
+        },
+        "termsOfService": {
+          "question": "Términos de Servicio",
+          "answer": "Al usar esta aplicación, aceptas:\n\n• Usar la aplicación de manera responsable\n• Mantener tu cuenta segura\n• No violar los derechos de otros\n• Cumplir con las leyes aplicables\n\nVe los Términos de Servicio completos en Configuración → Legal."
+        }
+      },
+      "stillNeedHelp": {
+        "title": "¿Aún Necesitas Ayuda?",
+        "description": "Nuestro equipo de soporte está aquí para ayudarte con cualquier pregunta o problema.",
+        "button": "Contactar Soporte"
+      },
+      "platformNotes": {
+        "ios": "En iOS, es posible que debas permitir las notificaciones cuando se te solicite por primera vez.",
+        "android": "En Android, verifica que la optimización de batería no esté bloqueando las notificaciones."
+      }
     }
   }
 }

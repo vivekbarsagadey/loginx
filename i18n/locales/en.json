@@ -930,6 +930,129 @@
         },
         "applied": "Text size changed successfully!"
       }
+    },
+    "help": {
+      "title": "Help Center",
+      "subtitle": "Find answers, get support, and learn how to use the app",
+      "quickActions": {
+        "title": "Quick Actions",
+        "contactSupport": {
+          "title": "Contact Support",
+          "description": "Get help from our support team"
+        },
+        "sendFeedback": {
+          "title": "Send Feedback",
+          "description": "Share your thoughts and suggestions"
+        },
+        "visitWebsite": {
+          "title": "Visit Website",
+          "description": "Learn more about LoginX"
+        },
+        "privacySecurity": {
+          "title": "Privacy & Security",
+          "description": "Review our privacy practices"
+        }
+      },
+      "gettingStarted": {
+        "title": "Getting Started",
+        "createAccount": {
+          "question": "How do I create an account?",
+          "answer": "To create an account:\n\n1. Tap &ldquo;Sign Up&rdquo; on the login screen\n2. Enter your email and create a strong password\n3. Verify your email address\n4. Complete your profile setup\n\nYou can then enable biometric login and customize your preferences in Settings."
+        },
+        "enableBiometric": {
+          "question": "How do I enable biometric login?",
+          "answer": "Enable Face ID/Touch ID for quick, secure access:\n\n1. Go to Settings → Security\n2. Tap &ldquo;Biometric Authentication&rdquo;\n3. Follow the on-screen instructions\n\nYour biometric data is stored securely on your device only and never leaves it."
+        },
+        "resetPassword": {
+          "question": "How do I reset my password?",
+          "answer": "If you forgot your password:\n\n1. Tap &ldquo;Forgot Password&rdquo; on the login screen\n2. Enter your email address\n3. Check your email for a password reset link\n4. Create a new strong password\n\nMake sure to use a unique password that you don&apos;t use elsewhere."
+        }
+      },
+      "accountSecurity": {
+        "title": "Account & Security",
+        "changeEmail": {
+          "question": "How do I change my email?",
+          "answer": "To update your email address:\n\n1. Go to Settings → Profile\n2. Tap on your current email\n3. Enter your new email address\n4. Verify the new email\n\nYou&apos;ll need to verify the new email before the change takes effect."
+        },
+        "twoFactor": {
+          "question": "How do I enable two-factor authentication?",
+          "answer": "Add an extra layer of security:\n\n1. Go to Settings → Security\n2. Tap &ldquo;Two-Factor Authentication&rdquo;\n3. Choose your preferred method (SMS or Authenticator App)\n4. Follow the setup instructions\n\nWe highly recommend enabling 2FA to protect your account."
+        },
+        "dataSecure": {
+          "question": "Is my data secure?",
+          "answer": "Yes! We take security seriously:\n\n• End-to-end encryption for all data\n• Biometric authentication support\n• Secure cloud synchronization\n• No third-party data sharing\n• GDPR & CCPA compliant\n\nYour biometric data never leaves your device, and all cloud data is encrypted."
+        },
+        "deleteAccount": {
+          "question": "How do I delete my account?",
+          "answer": "To permanently delete your account:\n\n1. Go to Settings → Account\n2. Scroll down and tap &ldquo;Delete Account&rdquo;\n3. Confirm your decision\n\n⚠️ Warning: This action is permanent and cannot be undone. All your data will be permanently deleted."
+        }
+      },
+      "troubleshooting": {
+        "title": "Troubleshooting",
+        "appCrashing": {
+          "question": "App is not loading or crashing",
+          "answer": "Try these steps:\n\n1. Force close the app and reopen it\n2. Check your internet connection\n3. Clear app cache (Settings → Clear Cache)\n4. Update to the latest version\n5. Restart your device\n\nIf the problem persists, contact support with details about when the crash occurs."
+        },
+        "biometricNotWorking": {
+          "question": "Biometric login not working",
+          "answer": "Common solutions:\n\n1. Make sure biometrics are enabled in device Settings\n2. Re-register your biometric data in device Settings\n3. Toggle biometric login off and on in app Settings\n4. Update your device&apos;s operating system\n\nIf it still doesn&apos;t work, use password login and contact support."
+        },
+        "noNotifications": {
+          "question": "Not receiving notifications",
+          "answer": "Check these settings:\n\n1. Enable notifications in device Settings → Notifications → LoginX\n2. Make sure &ldquo;Do Not Disturb&rdquo; is off\n3. Check in-app notification settings\n4. Re-enable notification permissions in the app\n\n{platformNote}"
+        },
+        "syncIssues": {
+          "question": "Sync issues across devices",
+          "answer": "To fix sync problems:\n\n1. Make sure you&apos;re signed in with the same account\n2. Check your internet connection\n3. Pull down to refresh on the main screen\n4. Sign out and sign back in\n\nChanges typically sync within a few seconds when connected to the internet."
+        },
+        "emailVerification": {
+          "question": "Email verification not received",
+          "answer": "Can&apos;t find the verification email?\n\n1. Check your spam/junk folder\n2. Make sure the email address is correct\n3. Tap &ldquo;Resend Verification Email&rdquo;\n4. Wait a few minutes and check again\n5. Add our email domain to your safe senders\n\nIf you still don&apos;t receive it, contact support."
+        }
+      },
+      "features": {
+        "title": "Features & Settings",
+        "changeTheme": {
+          "question": "How do I change the theme?",
+          "answer": "Customize your app appearance:\n\n1. Go to Settings → Appearance\n2. Choose from Light, Dark, or System theme\n\nSystem theme will automatically match your device&apos;s theme settings."
+        },
+        "changeLanguage": {
+          "question": "How do I change the language?",
+          "answer": "Switch to your preferred language:\n\n1. Go to Settings → Language\n2. Select from available languages\n3. The app will update instantly\n\nCurrently supported: English, Spanish, Hindi"
+        },
+        "offlineData": {
+          "question": "What data is stored offline?",
+          "answer": "The app works offline with these features:\n\n• Your profile information\n• Security settings\n• App preferences (theme, language)\n• Recent activity\n\nChanges made offline will sync automatically when you reconnect to the internet."
+        },
+        "clearCache": {
+          "question": "How do I clear app cache?",
+          "answer": "To clear cached data:\n\n1. Go to Settings → Storage\n2. Tap &ldquo;Clear Cache&rdquo;\n3. Confirm the action\n\nThis clears temporary files but keeps your account data safe. You&apos;ll remain signed in."
+        }
+      },
+      "privacy": {
+        "title": "Privacy & Legal",
+        "dataUsage": {
+          "question": "How is my data used?",
+          "answer": "We respect your privacy:\n\n• Your data is used only to provide our services\n• We never sell your data to third parties\n• No advertising or tracking\n• You can export or delete your data anytime\n\nRead our full Privacy Policy for details."
+        },
+        "exportData": {
+          "question": "Can I export my data?",
+          "answer": "Yes! You own your data:\n\n1. Go to Settings → Privacy\n2. Tap &ldquo;Export My Data&rdquo;\n3. Choose export format (JSON or CSV)\n4. Download or email the export\n\nThis includes all your profile information and activity history."
+        },
+        "termsOfService": {
+          "question": "Terms of Service",
+          "answer": "By using this app, you agree to:\n\n• Use the app responsibly\n• Keep your account secure\n• Not violate others&apos; rights\n• Comply with applicable laws\n\nView the complete Terms of Service in Settings → Legal."
+        }
+      },
+      "stillNeedHelp": {
+        "title": "Still Need Help?",
+        "description": "Our support team is here to assist you with any questions or issues.",
+        "button": "Contact Support"
+      },
+      "platformNotes": {
+        "ios": "On iOS, you may need to allow notifications when first prompted.",
+        "android": "On Android, check that battery optimization is not blocking notifications."
+      }
     }
   }
 }
