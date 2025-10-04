@@ -1063,6 +1063,133 @@
         "ios": "En iOS, es posible que debas permitir las notificaciones cuando se te solicite por primera vez.",
         "android": "En Android, verifica que la optimización de batería no esté bloqueando las notificaciones."
       }
+    },
+    "privacy": {
+      "title": "Política de Privacidad",
+      "subtitle": "Tu privacidad es importante para nosotros",
+      "lastUpdated": "Última actualización: 5 de octubre de 2025",
+      "introduction": "En LoginX, estamos comprometidos a proteger tu privacidad y garantizar la seguridad de tu información personal. Esta Política de Privacidad explica cómo recopilamos, usamos y protegemos tus datos cuando utilizas nuestra aplicación.",
+      "informationWeCollect": {
+        "title": "Información que Recopilamos",
+        "accountInfo": {
+          "title": "Información de la Cuenta",
+          "content": "Cuando creas una cuenta, recopilamos:\n\n• Dirección de correo electrónico\n• Nombre para mostrar\n• Contraseña (cifrada y almacenada de forma segura)\n• Foto de perfil (opcional)\n\nEsta información es necesaria para proporcionarte nuestros servicios y mantener la seguridad de tu cuenta."
+        },
+        "usageData": {
+          "title": "Datos de Uso",
+          "content": "Recopilamos información sobre cómo usas la aplicación:\n\n• Horarios y frecuencia de inicio de sesión\n• Funciones que utilizas\n• Configuraciones y preferencias\n• Registros de errores e informes de fallos\n\nEstos datos nos ayudan a mejorar la aplicación y proporcionar una mejor experiencia de usuario."
+        },
+        "deviceInfo": {
+          "title": "Información del Dispositivo",
+          "content": "Recopilamos información básica del dispositivo:\n\n• Modelo de dispositivo y sistema operativo\n• Versión de la aplicación\n• Preferencia de idioma\n• Zona horaria\n\nNO recopilamos tu ID de dispositivo, ID de publicidad u otros identificadores únicos con fines de seguimiento."
+        }
+      },
+      "howWeUse": {
+        "title": "Cómo Usamos Tu Información",
+        "provideServices": {
+          "title": "Para Proporcionar y Mantener Servicios",
+          "content": "Usamos tu información para:\n\n• Crear y gestionar tu cuenta\n• Habilitar autenticación y autorización\n• Sincronizar tus datos entre dispositivos\n• Proporcionar atención al cliente\n• Enviar notificaciones importantes del servicio\n\nTus datos se utilizan únicamente para entregar la funcionalidad que esperas de LoginX."
+        },
+        "improveSecurity": {
+          "title": "Para Mejorar la Seguridad y Prevenir Fraudes",
+          "content": "Monitoreamos actividades sospechosas para:\n\n• Detectar y prevenir accesos no autorizados\n• Identificar posibles amenazas de seguridad\n• Proteger contra fraudes y abusos\n• Mantener la integridad de la plataforma\n\nTu seguridad es nuestra máxima prioridad y empleamos medidas de seguridad estándar de la industria."
+        },
+        "communicate": {
+          "title": "Para Comunicarnos Contigo",
+          "content": "Podemos contactarte para:\n\n• Enviar correos de verificación de cuenta\n• Notificarte cambios importantes\n• Responder a tus solicitudes de soporte\n• Compartir actualizaciones de seguridad importantes\n\nPuedes controlar las preferencias de notificación en Configuración. Nunca te enviaremos correos promocionales o de marketing sin tu consentimiento explícito."
+        }
+      },
+      "dataSecurity": {
+        "title": "Seguridad de Datos",
+        "description": "Implementamos medidas de seguridad robustas para proteger tus datos:\n\n• Cifrado de extremo a extremo para todos los datos sensibles\n• Hash seguro de contraseñas con algoritmos estándar de la industria\n• Datos biométricos almacenados localmente solo en tu dispositivo\n• Auditorías y actualizaciones de seguridad regulares\n• Infraestructura en la nube segura con almacenamiento cifrado\n• HTTPS/TLS para toda la transmisión de datos\n\nSi bien nos esforzamos por proteger tu información, ningún método de transmisión por internet es 100% seguro. Trabajamos continuamente para mejorar nuestras prácticas de seguridad."
+      },
+      "dataSharing": {
+        "title": "Compartir Datos y Terceros",
+        "noSelling": {
+          "title": "Nunca Vendemos Tus Datos",
+          "content": "LoginX NUNCA venderá, alquilará o intercambiará tu información personal a terceros con fines de marketing. Tus datos son tuyos y respetamos eso."
+        },
+        "serviceProviders": {
+          "title": "Proveedores de Servicios",
+          "content": "Podemos compartir datos limitados con proveedores de servicios de confianza que nos ayudan a operar nuestros servicios:\n\n• Proveedores de alojamiento en la nube (almacenamiento cifrado)\n• Servicios de autenticación (Firebase)\n• Servicios de análisis (solo datos anonimizados)\n\nEstos proveedores están sujetos a estrictos acuerdos de confidencialidad y solo pueden usar tus datos para prestarnos servicios."
+        },
+        "legalRequirements": {
+          "title": "Requisitos Legales",
+          "content": "Podemos divulgar tu información si lo exige la ley o en respuesta a:\n\n• Procesos legales válidos (citaciones, órdenes judiciales)\n• Solicitudes de las fuerzas del orden o agencias gubernamentales\n• Protección de nuestros derechos y seguridad\n• Prevención de fraude o actividad ilegal\n\nTe notificaremos de tales solicitudes a menos que esté prohibido por ley."
+        }
+      },
+      "yourRights": {
+        "title": "Tus Derechos de Privacidad",
+        "accessData": {
+          "title": "Derecho de Acceso",
+          "content": "Tienes derecho a acceder a todos los datos personales que tenemos sobre ti. Puedes ver la información de tu cuenta en cualquier momento en la sección Perfil de la aplicación."
+        },
+        "correctData": {
+          "title": "Derecho de Corrección",
+          "content": "Puedes actualizar o corregir tu información personal en cualquier momento a través de la configuración de la aplicación. Si necesitas ayuda, contacta a nuestro equipo de soporte."
+        },
+        "deleteData": {
+          "title": "Derecho de Eliminación",
+          "content": "Tienes derecho a eliminar tu cuenta y todos los datos asociados:\n\n1. Ve a Configuración → Cuenta\n2. Toca &ldquo;Eliminar Cuenta&rdquo;\n3. Confirma tu decisión\n\nUna vez eliminados, todos tus datos se eliminarán permanentemente de nuestros servidores en un plazo de 30 días. Esta acción no se puede deshacer."
+        },
+        "exportData": {
+          "title": "Derecho a la Portabilidad de Datos",
+          "content": "Puedes exportar todos tus datos en cualquier momento:\n\n1. Ve a Configuración → Privacidad\n2. Toca &ldquo;Exportar Mis Datos&rdquo;\n3. Elige tu formato preferido (JSON o CSV)\n4. Descarga o envía por correo electrónico la exportación\n\nTú eres dueño de tus datos y hacemos que sea fácil llevarlos contigo."
+        }
+      },
+      "childrenPrivacy": {
+        "title": "Privacidad de Niños",
+        "content": "LoginX no está destinado a niños menores de 13 años. No recopilamos intencionalmente información personal de niños. Si crees que hemos recopilado inadvertidamente datos de un niño, contáctanos de inmediato y los eliminaremos."
+      },
+      "changes": {
+        "title": "Cambios a Esta Política",
+        "content": "Podemos actualizar esta Política de Privacidad de vez en cuando para reflejar cambios en nuestras prácticas o requisitos legales. Cuando realicemos cambios significativos, te notificaremos a través de la aplicación o por correo electrónico. Tu uso continuo de LoginX después de tales cambios constituye tu aceptación de la política actualizada."
+      },
+      "contact": {
+        "title": "Contáctanos",
+        "content": "Si tienes alguna pregunta, inquietud o solicitud con respecto a esta Política de Privacidad o tus datos personales, contáctanos a través de la sección de Soporte en la aplicación."
+      }
+    },
+    "feedback": {
+      "title": "Enviar Comentarios",
+      "subtitle": "Ayúdanos a mejorar compartiendo tus pensamientos y sugerencias",
+      "categoryLabel": "¿Qué tipo de comentario tienes?",
+      "categories": {
+        "bug": "Reporte de Error",
+        "feature": "Solicitud de Función",
+        "improvement": "Mejora",
+        "other": "Otro"
+      },
+      "subjectLabel": "Asunto",
+      "subjectPlaceholder": "Resumen breve de tus comentarios",
+      "messageLabel": "Tus Comentarios",
+      "messagePlaceholder": "Por favor proporciona comentarios detallados. Cuanta más información compartas, mejor podremos ayudar.",
+      "infoMessage": "Tus comentarios nos ayudan a mejorar la aplicación para todos. Leemos cada mensaje y usamos tu opinión para priorizar funciones y correcciones.",
+      "submitButton": "Enviar Comentarios",
+      "submitting": "Enviando...",
+      "validation": {
+        "subjectRequired": {
+          "title": "Asunto Requerido",
+          "message": "Por favor ingresa un asunto para tus comentarios."
+        },
+        "messageRequired": {
+          "title": "Mensaje Requerido",
+          "message": "Por favor ingresa tu mensaje de comentarios."
+        },
+        "messageTooShort": {
+          "title": "Mensaje Muy Corto",
+          "message": "Por favor proporciona más detalles (al menos 10 caracteres)."
+        }
+      },
+      "success": {
+        "title": "¡Comentarios Enviados!",
+        "message": "Gracias por tus comentarios. Apreciamos que te hayas tomado el tiempo para ayudarnos a mejorar.",
+        "button": "OK"
+      },
+      "error": {
+        "title": "Error al Enviar",
+        "message": "No pudimos enviar tus comentarios. Por favor verifica tu conexión a internet e intenta nuevamente."
+      }
     }
   }
 }
