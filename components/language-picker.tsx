@@ -15,20 +15,34 @@ export const LanguagePicker = () => {
   const colorScheme = useColorScheme();
   const colors = Colors[theme === 'system' ? colorScheme || 'light' : theme];
 
+  const dynamicStyles = React.useMemo(
+    () =>
+      StyleSheet.create({
+        chipActive: {
+          backgroundColor: colors.primary,
+        },
+        chipInactive: {
+          backgroundColor: colors.surface,
+        },
+        textActive: {
+          color: colors['on-primary'],
+          fontWeight: '600',
+        },
+        textInactive: {
+          color: colors.text,
+          fontWeight: '600',
+        },
+      }),
+    [colors]
+  );
+
   return (
     <ThemedView>
       <ThemedText style={styles.label}>{i18n.t('onb.personalize.language')}</ThemedText>
       <ThemedView style={styles.container}>
         {LANGUAGE_OPTIONS.map((option) => (
-          <Pressable key={option} style={[styles.chip, { backgroundColor: language === option ? colors.primary : colors.surface }]} onPress={() => persistLanguage(option)}>
-            <ThemedText
-              style={{
-                color: language === option ? colors['on-primary'] : colors.text,
-                fontWeight: '600',
-              }}
-            >
-              {option.toUpperCase()}
-            </ThemedText>
+          <Pressable key={option} style={[styles.chip, language === option ? dynamicStyles.chipActive : dynamicStyles.chipInactive]} onPress={() => persistLanguage(option)}>
+            <ThemedText style={language === option ? dynamicStyles.textActive : dynamicStyles.textInactive}>{option.toUpperCase()}</ThemedText>
           </Pressable>
         ))}
       </ThemedView>

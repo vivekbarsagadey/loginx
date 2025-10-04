@@ -16,20 +16,37 @@ export const ThemeSelector = () => {
   const textColor = useThemeColor({}, 'text');
   const borderColor = useThemeColor({}, 'border');
 
+  const dynamicStyles = React.useMemo(
+    () =>
+      StyleSheet.create({
+        containerBorder: {
+          borderColor: borderColor,
+        },
+        chipActive: {
+          backgroundColor: primaryColor,
+        },
+        chipInactive: {
+          backgroundColor: surfaceColor,
+        },
+        textActive: {
+          color: onPrimaryColor,
+          fontWeight: '600',
+        },
+        textInactive: {
+          color: textColor,
+          fontWeight: '600',
+        },
+      }),
+    [borderColor, primaryColor, surfaceColor, onPrimaryColor, textColor]
+  );
+
   return (
     <ThemedView>
       <ThemedText style={styles.label}>{i18n.t('onb.personalize.theme')}</ThemedText>
-      <ThemedView style={[styles.container, { borderColor: borderColor }]}>
+      <ThemedView style={[styles.container, dynamicStyles.containerBorder]}>
         {THEME_OPTIONS.map((option) => (
-          <Pressable key={option} style={[styles.chip, { backgroundColor: theme === option ? primaryColor : surfaceColor }]} onPress={() => persistTheme(option as 'light' | 'dark' | 'system')}>
-            <ThemedText
-              style={{
-                color: theme === option ? onPrimaryColor : textColor,
-                fontWeight: '600',
-              }}
-            >
-              {option.charAt(0).toUpperCase() + option.slice(1)}
-            </ThemedText>
+          <Pressable key={option} style={[styles.chip, theme === option ? dynamicStyles.chipActive : dynamicStyles.chipInactive]} onPress={() => persistTheme(option as 'light' | 'dark' | 'system')}>
+            <ThemedText style={theme === option ? dynamicStyles.textActive : dynamicStyles.textInactive}>{option.charAt(0).toUpperCase() + option.slice(1)}</ThemedText>
           </Pressable>
         ))}
       </ThemedView>
