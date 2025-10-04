@@ -35,10 +35,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    debugLog('[Auth] Setting up auth state listener...');
+
     // Subscribe to auth state changes
     const unsubscribe = onAuthStateChanged(
       auth,
       async (user) => {
+        debugLog('[Auth] Auth state changed:', user ? `User: ${user.uid}` : 'No user');
+
         if (user) {
           // Apply any pending profile data from onboarding
           try {
@@ -50,6 +54,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             console.error('[Auth] Failed to apply pending profile data:', error);
             // Don't fail authentication for profile data issues
           }
+
+          // Log successful authentication
+          debugLog('[Auth] User authenticated successfully');
+        } else {
+          debugLog('[Auth] User signed out or not authenticated');
         }
 
         setUser(user);
@@ -57,13 +66,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       },
       (error) => {
         // Handle auth state change errors
-        console.error('[Auth] State change error:', error);
+        debugError('[Auth] State change error', error);
         setLoading(false);
         showError(error);
       }
     );
 
-    return () => unsubscribe();
+    return () => {
+      debugLog('[Auth] Cleaning up auth state listener');
+      unsubscribe();
+    };
   }, []);
 
   // Memoize signOut to prevent unnecessary re-renders

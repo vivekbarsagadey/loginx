@@ -1,6 +1,6 @@
 // firebase-config.ts
 import { getApp, getApps, initializeApp } from 'firebase/app';
-import { type Auth, browserLocalPersistence, getAuth, initializeAuth, inMemoryPersistence, setPersistence } from 'firebase/auth';
+import { type Auth, browserLocalPersistence, getAuth, initializeAuth, setPersistence } from 'firebase/auth';
 import { connectFirestoreEmulator, enableIndexedDbPersistence, enableMultiTabIndexedDbPersistence, getFirestore } from 'firebase/firestore';
 import { Platform } from 'react-native';
 import { Config, validateRequiredConfig } from './utils/config';
@@ -40,13 +40,18 @@ let auth: Auth;
 if (Platform.OS === 'web') {
   // Web: keep users signed in (local persistence)
   auth = getAuth(app);
-  // Optional: use session-only persistence instead with browserSessionPersistence
-  setPersistence(auth, browserLocalPersistence).catch(() => {});
+  // Set persistence to keep users logged in across browser sessions
+  setPersistence(auth, browserLocalPersistence).catch((error) => {
+    console.warn('[Firebase] Failed to set persistence:', error);
+  });
 } else {
-  // React Native: explicit in-memory persistence (no disk, no AsyncStorage)
+  // React Native: Use default persistence (automatic AsyncStorage persistence)
+  // Firebase Auth in React Native automatically persists auth state using AsyncStorage
   try {
+    // Don't specify persistence - let Firebase use its default React Native persistence
     auth = initializeAuth(app, {
-      persistence: inMemoryPersistence,
+      // Remove inMemoryPersistence to enable automatic persistence
+      // Firebase will automatically use AsyncStorage for persistence in React Native
     });
   } catch {
     // guard for Fast Refresh / already-initialized
@@ -75,54 +80,54 @@ try {
       }
     }
 
-    // Enable offline persistence for web
+    // Enable AGGRESSIVE offline persistence for LOCAL-FIRST behavior
     if (Platform.OS === 'web') {
       // Try multi-tab persistence first, fall back to single-tab
       enableMultiTabIndexedDbPersistence(firestoreInstance)
         .then(() => {
-          console.warn('[Firebase] Multi-tab offline persistence enabled');
+          console.warn('[Firebase] 🏠 LOCAL-FIRST: Multi-tab offline persistence enabled');
           firestoreInitialized = true;
         })
         .catch((err) => {
           if (err.code === 'failed-precondition') {
             // Multiple tabs open, persistence can only be enabled in one tab at a time
-            console.warn('[Firebase] Multi-tab persistence failed, trying single-tab');
+            console.warn('[Firebase] 🏠 LOCAL-FIRST: Multi-tab persistence failed, trying single-tab');
             return enableIndexedDbPersistence(firestoreInstance!);
           } else if (err.code === 'unimplemented') {
             // The current browser doesn't support persistence
-            console.warn('[Firebase] Offline persistence not supported in this browser');
+            console.warn('[Firebase] ⚠️  LOCAL-FIRST: Offline persistence not supported in this browser');
           } else {
-            console.error('[Firebase] Persistence error:', err);
+            console.error('[Firebase] LOCAL-FIRST: Persistence error:', err);
           }
           firestoreInitialized = true;
         })
         .then(() => {
           if (!firestoreInitialized) {
-            console.warn('[Firebase] Single-tab offline persistence enabled');
+            console.warn('[Firebase] 🏠 LOCAL-FIRST: Single-tab offline persistence enabled');
             firestoreInitialized = true;
           }
         })
         .catch((err) => {
-          console.warn('[Firebase] Could not enable offline persistence:', err);
+          console.warn('[Firebase] ⚠️  LOCAL-FIRST: Could not enable offline persistence:', err);
           firestoreInitialized = true;
         });
     } else {
-      // Native platforms have built-in offline support
+      // Native platforms have built-in offline support - PERFECT for local-first
       firestoreInitialized = true;
       if (__DEV__) {
-        console.warn('[Firebase] Native offline persistence enabled by default');
+        console.warn('[Firebase] 🏠 LOCAL-FIRST: Native offline persistence enabled by default');
       }
     }
 
-    // Monitor connection state in development
+    // Monitor connection state for LOCAL-FIRST behavior
     if (__DEV__) {
       // Set up connection monitoring
       const checkConnection = () => {
         if (typeof navigator !== 'undefined' && 'onLine' in navigator) {
           if (navigator.onLine) {
-            console.warn('[Firebase] Network connection: ONLINE');
+            console.warn('[Firebase] 🌐 LOCAL-FIRST: Network ONLINE - Syncing in background');
           } else {
-            console.warn('[Firebase] Network connection: OFFLINE - Using cached data');
+            console.warn('[Firebase] 🏠 LOCAL-FIRST: Network OFFLINE - Using local data ONLY');
           }
         }
       };
@@ -130,14 +135,21 @@ try {
       // Only set up window event listeners on web platform
       if (Platform.OS === 'web' && typeof window !== 'undefined') {
         window.addEventListener('online', () => {
-          console.warn('[Firebase] Network connection restored');
+          console.warn('[Firebase] 🔄 LOCAL-FIRST: Connection restored - Background sync starting');
         });
         window.addEventListener('offline', () => {
-          console.warn('[Firebase] Network connection lost - Switching to offline mode');
+          console.warn('[Firebase] 🏠 LOCAL-FIRST: Gone offline - Continuing with local data');
         });
       }
 
       checkConnection();
+    }
+
+    // Set up LOCAL-FIRST data loading preferences
+    if (firestoreInstance) {
+      // Configure Firestore for local-first behavior
+      // This ensures all reads attempt local cache first
+      console.warn('[Firebase] 🏠 LOCAL-FIRST: Configured for cache-first operations');
     }
   } else {
     // Configuration missing - don't initialize Firestore

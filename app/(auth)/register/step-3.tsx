@@ -22,7 +22,10 @@ export default function RegisterStep3({ errors }: { errors: FieldErrors<FormData
   const stateRef = useRef<TextInput>(null);
   const zipCodeRef = useRef<TextInput>(null);
 
-  const [useAutocomplete, setUseAutocomplete] = useState(!!GOOGLE_PLACES_API_KEY);
+  // Check if API key is valid (not a placeholder)
+  const isValidApiKey = GOOGLE_PLACES_API_KEY && GOOGLE_PLACES_API_KEY.trim() !== '' && !GOOGLE_PLACES_API_KEY.includes('your-google-places-api-key') && !GOOGLE_PLACES_API_KEY.includes('yourkey');
+
+  const [useAutocomplete, setUseAutocomplete] = useState(isValidApiKey);
 
   // Auto-focus address input on mount
   useEffect(() => {
@@ -50,16 +53,25 @@ export default function RegisterStep3({ errors }: { errors: FieldErrors<FormData
         Provide your address information (optional - enhances your experience)
       </ThemedText>
 
-      {useAutocomplete ? (
+      {/* Show helpful message when autocomplete is not available */}
+      {!isValidApiKey && (
+        <ThemedText type="caption" style={styles.infoText}>
+          💡 Fill in your address details below
+        </ThemedText>
+      )}
+
+      {/* Show autocomplete if available */}
+      {useAutocomplete && isValidApiKey && (
         <>
           <AddressAutocomplete onAddressSelect={handleAddressSelect} googleApiKey={GOOGLE_PLACES_API_KEY} />
           <ThemedText type="caption" style={styles.manualLink} onPress={() => setUseAutocomplete(false)} accessibilityRole="button" accessibilityLabel="Switch to manual address entry">
             Or enter address manually
           </ThemedText>
         </>
-      ) : null}
+      )}
 
-      {!useAutocomplete ? (
+      {/* Always show manual inputs unless autocomplete is actively being used */}
+      {(!useAutocomplete || !isValidApiKey) && (
         <>
           <Controller
             control={control}
@@ -152,7 +164,7 @@ export default function RegisterStep3({ errors }: { errors: FieldErrors<FormData
             )}
           />
         </>
-      ) : null}
+      )}
     </ThemedView>
   );
 }
@@ -167,6 +179,11 @@ const styles = StyleSheet.create({
   description: {
     marginBottom: 16,
     opacity: 0.7,
+  },
+  infoText: {
+    marginBottom: 12,
+    opacity: 0.8,
+    fontStyle: 'italic',
   },
   manualLink: {
     marginTop: 8,

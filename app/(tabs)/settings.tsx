@@ -168,12 +168,16 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        {settingsSections.map((section) => (
-          <View key={section.title} style={styles.section}>
+        {settingsSections.map((section, sectionIndex) => (
+          <View key={section.title || `section-${sectionIndex}`} style={styles.section}>
             {section.title && <ThemedText type="h2">{section.title}</ThemedText>}
             <View style={styles.sectionItems}>
-              {section.items.map((item, index) => (
-                <TouchableOpacity key={item.title} style={[styles.settingRow, index === section.items.length - 1 && styles.settingRowLast]} onPress={() => handlePress(item)}>
+              {section.items.map((item, itemIndex) => (
+                <TouchableOpacity
+                  key={`${sectionIndex}-${itemIndex}-${item.title}`}
+                  style={[styles.settingRow, itemIndex === section.items.length - 1 && styles.settingRowLast]}
+                  onPress={() => handlePress(item)}
+                >
                   <Feather
                     name={item.icon as unknown as React.ComponentProps<typeof Feather>['name']}
                     size={20}

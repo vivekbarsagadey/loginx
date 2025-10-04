@@ -1,14 +1,12 @@
-import { ApiConstants, FirebaseCollections } from '@/constants';
-import { firestore } from '@/firebase-config';
+import { FirebaseCollections } from '@/constants';
 import { UserProfile } from '@/types/user';
-import * as cache from '@/utils/cache';
+import { debugLog } from '@/utils/debug';
 import { showError } from '@/utils/error';
-import { withRetry } from '@/utils/retry';
+import { getData, setData } from '@/utils/local-first';
 import { sanitizeUserProfile } from '@/utils/sanitize';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 /**
- * Get user profile from Firestore with caching
+ * LOCAL-FIRST: Get user profile (local first, remote fallback)
  * @param uid - User ID
  * @returns User profile or null if not found
  */
@@ -19,24 +17,14 @@ export const getUserProfile = async (uid: string): Promise<UserProfile | null> =
       return null;
     }
 
-    const cacheKey = `user-profile-${uid}`;
-    const cachedProfile = cache.get(cacheKey);
-    if (cachedProfile) {
-      return cachedProfile as UserProfile;
-    }
-
-    const userDocRef = doc(firestore, 'users', uid);
-    const userDoc = await withRetry(() => getDoc(userDocRef), {
-      maxRetries: ApiConstants.MAX_RETRIES,
-      initialDelay: ApiConstants.INITIAL_DELAY,
+    // Use LOCAL-FIRST approach
+    const userProfile = await getData<UserProfile>({
+      collection: FirebaseCollections.USERS,
+      id: uid,
+      syncEnabled: true,
     });
 
-    if (userDoc.exists()) {
-      const userProfile = userDoc.data() as UserProfile;
-      cache.set(cacheKey, userProfile);
-      return userProfile;
-    }
-    return null;
+    return userProfile;
   } catch (error) {
     console.error('[UserAction] Error getting user profile:', error);
     showError(error);
@@ -45,7 +33,7 @@ export const getUserProfile = async (uid: string): Promise<UserProfile | null> =
 };
 
 /**
- * Update user profile in Firestore and invalidate cache
+ * LOCAL-FIRST: Update user profile (saves locally first, syncs in background)
  * @param uid - User ID
  * @param data - Partial user profile data to update
  */
@@ -56,17 +44,25 @@ export const updateUser = async (uid: string, data: Partial<UserProfile>): Promi
       return;
     }
 
-    // Sanitize user input before saving
-    const sanitizedData = sanitizeUserProfile(data);
+    // Get current profile first
+    const currentProfile = await getUserProfile(uid);
+    if (!currentProfile) {
+      throw new Error('User profile not found');
+    }
 
-    const userDocRef = doc(firestore, FirebaseCollections.USERS, uid);
-    await withRetry(() => updateDoc(userDocRef, sanitizedData), {
-      maxRetries: ApiConstants.MAX_RETRIES,
-      initialDelay: ApiConstants.INITIAL_DELAY,
+    // Merge with existing data and sanitize
+    const updatedProfile = { ...currentProfile, ...data };
+    const sanitizedData = sanitizeUserProfile(updatedProfile);
+
+    // Use LOCAL-FIRST approach - saves locally immediately, syncs in background
+    await setData({
+      collection: FirebaseCollections.USERS,
+      id: uid,
+      data: sanitizedData,
+      syncEnabled: true,
     });
 
-    // Invalidate cache instead of setting partial data
-    cache.invalidate(`user-profile-${uid}`);
+    debugLog('[UserAction] ✅ LOCAL-FIRST: User profile updated locally');
   } catch (error) {
     console.error('[UserAction] Error updating user:', error);
     showError(error);
@@ -74,7 +70,7 @@ export const updateUser = async (uid: string, data: Partial<UserProfile>): Promi
 };
 
 /**
- * Create new user profile in Firestore
+ * LOCAL-FIRST: Create new user profile (saves locally first, syncs in background)
  * @param uid - User ID
  * @param data - Complete user profile data
  */
@@ -88,9 +84,15 @@ export const createUserProfile = async (uid: string, data: UserProfile): Promise
     // Sanitize user input before saving
     const sanitizedData = sanitizeUserProfile(data);
 
-    const userDocRef = doc(firestore, 'users', uid);
-    await setDoc(userDocRef, sanitizedData);
-    cache.set(`user-profile-${uid}`, sanitizedData);
+    // Use LOCAL-FIRST approach
+    await setData({
+      collection: FirebaseCollections.USERS,
+      id: uid,
+      data: sanitizedData,
+      syncEnabled: true,
+    });
+
+    debugLog('[UserAction] ✅ LOCAL-FIRST: User profile created locally');
   } catch (error) {
     console.error('[UserAction] Error creating user profile:', error);
     showError(error);
@@ -98,7 +100,7 @@ export const createUserProfile = async (uid: string, data: UserProfile): Promise
 };
 
 /**
- * Soft delete user account (mark as deleted)
+ * LOCAL-FIRST: Soft delete user account (saves locally first, syncs in background)
  * @param uid - User ID
  */
 export const deleteUserAccount = async (uid: string): Promise<void> => {
@@ -108,14 +110,28 @@ export const deleteUserAccount = async (uid: string): Promise<void> => {
       return;
     }
 
-    const userDocRef = doc(firestore, 'users', uid);
-    await updateDoc(userDocRef, {
+    // Get current profile first
+    const currentProfile = await getUserProfile(uid);
+    if (!currentProfile) {
+      throw new Error('User profile not found');
+    }
+
+    // Mark as deleted
+    const deletedProfile = {
+      ...currentProfile,
       deleted: true,
       deletedAt: new Date().toISOString(),
+    };
+
+    // Use LOCAL-FIRST approach
+    await setData({
+      collection: FirebaseCollections.USERS,
+      id: uid,
+      data: deletedProfile,
+      syncEnabled: true,
     });
 
-    // Invalidate cache
-    cache.invalidate(`user-profile-${uid}`);
+    debugLog('[UserAction] ✅ LOCAL-FIRST: User account marked as deleted locally');
   } catch (error) {
     console.error('[UserAction] Error deleting user account:', error);
     showError(error);

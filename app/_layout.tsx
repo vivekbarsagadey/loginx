@@ -9,6 +9,7 @@ import { Routes } from '@/constants/routes';
 import { AuthProvider, useAuth } from '@/hooks/use-auth-provider';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { OnboardingProvider, useOnboarding } from '@/hooks/use-onboarding-provider';
+import { initializeLocalFirst } from '@/utils/local-first';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -61,6 +62,11 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
+
+      // Initialize LOCAL-FIRST system
+      initializeLocalFirst().catch((error) => {
+        console.error('Failed to initialize LOCAL-FIRST system:', error);
+      });
     }
   }, [loaded]);
 

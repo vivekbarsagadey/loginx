@@ -31,45 +31,63 @@ export function AddressAutocomplete({ onAddressSelect, initialValue, googleApiKe
   const borderColor = useThemeColor({}, 'border');
   const surfaceColor = useThemeColor({}, 'surface');
 
-  const [manualMode] = useState(!googleApiKey);
+  // Check if API key is valid (not a placeholder)
+  const isValidApiKey = googleApiKey && googleApiKey.trim() !== '' && !googleApiKey.includes('your-google-places-api-key') && !googleApiKey.includes('yourkey');
+
+  const [manualMode] = useState(!isValidApiKey);
 
   useEffect(() => {
-    if (initialValue && ref.current) {
+    if (initialValue && ref.current && !manualMode) {
       ref.current.setAddressText(initialValue);
     }
-  }, [initialValue]);
+  }, [initialValue, manualMode]);
 
   const parseAddressComponents = (details: unknown): AddressComponents => {
-    const addressComponents = (details as { address_components?: { types: string[]; long_name: string; short_name: string }[] })?.address_components || [];
+    try {
+      if (!details || typeof details !== 'object') {
+        throw new Error('Invalid details object');
+      }
 
-    const getComponent = (type: string, useShort = false) => {
-      const component = addressComponents.find((c) => c.types.includes(type));
-      return component ? (useShort ? component.short_name : component.long_name) : '';
-    };
+      const addressComponents = (details as { address_components?: { types: string[]; long_name: string; short_name: string }[] })?.address_components || [];
 
-    const streetNumber = getComponent('street_number');
-    const route = getComponent('route');
-    const street = `${streetNumber} ${route}`.trim();
+      const getComponent = (type: string, useShort = false) => {
+        try {
+          const component = addressComponents.find((c) => c && c.types && Array.isArray(c.types) && c.types.includes(type));
+          return component ? (useShort ? component.short_name : component.long_name) : '';
+        } catch {
+          return '';
+        }
+      };
 
-    return {
-      fullAddress: (details as { formatted_address?: string })?.formatted_address || '',
-      street,
-      city: getComponent('locality') || getComponent('sublocality') || getComponent('administrative_area_level_2'),
-      state: getComponent('administrative_area_level_1', true),
-      zipCode: getComponent('postal_code'),
-      country: getComponent('country', true),
-    };
+      const streetNumber = getComponent('street_number');
+      const route = getComponent('route');
+      const street = `${streetNumber} ${route}`.trim();
+
+      return {
+        fullAddress: (details as { formatted_address?: string })?.formatted_address || '',
+        street,
+        city: getComponent('locality') || getComponent('sublocality') || getComponent('administrative_area_level_2'),
+        state: getComponent('administrative_area_level_1', true),
+        zipCode: getComponent('postal_code'),
+        country: getComponent('country', true),
+      };
+    } catch (error) {
+      console.error('Error parsing address components:', error);
+      // Return a fallback object
+      return {
+        fullAddress: '',
+        street: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        country: '',
+      };
+    }
   };
 
-  // Fallback to manual input if no API key
-  if (manualMode || !googleApiKey) {
-    return (
-      <ThemedView style={styles.container}>
-        <ThemedText type="caption" style={styles.helperText}>
-          Google Places API key not configured. Using manual address entry.
-        </ThemedText>
-      </ThemedView>
-    );
+  // Fallback to manual input if no valid API key - return null to let parent handle manual entry
+  if (manualMode || !isValidApiKey) {
+    return null;
   }
 
   return (
@@ -79,13 +97,29 @@ export function AddressAutocomplete({ onAddressSelect, initialValue, googleApiKe
         placeholder="Start typing your address..."
         fetchDetails={true}
         onPress={(data, details = null) => {
-          if (details) {
-            const addressComponents = parseAddressComponents(details);
-            onAddressSelect(addressComponents);
+          try {
+            if (details) {
+              const addressComponents = parseAddressComponents(details);
+              onAddressSelect(addressComponents);
+            }
+          } catch (error) {
+            console.error('Error parsing address:', error);
+            // Fallback - use the basic address text
+            onAddressSelect({
+              fullAddress: data.description || '',
+              street: data.description || '',
+              city: '',
+              state: '',
+              zipCode: '',
+              country: '',
+            });
           }
         }}
+        onFail={(error) => {
+          console.error('GooglePlacesAutocomplete error:', error);
+        }}
         query={{
-          key: googleApiKey,
+          key: isValidApiKey ? googleApiKey : '',
           language: 'en',
           components: 'country:us', // Restrict to US addresses (change as needed)
         }}
@@ -144,6 +178,13 @@ export function AddressAutocomplete({ onAddressSelect, initialValue, googleApiKe
         GooglePlacesSearchQuery={{
           rankby: 'distance',
         }}
+        suppressDefaultStyles={false}
+        keepResultsAfterBlur={false}
+        listEmptyComponent={() => (
+          <ThemedText type="caption" style={[styles.helperText, { textAlign: 'center', padding: 16 }]}>
+            No results found
+          </ThemedText>
+        )}
       />
 
       <ThemedText type="caption" style={[styles.helperText, { color: textColor }]}>
