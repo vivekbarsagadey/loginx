@@ -1,21 +1,10 @@
-import { ThemedScrollView } from '@/components/themed-scroll-view';
+import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
-import { StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ItemsScreen() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ThemedScrollView style={styles.container}>
-        <ThemedText type="h1">Items</ThemedText>
-      </ThemedScrollView>
-    </SafeAreaView>
+    <ScreenContainer scrollable>
+      <ThemedText type="h1">Items</ThemedText>
+    </ScreenContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-});

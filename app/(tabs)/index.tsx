@@ -1,13 +1,11 @@
 import { getUserProfile } from '@/actions/user.action';
-import { ThemedScrollView } from '@/components/themed-scroll-view';
+import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { useAuth } from '@/hooks/use-auth-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { UserProfile } from '@/types/user';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function IndexScreen() {
   const { user } = useAuth();
@@ -39,49 +37,37 @@ export default function IndexScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <ThemedView style={styles.loaderContainer}>
-          <ActivityIndicator size="large" />
-        </ThemedView>
-      </SafeAreaView>
+      <ScreenContainer centerContent>
+        <ActivityIndicator size="large" />
+      </ScreenContainer>
     );
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ThemedScrollView contentContainerStyle={styles.container}>
-        {userProfile ? (
-          <>
-            <ThemedText type="h1">Welcome, {userProfile.displayName}!</ThemedText>
-            <ThemedText type="body" style={styles.email}>
-              {userProfile.email}
-            </ThemedText>
-            <ThemedText type="body">Age: {userProfile.age}</ThemedText>
+    <ScreenContainer scrollable>
+      {userProfile ? (
+        <>
+          <ThemedText type="h1">Welcome, {userProfile.displayName}!</ThemedText>
+          <ThemedText type="body" style={styles.email}>
+            {userProfile.email}
+          </ThemedText>
+          <ThemedText type="body">Age: {userProfile.age}</ThemedText>
 
-            <View style={[styles.section, { borderColor: borderColor }]}>
-              <ThemedText type="h2">Your Notification Preferences</ThemedText>
-              <ThemedText>Push Notifications: {userProfile.pushEnabled ? 'Enabled' : 'Disabled'}</ThemedText>
-              <ThemedText>Email Updates: {userProfile.emailUpdates ? 'Enabled' : 'Disabled'}</ThemedText>
-              <ThemedText>Marketing Tips: {userProfile.marketingTips ? 'Enabled' : 'Disabled'}</ThemedText>
-            </View>
-          </>
-        ) : (
-          <ThemedText type="h1">Welcome!</ThemedText>
-        )}
-      </ThemedScrollView>
-    </SafeAreaView>
+          <View style={[styles.section, { borderColor: borderColor }]}>
+            <ThemedText type="h2">Your Notification Preferences</ThemedText>
+            <ThemedText>Push Notifications: {userProfile.pushEnabled ? 'Enabled' : 'Disabled'}</ThemedText>
+            <ThemedText>Email Updates: {userProfile.emailUpdates ? 'Enabled' : 'Disabled'}</ThemedText>
+            <ThemedText>Marketing Tips: {userProfile.marketingTips ? 'Enabled' : 'Disabled'}</ThemedText>
+          </View>
+        </>
+      ) : (
+        <ThemedText type="h1">Welcome!</ThemedText>
+      )}
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-  },
-  loaderContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   email: {
     marginVertical: 16,
   },
