@@ -2,7 +2,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/layout';
+import { Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
@@ -215,12 +215,12 @@ const styles = StyleSheet.create({
   },
   phoneNumber: {
     textAlign: 'center',
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: Typography.body.fontSize,
+    fontWeight: Typography.bodyBold.fontWeight,
     marginBottom: Spacing.md,
   },
   input: {
-    fontSize: 24,
+    fontSize: Typography.h1.fontSize,
     textAlign: 'center',
     letterSpacing: 8,
   },

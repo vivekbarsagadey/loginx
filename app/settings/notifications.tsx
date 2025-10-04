@@ -2,7 +2,7 @@ import { updateSetting } from '@/actions/setting.action';
 import { getUserProfile } from '@/actions/user.action';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
-import { BorderRadius, Spacing } from '@/constants/layout';
+import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { showError } from '@/utils/error';
@@ -94,8 +94,8 @@ export default function NotificationsScreen() {
           marginRight: Spacing.md,
         },
         settingTitle: {
-          fontWeight: '600',
-          marginBottom: 4,
+          fontWeight: Typography.bodyBold.fontWeight,
+          marginBottom: Spacing.xs,
         },
         settingDescription: {
           color: textMutedColor,

@@ -3,7 +3,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { SocialSignInButtons } from '@/components/ui/social-sign-in-buttons';
-import { Spacing } from '@/constants/layout';
+import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
 import { useSecuritySettings } from '@/hooks/use-security-settings';
@@ -278,22 +278,22 @@ const styles = StyleSheet.create({
   warningContainer: {
     marginTop: Spacing.md,
     padding: Spacing.md,
-    borderRadius: Spacing.sm,
+    borderRadius: BorderRadius.sm,
     borderWidth: 1,
   },
   warningText: {
     textAlign: 'center',
-    fontSize: 14,
+    fontSize: Typography.caption.fontSize,
   },
   lockoutContainer: {
     marginTop: Spacing.md,
     padding: Spacing.md,
-    borderRadius: Spacing.sm,
+    borderRadius: BorderRadius.sm,
     borderWidth: 1,
   },
   lockoutText: {
     textAlign: 'center',
-    fontSize: 14,
+    fontSize: Typography.caption.fontSize,
   },
   linkButton: {
     marginTop: Spacing.md,

@@ -1,7 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { BorderRadius, Spacing } from '@/constants/layout';
+import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import i18n from '@/i18n';
 import { StyleSheet } from 'react-native';
 
@@ -65,10 +65,10 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     marginBottom: Spacing.md,
-    fontWeight: 'bold',
+    fontWeight: Typography.h3.fontWeight,
   },
   sectionContent: {
-    lineHeight: 22,
+    lineHeight: Typography.body.lineHeight,
     opacity: 0.9,
     marginBottom: Spacing.md,
   },
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     // Background handled by theme
   },
   libraryName: {
-    fontWeight: 'bold',
+    fontWeight: Typography.bodyBold.fontWeight,
     marginBottom: Spacing.xs,
   },
   libraryLicense: {
@@ -89,6 +89,6 @@ const styles = StyleSheet.create({
   },
   libraryDescription: {
     opacity: 0.8,
-    lineHeight: 18,
+    lineHeight: Typography.caption.lineHeight,
   },
 });

@@ -2,7 +2,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/layout';
+import { Spacing, Typography } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import { showError } from '@/utils/error';
@@ -269,12 +269,12 @@ const styles = StyleSheet.create({
   },
   email: {
     textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: Typography.body.fontSize,
+    fontWeight: Typography.bodyBold.fontWeight,
     marginBottom: Spacing.md,
   },
   input: {
-    fontSize: 24,
+    fontSize: Typography.h1.fontSize,
     textAlign: 'center',
     letterSpacing: 4,
   },

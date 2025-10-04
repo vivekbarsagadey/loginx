@@ -1,3 +1,5 @@
+import { BorderRadius, Spacing, Typography } from '@/constants/layout';
+import { getShadow } from '@/constants/style-utils';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
@@ -223,7 +225,7 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
     <ThemedView style={[styles.container, { width }]}>
       <ThemedView style={styles.content}>
         <ThemedView style={styles.iconContainer}>
-          <ThemedView style={[styles.iconCircle, { backgroundColor: getStatusColor(), shadowColor }]}>
+          <ThemedView style={[styles.iconCircle, { backgroundColor: getStatusColor(), shadowColor }, getShadow('md', colorScheme)]}>
             <Ionicons name={getStatusIcon() as keyof typeof Ionicons.glyphMap} size={64} color={theme.background} />
           </ThemedView>
         </ThemedView>
@@ -250,7 +252,7 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
+    padding: Spacing.lg,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -260,53 +262,50 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconContainer: {
-    marginBottom: 32,
+    marginBottom: Spacing.xl,
   },
   iconCircle: {
     width: 120,
     height: 120,
-    borderRadius: 60,
+    borderRadius: BorderRadius.full,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
+    // Shadow added dynamically via getShadow()
   },
   title: {
-    marginBottom: 16,
+    marginBottom: Spacing.md,
     textAlign: 'center',
-    fontWeight: '700',
+    fontWeight: Typography.h1.fontWeight,
   },
   description: {
-    marginBottom: 32,
+    marginBottom: Spacing.xl,
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: Typography.body.lineHeight,
   },
   benefitsContainer: {
     width: '100%',
-    marginBottom: 32,
+    marginBottom: Spacing.xl,
   },
   benefitsTitle: {
-    marginBottom: 16,
-    fontWeight: '600',
+    marginBottom: Spacing.md,
+    fontWeight: Typography.h3.fontWeight,
     textAlign: 'center',
   },
   benefitItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
-    paddingHorizontal: 8,
+    marginBottom: Spacing.sm,
+    paddingHorizontal: Spacing.sm,
   },
   benefitText: {
-    marginLeft: 12,
+    marginLeft: Spacing.sm,
     flex: 1,
-    lineHeight: 20,
+    lineHeight: Typography.caption.lineHeight,
     flexShrink: 1,
   },
   buttonContainer: {
     width: '100%',
-    gap: 12,
+    gap: Spacing.sm,
   },
   primaryButton: {
     width: '100%',
@@ -317,15 +316,15 @@ const styles = StyleSheet.create({
   warningContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 8,
+    marginTop: Spacing.md,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.sm,
   },
   warningText: {
-    marginLeft: 8,
+    marginLeft: Spacing.sm,
     flex: 1,
-    fontSize: 14,
+    fontSize: Typography.caption.fontSize,
     textAlign: 'center',
   },
 });

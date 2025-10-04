@@ -1,7 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/layout';
+import { Spacing, Typography } from '@/constants/layout';
 import i18n from '@/i18n';
 import { StyleSheet } from 'react-native';
 
@@ -43,10 +43,10 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     marginBottom: Spacing.md,
-    fontWeight: 'bold',
+    fontWeight: Typography.h3.fontWeight,
   },
   sectionContent: {
-    lineHeight: 22,
+    lineHeight: Typography.body.lineHeight,
     opacity: 0.9,
   },
 });

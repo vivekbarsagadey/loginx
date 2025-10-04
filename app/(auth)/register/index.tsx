@@ -3,7 +3,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { SocialSignInButtons } from '@/components/ui/social-sign-in-buttons';
-import { Spacing } from '@/constants/layout';
+import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useSocialAuth } from '@/hooks/use-social-auth';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -383,8 +383,8 @@ const styles = StyleSheet.create({
     // Color will be set by ThemedText's 'caption' type
   },
   stepTitle: {
-    fontWeight: '600',
-    fontSize: 16,
+    fontWeight: Typography.bodyBold.fontWeight,
+    fontSize: Typography.body.fontSize,
   },
   progressBarContainer: {
     flexDirection: 'row',
@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
   progressBar: {
     flex: 1,
     height: 4,
-    borderRadius: 2,
+    borderRadius: BorderRadius.xs,
   },
   scrollView: {
     flex: 1,

@@ -1,7 +1,7 @@
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/layout';
+import { Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import i18n from '@/i18n';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   email: {
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontWeight: Typography.bodyBold.fontWeight,
     marginBottom: Spacing.xl,
   },
   button: {

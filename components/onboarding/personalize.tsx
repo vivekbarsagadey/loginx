@@ -1,4 +1,4 @@
-import { Spacing } from '@/constants/layout';
+import { Spacing, Typography } from '@/constants/layout';
 import i18n from '@/i18n';
 import { StyleSheet } from 'react-native';
 import { LanguagePicker } from '../language-picker';
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   note: {
-    fontSize: 13,
+    fontSize: Typography.caption.fontSize,
     textAlign: 'center',
     marginTop: Spacing.sm,
   },

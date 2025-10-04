@@ -1,3 +1,5 @@
+import { BorderRadius, Spacing, Typography } from '@/constants/layout';
+import { getShadow } from '@/constants/style-utils';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
@@ -51,7 +53,7 @@ export const CompletionSlide = ({ width, onComplete }: CompletionSlideProps) => 
     <ThemedView style={[styles.container, { width }]}>
       <ThemedView style={styles.content}>
         <ThemedView style={styles.header}>
-          <ThemedView style={[styles.iconCircle, { backgroundColor: theme.success, shadowColor }]}>
+          <ThemedView style={[styles.iconCircle, { backgroundColor: theme.success, shadowColor }, getShadow('md', colorScheme)]}>
             <Ionicons name="checkmark-circle" size={64} color={theme.background} />
           </ThemedView>
 
@@ -97,7 +99,7 @@ export const CompletionSlide = ({ width, onComplete }: CompletionSlideProps) => 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
+    padding: Spacing.lg,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -114,23 +116,20 @@ const styles = StyleSheet.create({
   iconCircle: {
     width: 100,
     height: 100,
-    borderRadius: 50,
+    borderRadius: BorderRadius.full,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 24,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
+    marginBottom: Spacing.lg,
+    // Shadow added dynamically via getShadow()
   },
   title: {
-    marginBottom: 12,
+    marginBottom: Spacing.sm,
     textAlign: 'center',
-    fontWeight: '700',
+    fontWeight: Typography.h1.fontWeight,
   },
   subtitle: {
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: Typography.body.lineHeight,
     opacity: 0.8,
   },
   summarySection: {
@@ -138,36 +137,36 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   summaryTitle: {
-    marginBottom: 24,
-    fontWeight: '600',
+    marginBottom: Spacing.lg,
+    fontWeight: Typography.h2.fontWeight,
   },
   featureItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-    marginBottom: 8,
-    borderRadius: 12,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.sm,
+    marginBottom: Spacing.sm,
+    borderRadius: BorderRadius.md,
   },
   featureIcon: {
     width: 36,
     height: 36,
-    borderRadius: 18,
+    borderRadius: BorderRadius.lg,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
   },
   featureTitle: {
     flex: 1,
-    fontWeight: '500',
+    fontWeight: Typography.bodyBold.fontWeight,
   },
   footer: {
     alignItems: 'center',
-    paddingBottom: 20,
+    paddingBottom: Spacing.lg,
   },
   completeButton: {
     width: '100%',
-    marginBottom: 16,
+    marginBottom: Spacing.md,
   },
   footerText: {
     textAlign: 'center',

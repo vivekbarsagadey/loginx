@@ -1,5 +1,5 @@
 import { AnimationDurations, Colors } from '@/constants';
-import { BorderRadius, Spacing, TouchTarget } from '@/constants/layout';
+import { BorderRadius, Spacing, TouchTarget, Typography } from '@/constants/layout';
 import i18n from '@/i18n';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
@@ -382,12 +382,12 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: 4,
-    borderRadius: 2,
+    borderRadius: BorderRadius.xs,
     marginBottom: Spacing.xs + Spacing.sm,
   },
   progressFill: {
     height: '100%',
-    borderRadius: 2,
+    borderRadius: BorderRadius.xs,
   },
   indicatorsContainer: {
     flexDirection: 'row',
@@ -411,6 +411,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonText: {
-    fontWeight: '600',
+    fontWeight: Typography.bodyBold.fontWeight,
   },
 });

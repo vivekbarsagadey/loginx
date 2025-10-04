@@ -2,7 +2,7 @@ import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { PasswordStrengthMeter } from '@/components/ui/password-strength-meter';
-import { Spacing } from '@/constants/layout';
+import { Spacing, Typography } from '@/constants/layout';
 import { useEmailAvailability } from '@/hooks/use-email-availability';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -204,13 +204,13 @@ const styles = StyleSheet.create({
   },
   statusText: {
     marginTop: Spacing.xs,
-    fontSize: 12,
+    fontSize: Typography.small.fontSize,
   },
   passwordSection: {
     gap: Spacing.sm,
   },
   helperText: {
     opacity: 0.7,
-    lineHeight: 18,
+    lineHeight: Typography.caption.lineHeight,
   },
 });

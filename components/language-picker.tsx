@@ -1,3 +1,4 @@
+import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { Colors } from '@/constants/theme';
 import { useLanguage } from '@/hooks/use-language';
 import { useTheme } from '@/hooks/use-theme';
@@ -26,11 +27,11 @@ export const LanguagePicker = () => {
         },
         textActive: {
           color: colors['on-primary'],
-          fontWeight: '600',
+          fontWeight: Typography.bodyBold.fontWeight,
         },
         textInactive: {
           color: colors.text,
-          fontWeight: '600',
+          fontWeight: Typography.bodyBold.fontWeight,
         },
       }),
     [colors]
@@ -52,20 +53,20 @@ export const LanguagePicker = () => {
 
 const styles = StyleSheet.create({
   label: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
+    fontSize: Typography.body.fontSize,
+    fontWeight: Typography.bodyBold.fontWeight,
+    marginBottom: Spacing.sm,
   },
   container: {
     flexDirection: 'row',
-    borderRadius: 12,
+    borderRadius: BorderRadius.md,
     borderWidth: 1,
     borderColor: Colors.light.border,
     overflow: 'hidden',
   },
   chip: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: Spacing.sm,
     alignItems: 'center',
     justifyContent: 'center',
   },

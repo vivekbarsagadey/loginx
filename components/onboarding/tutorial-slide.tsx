@@ -1,4 +1,5 @@
 import { AnimationDurations, Colors } from '@/constants';
+import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
 import i18n from '@/i18n';
@@ -275,9 +276,9 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingHorizontal: 24,
-    paddingTop: 24,
-    paddingBottom: 16,
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.lg,
+    paddingBottom: Spacing.md,
   },
   header: {
     alignItems: 'center',
@@ -285,13 +286,13 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    fontWeight: '700',
-    marginBottom: 8,
+    fontWeight: Typography.h1.fontWeight,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     textAlign: 'center',
     opacity: 0.8,
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
   },
   tutorialProgress: {
     alignItems: 'center',
@@ -304,24 +305,24 @@ const styles = StyleSheet.create({
   progressTrack: {
     width: '100%',
     height: 4,
-    borderRadius: 2,
+    borderRadius: BorderRadius.xs,
   },
   progressBar: {
     height: '100%',
-    borderRadius: 2,
+    borderRadius: BorderRadius.xs,
   },
   tutorialCard: {
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
   },
   tutorialHeader: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
   },
   tutorialIcon: {
     width: 56,
     height: 56,
-    borderRadius: 28,
+    borderRadius: BorderRadius.full,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
@@ -330,28 +331,28 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   tutorialTitle: {
-    marginBottom: 4,
-    fontWeight: '600',
+    marginBottom: Spacing.xs,
+    fontWeight: Typography.h2.fontWeight,
   },
   tutorialDescription: {
-    lineHeight: 20,
+    lineHeight: Typography.caption.lineHeight,
     opacity: 0.8,
   },
   completedBadge: {
     marginLeft: 8,
   },
   demoSection: {
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
   },
   demoTitle: {
-    marginBottom: 16,
-    fontWeight: '600',
+    marginBottom: Spacing.md,
+    fontWeight: Typography.h3.fontWeight,
   },
   demoArea: {
     borderWidth: 2,
     borderStyle: 'dashed',
-    borderRadius: 12,
-    padding: 24,
+    borderRadius: BorderRadius.md,
+    padding: Spacing.lg,
     alignItems: 'center',
     minHeight: 120,
     maxHeight: 180,
@@ -362,70 +363,70 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   demoText: {
-    marginTop: 12,
+    marginTop: Spacing.sm,
     textAlign: 'center',
-    fontWeight: '500',
+    fontWeight: Typography.body.fontWeight,
   },
   demoProgress: {
     position: 'absolute',
-    bottom: 12,
-    left: 12,
-    right: 12,
+    bottom: Spacing.sm,
+    left: Spacing.sm,
+    right: Spacing.sm,
   },
   demoProgressTrack: {
     height: 2,
-    borderRadius: 1,
+    borderRadius: BorderRadius.xs,
   },
   demoProgressBar: {
     height: '100%',
-    borderRadius: 1,
+    borderRadius: BorderRadius.xs,
   },
   stepsSection: {},
   stepsTitle: {
-    marginBottom: 16,
-    fontWeight: '600',
+    marginBottom: Spacing.md,
+    fontWeight: Typography.h3.fontWeight,
   },
   stepItem: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 16,
+    marginBottom: Spacing.md,
   },
   stepNumber: {
     width: 24,
     height: 24,
-    borderRadius: 12,
+    borderRadius: BorderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
     marginTop: 2,
   },
   stepNumberText: {
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: Typography.small.fontSize,
+    fontWeight: Typography.small.fontWeight,
   },
   stepText: {
     flex: 1,
-    lineHeight: 20,
+    lineHeight: Typography.caption.lineHeight,
   },
   footer: {
-    paddingHorizontal: 24,
-    paddingBottom: 24,
-    paddingTop: 16,
+    paddingHorizontal: Spacing.lg,
+    paddingBottom: Spacing.lg,
+    paddingTop: Spacing.md,
   },
   tutorialNav: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 20,
-    gap: 8,
+    marginBottom: Spacing.lg,
+    gap: Spacing.sm,
   },
   navDot: {
     width: 8,
     height: 8,
-    borderRadius: 4,
+    borderRadius: BorderRadius.xs,
   },
   buttonContainer: {
     flexDirection: 'row',
-    gap: 12,
+    gap: Spacing.sm,
   },
   skipButton: {
     flex: 1,

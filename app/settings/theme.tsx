@@ -1,6 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { BorderRadius, Spacing } from '@/constants/layout';
+import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { useState } from 'react';
@@ -126,31 +126,31 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
   },
   optionIcon: {
-    fontSize: 24,
+    fontSize: Typography.h1.fontSize,
     marginRight: Spacing.md,
   },
   optionText: {
     flex: 1,
   },
   optionTitle: {
-    fontWeight: 'bold',
+    fontWeight: Typography.bodyBold.fontWeight,
     marginBottom: Spacing.xs,
   },
   optionDescription: {
     opacity: 0.7,
-    fontSize: 14,
+    fontSize: Typography.caption.fontSize,
   },
   checkmark: {
-    fontSize: 20,
+    fontSize: Typography.h3.fontSize,
     // Color applied inline with theme
-    fontWeight: 'bold',
+    fontWeight: Typography.bodyBold.fontWeight,
   },
   previewSection: {
     marginTop: Spacing.md,
   },
   previewTitle: {
     marginBottom: Spacing.md,
-    fontWeight: 'bold',
+    fontWeight: Typography.h3.fontWeight,
   },
   previewContainer: {
     alignItems: 'center',
@@ -162,8 +162,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   previewText: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: Typography.body.fontSize,
+    fontWeight: Typography.bodyBold.fontWeight,
     marginBottom: Spacing.sm,
   },
   previewSubtext: {

@@ -1,6 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { BorderRadius, Spacing } from '@/constants/layout';
+import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import React, { useState } from 'react';
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   optionTitle: {
-    fontWeight: '600',
+    fontWeight: Typography.bodyBold.fontWeight,
     marginBottom: Spacing.sm,
   },
   optionContent: {
@@ -112,15 +112,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   checkmark: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: Typography.h3.fontSize,
+    fontWeight: Typography.bodyBold.fontWeight,
   },
   previewSection: {
     marginTop: Spacing.lg,
   },
   previewTitle: {
     marginBottom: Spacing.md,
-    fontWeight: 'bold',
+    fontWeight: Typography.h3.fontWeight,
   },
   previewContainer: {
     marginTop: Spacing.xl,
