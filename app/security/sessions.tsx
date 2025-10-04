@@ -1,10 +1,11 @@
+import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 
 interface Session {
   id: string;
@@ -94,46 +95,37 @@ export default function SessionsScreen() {
   );
 
   return (
-    <ScrollView style={styles.scrollView}>
-      <ThemedView style={styles.container}>
-        <ThemedText type="h1" style={styles.title}>
-          {i18n.t('screens.security.sessions.title')}
+    <ScreenContainer scrollable>
+      <ThemedText type="h1" style={styles.title}>
+        {i18n.t('screens.security.sessions.title')}
+      </ThemedText>
+      <ThemedText style={styles.subtitle}>{i18n.t('screens.security.sessions.subtitle')}</ThemedText>
+
+      <ThemedView style={styles.section}>
+        <ThemedText type="h3" style={styles.sectionTitle}>
+          {i18n.t('screens.security.sessions.currentSession')}
         </ThemedText>
-        <ThemedText style={styles.subtitle}>{i18n.t('screens.security.sessions.subtitle')}</ThemedText>
-
-        <ThemedView style={styles.section}>
-          <ThemedText type="h3" style={styles.sectionTitle}>
-            {i18n.t('screens.security.sessions.currentSession')}
-          </ThemedText>
-          {currentSessions.map(renderSession)}
-        </ThemedView>
-
-        <ThemedView style={styles.section}>
-          <ThemedText type="h3" style={styles.sectionTitle}>
-            {i18n.t('screens.security.sessions.otherSessions')}
-          </ThemedText>
-          {otherSessions.length > 0 ? (
-            <>
-              {otherSessions.map(renderSession)}
-              <ThemedButton title={i18n.t('screens.security.sessions.actions.endAll')} variant="secondary" onPress={handleEndAllSessions} style={styles.endAllButton} />
-            </>
-          ) : (
-            <ThemedText style={styles.noSessionsText}>{i18n.t('screens.security.sessions.noOtherSessions')}</ThemedText>
-          )}
-        </ThemedView>
+        {currentSessions.map(renderSession)}
       </ThemedView>
-    </ScrollView>
+
+      <ThemedView style={styles.section}>
+        <ThemedText type="h3" style={styles.sectionTitle}>
+          {i18n.t('screens.security.sessions.otherSessions')}
+        </ThemedText>
+        {otherSessions.length > 0 ? (
+          <>
+            {otherSessions.map(renderSession)}
+            <ThemedButton title={i18n.t('screens.security.sessions.actions.endAll')} variant="secondary" onPress={handleEndAllSessions} style={styles.endAllButton} />
+          </>
+        ) : (
+          <ThemedText style={styles.noSessionsText}>{i18n.t('screens.security.sessions.noOtherSessions')}</ThemedText>
+        )}
+      </ThemedView>
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    padding: 16,
-  },
   title: {
     textAlign: 'center',
     marginBottom: 8,

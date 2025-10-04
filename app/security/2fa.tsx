@@ -1,3 +1,4 @@
+import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -7,7 +8,7 @@ import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
-import { ActivityIndicator, Alert, ScrollView, StyleSheet, Switch, View } from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet, Switch, View } from 'react-native';
 
 export default function TwoFactorAuthScreen() {
   const { isEnabled, backupCodes, isLoading, error, enableTwoFactor, disableTwoFactor, generateBackupCodes, backupCodesCount, isBackupCodesLow, formatBackupCode } = useTwoFactorAuth();
@@ -91,115 +92,106 @@ export default function TwoFactorAuthScreen() {
 
   if (isLoading || biometricLoading) {
     return (
-      <ThemedView style={styles.loadingContainer}>
+      <ScreenContainer centerContent>
         <ActivityIndicator size="large" />
         <ThemedText style={styles.loadingText}>Loading security settings...</ThemedText>
-      </ThemedView>
+      </ScreenContainer>
     );
   }
 
   if (error) {
     return (
-      <ThemedView style={styles.errorContainer}>
+      <ScreenContainer centerContent>
         <ThemedText style={[styles.errorText, { color: errorColor }]}>Error: {error}</ThemedText>
         <ThemedButton title="Retry" onPress={() => window.location.reload()} />
-      </ThemedView>
+      </ScreenContainer>
     );
   }
 
   return (
-    <ScrollView style={styles.scrollView}>
-      <ThemedView style={styles.container}>
-        <ThemedText type="h1" style={styles.title}>
-          {i18n.t('screens.security.twoFactor.title')}
-        </ThemedText>
-        <ThemedText style={styles.subtitle}>{i18n.t('screens.security.twoFactor.subtitle')}</ThemedText>
+    <ScreenContainer scrollable>
+      <ThemedText type="h1" style={styles.title}>
+        {i18n.t('screens.security.twoFactor.title')}
+      </ThemedText>
+      <ThemedText style={styles.subtitle}>{i18n.t('screens.security.twoFactor.subtitle')}</ThemedText>
 
-        {/* Biometric Authentication Section */}
-        {biometricAvailable && (
-          <ThemedView style={styles.section}>
-            <ThemedText type="h3" style={[styles.sectionTitle, { color: primaryColor }]}>
-              {biometricTypeName} Authentication
+      {/* Biometric Authentication Section */}
+      {biometricAvailable && (
+        <ThemedView style={styles.section}>
+          <ThemedText type="h3" style={[styles.sectionTitle, { color: primaryColor }]}>
+            {biometricTypeName} Authentication
+          </ThemedText>
+          <ThemedText style={styles.description}>Use {biometricTypeName.toLowerCase()} to quickly and securely access your account.</ThemedText>
+          <View style={[styles.switchContainer, { backgroundColor: surfaceVariant }]}>
+            <ThemedText>Enable {biometricTypeName}</ThemedText>
+            <Switch value={biometricEnabled} onValueChange={handleToggleBiometric} disabled={biometricLoading} />
+          </View>
+        </ThemedView>
+      )}
+
+      {/* 2FA Section */}
+      {!isEnabled ? (
+        <ThemedView style={styles.section}>
+          <ThemedText type="h3" style={[styles.sectionTitle, { color: primaryColor }]}>
+            {i18n.t('screens.security.twoFactor.notEnabled.title')}
+          </ThemedText>
+          <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.notEnabled.description')}</ThemedText>
+
+          <ThemedView style={styles.benefitsContainer}>
+            {benefits.map((benefit, index) => (
+              <ThemedView key={index} style={styles.benefitItem}>
+                <ThemedText style={[styles.bulletPoint, { color: successColor }]}>✓</ThemedText>
+                <ThemedText style={styles.benefitText}>{benefit}</ThemedText>
+              </ThemedView>
+            ))}
+          </ThemedView>
+
+          <ThemedButton title={i18n.t('screens.security.twoFactor.notEnabled.enableButton')} onPress={handleEnable2FA} style={styles.enableButton} disabled={isLoading} />
+        </ThemedView>
+      ) : (
+        <ThemedView style={styles.section}>
+          <ThemedText type="h3" style={[styles.sectionTitle, { color: primaryColor }]}>
+            {i18n.t('screens.security.twoFactor.enabled.setup.title')}
+          </ThemedText>
+          <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.enabled.description')}</ThemedText>
+
+          <ThemedView style={styles.setupContainer}>
+            <ThemedText style={styles.setupStep}>{i18n.t('screens.security.twoFactor.setup.step1')}</ThemedText>
+            <ThemedText style={styles.setupStep}>{i18n.t('screens.security.twoFactor.setup.step2')}</ThemedText>
+            <ThemedText style={styles.setupStep}>{i18n.t('screens.security.twoFactor.setup.step3')}</ThemedText>
+            <ThemedText style={styles.appsRecommendation}>{i18n.t('screens.security.twoFactor.setup.apps')}</ThemedText>
+          </ThemedView>
+
+          {/* Backup Codes Section */}
+          <ThemedView
+            style={[
+              styles.backupCodesContainer,
+              {
+                backgroundColor: isBackupCodesLow ? warningColor + '1A' : successColor + '1A',
+                borderColor: isBackupCodesLow ? warningColor + '4D' : successColor + '4D',
+              },
+            ]}
+          >
+            <ThemedText style={[styles.backupCodesTitle, { color: isBackupCodesLow ? warningColor : successColor }]}>
+              {i18n.t('screens.security.twoFactor.enabled.backupCodes.title')} ({backupCodesCount} remaining)
             </ThemedText>
-            <ThemedText style={styles.description}>Use {biometricTypeName.toLowerCase()} to quickly and securely access your account.</ThemedText>
-            <View style={[styles.switchContainer, { backgroundColor: surfaceVariant }]}>
-              <ThemedText>Enable {biometricTypeName}</ThemedText>
-              <Switch value={biometricEnabled} onValueChange={handleToggleBiometric} disabled={biometricLoading} />
+            {isBackupCodesLow && <ThemedText style={[styles.warningText, { color: warningColor }]}>You&apos;re running low on backup codes. Consider generating new ones.</ThemedText>}
+            <View style={styles.backupButtonsContainer}>
+              <ThemedButton title="View Codes" variant="secondary" onPress={handleShowBackupCodes} style={styles.backupButton} />
+              <ThemedButton title="Generate New" variant="secondary" onPress={handleGenerateNewBackupCodes} style={styles.backupButton} />
             </View>
           </ThemedView>
-        )}
 
-        {/* 2FA Section */}
-        {!isEnabled ? (
-          <ThemedView style={styles.section}>
-            <ThemedText type="h3" style={[styles.sectionTitle, { color: primaryColor }]}>
-              {i18n.t('screens.security.twoFactor.notEnabled.title')}
-            </ThemedText>
-            <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.notEnabled.description')}</ThemedText>
-
-            <ThemedView style={styles.benefitsContainer}>
-              {benefits.map((benefit, index) => (
-                <ThemedView key={index} style={styles.benefitItem}>
-                  <ThemedText style={[styles.bulletPoint, { color: successColor }]}>✓</ThemedText>
-                  <ThemedText style={styles.benefitText}>{benefit}</ThemedText>
-                </ThemedView>
-              ))}
-            </ThemedView>
-
-            <ThemedButton title={i18n.t('screens.security.twoFactor.notEnabled.enableButton')} onPress={handleEnable2FA} style={styles.enableButton} disabled={isLoading} />
+          <ThemedView style={styles.buttonContainer}>
+            <ThemedButton title={i18n.t('screens.security.twoFactor.enabled.disableButton')} variant="link" onPress={handleDisable2FA} style={styles.button} />
           </ThemedView>
-        ) : (
-          <ThemedView style={styles.section}>
-            <ThemedText type="h3" style={[styles.sectionTitle, { color: primaryColor }]}>
-              {i18n.t('screens.security.twoFactor.enabled.setup.title')}
-            </ThemedText>
-            <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.enabled.description')}</ThemedText>
-
-            <ThemedView style={styles.setupContainer}>
-              <ThemedText style={styles.setupStep}>{i18n.t('screens.security.twoFactor.setup.step1')}</ThemedText>
-              <ThemedText style={styles.setupStep}>{i18n.t('screens.security.twoFactor.setup.step2')}</ThemedText>
-              <ThemedText style={styles.setupStep}>{i18n.t('screens.security.twoFactor.setup.step3')}</ThemedText>
-              <ThemedText style={styles.appsRecommendation}>{i18n.t('screens.security.twoFactor.setup.apps')}</ThemedText>
-            </ThemedView>
-
-            {/* Backup Codes Section */}
-            <ThemedView
-              style={[
-                styles.backupCodesContainer,
-                {
-                  backgroundColor: isBackupCodesLow ? warningColor + '1A' : successColor + '1A',
-                  borderColor: isBackupCodesLow ? warningColor + '4D' : successColor + '4D',
-                },
-              ]}
-            >
-              <ThemedText style={[styles.backupCodesTitle, { color: isBackupCodesLow ? warningColor : successColor }]}>
-                {i18n.t('screens.security.twoFactor.enabled.backupCodes.title')} ({backupCodesCount} remaining)
-              </ThemedText>
-              {isBackupCodesLow && <ThemedText style={[styles.warningText, { color: warningColor }]}>You&apos;re running low on backup codes. Consider generating new ones.</ThemedText>}
-              <View style={styles.backupButtonsContainer}>
-                <ThemedButton title="View Codes" variant="secondary" onPress={handleShowBackupCodes} style={styles.backupButton} />
-                <ThemedButton title="Generate New" variant="secondary" onPress={handleGenerateNewBackupCodes} style={styles.backupButton} />
-              </View>
-            </ThemedView>
-
-            <ThemedView style={styles.buttonContainer}>
-              <ThemedButton title={i18n.t('screens.security.twoFactor.enabled.disableButton')} variant="link" onPress={handleDisable2FA} style={styles.button} />
-            </ThemedView>
-          </ThemedView>
-        )}
-      </ThemedView>
-    </ScrollView>
+        </ThemedView>
+      )}
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    padding: 16,
-  },
   title: {
     textAlign: 'center',
     marginBottom: 8,
@@ -209,21 +201,9 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     opacity: 0.7,
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-  },
   loadingText: {
     marginTop: 16,
     opacity: 0.7,
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
   },
   errorText: {
     textAlign: 'center',

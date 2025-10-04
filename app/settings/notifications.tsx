@@ -1,6 +1,6 @@
 import { updateSetting } from '@/actions/setting.action';
 import { getUserProfile } from '@/actions/user.action';
-import { ThemedScrollView } from '@/components/themed-scroll-view';
+import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { auth } from '@/firebase-config';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -8,7 +8,6 @@ import { showError } from '@/utils/error';
 import { Feather } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Switch, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface NotificationSetting {
   key: 'pushEnabled' | 'emailUpdates' | 'marketingTips';
@@ -94,12 +93,6 @@ export default function NotificationsScreen() {
   };
 
   const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-    contentContainer: {
-      padding: 16,
-    },
     header: {
       marginBottom: 24,
     },
@@ -143,53 +136,49 @@ export default function NotificationsScreen() {
 
   if (initialLoading) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={tintColor} />
-          <ThemedText style={{ marginTop: 16 }}>Loading settings...</ThemedText>
-        </View>
-      </SafeAreaView>
+      <ScreenContainer centerContent>
+        <ActivityIndicator size="large" color={tintColor} />
+        <ThemedText style={{ marginTop: 16 }}>Loading settings...</ThemedText>
+      </ScreenContainer>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ThemedScrollView contentContainerStyle={styles.contentContainer}>
-        <View style={styles.header}>
-          <ThemedText type="h2">Notification Preferences</ThemedText>
-          <ThemedText type="caption" style={{ marginTop: 8, color: textMutedColor }}>
-            Choose what notifications you want to receive
-          </ThemedText>
-        </View>
+    <ScreenContainer scrollable>
+      <View style={styles.header}>
+        <ThemedText type="h2">Notification Preferences</ThemedText>
+        <ThemedText type="caption" style={{ marginTop: 8, color: textMutedColor }}>
+          Choose what notifications you want to receive
+        </ThemedText>
+      </View>
 
-        <View style={styles.settingsContainer}>
-          {notificationSettings.map((setting, index) => (
-            <View key={setting.key} style={[styles.settingRow, index === notificationSettings.length - 1 && styles.settingRowLast]}>
-              <View style={styles.iconContainer}>
-                <Feather name={setting.icon as React.ComponentProps<typeof Feather>['name']} size={20} color={tintColor} />
-              </View>
-              <View style={styles.settingInfo}>
-                <ThemedText style={{ fontWeight: '600', marginBottom: 4 }}>{setting.title}</ThemedText>
-                <ThemedText type="caption" style={{ color: textMutedColor }}>
-                  {setting.description}
-                </ThemedText>
-              </View>
-              {loading[setting.key] ? (
-                <ActivityIndicator />
-              ) : (
-                <Switch
-                  value={settings[setting.key]}
-                  onValueChange={(value) => handleToggle(setting.key, value)}
-                  trackColor={{
-                    false: borderColor,
-                    true: tintColor,
-                  }}
-                />
-              )}
+      <View style={styles.settingsContainer}>
+        {notificationSettings.map((setting, index) => (
+          <View key={setting.key} style={[styles.settingRow, index === notificationSettings.length - 1 && styles.settingRowLast]}>
+            <View style={styles.iconContainer}>
+              <Feather name={setting.icon as React.ComponentProps<typeof Feather>['name']} size={20} color={tintColor} />
             </View>
-          ))}
-        </View>
-      </ThemedScrollView>
-    </SafeAreaView>
+            <View style={styles.settingInfo}>
+              <ThemedText style={{ fontWeight: '600', marginBottom: 4 }}>{setting.title}</ThemedText>
+              <ThemedText type="caption" style={{ color: textMutedColor }}>
+                {setting.description}
+              </ThemedText>
+            </View>
+            {loading[setting.key] ? (
+              <ActivityIndicator />
+            ) : (
+              <Switch
+                value={settings[setting.key]}
+                onValueChange={(value) => handleToggle(setting.key, value)}
+                trackColor={{
+                  false: borderColor,
+                  true: tintColor,
+                }}
+              />
+            )}
+          </View>
+        ))}
+      </View>
+    </ScreenContainer>
   );
 }

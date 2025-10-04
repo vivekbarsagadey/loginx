@@ -1,3 +1,4 @@
+import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
@@ -12,7 +13,7 @@ import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { verifyBeforeUpdateEmail } from 'firebase/auth';
 import { useCallback, useState } from 'react';
-import { Alert, ScrollView, StyleSheet } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 
 export default function UpdateEmailScreen() {
   const user = auth.currentUser;
@@ -124,7 +125,7 @@ export default function UpdateEmailScreen() {
   const currentEmail = user?.email || '';
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScreenContainer scrollable keyboardAvoiding>
       <ThemedView style={styles.header}>
         <ThemedText type="h1" style={styles.title}>
           {i18n.t('profile.updateEmail.title') || 'Update Email Address'}
@@ -213,18 +214,11 @@ export default function UpdateEmailScreen() {
           accessibilityHint={loading ? 'Please wait while verification email is being sent' : 'Tap to update your email address'}
         />
       </ThemedView>
-    </ScrollView>
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    padding: 24,
-    flexGrow: 1,
-  },
   header: {
     marginBottom: 32,
   },

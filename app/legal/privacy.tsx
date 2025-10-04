@@ -1,40 +1,32 @@
+import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import i18n from '@/i18n';
-import { ScrollView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default function PrivacyScreen() {
   const sections = i18n.t('screens.legal.privacy.sections', { returnObjects: true }) as Record<string, { title: string; content: string }>;
 
   return (
-    <ScrollView style={styles.scrollView}>
-      <ThemedView style={styles.container}>
-        <ThemedText type="h1" style={styles.title}>
-          {i18n.t('screens.legal.privacy.title')}
-        </ThemedText>
-        <ThemedText style={styles.lastUpdated}>{i18n.t('screens.legal.privacy.lastUpdated')}</ThemedText>
+    <ScreenContainer scrollable>
+      <ThemedText type="h1" style={styles.title}>
+        {i18n.t('screens.legal.privacy.title')}
+      </ThemedText>
+      <ThemedText style={styles.lastUpdated}>{i18n.t('screens.legal.privacy.lastUpdated')}</ThemedText>
 
-        {Object.entries(sections).map(([key, section]) => (
-          <ThemedView key={key} style={styles.section}>
-            <ThemedText type="h3" style={styles.sectionTitle}>
-              {section.title}
-            </ThemedText>
-            <ThemedText style={styles.sectionContent}>{section.content}</ThemedText>
-          </ThemedView>
-        ))}
-      </ThemedView>
-    </ScrollView>
+      {Object.entries(sections).map(([key, section]) => (
+        <ThemedView key={key} style={styles.section}>
+          <ThemedText type="h3" style={styles.sectionTitle}>
+            {section.title}
+          </ThemedText>
+          <ThemedText style={styles.sectionContent}>{section.content}</ThemedText>
+        </ThemedView>
+      ))}
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    padding: 16,
-  },
   title: {
     textAlign: 'center',
     marginBottom: 8,

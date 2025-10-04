@@ -1,10 +1,11 @@
+import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import i18n from '@/i18n';
 import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 
 export default function ChangePasswordScreen() {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -32,53 +33,44 @@ export default function ChangePasswordScreen() {
   };
 
   return (
-    <ScrollView style={styles.scrollView}>
-      <ThemedView style={styles.container}>
-        <ThemedText type="h1" style={styles.title}>
-          {i18n.t('screens.security.changePassword.title')}
-        </ThemedText>
-        <ThemedText style={styles.subtitle}>{i18n.t('screens.security.changePassword.subtitle')}</ThemedText>
+    <ScreenContainer scrollable>
+      <ThemedText type="h1" style={styles.title}>
+        {i18n.t('screens.security.changePassword.title')}
+      </ThemedText>
+      <ThemedText style={styles.subtitle}>{i18n.t('screens.security.changePassword.subtitle')}</ThemedText>
 
-        <ThemedView style={styles.form}>
-          <ThemedInput placeholder={i18n.t('screens.security.changePassword.currentPassword')} value={currentPassword} onChangeText={setCurrentPassword} secureTextEntry style={styles.input} />
+      <ThemedView style={styles.form}>
+        <ThemedInput placeholder={i18n.t('screens.security.changePassword.currentPassword')} value={currentPassword} onChangeText={setCurrentPassword} secureTextEntry style={styles.input} />
 
-          <ThemedInput placeholder={i18n.t('screens.security.changePassword.newPassword')} value={newPassword} onChangeText={setNewPassword} secureTextEntry style={styles.input} />
+        <ThemedInput placeholder={i18n.t('screens.security.changePassword.newPassword')} value={newPassword} onChangeText={setNewPassword} secureTextEntry style={styles.input} />
 
-          <ThemedInput placeholder={i18n.t('screens.security.changePassword.confirmPassword')} value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry style={styles.input} />
+        <ThemedInput placeholder={i18n.t('screens.security.changePassword.confirmPassword')} value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry style={styles.input} />
 
-          <ThemedView style={styles.requirementsContainer}>
-            <ThemedText type="h3" style={styles.requirementsTitle}>
-              {requirements.title}
-            </ThemedText>
-            <ThemedText style={styles.requirement}>• {requirements.minLength}</ThemedText>
-            <ThemedText style={styles.requirement}>• {requirements.uppercase}</ThemedText>
-            <ThemedText style={styles.requirement}>• {requirements.lowercase}</ThemedText>
-            <ThemedText style={styles.requirement}>• {requirements.numbers}</ThemedText>
-            <ThemedText style={styles.requirement}>• {requirements.symbols}</ThemedText>
-          </ThemedView>
-
-          <ThemedButton
-            title={i18n.t('screens.security.changePassword.changeButton')}
-            onPress={handleChangePassword}
-            disabled={loading || !currentPassword || !newPassword || !confirmPassword}
-            style={styles.changeButton}
-          />
-
-          <ThemedText style={styles.lastChanged}>{i18n.t('screens.security.changePassword.lastChanged', { date: 'November 15, 2024' })}</ThemedText>
+        <ThemedView style={styles.requirementsContainer}>
+          <ThemedText type="h3" style={styles.requirementsTitle}>
+            {requirements.title}
+          </ThemedText>
+          <ThemedText style={styles.requirement}>• {requirements.minLength}</ThemedText>
+          <ThemedText style={styles.requirement}>• {requirements.uppercase}</ThemedText>
+          <ThemedText style={styles.requirement}>• {requirements.lowercase}</ThemedText>
+          <ThemedText style={styles.requirement}>• {requirements.numbers}</ThemedText>
+          <ThemedText style={styles.requirement}>• {requirements.symbols}</ThemedText>
         </ThemedView>
+
+        <ThemedButton
+          title={i18n.t('screens.security.changePassword.changeButton')}
+          onPress={handleChangePassword}
+          disabled={loading || !currentPassword || !newPassword || !confirmPassword}
+          style={styles.changeButton}
+        />
+
+        <ThemedText style={styles.lastChanged}>{i18n.t('screens.security.changePassword.lastChanged', { date: 'November 15, 2024' })}</ThemedText>
       </ThemedView>
-    </ScrollView>
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    padding: 16,
-  },
   title: {
     textAlign: 'center',
     marginBottom: 8,
