@@ -1,3 +1,4 @@
+import { AnimationDurations, ScreenTransitions } from '@/constants/animation';
 import { Stack } from 'expo-router';
 
 export default function RegisterLayout() {
@@ -6,7 +7,8 @@ export default function RegisterLayout() {
       screenOptions={{
         headerShown: true,
         presentation: 'card',
-        animation: 'slide_from_right',
+        animation: ScreenTransitions.DEFAULT,
+        animationDuration: AnimationDurations.SCREEN_TRANSITION,
       }}
     >
       <Stack.Screen

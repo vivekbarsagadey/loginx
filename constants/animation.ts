@@ -93,3 +93,37 @@ export const HapticPatterns = {
   ERROR: 'error',
   SELECTION: 'selection',
 } as const;
+
+/**
+ * Screen transition animations for Expo Router Stack
+ * Following iOS HIG and Material Design guidelines
+ */
+export const ScreenTransitions = {
+  // Standard push/pop transitions
+  SLIDE_FROM_RIGHT: 'slide_from_right', // iOS default, feels natural
+  SLIDE_FROM_LEFT: 'slide_from_left',
+  SLIDE_FROM_BOTTOM: 'slide_from_bottom', // Good for modals
+
+  // Other transitions
+  FADE: 'fade', // Subtle, good for tabs
+  FADE_FROM_BOTTOM: 'fade_from_bottom',
+  FLIP: 'flip',
+  SIMPLE_PUSH: 'simple_push',
+  NONE: 'none', // Instant, no animation
+
+  // Default for the app
+  DEFAULT: 'slide_from_right',
+  MODAL: 'slide_from_bottom',
+} as const;
+
+/**
+ * Screen presentation modes
+ */
+export const ScreenPresentations = {
+  CARD: 'card', // Standard screen
+  MODAL: 'modal', // Full-screen modal
+  TRANSPARENT_MODAL: 'transparentModal', // See-through modal
+  CONTAINED_MODAL: 'containedModal', // Card-style modal
+  CONTAINED_TRANSPARENT_MODAL: 'containedTransparentModal',
+  FULLSCREEN_MODAL: 'fullScreenModal',
+} as const;

@@ -12,6 +12,8 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
+        // Smooth fade animation for tab switches (150ms duration is optimal)
+        animation: 'fade',
       }}
     >
       <Tabs.Screen
