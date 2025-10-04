@@ -41,8 +41,8 @@ importers:
         specifier: ^7.1.8
         version: 7.1.17(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.16)(react@19.1.0))(react@19.1.0)
       '@sentry/react-native':
-        specifier: ~7.1.0
-        version: 7.1.0(expo@54.0.12)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.16)(react@19.1.0))(react@19.1.0)
+        specifier: ~7.2.0
+        version: 7.2.0(expo@54.0.12)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.16)(react@19.1.0))(react@19.1.0)
       '@types/expo__vector-icons':
         specifier: ^9.0.1
         version: 9.0.1(@babel/core@7.28.4)(react@19.1.0)
@@ -76,6 +76,9 @@ importers:
       expo-linking:
         specifier: ~8.0.8
         version: 8.0.8(expo@54.0.12)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.16)(react@19.1.0))(react@19.1.0)
+      expo-local-authentication:
+        specifier: ~17.0.7
+        version: 17.0.7(expo@54.0.12)
       expo-localization:
         specifier: ~17.0.7
         version: 17.0.7(expo@54.0.12)(react@19.1.0)
@@ -1731,55 +1734,55 @@ packages:
     resolution: {integrity: sha512-lKyaB2NFmr7SxPjmMTLLhQ7xfxaY3kdkMhpzuRI5qwOngtKt4+FtvNYHRuz+PTtEFv4OaHhNNbRn6r91gWguQg==}
     engines: {node: '>=18'}
 
-  '@sentry/cli-darwin@2.53.0':
-    resolution: {integrity: sha512-NNPfpILMwKgpHiyJubHHuauMKltkrgLQ5tvMdxNpxY60jBNdo5VJtpESp4XmXlnidzV4j1z61V4ozU6ttDgt5Q==}
+  '@sentry/cli-darwin@2.55.0':
+    resolution: {integrity: sha512-jGHE7SHHzqXUmnsmRLgorVH6nmMmTjQQXdPZbSL5tRtH8d3OIYrVNr5D72DSgD26XAPBDMV0ibqOQ9NKoiSpfA==}
     engines: {node: '>=10'}
     os: [darwin]
 
-  '@sentry/cli-linux-arm64@2.53.0':
-    resolution: {integrity: sha512-xY/CZ1dVazsSCvTXzKpAgXaRqfljVfdrFaYZRUaRPf1ZJRGa3dcrivoOhSIeG/p5NdYtMvslMPY9Gm2MT0M83A==}
+  '@sentry/cli-linux-arm64@2.55.0':
+    resolution: {integrity: sha512-jNB/0/gFcOuDCaY/TqeuEpsy/k52dwyk1SOV3s1ku4DUsln6govTppeAGRewY3T1Rj9B2vgIWTrnB8KVh9+Rgg==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux, freebsd, android]
 
-  '@sentry/cli-linux-arm@2.53.0':
-    resolution: {integrity: sha512-NdRzQ15Ht83qG0/Lyu11ciy/Hu/oXbbtJUgwzACc7bWvHQA8xEwTsehWexqn1529Kfc5EjuZ0Wmj3MHmp+jOWw==}
+  '@sentry/cli-linux-arm@2.55.0':
+    resolution: {integrity: sha512-ATjU0PsiWADSPLF/kZroLZ7FPKd5W9TDWHVkKNwIUNTei702LFgTjNeRwOIzTgSvG3yTmVEqtwFQfFN/7hnVXQ==}
     engines: {node: '>=10'}
     cpu: [arm]
     os: [linux, freebsd, android]
 
-  '@sentry/cli-linux-i686@2.53.0':
-    resolution: {integrity: sha512-0REmBibGAB4jtqt9S6JEsFF4QybzcXHPcHtJjgMi5T0ueh952uG9wLzjSxQErCsxTKF+fL8oG0Oz5yKBuCwCCQ==}
+  '@sentry/cli-linux-i686@2.55.0':
+    resolution: {integrity: sha512-8LZjo6PncTM6bWdaggscNOi5r7F/fqRREsCwvd51dcjGj7Kp1plqo9feEzYQ+jq+KUzVCiWfHrUjddFmYyZJrg==}
     engines: {node: '>=10'}
     cpu: [x86, ia32]
     os: [linux, freebsd, android]
 
-  '@sentry/cli-linux-x64@2.53.0':
-    resolution: {integrity: sha512-9UGJL+Vy5N/YL1EWPZ/dyXLkShlNaDNrzxx4G7mTS9ywjg+BIuemo6rnN7w43K1NOjObTVO6zY0FwumJ1pCyLg==}
+  '@sentry/cli-linux-x64@2.55.0':
+    resolution: {integrity: sha512-5LUVvq74Yj2cZZy5g5o/54dcWEaX4rf3myTHy73AKhRj1PABtOkfexOLbF9xSrZy95WXWaXyeH+k5n5z/vtHfA==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux, freebsd, android]
 
-  '@sentry/cli-win32-arm64@2.53.0':
-    resolution: {integrity: sha512-G1kjOjrjMBY20rQcJV2GA8KQE74ufmROCDb2GXYRfjvb1fKAsm4Oh8N5+Tqi7xEHdjQoLPkE4CNW0aH68JSUDQ==}
+  '@sentry/cli-win32-arm64@2.55.0':
+    resolution: {integrity: sha512-cWIQdzm1pfLwPARsV6dUb8TVd6Y3V1A2VWxjTons3Ift6GvtVmiAe0OWL8t2Yt95i8v61kTD/6Tq21OAaogqzA==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [win32]
 
-  '@sentry/cli-win32-i686@2.53.0':
-    resolution: {integrity: sha512-qbGTZUzesuUaPtY9rPXdNfwLqOZKXrJRC1zUFn52hdo6B+Dmv0m/AHwRVFHZP53Tg1NCa8bDei2K/uzRN0dUZw==}
+  '@sentry/cli-win32-i686@2.55.0':
+    resolution: {integrity: sha512-ldepCn2t9r4I0wvgk7NRaA7coJyy4rTQAzM66u9j5nTEsUldf66xym6esd5ZZRAaJUjffqvHqUIr/lrieTIrVg==}
     engines: {node: '>=10'}
     cpu: [x86, ia32]
     os: [win32]
 
-  '@sentry/cli-win32-x64@2.53.0':
-    resolution: {integrity: sha512-1TXYxYHtwgUq5KAJt3erRzzUtPqg7BlH9T7MdSPHjJatkrr/kwZqnVe2H6Arr/5NH891vOlIeSPHBdgJUAD69g==}
+  '@sentry/cli-win32-x64@2.55.0':
+    resolution: {integrity: sha512-4hPc/I/9tXx+HLTdTGwlagtAfDSIa2AoTUP30tl32NAYQhx9a6niUbPAemK2qfxesiufJ7D2djX83rCw6WnJVA==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [win32]
 
-  '@sentry/cli@2.53.0':
-    resolution: {integrity: sha512-n2ZNb+5Z6AZKQSI0SusQ7ZzFL637mfw3Xh4C3PEyVSn9LiF683fX0TTq8OeGmNZQS4maYfS95IFD+XpydU0dEA==}
+  '@sentry/cli@2.55.0':
+    resolution: {integrity: sha512-cynvcIM2xL8ddwELyFRSpZQw4UtFZzoM2rId2l9vg7+wDREPDocMJB9lEQpBIo3eqhp9JswqUT037yjO6iJ5Sw==}
     engines: {node: '>= 10'}
     hasBin: true
 
@@ -1787,8 +1790,8 @@ packages:
     resolution: {integrity: sha512-Jrf0Yo7DvmI/ZQcvBnA0xKNAFkJlVC/fMlvcin+5IrFNRcqOToZ2vtF+XqTgjRZymXQNE8s1QTD7IomPHk0TAw==}
     engines: {node: '>=18'}
 
-  '@sentry/react-native@7.1.0':
-    resolution: {integrity: sha512-Nhs/1j+w7cl9Q+FmaBl0+nByeAKpZttWFz1R0YkZJsg01b+4g63pepI3WMwUSq2QrvYIAu/5PiUoTa2dx9HK6g==}
+  '@sentry/react-native@7.2.0':
+    resolution: {integrity: sha512-rjqYgEjntPz1sPysud78wi4B9ui7LBVPsG6qr8s/htLMYho9GPGFA5dF+eqsQWqMX8NDReAxNkLTC4+gCNklLQ==}
     hasBin: true
     peerDependencies:
       expo: '>=49.0.0'
@@ -3014,6 +3017,11 @@ packages:
     peerDependencies:
       react: '*'
       react-native: '*'
+
+  expo-local-authentication@17.0.7:
+    resolution: {integrity: sha512-yRWcgYn/OIwxEDEk7cM7tRjQSHaTp5hpKwzq+g9NmSMJ1etzUzt0yGzkDiOjObj3YqFo0ucyDJ8WfanLhZDtMw==}
+    peerDependencies:
+      expo: '*'
 
   expo-localization@17.0.7:
     resolution: {integrity: sha512-ACg1B0tJLNa+f8mZfAaNrMyNzrrzHAARVH1sHHvh+LolKdQpgSKX69Uroz1Llv4C71furpwBklVStbNcEwVVVA==}
@@ -7892,31 +7900,31 @@ snapshots:
       '@sentry-internal/replay-canvas': 10.12.0
       '@sentry/core': 10.12.0
 
-  '@sentry/cli-darwin@2.53.0':
+  '@sentry/cli-darwin@2.55.0':
     optional: true
 
-  '@sentry/cli-linux-arm64@2.53.0':
+  '@sentry/cli-linux-arm64@2.55.0':
     optional: true
 
-  '@sentry/cli-linux-arm@2.53.0':
+  '@sentry/cli-linux-arm@2.55.0':
     optional: true
 
-  '@sentry/cli-linux-i686@2.53.0':
+  '@sentry/cli-linux-i686@2.55.0':
     optional: true
 
-  '@sentry/cli-linux-x64@2.53.0':
+  '@sentry/cli-linux-x64@2.55.0':
     optional: true
 
-  '@sentry/cli-win32-arm64@2.53.0':
+  '@sentry/cli-win32-arm64@2.55.0':
     optional: true
 
-  '@sentry/cli-win32-i686@2.53.0':
+  '@sentry/cli-win32-i686@2.55.0':
     optional: true
 
-  '@sentry/cli-win32-x64@2.53.0':
+  '@sentry/cli-win32-x64@2.55.0':
     optional: true
 
-  '@sentry/cli@2.53.0':
+  '@sentry/cli@2.55.0':
     dependencies:
       https-proxy-agent: 5.0.1
       node-fetch: 2.7.0
@@ -7924,25 +7932,25 @@ snapshots:
       proxy-from-env: 1.1.0
       which: 2.0.2
     optionalDependencies:
-      '@sentry/cli-darwin': 2.53.0
-      '@sentry/cli-linux-arm': 2.53.0
-      '@sentry/cli-linux-arm64': 2.53.0
-      '@sentry/cli-linux-i686': 2.53.0
-      '@sentry/cli-linux-x64': 2.53.0
-      '@sentry/cli-win32-arm64': 2.53.0
-      '@sentry/cli-win32-i686': 2.53.0
-      '@sentry/cli-win32-x64': 2.53.0
+      '@sentry/cli-darwin': 2.55.0
+      '@sentry/cli-linux-arm': 2.55.0
+      '@sentry/cli-linux-arm64': 2.55.0
+      '@sentry/cli-linux-i686': 2.55.0
+      '@sentry/cli-linux-x64': 2.55.0
+      '@sentry/cli-win32-arm64': 2.55.0
+      '@sentry/cli-win32-i686': 2.55.0
+      '@sentry/cli-win32-x64': 2.55.0
     transitivePeerDependencies:
       - encoding
       - supports-color
 
   '@sentry/core@10.12.0': {}
 
-  '@sentry/react-native@7.1.0(expo@54.0.12)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.16)(react@19.1.0))(react@19.1.0)':
+  '@sentry/react-native@7.2.0(expo@54.0.12)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.16)(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@sentry/babel-plugin-component-annotate': 4.3.0
       '@sentry/browser': 10.12.0
-      '@sentry/cli': 2.53.0
+      '@sentry/cli': 2.55.0
       '@sentry/core': 10.12.0
       '@sentry/react': 10.12.0(react@19.1.0)
       '@sentry/types': 10.12.0
@@ -9394,6 +9402,11 @@ snapshots:
     transitivePeerDependencies:
       - expo
       - supports-color
+
+  expo-local-authentication@17.0.7(expo@54.0.12):
+    dependencies:
+      expo: 54.0.12(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.10)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.16)(react@19.1.0))(react@19.1.0)
+      invariant: 2.2.4
 
   expo-localization@17.0.7(expo@54.0.12)(react@19.1.0):
     dependencies:

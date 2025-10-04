@@ -4,6 +4,7 @@
  */
 
 import { auth } from '@/firebase-config';
+import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 import { isDevelopment } from './env';
 
@@ -45,24 +46,34 @@ export function checkFirebaseConfig(): DiagnosticResult[] {
       });
     }
 
-    // Check environment variables
-    const requiredEnvVars = ['API_KEY', 'AUTH_DOMAIN', 'PROJECT_ID', 'STORAGE_BUCKET', 'MESSAGING_SENDER_ID', 'APP_ID'];
+    // Check environment variables from Expo config
+    const extra = (Constants.expoConfig?.extra as Record<string, string> | undefined) ?? (Constants.manifest?.extra as Record<string, string> | undefined);
 
-    const missingVars = requiredEnvVars.filter((varName) => !process.env[varName]);
-
-    if (missingVars.length > 0) {
+    if (!extra) {
       results.push({
         category: 'Environment',
         status: 'warning',
-        message: 'Some environment variables are missing',
-        details: `Missing: ${missingVars.join(', ')}`,
+        message: 'Expo config not yet available - this is normal during app startup',
+        details: 'Environment variables will be available after initialization',
       });
     } else {
-      results.push({
-        category: 'Environment',
-        status: 'success',
-        message: 'All required environment variables are set',
-      });
+      const requiredEnvVars = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId'];
+      const missingVars = requiredEnvVars.filter((varName) => !extra[varName]);
+
+      if (missingVars.length > 0) {
+        results.push({
+          category: 'Environment',
+          status: 'warning',
+          message: 'Some environment variables are missing from Expo config',
+          details: `Missing: ${missingVars.join(', ')}`,
+        });
+      } else {
+        results.push({
+          category: 'Environment',
+          status: 'success',
+          message: 'All required environment variables are set in Expo config',
+        });
+      }
     }
   } catch (error) {
     results.push({
@@ -157,7 +168,7 @@ export function runRegistrationDiagnostics(): void {
   const allResults = [...checkFirebaseConfig(), ...checkNavigationSetup()];
 
   const hasErrors = allResults.some((r) => r.status === 'error');
-  const hasWarnings = allResults.some((r) => r.status === 'warning');
+  const hasWarnings = allResults.filter((r) => r.status === 'warning' && !r.message.includes('not yet available')); // Exclude startup warnings
 
   // Use allowed console methods (warn/error only per ESLint rules)
   if (hasErrors) {
@@ -172,16 +183,15 @@ export function runRegistrationDiagnostics(): void {
       });
   }
 
-  if (hasWarnings) {
+  // Only show warnings for actual issues, not startup timing
+  if (hasWarnings.length > 0) {
     console.warn('⚠️ Registration has warnings:');
-    allResults
-      .filter((r) => r.status === 'warning')
-      .forEach((result) => {
-        console.warn(`  [${result.category}] ${result.message}`);
-        if (result.details) {
-          console.warn(`    Details: ${result.details}`);
-        }
-      });
+    hasWarnings.forEach((result) => {
+      console.warn(`  [${result.category}] ${result.message}`);
+      if (result.details) {
+        console.warn(`    Details: ${result.details}`);
+      }
+    });
   }
 }
 
@@ -192,6 +202,11 @@ export function runRegistrationDiagnostics(): void {
 export function logStateChange(component: string, stateName: string, oldValue: unknown, newValue: unknown): void {
   if (!isDevelopment()) {
     return;
+  }
+
+  // Skip logging normal initialization steps to reduce noise
+  if (stateName === 'currentStep' && oldValue === -1 && newValue === 0) {
+    return; // Skip initial step setup
   }
 
   // Use console.warn for debugging visibility

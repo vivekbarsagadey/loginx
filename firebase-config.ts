@@ -146,15 +146,17 @@ try {
         }
       };
 
-      if (typeof window !== 'undefined') {
+      // Only set up window event listeners on web platform
+      if (Platform.OS === 'web' && typeof window !== 'undefined') {
         window.addEventListener('online', () => {
           console.warn('[Firebase] Network connection restored');
         });
         window.addEventListener('offline', () => {
           console.warn('[Firebase] Network connection lost - Switching to offline mode');
         });
-        checkConnection();
       }
+
+      checkConnection();
     }
   } else {
     // Configuration missing - don't initialize Firestore

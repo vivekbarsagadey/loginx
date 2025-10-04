@@ -2,13 +2,31 @@ import { createUserProfile } from '@/actions/user.action';
 import { auth } from '@/firebase-config';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { GoogleAuthProvider, OAuthProvider, signInWithCredential } from 'firebase/auth';
 import { useState } from 'react';
 import { Platform } from 'react-native';
+
+// Google Sign-in availability check
+const isGoogleSigninAvailable = (): boolean => {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    require('@react-native-google-signin/google-signin');
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const getGoogleSignin = () => {
+  if (!isGoogleSigninAvailable()) {
+    throw new Error('Google Sign-in requires a development build. Please use expo-dev-client instead of Expo Go.');
+  }
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return require('@react-native-google-signin/google-signin').GoogleSignin;
+};
 
 /**
  * Hook to handle social authentication (Google & Apple)
@@ -25,9 +43,17 @@ export function useSocialAuth() {
       return;
     }
 
+    // Check if Google Sign-in is available (not in Expo Go)
+    if (!isGoogleSigninAvailable()) {
+      showError(new Error('Google Sign-in requires a development build. Please use expo-dev-client instead of Expo Go.'));
+      return;
+    }
+
     setLoading(true);
 
     try {
+      const GoogleSignin = getGoogleSignin();
+
       // Configure Google Sign-In (should be done once, but safe to call multiple times)
       await GoogleSignin.configure({
         // You need to get this from Firebase Console

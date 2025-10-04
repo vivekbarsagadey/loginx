@@ -5,12 +5,30 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import * as Device from 'expo-device';
-import * as Notifications from 'expo-notifications';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Platform, StyleSheet } from 'react-native';
 import { ThemedButton } from '../themed-button';
 import { ThemedText } from '../themed-text';
 import { ThemedView } from '../themed-view';
+
+// Notifications availability check
+const isNotificationsAvailable = (): boolean => {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    require('expo-notifications');
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const getNotifications = () => {
+  if (!isNotificationsAvailable()) {
+    throw new Error('Push notifications require a development build. Please use expo-dev-client instead of Expo Go.');
+  }
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return require('expo-notifications');
+};
 
 interface NotificationSlideProps {
   width: number;
@@ -36,6 +54,14 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
 
   const checkNotificationPermission = async () => {
     try {
+      if (!isNotificationsAvailable()) {
+        console.warn('[Notifications] Notifications not available in Expo Go');
+        setPermissionStatus('denied');
+        setHasCheckedPermission(true);
+        return;
+      }
+
+      const Notifications = getNotifications();
       const { status } = await Notifications.getPermissionsAsync();
       setPermissionStatus(status);
       setHasCheckedPermission(true);
@@ -44,15 +70,21 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
       setHasCheckedPermission(true);
     }
   };
-
   const requestNotificationPermission = async () => {
     if (!Device.isDevice) {
       Alert.alert(i18n.t('onb.notifications.error.title'), i18n.t('onb.notifications.error.emulator'), [{ text: 'OK', onPress: onNext }]);
       return;
     }
 
+    if (!isNotificationsAvailable()) {
+      Alert.alert('Notifications Unavailable', 'Push notifications require a development build. Please use expo-dev-client instead of Expo Go.', [{ text: 'Skip', onPress: onSkip }]);
+      return;
+    }
+
     setIsLoading(true);
     try {
+      const Notifications = getNotifications();
+
       // Configure notification channel for Android
       if (Platform.OS === 'android') {
         await Notifications.setNotificationChannelAsync('default', {

@@ -1,12 +1,13 @@
 /**
  * Biometric Authentication Hook
  * Manages biometric authentication preferences and functionality
+ * Uses expo-local-authentication for better Expo compatibility
  */
 import { debugError, debugLog } from '@/utils/debug';
 import { BiometricStorage } from '@/utils/secure-storage';
+import * as LocalAuthentication from 'expo-local-authentication';
 import { useCallback, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
-import ReactNativeBiometrics from 'react-native-biometrics';
 
 interface BiometricState {
   isAvailable: boolean;
@@ -40,21 +41,52 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
     try {
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
-      const rnBiometrics = new ReactNativeBiometrics();
-      const { available, biometryType } = await rnBiometrics.isSensorAvailable();
+      // Check hardware availability
+      const hasHardware = await LocalAuthentication.hasHardwareAsync();
+      if (!hasHardware) {
+        debugLog('[BiometricAuth] No biometric hardware available');
+        setState((prev) => ({
+          ...prev,
+          isAvailable: false,
+          biometryType: null,
+          isEnabled: false,
+          isLoading: false,
+        }));
+        return;
+      }
+
+      // Check if biometrics are enrolled
+      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+      if (!isEnrolled) {
+        debugLog('[BiometricAuth] No biometric records enrolled');
+        setState((prev) => ({
+          ...prev,
+          isAvailable: false,
+          biometryType: null,
+          isEnabled: false,
+          isLoading: false,
+        }));
+        return;
+      }
+
+      // Get available authentication types
+      const authTypes = await LocalAuthentication.supportedAuthenticationTypesAsync();
+      const biometryType = getBiometryTypeFromAuthTypes(authTypes);
 
       // Get saved biometric preference from secure storage
       const { enabled } = await BiometricStorage.getBiometricSettings();
 
+      const isAvailable = hasHardware && isEnrolled;
+
       setState((prev) => ({
         ...prev,
-        isAvailable: available,
-        biometryType: biometryType || null,
-        isEnabled: available && enabled,
+        isAvailable,
+        biometryType,
+        isEnabled: isAvailable && enabled,
         isLoading: false,
       }));
 
-      debugLog(`[BiometricAuth] Support check - Available: ${available}, Type: ${biometryType}, Enabled: ${enabled}`);
+      debugLog(`[BiometricAuth] Support check - Available: ${isAvailable}, Type: ${biometryType}, Enrolled: ${isEnrolled}, Enabled: ${enabled}`);
     } catch (error) {
       debugError('[BiometricAuth] Failed to check biometric support', error);
       setState((prev) => ({
@@ -84,15 +116,15 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
         return false;
       }
 
-      const rnBiometrics = new ReactNativeBiometrics();
-
       // Test biometric authentication
-      const { success, error: authError } = await rnBiometrics.simplePrompt({
+      const result = await LocalAuthentication.authenticateAsync({
         promptMessage: 'Authenticate to enable biometric login',
-        cancelButtonText: 'Cancel',
+        cancelLabel: 'Cancel',
+        disableDeviceFallback: false,
+        requireConfirmation: false,
       });
 
-      if (success) {
+      if (result.success) {
         // Save preference to secure storage
         await BiometricStorage.setBiometricEnabled(true, state.biometryType || undefined);
 
@@ -108,7 +140,7 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
         setState((prev) => ({
           ...prev,
           isLoading: false,
-          error: authError || 'Biometric authentication failed',
+          error: result.error || 'Biometric authentication failed',
         }));
         return false;
       }
@@ -159,31 +191,31 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
         return false;
       }
 
-      const rnBiometrics = new ReactNativeBiometrics();
-
       // Determine the prompt message based on biometry type
       let promptMessage = 'Authenticate to continue';
-      if (state.biometryType === 'FaceID') {
+      if (state.biometryType === 'FACE_ID') {
         promptMessage = 'Use Face ID to authenticate';
-      } else if (state.biometryType === 'TouchID') {
+      } else if (state.biometryType === 'TOUCH_ID') {
         promptMessage = 'Use Touch ID to authenticate';
-      } else if (state.biometryType === 'Biometrics') {
+      } else if (state.biometryType === 'FINGERPRINT') {
         promptMessage = 'Use your fingerprint to authenticate';
       }
 
-      const { success, error: authError } = await rnBiometrics.simplePrompt({
+      const result = await LocalAuthentication.authenticateAsync({
         promptMessage,
-        cancelButtonText: 'Cancel',
+        cancelLabel: 'Cancel',
+        disableDeviceFallback: false,
+        requireConfirmation: false,
       });
 
-      if (success) {
+      if (result.success) {
         debugLog('[BiometricAuth] Biometric authentication successful');
         return true;
       } else {
         debugLog('[BiometricAuth] Biometric authentication failed or cancelled');
         setState((prev) => ({
           ...prev,
-          error: authError || 'Authentication failed or was cancelled',
+          error: result.error || 'Authentication failed or was cancelled',
         }));
         return false;
       }
@@ -206,15 +238,35 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
     }
 
     switch (state.biometryType) {
-      case 'FaceID':
+      case 'FACE_ID':
         return 'Face ID';
-      case 'TouchID':
+      case 'TOUCH_ID':
         return 'Touch ID';
-      case 'Biometrics':
+      case 'FINGERPRINT':
         return Platform.OS === 'android' ? 'Fingerprint' : 'Biometric';
+      case 'FACIAL_RECOGNITION':
+        return 'Face Recognition';
+      case 'IRIS':
+        return 'Iris Recognition';
       default:
         return 'Biometric';
     }
+  };
+
+  /**
+   * Convert LocalAuthentication types to string format
+   */
+  const getBiometryTypeFromAuthTypes = (authTypes: LocalAuthentication.AuthenticationType[]): string | null => {
+    if (authTypes.includes(LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION)) {
+      return 'FACE_ID';
+    }
+    if (authTypes.includes(LocalAuthentication.AuthenticationType.FINGERPRINT)) {
+      return 'FINGERPRINT';
+    }
+    if (authTypes.includes(LocalAuthentication.AuthenticationType.IRIS)) {
+      return 'IRIS';
+    }
+    return authTypes.length > 0 ? 'BIOMETRIC' : null;
   };
 
   // Initialize biometric support check on mount
