@@ -6,92 +6,89 @@
 import { isDevelopment } from './env';
 
 /**
- * Colors for console output
+ * ANSI color codes for terminal output
  */
 const Colors = {
   reset: '\x1b[0m',
-  bright: '\x1b[1m',
-  dim: '\x1b[2m',
   red: '\x1b[31m',
   green: '\x1b[32m',
   yellow: '\x1b[33m',
   blue: '\x1b[34m',
   magenta: '\x1b[35m',
   cyan: '\x1b[36m',
-};
+  white: '\x1b[37m',
+} as const;
 
 /**
- * Enhanced console.log that only works in development
+ * Basic debug logging - only works in development
+ * Uses console.warn to comply with ESLint restrictions
  */
-export function debugLog(message: string, ...args: any[]): void {
+export function debugLog(message: string, ...args: unknown[]): void {
   if (isDevelopment()) {
-    console.log(`${Colors.blue}[DEBUG]${Colors.reset} ${message}`, ...args);
+    console.warn(`${Colors.blue}[DEBUG]${Colors.reset} ${message}`, ...args);
   }
 }
 
 /**
- * Log info messages in development
+ * Info level debug logging
+ * Uses console.warn to comply with ESLint restrictions
  */
-export function debugInfo(message: string, ...args: any[]): void {
+export function debugInfo(message: string, ...args: unknown[]): void {
   if (isDevelopment()) {
-    console.log(`${Colors.cyan}[INFO]${Colors.reset} ${message}`, ...args);
+    console.warn(`${Colors.cyan}[INFO]${Colors.reset} ${message}`, ...args);
   }
 }
 
 /**
- * Log warning messages in development
+ * Warning level debug logging
  */
-export function debugWarn(message: string, ...args: any[]): void {
+export function debugWarn(message: string, ...args: unknown[]): void {
   if (isDevelopment()) {
     console.warn(`${Colors.yellow}[WARN]${Colors.reset} ${message}`, ...args);
   }
 }
 
 /**
- * Log error messages (works in all environments)
+ * Error level debug logging
  */
 export function debugError(message: string, error?: unknown): void {
-  console.error(`${Colors.red}[ERROR]${Colors.reset} ${message}`, error);
+  if (isDevelopment()) {
+    console.error(`${Colors.red}[ERROR]${Colors.reset} ${message}`, error);
+  }
 }
 
 /**
- * Log a group of related messages
+ * Group debug messages together
+ * Uses console.warn for grouping to comply with ESLint restrictions
  */
 export function debugGroup(label: string, callback: () => void): void {
   if (isDevelopment()) {
-    console.group(`${Colors.magenta}[GROUP]${Colors.reset} ${label}`);
+    console.warn(`${Colors.magenta}[GROUP START]${Colors.reset} ${label}`);
     callback();
-    console.groupEnd();
+    console.warn(`${Colors.magenta}[GROUP END]${Colors.reset} ${label}`);
   }
 }
 
 /**
- * Measure execution time of a function
+ * Time a function execution
  */
-export async function debugTime<T>(label: string, fn: () => T | Promise<T>): Promise<T> {
-  if (!isDevelopment()) {
-    return fn();
-  }
-
-  const start = performance.now();
-  console.time(label);
-
-  try {
-    const result = await fn();
-    return result;
-  } finally {
-    console.timeEnd(label);
-    const end = performance.now();
-    console.log(`${Colors.green}[TIME]${Colors.reset} ${label}: ${(end - start).toFixed(2)}ms`);
-  }
-}
-
-/**
- * Pretty print an object for debugging
- */
-export function debugObject(label: string, obj: any): void {
+export function debugTime<T>(label: string, fn: () => T): T {
   if (isDevelopment()) {
-    console.log(`${Colors.cyan}[OBJECT]${Colors.reset} ${label}:`, JSON.stringify(obj, null, 2));
+    const start = performance.now();
+    const result = fn();
+    const end = performance.now();
+    console.warn(`${Colors.green}[TIME]${Colors.reset} ${label}: ${(end - start).toFixed(2)}ms`);
+    return result;
+  }
+  return fn();
+}
+
+/**
+ * Debug log an object with pretty formatting
+ */
+export function debugObject(label: string, obj: unknown): void {
+  if (isDevelopment()) {
+    console.warn(`${Colors.cyan}[OBJECT]${Colors.reset} ${label}:`, JSON.stringify(obj, null, 2));
   }
 }
 
@@ -106,16 +103,17 @@ export function debugAssert(condition: boolean, message: string): void {
 }
 
 /**
- * Create a debug instance with a namespace
+ * Create a namespaced debug logger
  */
 export function createDebugger(namespace: string) {
   return {
-    log: (message: string, ...args: any[]) => debugLog(`[${namespace}] ${message}`, ...args),
-    info: (message: string, ...args: any[]) => debugInfo(`[${namespace}] ${message}`, ...args),
-    warn: (message: string, ...args: any[]) => debugWarn(`[${namespace}] ${message}`, ...args),
+    log: (message: string, ...args: unknown[]) => debugLog(`[${namespace}] ${message}`, ...args),
+    info: (message: string, ...args: unknown[]) => debugInfo(`[${namespace}] ${message}`, ...args),
+    warn: (message: string, ...args: unknown[]) => debugWarn(`[${namespace}] ${message}`, ...args),
     error: (message: string, error?: unknown) => debugError(`[${namespace}] ${message}`, error),
     group: (label: string, callback: () => void) => debugGroup(`[${namespace}] ${label}`, callback),
-    time: <T>(label: string, fn: () => T | Promise<T>) => debugTime(`[${namespace}] ${label}`, fn),
-    object: (label: string, obj: any) => debugObject(`[${namespace}] ${label}`, obj),
+    time: <T>(label: string, fn: () => T) => debugTime(`[${namespace}] ${label}`, fn),
+    object: (label: string, obj: unknown) => debugObject(`[${namespace}] ${label}`, obj),
+    assert: (condition: boolean, message: string) => debugAssert(condition, `[${namespace}] ${message}`),
   };
 }

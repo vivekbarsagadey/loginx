@@ -258,22 +258,63 @@ Ensure you have the following installed on your system:
    STORAGE_BUCKET="your-project.appspot.com"
    MESSAGING_SENDER_ID="123456789012"
    APP_ID="1:123456789012:web:abcdef123456"
+   MEASUREMENT_ID="G-XXXXXXXXXX"
 
-   # Optional Configuration
+   # Expo Configuration
+   EAS_PROJECT_ID="your-eas-project-id"
+
+   # App Information
    APP_NAME="LoginX"
    APP_VERSION="1.0.0"
    APP_BUILD="100"
 
-   # API Configuration (Optional)
+   # Social Authentication
+   GOOGLE_WEB_CLIENT_ID="your-google-web-client-id.apps.googleusercontent.com"
+   GOOGLE_IOS_CLIENT_ID="your-google-ios-client-id.apps.googleusercontent.com"
+   GOOGLE_ANDROID_CLIENT_ID="your-google-android-client-id.apps.googleusercontent.com"
+
+   # Apple Sign In (iOS)
+   APPLE_TEAM_ID="your-apple-team-id"
+   APPLE_BUNDLE_ID="com.whizit.loginx"
+
+   # Google Places API (for address autocomplete in registration)
+   EXPO_PUBLIC_GOOGLE_PLACES_API_KEY="your-google-places-api-key"
+
+   # Firebase Functions (if using)
+   FUNCTIONS_URL="https://us-central1-your-project.cloudfunctions.net"
+   FIREBASE_STORAGE_URL="gs://your-project.firebasestorage.app"
+
+   # Optional: Backend API configuration
    API_BASE_URL="https://api.myapp.com"
    API_TIMEOUT="10000"
    WS_URL="wss://ws.myapp.com"
+
+   # Optional: Database configuration
+   DB_NAME="myappdb"
+   DB_ENCRYPTION_KEY="random-32byte-secret"
    CACHE_TTL="3600"
 
-   # Analytics & Monitoring (Optional)
-   SENTRY_DSN="your-sentry-dsn"
-   AMPLITUDE_KEY="your-amplitude-key"
-   GOOGLE_MAPS_API_KEY="your-google-maps-key"
+   # Security & Encryption
+   JWT_SECRET="your-jwt-secret-key-here"
+   AES_ENCRYPTION_KEY="your-32-character-encryption-key"
+
+   # Feature Flags
+   ENABLE_BIOMETRIC_AUTH="true"
+   ENABLE_SOCIAL_LOGIN="true"
+   ENABLE_EMAIL_VERIFICATION="true"
+   ENABLE_PUSH_NOTIFICATIONS="false"
+   ENABLE_ANALYTICS="false"
+
+   # Development Settings
+   USE_FIREBASE_EMULATOR="false"
+   DEBUG_MODE="true"
+   LOG_LEVEL="debug"
+
+   # Optional: Analytics and monitoring
+   SENTRY_DSN="https://xxxx.ingest.sentry.io/1234"
+   AMPLITUDE_KEY="abcd1234"
+   GOOGLE_MAPS_API_KEY="your-google-maps-api-key"
+   MIXPANEL_TOKEN="your-mixpanel-token"
    ```
 
 3. **Verify setup:**
@@ -705,7 +746,7 @@ App configuration is managed in `app.config.ts`:
 
 All environment variables are typed in `env.d.ts` for TypeScript safety.
 
-#### Required Variables
+#### Required Variables (Firebase Core)
 
 - `API_KEY` - Firebase API key
 - `AUTH_DOMAIN` - Firebase auth domain
@@ -713,10 +754,47 @@ All environment variables are typed in `env.d.ts` for TypeScript safety.
 - `STORAGE_BUCKET` - Firebase storage bucket
 - `MESSAGING_SENDER_ID` - Firebase messaging sender ID
 - `APP_ID` - Firebase app ID
+- `MEASUREMENT_ID` - Google Analytics measurement ID
+- `EAS_PROJECT_ID` - Expo Application Services project ID
 
-#### Optional Variables
+#### Social Authentication (Optional)
 
-See `env.d.ts` for the complete list of optional configuration variables.
+- `GOOGLE_WEB_CLIENT_ID` - Google OAuth web client ID
+- `GOOGLE_IOS_CLIENT_ID` - Google OAuth iOS client ID
+- `GOOGLE_ANDROID_CLIENT_ID` - Google OAuth Android client ID
+- `APPLE_TEAM_ID` - Apple Developer Team ID for Sign in with Apple
+- `APPLE_BUNDLE_ID` - App bundle identifier for Apple services
+
+#### Security & Encryption (Optional)
+
+- `JWT_SECRET` - JSON Web Token signing secret
+- `AES_ENCRYPTION_KEY` - Advanced Encryption Standard key (32 characters)
+
+#### Feature Flags (Optional)
+
+- `ENABLE_BIOMETRIC_AUTH` - Toggle biometric authentication (true/false)
+- `ENABLE_SOCIAL_LOGIN` - Toggle social login features (true/false)
+- `ENABLE_EMAIL_VERIFICATION` - Toggle email verification (true/false)
+- `ENABLE_PUSH_NOTIFICATIONS` - Toggle push notifications (true/false)
+- `ENABLE_ANALYTICS` - Toggle analytics tracking (true/false)
+
+#### Development Settings (Optional)
+
+- `USE_FIREBASE_EMULATOR` - Use Firebase emulator for development (true/false)
+- `DEBUG_MODE` - Enable debug logging (true/false)
+- `LOG_LEVEL` - Logging verbosity (debug/info/warn/error)
+
+#### External Services (Optional)
+
+- `SENTRY_DSN` - Sentry error tracking DSN
+- `AMPLITUDE_KEY` - Amplitude analytics key
+- `MIXPANEL_TOKEN` - Mixpanel analytics token
+- `GOOGLE_MAPS_API_KEY` - Google Maps API key
+- `EXPO_PUBLIC_GOOGLE_PLACES_API_KEY` - Google Places API for address
+  autocomplete
+
+See `env.d.ts` for the complete list and TypeScript definitions of all
+configuration variables.
 
 ### Platform-Specific Configuration
 

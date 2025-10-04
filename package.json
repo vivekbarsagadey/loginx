@@ -112,6 +112,8 @@
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.45.0",
+    "@typescript-eslint/parser": "^8.45.0",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
     "markdownlint-cli": "^0.43.0",

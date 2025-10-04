@@ -1,45 +1,26 @@
 // firebase-config.ts
-import Constants from 'expo-constants';
 import { getApp, getApps, initializeApp } from 'firebase/app';
 import { type Auth, browserLocalPersistence, getAuth, initializeAuth, inMemoryPersistence, setPersistence } from 'firebase/auth';
 import { connectFirestoreEmulator, enableIndexedDbPersistence, enableMultiTabIndexedDbPersistence, getFirestore } from 'firebase/firestore';
 import { Platform } from 'react-native';
+import { Config, validateRequiredConfig } from './utils/config';
 
-// ---- config from app.json/app.config.ts -> extra ----
-const extra = (Constants.expoConfig?.extra as Record<string, string> | undefined) ?? (Constants.manifest?.extra as Record<string, string> | undefined);
-
-// Validate required Firebase configuration
-const requiredFields = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId'];
-const missingFields = requiredFields.filter((field) => !extra?.[field]);
-
-if (missingFields.length > 0) {
-  const errorMessage = `[Firebase] Missing required configuration fields: ${missingFields.join(', ')}
-  
-Please create a .env file in the project root with the following variables:
-${missingFields.map((field) => `${field.replace(/([A-Z])/g, '_$1').toUpperCase()}="your-value-here"`).join('\n')}
-
-You can copy .env.example to .env and fill in your Firebase credentials.`;
-
-  console.error(errorMessage);
-
-  // Don't throw during initialization - let the app load and show a proper error screen
-  if (!__DEV__) {
-    throw new Error('Firebase configuration missing. Please contact support.');
-  }
-}
+// Validate Firebase configuration
+validateRequiredConfig();
 
 const firebaseConfig = {
-  apiKey: extra?.apiKey || 'missing-api-key',
-  authDomain: extra?.authDomain || 'missing-auth-domain',
-  projectId: extra?.projectId || 'missing-project-id',
-  storageBucket: extra?.storageBucket || 'missing-storage-bucket',
-  messagingSenderId: extra?.messagingSenderId || 'missing-sender-id',
-  appId: extra?.appId || 'missing-app-id',
+  apiKey: Config.firebase.apiKey || 'missing-api-key',
+  authDomain: Config.firebase.authDomain || 'missing-auth-domain',
+  projectId: Config.firebase.projectId || 'missing-project-id',
+  storageBucket: Config.firebase.storageBucket || 'missing-storage-bucket',
+  messagingSenderId: Config.firebase.messagingSenderId || 'missing-sender-id',
+  appId: Config.firebase.appId || 'missing-app-id',
+  measurementId: Config.firebase.measurementId,
 };
 
 // Log Firebase configuration in development (without exposing sensitive data)
 if (__DEV__) {
-  console.warn('[Firebase] Initializing with project:', firebaseConfig.projectId);
+  console.warn('[Firebase] Initializing with project:', Config.firebase.projectId);
 }
 
 // ---- initialize (reuse if already created) ----
@@ -81,11 +62,11 @@ let firestoreInitialized = false;
 let firestoreError: Error | null = null;
 
 try {
-  if (missingFields.length === 0) {
+  if (Config.firebase.projectId && Config.firebase.projectId !== 'missing-project-id') {
     firestoreInstance = getFirestore(app);
 
     // Connect to Firestore emulator if enabled (development only)
-    if (__DEV__ && process.env.USE_FIREBASE_EMULATOR === 'true') {
+    if (__DEV__ && Config.development.useFirebaseEmulator) {
       try {
         connectFirestoreEmulator(firestoreInstance, 'localhost', 8080);
         console.warn('[Firebase] Connected to Firestore emulator at localhost:8080');
@@ -206,7 +187,7 @@ export const getFirestoreStatus = () => {
   return {
     initialized: firestoreInitialized,
     projectId: firebaseConfig.projectId,
-    emulatorEnabled: __DEV__ && process.env.USE_FIREBASE_EMULATOR === 'true',
+    emulatorEnabled: Config.development.useFirebaseEmulator,
     platform: Platform.OS,
     online: typeof navigator !== 'undefined' ? navigator.onLine : true,
   };

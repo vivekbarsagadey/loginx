@@ -1,5 +1,6 @@
 import { createUserProfile } from '@/actions/user.action';
 import { auth } from '@/firebase-config';
+import { Config } from '@/utils/config';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
 import * as AppleAuthentication from 'expo-apple-authentication';
@@ -56,9 +57,9 @@ export function useSocialAuth() {
 
       // Configure Google Sign-In (should be done once, but safe to call multiple times)
       await GoogleSignin.configure({
-        // You need to get this from Firebase Console
-        // https://console.firebase.google.com/ -> Project Settings -> General -> Your apps
-        webClientId: process.env.GOOGLE_WEB_CLIENT_ID || '',
+        webClientId: Config.social.googleWebClientId || '',
+        iosClientId: Config.social.googleIosClientId,
+        androidClientId: Config.social.googleAndroidClientId,
         offlineAccess: true,
       });
 

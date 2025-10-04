@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
 // Validate required environment variables
-const requiredEnvVars = ['API_KEY', 'AUTH_DOMAIN', 'PROJECT_ID', 'STORAGE_BUCKET', 'MESSAGING_SENDER_ID', 'APP_ID', 'EAS_PROJECT_ID'];
+const requiredEnvVars = ['API_KEY', 'AUTH_DOMAIN', 'PROJECT_ID', 'STORAGE_BUCKET', 'MESSAGING_SENDER_ID', 'APP_ID', 'MEASUREMENT_ID', 'EAS_PROJECT_ID'];
 
 const missingVars = requiredEnvVars.filter((varName) => !process.env[varName]);
 
@@ -62,24 +62,72 @@ export default {
       eas: {
         projectId: process.env.EAS_PROJECT_ID,
       },
+      // Firebase Configuration
       apiKey: process.env.API_KEY,
       authDomain: process.env.AUTH_DOMAIN,
       projectId: process.env.PROJECT_ID,
       storageBucket: process.env.STORAGE_BUCKET,
       messagingSenderId: process.env.MESSAGING_SENDER_ID,
       appId: process.env.APP_ID,
+      measurementId: process.env.MEASUREMENT_ID,
+
+      // App Information
       appName: process.env.APP_NAME || 'loginx',
       appVersion: process.env.APP_VERSION || '1.0.0',
       appBuild: process.env.APP_BUILD || '100',
+
+      // Social Authentication
+      googleWebClientId: process.env.GOOGLE_WEB_CLIENT_ID,
+      googleIosClientId: process.env.GOOGLE_IOS_CLIENT_ID,
+      googleAndroidClientId: process.env.GOOGLE_ANDROID_CLIENT_ID,
+      appleTeamId: process.env.APPLE_TEAM_ID,
+      appleBundleId: process.env.APPLE_BUNDLE_ID,
+
+      // Firebase Functions
+      functionsUrl: process.env.FUNCTIONS_URL,
+      firebaseStorageUrl: process.env.FIREBASE_STORAGE_URL,
+
+      // Backend API Configuration
       apiBaseUrl: process.env.API_BASE_URL || 'https://api.myapp.com',
       apiTimeout: process.env.API_TIMEOUT || '10000',
       wsUrl: process.env.WS_URL || 'wss://ws.myapp.com',
+
+      // Database Configuration
       dbName: process.env.DB_NAME || 'login-x-db',
       dbEncryptionKey: process.env.DB_ENCRYPTION_KEY,
       cacheTtl: process.env.CACHE_TTL || '3600',
+
+      // Security & Encryption
+      jwtSecret: process.env.JWT_SECRET,
+      aesEncryptionKey: process.env.AES_ENCRYPTION_KEY,
+
+      // Feature Flags
+      enableBiometricAuth: process.env.ENABLE_BIOMETRIC_AUTH === 'true',
+      enableSocialLogin: process.env.ENABLE_SOCIAL_LOGIN === 'true',
+      enableEmailVerification: process.env.ENABLE_EMAIL_VERIFICATION !== 'false',
+      enablePushNotifications: process.env.ENABLE_PUSH_NOTIFICATIONS === 'true',
+      enableAnalytics: process.env.ENABLE_ANALYTICS === 'true',
+
+      // Development Settings
+      useFirebaseEmulator: process.env.USE_FIREBASE_EMULATOR === 'true',
+      debugMode: process.env.DEBUG_MODE !== 'false',
+      logLevel: process.env.LOG_LEVEL || 'debug',
+
+      // Analytics & Monitoring
       sentryDsn: process.env.SENTRY_DSN,
       amplitudeKey: process.env.AMPLITUDE_KEY,
       googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+      mixpanelToken: process.env.MIXPANEL_TOKEN,
+
+      // External Services
+      sendgridApiKey: process.env.SENDGRID_API_KEY,
+      mailgunApiKey: process.env.MAILGUN_API_KEY,
+      twilioAccountSid: process.env.TWILIO_ACCOUNT_SID,
+      twilioAuthToken: process.env.TWILIO_AUTH_TOKEN,
+      twilioPhoneNumber: process.env.TWILIO_PHONE_NUMBER,
+      facebookAppId: process.env.FACEBOOK_APP_ID,
+      twitterApiKey: process.env.TWITTER_API_KEY,
+      linkedinClientId: process.env.LINKEDIN_CLIENT_ID,
     },
   },
 };
