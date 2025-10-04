@@ -1,3 +1,4 @@
+import { clearAuthState, saveAuthState } from '@/utils/auth-persistence';
 import { debugError, debugLog } from '@/utils/debug';
 import { showError } from '@/utils/error';
 import { applyPendingProfileData, clearPendingProfileData } from '@/utils/pending-profile';
@@ -55,10 +56,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             // Don't fail authentication for profile data issues
           }
 
-          // Log successful authentication
+          // Save authentication state for persistence
+          try {
+            await saveAuthState(user);
+            debugLog('[Auth] ✅ PERSISTENCE: Auth state saved successfully');
+          } catch (persistError) {
+            debugError('[Auth] Failed to save auth state for persistence', persistError);
+            // Don't fail authentication for persistence issues
+          }
+
           debugLog('[Auth] User authenticated successfully');
         } else {
           debugLog('[Auth] User signed out or not authenticated');
+
+          // Clear authentication state on logout
+          try {
+            await saveAuthState(null);
+            debugLog('[Auth] ✅ PERSISTENCE: Auth state cleared');
+          } catch (persistError) {
+            debugError('[Auth] Failed to clear auth state', persistError);
+          }
         }
 
         setUser(user);
@@ -102,6 +119,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch (profileError) {
         debugError('[Auth] Failed to clear pending profile data on logout', profileError);
         // Don't fail logout if profile clearing fails
+      }
+
+      // Clear authentication persistence
+      try {
+        await clearAuthState();
+        debugLog('[Auth] ✅ PERSISTENCE: Cleared auth persistence on logout');
+      } catch (persistError) {
+        debugError('[Auth] Failed to clear auth persistence on logout', persistError);
+        // Don't fail logout if persistence clearing fails
       }
 
       debugLog('[Auth] Logout completed successfully');

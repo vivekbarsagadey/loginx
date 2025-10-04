@@ -45,16 +45,18 @@ if (Platform.OS === 'web') {
     console.warn('[Firebase] Failed to set persistence:', error);
   });
 } else {
-  // React Native: Use default persistence (automatic AsyncStorage persistence)
-  // Firebase Auth in React Native automatically persists auth state using AsyncStorage
+  // React Native: Default persistence should work, but let's be explicit
   try {
-    // Don't specify persistence - let Firebase use its default React Native persistence
-    auth = initializeAuth(app, {
-      // Remove inMemoryPersistence to enable automatic persistence
-      // Firebase will automatically use AsyncStorage for persistence in React Native
-    });
-  } catch {
-    // guard for Fast Refresh / already-initialized
+    // For React Native, Firebase should automatically use AsyncStorage
+    // if @react-native-async-storage/async-storage is installed
+    auth = initializeAuth(app);
+
+    if (__DEV__) {
+      console.warn('[Firebase] ✅ AUTH PERSISTENCE: Initialized for React Native with default persistence');
+    }
+  } catch (_initError) {
+    // Fallback for Fast Refresh or already-initialized
+    console.warn('[Firebase] Auth already initialized, using existing instance');
     auth = getAuth(app);
   }
 }
