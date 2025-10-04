@@ -2,6 +2,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
@@ -197,16 +198,16 @@ export default function VerifyPhoneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: Spacing.md,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    gap: 16,
+    gap: Spacing.md,
   },
   title: {
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     textAlign: 'center',
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     fontWeight: '600',
-    marginBottom: 16,
+    marginBottom: Spacing.md,
   },
   input: {
     fontSize: 24,
@@ -227,16 +228,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
+    gap: Spacing.sm,
   },
   resendText: {
     opacity: 0.7,
   },
   button: {
-    marginTop: 16,
+    marginTop: Spacing.md,
   },
   skipButton: {
-    marginTop: 8,
+    marginTop: Spacing.sm,
     alignSelf: 'center',
   },
 });

@@ -2,6 +2,7 @@ import { updateSetting } from '@/actions/setting.action';
 import { getUserProfile } from '@/actions/user.action';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
+import { BorderRadius, Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { showError } from '@/utils/error';
@@ -94,10 +95,10 @@ export default function NotificationsScreen() {
 
   const styles = StyleSheet.create({
     header: {
-      marginBottom: 24,
+      marginBottom: Spacing.lg,
     },
     settingsContainer: {
-      borderRadius: 12,
+      borderRadius: BorderRadius.md,
       overflow: 'hidden',
       borderWidth: 1,
       borderColor: borderColor,
@@ -105,7 +106,7 @@ export default function NotificationsScreen() {
     settingRow: {
       flexDirection: 'row',
       alignItems: 'center',
-      padding: 16,
+      padding: Spacing.md,
       borderBottomWidth: 1,
       borderBottomColor: borderColor,
       backgroundColor: backgroundColor,
@@ -120,17 +121,17 @@ export default function NotificationsScreen() {
       backgroundColor: tintColor + '20',
       justifyContent: 'center',
       alignItems: 'center',
-      marginRight: 12,
+      marginRight: Spacing.md,
     },
     settingInfo: {
       flex: 1,
-      marginRight: 12,
+      marginRight: Spacing.md,
     },
     loadingContainer: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      padding: 24,
+      padding: Spacing.lg,
     },
   });
 
@@ -147,7 +148,7 @@ export default function NotificationsScreen() {
     <ScreenContainer scrollable>
       <View style={styles.header}>
         <ThemedText type="h2">Notification Preferences</ThemedText>
-        <ThemedText type="caption" style={{ marginTop: 8, color: textMutedColor }}>
+        <ThemedText type="caption" style={{ marginTop: Spacing.sm, color: textMutedColor }}>
           Choose what notifications you want to receive
         </ThemedText>
       </View>

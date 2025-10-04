@@ -2,6 +2,7 @@ import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { PasswordStrengthMeter } from '@/components/ui/password-strength-meter';
+import { Spacing } from '@/constants/layout';
 import { useEmailAvailability } from '@/hooks/use-email-availability';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -180,13 +181,16 @@ export default function RegisterStep2({ errors }: { errors: FieldErrors<FormData
 
 const styles = StyleSheet.create({
   container: {
-    gap: 8,
+    gap: Spacing.sm,
+  },
+  emailContainer: {
+    gap: Spacing.sm,
   },
   title: {
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   description: {
-    marginBottom: 16,
+    marginBottom: Spacing.md,
     opacity: 0.7,
   },
   inputWithIcon: {
@@ -194,16 +198,16 @@ const styles = StyleSheet.create({
   },
   statusIcon: {
     position: 'absolute',
-    right: 16,
-    top: 16,
+    right: Spacing.md,
+    top: Spacing.md,
     zIndex: 10,
   },
   statusText: {
-    marginTop: 4,
+    marginTop: Spacing.xs,
     fontSize: 12,
   },
   passwordSection: {
-    gap: 8,
+    gap: Spacing.sm,
   },
   helperText: {
     opacity: 0.7,

@@ -3,6 +3,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Spacing } from '@/constants/layout';
 import i18n from '@/i18n';
 import { useState } from 'react';
 import { Alert, StyleSheet } from 'react-native';
@@ -73,39 +74,39 @@ export default function ChangePasswordScreen() {
 const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
     opacity: 0.7,
   },
   form: {
     flex: 1,
   },
   input: {
-    marginBottom: 16,
+    marginBottom: Spacing.md,
   },
   requirementsContainer: {
-    marginVertical: 20,
-    padding: 16,
-    borderRadius: 8,
+    marginVertical: Spacing.lg,
+    padding: Spacing.md,
+    borderRadius: Spacing.sm,
     // Background handled by theme
   },
   requirementsTitle: {
-    marginBottom: 12,
+    marginBottom: Spacing.md,
     fontWeight: 'bold',
   },
   requirement: {
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
     opacity: 0.8,
   },
   changeButton: {
-    marginTop: 16,
+    marginTop: Spacing.md,
   },
   lastChanged: {
     textAlign: 'center',
-    marginTop: 24,
+    marginTop: Spacing.lg,
     opacity: 0.6,
     fontStyle: 'italic',
   },

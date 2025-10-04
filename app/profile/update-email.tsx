@@ -3,6 +3,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { BorderRadius, Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -220,38 +221,38 @@ export default function UpdateEmailScreen() {
 
 const styles = StyleSheet.create({
   header: {
-    marginBottom: 32,
+    marginBottom: Spacing.xl,
   },
   title: {
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     opacity: 0.8,
   },
   currentEmailSection: {
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
   },
   sectionLabel: {
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
     fontWeight: '500',
   },
   currentEmailBox: {
-    padding: 16,
-    borderRadius: 12,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
     borderWidth: 1,
   },
   currentEmailText: {
     fontFamily: 'monospace',
   },
   formSection: {
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
   },
   warningSection: {
-    marginBottom: 32,
+    marginBottom: Spacing.xl,
   },
   warningBox: {
-    padding: 16,
-    borderRadius: 12,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
     borderWidth: 1,
   },
   warningText: {
@@ -259,6 +260,6 @@ const styles = StyleSheet.create({
   },
   actionsSection: {
     marginTop: 'auto',
-    paddingBottom: 16,
+    paddingBottom: Spacing.md,
   },
 });

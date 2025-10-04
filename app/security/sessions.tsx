@@ -2,6 +2,7 @@ import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { BorderRadius, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { useState } from 'react';
@@ -128,31 +129,31 @@ export default function SessionsScreen() {
 const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
     opacity: 0.7,
   },
   section: {
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
   },
   sectionTitle: {
-    marginBottom: 16,
+    marginBottom: Spacing.md,
     fontWeight: 'bold',
   },
   sessionItem: {
-    marginBottom: 16,
-    padding: 16,
-    borderRadius: 8,
+    marginBottom: Spacing.md,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
     // Background handled by theme
   },
   sessionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: Spacing.md,
   },
   deviceName: {
     fontWeight: 'bold',
@@ -160,30 +161,30 @@ const styles = StyleSheet.create({
   },
   currentBadge: {
     // Use theme success color in component
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.md,
   },
   currentBadgeText: {
     fontSize: 12,
     fontWeight: 'bold',
   },
   sessionInfo: {
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
     opacity: 0.8,
     fontSize: 14,
   },
   endSessionButton: {
     alignSelf: 'flex-start',
-    marginTop: 8,
+    marginTop: Spacing.sm,
   },
   endAllButton: {
-    marginTop: 16,
+    marginTop: Spacing.md,
   },
   noSessionsText: {
     textAlign: 'center',
     opacity: 0.6,
     fontStyle: 'italic',
-    padding: 20,
+    padding: Spacing.lg,
   },
 });

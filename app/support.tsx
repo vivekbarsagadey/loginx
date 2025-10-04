@@ -3,6 +3,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Collapsible } from '@/components/ui/collapsible';
+import { Spacing } from '@/constants/layout';
 import i18n from '@/i18n';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
@@ -116,38 +117,38 @@ export default function SupportScreen() {
 const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
     opacity: 0.7,
   },
   section: {
-    marginBottom: 32,
+    marginBottom: Spacing.xl,
   },
   sectionTitle: {
-    marginBottom: 16,
+    marginBottom: Spacing.md,
     fontWeight: 'bold',
   },
   contactInfo: {
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
     lineHeight: 22,
     opacity: 0.9,
   },
   emailButton: {
-    marginTop: 16,
+    marginTop: Spacing.md,
   },
   faqItem: {
-    marginBottom: 12,
+    marginBottom: Spacing.md,
   },
   faqAnswer: {
     lineHeight: 22,
     opacity: 0.9,
-    marginTop: 8,
+    marginTop: Spacing.sm,
   },
   resourceButton: {
-    marginBottom: 12,
+    marginBottom: Spacing.md,
   },
   deviceInfo: {
     marginBottom: 6,

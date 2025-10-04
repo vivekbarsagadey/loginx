@@ -2,6 +2,7 @@ import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { AddressAutocomplete, AddressComponents } from '@/components/ui/address-autocomplete';
+import { Spacing } from '@/constants/layout';
 import i18n from '@/i18n';
 import { GOOGLE_PLACES_API_KEY } from '@/utils/env';
 import { useEffect, useRef, useState } from 'react';
@@ -171,22 +172,22 @@ export default function RegisterStep3({ errors }: { errors: FieldErrors<FormData
 
 const styles = StyleSheet.create({
   container: {
-    gap: 8,
+    gap: Spacing.sm,
   },
   title: {
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   description: {
-    marginBottom: 16,
+    marginBottom: Spacing.md,
     opacity: 0.7,
   },
   infoText: {
-    marginBottom: 12,
+    marginBottom: Spacing.md,
     opacity: 0.8,
     fontStyle: 'italic',
   },
   manualLink: {
-    marginTop: 8,
+    marginTop: Spacing.sm,
     textDecorationLine: 'underline',
     opacity: 0.8,
   },

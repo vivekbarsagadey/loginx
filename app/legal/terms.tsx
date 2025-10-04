@@ -1,6 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Spacing } from '@/constants/layout';
 import i18n from '@/i18n';
 import { StyleSheet } from 'react-native';
 
@@ -29,19 +30,19 @@ export default function TermsScreen() {
 const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   lastUpdated: {
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
     opacity: 0.7,
     fontStyle: 'italic',
   },
   section: {
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
   },
   sectionTitle: {
-    marginBottom: 12,
+    marginBottom: Spacing.md,
     fontWeight: 'bold',
   },
   sectionContent: {

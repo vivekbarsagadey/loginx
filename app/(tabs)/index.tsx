@@ -1,6 +1,7 @@
 import { getUserProfile } from '@/actions/user.action';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
+import { BorderRadius, Spacing } from '@/constants/layout';
 import { useAuth } from '@/hooks/use-auth-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { UserProfile } from '@/types/user';
@@ -69,12 +70,12 @@ export default function IndexScreen() {
 
 const styles = StyleSheet.create({
   email: {
-    marginVertical: 16,
+    marginVertical: Spacing.md,
   },
   section: {
-    marginTop: 32,
-    padding: 16,
+    marginTop: Spacing.xl,
+    padding: Spacing.md,
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: BorderRadius.sm,
   },
 });

@@ -1,5 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { BorderRadius, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import React, { useState } from 'react';
@@ -79,54 +80,52 @@ export default function TextSizeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: Spacing.md,
   },
   title: {
-    textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
-    textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
     opacity: 0.7,
   },
   optionsContainer: {
-    marginBottom: 32,
+    gap: Spacing.md,
   },
   option: {
-    padding: 16,
-    marginBottom: 12,
-    borderRadius: 8,
-    borderWidth: 1,
+    padding: Spacing.md,
+    marginBottom: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
   selectedOption: {
     borderWidth: 2,
+  },
+  optionTitle: {
+    fontWeight: '600',
+    marginBottom: Spacing.sm,
   },
   optionContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 16,
-  },
-  optionTitle: {
-    fontWeight: 'bold',
   },
   checkmark: {
     fontSize: 20,
-    // Color applied inline with theme
     fontWeight: 'bold',
   },
   previewSection: {
-    marginTop: 16,
+    marginTop: Spacing.lg,
   },
   previewTitle: {
-    marginBottom: 16,
+    marginBottom: Spacing.md,
     fontWeight: 'bold',
   },
   previewContainer: {
-    padding: 20,
-    borderRadius: 12,
-    // Background handled by theme
+    marginTop: Spacing.xl,
+    padding: Spacing.lg,
+    borderRadius: BorderRadius.md,
   },
   previewText: {
     textAlign: 'center',

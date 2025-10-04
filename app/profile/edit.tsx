@@ -4,6 +4,7 @@ import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { AccessibilityHints, AccessibilityRoles } from '@/constants/accessibility';
+import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -199,19 +200,19 @@ export default function EditProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
+    padding: Spacing.lg,
   },
   avatarSection: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: Spacing.xl,
   },
   avatarContainer: {
     position: 'relative',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: Spacing.md,
     borderRadius: 80,
     borderWidth: 2,
-    padding: 4,
+    padding: Spacing.xs,
   },
   avatar: {
     width: 128,
@@ -236,10 +237,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   formSection: {
-    marginBottom: 32,
+    marginBottom: Spacing.xl,
   },
   actionsSection: {
     marginTop: 'auto',
-    paddingBottom: 16,
+    paddingBottom: Spacing.md,
   },
 });

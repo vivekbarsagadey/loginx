@@ -1,4 +1,5 @@
 import { AnimationDurations, Colors } from '@/constants';
+import { BorderRadius, Spacing, TouchTarget } from '@/constants/layout';
 import i18n from '@/i18n';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
@@ -255,8 +256,8 @@ export default function Onboarding() {
 
   return (
     <ThemedView style={{ flex: 1 }}>
-      <Animated.View style={[{ position: 'absolute', right: 16, top: top + 16, zIndex: 1 }, skipButtonAnimatedStyle]}>
-        <Pressable onPress={skip} style={{ padding: 8 }}>
+      <Animated.View style={[{ position: 'absolute', right: Spacing.md, top: top + Spacing.md, zIndex: 1 }, skipButtonAnimatedStyle]}>
+        <Pressable onPress={skip} style={{ padding: Spacing.sm }}>
           <ThemedText type="muted">{i18n.t('onb.cta.skip')} </ThemedText>
         </Pressable>
       </Animated.View>
@@ -355,13 +356,19 @@ export default function Onboarding() {
             })}
           </View>
         </View>
-        <View style={{ flexDirection: 'row', gap: 12 }}>
+        <View style={{ flexDirection: 'row', gap: Spacing.md }}>
           {i > 0 && (
-            <Pressable onPress={back} style={{ height: 48, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: theme.surface, flex: 1 }}>
+            <Pressable
+              onPress={back}
+              style={{ height: TouchTarget.comfortable, borderRadius: BorderRadius.md, alignItems: 'center', justifyContent: 'center', backgroundColor: theme.surface, flex: 1 }}
+            >
               <ThemedText style={{ fontWeight: '600' }}>{i18n.t('onb.cta.back')}</ThemedText>
             </Pressable>
           )}
-          <Pressable onPress={next} style={{ height: 48, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: theme.primary, flex: i > 0 ? 2 : 1 }}>
+          <Pressable
+            onPress={next}
+            style={{ height: TouchTarget.comfortable, borderRadius: BorderRadius.md, alignItems: 'center', justifyContent: 'center', backgroundColor: theme.primary, flex: i > 0 ? 2 : 1 }}
+          >
             <ThemedText type="inverse" style={{ fontWeight: '600' }}>
               {i < SLIDES.length - 1 ? i18n.t('onb.cta.next') : i18n.t('onb.cta.start')}
             </ThemedText>

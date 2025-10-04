@@ -1,5 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { BorderRadius, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { useState } from 'react';
@@ -95,23 +96,23 @@ export default function ThemeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: Spacing.md,
   },
   title: {
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
     opacity: 0.7,
   },
   optionsContainer: {
-    marginBottom: 32,
+    marginBottom: Spacing.xl,
   },
   optionItem: {
-    marginBottom: 12,
-    borderRadius: 12,
+    marginBottom: Spacing.md,
+    borderRadius: BorderRadius.md,
     borderWidth: 2,
     borderColor: 'transparent',
   },
@@ -122,18 +123,18 @@ const styles = StyleSheet.create({
   optionContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
+    padding: Spacing.md,
   },
   optionIcon: {
     fontSize: 24,
-    marginRight: 16,
+    marginRight: Spacing.md,
   },
   optionText: {
     flex: 1,
   },
   optionTitle: {
     fontWeight: 'bold',
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
   },
   optionDescription: {
     opacity: 0.7,
@@ -145,25 +146,25 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   previewSection: {
-    marginTop: 16,
+    marginTop: Spacing.md,
   },
   previewTitle: {
-    marginBottom: 16,
+    marginBottom: Spacing.md,
     fontWeight: 'bold',
   },
   previewContainer: {
     alignItems: 'center',
   },
   previewBox: {
-    padding: 20,
-    borderRadius: 12,
+    padding: Spacing.lg,
+    borderRadius: BorderRadius.md,
     width: '100%',
     alignItems: 'center',
   },
   previewText: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   previewSubtext: {
     opacity: 0.7,

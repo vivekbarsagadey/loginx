@@ -1,6 +1,7 @@
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import i18n from '@/i18n';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -85,30 +86,27 @@ export default function VerifyEmailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: Spacing.md,
   },
   title: {
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: Spacing.lg,
   },
   email: {
     textAlign: 'center',
-    marginBottom: 16,
     fontWeight: 'bold',
+    marginBottom: Spacing.xl,
   },
   button: {
-    marginTop: 16,
+    marginTop: Spacing.md,
   },
   linkButton: {
-    marginTop: 16,
-  },
-  loading: {
-    marginTop: 16,
+    marginTop: Spacing.sm,
   },
 });

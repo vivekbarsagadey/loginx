@@ -1,6 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { BorderRadius, Spacing } from '@/constants/layout';
 import i18n from '@/i18n';
 import { StyleSheet } from 'react-native';
 
@@ -57,33 +58,33 @@ export default function LicenseScreen() {
 const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
   },
   section: {
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
   },
   sectionTitle: {
-    marginBottom: 12,
+    marginBottom: Spacing.md,
     fontWeight: 'bold',
   },
   sectionContent: {
     lineHeight: 22,
     opacity: 0.9,
-    marginBottom: 16,
+    marginBottom: Spacing.md,
   },
   libraryItem: {
-    marginBottom: 16,
-    padding: 12,
-    borderRadius: 8,
+    marginBottom: Spacing.md,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
     // Background handled by theme
   },
   libraryName: {
     fontWeight: 'bold',
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
   },
   libraryLicense: {
     opacity: 0.7,
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
     fontStyle: 'italic',
   },
   libraryDescription: {

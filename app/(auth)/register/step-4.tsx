@@ -1,6 +1,7 @@
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Spacing } from '@/constants/layout';
 import { useEffect, useRef } from 'react';
 import { Controller, FieldErrors, useFormContext } from 'react-hook-form';
 import { StyleSheet, TextInput } from 'react-native';
@@ -63,18 +64,18 @@ export default function RegisterStep4({ errors }: { errors: FieldErrors<FormData
 
 const styles = StyleSheet.create({
   container: {
-    gap: 8,
+    gap: Spacing.sm,
   },
   title: {
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   description: {
-    marginBottom: 16,
+    marginBottom: Spacing.md,
     opacity: 0.7,
   },
   helperText: {
     opacity: 0.7,
     lineHeight: 18,
-    marginTop: 8,
+    marginTop: Spacing.sm,
   },
 });

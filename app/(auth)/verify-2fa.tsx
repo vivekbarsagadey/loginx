@@ -2,6 +2,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import { showError } from '@/utils/error';
@@ -250,27 +251,27 @@ export default function Verify2FAScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: Spacing.md,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    gap: 16,
+    gap: Spacing.md,
   },
   title: {
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     textAlign: 'center',
     opacity: 0.7,
-    marginBottom: 16,
+    marginBottom: Spacing.md,
   },
   email: {
     textAlign: 'center',
     fontSize: 16,
     fontWeight: '600',
-    marginBottom: 16,
+    marginBottom: Spacing.md,
   },
   input: {
     fontSize: 24,
@@ -279,7 +280,7 @@ const styles = StyleSheet.create({
   },
   helperText: {
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   instructionText: {
     textAlign: 'center',
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
   },
   backupCodeWarning: {
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   warningText: {
     textAlign: 'center',
@@ -295,20 +296,20 @@ const styles = StyleSheet.create({
   },
   lowCodesWarning: {
     textAlign: 'center',
-    marginTop: 4,
+    marginTop: Spacing.xs,
   },
   button: {
-    marginTop: 16,
+    marginTop: Spacing.md,
   },
   linkButton: {
-    marginTop: 8,
+    marginTop: Spacing.sm,
     alignSelf: 'center',
   },
   cancelButton: {
-    marginTop: 4,
+    marginTop: Spacing.xs,
     alignSelf: 'center',
   },
   loading: {
-    marginTop: 16,
+    marginTop: Spacing.md,
   },
 });

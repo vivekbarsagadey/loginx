@@ -2,6 +2,7 @@ import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { BorderRadius, Spacing } from '@/constants/layout';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
@@ -194,51 +195,51 @@ export default function TwoFactorAuthScreen() {
 const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
     opacity: 0.7,
   },
   loadingText: {
-    marginTop: 16,
+    marginTop: Spacing.md,
     opacity: 0.7,
   },
   errorText: {
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: Spacing.md,
   },
   section: {
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
   },
   sectionTitle: {
-    marginBottom: 12,
+    marginBottom: Spacing.md,
     fontWeight: 'bold',
   },
   description: {
     lineHeight: 22,
     opacity: 0.9,
-    marginBottom: 20,
+    marginBottom: Spacing.lg,
   },
   switchContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.md,
+    borderRadius: BorderRadius.sm,
   },
   benefitsContainer: {
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
   },
   benefitItem: {
     flexDirection: 'row',
-    marginBottom: 12,
+    marginBottom: Spacing.md,
     alignItems: 'flex-start',
   },
   bulletPoint: {
-    marginRight: 12,
+    marginRight: Spacing.md,
     fontWeight: 'bold',
     fontSize: 16,
   },
@@ -247,26 +248,26 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   enableButton: {
-    marginTop: 16,
+    marginTop: Spacing.md,
   },
   setupContainer: {
-    marginBottom: 24,
-    padding: 16,
-    borderRadius: 8,
+    marginBottom: Spacing.lg,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
   },
   setupStep: {
-    marginBottom: 12,
+    marginBottom: Spacing.md,
     lineHeight: 20,
   },
   appsRecommendation: {
-    marginTop: 12,
+    marginTop: Spacing.md,
     fontStyle: 'italic',
     opacity: 0.8,
   },
   backupCodesContainer: {
-    marginBottom: 24,
-    padding: 16,
-    borderRadius: 8,
+    marginBottom: Spacing.lg,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
     borderWidth: 1,
   },
   lowBackupCodes: {
@@ -274,24 +275,24 @@ const styles = StyleSheet.create({
   },
   backupCodesTitle: {
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   warningText: {
     fontSize: 14,
-    marginBottom: 12,
+    marginBottom: Spacing.md,
     fontStyle: 'italic',
   },
   backupButtonsContainer: {
     flexDirection: 'row',
-    gap: 12,
+    gap: Spacing.md,
   },
   backupButton: {
     flex: 1,
   },
   buttonContainer: {
-    gap: 12,
+    gap: Spacing.md,
   },
   button: {
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
 });

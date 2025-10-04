@@ -3,6 +3,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { SocialSignInButtons } from '@/components/ui/social-sign-in-buttons';
+import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useSocialAuth } from '@/hooks/use-social-auth';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -371,13 +372,13 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 16,
+    padding: Spacing.md,
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
   progressContainer: {
-    paddingVertical: 16,
-    gap: 8,
+    paddingVertical: Spacing.md,
+    gap: Spacing.sm,
   },
   stepTitle: {
     fontWeight: '600',
@@ -385,8 +386,8 @@ const styles = StyleSheet.create({
   },
   progressBarContainer: {
     flexDirection: 'row',
-    gap: 8,
-    marginVertical: 8,
+    gap: Spacing.sm,
+    marginVertical: Spacing.sm,
   },
   progressBar: {
     flex: 1,
@@ -395,7 +396,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    marginBottom: 16,
+    marginBottom: Spacing.md,
   },
   scrollViewContent: {
     flexGrow: 1,
@@ -403,9 +404,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    gap: 16,
-    paddingTop: 16,
-    paddingBottom: Platform.OS === 'ios' ? 8 : 16,
+    gap: Spacing.md,
+    paddingTop: Spacing.md,
+    paddingBottom: Platform.OS === 'ios' ? Spacing.sm : Spacing.md,
     backgroundColor: 'transparent',
   },
   button: {

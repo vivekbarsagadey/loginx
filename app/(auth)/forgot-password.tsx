@@ -2,6 +2,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
@@ -82,25 +83,25 @@ export default function ForgotPasswordScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: Spacing.md,
     justifyContent: 'center',
   },
   title: {
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     textAlign: 'center',
-    marginBottom: 32,
+    marginBottom: Spacing.xl,
   },
   input: {
-    marginVertical: 8,
+    marginVertical: Spacing.sm,
   },
   button: {
-    marginTop: 32,
+    marginTop: Spacing.xl,
   },
   linkButton: {
-    marginTop: 16,
+    marginTop: Spacing.md,
     alignSelf: 'center',
   },
   loading: {

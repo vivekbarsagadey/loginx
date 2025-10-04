@@ -4,6 +4,7 @@ import { ThemedView } from '@/components/themed-view';
 import { PhotoUpload } from '@/components/ui/photo-upload';
 import { ReferralCodeInput } from '@/components/ui/referral-code-input';
 import { TermsCheckbox } from '@/components/ui/terms-checkbox';
+import { Spacing } from '@/constants/layout';
 import i18n from '@/i18n';
 import { useEffect, useRef } from 'react';
 import { Controller, FieldErrors, useFormContext } from 'react-hook-form';
@@ -116,17 +117,17 @@ export default function RegisterStep1({ errors }: { errors: FieldErrors<FormData
 
 const styles = StyleSheet.create({
   container: {
-    gap: 8,
+    gap: Spacing.sm,
   },
   title: {
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   description: {
-    marginBottom: 16,
+    marginBottom: Spacing.md,
     opacity: 0.7,
   },
   photoContainer: {
     alignSelf: 'center',
-    marginVertical: 16,
+    marginVertical: Spacing.md,
   },
 });

@@ -124,7 +124,7 @@ export default function SettingsScreen() {
     avatar: {
       width: 64,
       height: 64,
-      borderRadius: 32,
+      borderRadius: Spacing.xl,
       marginRight: Spacing.md,
       opacity: 0.5,
     },

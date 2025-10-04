@@ -1,6 +1,7 @@
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Spacing } from '@/constants/layout';
 import i18n from '@/i18n';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StyleSheet } from 'react-native';
@@ -25,16 +26,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
+    padding: Spacing.md,
   },
   title: {
-    marginBottom: 16,
+    marginBottom: Spacing.md,
   },
   subtitle: {
-    marginBottom: 32,
+    marginBottom: Spacing.xl,
     textAlign: 'center',
   },
   button: {
-    marginTop: 16,
+    marginTop: Spacing.md,
   },
 });

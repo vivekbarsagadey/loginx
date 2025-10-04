@@ -1,6 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { BorderRadius, Spacing } from '@/constants/layout';
 import i18n from '@/i18n';
 import { StyleSheet } from 'react-native';
 
@@ -53,29 +54,29 @@ export default function WhatsNewScreen() {
 const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   version: {
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
     opacity: 0.7,
   },
   section: {
-    marginBottom: 24,
+    marginBottom: Spacing.lg,
   },
   sectionTitle: {
-    marginBottom: 16,
+    marginBottom: Spacing.md,
     fontWeight: 'bold',
   },
   featureItem: {
-    marginBottom: 16,
-    padding: 16,
-    borderRadius: 8,
+    marginBottom: Spacing.md,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.sm,
     // Background handled by theme
   },
   featureTitle: {
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   featureDescription: {
     opacity: 0.8,
@@ -83,11 +84,11 @@ const styles = StyleSheet.create({
   },
   bugFixItem: {
     flexDirection: 'row',
-    marginBottom: 8,
-    paddingHorizontal: 16,
+    marginBottom: Spacing.sm,
+    paddingHorizontal: Spacing.md,
   },
   bulletPoint: {
-    marginRight: 8,
+    marginRight: Spacing.sm,
     fontWeight: 'bold',
   },
   bugFixText: {

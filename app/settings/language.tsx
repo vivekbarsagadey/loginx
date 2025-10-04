@@ -1,5 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Feather } from '@expo/vector-icons';
@@ -29,13 +30,13 @@ export default function LanguageScreen() {
     item: {
       flexDirection: 'row',
       alignItems: 'center',
-      padding: 16,
+      padding: Spacing.md,
       borderBottomWidth: 1,
       borderBottomColor: borderColor,
     },
     itemText: {
       flex: 1,
-      marginLeft: 16,
+      marginLeft: Spacing.md,
     },
   });
 
