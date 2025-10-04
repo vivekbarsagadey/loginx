@@ -1,4 +1,5 @@
 import { AccessibilityHints } from '@/constants/accessibility';
+import { InputField, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { StyleSheet, TextInput, TextInputProps } from 'react-native';
 
@@ -9,14 +10,18 @@ export type ThemedTextInputProps = TextInputProps & {
   accessibilityHint?: string;
 };
 
-export function ThemedTextInput({ style, lightColor, darkColor, accessibilityLabel, accessibilityHint, placeholder, ...rest }: ThemedTextInputProps) {
+export function ThemedTextInput({ style, lightColor, darkColor, accessibilityLabel, accessibilityHint, placeholder, placeholderTextColor, ...rest }: ThemedTextInputProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'surface');
+  const borderColor = useThemeColor({ light: lightColor, dark: darkColor }, 'border');
+  const defaultPlaceholderColor = useThemeColor({}, 'text-muted');
+  const placeholderColor = placeholderTextColor || defaultPlaceholderColor;
 
   return (
     <TextInput
-      style={[{ color, backgroundColor }, styles.input, style]}
+      style={[{ color, backgroundColor, borderColor }, styles.input, style]}
       placeholder={placeholder}
+      placeholderTextColor={placeholderColor}
       accessible={true}
       accessibilityLabel={accessibilityLabel || placeholder || 'Text input'}
       accessibilityHint={accessibilityHint || AccessibilityHints.INPUT_EDIT}
@@ -27,10 +32,11 @@ export function ThemedTextInput({ style, lightColor, darkColor, accessibilityLab
 
 const styles = StyleSheet.create({
   input: {
-    height: 50,
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginVertical: 5,
+    height: InputField.height,
+    borderWidth: InputField.borderWidth,
+    borderRadius: InputField.borderRadius,
+    paddingHorizontal: InputField.paddingHorizontal,
+    fontSize: InputField.fontSize,
+    marginVertical: Spacing.sm,
   },
 });

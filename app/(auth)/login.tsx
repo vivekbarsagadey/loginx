@@ -1,8 +1,9 @@
+import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { SocialSignInButtons } from '@/components/ui/social-sign-in-buttons';
+import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
 import { useSecuritySettings } from '@/hooks/use-security-settings';
@@ -146,7 +147,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <ScreenContainer scrollable centerContent>
       <ThemedText type="h1" style={styles.title}>
         {i18n.t('screens.login.title')}
       </ThemedText>
@@ -243,37 +244,32 @@ export default function LoginScreen() {
       <SocialSignInButtons onGoogleSignIn={signInWithGoogle} onAppleSignIn={signInWithApple} loading={socialLoading} mode="login" />
 
       <ThemedButton title={i18n.t('screens.login.noAccount')} variant="link" onPress={() => router.push('/(auth)/register')} style={styles.linkButton} />
-    </ThemedView>
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    justifyContent: 'center',
-  },
   title: {
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     textAlign: 'center',
-    marginBottom: 32,
+    marginBottom: Spacing.xl,
   },
   input: {
-    marginVertical: 8,
+    marginVertical: Spacing.sm,
   },
   button: {
-    marginTop: 32,
+    marginTop: Spacing.xl,
   },
   biometricButton: {
-    marginTop: 12,
+    marginTop: Spacing.md,
   },
   warningContainer: {
-    marginTop: 16,
-    padding: 12,
-    borderRadius: 8,
+    marginTop: Spacing.md,
+    padding: Spacing.md,
+    borderRadius: Spacing.sm,
     borderWidth: 1,
   },
   warningText: {
@@ -281,9 +277,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   lockoutContainer: {
-    marginTop: 16,
-    padding: 12,
-    borderRadius: 8,
+    marginTop: Spacing.md,
+    padding: Spacing.md,
+    borderRadius: Spacing.sm,
     borderWidth: 1,
   },
   lockoutText: {
@@ -291,7 +287,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   linkButton: {
-    marginTop: 16,
+    marginTop: Spacing.md,
     alignSelf: 'center',
   },
   loading: {

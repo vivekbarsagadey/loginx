@@ -1,7 +1,8 @@
 import { deleteUserAccount } from '@/actions/user.action';
-import { ThemedScrollView } from '@/components/themed-scroll-view';
+import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { SettingsItem, settingsSections } from '@/config/settings';
+import { BorderRadius, Spacing, TouchTarget } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { clear as clearCache } from '@/utils/cache';
@@ -12,7 +13,6 @@ import * as Haptics from 'expo-haptics';
 import { Href, useRouter } from 'expo-router';
 import { deleteUser } from 'firebase/auth';
 import { Alert, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -116,26 +116,23 @@ export default function SettingsScreen() {
   };
 
   const styles = StyleSheet.create({
-    container: {
-      padding: 16,
-    },
     header: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: 24,
+      marginBottom: Spacing.lg,
     },
     avatar: {
       width: 64,
       height: 64,
       borderRadius: 32,
-      marginRight: 16,
+      marginRight: Spacing.md,
       opacity: 0.5,
     },
     section: {
-      marginBottom: 24,
+      marginBottom: Spacing.lg,
     },
     sectionItems: {
-      borderRadius: 12,
+      borderRadius: BorderRadius.md,
       overflow: 'hidden',
       borderWidth: 1,
       borderColor: borderColor,
@@ -143,8 +140,8 @@ export default function SettingsScreen() {
     settingRow: {
       flexDirection: 'row',
       alignItems: 'center',
-      padding: 16,
-      minHeight: 56,
+      padding: Spacing.md,
+      minHeight: TouchTarget.large,
       borderBottomWidth: 1,
       borderBottomColor: borderColor,
     },
@@ -153,50 +150,48 @@ export default function SettingsScreen() {
     },
     settingInfo: {
       flex: 1,
-      marginLeft: 16,
+      marginLeft: Spacing.md,
     },
   });
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ThemedScrollView contentContainerStyle={styles.container}>
-        <View style={styles.header}>
-          <Image source={{ uri: user?.photoURL ?? 'https://www.gravatar.com/avatar/?d=mp' }} style={styles.avatar} />
-          <View>
-            <ThemedText type="h2">{user?.displayName}</ThemedText>
-            <ThemedText style={{ color: textMutedColor }}>{user?.email}</ThemedText>
-            <TouchableOpacity onPress={() => router.push('/profile/edit')}>
-              <ThemedText style={{ color: tintColor }}>Edit profile ›</ThemedText>
-            </TouchableOpacity>
+    <ScreenContainer scrollable noPadding={false}>
+      <View style={styles.header}>
+        <Image source={{ uri: user?.photoURL ?? 'https://www.gravatar.com/avatar/?d=mp' }} style={styles.avatar} />
+        <View>
+          <ThemedText type="h2">{user?.displayName}</ThemedText>
+          <ThemedText style={{ color: textMutedColor }}>{user?.email}</ThemedText>
+          <TouchableOpacity onPress={() => router.push('/profile/edit')}>
+            <ThemedText style={{ color: tintColor }}>Edit profile ›</ThemedText>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {settingsSections.map((section, sectionIndex) => (
+        <View key={section.title || `section-${sectionIndex}`} style={styles.section}>
+          {section.title && <ThemedText type="h2">{section.title}</ThemedText>}
+          <View style={styles.sectionItems}>
+            {section.items.map((item, itemIndex) => (
+              <TouchableOpacity
+                key={`${sectionIndex}-${itemIndex}-${item.title}`}
+                style={[styles.settingRow, itemIndex === section.items.length - 1 && styles.settingRowLast]}
+                onPress={() => handlePress(item)}
+              >
+                <Feather name={item.icon as React.ComponentProps<typeof Feather>['name']} size={24} color={item.type === 'danger' ? errorColor : textColor} />
+                <View style={styles.settingInfo}>
+                  <ThemedText style={{ color: item.type === 'danger' ? errorColor : textColor }}>{item.title}</ThemedText>
+                  {item.subtitle && (
+                    <ThemedText type="caption" style={{ color: textMutedColor }}>
+                      {item.subtitle}
+                    </ThemedText>
+                  )}
+                </View>
+                {(item.type === 'link' || item.type === 'action' || item.type === 'danger') && <Feather name="chevron-right" size={24} color={textMutedColor} />}
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
-
-        {settingsSections.map((section, sectionIndex) => (
-          <View key={section.title || `section-${sectionIndex}`} style={styles.section}>
-            {section.title && <ThemedText type="h2">{section.title}</ThemedText>}
-            <View style={styles.sectionItems}>
-              {section.items.map((item, itemIndex) => (
-                <TouchableOpacity
-                  key={`${sectionIndex}-${itemIndex}-${item.title}`}
-                  style={[styles.settingRow, itemIndex === section.items.length - 1 && styles.settingRowLast]}
-                  onPress={() => handlePress(item)}
-                >
-                  <Feather name={item.icon as React.ComponentProps<typeof Feather>['name']} size={24} color={item.type === 'danger' ? errorColor : textColor} />
-                  <View style={styles.settingInfo}>
-                    <ThemedText style={{ color: item.type === 'danger' ? errorColor : textColor }}>{item.title}</ThemedText>
-                    {item.subtitle && (
-                      <ThemedText type="caption" style={{ color: textMutedColor }}>
-                        {item.subtitle}
-                      </ThemedText>
-                    )}
-                  </View>
-                  {(item.type === 'link' || item.type === 'action' || item.type === 'danger') && <Feather name="chevron-right" size={24} color={textMutedColor} />}
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        ))}
-      </ThemedScrollView>
-    </SafeAreaView>
+      ))}
+    </ScreenContainer>
   );
 }

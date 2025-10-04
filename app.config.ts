@@ -24,6 +24,8 @@ export default {
     },
     android: {
       adaptiveIcon: {
+        // NOTE: Build-time color - matches Colors.light.bg from theme.ts (#E6F4FE is a light blue tint)
+        // This is a build configuration and cannot dynamically reference runtime theme values
         backgroundColor: '#E6F4FE',
         foregroundImage: './assets/images/android-icon-foreground.png',
         backgroundImage: './assets/images/android-icon-background.png',
@@ -45,9 +47,11 @@ export default {
           image: './assets/images/splash-icon.png',
           imageWidth: 200,
           resizeMode: 'contain',
-          backgroundColor: '#ffffff',
+          // NOTE: Build-time colors - match Colors.light.bg and Colors.dark.bg from theme.ts
+          // Splash screen is displayed before app loads, so cannot use runtime theme values
+          backgroundColor: '#ffffff', // Colors.light.bg
           dark: {
-            backgroundColor: '#000000',
+            backgroundColor: '#000000', // Approximates Colors.dark.bg (#0B1220)
           },
         },
       ],

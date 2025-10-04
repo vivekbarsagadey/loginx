@@ -1,10 +1,11 @@
+import { Typography } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { StyleSheet, Text, type TextProps } from 'react-native';
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
-  type?: 'h1' | 'h2' | 'h3' | 'body' | 'caption' | 'muted' | 'inverse';
+  type?: 'display' | 'h1' | 'h2' | 'h3' | 'body' | 'bodyBold' | 'caption' | 'small' | 'muted' | 'inverse';
 };
 
 export function ThemedText({ style, lightColor, darkColor, type = 'body', ...rest }: ThemedTextProps) {
@@ -27,35 +28,54 @@ export function ThemedText({ style, lightColor, darkColor, type = 'body', ...res
 }
 
 const styles = StyleSheet.create({
+  display: {
+    fontSize: Typography.display.fontSize,
+    lineHeight: Typography.display.lineHeight,
+    fontWeight: Typography.display.fontWeight,
+  },
   h1: {
-    fontSize: 28,
-    lineHeight: 28 * 1.4,
-    fontWeight: 'bold',
+    fontSize: Typography.h1.fontSize,
+    lineHeight: Typography.h1.lineHeight,
+    fontWeight: Typography.h1.fontWeight,
   },
   h2: {
-    fontSize: 24,
-    lineHeight: 24 * 1.4,
-    fontWeight: 'bold',
+    fontSize: Typography.h2.fontSize,
+    lineHeight: Typography.h2.lineHeight,
+    fontWeight: Typography.h2.fontWeight,
   },
   h3: {
-    fontSize: 20,
-    lineHeight: 20 * 1.5,
-    fontWeight: '600',
+    fontSize: Typography.h3.fontSize,
+    lineHeight: Typography.h3.lineHeight,
+    fontWeight: Typography.h3.fontWeight,
   },
   body: {
-    fontSize: 16,
-    lineHeight: 16 * 1.5,
+    fontSize: Typography.body.fontSize,
+    lineHeight: Typography.body.lineHeight,
+    fontWeight: Typography.body.fontWeight,
+  },
+  bodyBold: {
+    fontSize: Typography.bodyBold.fontSize,
+    lineHeight: Typography.bodyBold.lineHeight,
+    fontWeight: Typography.bodyBold.fontWeight,
   },
   caption: {
-    fontSize: 13,
-    lineHeight: 13 * 1.4,
+    fontSize: Typography.caption.fontSize,
+    lineHeight: Typography.caption.lineHeight,
+    fontWeight: Typography.caption.fontWeight,
+  },
+  small: {
+    fontSize: Typography.small.fontSize,
+    lineHeight: Typography.small.lineHeight,
+    fontWeight: Typography.small.fontWeight,
   },
   muted: {
-    fontSize: 16,
-    lineHeight: 16 * 1.5,
+    fontSize: Typography.body.fontSize,
+    lineHeight: Typography.body.lineHeight,
+    fontWeight: Typography.body.fontWeight,
   },
   inverse: {
-    fontSize: 16,
-    lineHeight: 16 * 1.5,
+    fontSize: Typography.body.fontSize,
+    lineHeight: Typography.body.lineHeight,
+    fontWeight: Typography.body.fontWeight,
   },
 });

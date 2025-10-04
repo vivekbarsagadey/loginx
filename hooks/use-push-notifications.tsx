@@ -7,6 +7,7 @@ import Constants from 'expo-constants';
 import { Subscription } from 'expo-notifications';
 import { doc, updateDoc } from 'firebase/firestore';
 import { firestore } from '../firebase-config';
+import { Colors } from '@/constants/theme';
 
 // Configure the notification handler
 Notifications.setNotificationHandler({
@@ -23,11 +24,16 @@ async function registerForPushNotificationsAsync() {
   let token;
 
   if (Platform.OS === 'android') {
+    // Use theme error color for notification LED light
+    // Note: Android requires hex format with alpha channel (ARGB)
+    // Converting theme error color to ARGB format with ~49% opacity (7C in hex)
+    const notificationLightColor = Colors.light.error + '7C'; // e.g., '#DC26267C'
+    
     await Notifications.setNotificationChannelAsync('default', {
       name: 'default',
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
+      lightColor: notificationLightColor,
     });
   }
 

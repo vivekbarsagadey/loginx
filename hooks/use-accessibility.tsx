@@ -1,3 +1,4 @@
+import { Colors } from '@/constants/theme';
 import { useEffect, useState } from 'react';
 import { AccessibilityInfo, Platform } from 'react-native';
 
@@ -135,16 +136,21 @@ export const AccessibilityUtils = {
 
   /**
    * Get high contrast colors if needed
+   * Uses theme colors instead of hardcoded values for consistency
    */
   getContrastAwareColors: (normalColors: { background: string; text: string }, isHighContrast: boolean) => {
     if (!isHighContrast) {
       return normalColors;
     }
 
-    // Return high contrast alternatives
+    // Return high contrast alternatives using theme colors
+    // Light mode has white background and black text
+    // Dark mode has black background and white text
+    const isLightBackground = normalColors.background === Colors.light.bg;
+
     return {
-      background: normalColors.background === '#FFFFFF' ? '#FFFFFF' : '#000000',
-      text: normalColors.text === '#000000' ? '#000000' : '#FFFFFF',
+      background: isLightBackground ? Colors.light.bg : Colors.dark.bg,
+      text: isLightBackground ? Colors.light.text : Colors.dark.text,
     };
   },
 
