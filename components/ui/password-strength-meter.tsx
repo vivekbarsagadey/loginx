@@ -81,8 +81,10 @@ export function calculatePasswordStrength(password: string): PasswordStrength {
 
 /**
  * Get color for password strength
+ * Made as worklet for React Native Reanimated compatibility
  */
 function getStrengthColor(strength: PasswordStrength, colors: { error: string; warning: string; success: string }): string {
+  'worklet';
   switch (strength) {
     case 'weak':
       return colors.error;
@@ -98,8 +100,10 @@ function getStrengthColor(strength: PasswordStrength, colors: { error: string; w
 
 /**
  * Get width percentage for strength meter
+ * Made as worklet for potential React Native Reanimated compatibility
  */
 function getStrengthWidth(strength: PasswordStrength): number {
+  'worklet';
   switch (strength) {
     case 'weak':
       return 25;
@@ -116,8 +120,10 @@ function getStrengthWidth(strength: PasswordStrength): number {
 
 /**
  * Get label for password strength
+ * Made as worklet for potential React Native Reanimated compatibility
  */
 function getStrengthLabel(strength: PasswordStrength): string {
+  'worklet';
   switch (strength) {
     case 'weak':
       return 'Weak';
@@ -139,11 +145,23 @@ function getStrengthLabel(strength: PasswordStrength): string {
 export function PasswordStrengthMeter({ password, onStrengthChange }: PasswordStrengthMeterProps) {
   const [strength, setStrength] = useState<PasswordStrength>('none');
   const width = useSharedValue(0);
+  const strengthValue = useSharedValue<PasswordStrength>('none');
 
   const errorColor = useThemeColor({}, 'error');
   const warningColor = useThemeColor({}, 'warning');
   const successColor = useThemeColor({}, 'success');
   const borderColor = useThemeColor({}, 'border');
+
+  const errorColorShared = useSharedValue(errorColor);
+  const warningColorShared = useSharedValue(warningColor);
+  const successColorShared = useSharedValue(successColor);
+
+  // Update shared values when theme colors change
+  useEffect(() => {
+    errorColorShared.value = errorColor;
+    warningColorShared.value = warningColor;
+    successColorShared.value = successColor;
+  }, [errorColor, warningColor, successColor, errorColorShared, warningColorShared, successColorShared]);
 
   const colors = {
     error: errorColor,
@@ -154,17 +172,25 @@ export function PasswordStrengthMeter({ password, onStrengthChange }: PasswordSt
   useEffect(() => {
     const newStrength = calculatePasswordStrength(password);
     setStrength(newStrength);
+    strengthValue.value = newStrength;
     width.value = withSpring(getStrengthWidth(newStrength), {
       damping: 15,
       stiffness: 150,
     });
     onStrengthChange?.(newStrength);
-  }, [password, onStrengthChange, width]);
+  }, [password, onStrengthChange, width, strengthValue]);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    width: `${width.value}%`,
-    backgroundColor: getStrengthColor(strength, colors),
-  }));
+  const animatedStyle = useAnimatedStyle(() => {
+    const colors = {
+      error: errorColorShared.value,
+      warning: warningColorShared.value,
+      success: successColorShared.value,
+    };
+    return {
+      width: `${width.value}%`,
+      backgroundColor: getStrengthColor(strengthValue.value, colors),
+    };
+  });
 
   // Don't show meter if no password entered
   if (strength === 'none') {
