@@ -151,7 +151,7 @@ error handling, and advanced security features.
 
 **File:** `app/(auth)/login.tsx`
 
-#### Features:
+#### Features
 
 - Real-time validation with Zod schema
 - Email format validation
@@ -161,7 +161,7 @@ error handling, and advanced security features.
 - Loading states during authentication
 - Error handling with user-friendly messages
 
-#### Validation Rules:
+#### Validation Rules
 
 ```typescript
 Email:
@@ -176,7 +176,7 @@ Password:
 - Sanitized before submission
 ```
 
-#### User Flow:
+#### User Flow
 
 ```
 1. User enters email address
@@ -199,7 +199,7 @@ Password:
 10. Error: Show error message, allow retry
 ```
 
-#### Code Reference:
+#### Code Reference
 
 ```typescript
 // Schema validation
@@ -221,7 +221,7 @@ await signInWithEmailAndPassword(auth, email, password);
 
 **File:** `hooks/use-social-auth.tsx`
 
-#### Features:
+#### Features
 
 - One-tap Google Sign-In
 - Automatic account linking
@@ -232,7 +232,7 @@ await signInWithEmailAndPassword(auth, email, password);
 - Loading states
 - Haptic feedback
 
-#### User Flow:
+#### User Flow
 
 ```
 1. User taps "Sign in with Google"
@@ -261,14 +261,14 @@ await signInWithEmailAndPassword(auth, email, password);
 14. Navigate to main app
 ```
 
-#### Requirements:
+#### Requirements
 
 - Google Web Client ID (from Firebase Console)
 - Google Play Services (Android)
 - Proper OAuth configuration
 - Firestore rules for profile creation
 
-#### Error Scenarios:
+#### Error Scenarios
 
 - User cancelled sign-in
 - Google Play Services not available
@@ -282,7 +282,7 @@ await signInWithEmailAndPassword(auth, email, password);
 
 **File:** `hooks/use-social-auth.tsx`
 
-#### Features:
+#### Features
 
 - Native Apple Sign-In (iOS)
 - Privacy-focused (hide email option)
@@ -291,7 +291,7 @@ await signInWithEmailAndPassword(auth, email, password);
 - Profile data sync
 - Fallback for non-iOS platforms
 
-#### User Flow (iOS):
+#### User Flow (iOS)
 
 ```
 1. User taps "Sign in with Apple"
@@ -322,12 +322,12 @@ await signInWithEmailAndPassword(auth, email, password);
 15. Navigate to main app
 ```
 
-#### Platform Support:
+#### Platform Support
 
 - **iOS**: Native Apple Authentication Button
 - **Android/Web**: Generic button with OAuth flow (requires backend)
 
-#### Privacy Features:
+#### Privacy Features
 
 - Email hiding supported
 - Minimal data collection
@@ -339,12 +339,12 @@ await signInWithEmailAndPassword(auth, email, password);
 
 **File:** `hooks/use-biometric-auth.tsx`
 
-#### Supported Types:
+#### Supported Types
 
 - **iOS**: Face ID, Touch ID
 - **Android**: Fingerprint, Face Unlock
 
-#### Features:
+#### Features
 
 - Device capability detection
 - User preference storage (secure)
@@ -353,7 +353,7 @@ await signInWithEmailAndPassword(auth, email, password);
 - Respect system "Reduce Motion" settings
 - Secure biometric settings storage
 
-#### User Flow (Enrollment):
+#### User Flow (Enrollment)
 
 ```
 1. User navigates to Settings > Security
@@ -373,7 +373,7 @@ await signInWithEmailAndPassword(auth, email, password);
 8. Biometric login now enabled
 ```
 
-#### User Flow (Login):
+#### User Flow (Login)
 
 ```
 1. User opens app
@@ -390,7 +390,7 @@ await signInWithEmailAndPassword(auth, email, password);
 7. Failure: Show password login option
 ```
 
-#### Security Considerations:
+#### Security Considerations
 
 - Biometric data never leaves device
 - Preferences stored in encrypted SecureStore
@@ -403,7 +403,7 @@ await signInWithEmailAndPassword(auth, email, password);
 
 **File:** `hooks/use-two-factor-auth.tsx`
 
-#### Features:
+#### Features
 
 - TOTP-based 2FA codes
 - Backup codes (10 generated)
@@ -412,7 +412,7 @@ await signInWithEmailAndPassword(auth, email, password);
 - Low backup code warnings
 - 2FA enable/disable flow
 
-#### User Flow (Enable 2FA):
+#### User Flow (Enable 2FA)
 
 ```
 1. User navigates to Settings > Security > 2FA
@@ -432,7 +432,7 @@ await signInWithEmailAndPassword(auth, email, password);
 8. 2FA required for all future logins
 ```
 
-#### User Flow (Login with 2FA):
+#### User Flow (Login with 2FA)
 
 ```
 1. User enters email & password
@@ -453,7 +453,7 @@ await signInWithEmailAndPassword(auth, email, password);
 9. Option to use backup code instead
 ```
 
-#### Backup Code Flow:
+#### Backup Code Flow
 
 ```
 1. User can't access authenticator app
@@ -832,7 +832,7 @@ Opportunities: Auto-fill codes, remember device option
 
 **File:** `hooks/use-auth-provider.tsx`
 
-#### States:
+#### States
 
 ```typescript
 interface AuthState {
@@ -842,7 +842,7 @@ interface AuthState {
 }
 ```
 
-#### State Transitions:
+#### State Transitions
 
 ```
 Initial State (App Launch)
@@ -866,7 +866,7 @@ Unauthenticated State
 └─ signOut: function (no-op)
 ```
 
-#### Context Provider:
+#### Context Provider
 
 ```typescript
 <AuthProvider>
@@ -881,7 +881,7 @@ const { user, loading, signOut } = useAuth();
 
 **Library:** React Hook Form + Zod
 
-#### States:
+#### States
 
 ```typescript
 interface FormState {
@@ -903,7 +903,7 @@ interface FormState {
 
 **File:** `hooks/use-biometric-auth.tsx`
 
-#### States:
+#### States
 
 ```typescript
 interface BiometricState {
@@ -919,7 +919,7 @@ interface BiometricState {
 
 **File:** `hooks/use-two-factor-auth.tsx`
 
-#### States:
+#### States
 
 ```typescript
 interface TwoFactorState {
@@ -1148,7 +1148,7 @@ showError(error);
 
 **Library:** expo-secure-store
 
-#### Stored Data:
+#### Stored Data
 
 - Biometric preferences
 - 2FA settings
@@ -1156,7 +1156,7 @@ showError(error);
 - Session tokens
 - User preferences
 
-#### Implementation:
+#### Implementation
 
 ```typescript
 import * as SecureStore from "expo-secure-store";
@@ -1171,7 +1171,7 @@ const value = await SecureStore.getItemAsync("key");
 await SecureStore.deleteItemAsync("key");
 ```
 
-#### Security Measures:
+#### Security Measures
 
 - Hardware-backed keystore (Android)
 - Keychain Services (iOS)
@@ -1183,7 +1183,7 @@ await SecureStore.deleteItemAsync("key");
 
 **File:** `utils/sanitize.ts`
 
-#### Functions:
+#### Functions
 
 ```typescript
 // Sanitize user input
@@ -1199,7 +1199,7 @@ escapeHtml(input: string): string
 isValidEmail(email: string): boolean
 ```
 
-#### Protected Against:
+#### Protected Against
 
 - XSS attacks
 - SQL injection
@@ -1211,7 +1211,7 @@ isValidEmail(email: string): boolean
 
 **File:** `firestore.rules`
 
-#### User Profile Rules:
+#### User Profile Rules
 
 ```javascript
 // User can only read/write their own profile
@@ -1229,7 +1229,7 @@ match /users/{userId} {
 
 ### 4. Session Management
 
-#### Features:
+#### Features
 
 - Automatic token refresh
 - Session timeout (30 days default)
@@ -1238,7 +1238,7 @@ match /users/{userId} {
 - Force logout on password change
 - Clear session on logout
 
-#### Implementation:
+#### Implementation
 
 ```typescript
 // Firebase handles session automatically
@@ -1253,7 +1253,7 @@ onAuthStateChanged(auth, (user) => {
 
 ### 5. Rate Limiting
 
-#### Firebase Built-in:
+#### Firebase Built-in
 
 - Too many failed attempts: Temporary block
 - Suspicious activity: CAPTCHA challenge
@@ -1275,7 +1275,7 @@ All network requests use HTTPS:
 
 ### Scenario 1: User Loses Internet During Login
 
-**Flow:**
+#### Flow
 
 ```
 1. User enters credentials
@@ -1291,7 +1291,7 @@ All network requests use HTTPS:
 11. User logged in successfully
 ```
 
-**Handling:**
+#### Handling
 
 - Detect network errors
 - User-friendly error message
@@ -1301,7 +1301,7 @@ All network requests use HTTPS:
 
 ### Scenario 2: User Has 2FA Enabled but Lost Phone
 
-**Flow:**
+#### Flow
 
 ```
 1. User enters email & password
@@ -1316,7 +1316,7 @@ All network requests use HTTPS:
 10. Warning shown: "3 backup codes remaining"
 ```
 
-**Handling:**
+#### Handling
 
 - Clear backup code option
 - Validate and consume codes
@@ -1325,7 +1325,7 @@ All network requests use HTTPS:
 
 ### Scenario 3: Biometric Authentication Fails
 
-**Flow:**
+#### Flow
 
 ```
 1. App launches
@@ -1338,7 +1338,7 @@ All network requests use HTTPS:
 8. User logged in successfully
 ```
 
-**Handling:**
+#### Handling
 
 - Automatic fallback to password
 - Clear transition to password screen
@@ -1347,7 +1347,7 @@ All network requests use HTTPS:
 
 ### Scenario 4: Email Already in Use (Social Sign-In)
 
-**Flow:**
+#### Flow
 
 ```
 1. User taps "Sign in with Google"
@@ -1359,7 +1359,7 @@ All network requests use HTTPS:
 7. Offer: "Link Google account to existing account"
 ```
 
-**Handling:**
+#### Handling
 
 - Detect account linking scenarios
 - Provide clear options
@@ -1368,7 +1368,7 @@ All network requests use HTTPS:
 
 ### Scenario 5: Password Reset Email Not Received
 
-**Flow:**
+#### Flow
 
 ```
 1. User requests password reset
@@ -1382,7 +1382,7 @@ All network requests use HTTPS:
 9. User resets password successfully
 ```
 
-**Handling:**
+#### Handling
 
 - "Resend Email" option
 - Check spam folder reminder
@@ -1391,7 +1391,7 @@ All network requests use HTTPS:
 
 ### Scenario 6: Simultaneous Login Attempts (Multiple Devices)
 
-**Flow:**
+#### Flow
 
 ```
 Device 1:
@@ -1407,7 +1407,7 @@ Device 1:
 6. Both devices work simultaneously
 ```
 
-**Handling:**
+#### Handling
 
 - Multi-device support enabled
 - No session conflicts
@@ -1416,7 +1416,7 @@ Device 1:
 
 ### Scenario 7: User Enters Wrong Email Format
 
-**Flow:**
+#### Flow
 
 ```
 1. User types "user@example" (no TLD)
@@ -1431,7 +1431,7 @@ Device 1:
 10. Submit button enabled
 ```
 
-**Handling:**
+#### Handling
 
 - Real-time validation on blur
 - Clear error messages
@@ -1441,7 +1441,7 @@ Device 1:
 
 ### Scenario 8: App Killed During Authentication
 
-**Flow:**
+#### Flow
 
 ```
 1. User enters credentials
@@ -1455,7 +1455,7 @@ Device 1:
 9. Navigate to main app directly
 ```
 
-**Handling:**
+#### Handling
 
 - Firebase persists auth state
 - App checks state on launch
@@ -1464,7 +1464,7 @@ Device 1:
 
 ### Scenario 9: User Changes Password on Another Device
 
-**Flow:**
+#### Flow
 
 ```
 Device 1 (desktop):
@@ -1479,7 +1479,7 @@ Device 2 (mobile app):
 7. User authenticated successfully
 ```
 
-**Handling:**
+#### Handling
 
 - Firebase auto-detects invalid sessions
 - Graceful logout
@@ -1488,7 +1488,7 @@ Device 2 (mobile app):
 
 ### Scenario 10: Biometric Hardware Changed
 
-**Flow:**
+#### Flow
 
 ```
 1. User adds new fingerprint to phone
@@ -1507,7 +1507,7 @@ OR
 6. User must re-enable biometric in settings
 ```
 
-**Handling:**
+#### Handling
 
 - Detect biometric changes
 - Auto-disable if hardware changed
@@ -1522,7 +1522,7 @@ OR
 
 **SDK:** `firebase/auth`
 
-#### Initialization:
+#### Initialization
 
 ```typescript
 import { initializeApp } from "firebase/app";
@@ -1532,7 +1532,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 ```
 
-#### Methods Used:
+#### Methods Used
 
 ##### 1. Sign In with Email/Password
 
@@ -1597,7 +1597,7 @@ const unsubscribe = onAuthStateChanged(auth, (user) => {
 
 **SDK:** `firebase/firestore`
 
-#### User Profile Operations:
+#### User Profile Operations
 
 ##### Create User Profile
 
@@ -1640,7 +1640,7 @@ await updateDoc(doc(db, "users", userId), {
 
 **Package:** `@react-native-google-signin/google-signin`
 
-#### Configuration:
+#### Configuration
 
 ```typescript
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
@@ -1651,7 +1651,7 @@ GoogleSignin.configure({
 });
 ```
 
-#### Sign In:
+#### Sign In
 
 ```typescript
 await GoogleSignin.hasPlayServices();
@@ -1663,7 +1663,7 @@ const idToken = userInfo.data?.idToken;
 
 **Package:** `expo-apple-authentication`
 
-#### Sign In:
+#### Sign In
 
 ```typescript
 import * as AppleAuthentication from "expo-apple-authentication";
@@ -1722,7 +1722,7 @@ const debouncedValidation = useMemo(
 
 ### 2. Bundle Size
 
-#### Current Bundles:
+#### Current Bundles
 
 - Firebase Auth: ~80KB (gzipped)
 - Google Sign-In: ~50KB
@@ -1730,9 +1730,11 @@ const debouncedValidation = useMemo(
 - React Hook Form: ~25KB
 - Zod: ~15KB
 
-#### Total: ~190KB for authentication features
+#### Total
 
-#### Optimization:
+~190KB for authentication features
+
+#### Optimization
 
 - Tree shaking enabled
 - Code splitting by route
@@ -1741,7 +1743,7 @@ const debouncedValidation = useMemo(
 
 ### 3. Loading Times
 
-#### Target Performance:
+#### Target Performance
 
 - Initial app load: <2 seconds
 - Login screen render: <100ms
@@ -1749,7 +1751,7 @@ const debouncedValidation = useMemo(
 - Authentication request: <1 second
 - Screen transition: <300ms
 
-#### Measurements:
+#### Measurements
 
 ```typescript
 // Performance monitoring
@@ -1766,7 +1768,7 @@ trace.stop();
 
 ### 4. Network Optimization
 
-#### Strategies:
+#### Strategies
 
 - Request batching
 - Response caching
@@ -1774,7 +1776,7 @@ trace.stop();
 - Request retry with exponential backoff
 - Compression enabled
 
-#### Example:
+#### Example
 
 ```typescript
 // Retry failed requests
@@ -1792,7 +1794,7 @@ const retryRequest = async (fn, maxRetries = 3) => {
 
 ### 5. Rendering Performance
 
-#### Techniques:
+#### Techniques
 
 - Avoid unnecessary re-renders
 - Use React.memo for expensive components
@@ -1800,7 +1802,7 @@ const retryRequest = async (fn, maxRetries = 3) => {
 - Optimize images
 - Reduce component tree depth
 
-#### Example:
+#### Example
 
 ```typescript
 // Prevent re-renders
@@ -1815,7 +1817,7 @@ const MemoizedLoginForm = React.memo(LoginForm, (prevProps, nextProps) => {
 
 ### 1. Screen Reader Support
 
-#### Labels & Hints:
+#### Labels & Hints
 
 ```typescript
 <TouchableOpacity
@@ -1828,7 +1830,7 @@ const MemoizedLoginForm = React.memo(LoginForm, (prevProps, nextProps) => {
 </TouchableOpacity>
 ```
 
-#### Form Fields:
+#### Form Fields
 
 ```typescript
 <TextInput
@@ -1839,7 +1841,7 @@ const MemoizedLoginForm = React.memo(LoginForm, (prevProps, nextProps) => {
 />
 ```
 
-#### Error Announcements:
+#### Error Announcements
 
 ```typescript
 <View
@@ -1852,7 +1854,7 @@ const MemoizedLoginForm = React.memo(LoginForm, (prevProps, nextProps) => {
 
 ### 2. Keyboard Navigation
 
-#### Focus Management:
+#### Focus Management
 
 ```typescript
 const emailRef = useRef<TextInput>(null);
@@ -1874,13 +1876,13 @@ const passwordRef = useRef<TextInput>(null);
 
 ### 3. Visual Accessibility
 
-#### High Contrast:
+#### High Contrast
 
 ```typescript
 const highContrastColor = useColorScheme() === "dark" ? "#FFFFFF" : "#000000";
 ```
 
-#### Font Scaling:
+#### Font Scaling
 
 ```typescript
 <Text
@@ -1891,7 +1893,7 @@ const highContrastColor = useColorScheme() === "dark" ? "#FFFFFF" : "#000000";
 </Text>
 ```
 
-#### Touch Targets:
+#### Touch Targets
 
 ```typescript
 // Minimum 44x44 points
@@ -1906,13 +1908,13 @@ const styles = StyleSheet.create({
 
 ### 4. Color Contrast
 
-#### WCAG AA Compliance:
+#### WCAG AA Compliance
 
 - Normal text: 4.5:1 ratio minimum
 - Large text: 3.0:1 ratio minimum
 - UI components: 3.0:1 ratio minimum
 
-#### Testing:
+#### Testing
 
 ```typescript
 // Use tools like:
