@@ -5,7 +5,7 @@ import { StyleSheet, Text, type TextProps } from 'react-native';
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
-  type?: 'display' | 'h1' | 'h2' | 'h3' | 'body' | 'bodyBold' | 'caption' | 'small' | 'muted' | 'inverse';
+  type?: 'display' | 'h1' | 'h2' | 'h3' | 'subtitle1' | 'subtitle2' | 'body' | 'bodyBold' | 'button' | 'caption' | 'overline' | 'label' | 'small' | 'muted' | 'inverse';
 };
 
 export function ThemedText({ style, lightColor, darkColor, type = 'body', ...rest }: ThemedTextProps) {
@@ -48,6 +48,16 @@ const styles = StyleSheet.create({
     lineHeight: Typography.h3.lineHeight,
     fontWeight: Typography.h3.fontWeight,
   },
+  subtitle1: {
+    fontSize: Typography.subtitle1.fontSize,
+    lineHeight: Typography.subtitle1.lineHeight,
+    fontWeight: Typography.subtitle1.fontWeight,
+  },
+  subtitle2: {
+    fontSize: Typography.subtitle2.fontSize,
+    lineHeight: Typography.subtitle2.lineHeight,
+    fontWeight: Typography.subtitle2.fontWeight,
+  },
   body: {
     fontSize: Typography.body.fontSize,
     lineHeight: Typography.body.lineHeight,
@@ -58,10 +68,28 @@ const styles = StyleSheet.create({
     lineHeight: Typography.bodyBold.lineHeight,
     fontWeight: Typography.bodyBold.fontWeight,
   },
+  button: {
+    fontSize: Typography.button.fontSize,
+    lineHeight: Typography.button.lineHeight,
+    fontWeight: Typography.button.fontWeight,
+    letterSpacing: Typography.button.letterSpacing,
+  },
   caption: {
     fontSize: Typography.caption.fontSize,
     lineHeight: Typography.caption.lineHeight,
     fontWeight: Typography.caption.fontWeight,
+  },
+  overline: {
+    fontSize: Typography.overline.fontSize,
+    lineHeight: Typography.overline.lineHeight,
+    fontWeight: Typography.overline.fontWeight,
+    letterSpacing: Typography.overline.letterSpacing,
+    textTransform: Typography.overline.textTransform,
+  },
+  label: {
+    fontSize: Typography.label.fontSize,
+    lineHeight: Typography.label.lineHeight,
+    fontWeight: Typography.label.fontWeight,
   },
   small: {
     fontSize: Typography.small.fontSize,

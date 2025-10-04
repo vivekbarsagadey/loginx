@@ -1045,10 +1045,32 @@ Need help? Here are your options:
 
 ### Documentation
 
+#### Getting Started
+
 - **[README.md](./README.md)** - This file (getting started)
 - **[SECURITY.md](./SECURITY.md)** - Security guidelines
 - **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** - Quick reference
 - **[LINTING_FORMATTING.md](./LINTING_FORMATTING.md)** - Code style guide
+
+#### Design System
+
+- **[docs/DESIGN_SYSTEM.md](./docs/DESIGN_SYSTEM.md)** - Complete design system
+  guide (1000+ lines)
+- **[docs/DESIGN_SYSTEM_ANALYSIS.md](./docs/DESIGN_SYSTEM_ANALYSIS.md)** -
+  Industry comparison & analysis
+- **[docs/DESIGN_SYSTEM_SUMMARY.md](./docs/DESIGN_SYSTEM_SUMMARY.md)** - Quick
+  overview
+- **[docs/DESIGN_SYSTEM_IMPROVEMENTS.md](./docs/DESIGN_SYSTEM_IMPROVEMENTS.md)** -
+  4-phase improvement plan (25 components)
+- **[docs/DESIGN_SYSTEM_IMPROVEMENT_SUMMARY.md](./docs/DESIGN_SYSTEM_IMPROVEMENT_SUMMARY.md)** -
+  Implementation roadmap
+- **[docs/DESIGN_SYSTEM_CHECKLIST.md](./docs/DESIGN_SYSTEM_CHECKLIST.md)** -
+  Implementation checklist
+
+#### Development
+
+- **[docs/CONSTANTS_REFERENCE.md](./docs/CONSTANTS_REFERENCE.md)** - All
+  constants reference
 - **[.github/instructions/rule.instructions.md](.github/instructions/rule.instructions.md)** -
   Complete dev guidelines
 

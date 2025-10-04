@@ -67,6 +67,16 @@ export const Typography = {
     lineHeight: 28,
     fontWeight: '600' as const,
   },
+  subtitle1: {
+    fontSize: 18,
+    lineHeight: 26,
+    fontWeight: '500' as const,
+  },
+  subtitle2: {
+    fontSize: 16,
+    lineHeight: 24,
+    fontWeight: '500' as const,
+  },
   body: {
     fontSize: 16,
     lineHeight: 24,
@@ -77,10 +87,28 @@ export const Typography = {
     lineHeight: 24,
     fontWeight: '600' as const,
   },
+  button: {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: '500' as const,
+    letterSpacing: 1.25,
+  },
   caption: {
     fontSize: 14,
     lineHeight: 20,
     fontWeight: '400' as const,
+  },
+  overline: {
+    fontSize: 10,
+    lineHeight: 16,
+    fontWeight: '500' as const,
+    letterSpacing: 1.5,
+    textTransform: 'uppercase' as const,
+  },
+  label: {
+    fontSize: 12,
+    lineHeight: 16,
+    fontWeight: '500' as const,
   },
   small: {
     fontSize: 12,
