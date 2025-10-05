@@ -11,7 +11,7 @@ across the entire application.
 
 ---
 
-## 🎨 What is a Design System?
+## 🎨 What is a Design System
 
 A **design system** is a comprehensive set of standards, reusable components,
 and documentation that guides the design and development of an application. It
@@ -220,7 +220,7 @@ Pre-built style helpers that combine design tokens for common patterns.
 **File:** `constants/style-utils.ts` **Status:** ✅ Fully Implemented - 15+
 Utility Collections
 
-#### Available Utilities:
+#### Available Utilities
 
 ```typescript
 // Shadow Utilities (Theme-Aware)
