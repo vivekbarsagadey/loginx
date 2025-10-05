@@ -3,6 +3,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import i18n from '@/i18n';
 import { useState } from 'react';
@@ -35,10 +36,10 @@ export default function ChangePasswordScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={styles.title}>
+      <ThemedText type="h1" style={CommonText.title}>
         {i18n.t('screens.security.changePassword.title')}
       </ThemedText>
-      <ThemedText style={styles.subtitle}>{i18n.t('screens.security.changePassword.subtitle')}</ThemedText>
+      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.security.changePassword.subtitle')}</ThemedText>
 
       <ThemedView style={styles.form}>
         <ThemedInput placeholder={i18n.t('screens.security.changePassword.currentPassword')} value={currentPassword} onChangeText={setCurrentPassword} secureTextEntry style={styles.input} />
@@ -72,15 +73,6 @@ export default function ChangePasswordScreen() {
 }
 
 const styles = StyleSheet.create({
-  title: {
-    textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
-  subtitle: {
-    textAlign: 'center',
-    marginBottom: Spacing.lg,
-    opacity: 0.7,
-  },
   form: {
     flex: 1,
   },

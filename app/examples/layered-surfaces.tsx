@@ -10,6 +10,7 @@ import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { Card, ElevatedCard, FilledCard, OutlinedCard } from '@/components/ui/card';
+import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { Feather } from '@expo/vector-icons';
 import { StyleSheet, View } from 'react-native';
@@ -20,16 +21,16 @@ import { StyleSheet, View } from 'react-native';
 export default function LayeredSurfacesExampleScreen() {
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={styles.title}>
+      <ThemedText type="h1" style={CommonText.title}>
         Layered Surfaces
       </ThemedText>
-      <ThemedText type="body" style={styles.subtitle}>
+      <ThemedText type="body" style={CommonText.subtitle}>
         Examples of elevation and surface variants
       </ThemedText>
 
       {/* Elevation Examples */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Elevation Levels
         </ThemedText>
 
@@ -56,7 +57,7 @@ export default function LayeredSurfacesExampleScreen() {
 
       {/* Surface Variants */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Surface Variants
         </ThemedText>
 
@@ -73,7 +74,7 @@ export default function LayeredSurfacesExampleScreen() {
 
       {/* Specialized Variants */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Specialized Variants
         </ThemedText>
 
@@ -95,15 +96,15 @@ export default function LayeredSurfacesExampleScreen() {
 
       {/* Nested Cards Example */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Nested Cards (Layering)
         </ThemedText>
 
         <Card elevation={1} style={styles.card}>
-          <ThemedText type="h3" style={styles.cardTitle}>
+          <ThemedText type="h3" style={CommonText.sectionTitle}>
             Outer Card (surface)
           </ThemedText>
-          <ThemedText type="body" style={styles.cardDescription}>
+          <ThemedText type="body" style={CommonText.descriptionText}>
             This demonstrates the layering concept where nested content uses a different surface variant.
           </ThemedText>
 
@@ -121,7 +122,7 @@ export default function LayeredSurfacesExampleScreen() {
 
       {/* Card with Header and Footer */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Card with Header & Footer
         </ThemedText>
 
@@ -148,7 +149,7 @@ export default function LayeredSurfacesExampleScreen() {
 
       {/* Dashboard Stats Example */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Dashboard Stats Example
         </ThemedText>
 
@@ -195,7 +196,7 @@ export default function LayeredSurfacesExampleScreen() {
 
       {/* List Example */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           List with Cards
         </ThemedText>
 
@@ -214,28 +215,11 @@ export default function LayeredSurfacesExampleScreen() {
 }
 
 const styles = StyleSheet.create({
-  title: {
-    marginBottom: Spacing.xs,
-  },
-  subtitle: {
-    opacity: 0.7,
-    marginBottom: Spacing.xl,
-  },
   section: {
     marginBottom: Spacing.xl,
   },
-  sectionTitle: {
-    marginBottom: Spacing.md,
-  },
   card: {
     marginBottom: Spacing.md,
-  },
-  cardTitle: {
-    marginBottom: Spacing.sm,
-  },
-  cardDescription: {
-    marginBottom: Spacing.md,
-    opacity: 0.8,
   },
   nestedCard: {
     marginTop: Spacing.md,

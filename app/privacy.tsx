@@ -2,6 +2,7 @@ import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Collapsible } from '@/components/ui/collapsible';
+import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -14,10 +15,10 @@ export default function PrivacyScreen() {
   return (
     <ScreenContainer scrollable>
       {/* Header */}
-      <ThemedText type="h1" style={styles.title}>
+      <ThemedText type="h1" style={CommonText.title}>
         {i18n.t('screens.privacy.title')}
       </ThemedText>
-      <ThemedText style={styles.subtitle}>{i18n.t('screens.privacy.subtitle')}</ThemedText>
+      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.privacy.subtitle')}</ThemedText>
       <ThemedText style={[styles.lastUpdated, { color: textMuted }]}>{i18n.t('screens.privacy.lastUpdated')}</ThemedText>
 
       {/* Introduction */}
@@ -27,7 +28,7 @@ export default function PrivacyScreen() {
 
       {/* Information We Collect */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           {i18n.t('screens.privacy.informationWeCollect.title')}
         </ThemedText>
         <Collapsible title={i18n.t('screens.privacy.informationWeCollect.accountInfo.title')}>
@@ -45,7 +46,7 @@ export default function PrivacyScreen() {
 
       {/* How We Use Your Information */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           {i18n.t('screens.privacy.howWeUse.title')}
         </ThemedText>
         <Collapsible title={i18n.t('screens.privacy.howWeUse.provideServices.title')}>
@@ -63,7 +64,7 @@ export default function PrivacyScreen() {
 
       {/* Data Security */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           {i18n.t('screens.privacy.dataSecurity.title')}
         </ThemedText>
         <ThemedText style={styles.description}>{i18n.t('screens.privacy.dataSecurity.description')}</ThemedText>
@@ -71,7 +72,7 @@ export default function PrivacyScreen() {
 
       {/* Data Sharing */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           {i18n.t('screens.privacy.dataSharing.title')}
         </ThemedText>
         <Collapsible title={i18n.t('screens.privacy.dataSharing.noSelling.title')}>
@@ -89,7 +90,7 @@ export default function PrivacyScreen() {
 
       {/* Your Rights */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           {i18n.t('screens.privacy.yourRights.title')}
         </ThemedText>
         <Collapsible title={i18n.t('screens.privacy.yourRights.accessData.title')}>
@@ -111,7 +112,7 @@ export default function PrivacyScreen() {
 
       {/* Children's Privacy */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           {i18n.t('screens.privacy.childrenPrivacy.title')}
         </ThemedText>
         <ThemedText style={styles.description}>{i18n.t('screens.privacy.childrenPrivacy.content')}</ThemedText>
@@ -119,7 +120,7 @@ export default function PrivacyScreen() {
 
       {/* Changes to Policy */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           {i18n.t('screens.privacy.changes.title')}
         </ThemedText>
         <ThemedText style={styles.description}>{i18n.t('screens.privacy.changes.content')}</ThemedText>
@@ -138,22 +139,12 @@ export default function PrivacyScreen() {
 }
 
 const styles = StyleSheet.create({
-  title: {
-    marginBottom: Spacing.xs,
-  },
-  subtitle: {
-    marginBottom: Spacing.xs,
-    opacity: 0.8,
-  },
   lastUpdated: {
     fontSize: 14,
     marginBottom: Spacing.lg,
   },
   section: {
     marginBottom: Spacing.lg,
-  },
-  sectionTitle: {
-    marginBottom: Spacing.md,
   },
   description: {
     lineHeight: 24,

@@ -7,6 +7,7 @@
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
@@ -15,10 +16,10 @@ export default function TypographyShowcase() {
   return (
     <ScrollView style={styles.container}>
       <ThemedView style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Typography System - 13 Levels
         </ThemedText>
-        <ThemedText type="caption" style={styles.sectionSubtitle}>
+        <ThemedText type="caption" style={CommonText.subtitle}>
           All available typography levels in LoginX
         </ThemedText>
       </ThemedView>
@@ -168,7 +169,7 @@ export default function TypographyShowcase() {
 
       {/* Special Types */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           Special Typography Types
         </ThemedText>
       </ThemedView>
@@ -195,7 +196,7 @@ export default function TypographyShowcase() {
 
       {/* Usage Examples */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           Common Usage Patterns
         </ThemedText>
       </ThemedView>
@@ -229,12 +230,6 @@ const styles = StyleSheet.create({
   section: {
     padding: Spacing.lg,
     paddingBottom: Spacing.md,
-  },
-  sectionTitle: {
-    marginBottom: Spacing.xs,
-  },
-  sectionSubtitle: {
-    opacity: 0.7,
   },
   item: {
     padding: Spacing.md,

@@ -4,6 +4,7 @@ import { ThemedView } from '@/components/themed-view';
 import { PhotoUpload } from '@/components/ui/photo-upload';
 import { ReferralCodeInput } from '@/components/ui/referral-code-input';
 import { TermsCheckbox } from '@/components/ui/terms-checkbox';
+import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import i18n from '@/i18n';
 import { useEffect, useRef } from 'react';
@@ -33,10 +34,10 @@ export default function RegisterStep1({ errors }: { errors: FieldErrors<FormData
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="h2" style={styles.title}>
+      <ThemedText type="h2" style={CommonText.sectionTitle}>
         {i18n.t('register.step1.title')}
       </ThemedText>
-      <ThemedText type="caption" style={styles.description}>
+      <ThemedText type="caption" style={CommonText.descriptionText}>
         Let&apos;s start with your basic information
       </ThemedText>
 
@@ -118,13 +119,6 @@ export default function RegisterStep1({ errors }: { errors: FieldErrors<FormData
 const styles = StyleSheet.create({
   container: {
     gap: Spacing.sm,
-  },
-  title: {
-    marginBottom: Spacing.sm,
-  },
-  description: {
-    marginBottom: Spacing.md,
-    opacity: 0.7,
   },
   photoContainer: {
     alignSelf: 'center',

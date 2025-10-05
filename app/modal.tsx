@@ -1,4 +1,4 @@
-import { Spacing } from '@/constants/layout';
+import { CommonContainers } from '@/constants/common-styles';
 import { Link } from 'expo-router';
 import { StyleSheet } from 'react-native';
 
@@ -7,7 +7,7 @@ import { ThemedView } from '@/components/themed-view';
 
 export default function ModalScreen() {
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={CommonContainers.centerContent}>
       <ThemedText type="h1">This is a modal</ThemedText>
       <Link href="../" style={styles.link}>
         <ThemedText type="body">Go to home screen</ThemedText>
@@ -17,12 +17,6 @@ export default function ModalScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: Spacing.lg,
-  },
   link: {
     marginTop: 15,
     paddingVertical: 15,

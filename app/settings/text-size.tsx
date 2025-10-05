@@ -1,5 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -33,10 +34,10 @@ export default function TextSizeScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="h1" style={styles.title}>
+      <ThemedText type="h1" style={CommonText.title}>
         {i18n.t('screens.settings.textSize.title')}
       </ThemedText>
-      <ThemedText style={styles.subtitle}>{i18n.t('screens.settings.textSize.subtitle')}</ThemedText>
+      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.settings.textSize.subtitle')}</ThemedText>
 
       <ThemedView style={styles.optionsContainer}>
         {sizeOptions.map((option) => (
@@ -81,13 +82,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: Spacing.md,
-  },
-  title: {
-    marginBottom: Spacing.sm,
-  },
-  subtitle: {
-    marginBottom: Spacing.lg,
-    opacity: 0.7,
   },
   optionsContainer: {
     gap: Spacing.md,

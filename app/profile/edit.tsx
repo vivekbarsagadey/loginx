@@ -5,6 +5,7 @@ import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { AccessibilityHints, AccessibilityRoles } from '@/constants/accessibility';
+import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { ValidationConstants, ValidationMessages } from '@/constants/validation';
 import { auth } from '@/firebase-config';
@@ -332,7 +333,7 @@ export default function EditProfileScreen() {
 
         {/* Form Section */}
         <ThemedView style={styles.formSection}>
-          <ThemedText style={styles.sectionTitle}>Basic Information</ThemedText>
+          <ThemedText style={CommonText.sectionTitle}>Basic Information</ThemedText>
 
           <ThemedInput
             label={i18n.t('profile.edit.nameLabel')}
@@ -390,7 +391,7 @@ export default function EditProfileScreen() {
             accessibilityHint="Enter your age (optional)"
           />
 
-          <ThemedText style={[styles.sectionTitle, styles.sectionTitleSpacing]}>Address (Optional)</ThemedText>
+          <ThemedText style={[CommonText.sectionTitle, styles.sectionTitleSpacing]}>Address (Optional)</ThemedText>
 
           <ThemedInput
             ref={addressInputRef}
@@ -550,12 +551,6 @@ const styles = StyleSheet.create({
   },
   formSection: {
     marginBottom: Spacing.xl,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: Spacing.md,
-    marginTop: Spacing.sm,
   },
   sectionTitleSpacing: {
     marginTop: Spacing.lg,

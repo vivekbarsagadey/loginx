@@ -2,6 +2,7 @@ import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { AddressAutocomplete, AddressComponents } from '@/components/ui/address-autocomplete';
+import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import i18n from '@/i18n';
 import { GOOGLE_PLACES_API_KEY } from '@/utils/env';
@@ -47,10 +48,10 @@ export default function RegisterStep3({ errors }: { errors: FieldErrors<FormData
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="h2" style={styles.title}>
+      <ThemedText type="h2" style={CommonText.sectionTitle}>
         {i18n.t('register.step3.title')}
       </ThemedText>
-      <ThemedText type="caption" style={styles.description}>
+      <ThemedText type="caption" style={CommonText.descriptionText}>
         Provide your address information (optional - enhances your experience)
       </ThemedText>
 
@@ -173,13 +174,6 @@ export default function RegisterStep3({ errors }: { errors: FieldErrors<FormData
 const styles = StyleSheet.create({
   container: {
     gap: Spacing.sm,
-  },
-  title: {
-    marginBottom: Spacing.sm,
-  },
-  description: {
-    marginBottom: Spacing.md,
-    opacity: 0.7,
   },
   infoText: {
     marginBottom: Spacing.md,

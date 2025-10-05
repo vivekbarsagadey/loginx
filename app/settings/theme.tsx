@@ -1,5 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { CommonContainers, CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -41,11 +42,11 @@ export default function ThemeScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="h1" style={styles.title}>
+    <ThemedView style={CommonContainers.screenContainer}>
+      <ThemedText type="h1" style={CommonText.title}>
         {i18n.t('screens.settings.theme.title')}
       </ThemedText>
-      <ThemedText style={styles.subtitle}>{i18n.t('screens.settings.theme.subtitle')}</ThemedText>
+      <ThemedText style={CommonText.subtitleMedium}>{i18n.t('screens.settings.theme.subtitle')}</ThemedText>
 
       <ThemedView style={styles.optionsContainer}>
         {themeOptions.map((option) => (
@@ -94,19 +95,6 @@ export default function ThemeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: Spacing.md,
-  },
-  title: {
-    textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
-  subtitle: {
-    textAlign: 'center',
-    marginBottom: Spacing.lg,
-    opacity: 0.7,
-  },
   optionsContainer: {
     marginBottom: Spacing.xl,
   },

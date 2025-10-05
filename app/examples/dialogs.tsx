@@ -10,6 +10,7 @@ import { ActionSheet, useActionSheet } from '@/components/ui/action-sheet';
 import { BottomSheet, ConfirmationDialog, ThemedAlert } from '@/components/ui/dialog';
 import { LoadingOverlay, useLoadingOverlay } from '@/components/ui/loading-overlay';
 import { Toast, useToast } from '@/components/ui/toast';
+import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { useConfirmation, useDialog } from '@/hooks/use-dialog';
 import i18n from '@/i18n';
@@ -126,16 +127,16 @@ export default function DialogExamplesScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={styles.title}>
+      <ThemedText type="h1" style={CommonText.title}>
         Dialog Components
       </ThemedText>
-      <ThemedText type="body" style={styles.description}>
+      <ThemedText type="body" style={CommonText.subtitle}>
         Examples of all dialog components available in the app.
       </ThemedText>
 
       {/* Alert Examples */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Alerts
         </ThemedText>
         <ThemedButton title="Show Success Alert" onPress={handleShowAlert} style={styles.button} />
@@ -143,7 +144,7 @@ export default function DialogExamplesScreen() {
 
       {/* Toast Examples */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Toast Notifications
         </ThemedText>
         <ThemedButton title="Success Toast" onPress={handleShowSuccess} style={styles.button} />
@@ -154,7 +155,7 @@ export default function DialogExamplesScreen() {
 
       {/* Confirmation Examples */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Confirmation Dialogs
         </ThemedText>
         <ThemedButton title="Confirm Action" onPress={handleShowConfirmation} style={styles.button} />
@@ -163,7 +164,7 @@ export default function DialogExamplesScreen() {
 
       {/* Bottom Sheet Examples */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Bottom Sheet
         </ThemedText>
         <ThemedButton title="Show Bottom Sheet" onPress={handleShowBottomSheet} style={styles.button} />
@@ -171,7 +172,7 @@ export default function DialogExamplesScreen() {
 
       {/* Action Sheet Examples */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Action Sheet
         </ThemedText>
         <ThemedButton title="Show Action Sheet" onPress={handleShowActionSheet} style={styles.button} />
@@ -179,7 +180,7 @@ export default function DialogExamplesScreen() {
 
       {/* Loading Examples */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Loading Overlay
         </ThemedText>
         <ThemedButton title="Show Loading (3s)" onPress={handleShowLoading} style={styles.button} />
@@ -245,18 +246,8 @@ export default function DialogExamplesScreen() {
 }
 
 const styles = StyleSheet.create({
-  title: {
-    marginBottom: Spacing.sm,
-  },
-  description: {
-    marginBottom: Spacing.xl,
-    opacity: 0.7,
-  },
   section: {
     marginBottom: Spacing.xl,
-  },
-  sectionTitle: {
-    marginBottom: Spacing.md,
   },
   button: {
     marginBottom: Spacing.sm,

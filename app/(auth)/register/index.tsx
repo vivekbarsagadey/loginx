@@ -3,13 +3,13 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { SocialSignInButtons } from '@/components/ui/social-sign-in-buttons';
-import { BorderRadius, Spacing, Typography } from '@/constants/layout';
+import { CommonText } from '@/constants/common-styles';
+import { BorderRadius, Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useSocialAuth } from '@/hooks/use-social-auth';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { showError } from '@/utils/error';
 import { logStateChange, runRegistrationDiagnostics } from '@/utils/registration-diagnostics';
-import { safeReplace } from '@/utils/safe-navigation';
 import { sanitizeEmail, sanitizeUserInput } from '@/utils/sanitize';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Haptics from 'expo-haptics';
@@ -238,24 +238,35 @@ export default function RegisterScreen() {
       // Navigate based on whether phone number was provided
       if (sanitizedData.phoneNumber && sanitizedData.phoneNumber.trim()) {
         // Phone verification flow
-        safeReplace({
-          pathname: '/(auth)/verify-phone',
-          params: { phoneNumber: sanitizedData.phoneNumber },
-          fallbackRoute: '/(auth)/verify-email',
-          onError: () => {
-            showError(new Error('Could not navigate to phone verification. Please check your email for verification link.'));
-          },
-        });
+        try {
+          router.replace({
+            pathname: '/(auth)/verify-phone',
+            params: { phoneNumber: sanitizedData.phoneNumber },
+          });
+        } catch (navError) {
+          console.error('[Registration] Navigation to phone verification failed:', navError);
+          // Fallback to email verification
+          try {
+            router.replace({
+              pathname: '/(auth)/verify-email',
+              params: { email: sanitizedData.email },
+            });
+          } catch (fallbackError) {
+            console.error('[Registration] Fallback navigation also failed:', fallbackError);
+            showError(new Error('Registration complete! Please check your email for verification link.'));
+          }
+        }
       } else {
         // Email verification flow (no phone)
-        safeReplace({
-          pathname: '/(auth)/verify-email',
-          params: { email: sanitizedData.email },
-          fallbackRoute: '/(auth)/login',
-          onError: () => {
-            showError(new Error('Registration complete but navigation failed. Please log in with your email.'));
-          },
-        });
+        try {
+          router.replace({
+            pathname: '/(auth)/verify-email',
+            params: { email: sanitizedData.email },
+          });
+        } catch (navError) {
+          console.error('[Registration] Navigation to email verification failed:', navError);
+          showError(new Error('Registration complete! Please check your email for verification link and then log in.'));
+        }
       }
     } catch (error) {
       // Error haptic feedback
@@ -297,7 +308,7 @@ export default function RegisterScreen() {
           />
         ))}
       </View>
-      <ThemedText type="body" style={[{ color: textColor }, styles.stepTitle]}>
+      <ThemedText type="body" style={[{ color: textColor }, CommonText.sectionTitle]}>
         {STEPS[currentStep].title}
       </ThemedText>
     </ThemedView>
@@ -381,10 +392,6 @@ const styles = StyleSheet.create({
   },
   progressText: {
     // Color will be set by ThemedText's 'caption' type
-  },
-  stepTitle: {
-    fontWeight: Typography.bodyBold.fontWeight,
-    fontSize: Typography.body.fontSize,
   },
   progressBarContainer: {
     flexDirection: 'row',

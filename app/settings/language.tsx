@@ -1,5 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { CommonLists } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -31,10 +32,7 @@ export default function LanguageScreen() {
           flex: 1,
         },
         item: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          padding: Spacing.md,
-          borderBottomWidth: 1,
+          ...CommonLists.listItem,
           borderBottomColor: borderColor,
         },
         itemText: {

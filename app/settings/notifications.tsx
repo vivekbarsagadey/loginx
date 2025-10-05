@@ -2,6 +2,7 @@ import { updateSetting } from '@/actions/setting.action';
 import { getUserProfile } from '@/actions/user.action';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
+import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -58,10 +59,6 @@ export default function NotificationsScreen() {
       StyleSheet.create({
         header: {
           marginBottom: Spacing.lg,
-        },
-        headerSubtitle: {
-          marginTop: Spacing.sm,
-          color: textMutedColor,
         },
         settingsContainer: {
           borderRadius: BorderRadius.md,
@@ -166,7 +163,7 @@ export default function NotificationsScreen() {
     <ScreenContainer scrollable>
       <View style={styles.header}>
         <ThemedText type="h2">Notification Preferences</ThemedText>
-        <ThemedText type="caption" style={styles.headerSubtitle}>
+        <ThemedText type="caption" style={CommonText.descriptionText}>
           Choose what notifications you want to receive
         </ThemedText>
       </View>

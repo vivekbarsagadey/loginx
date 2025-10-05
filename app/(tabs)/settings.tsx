@@ -4,6 +4,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
 import { ConfirmationDialog } from '@/components/ui/dialog';
 import { SettingsItem, settingsSections } from '@/config/settings';
+import { CommonText } from '@/constants/common-styles';
 import { Spacing, TouchTarget } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useConfirmation } from '@/hooks/use-dialog';
@@ -139,9 +140,6 @@ export default function SettingsScreen() {
         section: {
           marginBottom: Spacing.lg,
         },
-        sectionTitle: {
-          marginBottom: Spacing.md,
-        },
         settingRow: {
           flexDirection: 'row',
           alignItems: 'center',
@@ -188,7 +186,7 @@ export default function SettingsScreen() {
       {settingsSections.map((section, sectionIndex) => (
         <View key={section.title || `section-${sectionIndex}`} style={styles.section}>
           {section.title && (
-            <ThemedText type="h2" style={styles.sectionTitle}>
+            <ThemedText type="h2" style={CommonText.sectionTitle}>
               {section.title}
             </ThemedText>
           )}

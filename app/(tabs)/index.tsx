@@ -2,6 +2,7 @@ import { getUserProfile } from '@/actions/user.action';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
+import { CommonSpacing } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { useAuth } from '@/hooks/use-auth-provider';
 import { UserProfile } from '@/types/user';
@@ -47,7 +48,7 @@ export default function IndexScreen() {
     <ScreenContainer scrollable>
       {userProfile ? (
         <>
-          <View style={styles.welcomeSection}>
+          <View style={CommonSpacing.marginBottomLarge}>
             <ThemedText type="h1">Welcome, {userProfile.displayName}!</ThemedText>
             <ThemedText type="body" style={styles.email}>
               {userProfile.email}
@@ -57,7 +58,7 @@ export default function IndexScreen() {
             </ThemedText>
           </View>
 
-          <Card elevation={1} style={styles.card}>
+          <Card elevation={1} style={CommonSpacing.marginBottomLarge}>
             <ThemedText type="h2" style={styles.cardTitle}>
               Your Notification Preferences
             </ThemedText>
@@ -92,9 +93,6 @@ export default function IndexScreen() {
 }
 
 const styles = StyleSheet.create({
-  welcomeSection: {
-    marginBottom: Spacing.lg,
-  },
   email: {
     marginTop: Spacing.sm,
     opacity: 0.8,
@@ -102,9 +100,6 @@ const styles = StyleSheet.create({
   age: {
     marginTop: Spacing.xs,
     opacity: 0.7,
-  },
-  card: {
-    marginBottom: Spacing.lg,
   },
   cardTitle: {
     marginBottom: Spacing.md,

@@ -3,6 +3,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Collapsible } from '@/components/ui/collapsible';
+import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import i18n from '@/i18n';
 import Constants from 'expo-constants';
@@ -55,14 +56,14 @@ export default function SupportScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={styles.title}>
+      <ThemedText type="h1" style={CommonText.title}>
         {i18n.t('screens.support.title')}
       </ThemedText>
-      <ThemedText style={styles.subtitle}>{i18n.t('screens.support.subtitle')}</ThemedText>
+      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.support.subtitle')}</ThemedText>
 
       {/* Contact Section */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.support.contact.title')}
         </ThemedText>
         <ThemedText style={styles.contactInfo}>{i18n.t('screens.support.contact.email')}</ThemedText>
@@ -79,7 +80,7 @@ export default function SupportScreen() {
 
       {/* FAQ Section */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.support.faq.title')}
         </ThemedText>
         {faqItems.map((item, index) => (
@@ -93,7 +94,7 @@ export default function SupportScreen() {
 
       {/* Resources Section */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.support.resources.title')}
         </ThemedText>
         <ThemedButton title={i18n.t('screens.support.resources.privacy')} variant="secondary" onPress={handleNavigateToPrivacy} style={styles.resourceButton} />
@@ -103,7 +104,7 @@ export default function SupportScreen() {
 
       {/* Device Info Section */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.support.deviceInfo.title')}
         </ThemedText>
         <ThemedText style={styles.deviceInfo}>{i18n.t('screens.support.deviceInfo.version', { version: appVersion })}</ThemedText>
@@ -115,21 +116,8 @@ export default function SupportScreen() {
 }
 
 const styles = StyleSheet.create({
-  title: {
-    textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
-  subtitle: {
-    textAlign: 'center',
-    marginBottom: Spacing.lg,
-    opacity: 0.7,
-  },
   section: {
     marginBottom: Spacing.xl,
-  },
-  sectionTitle: {
-    marginBottom: Spacing.md,
-    fontWeight: 'bold',
   },
   contactInfo: {
     marginBottom: Spacing.sm,

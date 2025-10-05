@@ -8,6 +8,7 @@ export * from './accessibility';
 export * from './animation';
 export * from './api';
 export * from './cache';
+export * from './common-styles';
 export * from './firebase';
 export * from './layout';
 export * from './routes';

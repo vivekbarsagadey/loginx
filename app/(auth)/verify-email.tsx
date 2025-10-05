@@ -1,6 +1,7 @@
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { CommonButtons, CommonContainers, CommonText } from '@/constants/common-styles';
 import { Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import i18n from '@/i18n';
@@ -26,10 +27,21 @@ export default function VerifyEmailScreen() {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (auth.currentUser) {
-        await auth.currentUser.reload();
-        if (auth.currentUser.emailVerified) {
-          clearInterval(interval);
-          router.replace('/(tabs)');
+        try {
+          await auth.currentUser.reload();
+          if (auth.currentUser.emailVerified) {
+            clearInterval(interval);
+            try {
+              router.replace('/(tabs)');
+            } catch (navError) {
+              console.error('[VerifyEmail] Navigation failed:', navError);
+              // User is verified, they can manually navigate
+              Alert.alert(i18n.t('success.title'), 'Email verified successfully! Please restart the app to continue.', [{ text: 'OK' }]);
+            }
+          }
+        } catch (reloadError) {
+          console.error('[VerifyEmail] Failed to reload user:', reloadError);
+          // Continue checking - don't break the interval
         }
       }
     }, 3000);
@@ -61,8 +73,8 @@ export default function VerifyEmailScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="h1" style={styles.title}>
+    <ThemedView style={CommonContainers.centeredContainer}>
+      <ThemedText type="h1" style={CommonText.title}>
         {i18n.t('screens.verifyEmail.title')}
       </ThemedText>
       <ThemedText style={styles.subtitle}>{i18n.t('screens.verifyEmail.subtitle')}</ThemedText>
@@ -76,24 +88,14 @@ export default function VerifyEmailScreen() {
         onPress={handleResend}
         disabled={isResending}
         variant="secondary"
-        style={styles.button}
+        style={CommonButtons.button}
       />
-      <ThemedButton title={i18n.t('screens.verifyEmail.goToLogin')} onPress={handleLoginRedirect} variant="link" style={styles.linkButton} />
+      <ThemedButton title={i18n.t('screens.verifyEmail.goToLogin')} onPress={handleLoginRedirect} variant="link" style={CommonButtons.linkButtonSmall} />
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: Spacing.md,
-  },
-  title: {
-    textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
   subtitle: {
     textAlign: 'center',
     marginBottom: Spacing.lg,
@@ -102,11 +104,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: Typography.bodyBold.fontWeight,
     marginBottom: Spacing.xl,
-  },
-  button: {
-    marginTop: Spacing.md,
-  },
-  linkButton: {
-    marginTop: Spacing.sm,
   },
 });

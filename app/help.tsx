@@ -3,6 +3,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Collapsible } from '@/components/ui/collapsible';
+import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -75,10 +76,10 @@ export default function HelpScreen() {
   return (
     <ScreenContainer scrollable>
       {/* Header */}
-      <ThemedText type="h1" style={styles.title}>
+      <ThemedText type="h1" style={CommonText.title}>
         {i18n.t('screens.help.title')}
       </ThemedText>
-      <ThemedText style={styles.subtitle}>{i18n.t('screens.help.subtitle')}</ThemedText>
+      <ThemedText style={CommonText.subtitleMedium}>{i18n.t('screens.help.subtitle')}</ThemedText>
 
       {/* Quick Actions */}
       <ThemedView style={styles.section}>
@@ -237,15 +238,6 @@ export default function HelpScreen() {
 }
 
 const styles = StyleSheet.create({
-  title: {
-    textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
-  subtitle: {
-    textAlign: 'center',
-    marginBottom: Spacing.lg,
-    opacity: 0.7,
-  },
   section: {
     marginBottom: Spacing.xl,
   },

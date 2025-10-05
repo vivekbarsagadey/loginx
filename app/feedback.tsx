@@ -3,6 +3,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
+import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -87,14 +88,14 @@ export default function FeedbackScreen() {
   return (
     <ScreenContainer scrollable>
       {/* Header */}
-      <ThemedText type="h1" style={styles.title}>
+      <ThemedText type="h1" style={CommonText.title}>
         {i18n.t('screens.feedback.title')}
       </ThemedText>
-      <ThemedText style={styles.subtitle}>{i18n.t('screens.feedback.subtitle')}</ThemedText>
+      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.feedback.subtitle')}</ThemedText>
 
       {/* Category Selection */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.feedback.categoryLabel')}
         </ThemedText>
         <ThemedView style={styles.categoriesGrid}>
@@ -106,7 +107,7 @@ export default function FeedbackScreen() {
 
       {/* Subject Input */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.feedback.subjectLabel')}
         </ThemedText>
         <ThemedTextInput
@@ -123,7 +124,7 @@ export default function FeedbackScreen() {
 
       {/* Message Input */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.feedback.messageLabel')}
         </ThemedText>
         <ThemedTextInput
@@ -192,18 +193,8 @@ function CategoryButton({ category, isSelected, onPress }: CategoryButtonProps) 
 }
 
 const styles = StyleSheet.create({
-  title: {
-    marginBottom: Spacing.xs,
-  },
-  subtitle: {
-    marginBottom: Spacing.lg,
-    opacity: 0.8,
-  },
   section: {
     marginBottom: Spacing.lg,
-  },
-  sectionTitle: {
-    marginBottom: Spacing.sm,
   },
   categoriesGrid: {
     flexDirection: 'row',

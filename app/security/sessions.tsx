@@ -2,6 +2,7 @@ import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -97,20 +98,20 @@ export default function SessionsScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={styles.title}>
+      <ThemedText type="h1" style={CommonText.title}>
         {i18n.t('screens.security.sessions.title')}
       </ThemedText>
-      <ThemedText style={styles.subtitle}>{i18n.t('screens.security.sessions.subtitle')}</ThemedText>
+      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.security.sessions.subtitle')}</ThemedText>
 
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.security.sessions.currentSession')}
         </ThemedText>
         {currentSessions.map(renderSession)}
       </ThemedView>
 
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.security.sessions.otherSessions')}
         </ThemedText>
         {otherSessions.length > 0 ? (
@@ -127,21 +128,8 @@ export default function SessionsScreen() {
 }
 
 const styles = StyleSheet.create({
-  title: {
-    textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
-  subtitle: {
-    textAlign: 'center',
-    marginBottom: Spacing.lg,
-    opacity: 0.7,
-  },
   section: {
     marginBottom: Spacing.lg,
-  },
-  sectionTitle: {
-    marginBottom: Spacing.md,
-    fontWeight: 'bold',
   },
   sessionItem: {
     marginBottom: Spacing.md,

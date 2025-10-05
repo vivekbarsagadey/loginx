@@ -1,6 +1,7 @@
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { useEffect, useRef } from 'react';
 import { Controller, FieldErrors, useFormContext } from 'react-hook-form';
@@ -24,10 +25,10 @@ export default function RegisterStep4({ errors }: { errors: FieldErrors<FormData
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="h2" style={styles.title}>
+      <ThemedText type="h2" style={CommonText.sectionTitle}>
         Phone Verification (Optional)
       </ThemedText>
-      <ThemedText type="caption" style={styles.description}>
+      <ThemedText type="caption" style={CommonText.descriptionText}>
         Add your phone number for enhanced security and account recovery
       </ThemedText>
 
@@ -65,13 +66,6 @@ export default function RegisterStep4({ errors }: { errors: FieldErrors<FormData
 const styles = StyleSheet.create({
   container: {
     gap: Spacing.sm,
-  },
-  title: {
-    marginBottom: Spacing.sm,
-  },
-  description: {
-    marginBottom: Spacing.md,
-    opacity: 0.7,
   },
   helperText: {
     opacity: 0.7,

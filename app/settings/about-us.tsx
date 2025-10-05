@@ -1,6 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
+import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { Feather } from '@expo/vector-icons';
@@ -75,9 +76,6 @@ export default function AboutUsScreen() {
         },
         section: {
           marginBottom: Spacing.lg,
-        },
-        sectionTitle: {
-          marginBottom: Spacing.md,
         },
         infoRow: {
           flexDirection: 'row',
@@ -179,7 +177,7 @@ export default function AboutUsScreen() {
 
       {/* App Information Section */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           App Information
         </ThemedText>
         <Card elevation={1} noPadding>
@@ -199,7 +197,7 @@ export default function AboutUsScreen() {
 
       {/* Contact Information Section */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Contact Information
         </ThemedText>
         <Card elevation={1} noPadding>
@@ -220,7 +218,7 @@ export default function AboutUsScreen() {
 
       {/* Features Highlights */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Key Features
         </ThemedText>
         <Card elevation={1}>
@@ -236,7 +234,7 @@ export default function AboutUsScreen() {
 
       {/* Technologies Section */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={styles.sectionTitle}>
+        <ThemedText type="h2" style={CommonText.sectionTitle}>
           Built With
         </ThemedText>
         <Card elevation={1}>

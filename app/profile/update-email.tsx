@@ -3,6 +3,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -128,17 +129,17 @@ export default function UpdateEmailScreen() {
   return (
     <ScreenContainer scrollable keyboardAvoiding>
       <ThemedView style={styles.header}>
-        <ThemedText type="h1" style={styles.title}>
+        <ThemedText type="h1" style={CommonText.title}>
           {i18n.t('profile.updateEmail.title') || 'Update Email Address'}
         </ThemedText>
-        <ThemedText type="body" style={styles.subtitle}>
+        <ThemedText type="body" style={CommonText.subtitle}>
           {i18n.t('profile.updateEmail.subtitle') || 'Enter your new email address to update your account.'}
         </ThemedText>
       </ThemedView>
 
       {/* Current Email Display */}
       <ThemedView style={styles.currentEmailSection}>
-        <ThemedText type="caption" style={styles.sectionLabel}>
+        <ThemedText type="caption" style={CommonText.sectionTitle}>
           Current Email
         </ThemedText>
         <ThemedView style={[styles.currentEmailBox, { borderColor: warningColor + '40', backgroundColor: warningColor + '10' }]}>
@@ -223,18 +224,8 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: Spacing.xl,
   },
-  title: {
-    marginBottom: Spacing.sm,
-  },
-  subtitle: {
-    opacity: 0.8,
-  },
   currentEmailSection: {
     marginBottom: Spacing.lg,
-  },
-  sectionLabel: {
-    marginBottom: Spacing.sm,
-    fontWeight: '500',
   },
   currentEmailBox: {
     padding: Spacing.md,

@@ -2,6 +2,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { CommonButtons, CommonContainers, CommonText } from '@/constants/common-styles';
 import { Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { showError } from '@/utils/error';
@@ -158,9 +159,9 @@ export default function VerifyPhoneScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={CommonContainers.screenContainer}>
       <View style={styles.content}>
-        <ThemedText type="h1" style={styles.title}>
+        <ThemedText type="h1" style={CommonText.title}>
           Verify Your Phone
         </ThemedText>
         <ThemedText style={styles.subtitle}>We&apos;ve sent a 6-digit verification code to:</ThemedText>
@@ -187,27 +188,19 @@ export default function VerifyPhoneScreen() {
           <ThemedButton title={countdown > 0 ? `Resend in ${countdown}s` : 'Resend Code'} variant="link" onPress={sendVerificationCode} disabled={countdown > 0 || resending} loading={resending} />
         </View>
 
-        <ThemedButton title="Verify" onPress={handleVerifyCode} loading={loading} disabled={loading || verificationCode.length !== 6} style={styles.button} />
+        <ThemedButton title="Verify" onPress={handleVerifyCode} loading={loading} disabled={loading || verificationCode.length !== 6} style={CommonButtons.button} />
 
-        <ThemedButton title="Skip for Now" variant="link" onPress={handleSkip} style={styles.skipButton} />
+        <ThemedButton title="Skip for Now" variant="link" onPress={handleSkip} style={CommonButtons.linkButtonSmall} />
       </View>
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: Spacing.md,
-  },
   content: {
     flex: 1,
     justifyContent: 'center',
     gap: Spacing.md,
-  },
-  title: {
-    textAlign: 'center',
-    marginBottom: Spacing.sm,
   },
   subtitle: {
     textAlign: 'center',
@@ -232,12 +225,5 @@ const styles = StyleSheet.create({
   },
   resendText: {
     opacity: 0.7,
-  },
-  button: {
-    marginTop: Spacing.md,
-  },
-  skipButton: {
-    marginTop: Spacing.sm,
-    alignSelf: 'center',
   },
 });

@@ -2,6 +2,7 @@ import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing } from '@/constants/layout';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -111,15 +112,15 @@ export default function TwoFactorAuthScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={styles.title}>
+      <ThemedText type="h1" style={CommonText.title}>
         {i18n.t('screens.security.twoFactor.title')}
       </ThemedText>
-      <ThemedText style={styles.subtitle}>{i18n.t('screens.security.twoFactor.subtitle')}</ThemedText>
+      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.security.twoFactor.subtitle')}</ThemedText>
 
       {/* Biometric Authentication Section */}
       {biometricAvailable && (
         <ThemedView style={styles.section}>
-          <ThemedText type="h3" style={[styles.sectionTitle, { color: primaryColor }]}>
+          <ThemedText type="h3" style={[CommonText.sectionTitle, { color: primaryColor }]}>
             {biometricTypeName} Authentication
           </ThemedText>
           <ThemedText style={styles.description}>Use {biometricTypeName.toLowerCase()} to quickly and securely access your account.</ThemedText>
@@ -133,7 +134,7 @@ export default function TwoFactorAuthScreen() {
       {/* 2FA Section */}
       {!isEnabled ? (
         <ThemedView style={styles.section}>
-          <ThemedText type="h3" style={[styles.sectionTitle, { color: primaryColor }]}>
+          <ThemedText type="h3" style={[CommonText.sectionTitle, { color: primaryColor }]}>
             {i18n.t('screens.security.twoFactor.notEnabled.title')}
           </ThemedText>
           <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.notEnabled.description')}</ThemedText>
@@ -151,7 +152,7 @@ export default function TwoFactorAuthScreen() {
         </ThemedView>
       ) : (
         <ThemedView style={styles.section}>
-          <ThemedText type="h3" style={[styles.sectionTitle, { color: primaryColor }]}>
+          <ThemedText type="h3" style={[CommonText.sectionTitle, { color: primaryColor }]}>
             {i18n.t('screens.security.twoFactor.enabled.setup.title')}
           </ThemedText>
           <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.enabled.description')}</ThemedText>
@@ -193,15 +194,6 @@ export default function TwoFactorAuthScreen() {
 }
 
 const styles = StyleSheet.create({
-  title: {
-    textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
-  subtitle: {
-    textAlign: 'center',
-    marginBottom: Spacing.lg,
-    opacity: 0.7,
-  },
   loadingText: {
     marginTop: Spacing.md,
     opacity: 0.7,
@@ -212,10 +204,6 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: Spacing.lg,
-  },
-  sectionTitle: {
-    marginBottom: Spacing.md,
-    fontWeight: 'bold',
   },
   description: {
     lineHeight: 22,

@@ -1,6 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { CommonText } from '@/constants/common-styles';
 import { Spacing, Typography } from '@/constants/layout';
 import i18n from '@/i18n';
 import { StyleSheet } from 'react-native';
@@ -10,14 +11,14 @@ export default function PrivacyScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={styles.title}>
+      <ThemedText type="h1" style={CommonText.title}>
         {i18n.t('screens.legal.privacy.title')}
       </ThemedText>
       <ThemedText style={styles.lastUpdated}>{i18n.t('screens.legal.privacy.lastUpdated')}</ThemedText>
 
       {Object.entries(sections).map(([key, section]) => (
         <ThemedView key={key} style={styles.section}>
-          <ThemedText type="h3" style={styles.sectionTitle}>
+          <ThemedText type="h3" style={CommonText.sectionTitle}>
             {section.title}
           </ThemedText>
           <ThemedText style={styles.sectionContent}>{section.content}</ThemedText>
@@ -28,10 +29,6 @@ export default function PrivacyScreen() {
 }
 
 const styles = StyleSheet.create({
-  title: {
-    textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
   lastUpdated: {
     textAlign: 'center',
     marginBottom: Spacing.lg,
@@ -40,10 +37,6 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: Spacing.lg,
-  },
-  sectionTitle: {
-    marginBottom: Spacing.md,
-    fontWeight: Typography.h3.fontWeight,
   },
   sectionContent: {
     lineHeight: Typography.body.lineHeight,

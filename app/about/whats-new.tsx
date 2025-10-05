@@ -1,6 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing } from '@/constants/layout';
 import i18n from '@/i18n';
 import { StyleSheet } from 'react-native';
@@ -11,7 +12,7 @@ export default function WhatsNewScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={styles.title}>
+      <ThemedText type="h1" style={CommonText.title}>
         {i18n.t('screens.whatsNew.title')}
       </ThemedText>
       <ThemedText type="h2" style={styles.version}>
@@ -19,7 +20,7 @@ export default function WhatsNewScreen() {
       </ThemedText>
 
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           ✨ New Features
         </ThemedText>
         {features.map((feature, index) => (
@@ -33,7 +34,7 @@ export default function WhatsNewScreen() {
       </ThemedView>
 
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           🐛 {i18n.t('screens.whatsNew.bugFixes')}
         </ThemedText>
         {bugFixes.map((fix, index) => (
@@ -52,10 +53,6 @@ export default function WhatsNewScreen() {
 }
 
 const styles = StyleSheet.create({
-  title: {
-    textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
   version: {
     textAlign: 'center',
     marginBottom: Spacing.lg,
@@ -63,10 +60,6 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: Spacing.lg,
-  },
-  sectionTitle: {
-    marginBottom: Spacing.md,
-    fontWeight: 'bold',
   },
   featureItem: {
     marginBottom: Spacing.md,
