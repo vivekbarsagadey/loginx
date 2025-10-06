@@ -2,7 +2,7 @@
 applyTo: "**"
 ---
 
-# Project Development Guidelines
+# LoginX Project Development Guidelines
 
 ## Table of Contents
 
@@ -17,6 +17,8 @@ applyTo: "**"
 9. Accessibility
 10. Testing
 11. Security
+12. Firebase Integration
+13. Local-First Architecture
 
 ---
 
@@ -187,33 +189,94 @@ function UserProfile({ user }: { user: User | null }) {
 
 ```
 app/
-  (auth)/          # Auth group
+  (auth)/          # Auth group - login, register, verify flows
     login.tsx
-    register.tsx
-  (tabs)/          # Tab navigation
-    index.tsx
-    settings.tsx
-  _layout.tsx      # Root layout
+    register/      # Multi-step registration
+    verify-email.tsx
+    verify-phone.tsx
+    verify-2fa.tsx
+    forgot-password.tsx
+    welcome.tsx
+  (tabs)/          # Tab navigation - main app screens
+    index.tsx      # Home/Dashboard
+    items.tsx      # Items list
+    settings.tsx   # Settings
+  onboarding/      # First-time user experience
+  profile/         # Profile management
+  security/        # Security settings (2FA, biometrics)
+  settings/        # App settings
+  about/           # About section
+  legal/           # Legal documents
+  examples/        # Example screens
+  _layout.tsx      # Root layout with providers
 ```
+
+### Key Features
+
+- **Multi-step Registration**: Modular registration flow with email/phone
+  verification
+- **Social Authentication**: Google and Apple Sign-In integration
+- **2FA Support**: Time-based OTP and SMS verification
+- **Biometric Authentication**: FaceID/TouchID/Fingerprint support
+- **Internationalization**: i18n-js with multiple locale support
+- **Local-First Architecture**: Offline-first data synchronization with Firebase
+- **Theme System**: Light/Dark/System mode with layered surface design
+- **Error Boundaries**: Comprehensive error handling at app level
 
 ### Navigation
 
 - **Use typed routes** from `expo-router`
 - **Use `useRouter` hook** for navigation
 - **Implement proper back handling** with `router.back()`
+- **Use Routes constants** from `constants/routes.ts` for type safety
 
 ```typescript
-// ✅ Good
+// ✅ Good - Using Routes constants
 import { useRouter } from "expo-router";
+import { Routes } from "@/constants/routes";
 
 function LoginScreen() {
   const router = useRouter();
 
   const handleLogin = async () => {
     await login();
-    router.replace("/(tabs)");
+    router.replace(Routes.TABS.HOME);
+  };
+
+  const handleForgotPassword = () => {
+    router.push(Routes.AUTH.FORGOT_PASSWORD);
   };
 }
+
+// ❌ Bad - Hardcoded routes
+router.replace("/(tabs)"); // Don't hardcode paths
+```
+
+### Screen Transitions
+
+- **Use consistent animations** from `constants/animation.ts`
+- **Follow platform conventions** - slide from right on iOS, fade on Android
+- **Use modal presentation** for overlay screens
+
+```typescript
+// ✅ Good - Consistent screen options
+import { Stack } from "expo-router";
+import { ScreenTransitions, AnimationDurations } from "@/constants/animation";
+
+<Stack
+  screenOptions={{
+    animation: ScreenTransitions.DEFAULT,
+    animationDuration: AnimationDurations.SCREEN_TRANSITION,
+  }}
+>
+  <Stack.Screen
+    name="modal"
+    options={{
+      animation: ScreenTransitions.MODAL,
+      presentation: 'modal',
+    }}
+  />
+</Stack>
 ```
 
 ### Assets & Resources
@@ -270,13 +333,34 @@ function MyScreen() {
 
 ```
 components/
-  ui/               # Generic UI components
-    button.tsx
-    input.tsx
-  themed-*.tsx      # Themed wrappers
-  navigation/       # Navigation-specific
-  brand/           # Brand elements (logo, etc.)
-  [feature]/       # Feature-specific components
+  ui/                    # Generic UI components (follows new design system)
+    card.tsx
+    dialog.tsx
+    toast.tsx
+    skeleton-loader.tsx
+    loading-overlay.tsx
+    action-sheet.tsx
+    collapsible.tsx
+    password-strength-meter.tsx
+    photo-upload.tsx
+    social-sign-in-buttons.tsx
+    terms-checkbox.tsx
+    inputs/              # Form inputs
+      checkbox.tsx
+      radio-button.tsx
+      search-bar.tsx
+      slider.tsx
+      switch.tsx
+    feedback/            # User feedback components
+    data-display/        # Data visualization components
+    layout/              # Layout helpers
+    overlays/            # Modals, popovers, etc.
+    navigation/          # Navigation components
+  themed-*.tsx           # Themed wrappers (ThemedView, ThemedText, etc.)
+  navigation/            # Navigation-specific components
+  brand/                 # Brand elements (logo, etc.)
+  onboarding/            # Onboarding-specific components
+  [feature]/             # Feature-specific components
 ```
 
 ### Props Pattern
@@ -518,6 +602,8 @@ const adjustedFontSize = 16 * Math.min(fontScale, 1.3); // Cap at 1.3x
   - Background, Surface, Text
 - **Color palette** - 5-7 colors maximum
 - **60-30-10 rule** - 60% dominant, 30% secondary, 10% accent
+- **Layered surface system** - Use bg, bg-elevated, surface, surface-variant for
+  depth hierarchy
 
 #### Contrast & Accessibility
 
@@ -533,9 +619,9 @@ const adjustedFontSize = 16 * Math.min(fontScale, 1.3); // Cap at 1.3x
 
 #### Dark Mode Guidelines
 
-- **True blacks** (hex 000000) can cause eye strain - use dark grays
-  (hex 121212)
-- **Reduce elevation shadows** - Use lighter surfaces for hierarchy
+- **True blacks** (hex 000000) can cause eye strain - use dark grays (hex
+  0B1220)
+- **Layered surfaces** - Use lighter surfaces for elevated content
 - **Desaturate colors** - Vibrant colors appear too bright
 - **Test readability** - Ensure sufficient contrast in dark theme
 - **Respect system preference** - Auto-switch based on user settings
@@ -549,29 +635,36 @@ const adjustedFontSize = 16 * Math.min(fontScale, 1.3); // Cap at 1.3x
 - **Gray**: Disabled states, secondary information
 
 ```typescript
-// ✅ Good - Complete color system
+// ✅ Good - Complete color system with layered surfaces
 import { Colors } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { useColorScheme } from "react-native";
 
 function MyComponent() {
-  const theme = useTheme();
+  const { theme } = useTheme();
   const systemTheme = useColorScheme(); // 'light' | 'dark'
-  const colors = Colors[theme];
+  const colors = Colors[theme === 'system' ? systemTheme || 'light' : theme];
 
   return (
-    <View style={{ backgroundColor: colors.background }}>
-      <ThemedText style={{ color: colors.text }}>Primary Text</ThemedText>
-      <ThemedText style={{ color: colors.textSecondary }}>
-        Secondary Text
-      </ThemedText>
+    <View style={{ backgroundColor: colors.bg }}>
+      {/* Base background - lowest layer */}
+      <View style={{ backgroundColor: colors['bg-elevated'] }}>
+        {/* Slightly elevated background */}
+        <View style={{ backgroundColor: colors.surface }}>
+          {/* Card surface - floating above background */}
+          <ThemedText style={{ color: colors.text }}>Primary Text</ThemedText>
+          <ThemedText style={{ color: colors['text-muted'] }}>
+            Secondary Text
+          </ThemedText>
+        </View>
+      </View>
 
       {/* Semantic colors */}
       <View style={{ backgroundColor: colors.error }}>
-        <ThemedText style={{ color: colors.onError }}>Error</ThemedText>
+        <ThemedText style={{ color: colors['on-primary'] }}>Error</ThemedText>
       </View>
       <View style={{ backgroundColor: colors.success }}>
-        <ThemedText style={{ color: colors.onSuccess }}>Success</ThemedText>
+        <ThemedText style={{ color: colors['on-primary'] }}>Success</ThemedText>
       </View>
     </View>
   );
@@ -1361,19 +1454,33 @@ import { LocalComponent } from "./local-component";
 
 ### Context
 
-- **Use Context** for app-wide state (auth, theme, i18n)
+- **Use Context** for app-wide state (auth, theme, i18n, onboarding)
 - **Split contexts** by concern - don't create god contexts
 - **Memoize context values**
 
 ```typescript
-// ✅ Good - Memoized context
+// ✅ Good - Memoized context with proper typing
 export function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const value = useMemo(() => ({ user, setUser }), [user]);
+  const value = useMemo(() => ({
+    user,
+    setUser,
+    loading
+  }), [user, loading]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+// ✅ Good - Custom hook for context consumption
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+  return context;
+};
 ```
 
 ### Async State
@@ -1533,6 +1640,315 @@ const handleSubmit = (rawInput: string) => {
 
 ---
 
+## Firebase Integration
+
+### Configuration
+
+- **Use environment variables** for Firebase config
+- **Initialize Firebase** in `firebase-config.ts`
+- **Never expose API keys** in client code (they're public anyway, but restrict
+  domains)
+- **Use Firebase Security Rules** to protect data
+
+```typescript
+// ✅ Good - Environment-based configuration
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID
+  // ... other config
+};
+
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+```
+
+### Authentication
+
+- **Use Firebase Auth** for user authentication
+- **Support multiple providers**: Email/Password, Google, Apple
+- **Implement proper error handling** for auth errors
+- **Use auth state persistence** with `utils/auth-persistence.ts`
+
+```typescript
+// ✅ Good - Proper auth flow
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut
+} from "firebase/auth";
+import { auth } from "@/firebase-config";
+
+export async function loginWithEmail(email: string, password: string) {
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return userCredential.user;
+  } catch (error: unknown) {
+    if (error instanceof FirebaseError) {
+      // Handle specific Firebase auth errors
+      switch (error.code) {
+        case "auth/user-not-found":
+          throw new AuthError("No account found with this email");
+        case "auth/wrong-password":
+          throw new AuthError("Incorrect password");
+        case "auth/too-many-requests":
+          throw new AuthError("Too many failed attempts. Try again later");
+        default:
+          throw new AuthError("Authentication failed");
+      }
+    }
+    throw error;
+  }
+}
+```
+
+### Firestore Best Practices
+
+- **Use TypeScript types** for Firestore documents
+- **Implement proper error handling** with try-catch
+- **Use Firestore helpers** from `utils/firestore-helpers.ts`
+- **Batch writes** when updating multiple documents
+- **Use transactions** for critical operations
+
+```typescript
+// ✅ Good - Typed Firestore operations
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { db } from "@/firebase-config";
+import type { User } from "@/types/user";
+
+export async function getUserProfile(userId: string): Promise<User | null> {
+  try {
+    const docRef = doc(db, "users", userId);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      return null;
+    }
+
+    return docSnap.data() as User;
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    throw new FirestoreError("Failed to fetch user profile");
+  }
+}
+
+export async function updateUserProfile(
+  userId: string,
+  updates: Partial<User>
+): Promise<void> {
+  try {
+    const docRef = doc(db, "users", userId);
+    await updateDoc(docRef, updates);
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    throw new FirestoreError("Failed to update user profile");
+  }
+}
+```
+
+### Security Rules
+
+- **Always define Firestore security rules** in `firestore.rules`
+- **Validate data structure** in security rules
+- **Restrict access** based on authentication
+- **Never trust client-side validation alone**
+
+```javascript
+// ✅ Good - Firestore security rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can only read/write their own profile
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.email == request.auth.token.email;
+    }
+
+    // Public read, authenticated write
+    match /posts/{postId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null
+        && request.auth.uid == resource.data.authorId;
+    }
+  }
+}
+```
+
+---
+
+## Local-First Architecture
+
+### Overview
+
+LoginX implements a **local-first architecture** for offline-first data
+synchronization:
+
+- Data is stored locally first using AsyncStorage
+- Changes sync to Firebase when online
+- Automatic conflict resolution
+- Queue failed operations for retry
+
+### Implementation
+
+- **Initialize local-first** in `app/_layout.tsx` on app start
+- **Use utility functions** from `utils/local-first.ts`
+- **Cache management** via `utils/cache.ts`
+- **Handle offline state** gracefully
+
+```typescript
+// ✅ Good - Local-first data operations
+import { saveDataLocally, syncToFirestore } from "@/utils/local-first";
+import { getCachedData, setCachedData } from "@/utils/cache";
+
+export async function saveUserPreferences(
+  userId: string,
+  preferences: UserPreferences
+) {
+  try {
+    // 1. Save locally first (always succeeds)
+    await saveDataLocally(`preferences_${userId}`, preferences);
+    await setCachedData(`preferences_${userId}`, preferences);
+
+    // 2. Sync to Firestore (may fail if offline)
+    await syncToFirestore("users", userId, { preferences });
+
+    return { success: true };
+  } catch (error) {
+    // Data is saved locally, will sync when online
+    console.log("Will sync preferences when online:", error);
+    return { success: true, synced: false };
+  }
+}
+
+export async function getUserPreferences(
+  userId: string
+): Promise<UserPreferences | null> {
+  try {
+    // 1. Check cache first (fastest)
+    const cached = await getCachedData<UserPreferences>(
+      `preferences_${userId}`
+    );
+    if (cached) return cached;
+
+    // 2. Check local storage
+    const local = await getDataLocally<UserPreferences>(
+      `preferences_${userId}`
+    );
+    if (local) {
+      await setCachedData(`preferences_${userId}`, local);
+      return local;
+    }
+
+    // 3. Fetch from Firestore
+    const remote = await getFromFirestore("users", userId);
+    if (remote?.preferences) {
+      await saveDataLocally(`preferences_${userId}`, remote.preferences);
+      await setCachedData(`preferences_${userId}`, remote.preferences);
+      return remote.preferences;
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Error fetching preferences:", error);
+    return null;
+  }
+}
+```
+
+### Offline Support
+
+- **Detect network state** before making requests
+- **Queue operations** when offline
+- **Retry failed operations** when online
+- **Show offline indicator** in UI
+
+```typescript
+// ✅ Good - Network-aware operations
+import NetInfo from "@react-native-community/netinfo";
+
+export async function performNetworkOperation<T>(
+  operation: () => Promise<T>,
+  fallback?: T
+): Promise<T> {
+  const netInfo = await NetInfo.fetch();
+
+  if (!netInfo.isConnected) {
+    if (fallback !== undefined) {
+      return fallback;
+    }
+    throw new NetworkError("No internet connection");
+  }
+
+  return await operation();
+}
+```
+
+### Data Synchronization
+
+- **Sync on app resume** from background
+- **Periodic sync** for long-running sessions
+- **Manual sync trigger** for user-initiated refresh
+- **Conflict resolution** - last-write-wins or custom strategy
+
+```typescript
+// ✅ Good - Sync strategy
+import { AppState } from "react-native";
+import { syncPendingOperations } from "@/utils/local-first";
+
+export function useSyncOnResume() {
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (nextAppState === "active") {
+        // App came to foreground, sync pending operations
+        syncPendingOperations().catch(console.error);
+      }
+    });
+
+    return () => subscription.remove();
+  }, []);
+}
+```
+
+### Cache Strategy
+
+- **Cache user data** for instant access
+- **TTL (Time To Live)** for cache entries
+- **Cache invalidation** on logout
+- **Size limits** to prevent storage overflow
+
+```typescript
+// ✅ Good - Cache with TTL
+import { getCachedData, setCachedData, CACHE_TTL } from "@/utils/cache";
+
+export async function getUserData(userId: string, forceRefresh = false) {
+  if (!forceRefresh) {
+    const cached = await getCachedData(`user_${userId}`);
+    if (cached) return cached;
+  }
+
+  const data = await fetchFromFirestore(userId);
+
+  // Cache for 5 minutes
+  await setCachedData(`user_${userId}`, data, CACHE_TTL.SHORT);
+
+  return data;
+}
+```
+
+---
+
 ## Best Practices to Adopt
 
 ### Core Principles
@@ -1635,10 +2051,11 @@ export async function getUserProfile(
 
 ### Design Systems
 
-- iOS Human Interface Guidelines: developer.apple.com/design/human-interface-guidelines
+- iOS Human Interface Guidelines:
+  developer.apple.com/design/human-interface-guidelines
 - Material Design Guidelines: material.io/design
 - WCAG Accessibility Guidelines: w3.org/WAI/WCAG21/quickref
 
 ---
 
-_Last updated: October 2, 2025_
+_Last updated: October 6, 2025_
