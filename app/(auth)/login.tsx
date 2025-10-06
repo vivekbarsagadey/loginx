@@ -11,6 +11,7 @@ import { useSecuritySettings } from '@/hooks/use-security-settings';
 import { useSocialAuth } from '@/hooks/use-social-auth';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
+import { AuthMethod, isAuthMethodEnabled } from '@/utils/auth-methods';
 import { showError } from '@/utils/error';
 
 import { showSuccess } from '@/utils/success';
@@ -35,7 +36,7 @@ export default function LoginScreen() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [biometricAttempted, setBiometricAttempted] = useState(false);
-  const { signInWithGoogle, signInWithApple, loading: socialLoading } = useSocialAuth();
+  const { signInWithGoogle, signInWithApple, signInWithFacebook, loading: socialLoading } = useSocialAuth();
   const { isAvailable: biometricAvailable, isEnabled: biometricEnabled, authenticateWithBiometric, biometricTypeName } = useBiometricAuth();
 
   const { isAccountLocked, remainingAttempts, incrementLoginAttempts, resetLoginAttempts, getTimeUntilUnlock } = useSecuritySettings();
@@ -229,8 +230,44 @@ export default function LoginScreen() {
         </View>
       )}
 
-      {/* Biometric Login Button */}
-      {biometricAvailable && biometricEnabled && !isAccountLocked() && (
+      {/* Alternative Login Methods Section */}
+      {(isAuthMethodEnabled(AuthMethod.EMAIL_MAGIC_LINK) || isAuthMethodEnabled(AuthMethod.EMAIL_OTP) || isAuthMethodEnabled(AuthMethod.PHONE_OTP)) && (
+        <View style={styles.alternativeMethodsContainer}>
+          <ThemedText type="caption" style={styles.alternativeMethodsTitle}>
+            {i18n.t('screens.login.alternativeMethods', { defaultValue: 'Or sign in with' })}
+          </ThemedText>
+
+          {isAuthMethodEnabled(AuthMethod.EMAIL_MAGIC_LINK) && (
+            <ThemedButton
+              title={i18n.t('screens.login.magicLink', { defaultValue: 'Magic Link (Passwordless)' })}
+              variant="secondary"
+              onPress={() => router.push('/(auth)/passwordless-login' as any)}
+              style={styles.alternativeButton}
+            />
+          )}
+
+          {isAuthMethodEnabled(AuthMethod.EMAIL_OTP) && (
+            <ThemedButton
+              title={i18n.t('screens.login.emailOtp', { defaultValue: 'Email OTP' })}
+              variant="secondary"
+              onPress={() => router.push('/(auth)/otp-login' as any)}
+              style={styles.alternativeButton}
+            />
+          )}
+
+          {isAuthMethodEnabled(AuthMethod.PHONE_OTP) && (
+            <ThemedButton
+              title={i18n.t('screens.login.phoneOtp', { defaultValue: 'Phone OTP' })}
+              variant="secondary"
+              onPress={() => router.push('/(auth)/verify-phone')}
+              style={styles.alternativeButton}
+            />
+          )}
+        </View>
+      )}
+
+      {/* Biometric Login Button - Only show if enabled */}
+      {isAuthMethodEnabled(AuthMethod.BIOMETRIC) && biometricAvailable && biometricEnabled && !isAccountLocked() && (
         <ThemedButton
           title={`Login with ${biometricTypeName}`}
           onPress={handleBiometricLogin}
@@ -241,8 +278,16 @@ export default function LoginScreen() {
         />
       )}
 
-      {/* Social Sign-In */}
-      <SocialSignInButtons onGoogleSignIn={signInWithGoogle} onAppleSignIn={signInWithApple} loading={socialLoading} mode="login" />
+      {/* Social Sign-In - Only show if at least one social method is enabled */}
+      {(isAuthMethodEnabled(AuthMethod.GOOGLE) || isAuthMethodEnabled(AuthMethod.APPLE) || isAuthMethodEnabled(AuthMethod.FACEBOOK)) && (
+        <SocialSignInButtons
+          onGoogleSignIn={isAuthMethodEnabled(AuthMethod.GOOGLE) ? signInWithGoogle : undefined}
+          onAppleSignIn={isAuthMethodEnabled(AuthMethod.APPLE) ? signInWithApple : undefined}
+          onFacebookSignIn={isAuthMethodEnabled(AuthMethod.FACEBOOK) ? signInWithFacebook : undefined}
+          loading={socialLoading}
+          mode="login"
+        />
+      )}
 
       <ThemedButton title={i18n.t('screens.login.noAccount')} variant="link" onPress={() => router.push('/(auth)/register')} style={styles.linkButton} />
     </ScreenContainer>
@@ -267,6 +312,21 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 500,
     alignSelf: 'center',
+  },
+  alternativeMethodsContainer: {
+    marginTop: Spacing.xl,
+    width: '100%',
+    maxWidth: 500,
+    alignSelf: 'center',
+  },
+  alternativeMethodsTitle: {
+    textAlign: 'center',
+    marginBottom: Spacing.md,
+    opacity: 0.7,
+  },
+  alternativeButton: {
+    marginTop: Spacing.sm,
+    width: '100%',
   },
   warningContainer: {
     marginTop: Spacing.md,

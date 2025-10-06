@@ -7,17 +7,18 @@ import Constants from 'expo-constants';
 import { Platform, StyleSheet, View } from 'react-native';
 
 interface SocialSignInButtonsProps {
-  onGoogleSignIn: () => void;
-  onAppleSignIn: () => void;
+  onGoogleSignIn?: () => void;
+  onAppleSignIn?: () => void;
+  onFacebookSignIn?: () => void;
   loading?: boolean;
   mode?: 'register' | 'login';
 }
 
 /**
  * Social Sign-In Buttons Component
- * Displays Google and Apple sign-in buttons with proper platform handling
+ * Displays Google, Apple, and Facebook sign-in buttons with proper platform handling
  */
-export function SocialSignInButtons({ onGoogleSignIn, onAppleSignIn, loading = false, mode = 'register' }: SocialSignInButtonsProps) {
+export function SocialSignInButtons({ onGoogleSignIn, onAppleSignIn, onFacebookSignIn, loading = false, mode = 'register' }: SocialSignInButtonsProps) {
   const borderColor = useThemeColor({}, 'border');
 
   const actionText = mode === 'register' ? 'Sign up' : 'Sign in';
@@ -39,29 +40,31 @@ export function SocialSignInButtons({ onGoogleSignIn, onAppleSignIn, loading = f
       {/* Social Sign-In Buttons */}
       <View style={styles.buttonsContainer}>
         {/* Google Sign-In Button - Disabled in Expo Go */}
-        <ThemedButton
-          title={`${actionText} with Google`}
-          onPress={onGoogleSignIn}
-          variant="secondary"
-          disabled={loading || isExpoGo}
-          style={styles.socialButton}
-          accessibilityLabel={`${actionText} with Google`}
-          accessibilityHint={isExpoGo ? 'Not available in Expo Go' : 'Sign in using your Google account'}
-        />
+        {onGoogleSignIn && (
+          <ThemedButton
+            title={`${actionText} with Google`}
+            onPress={onGoogleSignIn}
+            variant="secondary"
+            disabled={loading || isExpoGo}
+            style={styles.socialButton}
+            accessibilityLabel={`${actionText} with Google`}
+            accessibilityHint={isExpoGo ? 'Not available in Expo Go' : 'Sign in using your Google account'}
+          />
+        )}
 
         {/* Apple Sign-In Button - iOS only */}
-        {Platform.OS === 'ios' && (
+        {onAppleSignIn && Platform.OS === 'ios' && (
           <AppleAuthentication.AppleAuthenticationButton
             buttonType={mode === 'register' ? AppleAuthentication.AppleAuthenticationButtonType.SIGN_UP : AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
             buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
             cornerRadius={8}
             style={styles.appleButton}
-            onPress={onAppleSignIn}
+            onPress={() => onAppleSignIn()}
           />
         )}
 
         {/* Apple Sign-In Button - Android/Web fallback */}
-        {Platform.OS !== 'ios' && (
+        {onAppleSignIn && Platform.OS !== 'ios' && (
           <ThemedButton
             title={`${actionText} with Apple`}
             onPress={onAppleSignIn}
@@ -70,6 +73,19 @@ export function SocialSignInButtons({ onGoogleSignIn, onAppleSignIn, loading = f
             style={styles.socialButton}
             accessibilityLabel={`${actionText} with Apple`}
             accessibilityHint="Sign in using your Apple ID"
+          />
+        )}
+
+        {/* Facebook Sign-In Button */}
+        {onFacebookSignIn && (
+          <ThemedButton
+            title={`${actionText} with Facebook`}
+            onPress={onFacebookSignIn}
+            variant="secondary"
+            disabled={loading}
+            style={styles.socialButton}
+            accessibilityLabel={`${actionText} with Facebook`}
+            accessibilityHint="Sign in using your Facebook account"
           />
         )}
       </View>

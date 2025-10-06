@@ -122,6 +122,17 @@ export default {
       enablePushNotifications: process.env.ENABLE_PUSH_NOTIFICATIONS === 'true',
       enableAnalytics: process.env.ENABLE_ANALYTICS === 'true',
 
+      // Authentication Method Feature Flags
+      enableLoginEmailPassword: process.env.ENABLE_LOGIN_EMAIL_PASSWORD !== 'true',
+      enableLoginEmailMagicLink: process.env.ENABLE_LOGIN_EMAIL_MAGIC_LINK !== 'false',
+      enableLoginEmailOtp: process.env.ENABLE_LOGIN_EMAIL_OTP !== 'false',
+      enableLoginPhoneOtp: process.env.ENABLE_LOGIN_PHONE_OTP !== 'false',
+      enableLoginGoogle: process.env.ENABLE_LOGIN_GOOGLE !== 'true',
+      enableLoginApple: process.env.ENABLE_LOGIN_APPLE !== 'true',
+      enableLoginFacebook: process.env.ENABLE_LOGIN_FACEBOOK === 'true',
+      enableLoginBiometric: process.env.ENABLE_LOGIN_BIOMETRIC !== 'false',
+      enableLoginTwoFactor: process.env.ENABLE_LOGIN_TWO_FACTOR !== 'false',
+
       // Development Settings
       useFirebaseEmulator: process.env.USE_FIREBASE_EMULATOR === 'true',
       debugMode: process.env.DEBUG_MODE !== 'false',

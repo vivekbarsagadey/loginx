@@ -54,6 +54,17 @@ declare namespace NodeJS {
     ENABLE_PUSH_NOTIFICATIONS: string;
     ENABLE_ANALYTICS: string;
 
+    // Authentication Method Feature Flags
+    ENABLE_LOGIN_EMAIL_PASSWORD: string;
+    ENABLE_LOGIN_EMAIL_MAGIC_LINK: string;
+    ENABLE_LOGIN_EMAIL_OTP: string;
+    ENABLE_LOGIN_PHONE_OTP: string;
+    ENABLE_LOGIN_GOOGLE: string;
+    ENABLE_LOGIN_APPLE: string;
+    ENABLE_LOGIN_FACEBOOK: string;
+    ENABLE_LOGIN_BIOMETRIC: string;
+    ENABLE_LOGIN_TWO_FACTOR: string;
+
     // Development Settings
     USE_FIREBASE_EMULATOR: string;
     DEBUG_MODE: string;

@@ -38,8 +38,24 @@ const getGoogleSignin = () => {
   return require('@react-native-google-signin/google-signin').GoogleSignin;
 };
 
+// Facebook Sign-in availability check - returns false in Expo Go
+const isFacebookSigninAvailable = (): boolean => {
+  // Always return false in Expo Go to prevent module loading
+  if (isExpoGo) {
+    return false;
+  }
+
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    require('expo-auth-session/providers/facebook');
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 /**
- * Hook to handle social authentication (Google & Apple)
+ * Hook to handle social authentication (Google, Apple & Facebook)
  */
 export function useSocialAuth() {
   const router = useRouter();
@@ -205,9 +221,96 @@ export function useSocialAuth() {
     }
   };
 
+  /**
+   * Handle Facebook Sign-In
+   */
+  const signInWithFacebook = async () => {
+    if (loading) {
+      return;
+    }
+
+    // Check if Facebook Sign-in is available (not in Expo Go)
+    if (!isFacebookSigninAvailable()) {
+      showError(
+        new Error(
+          'Facebook Sign-In is not available in Expo Go.\n\n' +
+            'To use Facebook Sign-In:\n' +
+            '1. Build a development client: expo install expo-dev-client\n' +
+            '2. Install expo-auth-session: expo install expo-auth-session\n' +
+            '3. Build: eas build --profile development\n\n' +
+            'Or continue with email/password authentication.'
+        )
+      );
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { useAuthRequest } = require('expo-auth-session/providers/facebook');
+
+      // Note: This is a simplified implementation
+      // In production, you'd use the full expo-auth-session flow
+      // For now, we'll show a user-friendly error
+      throw new Error(
+        'Facebook Sign-In integration is pending.\n\n' +
+          `To complete setup:\n` +
+          `1. Configure Facebook App at developers.facebook.com\n` +
+          `2. Add Facebook App ID to environment variables\n` +
+          `3. Implement expo-auth-session flow\n\n` +
+          `Facebook App ID: ${Config.services.facebookAppId || 'Not configured'}\n\n` +
+          'Please use Google, Apple, or email authentication for now.'
+      );
+
+      // Production implementation would look like this:
+      /*
+      const [request, response, promptAsync] = useAuthRequest({
+        clientId: Config.social.facebookAppId || '',
+        responseType: ResponseType.Token,
+        scopes: ['public_profile', 'email'],
+      });
+
+      if (response?.type === 'success') {
+        const { access_token } = response.params;
+        const credential = FacebookAuthProvider.credential(access_token);
+        const { user } = await signInWithCredential(auth, credential);
+        
+        const isNewUser = user.metadata.creationTime === user.metadata.lastSignInTime;
+        if (isNewUser) {
+          await createUserProfile(user.uid, {
+            displayName: user.displayName || 'User',
+            email: user.email || '',
+            age: 0,
+            photoURL: user.photoURL || '',
+            pushEnabled: false,
+            emailUpdates: false,
+            marketingTips: false,
+            address: '',
+            city: '',
+            state: '',
+            zipCode: '',
+          });
+        }
+        
+        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        showSuccess('Success', isNewUser ? 'Account created successfully!' : 'Signed in successfully!');
+        router.replace('/(tabs)');
+      }
+      */
+    } catch (error) {
+      console.error('[SocialAuth] Facebook sign-in error:', error);
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      showError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     signInWithGoogle,
     signInWithApple,
+    signInWithFacebook,
     loading,
   };
 }

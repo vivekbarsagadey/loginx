@@ -1,0 +1,154 @@
+import { ScreenContainer } from '@/components/screen-container';
+import { ThemedButton } from '@/components/themed-button';
+import { ThemedInput } from '@/components/themed-input';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { CommonButtons, CommonContainers, CommonInputs, CommonText } from '@/constants/common-styles';
+import { Spacing } from '@/constants/layout';
+import { auth } from '@/firebase-config';
+import i18n from '@/i18n';
+import { showError } from '@/utils/error';
+import { showSuccess } from '@/utils/success';
+import { zodResolver } from '@hookform/resolvers/zod';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Haptics from 'expo-haptics';
+import { useRouter } from 'expo-router';
+import { sendSignInLinkToEmail } from 'firebase/auth';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { ActivityIndicator, StyleSheet } from 'react-native';
+import { z } from 'zod';
+
+const schema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+});
+
+/**
+ * Passwordless Login Screen
+ * Allows users to sign in via magic link sent to their email
+ * No password required - secure, convenient authentication
+ */
+export default function PasswordlessLoginScreen() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: '',
+    },
+  });
+
+  const onSubmit = async (data: z.infer<typeof schema>) => {
+    setLoading(true);
+
+    try {
+      const actionCodeSettings = {
+        // URL you want to redirect back to after email link is clicked
+        url: 'https://your-app.com/finish-sign-in', // Replace with your actual domain
+        handleCodeInApp: true,
+        // iOS and Android app configuration
+        iOS: {
+          bundleId: 'com.yourcompany.loginx', // Replace with your iOS bundle ID
+        },
+        android: {
+          packageName: 'com.yourcompany.loginx', // Replace with your Android package name
+          installApp: true,
+          minimumVersion: '1.0.0',
+        },
+        // Dynamic link domain for universal links
+        dynamicLinkDomain: 'yourapp.page.link', // Replace with your Firebase Dynamic Link domain
+      };
+
+      await sendSignInLinkToEmail(auth, data.email, actionCodeSettings);
+
+      // Save email to local storage so we can complete sign-in later
+      await AsyncStorage.setItem('emailForSignIn', data.email);
+
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
+      showSuccess(i18n.t('passwordlessLogin.success.title'), i18n.t('passwordlessLogin.success.message', { email: data.email }), () => {
+        router.push('/(auth)/verify-email');
+      });
+    } catch (error: unknown) {
+      showError(error);
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <ScreenContainer>
+      <ThemedView style={CommonContainers.centerContent}>
+        <ThemedText type="h1" style={CommonText.title}>
+          {i18n.t('passwordlessLogin.title')}
+        </ThemedText>
+
+        <ThemedText type="body" style={CommonText.subtitle}>
+          {i18n.t('passwordlessLogin.subtitle')}
+        </ThemedText>
+
+        <ThemedView style={styles.benefitsContainer}>
+          <ThemedText type="caption" style={styles.benefitItem}>
+            ✓ {i18n.t('passwordlessLogin.benefits.noPassword')}
+          </ThemedText>
+          <ThemedText type="caption" style={styles.benefitItem}>
+            ✓ {i18n.t('passwordlessLogin.benefits.secure')}
+          </ThemedText>
+          <ThemedText type="caption" style={styles.benefitItem}>
+            ✓ {i18n.t('passwordlessLogin.benefits.fast')}
+          </ThemedText>
+        </ThemedView>
+
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <ThemedInput
+              placeholder={i18n.t('passwordlessLogin.emailPlaceholder')}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              autoComplete="email"
+              textContentType="emailAddress"
+              errorMessage={errors.email?.message}
+              style={CommonInputs.input}
+            />
+          )}
+        />
+
+        <ThemedButton
+          title={loading ? i18n.t('passwordlessLogin.sendingButton') : i18n.t('passwordlessLogin.sendButton')}
+          onPress={handleSubmit(onSubmit)}
+          disabled={loading}
+          style={CommonButtons.buttonLarge}
+        />
+
+        {loading && <ActivityIndicator style={styles.loading} />}
+
+        <ThemedButton title={i18n.t('passwordlessLogin.backToLogin')} variant="link" onPress={() => router.back()} style={CommonButtons.linkButtonSmall} />
+      </ThemedView>
+    </ScreenContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  loading: {
+    marginTop: Spacing.md,
+  },
+  benefitsContainer: {
+    marginBottom: Spacing.lg,
+    paddingHorizontal: Spacing.md,
+  },
+  benefitItem: {
+    marginBottom: Spacing.sm,
+    opacity: 0.8,
+  },
+});

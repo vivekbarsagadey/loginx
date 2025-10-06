@@ -73,6 +73,19 @@ export const Config = {
     analytics: (extra.enableAnalytics as boolean) ?? false,
   },
 
+  // Authentication Methods - Control which login methods are available
+  authMethods: {
+    emailPassword: (extra.enableLoginEmailPassword as boolean) ?? true,
+    emailMagicLink: (extra.enableLoginEmailMagicLink as boolean) ?? true,
+    emailOtp: (extra.enableLoginEmailOtp as boolean) ?? true,
+    phoneOtp: (extra.enableLoginPhoneOtp as boolean) ?? true,
+    google: (extra.enableLoginGoogle as boolean) ?? true,
+    apple: (extra.enableLoginApple as boolean) ?? true,
+    facebook: (extra.enableLoginFacebook as boolean) ?? false, // Default disabled until setup
+    biometric: (extra.enableLoginBiometric as boolean) ?? true,
+    twoFactor: (extra.enableLoginTwoFactor as boolean) ?? true,
+  },
+
   // Development Settings
   development: {
     useFirebaseEmulator: (extra.useFirebaseEmulator as boolean) ?? false,
@@ -160,6 +173,7 @@ export const logConfigStatus = (): void => {
           hasApiKey: !isConfigMissing(Config.firebase.apiKey),
         },
         features: Config.features,
+        authMethods: Config.authMethods,
         development: Config.development,
       },
       null,
