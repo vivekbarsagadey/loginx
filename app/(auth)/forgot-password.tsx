@@ -50,7 +50,11 @@ export default function ForgotPasswordScreen() {
   const onSubmit = async (data: { email: string }) => {
     setLoading(true);
     try {
-      await sendPasswordResetEmail(auth, data.email);
+      // SECURITY: Sanitize email input before sending to Firebase
+      const { sanitizeEmail } = await import('@/utils/sanitize');
+      const sanitizedEmail = sanitizeEmail(data.email);
+
+      await sendPasswordResetEmail(auth, sanitizedEmail);
       showSuccess(i18n.t('success.passwordReset.title'), i18n.t('success.passwordReset.message'), () => router.push('/(auth)/login'));
     } catch (err: unknown) {
       showError(err);

@@ -1,14 +1,16 @@
 /**
  * Authentication Persistence Manager
  * Handles persistent login state using secure storage
+ * SECURITY: Uses SecureStore for tokens, AsyncStorage for non-sensitive state
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User } from 'firebase/auth';
 import { debugError, debugLog, debugWarn } from './debug';
+import { securelyDeleteItem, securelyGetItem, securelySetItem } from './secure-storage';
 
 const AUTH_STORAGE_KEY = '@LoginX:auth_state';
-const AUTH_TOKEN_KEY = '@LoginX:auth_token';
+const AUTH_TOKEN_KEY_SECURE = 'auth_token'; // Stored in SecureStore (encrypted)
 const AUTH_USER_KEY = '@LoginX:auth_user';
 
 interface PersistedAuthState {
@@ -44,11 +46,11 @@ export const saveAuthState = async (user: User | null): Promise<void> => {
       };
       await AsyncStorage.setItem(AUTH_USER_KEY, JSON.stringify(userInfo));
 
-      // Get and save auth token if available
+      // Get and save auth token if available - SECURELY in SecureStore
       try {
         const token = await user.getIdToken();
-        await AsyncStorage.setItem(AUTH_TOKEN_KEY, token);
-        debugLog('[AuthPersistence] ✅ Auth state and token saved successfully');
+        await securelySetItem(AUTH_TOKEN_KEY_SECURE, token);
+        debugLog('[AuthPersistence] ✅ Auth state and token saved securely in SecureStore');
       } catch (tokenError) {
         debugWarn('[AuthPersistence] Failed to save auth token:', tokenError);
         // Continue - we still have the user state
@@ -119,13 +121,13 @@ export const loadSavedUserInfo = async (): Promise<SavedUserInfo | null> => {
 };
 
 /**
- * Load saved auth token
+ * Load saved auth token from SecureStore (encrypted storage)
  */
 export const loadSavedAuthToken = async (): Promise<string | null> => {
   try {
-    const token = await AsyncStorage.getItem(AUTH_TOKEN_KEY);
+    const token = await securelyGetItem(AUTH_TOKEN_KEY_SECURE);
     if (token) {
-      debugLog('[AuthPersistence] ✅ Loaded saved auth token');
+      debugLog('[AuthPersistence] ✅ Loaded saved auth token from SecureStore');
     }
     return token;
   } catch (error) {
@@ -136,11 +138,16 @@ export const loadSavedAuthToken = async (): Promise<string | null> => {
 
 /**
  * Clear all authentication data
+ * SECURITY: Clears both AsyncStorage (state) and SecureStore (token)
  */
 export const clearAuthState = async (): Promise<void> => {
   try {
-    await Promise.all([AsyncStorage.removeItem(AUTH_STORAGE_KEY), AsyncStorage.removeItem(AUTH_TOKEN_KEY), AsyncStorage.removeItem(AUTH_USER_KEY)]);
-    debugLog('[AuthPersistence] ✅ All auth data cleared');
+    await Promise.all([
+      AsyncStorage.removeItem(AUTH_STORAGE_KEY),
+      securelyDeleteItem(AUTH_TOKEN_KEY_SECURE), // Clear encrypted token
+      AsyncStorage.removeItem(AUTH_USER_KEY),
+    ]);
+    debugLog('[AuthPersistence] ✅ All auth data cleared (including encrypted token)');
   } catch (error) {
     debugError('[AuthPersistence] Failed to clear auth data:', error);
   }

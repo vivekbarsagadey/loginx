@@ -125,7 +125,8 @@ export const validatePassword = (password: string): { isValid: boolean; message?
     return { isValid: false, message: 'Password is too long' };
   }
 
-  // Use the same regex pattern as in the schema validation for consistency
+  // Import from constants for consistency
+  // Password validation regex is defined in constants/validation.ts
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
   if (!passwordRegex.test(password)) {

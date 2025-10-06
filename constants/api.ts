@@ -1,7 +1,28 @@
 /**
  * API and network-related constants
  * Centralized API configuration and network timeouts
+ * SECURITY: All API endpoints must use HTTPS
  */
+
+/**
+ * Validate that a URL uses HTTPS protocol
+ * @param url - URL to validate
+ * @returns true if URL uses HTTPS
+ * @throws Error if URL uses HTTP in production
+ */
+export const validateHttps = (url: string): boolean => {
+  const isHttps = url.startsWith('https://');
+
+  if (!isHttps && !__DEV__) {
+    throw new Error(`SECURITY: API URL must use HTTPS in production: ${url}`);
+  }
+
+  if (!isHttps && __DEV__) {
+    console.warn(`⚠️ SECURITY WARNING: API URL should use HTTPS: ${url}`);
+  }
+
+  return isHttps;
+};
 
 export const ApiConstants = {
   // Timeouts (in milliseconds)

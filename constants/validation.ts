@@ -1,13 +1,16 @@
 /**
  * Validation constants for forms and user input
  * Centralized validation rules to maintain consistency
+ * SECURITY: Strong password requirements enforced
  */
 
 export const ValidationConstants = {
-  // Password rules
+  // Password rules - SECURITY: Strong password policy
   PASSWORD_MIN_LENGTH: 8,
   PASSWORD_MAX_LENGTH: 128,
-  PASSWORD_REGEX: /^[a-zA-Z0-9@$!%*?&]*$/,
+  // Require: 1 uppercase, 1 lowercase, 1 number, 1 special char (@$!%*?&)
+  PASSWORD_STRONG_REGEX: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+  PASSWORD_ALLOWED_CHARS_REGEX: /^[a-zA-Z0-9@$!%*?&]*$/,
 
   // Name rules
   NAME_MIN_LENGTH: 2,
@@ -36,6 +39,7 @@ export const ValidationMessages = {
   PASSWORD_TOO_SHORT: `Password must be at least ${ValidationConstants.PASSWORD_MIN_LENGTH} characters`,
   PASSWORD_TOO_LONG: `Password must not exceed ${ValidationConstants.PASSWORD_MAX_LENGTH} characters`,
   PASSWORD_INVALID_CHARS: 'Password contains invalid characters',
+  PASSWORD_WEAK: 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&)',
   NAME_TOO_SHORT: `Name must be at least ${ValidationConstants.NAME_MIN_LENGTH} characters`,
   NAME_TOO_LONG: `Name must not exceed ${ValidationConstants.NAME_MAX_LENGTH} characters`,
   AGE_TOO_LOW: `You must be at least ${ValidationConstants.MIN_AGE} years old`,

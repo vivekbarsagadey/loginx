@@ -5,6 +5,7 @@ import { ThemedText } from '@/components/themed-text';
 import { SocialSignInButtons } from '@/components/ui/social-sign-in-buttons';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
+import { ValidationConstants, ValidationMessages } from '@/constants/validation';
 import { auth } from '@/firebase-config';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
 import { useSecuritySettings } from '@/hooks/use-security-settings';
@@ -13,7 +14,6 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { AuthMethod, isAuthMethodEnabled } from '@/utils/auth-methods';
 import { showError } from '@/utils/error';
-
 import { showSuccess } from '@/utils/success';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
@@ -23,13 +23,14 @@ import { Controller, useForm } from 'react-hook-form';
 import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
 import { z } from 'zod';
 
+// SECURITY: Use consolidated validation from constants
 const schema = z.object({
   email: z.string().email(i18n.t('screens.login.validation.invalidEmail')),
   password: z
     .string()
-    .min(8, i18n.t('screens.login.validation.passwordTooShort'))
-    .max(128, 'Password is too long')
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.'),
+    .min(ValidationConstants.PASSWORD_MIN_LENGTH, i18n.t('screens.login.validation.passwordTooShort'))
+    .max(ValidationConstants.PASSWORD_MAX_LENGTH, ValidationMessages.PASSWORD_TOO_LONG)
+    .regex(ValidationConstants.PASSWORD_STRONG_REGEX, ValidationMessages.PASSWORD_WEAK),
 });
 
 export default function LoginScreen() {
