@@ -19,6 +19,7 @@ export enum AuthMethod {
   FACEBOOK = 'facebook',
   BIOMETRIC = 'biometric',
   TWO_FACTOR = 'twoFactor',
+  FORGOT_PASSWORD = 'forgotPassword',
 }
 
 /**
@@ -78,6 +79,7 @@ export const getAuthMethodLabel = (method: AuthMethod): string => {
     [AuthMethod.FACEBOOK]: 'Facebook Sign-In',
     [AuthMethod.BIOMETRIC]: 'Biometric (Face ID/Touch ID)',
     [AuthMethod.TWO_FACTOR]: 'Two-Factor Authentication',
+    [AuthMethod.FORGOT_PASSWORD]: 'Forgot Password / Password Reset',
   };
   return labels[method];
 };
@@ -96,7 +98,7 @@ export const validateAuthMethodsConfig = (): void => {
   // Log enabled methods in development
   if (__DEV__) {
     const enabledMethods = getEnabledAuthMethods();
-    console.log(`[Auth Config] ${enabledCount} authentication method(s) enabled:`, enabledMethods.map(getAuthMethodLabel).join(', '));
+    console.warn(`[Auth Config] ${enabledCount} authentication method(s) enabled:`, enabledMethods.map(getAuthMethodLabel).join(', '));
   }
 };
 

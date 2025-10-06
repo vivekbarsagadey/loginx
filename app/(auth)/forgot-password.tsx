@@ -5,14 +5,15 @@ import { ThemedView } from '@/components/themed-view';
 import { CommonButtons, CommonContainers, CommonInputs, CommonText } from '@/constants/common-styles';
 import { auth } from '@/firebase-config';
 import i18n from '@/i18n';
+import { AuthMethod, isAuthMethodEnabled } from '@/utils/auth-methods';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
 import { sendPasswordResetEmail } from 'firebase/auth';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet } from 'react-native';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -22,6 +23,18 @@ const schema = z.object({
 export default function ForgotPasswordScreen() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  // Check if forgot password feature is enabled
+  useEffect(() => {
+    if (!isAuthMethodEnabled(AuthMethod.FORGOT_PASSWORD)) {
+      Alert.alert('Feature Disabled', 'Password reset is currently unavailable. Please contact support for assistance.', [
+        {
+          text: 'OK',
+          onPress: () => router.replace('/(auth)/login'),
+        },
+      ]);
+    }
+  }, [router]);
 
   const {
     control,

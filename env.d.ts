@@ -64,6 +64,7 @@ declare namespace NodeJS {
     ENABLE_LOGIN_FACEBOOK: string;
     ENABLE_LOGIN_BIOMETRIC: string;
     ENABLE_LOGIN_TWO_FACTOR: string;
+    ENABLE_FORGOT_PASSWORD: string;
 
     // Development Settings
     USE_FIREBASE_EMULATOR: string;

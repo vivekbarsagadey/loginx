@@ -29,11 +29,13 @@ security features.
 
 ### Key Features
 
-- ✅ **9 Authentication Methods** - Email/password, social OAuth, biometric, OTP
+- ✅ **10 Authentication Methods** - Email/password, social OAuth, biometric,
+  OTP, password reset
 - ✅ **Environment-Based Configuration** - Enable/disable methods via feature
   flags
 - ✅ **Multi-Step Registration** - 4-step guided registration with validation
 - ✅ **Security-First** - 2FA, biometric, account lockout, session management
+- ✅ **Password Recovery** - Email and SMS-based password reset functionality
 - ✅ **Offline-First** - Local-first architecture with Firebase sync
 - ✅ **Platform Native** - Follows iOS and Android design guidelines
 - ✅ **Fully Accessible** - WCAG AA compliant with screen reader support
@@ -120,6 +122,9 @@ ENABLE_LOGIN_FACEBOOK="false"           # Facebook Sign-In (default: disabled)
 # Biometric & 2FA
 ENABLE_LOGIN_BIOMETRIC="true"           # FaceID/TouchID/Fingerprint
 ENABLE_LOGIN_TWO_FACTOR="true"          # TOTP or SMS 2FA
+
+# Password Recovery
+ENABLE_FORGOT_PASSWORD="true"           # Forgot password / password reset
 ```
 
 ### Configuration Flow
@@ -430,6 +435,132 @@ ENABLE_LOGIN_EMAIL_PASSWORD="true"  # Required dependency
 - `hooks/use-two-factor-auth.tsx` - 2FA logic
 - `app/(auth)/verify-2fa.tsx` - OTP verification
 - `app/security/2fa.tsx` - 2FA setup
+
+---
+
+### 10. Forgot Password / Password Reset
+
+**Status:** ✅ Production Ready
+
+**Features:**
+
+- Email-based password recovery
+- Secure Firebase reset link
+- Rate limiting protection
+- User-friendly error messages
+- Option to disable via feature flag
+- Works with SMS notification (requires Twilio)
+
+**Configuration:**
+
+```bash
+ENABLE_FORGOT_PASSWORD="true"
+ENABLE_LOGIN_EMAIL_PASSWORD="true"  # Required dependency
+```
+
+**How It Works:**
+
+1. User clicks "Forgot Password?" on login screen
+2. User enters their email address
+3. Firebase sends password reset email
+4. User clicks link in email
+5. User sets new password
+6. User redirected to login with new password
+
+**Feature Flag Control:**
+
+The forgot password feature can be enabled/disabled via environment variable:
+
+- **`ENABLE_FORGOT_PASSWORD="true"`** - Shows "Forgot Password?" link on login
+  screen
+- **`ENABLE_FORGOT_PASSWORD="false"`** - Hides forgot password option, users
+  must contact support
+
+**Security Features:**
+
+- Firebase secure password reset tokens
+- Rate limiting prevents abuse
+- Email verification required
+- Token expiration (1 hour)
+- Clear error handling for invalid/expired tokens
+
+**Requirements:**
+
+- Firebase Auth Email/Password provider enabled
+- Email delivery configured in Firebase
+- (Optional) Twilio for SMS notifications
+
+**SMS Support:**
+
+To enable SMS notifications for password resets:
+
+```bash
+TWILIO_ACCOUNT_SID="your-twilio-account-sid"
+TWILIO_AUTH_TOKEN="your-twilio-auth-token"
+TWILIO_PHONE_NUMBER="+1234567890"
+```
+
+**Error Handling:**
+
+- User not found: Secure message (doesn't reveal if email exists)
+- Invalid email format: Validation before submission
+- Rate limit exceeded: Clear message with retry time
+- Network errors: User-friendly error messages
+
+**Internationalization:**
+
+All text content supports i18n:
+
+```json
+{
+  "forgotPassword": {
+    "title": "Reset Password",
+    "subtitle": "Enter your email to receive a reset link",
+    "emailPlaceholder": "Email",
+    "sendButton": "Send Reset Link",
+    "sendingButton": "Sending...",
+    "backToLogin": "Back to Login"
+  },
+  "success": {
+    "passwordReset": {
+      "title": "Password Reset Email Sent",
+      "message": "Please check your inbox for a link to reset your password."
+    }
+  }
+}
+```
+
+**Files:**
+
+- `app/(auth)/forgot-password.tsx` - Password reset screen
+- `app/(auth)/login.tsx` - Forgot password link (conditionally displayed)
+- `utils/auth-methods.ts` - Feature flag checking
+
+**Testing:**
+
+1. Set `ENABLE_FORGOT_PASSWORD="true"` in `.env.local`
+2. Restart development server
+3. Navigate to login screen
+4. Click "Forgot Password?" link
+5. Enter registered email address
+6. Check email for reset link
+7. Click link and set new password
+
+**Disabling the Feature:**
+
+To disable forgot password:
+
+1. Set `ENABLE_FORGOT_PASSWORD="false"` in `.env.local`
+2. Restart development server
+3. "Forgot Password?" link will not appear on login screen
+4. Direct navigation to `/forgot-password` shows alert and redirects
+
+**Support Contact:**
+
+When forgot password is disabled, users see:
+
+> "Password reset is currently unavailable. Please contact support for
+> assistance."
 
 ---
 

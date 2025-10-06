@@ -84,6 +84,7 @@ export const Config = {
     facebook: (extra.enableLoginFacebook as boolean) ?? false, // Default disabled until setup
     biometric: (extra.enableLoginBiometric as boolean) ?? true,
     twoFactor: (extra.enableLoginTwoFactor as boolean) ?? true,
+    forgotPassword: (extra.enableForgotPassword as boolean) ?? true,
   },
 
   // Development Settings
