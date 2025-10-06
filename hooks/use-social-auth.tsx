@@ -61,6 +61,7 @@ export function useSocialAuth() {
         iosClientId: Config.social.googleIosClientId,
         androidClientId: Config.social.googleAndroidClientId,
         offlineAccess: true,
+        profileImageSize: 150,
       });
 
       // Check if device supports Google Play Services (Android)

@@ -21,6 +21,15 @@ export default {
     ios: {
       supportsTablet: true,
       buildNumber: process.env.APP_BUILD || '100',
+      bundleIdentifier: process.env.APPLE_BUNDLE_ID || 'com.whizit.loginx',
+      infoPlist: {
+        NSCameraUsageDescription: 'This app requires access to your camera to take photos for your profile and other features.',
+        NSPhotoLibraryUsageDescription: 'This app requires access to your photo library to select photos for your profile and other features.',
+        NSPhotoLibraryAddUsageDescription: 'This app requires permission to save photos to your photo library.',
+        NSLocationWhenInUseUsageDescription: 'This app requires access to your location to provide location-based features.',
+        NSLocationAlwaysUsageDescription: 'This app requires access to your location to provide location-based features even when the app is in the background.',
+        NSLocationAlwaysAndWhenInUseUsageDescription: 'This app requires access to your location to provide location-based features.',
+      },
     },
     android: {
       adaptiveIcon: {
@@ -34,6 +43,7 @@ export default {
       package: 'com.whizit.loginx',
       minSdkVersion: 26,
       versionCode: parseInt(process.env.APP_BUILD || '100'),
+      permissions: ['CAMERA', 'READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE', 'READ_MEDIA_IMAGES', 'ACCESS_FINE_LOCATION', 'ACCESS_COARSE_LOCATION'],
     },
     web: {
       output: 'static',
