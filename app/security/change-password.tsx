@@ -5,34 +5,150 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
+import { ValidationConstants } from '@/constants/validation';
+import { auth } from '@/firebase-config';
 import i18n from '@/i18n';
-import { useState } from 'react';
+import { showError } from '@/utils/error';
+import { showSuccess } from '@/utils/success';
+import * as Haptics from 'expo-haptics';
+import { useRouter } from 'expo-router';
+import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
+import { useCallback, useState } from 'react';
 import { Alert, StyleSheet } from 'react-native';
 
 export default function ChangePasswordScreen() {
+  const router = useRouter();
+  const user = auth.currentUser;
+
   const [currentPassword, setCurrentPassword] = useState('');
+  const [currentPasswordError, setCurrentPasswordError] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [newPasswordError, setNewPasswordError] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const requirements = i18n.t('screens.security.changePassword.requirements', { returnObjects: true }) as Record<string, string>;
 
-  const handleChangePassword = () => {
+  const validatePassword = useCallback((password: string): boolean => {
+    if (!password) {
+      return false;
+    }
+
+    // Check minimum length
+    if (password.length < ValidationConstants.PASSWORD_MIN_LENGTH) {
+      return false;
+    }
+
+    // Check for uppercase letter
+    if (!/[A-Z]/.test(password)) {
+      return false;
+    }
+
+    // Check for lowercase letter
+    if (!/[a-z]/.test(password)) {
+      return false;
+    }
+
+    // Check for number
+    if (!/[0-9]/.test(password)) {
+      return false;
+    }
+
+    // Check for special character
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      return false;
+    }
+
+    return true;
+  }, []);
+
+  const handleChangePassword = useCallback(async () => {
+    if (!user || !user.email) {
+      showError(new Error('No authenticated user found'));
+      return;
+    }
+
+    // Reset errors
+    setCurrentPasswordError('');
+    setNewPasswordError('');
+    setConfirmPasswordError('');
+
+    // Validate current password
+    if (!currentPassword) {
+      setCurrentPasswordError('Current password is required');
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      return;
+    }
+
+    // Validate new password
+    if (!newPassword) {
+      setNewPasswordError('New password is required');
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      return;
+    }
+
+    if (!validatePassword(newPassword)) {
+      setNewPasswordError('Password does not meet security requirements');
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      return;
+    }
+
+    // Validate confirm password
     if (newPassword !== confirmPassword) {
-      Alert.alert(i18n.t('errors.generic.title'), 'Passwords do not match');
+      setConfirmPasswordError('Passwords do not match');
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      return;
+    }
+
+    // Check if new password is different from current
+    if (currentPassword === newPassword) {
+      setNewPasswordError('New password must be different from current password');
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       return;
     }
 
     setLoading(true);
-    // Simulate password change
-    setTimeout(() => {
-      setLoading(false);
-      Alert.alert(i18n.t('success.profileUpdate.title'), i18n.t('screens.security.changePassword.success'));
+
+    try {
+      // Haptic feedback
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+      // Step 1: Reauthenticate user with current password
+      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+      await reauthenticateWithCredential(user, credential);
+
+      // Step 2: Update password
+      await updatePassword(user, newPassword);
+
+      // Success haptic
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
+      // Clear form
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-    }, 2000);
-  };
+
+      showSuccess(i18n.t('success.profileUpdate.title'), i18n.t('screens.security.changePassword.success'), () => router.back());
+    } catch (error: unknown) {
+      console.error('[ChangePassword] Error changing password:', error);
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+
+      // Handle specific Firebase errors
+      const firebaseError = error as { code?: string };
+      if (firebaseError.code === 'auth/wrong-password') {
+        setCurrentPasswordError('Current password is incorrect');
+      } else if (firebaseError.code === 'auth/weak-password') {
+        setNewPasswordError('Password is too weak');
+      } else if (firebaseError.code === 'auth/requires-recent-login') {
+        Alert.alert('Session Expired', 'For security reasons, please log out and log back in before changing your password.', [{ text: 'OK' }]);
+      } else {
+        showError(error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [user, currentPassword, newPassword, confirmPassword, validatePassword, router]);
 
   return (
     <ScreenContainer scrollable>
@@ -42,11 +158,53 @@ export default function ChangePasswordScreen() {
       <ThemedText style={CommonText.subtitle}>{i18n.t('screens.security.changePassword.subtitle')}</ThemedText>
 
       <ThemedView style={styles.form}>
-        <ThemedInput placeholder={i18n.t('screens.security.changePassword.currentPassword')} value={currentPassword} onChangeText={setCurrentPassword} secureTextEntry style={styles.input} />
+        <ThemedInput
+          label={i18n.t('screens.security.changePassword.currentPassword')}
+          value={currentPassword}
+          onChangeText={(text) => {
+            setCurrentPassword(text);
+            if (currentPasswordError) {
+              setCurrentPasswordError('');
+            }
+          }}
+          errorMessage={currentPasswordError}
+          secureTextEntry
+          style={styles.input}
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
 
-        <ThemedInput placeholder={i18n.t('screens.security.changePassword.newPassword')} value={newPassword} onChangeText={setNewPassword} secureTextEntry style={styles.input} />
+        <ThemedInput
+          label={i18n.t('screens.security.changePassword.newPassword')}
+          value={newPassword}
+          onChangeText={(text) => {
+            setNewPassword(text);
+            if (newPasswordError) {
+              setNewPasswordError('');
+            }
+          }}
+          errorMessage={newPasswordError}
+          secureTextEntry
+          style={styles.input}
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
 
-        <ThemedInput placeholder={i18n.t('screens.security.changePassword.confirmPassword')} value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry style={styles.input} />
+        <ThemedInput
+          label={i18n.t('screens.security.changePassword.confirmPassword')}
+          value={confirmPassword}
+          onChangeText={(text) => {
+            setConfirmPassword(text);
+            if (confirmPasswordError) {
+              setConfirmPasswordError('');
+            }
+          }}
+          errorMessage={confirmPasswordError}
+          secureTextEntry
+          style={styles.input}
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
 
         <ThemedView style={styles.requirementsContainer}>
           <ThemedText type="h3" style={styles.requirementsTitle}>
@@ -60,13 +218,12 @@ export default function ChangePasswordScreen() {
         </ThemedView>
 
         <ThemedButton
-          title={i18n.t('screens.security.changePassword.changeButton')}
+          title={loading ? 'Changing Password...' : i18n.t('screens.security.changePassword.changeButton')}
           onPress={handleChangePassword}
           disabled={loading || !currentPassword || !newPassword || !confirmPassword}
+          loading={loading}
           style={styles.changeButton}
         />
-
-        <ThemedText style={styles.lastChanged}>{i18n.t('screens.security.changePassword.lastChanged', { date: 'November 15, 2024' })}</ThemedText>
       </ThemedView>
     </ScreenContainer>
   );
