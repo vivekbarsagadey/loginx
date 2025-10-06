@@ -6,12 +6,14 @@ import { useEffect } from 'react';
 
 import { ErrorBoundary } from '@/components/error-boundary';
 import { GlobalDialogProvider } from '@/components/global-dialog-provider';
+import { OfflineIndicator } from '@/components/ui/offline-indicator';
 import { AnimationDurations, ScreenTransitions } from '@/constants/animation';
 import { Routes } from '@/constants/routes';
 import { AuthProvider, useAuth } from '@/hooks/use-auth-provider';
 import { OnboardingProvider, useOnboarding } from '@/hooks/use-onboarding-provider';
 import { ThemeProvider as CustomThemeProvider, useThemeContext } from '@/hooks/use-theme-context';
 import { initializeLocalFirst } from '@/utils/local-first';
+import { initializeNetworkMonitoring } from '@/utils/network';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -46,124 +48,129 @@ function RootLayoutNav() {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        animation: ScreenTransitions.DEFAULT,
-        animationDuration: AnimationDurations.SCREEN_TRANSITION,
-      }}
-    >
-      <Stack.Screen
-        name="(tabs)"
-        options={{
-          headerShown: false,
-          animation: ScreenTransitions.FADE,
-        }}
-      />
-      <Stack.Screen
-        name="(auth)"
-        options={{
-          headerShown: false,
-          animation: ScreenTransitions.SLIDE_FROM_RIGHT,
-        }}
-      />
-      <Stack.Screen
-        name="onboarding"
-        options={{
-          headerShown: false,
-          animation: ScreenTransitions.SLIDE_FROM_RIGHT,
-        }}
-      />
+    <>
+      {/* Offline Indicator - shown at top of all screens */}
+      <OfflineIndicator />
 
-      {/* Modal and auxiliary screens - headers handled by their own layouts */}
-      <Stack.Screen
-        name="profile"
-        options={{
-          headerShown: false,
-          animation: ScreenTransitions.SLIDE_FROM_RIGHT,
+      <Stack
+        screenOptions={{
+          animation: ScreenTransitions.DEFAULT,
+          animationDuration: AnimationDurations.SCREEN_TRANSITION,
         }}
-      />
-      <Stack.Screen
-        name="about"
-        options={{
-          headerShown: false,
-          animation: ScreenTransitions.SLIDE_FROM_RIGHT,
-        }}
-      />
-      <Stack.Screen
-        name="examples"
-        options={{
-          headerShown: false,
-          animation: ScreenTransitions.SLIDE_FROM_RIGHT,
-        }}
-      />
-      <Stack.Screen
-        name="security"
-        options={{
-          headerShown: false,
-          animation: ScreenTransitions.SLIDE_FROM_RIGHT,
-        }}
-      />
-      <Stack.Screen
-        name="settings"
-        options={{
-          headerShown: false,
-          animation: ScreenTransitions.SLIDE_FROM_RIGHT,
-        }}
-      />
-      <Stack.Screen
-        name="legal"
-        options={{
-          headerShown: false,
-          animation: ScreenTransitions.SLIDE_FROM_RIGHT,
-        }}
-      />
+      >
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerShown: false,
+            animation: ScreenTransitions.FADE,
+          }}
+        />
+        <Stack.Screen
+          name="(auth)"
+          options={{
+            headerShown: false,
+            animation: ScreenTransitions.SLIDE_FROM_RIGHT,
+          }}
+        />
+        <Stack.Screen
+          name="onboarding"
+          options={{
+            headerShown: false,
+            animation: ScreenTransitions.SLIDE_FROM_RIGHT,
+          }}
+        />
 
-      {/* Single modal screens - use bottom slide for modal feel */}
-      <Stack.Screen
-        name="modal"
-        options={{
-          headerShown: false,
-          animation: ScreenTransitions.MODAL,
-          presentation: 'modal',
-        }}
-      />
-      <Stack.Screen
-        name="feedback"
-        options={{
-          headerShown: false,
-          animation: ScreenTransitions.MODAL,
-          presentation: 'modal',
-        }}
-      />
-      <Stack.Screen
-        name="help"
-        options={{
-          headerShown: false,
-          animation: ScreenTransitions.SLIDE_FROM_RIGHT,
-        }}
-      />
-      <Stack.Screen
-        name="privacy"
-        options={{
-          headerShown: false,
-          animation: ScreenTransitions.SLIDE_FROM_RIGHT,
-        }}
-      />
-      <Stack.Screen
-        name="support"
-        options={{
-          headerShown: false,
-          animation: ScreenTransitions.SLIDE_FROM_RIGHT,
-        }}
-      />
+        {/* Modal and auxiliary screens - headers handled by their own layouts */}
+        <Stack.Screen
+          name="profile"
+          options={{
+            headerShown: false,
+            animation: ScreenTransitions.SLIDE_FROM_RIGHT,
+          }}
+        />
+        <Stack.Screen
+          name="about"
+          options={{
+            headerShown: false,
+            animation: ScreenTransitions.SLIDE_FROM_RIGHT,
+          }}
+        />
+        <Stack.Screen
+          name="examples"
+          options={{
+            headerShown: false,
+            animation: ScreenTransitions.SLIDE_FROM_RIGHT,
+          }}
+        />
+        <Stack.Screen
+          name="security"
+          options={{
+            headerShown: false,
+            animation: ScreenTransitions.SLIDE_FROM_RIGHT,
+          }}
+        />
+        <Stack.Screen
+          name="settings"
+          options={{
+            headerShown: false,
+            animation: ScreenTransitions.SLIDE_FROM_RIGHT,
+          }}
+        />
+        <Stack.Screen
+          name="legal"
+          options={{
+            headerShown: false,
+            animation: ScreenTransitions.SLIDE_FROM_RIGHT,
+          }}
+        />
 
-      <Stack.Screen
-        name="+not-found"
-        options={{
-          animation: ScreenTransitions.FADE,
-        }}
-      />
-    </Stack>
+        {/* Single modal screens - use bottom slide for modal feel */}
+        <Stack.Screen
+          name="modal"
+          options={{
+            headerShown: false,
+            animation: ScreenTransitions.MODAL,
+            presentation: 'modal',
+          }}
+        />
+        <Stack.Screen
+          name="feedback"
+          options={{
+            headerShown: false,
+            animation: ScreenTransitions.MODAL,
+            presentation: 'modal',
+          }}
+        />
+        <Stack.Screen
+          name="help"
+          options={{
+            headerShown: false,
+            animation: ScreenTransitions.SLIDE_FROM_RIGHT,
+          }}
+        />
+        <Stack.Screen
+          name="privacy"
+          options={{
+            headerShown: false,
+            animation: ScreenTransitions.SLIDE_FROM_RIGHT,
+          }}
+        />
+        <Stack.Screen
+          name="support"
+          options={{
+            headerShown: false,
+            animation: ScreenTransitions.SLIDE_FROM_RIGHT,
+          }}
+        />
+
+        <Stack.Screen
+          name="+not-found"
+          options={{
+            animation: ScreenTransitions.FADE,
+          }}
+        />
+      </Stack>
+    </>
   );
 }
 
@@ -182,10 +189,18 @@ export default function RootLayout() {
     if (loaded) {
       SplashScreen.hideAsync();
 
+      // Initialize network monitoring first
+      const networkUnsubscribe = initializeNetworkMonitoring();
+
       // Initialize LOCAL-FIRST system
       initializeLocalFirst().catch((error) => {
         console.error('Failed to initialize LOCAL-FIRST system:', error);
       });
+
+      // Cleanup on unmount
+      return () => {
+        networkUnsubscribe();
+      };
     }
   }, [loaded]);
 

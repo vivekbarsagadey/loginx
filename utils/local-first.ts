@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { disableNetwork, doc, enableNetwork, getDoc, setDoc } from 'firebase/firestore';
 import * as cache from './cache';
 import { debugError, debugLog, debugWarn } from './debug';
+import { isOnline as checkIsOnline, initializeNetworkMonitoring, subscribeToNetworkChanges } from './network';
 
 interface LocalFirstOptions {
   collection: string;
@@ -34,6 +35,7 @@ interface DataEntry<T = unknown> {
 // Network status tracking
 let isOnline = true;
 let networkListenersSetup = false;
+let networkUnsubscribe: (() => void) | null = null;
 
 // Pending sync queue
 const syncQueue = new Map<string, DataEntry>();
@@ -48,7 +50,7 @@ export const initializeLocalFirst = async (): Promise<void> => {
     // Initialize cache system
     await cache.initializeCache();
 
-    // Setup network monitoring
+    // Setup network monitoring using NetInfo
     if (!networkListenersSetup) {
       setupNetworkMonitoring();
       networkListenersSetup = true;
@@ -241,43 +243,65 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
 
 /**
  * Setup network monitoring for LOCAL-FIRST behavior
+ * Uses @react-native-community/netinfo for cross-platform support
  */
 const setupNetworkMonitoring = (): void => {
-  if (typeof navigator !== 'undefined' && 'onLine' in navigator) {
-    isOnline = navigator.onLine;
+  // Get initial network status
+  isOnline = checkIsOnline();
 
-    const handleOnline = () => {
-      isOnline = true;
+  // Initialize NetInfo monitoring
+  const netInfoUnsubscribe = initializeNetworkMonitoring();
+
+  // Subscribe to network changes
+  const changesUnsubscribe = subscribeToNetworkChanges((online) => {
+    const wasOnline = isOnline;
+    isOnline = online;
+
+    // Handle online transition
+    if (online && !wasOnline) {
       debugLog('[LocalFirst] 🌐 Network ONLINE - Starting background sync');
 
       // Enable Firestore network
       if (firestore) {
-        enableNetwork(firestore).catch((error) => {
-          debugWarn('[LocalFirst] Failed to enable Firestore network:', error);
-        });
+        enableNetwork(firestore)
+          .then(() => {
+            debugLog('[LocalFirst] ✅ Firestore network enabled');
+          })
+          .catch((error) => {
+            debugWarn('[LocalFirst] Failed to enable Firestore network:', error);
+          });
       }
 
       // Process sync queue
-      processSyncQueue();
-    };
+      processSyncQueue().catch((error) => {
+        debugWarn('[LocalFirst] Failed to process sync queue:', error);
+      });
+    }
 
-    const handleOffline = () => {
-      isOnline = false;
+    // Handle offline transition
+    if (!online && wasOnline) {
       debugLog('[LocalFirst] 🏠 Network OFFLINE - LOCAL-FIRST mode activated');
 
       // Disable Firestore network for better offline experience
       if (firestore) {
-        disableNetwork(firestore).catch((error) => {
-          debugWarn('[LocalFirst] Failed to disable Firestore network:', error);
-        });
+        disableNetwork(firestore)
+          .then(() => {
+            debugLog('[LocalFirst] ✅ Firestore network disabled for offline mode');
+          })
+          .catch((error) => {
+            debugWarn('[LocalFirst] Failed to disable Firestore network:', error);
+          });
       }
-    };
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('online', handleOnline);
-      window.addEventListener('offline', handleOffline);
     }
-  }
+  });
+
+  // Store unsubscribe function
+  networkUnsubscribe = () => {
+    netInfoUnsubscribe();
+    changesUnsubscribe();
+  };
+
+  debugLog('[LocalFirst] ✅ Network monitoring setup complete');
 };
 
 /**
@@ -364,4 +388,16 @@ export const forceSyncAll = async (): Promise<void> => {
   await processSyncQueue();
   await cache.syncPendingChanges();
   debugLog('[LocalFirst] ✅ Force sync completed');
+};
+
+/**
+ * Cleanup LOCAL-FIRST system
+ * Call this when app is shutting down
+ */
+export const cleanupLocalFirst = (): void => {
+  if (networkUnsubscribe) {
+    networkUnsubscribe();
+    networkUnsubscribe = null;
+    debugLog('[LocalFirst] ✅ Network monitoring cleaned up');
+  }
 };
