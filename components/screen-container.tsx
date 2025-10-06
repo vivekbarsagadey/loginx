@@ -1,9 +1,11 @@
 /**
  * Unified screen container component for consistent layout across all screens
  * Handles safe areas, keyboard avoidance, and scrolling automatically
+ * Now with responsive design support that adapts to device size and orientation
  */
 
 import { KeyboardOffset, Spacing } from '@/constants/layout';
+import { useResponsive } from '@/hooks/use-responsive';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { PropsWithChildren, ReactNode } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, ScrollViewProps, StyleSheet, View, ViewStyle } from 'react-native';
@@ -109,8 +111,10 @@ export function ScreenContainer({
   testID,
 }: ScreenContainerProps) {
   const backgroundColor = useThemeColor({}, variant);
+  const { padding: responsivePadding, maxContentWidth } = useResponsive();
 
-  const containerPadding = noPadding ? 0 : (padding ?? Spacing.md);
+  // Use responsive padding if not explicitly set
+  const containerPadding = noPadding ? 0 : (padding ?? responsivePadding.responsive ?? Spacing.md);
 
   const containerStyle: ViewStyle = {
     flex: 1,
@@ -122,7 +126,7 @@ export function ScreenContainer({
     padding: containerPadding,
     justifyContent: centerContent ? 'center' : undefined,
     width: '100%',
-    maxWidth: 1200,
+    maxWidth: maxContentWidth,
     alignSelf: 'center',
   };
 
