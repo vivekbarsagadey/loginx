@@ -168,6 +168,7 @@ export const clearSecureStorage = async (keys?: string[]): Promise<void> => {
 
 /**
  * Biometric preferences helper functions
+ * SECURITY: Stores user credentials encrypted in SecureStore for biometric re-authentication
  */
 export const BiometricStorage = {
   /**
@@ -200,6 +201,57 @@ export const BiometricStorage = {
     await securelyDeleteItem(SecureStorageKeys.BIOMETRIC_ENABLED);
     await securelyDeleteItem(SecureStorageKeys.BIOMETRIC_TYPE);
     debugLog('[BiometricStorage] Cleared biometric settings');
+  },
+
+  /**
+   * Save user email for biometric re-authentication
+   * SECURITY: Email stored encrypted in SecureStore for Firebase re-auth
+   * @param email - User's email address
+   */
+  setBiometricCredentials: async (email: string): Promise<void> => {
+    await securelySetItem('biometric_user_email', email);
+    debugLog('[BiometricStorage] Saved biometric credentials (email only)');
+  },
+
+  /**
+   * Get saved email for biometric re-authentication
+   * @returns Saved email or null
+   */
+  getBiometricCredentials: async (): Promise<{ email: string | null }> => {
+    const email = await securelyGetItem('biometric_user_email');
+    return { email };
+  },
+
+  /**
+   * Clear biometric credentials
+   * Called on logout or when biometric is disabled
+   */
+  clearBiometricCredentials: async (): Promise<void> => {
+    await securelyDeleteItem('biometric_user_email');
+    debugLog('[BiometricStorage] Cleared biometric credentials');
+  },
+
+  /**
+   * Track failed biometric attempts for security
+   * @param attempts - Number of failed attempts
+   */
+  setBiometricAttempts: async (attempts: number): Promise<void> => {
+    await securelySetNumber('biometric_failed_attempts', attempts);
+  },
+
+  /**
+   * Get failed biometric attempts count
+   * @returns Number of failed attempts
+   */
+  getBiometricAttempts: async (): Promise<number> => {
+    return await securelyGetNumber('biometric_failed_attempts', 0);
+  },
+
+  /**
+   * Clear biometric attempts counter (after successful auth)
+   */
+  clearBiometricAttempts: async (): Promise<void> => {
+    await securelyDeleteItem('biometric_failed_attempts');
   },
 };
 

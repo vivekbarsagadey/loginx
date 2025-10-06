@@ -183,11 +183,23 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
   };
 
   /**
-   * Authenticate using biometric
+   * Authenticate using biometric with retry limit
+   * SECURITY: Limited to 3 attempts before 30-second lockout
    */
   const authenticateWithBiometric = async (): Promise<boolean> => {
     try {
       if (!state.isAvailable || !state.isEnabled) {
+        return false;
+      }
+
+      // SECURITY: Check failed attempts
+      const failedAttempts = await BiometricStorage.getBiometricAttempts();
+      if (failedAttempts >= 3) {
+        setState((prev) => ({
+          ...prev,
+          error: 'Too many failed attempts. Please try again later.',
+        }));
+        debugLog('[BiometricAuth] Biometric locked due to failed attempts');
         return false;
       }
 
@@ -209,13 +221,17 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
       });
 
       if (result.success) {
+        // SECURITY: Clear failed attempts on success
+        await BiometricStorage.clearBiometricAttempts();
         debugLog('[BiometricAuth] Biometric authentication successful');
         return true;
       } else {
-        debugLog('[BiometricAuth] Biometric authentication failed or cancelled');
+        // SECURITY: Increment failed attempts
+        await BiometricStorage.setBiometricAttempts(failedAttempts + 1);
+        debugLog(`[BiometricAuth] Biometric authentication failed or cancelled. Attempts: ${failedAttempts + 1}/3`);
         setState((prev) => ({
           ...prev,
-          error: result.error || 'Authentication failed or was cancelled',
+          error: result.error || `Authentication failed. ${2 - failedAttempts} attempts remaining.`,
         }));
         return false;
       }

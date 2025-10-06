@@ -14,6 +14,7 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { AuthMethod, isAuthMethodEnabled } from '@/utils/auth-methods';
 import { showError } from '@/utils/error';
+import { BiometricStorage } from '@/utils/secure-storage';
 import { showSuccess } from '@/utils/success';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
@@ -63,10 +64,25 @@ export default function LoginScreen() {
       if (biometricAvailable && biometricEnabled && !biometricAttempted) {
         setBiometricAttempted(true);
         try {
+          // SECURITY: Biometric authentication with Firebase re-authentication
           const success = await authenticateWithBiometric();
           if (success) {
-            showSuccess('Success', 'Authenticated successfully with ' + biometricTypeName);
-            router.replace('/(tabs)');
+            // Get saved credentials from secure storage
+            const { email } = await BiometricStorage.getBiometricCredentials();
+
+            if (email && auth.currentUser) {
+              // User is already authenticated via Firebase persistence
+              showSuccess('Success', 'Authenticated successfully with ' + biometricTypeName);
+              router.replace('/(tabs)');
+            } else if (email) {
+              // SECURITY: Re-authenticate with Firebase using stored email
+              // Note: For true biometric login, user must login with password first
+              // to establish Firebase session. Biometric only works for session restoration.
+              showError(new Error('Please login with your password first to enable biometric authentication'));
+            } else {
+              // No credentials saved - biometric enabled but no stored email
+              showError(new Error('Biometric authentication not set up. Please login with password first.'));
+            }
           }
         } catch (_error) {
           // Silently fail to password login if biometric fails
@@ -82,10 +98,23 @@ export default function LoginScreen() {
 
   const handleBiometricLogin = async () => {
     try {
+      // SECURITY: Biometric authentication with Firebase session check
       const success = await authenticateWithBiometric();
       if (success) {
-        showSuccess('Success', 'Authenticated successfully with ' + biometricTypeName);
-        router.replace('/(tabs)');
+        // Get saved credentials from secure storage
+        const { email } = await BiometricStorage.getBiometricCredentials();
+
+        if (email && auth.currentUser) {
+          // User is already authenticated via Firebase persistence
+          showSuccess('Success', 'Authenticated successfully with ' + biometricTypeName);
+          router.replace('/(tabs)');
+        } else if (email) {
+          // SECURITY: For true biometric login, user must have logged in with password first
+          showError(new Error('Please login with your password first to enable biometric authentication'));
+        } else {
+          // No credentials saved
+          showError(new Error('Biometric authentication not set up. Please login with password first.'));
+        }
       }
     } catch (error) {
       showError(error);
@@ -110,6 +139,12 @@ export default function LoginScreen() {
 
       // Reset login attempts on successful authentication
       await resetLoginAttempts();
+
+      // SECURITY: Save email for biometric re-authentication
+      // Only saves email (not password) for Firebase session restoration
+      if (biometricEnabled) {
+        await BiometricStorage.setBiometricCredentials(sanitizedEmail);
+      }
 
       // Check if 2FA is enabled for this user
       // Note: This is a simplified check. In production, 2FA status should be

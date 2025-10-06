@@ -60,12 +60,14 @@ export const BiometricSlide = ({ width, onNext, onSkip }: BiometricSlideProps) =
 
   const getBiometricIcon = () => {
     switch (biometryType) {
-      case 'FaceID':
+      case 'FACE_ID':
+      case 'FACIAL_RECOGNITION':
         return 'ios-face-id';
-      case 'TouchID':
+      case 'TOUCH_ID':
+      case 'FINGERPRINT':
         return 'ios-finger-print';
-      case 'Biometrics':
-        return 'ios-finger-print';
+      case 'IRIS':
+        return 'ios-eye';
       default:
         return 'ios-lock-closed';
     }
@@ -77,12 +79,15 @@ export const BiometricSlide = ({ width, onNext, onSkip }: BiometricSlideProps) =
     }
 
     switch (biometryType) {
-      case 'FaceID':
+      case 'FACE_ID':
+      case 'FACIAL_RECOGNITION':
         return i18n.t('onb.biometric.faceId');
-      case 'TouchID':
+      case 'TOUCH_ID':
         return i18n.t('onb.biometric.touchId');
-      case 'Biometrics':
+      case 'FINGERPRINT':
         return i18n.t('onb.biometric.fingerprint');
+      case 'IRIS':
+        return 'Use your iris to unlock your device quickly and securely.';
       default:
         return i18n.t('onb.biometric.generic');
     }
