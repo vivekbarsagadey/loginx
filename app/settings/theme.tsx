@@ -3,14 +3,14 @@ import { ThemedView } from '@/components/themed-view';
 import { CommonContainers, CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeContext } from '@/hooks/use-theme-context';
 import i18n from '@/i18n';
-import { useState } from 'react';
 import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 
 type ThemeOption = 'system' | 'light' | 'dark';
 
 export default function ThemeScreen() {
-  const [selectedTheme, setSelectedTheme] = useState<ThemeOption>('system');
+  const { themePreference, setThemePreference } = useThemeContext();
 
   const primaryColor = useThemeColor({}, 'primary');
   const surfaceVariant = useThemeColor({}, 'surface-variant');
@@ -36,9 +36,13 @@ export default function ThemeScreen() {
     },
   ];
 
-  const handleThemeSelect = (theme: ThemeOption) => {
-    setSelectedTheme(theme);
-    Alert.alert(i18n.t('success.profileUpdate.title'), i18n.t('screens.settings.theme.applied'));
+  const handleThemeSelect = async (theme: ThemeOption) => {
+    try {
+      await setThemePreference(theme);
+      Alert.alert(i18n.t('success.profileUpdate.title'), i18n.t('screens.settings.theme.applied'));
+    } catch (_error) {
+      Alert.alert('Error', 'Failed to save theme preference');
+    }
   };
 
   return (
@@ -55,7 +59,7 @@ export default function ThemeScreen() {
             style={[
               styles.optionItem,
               { backgroundColor: surfaceVariant },
-              selectedTheme === option.key && [
+              themePreference === option.key && [
                 styles.selectedOption,
                 {
                   borderColor: primaryColor,
@@ -73,7 +77,7 @@ export default function ThemeScreen() {
                 </ThemedText>
                 <ThemedText style={styles.optionDescription}>{option.description}</ThemedText>
               </ThemedView>
-              {selectedTheme === option.key && <ThemedText style={[styles.checkmark, { color: primaryColor }]}>✓</ThemedText>}
+              {themePreference === option.key && <ThemedText style={[styles.checkmark, { color: primaryColor }]}>✓</ThemedText>}
             </ThemedView>
           </TouchableOpacity>
         ))}

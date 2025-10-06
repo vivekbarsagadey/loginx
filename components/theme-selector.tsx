@@ -1,5 +1,5 @@
-import { useTheme } from '@/hooks/use-theme';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeContext } from '@/hooks/use-theme-context';
 import i18n from '@/i18n';
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
@@ -9,7 +9,7 @@ import { ThemedView } from './themed-view';
 const THEME_OPTIONS = ['system', 'light', 'dark'];
 
 export const ThemeSelector = () => {
-  const { theme, persistTheme } = useTheme();
+  const { themePreference, setThemePreference } = useThemeContext();
   const primaryColor = useThemeColor({}, 'primary');
   const onPrimaryColor = useThemeColor({}, 'on-primary');
   const surfaceColor = useThemeColor({}, 'surface');
@@ -45,8 +45,12 @@ export const ThemeSelector = () => {
       <ThemedText style={styles.label}>{i18n.t('onb.personalize.theme')}</ThemedText>
       <ThemedView style={[styles.container, dynamicStyles.containerBorder]}>
         {THEME_OPTIONS.map((option) => (
-          <Pressable key={option} style={[styles.chip, theme === option ? dynamicStyles.chipActive : dynamicStyles.chipInactive]} onPress={() => persistTheme(option as 'light' | 'dark' | 'system')}>
-            <ThemedText style={theme === option ? dynamicStyles.textActive : dynamicStyles.textInactive}>{option.charAt(0).toUpperCase() + option.slice(1)}</ThemedText>
+          <Pressable
+            key={option}
+            style={[styles.chip, themePreference === option ? dynamicStyles.chipActive : dynamicStyles.chipInactive]}
+            onPress={() => setThemePreference(option as 'light' | 'dark' | 'system')}
+          >
+            <ThemedText style={themePreference === option ? dynamicStyles.textActive : dynamicStyles.textInactive}>{option.charAt(0).toUpperCase() + option.slice(1)}</ThemedText>
           </Pressable>
         ))}
       </ThemedView>

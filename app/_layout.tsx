@@ -9,8 +9,8 @@ import { GlobalDialogProvider } from '@/components/global-dialog-provider';
 import { AnimationDurations, ScreenTransitions } from '@/constants/animation';
 import { Routes } from '@/constants/routes';
 import { AuthProvider, useAuth } from '@/hooks/use-auth-provider';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { OnboardingProvider, useOnboarding } from '@/hooks/use-onboarding-provider';
+import { ThemeProvider as CustomThemeProvider, useThemeContext } from '@/hooks/use-theme-context';
 import { initializeLocalFirst } from '@/utils/local-first';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -167,8 +167,13 @@ function RootLayoutNav() {
   );
 }
 
+function NavigationThemeProvider({ children }: { children: React.ReactNode }) {
+  const { resolvedTheme } = useThemeContext();
+
+  return <ThemeProvider value={resolvedTheme === 'dark' ? DarkTheme : DefaultTheme}>{children}</ThemeProvider>;
+}
+
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -190,15 +195,17 @@ export default function RootLayout() {
 
   return (
     <ErrorBoundary>
-      <GlobalDialogProvider>
-        <AuthProvider>
-          <OnboardingProvider>
-            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-              <RootLayoutNav />
-            </ThemeProvider>
-          </OnboardingProvider>
-        </AuthProvider>
-      </GlobalDialogProvider>
+      <CustomThemeProvider>
+        <GlobalDialogProvider>
+          <AuthProvider>
+            <OnboardingProvider>
+              <NavigationThemeProvider>
+                <RootLayoutNav />
+              </NavigationThemeProvider>
+            </OnboardingProvider>
+          </AuthProvider>
+        </GlobalDialogProvider>
+      </CustomThemeProvider>
     </ErrorBoundary>
   );
 }
