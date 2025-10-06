@@ -118,7 +118,54 @@ reviewed for accuracy.
 
 ## 📋 Navigation & Meta
 
-### 8. DOCUMENTATION_STRUCTURE.md (4 KB)
+### 8. CAMERA_MEDIA_ACCESS_AUDIT.md (NEW)
+
+#### Complete audit and enhancement of camera & media access
+
+- Fixed MediaType enum usage and file size validation
+- QR code scanner component for 2FA
+- Multi-photo picker with grid display
+- Image optimization utilities (resize, compress, rotate, flip)
+- Platform permissions configuration
+- Implementation status and testing checklist
+
+**When to use**: Implementing camera/media features, QR scanning, image
+processing
+
+---
+
+### 9. FUTURE_ENHANCEMENTS_SETUP.md (NEW)
+
+#### Setup guide for camera and media enhancements
+
+- Installation instructions for new dependencies
+- Component usage examples (QRScanner, MultiPhotoPicker)
+- Image optimization utilities documentation
+- Integration examples with 2FA and profile features
+- Testing checklist and troubleshooting
+
+**When to use**: Setting up QR scanning, multi-photo selection, or image
+optimization
+
+---
+
+### 10. CAMERA_MEDIA_ENHANCEMENTS_IMPLEMENTATION.md (NEW)
+
+#### Complete implementation report for camera enhancements
+
+- Summary of 3 major enhancements implemented
+- Component features and code highlights
+- Integration examples with 2FA, profile, galleries
+- Dependencies required and installation guide
+- Quality assurance and testing checklist
+- Impact analysis and next steps
+
+**When to use**: Understanding what was implemented, integration examples,
+testing before production
+
+---
+
+### 11. DOCUMENTATION_STRUCTURE.md (4 KB)
 
 #### Documentation organization and navigation guide
 
@@ -146,14 +193,17 @@ details.
 2. **Setup environment**: Follow EXPO_GO_GUIDE.md and LINTING_FORMATTING.md
 3. **Authentication**: Read AUTHENTICATION_GUIDE.md
 4. **Design**: Read DESIGN_SYSTEM.md (especially quick reference section)
-5. **Reference**: Bookmark CONSTANTS_REFERENCE.md
+5. **Camera/Media**: CAMERA_MEDIA_ACCESS_AUDIT.md and
+   FUTURE_ENHANCEMENTS_SETUP.md
+6. **Reference**: Bookmark CONSTANTS_REFERENCE.md
 
 ### For Feature Development
 
 1. **Check status**: IMPLEMENTATION_STATUS.md
 2. **Authentication**: AUTHENTICATION_GUIDE.md
-3. **Design patterns**: DESIGN_SYSTEM.md
-4. **Constants**: CONSTANTS_REFERENCE.md as needed
+3. **Camera/Media**: CAMERA_MEDIA_ACCESS_AUDIT.md
+4. **Design patterns**: DESIGN_SYSTEM.md
+5. **Constants**: CONSTANTS_REFERENCE.md as needed
 
 ### For Architecture Decisions
 
@@ -167,7 +217,7 @@ details.
 
 | Metric                | Value       |
 | --------------------- | ----------- |
-| **Active Documents**  | 8 files     |
+| **Active Documents**  | 11 files    |
 | **Archived Docs**     | 2 files     |
 | **Consolidated Docs** | 6 → 1       |
 | **Last Major Update** | Oct 7, 2025 |
@@ -176,6 +226,26 @@ details.
 ---
 
 ## 🔄 Recent Changes (October 7, 2025)
+
+### ✅ Camera & Media Access Audit + Future Enhancements
+
+**Added 2 new comprehensive guides:**
+
+- ✅ **CAMERA_MEDIA_ACCESS_AUDIT.md** - Complete camera/media audit with fixes
+- ✅ **FUTURE_ENHANCEMENTS_SETUP.md** - Setup guide for new components
+
+**Implemented 3 major enhancements:**
+
+1. **QRScanner Component** - Full-featured QR code scanner for 2FA
+2. **MultiPhotoPicker Component** - Multi-image selection with grid display
+3. **Image Optimization Utils** - Resize, compress, rotate, flip, format
+   conversion
+
+**Fixed Issues:**
+
+- ✅ Corrected MediaType enum usage in photo-upload component
+- ✅ Added file size validation (5MB limit)
+- ✅ Enhanced error handling and user feedback
 
 ### ✅ Consolidated Authentication Documentation
 
@@ -219,6 +289,12 @@ details.
 ### Constants & Configuration
 
 → **CONSTANTS_REFERENCE.md**
+
+### Camera & Media Features
+
+→ **CAMERA_MEDIA_ACCESS_AUDIT.md** (Audit & Status)  
+→ **FUTURE_ENHANCEMENTS_SETUP.md** (Setup & Usage)  
+→ **CAMERA_MEDIA_ENHANCEMENTS_IMPLEMENTATION.md** (Implementation Report)
 
 ### Feature Status
 

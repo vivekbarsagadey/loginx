@@ -50,7 +50,7 @@ export function PhotoUpload({ value, onChange, onError }: PhotoUploadProps) {
       let result: ImagePicker.ImagePickerResult;
 
       const options: ImagePicker.ImagePickerOptions = {
-        mediaTypes: 'images' as ImagePicker.MediaType,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [1, 1],
         quality: 0.8,
@@ -63,7 +63,17 @@ export function PhotoUpload({ value, onChange, onError }: PhotoUploadProps) {
       }
 
       if (!result.canceled && result.assets && result.assets[0]) {
-        const uri = result.assets[0].uri;
+        const asset = result.assets[0];
+
+        // Validate file size (max 5MB)
+        if (asset.fileSize && asset.fileSize > 5 * 1024 * 1024) {
+          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+          Alert.alert('Image Too Large', 'Image must be smaller than 5MB. Please select a smaller image.', [{ text: 'OK' }]);
+          onError?.(new Error('Image file size exceeds 5MB limit'));
+          return;
+        }
+
+        const uri = asset.uri;
         onChange(uri);
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       }
