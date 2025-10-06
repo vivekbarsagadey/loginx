@@ -3,6 +3,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import * as AppleAuthentication from 'expo-apple-authentication';
+import Constants from 'expo-constants';
 import { Platform, StyleSheet, View } from 'react-native';
 
 interface SocialSignInButtonsProps {
@@ -21,6 +22,9 @@ export function SocialSignInButtons({ onGoogleSignIn, onAppleSignIn, loading = f
 
   const actionText = mode === 'register' ? 'Sign up' : 'Sign in';
 
+  // Check if running in Expo Go (Google Sign-In not available)
+  const isExpoGo = Constants.appOwnership === 'expo';
+
   return (
     <ThemedView style={styles.container}>
       {/* Divider with "OR" text */}
@@ -34,15 +38,15 @@ export function SocialSignInButtons({ onGoogleSignIn, onAppleSignIn, loading = f
 
       {/* Social Sign-In Buttons */}
       <View style={styles.buttonsContainer}>
-        {/* Google Sign-In Button */}
+        {/* Google Sign-In Button - Disabled in Expo Go */}
         <ThemedButton
           title={`${actionText} with Google`}
           onPress={onGoogleSignIn}
           variant="secondary"
-          disabled={loading}
+          disabled={loading || isExpoGo}
           style={styles.socialButton}
           accessibilityLabel={`${actionText} with Google`}
-          accessibilityHint="Sign in using your Google account"
+          accessibilityHint={isExpoGo ? 'Not available in Expo Go' : 'Sign in using your Google account'}
         />
 
         {/* Apple Sign-In Button - iOS only */}

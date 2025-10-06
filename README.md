@@ -188,6 +188,10 @@ Ensure you have the following installed on your system:
 - **Firebase Account** - Create a free account at
   [Firebase Console](https://console.firebase.google.com/)
 
+- **Expo Go App** (for quick testing) - Download for
+  [iOS](https://apps.apple.com/app/expo-go/id982107779) or
+  [Android](https://play.google.com/store/apps/details?id=host.exp.exponent)
+
 - **iOS Simulator** (Mac only) or **Android Emulator** for mobile development
 
 - **EAS CLI** (optional, for builds)
@@ -195,6 +199,16 @@ Ensure you have the following installed on your system:
   ```bash
   pnpm install -g eas-cli
   ```
+
+> **📱 Expo Go vs Development Build**
+>
+> - **Expo Go**: Quick testing - Most features work including email auth, 2FA,
+>   and biometrics ✅
+> - **Development Build**: Required for Google Sign-In and other custom native
+>   modules ⚠️
+>
+> See [EXPO_GO_GUIDE.md](./EXPO_GO_GUIDE.md) for detailed instructions on what
+> works in Expo Go and when you need a development build.
 
 ### Installation
 
