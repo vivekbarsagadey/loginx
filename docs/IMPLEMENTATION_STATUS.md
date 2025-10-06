@@ -209,6 +209,200 @@ const {
 
 ---
 
+## 📬 Push Notifications
+
+**Status**: ✅ Complete  
+**Date Completed**: October 7, 2025
+
+### Implementation Summary
+
+Successfully implemented **Push Notifications** with environment variable
+control and Expo Go compatibility:
+
+| Feature                    | Status      | Notes                                    |
+| -------------------------- | ----------- | ---------------------------------------- |
+| **Environment Control**    | ✅ Complete | `ENABLE_PUSH_NOTIFICATIONS` env variable |
+| **Expo Go Detection**      | ✅ Complete | Auto-disabled in Expo Go                 |
+| **Device Detection**       | ✅ Complete | Physical device requirement              |
+| **Token Management**       | ✅ Complete | Firebase Firestore sync                  |
+| **Permission Handling**    | ✅ Complete | Graceful permission requests             |
+| **Notification Listeners** | ✅ Complete | Receive and response handlers            |
+
+### Architecture
+
+```typescript
+// Hook returns isEnabled flag to check availability
+const { expoPushToken, notification, isEnabled } = usePushNotifications(userId);
+```
+
+### Auto-Disable Scenarios
+
+Push notifications are **automatically disabled** in the following scenarios:
+
+1. **Expo Go Environment**
+   - Detection: `Constants.appOwnership === 'expo'`
+   - Reason: Push notifications require native code not available in Expo Go
+   - Solution: Use development build (`eas build --profile development`)
+
+2. **Simulator/Emulator**
+   - Detection: `!Device.isDevice`
+   - Reason: Push notifications require physical device hardware
+   - Solution: Test on physical iOS/Android device
+
+3. **Feature Flag Disabled**
+   - Detection: `Config.features.pushNotifications === false`
+   - Reason: Controlled via `ENABLE_PUSH_NOTIFICATIONS` environment variable
+   - Default: `false` (disabled by default)
+
+### Configuration
+
+**Environment Variable:**
+
+```bash
+# .env file
+ENABLE_PUSH_NOTIFICATIONS="false"  # disabled by default
+# Set to "true" to enable in development builds
+```
+
+**Access via Config:**
+
+```typescript
+import { Config } from "@/utils/config";
+
+if (Config.features.pushNotifications) {
+  // Push notifications are enabled
+}
+```
+
+### Implementation Details
+
+#### Hook Usage
+
+```typescript
+// In a screen or component
+const { user } = useAuth();
+const { expoPushToken, notification, isEnabled } = usePushNotifications(
+  user?.uid
+);
+
+// Check if push notifications are available
+if (isEnabled && expoPushToken) {
+  console.log("Push notifications ready:", expoPushToken);
+}
+
+// Handle incoming notification
+useEffect(() => {
+  if (notification) {
+    console.log("New notification:", notification);
+    // Handle notification data
+  }
+}, [notification]);
+```
+
+#### Features
+
+- ✅ **Permission Handling** - Graceful permission requests with user feedback
+- ✅ **Token Management** - Automatic token storage in Firebase Firestore
+- ✅ **Android Notifications** - Custom notification channel with LED colors
+- ✅ **Notification Listeners** - Real-time notification handling
+- ✅ **Error Handling** - Comprehensive error handling and logging
+- ✅ **Development Logging** - Debug logs in development mode only
+
+### Files
+
+- **`hooks/use-push-notifications.tsx`** - Push notifications hook
+- **`utils/config.ts`** - Configuration utilities
+- **`.env.example`** - Environment variable template
+- **`app.config.ts`** - Expo configuration
+
+### Android Configuration
+
+**Notification Channel:**
+
+- Name: `default`
+- Importance: `MAX`
+- Vibration Pattern: `[0, 250, 250, 250]`
+- LED Color: Theme error color with 49% opacity
+
+### iOS Configuration
+
+No additional configuration needed. Uses standard iOS notification handling.
+
+### Testing
+
+**Development Build:**
+
+```bash
+# Build for device testing
+eas build --profile development --platform ios
+eas build --profile development --platform android
+
+# Install on device and test
+```
+
+**Test Notifications:**
+
+```bash
+# Use Expo Push Notification Tool
+# https://expo.dev/notifications
+```
+
+### Security
+
+- ✅ Push tokens stored securely in Firebase Firestore
+- ✅ Tokens automatically updated when changed
+- ✅ Tokens cleared on user logout
+- ✅ Device-specific token management
+
+### Limitations
+
+**Expo Go:**
+
+- ⚠️ Push notifications **DO NOT** work in Expo Go
+- ✅ Hook automatically detects and disables functionality
+- ✅ No errors or crashes in Expo Go
+
+**Simulators/Emulators:**
+
+- ⚠️ Push notifications **DO NOT** work on simulators
+- ✅ Hook automatically detects and disables functionality
+- ✅ Requires physical device for testing
+
+### Benefits
+
+1. **Zero Config in Expo Go** - Automatically disabled, no setup needed
+2. **Environment Control** - Enable/disable via single env variable
+3. **Safe Fallback** - Graceful degradation when unavailable
+4. **Developer Friendly** - Clear warnings in development mode
+5. **Production Ready** - Full functionality in development/production builds
+
+### Usage Example
+
+```typescript
+import { usePushNotifications } from '@/hooks/use-push-notifications';
+import { useAuth } from '@/hooks/use-auth-provider';
+
+function MyComponent() {
+  const { user } = useAuth();
+  const { expoPushToken, notification, isEnabled } = usePushNotifications(user?.uid);
+
+  if (!isEnabled) {
+    return <Text>Push notifications not available</Text>;
+  }
+
+  return (
+    <View>
+      <Text>Push Token: {expoPushToken}</Text>
+      {notification && (
+        <Text>Latest: {notification.request.content.title}</Text>
+      )}
+    </View>
+  );
+}
+```
+
+---
+
 ## 🎨 Theme Refactoring
 
 **Status**: 🔄 In Progress (90% Complete)  
@@ -448,13 +642,14 @@ required but recommended for consistency.
 
 ### Completed Features
 
-| Feature                    | Status | Date  | Notes                           |
-| -------------------------- | ------ | ----- | ------------------------------- |
-| Responsive UI Design       | ✅     | Oct 7 | Complete with docs & components |
-| SecureStore Implementation | ✅     | Oct 3 | Three-tier storage complete     |
-| Screen Animations          | ✅     | Oct 5 | All layouts updated             |
-| Hooks Usage Audit          | ✅     | Oct 2 | All hooks correct               |
-| Documentation Cleanup      | ✅     | Oct 5 | 9 files archived                |
+| Feature                    | Status | Date  | Notes                              |
+| -------------------------- | ------ | ----- | ---------------------------------- |
+| Push Notifications         | ✅     | Oct 7 | Environment control & Expo Go safe |
+| Responsive UI Design       | ✅     | Oct 7 | Complete with docs & components    |
+| SecureStore Implementation | ✅     | Oct 3 | Three-tier storage complete        |
+| Screen Animations          | ✅     | Oct 5 | All layouts updated                |
+| Hooks Usage Audit          | ✅     | Oct 2 | All hooks correct                  |
+| Documentation Cleanup      | ✅     | Oct 5 | 9 files archived                   |
 
 ### In Progress
 

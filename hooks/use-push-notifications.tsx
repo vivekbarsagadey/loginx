@@ -1,13 +1,13 @@
-/*
-import { useState, useEffect, useRef } from 'react';
-import { Platform } from 'react-native';
+import { Colors } from '@/constants/theme';
+import { Config } from '@/utils/config';
+import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import Constants from 'expo-constants';
 import { Subscription } from 'expo-notifications';
 import { doc, updateDoc } from 'firebase/firestore';
+import { useEffect, useRef, useState } from 'react';
+import { Platform } from 'react-native';
 import { firestore } from '../firebase-config';
-import { Colors } from '@/constants/theme';
 
 // Configure the notification handler
 Notifications.setNotificationHandler({
@@ -15,83 +15,166 @@ Notifications.setNotificationHandler({
     shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: true,
-    shouldShowBanner: true, // This was missing
-    shouldShowList: true,   // This was missing
+    shouldShowBanner: true,
+    shouldShowList: true,
   }),
 });
 
-async function registerForPushNotificationsAsync() {
-  let token;
-
-  if (Platform.OS === 'android') {
-    // Use theme error color for notification LED light
-    // Note: Android requires hex format with alpha channel (ARGB)
-    // Converting theme error color to ARGB format with ~49% opacity (7C in hex)
-    const notificationLightColor = Colors.light.error + '7C'; // e.g., '#DC26267C'
-    
-    await Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: notificationLightColor,
-    });
+/**
+ * Check if push notifications are available in the current environment
+ * Returns false in Expo Go or if feature is disabled
+ */
+function isPushNotificationsAvailable(): boolean {
+  // Check if push notifications feature is enabled via environment variable
+  if (!Config.features.pushNotifications) {
+    if (__DEV__) {
+      console.warn('[Push Notifications] Disabled via ENABLE_PUSH_NOTIFICATIONS env variable');
+    }
+    return false;
   }
 
-  if (Device.isDevice) {
+  // Check if running in Expo Go (push notifications don't work reliably in Expo Go)
+  const isExpoGo = Constants.appOwnership === 'expo';
+  if (isExpoGo) {
+    if (__DEV__) {
+      console.warn('[Push Notifications] Not available in Expo Go. Please use a development build.');
+    }
+    return false;
+  }
+
+  // Check if it's a physical device
+  if (!Device.isDevice) {
+    if (__DEV__) {
+      console.warn('[Push Notifications] Not available on simulator/emulator. Use a physical device.');
+    }
+    return false;
+  }
+
+  return true;
+}
+
+async function registerForPushNotificationsAsync() {
+  // Check if push notifications are available
+  if (!isPushNotificationsAvailable()) {
+    return undefined;
+  }
+
+  let token;
+
+  try {
+    if (Platform.OS === 'android') {
+      // Use theme error color for notification LED light
+      // Note: Android requires hex format with alpha channel (ARGB)
+      // Converting theme error color to ARGB format with ~49% opacity (7C in hex)
+      const notificationLightColor = Colors.light.error + '7C'; // e.g., '#DC26267C'
+
+      await Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: notificationLightColor,
+      });
+    }
+
+    // Request permissions
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
+
     if (existingStatus !== 'granted') {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
     }
+
     if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
-      return;
-    }
-    try {
-      const projectId = Constants.expoConfig?.extra?.projectId;
-      if (!projectId) {
-        throw new Error('Project ID not found in expo config');
+      if (__DEV__) {
+        console.warn('[Push Notifications] Permission not granted');
       }
-      token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
-      console.log(token);
-    } catch (e) {
-      console.error('Push notification token error:', e);
+      return undefined;
     }
-  } else {
-    alert('Must use a physical device for Push Notifications');
+
+    // Get the Expo push token
+    const projectId = Constants.expoConfig?.extra?.projectId;
+    if (!projectId) {
+      console.error('[Push Notifications] Project ID not found in expo config');
+      return undefined;
+    }
+
+    const pushToken = await Notifications.getExpoPushTokenAsync({ projectId });
+    token = pushToken.data;
+
+    if (__DEV__) {
+      console.warn('[Push Notifications] Token obtained:', token);
+    }
+  } catch (error) {
+    console.error('[Push Notifications] Error registering:', error);
+    return undefined;
   }
 
   return token;
 }
 
+/**
+ * Hook for managing push notifications
+ * @param uid - User ID to associate the push token with
+ * @returns Object containing expoPushToken and latest notification
+ *
+ * Note: Push notifications are automatically disabled in:
+ * - Expo Go (use development build instead)
+ * - Simulators/Emulators (use physical device)
+ * - When ENABLE_PUSH_NOTIFICATIONS env variable is set to 'false'
+ */
 export const usePushNotifications = (uid?: string) => {
   // Initialize useState hooks with undefined
   const [expoPushToken, setExpoPushToken] = useState<string | undefined>(undefined);
   const [notification, setNotification] = useState<Notifications.Notification | undefined>(undefined);
+  const [isEnabled, setIsEnabled] = useState<boolean>(false);
 
   // Initialize useRef hooks with undefined
   const notificationListener = useRef<Subscription | undefined>(undefined);
   const responseListener = useRef<Subscription | undefined>(undefined);
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then(token => {
-      setExpoPushToken(token);
-      if (token && uid) {
-        const userDocRef = doc(firestore, 'users', uid);
-        updateDoc(userDocRef, { expoPushToken: token });
+    // Check if push notifications are available
+    const available = isPushNotificationsAvailable();
+    setIsEnabled(available);
+
+    if (!available) {
+      // Push notifications not available, skip initialization
+      return;
+    }
+
+    // Register for push notifications
+    registerForPushNotificationsAsync()
+      .then((token) => {
+        setExpoPushToken(token);
+
+        // Update user document with push token
+        if (token && uid) {
+          const userDocRef = doc(firestore, 'users', uid);
+          updateDoc(userDocRef, { expoPushToken: token }).catch((error) => {
+            console.error('[Push Notifications] Error updating user token:', error);
+          });
+        }
+      })
+      .catch((error) => {
+        console.error('[Push Notifications] Error in registration:', error);
+      });
+
+    // Set up notification listeners
+    notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+      setNotification(notification);
+      if (__DEV__) {
+        console.warn('[Push Notifications] Notification received:', notification);
       }
     });
 
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
+    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
+      if (__DEV__) {
+        console.warn('[Push Notifications] Notification response received:', response);
+      }
     });
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log('Notification response received:', response);
-    });
-
-    // Correct cleanup logic
+    // Cleanup listeners
     return () => {
       if (notificationListener.current) {
         notificationListener.current.remove();
@@ -102,6 +185,5 @@ export const usePushNotifications = (uid?: string) => {
     };
   }, [uid]);
 
-  return { expoPushToken, notification };
+  return { expoPushToken, notification, isEnabled };
 };
-*/
