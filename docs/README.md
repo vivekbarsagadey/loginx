@@ -102,9 +102,23 @@ reviewed for accuracy.
 
 ---
 
+### 7. EXPO_GO_GUIDE.md (5 KB)
+
+#### Expo Go development and testing guide
+
+- Features available in Expo Go vs Development Build
+- Setup instructions for both environments
+- Google Sign-In requirements
+- Testing checklists and troubleshooting
+- Quick command reference
+
+**When to use**: Setting up development environment, testing on devices
+
+---
+
 ## 📋 Navigation & Meta
 
-### 7. DOCUMENTATION_STRUCTURE.md (4 KB)
+### 8. DOCUMENTATION_STRUCTURE.md (4 KB)
 
 #### Documentation organization and navigation guide
 
@@ -129,9 +143,9 @@ details.
 ### For New Developers
 
 1. **Start here**: Read this README
-2. **Authentication**: Read AUTHENTICATION_GUIDE.md
-3. **Design**: Read DESIGN_SYSTEM.md (especially quick reference section)
-4. **Setup**: Follow LINTING_FORMATTING.md
+2. **Setup environment**: Follow EXPO_GO_GUIDE.md and LINTING_FORMATTING.md
+3. **Authentication**: Read AUTHENTICATION_GUIDE.md
+4. **Design**: Read DESIGN_SYSTEM.md (especially quick reference section)
 5. **Reference**: Bookmark CONSTANTS_REFERENCE.md
 
 ### For Feature Development
@@ -153,7 +167,8 @@ details.
 
 | Metric                | Value       |
 | --------------------- | ----------- |
-| **Active Documents**  | 7 files     |
+| **Active Documents**  | 8 files     |
+| **Archived Docs**     | 2 files     |
 | **Consolidated Docs** | 6 → 1       |
 | **Last Major Update** | Oct 7, 2025 |
 | **Coverage**          | 100%        |
@@ -211,7 +226,8 @@ details.
 
 ### Development Setup
 
-→ **LINTING_FORMATTING.md**
+→ **EXPO_GO_GUIDE.md** (Testing & Builds)  
+→ **LINTING_FORMATTING.md** (Code Quality)
 
 ---
 
