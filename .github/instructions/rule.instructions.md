@@ -2058,4 +2058,71 @@ export async function getUserProfile(
 
 ---
 
-_Last updated: October 6, 2025_
+## Documentation Guidelines
+
+### Documentation Structure
+
+The project follows a **single-file-per-feature** documentation approach. All
+documentation files are located in the `docs/` folder with clear organization:
+
+#### Active Core Documentation Files
+
+**ALWAYS check if a documentation file already exists before creating a new
+one!**
+
+1. **DESIGN_SYSTEM.md** - Design tokens, components, UI patterns
+2. **AUTHENTICATION_GUIDE.md** - All authentication flows (login, register,
+   social auth, 2FA, biometric)
+3. **LOCAL_FIRST_IMPLEMENTATION.md** - Offline-first data architecture
+4. **CONSTANTS_REFERENCE.md** - Complete constants catalog
+5. **IMPLEMENTATION_STATUS.md** - Current implementation status and progress
+6. **LINTING_FORMATTING.md** - Development tools and configuration
+
+#### Documentation Best Practices
+
+1. **Check Before Creating** - Always search `docs/` folder for existing
+   documentation on the topic
+2. **Update, Don't Duplicate** - If documentation exists, update the existing
+   file instead of creating a new one
+3. **Single Source of Truth** - One file per feature/topic, no duplicates
+4. **Meaningful Updates** - When updating existing documentation:
+   - Preserve existing structure
+   - Update the "Last Updated" date at the bottom
+   - Add new content in the appropriate section
+   - Don't remove historical context unless obsolete
+5. **Archive Completed Work** - Move completion reports and old analysis to
+   `docs/archive/`
+6. **Cross-Reference** - Link related sections and documents
+7. **Include Examples** - Always provide code examples following the project
+   guidelines
+8. **Maintain Consistency** - Follow the same format and style as existing
+   documentation
+
+#### When to Update Existing Docs vs Create New
+
+**Update Existing:**
+
+- Adding new authentication methods → Update `AUTHENTICATION_GUIDE.md`
+- New design components or patterns → Update `DESIGN_SYSTEM.md`
+- New constants → Update `CONSTANTS_REFERENCE.md`
+- Feature completion status → Update `IMPLEMENTATION_STATUS.md`
+- Data architecture changes → Update `LOCAL_FIRST_IMPLEMENTATION.md`
+
+**Create New (Rare):**
+
+- Entirely new feature category not covered by existing docs
+- Major architectural documentation (e.g., new testing strategy)
+- Setup guides for new development tools
+
+#### Documentation File Naming Convention
+
+When a new file is absolutely necessary:
+
+- Use UPPERCASE_WITH_UNDERSCORES.md format
+- Be descriptive but concise: `FEATURE_NAME_GUIDE.md` or
+  `FEATURE_NAME_IMPLEMENTATION.md`
+- Check `docs/DOCUMENTATION_STRUCTURE.md` for naming patterns
+
+---
+
+_Last updated: October 7, 2025_
