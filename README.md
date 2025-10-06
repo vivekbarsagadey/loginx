@@ -16,7 +16,7 @@ comprehensive profile management.
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
 [![pnpm Version](https://img.shields.io/badge/pnpm-%3E%3D8.0.0-orange)](https://pnpm.io/)
-[![Expo SDK](https://img.shields.io/badge/expo-~54.0.10-blue)](https://expo.dev/)
+[![Expo SDK](https://img.shields.io/badge/expo-54.0.12-blue)](https://expo.dev/)
 [![React Native](https://img.shields.io/badge/react--native-0.81.4-blue)](https://reactnative.dev/)
 
 ## Table of Contents
@@ -232,6 +232,95 @@ Ensure you have the following installed on your system:
 
    The security rules are already defined in `firestore.rules`.
 
+### Android Keystore Setup
+
+LoginX uses a secure Android upload keystore for signing production builds. The
+keystore file and credentials are stored in the `keystore/` directory.
+
+1. **Locate keystore files:**
+
+   ```
+   keystore/
+   ├── @vivekbarsagadey__loginx-keystore.bak.jks    # Keystore file
+   └── @vivekbarsagadey__loginx-keystore-credentials.md  # Credentials
+   ```
+
+2. **View keystore information:**
+
+   To inspect the keystore and verify its details:
+
+   ```bash
+   # Windows PowerShell
+   keytool -list -v -keystore .\keystore\@vivekbarsagadey__loginx-keystore.bak.jks -storepass YOUR_KEYSTORE_PASSWORD
+
+   # Mac/Linux
+   keytool -list -v -keystore ./keystore/@vivekbarsagadey__loginx-keystore.bak.jks -storepass YOUR_KEYSTORE_PASSWORD
+   ```
+
+   This will display:
+   - Keystore type (JKS)
+   - Key alias information
+   - Certificate fingerprints (SHA1, SHA256)
+   - Validity period
+   - Owner information
+
+3. **View specific key information:**
+
+   ```bash
+   # Windows PowerShell
+   keytool -list -v -keystore .\keystore\@vivekbarsagadey__loginx-keystore.bak.jks -alias YOUR_KEY_ALIAS -storepass YOUR_KEYSTORE_PASSWORD -keypass YOUR_KEY_PASSWORD
+
+   # Mac/Linux
+   keytool -list -v -keystore ./keystore/@vivekbarsagadey__loginx-keystore.bak.jks -alias YOUR_KEY_ALIAS -storepass YOUR_KEYSTORE_PASSWORD -keypass YOUR_KEY_PASSWORD
+   ```
+
+4. **Export certificate (optional):**
+
+   To export the public certificate for Google Play Console:
+
+   ```bash
+   # Windows PowerShell
+   keytool -export -rfc -keystore .\keystore\@vivekbarsagadey__loginx-keystore.bak.jks -alias YOUR_KEY_ALIAS -file loginx-certificate.pem -storepass YOUR_KEYSTORE_PASSWORD
+
+   # Mac/Linux
+   keytool -export -rfc -keystore ./keystore/@vivekbarsagadey__loginx-keystore.bak.jks -alias YOUR_KEY_ALIAS -file loginx-certificate.pem -storepass YOUR_KEYSTORE_PASSWORD
+   ```
+
+5. **Keystore credentials:**
+
+   The credentials are **securely stored** in
+   `keystore/@vivekbarsagadey__loginx-keystore-credentials.md`.
+
+   **⚠️ NEVER share or commit actual credential values publicly!**
+
+   The credentials file contains:
+   - **Keystore password** - Required to access the keystore
+   - **Key alias** - Identifies the specific key within the keystore
+   - **Key password** - Required to use the key for signing
+
+6. **EAS Build configuration:**
+
+   For EAS builds, configure credentials using:
+
+   ```bash
+   eas credentials
+   ```
+
+   Select "Android" → "Set up a new keystore" or "Use an existing keystore" and
+   provide the credentials from the credentials file.
+
+> **🚨 CRITICAL SECURITY WARNING:**
+>
+> - **NEVER commit keystore files or credentials to public repositories**
+> - **NEVER share credential values in documentation or messages**
+> - Keep backups of your keystore in **multiple secure locations**
+> - If the keystore is lost, you **cannot update your app** on Google Play Store
+> - Store credentials in a **secure password manager** (1Password, LastPass,
+>   etc.)
+> - Treat keystore credentials like production database passwords
+> - If credentials are exposed, **generate a new keystore immediately**
+> - The `keystore/` directory should be in `.gitignore` for production apps
+
 ### Environment Setup
 
 1. **Create environment file:**
@@ -315,6 +404,20 @@ Ensure you have the following installed on your system:
    AMPLITUDE_KEY="abcd1234"
    GOOGLE_MAPS_API_KEY="your-google-maps-api-key"
    MIXPANEL_TOKEN="your-mixpanel-token"
+
+   # Email Service (if using custom email provider)
+   SENDGRID_API_KEY="your-sendgrid-api-key"
+   MAILGUN_API_KEY="your-mailgun-api-key"
+
+   # SMS Service (for phone verification)
+   TWILIO_ACCOUNT_SID="your-twilio-account-sid"
+   TWILIO_AUTH_TOKEN="your-twilio-auth-token"
+   TWILIO_PHONE_NUMBER="+1234567890"
+
+   # Social Media APIs (for profile import)
+   FACEBOOK_APP_ID="your-facebook-app-id"
+   TWITTER_API_KEY="your-twitter-api-key"
+   LINKEDIN_CLIENT_ID="your-linkedin-client-id"
    ```
 
 3. **Verify setup:**
@@ -355,15 +458,19 @@ workflows:
 
 - **`pnpm lint`** - Run ESLint to check code quality
 - **`pnpm lint:fix`** - Automatically fix ESLint issues
-- **`pnpm lint:md`** - Lint all Markdown files
+- **`pnpm lint:md`** - Lint all Markdown files with markdownlint
 - **`pnpm lint:md:fix`** - Auto-fix Markdown linting issues
+- **`pnpm lint:md:remark`** - Lint Markdown files with remark
+- **`pnpm lint:md:remark:fix`** - Auto-fix Markdown with remark
 
 ### Formatting
 
 - **`pnpm format`** - Format all code files with Prettier
 - **`pnpm format:check`** - Check if files are formatted correctly
-- **`pnpm format:md`** - Format Markdown files
+- **`pnpm format:md`** - Format Markdown with Prettier and remark
 - **`pnpm format:md:check`** - Check Markdown formatting
+- **`pnpm format:md:prettier`** - Format Markdown with Prettier only
+- **`pnpm format:md:remark`** - Format Markdown with remark only
 
 ### Type Checking
 
@@ -371,8 +478,8 @@ workflows:
 
 ### Validation
 
-- **`pnpm validate`** - Run all checks (lint, markdown lint, format check, type
-  check)
+- **`pnpm validate`** - Run all checks (lint, markdown lint with markdownlint
+  and remark, format check, type check)
 - **`pnpm validate:fix`** - Fix all auto-fixable issues
 
 ### Utility
@@ -653,11 +760,22 @@ loginx/
 ├── pnpm-lock.yaml                # pnpm lock file
 ├── env.d.ts                      # Environment variable types
 ├── .env                          # Environment variables (gitignored)
+├── .env.example                  # Example environment variables
+├── .editorconfig                 # Editor configuration
+├── .prettierrc.json              # Prettier configuration
+├── .prettierignore               # Prettier ignore rules
+├── .remarkrc.json                # Remark configuration
+├── .remarkignore                 # Remark ignore rules
+├── .markdownlint.json            # Markdownlint configuration
 ├── .gitignore                    # Git ignore rules
 ├── README.md                     # This file
 ├── SECURITY.md                   # Security guidelines
 ├── QUICK_REFERENCE.md            # Quick reference guide
-└── LINTING_FORMATTING.md         # Code style guide
+├── AUTHENTICATION_REVIEW.md      # Authentication flow documentation
+└── docs/                         # Additional documentation
+    ├── LINTING_FORMATTING.md    # Code style guide
+    ├── DESIGN_SYSTEM.md         # Design system documentation
+    └── ...                      # Other docs
 ```
 
 ### Key Architecture Patterns
@@ -792,6 +910,23 @@ All environment variables are typed in `env.d.ts` for TypeScript safety.
 - `GOOGLE_MAPS_API_KEY` - Google Maps API key
 - `EXPO_PUBLIC_GOOGLE_PLACES_API_KEY` - Google Places API for address
   autocomplete
+
+#### Email Services (Optional)
+
+- `SENDGRID_API_KEY` - SendGrid API key for email delivery
+- `MAILGUN_API_KEY` - Mailgun API key for email delivery
+
+#### SMS Services (Optional)
+
+- `TWILIO_ACCOUNT_SID` - Twilio account SID for SMS verification
+- `TWILIO_AUTH_TOKEN` - Twilio authentication token
+- `TWILIO_PHONE_NUMBER` - Twilio phone number for sending SMS
+
+#### Social Media Integration (Optional)
+
+- `FACEBOOK_APP_ID` - Facebook App ID for social features
+- `TWITTER_API_KEY` - Twitter API key for social integration
+- `LINKEDIN_CLIENT_ID` - LinkedIn Client ID for professional features
 
 See `env.d.ts` for the complete list and TypeScript definitions of all
 configuration variables.
@@ -1050,7 +1185,8 @@ Need help? Here are your options:
 - **[README.md](./README.md)** - This file (getting started)
 - **[SECURITY.md](./SECURITY.md)** - Security guidelines
 - **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** - Quick reference
-- **[LINTING_FORMATTING.md](./LINTING_FORMATTING.md)** - Code style guide
+- **[AUTHENTICATION_REVIEW.md](./AUTHENTICATION_REVIEW.md)** - Authentication
+  flow review
 
 #### Design System
 
@@ -1071,6 +1207,18 @@ Need help? Here are your options:
 
 - **[docs/CONSTANTS_REFERENCE.md](./docs/CONSTANTS_REFERENCE.md)** - All
   constants reference
+- **[docs/LINTING_FORMATTING.md](./docs/LINTING_FORMATTING.md)** - Linting and
+  formatting setup
+- **[docs/LOGIN_FLOW_DOCUMENTATION.md](./docs/LOGIN_FLOW_DOCUMENTATION.md)** -
+  Login flow details
+- **[docs/REGISTRATION_FLOW.md](./docs/REGISTRATION_FLOW.md)** - Registration
+  flow documentation
+- **[docs/LOCAL_FIRST_IMPLEMENTATION.md](./docs/LOCAL_FIRST_IMPLEMENTATION.md)** -
+  Local-first architecture
+- **[docs/DOCUMENTATION_STRUCTURE.md](./docs/DOCUMENTATION_STRUCTURE.md)** -
+  Documentation organization
+- **[docs/IMPLEMENTATION_STATUS.md](./docs/IMPLEMENTATION_STATUS.md)** -
+  Implementation status
 - **[.github/instructions/rule.instructions.md](.github/instructions/rule.instructions.md)** -
   Complete dev guidelines
 

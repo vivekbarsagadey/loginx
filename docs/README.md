@@ -303,7 +303,7 @@ details.
 - Search archive/ for historical context
 - Ask the development team
 
-### Found an Issue?
+### Found an Issue
 
 - Outdated information? Update and commit
 - Missing information? Add and update README
