@@ -42,8 +42,11 @@ export const settingsSections: { title?: string; items: SettingsItem[] }[] = [
     title: i18n.t('settings.helpAndFeedback'),
     items: [
       { type: 'link', icon: 'help-circle', title: i18n.t('settings.helpCenter'), href: '/help' },
+      { type: 'link', icon: 'star', title: 'Rate Our App', subtitle: 'Share your experience', href: '/rate-app' },
       { type: 'link', icon: 'message-square', title: i18n.t('settings.giveFeedback'), href: '/feedback' },
+      { type: 'link', icon: 'alert-triangle', title: 'Report an Issue', subtitle: 'Help us fix problems', href: '/report-issue' },
       { type: 'link', icon: 'headphones', title: i18n.t('settings.contactSupport'), href: '/support' },
+      { type: 'link', icon: 'share-2', title: i18n.t('settings.shareApp'), subtitle: i18n.t('settings.shareAppSubtitle'), href: '/settings/share-app' },
     ],
   },
   {

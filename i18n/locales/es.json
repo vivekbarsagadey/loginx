@@ -427,6 +427,8 @@
     "helpCenter": "Centro de ayuda",
     "giveFeedback": "Dar opinión",
     "contactSupport": "Contactar con soporte",
+    "shareApp": "Compartir aplicación",
+    "shareAppSubtitle": "Invita amigos a LoginX",
     "about": "Acerca de",
     "aboutUs": "Sobre Nosotros",
     "aboutUsSubtitle": "Información de la aplicación, versión y detalles de contacto",
@@ -440,6 +442,46 @@
     "deleteAccount": "Eliminar cuenta",
     "deleteAccountSubtitle": "Eliminar permanentemente su cuenta y datos",
     "logOut": "Cerrar sesión"
+  },
+  "shareApp": {
+    "title": "Compartir aplicación",
+    "heading": "Invitar amigos",
+    "description": "Comparte LoginX con tus amigos y familiares. Ayúdales a descubrir una experiencia de autenticación segura, simple y moderna.",
+    "yourReferralLink": "Tu enlace de referencia",
+    "copy": "Copiar",
+    "shareVia": "Compartir vía",
+    "whyShare": "¿Por qué compartir LoginX?",
+    "message": "Descubre LoginX - ¡la aplicación de autenticación más segura! Únete a mí y simplifica tu experiencia de inicio de sesión.\n\n{link}",
+    "emailSubject": "¡Únete a mí en LoginX!",
+    "options": {
+      "whatsapp": "Compartir vía WhatsApp",
+      "whatsappSubtitle": "Comparte tu enlace de referencia con amigos en WhatsApp",
+      "sms": "Compartir vía SMS",
+      "smsSubtitle": "Envía tu enlace de referencia por mensaje de texto",
+      "email": "Compartir vía correo electrónico",
+      "emailSubtitle": "Envía tu enlace de referencia por correo electrónico",
+      "more": "Más opciones",
+      "moreSubtitle": "Comparte a través de otras aplicaciones y plataformas"
+    },
+    "benefits": {
+      "secure": "Ayuda a tus amigos a asegurar sus cuentas con autenticación biométrica",
+      "simple": "Comparte una solución de autenticación simple y moderna",
+      "privacy": "Difunde la tecnología enfocada en la privacidad",
+      "community": "Haz crecer nuestra comunidad de usuarios conscientes de la seguridad"
+    },
+    "success": {
+      "title": "¡Compartido!",
+      "message": "Tu enlace de referencia se ha compartido con éxito."
+    },
+    "linkCopied": {
+      "title": "¡Enlace copiado!",
+      "message": "Tu enlace de referencia se ha copiado al portapapeles."
+    },
+    "errors": {
+      "whatsappNotInstalled": "WhatsApp no está instalado en tu dispositivo.",
+      "smsNotAvailable": "SMS no está disponible en este dispositivo.",
+      "emailNotAvailable": "El correo electrónico no está configurado en este dispositivo."
+    }
   },
   "screens": {
     "login": {

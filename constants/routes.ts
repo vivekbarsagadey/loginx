@@ -47,6 +47,7 @@ export const Routes = {
     LANGUAGE: '/settings/language',
     NOTIFICATIONS: '/settings/notifications',
     TEXT_SIZE: '/settings/text-size',
+    SHARE_APP: '/settings/share-app',
   },
 
   // Notifications

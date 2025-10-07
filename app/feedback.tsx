@@ -1,19 +1,21 @@
+import { submitFeedback } from '@/actions/feedback.action';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
+import { StarRating } from '@/components/ui/star-rating';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
+import { useAuth } from '@/hooks/use-auth-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
+import type { FeedbackCategory } from '@/types/feedback';
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Pressable, StyleSheet } from 'react-native';
-
-type FeedbackCategory = 'bug' | 'feature' | 'improvement' | 'other';
 
 interface CategoryOption {
   id: FeedbackCategory;
@@ -23,9 +25,12 @@ interface CategoryOption {
 
 export default function FeedbackScreen() {
   const router = useRouter();
+  const { user } = useAuth();
+  const primaryColor = useThemeColor({}, 'primary');
   const [selectedCategory, setSelectedCategory] = useState<FeedbackCategory>('improvement');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
+  const [rating, setRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const categories: CategoryOption[] = [
@@ -57,26 +62,35 @@ export default function FeedbackScreen() {
       return;
     }
 
+    if (!user) {
+      Alert.alert('Error', 'You must be logged in to submit feedback');
+      return;
+    }
+
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const result = await submitFeedback(user.uid, user.email || undefined, selectedCategory, subject, message, rating > 0 ? rating : undefined, true);
 
-      // Success
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      Alert.alert(i18n.t('screens.feedback.success.title'), i18n.t('screens.feedback.success.message'), [
-        {
-          text: i18n.t('screens.feedback.success.button'),
-          onPress: () => router.back(),
-        },
-      ]);
+      if (result.success) {
+        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        Alert.alert(i18n.t('screens.feedback.success.title'), i18n.t('screens.feedback.success.message'), [
+          {
+            text: i18n.t('screens.feedback.success.button'),
+            onPress: () => router.back(),
+          },
+        ]);
 
-      // Reset form
-      setSubject('');
-      setMessage('');
-      setSelectedCategory('improvement');
+        // Reset form
+        setSubject('');
+        setMessage('');
+        setRating(0);
+        setSelectedCategory('improvement');
+      } else {
+        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+        Alert.alert(i18n.t('screens.feedback.error.title'), result.error || i18n.t('screens.feedback.error.message'));
+      }
     } catch (_error) {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       Alert.alert(i18n.t('screens.feedback.error.title'), i18n.t('screens.feedback.error.message'));
@@ -142,9 +156,19 @@ export default function FeedbackScreen() {
         <ThemedText style={styles.charCount}>{message.length}/1000</ThemedText>
       </ThemedView>
 
+      {/* Optional Rating */}
+      <ThemedView style={styles.section}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
+          Rate Your Experience (Optional)
+        </ThemedText>
+        <ThemedView style={styles.ratingContainer}>
+          <StarRating value={rating} onChange={setRating} starSize={32} showLabel accessibilityLabel="Rate your experience" />
+        </ThemedView>
+      </ThemedView>
+
       {/* Info Box */}
       <ThemedView style={styles.infoBox}>
-        <Feather name="info" size={20} color={useThemeColor({}, 'primary')} />
+        <Feather name="info" size={20} color={primaryColor} />
         <ThemedText style={styles.infoText}>{i18n.t('screens.feedback.infoMessage')}</ThemedText>
       </ThemedView>
 
@@ -226,6 +250,10 @@ const styles = StyleSheet.create({
     minHeight: 120,
     textAlignVertical: 'top',
     paddingTop: Spacing.sm,
+  },
+  ratingContainer: {
+    alignItems: 'center',
+    paddingVertical: Spacing.md,
   },
   infoBox: {
     flexDirection: 'row',
