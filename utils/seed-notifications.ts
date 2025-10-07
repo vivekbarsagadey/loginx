@@ -10,7 +10,7 @@ export async function seedSampleNotifications() {
     {
       type: 'security' as const,
       title: 'New Login Detected',
-      message: 'A new login was detected from Chrome on Windows. If this wasn\'t you, please secure your account immediately.',
+      message: "A new login was detected from Chrome on Windows. If this wasn't you, please secure your account immediately.",
     },
     {
       type: 'success' as const,
@@ -37,9 +37,9 @@ export async function seedSampleNotifications() {
   for (const notif of sampleNotifications) {
     await addNotification(notif);
     // Add small delay to ensure different timestamps
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
-  
+
   if (__DEV__) {
     console.warn('✅ Sample notifications seeded');
   }

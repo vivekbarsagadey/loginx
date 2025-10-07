@@ -10,13 +10,7 @@ import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import type { NotificationItem, NotificationType } from '@/types/notification';
-import {
-  clearAllNotifications,
-  deleteNotification,
-  getNotificationHistory,
-  markAllNotificationsAsRead,
-  markNotificationAsRead
-} from '@/utils/notification-storage';
+import { clearAllNotifications, deleteNotification, getNotificationHistory, markAllNotificationsAsRead, markNotificationAsRead } from '@/utils/notification-storage';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -57,11 +51,14 @@ export default function NotificationsCenterScreen() {
     await loadNotifications();
   }, [loadNotifications]);
 
-  const handleMarkAsRead = useCallback(async (id: string) => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    await markNotificationAsRead(id);
-    await loadNotifications();
-  }, [loadNotifications]);
+  const handleMarkAsRead = useCallback(
+    async (id: string) => {
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      await markNotificationAsRead(id);
+      await loadNotifications();
+    },
+    [loadNotifications]
+  );
 
   const handleMarkAllAsRead = useCallback(async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -69,11 +66,9 @@ export default function NotificationsCenterScreen() {
     await loadNotifications();
   }, [loadNotifications]);
 
-  const handleDelete = useCallback(async (id: string) => {
-    Alert.alert(
-      'Delete Notification',
-      'Are you sure you want to delete this notification?',
-      [
+  const handleDelete = useCallback(
+    async (id: string) => {
+      Alert.alert('Delete Notification', 'Are you sure you want to delete this notification?', [
         { text: 'Cancel', style: 'cancel' },
         {
           text: 'Delete',
@@ -84,27 +79,24 @@ export default function NotificationsCenterScreen() {
             await loadNotifications();
           },
         },
-      ]
-    );
-  }, [loadNotifications]);
+      ]);
+    },
+    [loadNotifications]
+  );
 
   const handleClearAll = useCallback(async () => {
-    Alert.alert(
-      'Clear All Notifications',
-      'This will permanently delete all notifications. This action cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Clear All',
-          style: 'destructive',
-          onPress: async () => {
-            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-            await clearAllNotifications();
-            await loadNotifications();
-          },
+    Alert.alert('Clear All Notifications', 'This will permanently delete all notifications. This action cannot be undone.', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Clear All',
+        style: 'destructive',
+        onPress: async () => {
+          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+          await clearAllNotifications();
+          await loadNotifications();
         },
-      ]
-    );
+      },
+    ]);
   }, [loadNotifications]);
 
   const getNotificationIcon = (type: NotificationType) => {
@@ -142,7 +134,7 @@ export default function NotificationsCenterScreen() {
     if (days < 7) {
       return `${days}d ago`;
     }
-    
+
     return new Date(timestamp).toLocaleDateString();
   };
 
@@ -282,20 +274,11 @@ export default function NotificationsCenterScreen() {
     );
   }
 
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
     <ScreenContainer>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            tintColor={primaryColor}
-          />
-        }
-      >
+      <ScrollView showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={primaryColor} />}>
         <View style={styles.header}>
           <ThemedView>
             <ThemedText type="h2">Notifications</ThemedText>
@@ -308,20 +291,12 @@ export default function NotificationsCenterScreen() {
           {notifications.length > 0 && (
             <View style={styles.headerActions}>
               {unreadCount > 0 && (
-                <Pressable
-                  style={styles.actionButton}
-                  onPress={handleMarkAllAsRead}
-                >
+                <Pressable style={styles.actionButton} onPress={handleMarkAllAsRead}>
                   <ThemedText style={styles.actionButtonText}>Mark all read</ThemedText>
                 </Pressable>
               )}
-              <Pressable
-                style={styles.actionButton}
-                onPress={handleClearAll}
-              >
-                <ThemedText style={[styles.actionButtonText, { color: errorColor }]}>
-                  Clear all
-                </ThemedText>
+              <Pressable style={styles.actionButton} onPress={handleClearAll}>
+                <ThemedText style={[styles.actionButtonText, { color: errorColor }]}>Clear all</ThemedText>
               </Pressable>
             </View>
           )}
@@ -331,56 +306,35 @@ export default function NotificationsCenterScreen() {
           <View style={styles.emptyContainer}>
             <Feather name="bell-off" size={64} color={textMutedColor} style={styles.emptyIcon} />
             <ThemedText style={styles.emptyTitle}>No Notifications</ThemedText>
-            <ThemedText style={styles.emptyDescription}>
-              When you receive notifications, they&apos;ll appear here
-            </ThemedText>
+            <ThemedText style={styles.emptyDescription}>When you receive notifications, they&apos;ll appear here</ThemedText>
           </View>
         ) : (
           notifications.map((notification) => {
             const icon = getNotificationIcon(notification.type);
             return (
               <View key={notification.id} style={styles.notificationCard}>
-                <Pressable
-                  style={styles.notificationContent}
-                  onPress={() => !notification.read && handleMarkAsRead(notification.id)}
-                >
+                <Pressable style={styles.notificationContent} onPress={() => !notification.read && handleMarkAsRead(notification.id)}>
                   <View style={[styles.iconContainer, { backgroundColor: icon.color + '20' }]}>
                     <Ionicons name={icon.name as keyof typeof Ionicons.glyphMap} size={24} color={icon.color} />
                   </View>
                   <View style={styles.notificationBody}>
                     <View style={styles.notificationHeader}>
-                      <ThemedText style={styles.notificationTitle}>
-                        {notification.title}
-                      </ThemedText>
-                      <ThemedText style={styles.timestamp}>
-                        {formatTimestamp(notification.timestamp)}
-                      </ThemedText>
+                      <ThemedText style={styles.notificationTitle}>{notification.title}</ThemedText>
+                      <ThemedText style={styles.timestamp}>{formatTimestamp(notification.timestamp)}</ThemedText>
                     </View>
-                    <ThemedText style={styles.notificationMessage}>
-                      {notification.message}
-                    </ThemedText>
+                    <ThemedText style={styles.notificationMessage}>{notification.message}</ThemedText>
                   </View>
                   {!notification.read && <View style={styles.unreadIndicator} />}
                 </Pressable>
-                
+
                 <View style={styles.notificationActions}>
                   {!notification.read && (
-                    <Pressable
-                      style={styles.notificationAction}
-                      onPress={() => handleMarkAsRead(notification.id)}
-                    >
-                      <ThemedText style={[styles.actionText, styles.markReadText]}>
-                        Mark as read
-                      </ThemedText>
+                    <Pressable style={styles.notificationAction} onPress={() => handleMarkAsRead(notification.id)}>
+                      <ThemedText style={[styles.actionText, styles.markReadText]}>Mark as read</ThemedText>
                     </Pressable>
                   )}
-                  <Pressable
-                    style={styles.notificationAction}
-                    onPress={() => handleDelete(notification.id)}
-                  >
-                    <ThemedText style={[styles.actionText, styles.deleteText]}>
-                      Delete
-                    </ThemedText>
+                  <Pressable style={styles.notificationAction} onPress={() => handleDelete(notification.id)}>
+                    <ThemedText style={[styles.actionText, styles.deleteText]}>Delete</ThemedText>
                   </Pressable>
                 </View>
               </View>

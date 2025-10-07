@@ -164,7 +164,7 @@ export const usePushNotifications = (uid?: string) => {
     // Set up notification listeners
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
       setNotification(notification);
-      
+
       // Save notification to history
       const { title, body } = notification.request.content;
       if (title && body) {
@@ -172,11 +172,11 @@ export const usePushNotifications = (uid?: string) => {
           type: 'info',
           title: title,
           message: body,
-        }).catch(error => {
+        }).catch((error) => {
           console.error('[Push Notifications] Error saving notification:', error);
         });
       }
-      
+
       if (__DEV__) {
         console.warn('[Push Notifications] Notification received:', notification);
       }
