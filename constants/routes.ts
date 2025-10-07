@@ -59,6 +59,8 @@ export const Routes = {
     TERMS: '/legal/terms',
     PRIVACY: '/legal/privacy',
     LICENSE: '/legal/license',
+    DATA_RIGHTS: '/legal/data-rights',
+    COOKIES: '/legal/cookies',
   },
 
   // About routes

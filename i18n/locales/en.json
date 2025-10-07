@@ -6,7 +6,8 @@
     "retry": "Retry",
     "loading": "Loading...",
     "error": "Error",
-    "success": "Success"
+    "success": "Success",
+    "confirm": "Confirm"
   },
   "dialogs": {
     "buttons": {
@@ -853,6 +854,108 @@
         "attribution": {
           "title": "Attribution Guidelines",
           "content": "If you fork, modify, or use this code:\n\n• Maintain the original copyright notice\n• Include a copy of the MIT License\n• Link to the original repository: https://github.com/vivekbarsagadey/loginx\n• Credit Whiz IT and Vivek Barsagadey in your documentation\n\nFor commercial use or questions about licensing, contact vivek@whizit.co.in."
+        }
+      },
+      "dataRights": {
+        "title": "Your Data Rights",
+        "subtitle": "Under GDPR, you have the following rights regarding your personal data",
+        "yourRightsTitle": "Your Rights",
+        "actionsTitle": "Take Action",
+        "responseTime": "We will respond to your request within 30 days",
+        "rights": {
+          "access": {
+            "title": "Right of Access",
+            "description": "View and obtain a copy of your personal data that we hold about you"
+          },
+          "rectification": {
+            "title": "Right to Rectification",
+            "description": "Correct any inaccurate or incomplete personal data we have about you"
+          },
+          "erasure": {
+            "title": "Right to Erasure",
+            "description": "Request deletion of your personal data when it's no longer necessary"
+          },
+          "portability": {
+            "title": "Right to Data Portability",
+            "description": "Receive your personal data in a structured, machine-readable format"
+          },
+          "restriction": {
+            "title": "Right to Restriction",
+            "description": "Request that we restrict the processing of your personal data"
+          },
+          "objection": {
+            "title": "Right to Object",
+            "description": "Object to the processing of your personal data in certain circumstances"
+          }
+        },
+        "actions": {
+          "requestData": {
+            "button": "Request My Data",
+            "title": "Data Export Request",
+            "description": "We will prepare a copy of your personal data and send it to your registered email address within 30 days.",
+            "success": "Your data request has been submitted. You will receive an email within 30 days."
+          },
+          "deleteData": {
+            "button": "Delete My Account",
+            "title": "Delete Account",
+            "warning": "This will permanently delete your account and all associated data. This action cannot be undone. Are you sure you want to proceed?",
+            "confirm": "Delete Permanently"
+          },
+          "contact": {
+            "button": "Contact Privacy Team"
+          }
+        }
+      },
+      "cookies": {
+        "title": "Cookie Policy",
+        "lastUpdated": "Last updated: October 7, 2025",
+        "required": "Required",
+        "typesTitle": "Types of Cookies We Use",
+        "contact": "Questions about cookies? Contact us at privacy@whizit.co.in",
+        "whatAreCookies": {
+          "title": "What Are Cookies?",
+          "content": "Cookies are small text files that are placed on your device when you use our application. They help us provide you with a better experience by remembering your preferences and understanding how you use our service."
+        },
+        "types": {
+          "essential": {
+            "title": "Essential Cookies",
+            "description": "These cookies are necessary for the app to function properly. They enable core functionality such as security, authentication, and session management. These cannot be disabled."
+          },
+          "analytics": {
+            "title": "Analytics Cookies",
+            "description": "Help us understand how users interact with our app by collecting and reporting usage statistics. This data helps us improve the user experience."
+          },
+          "marketing": {
+            "title": "Marketing Cookies",
+            "description": "Used to deliver relevant advertisements and track ad campaign performance. You can opt out of these cookies in your device settings."
+          },
+          "social": {
+            "title": "Social Media Cookies",
+            "description": "Enable social media features like sharing content and connecting your social media accounts for easy login."
+          }
+        },
+        "howWeUse": {
+          "title": "How We Use Cookies",
+          "authentication": {
+            "title": "Authentication & Security",
+            "content": "We use cookies to keep you logged in securely and protect your account from unauthorized access. These cookies are essential for the app to work."
+          },
+          "preferences": {
+            "title": "Preferences & Settings",
+            "content": "Cookies remember your language preference, theme choice, and other personalization settings so you don't have to set them every time you use the app."
+          },
+          "security": {
+            "title": "Security & Fraud Prevention",
+            "content": "We use cookies to detect and prevent fraudulent activity, monitor for suspicious behavior, and keep your account safe."
+          }
+        },
+        "yourChoices": {
+          "title": "Your Choices",
+          "content": "You can control cookie settings through your device settings. Note that disabling essential cookies may affect the functionality of the app. Analytics and marketing cookies can be disabled without affecting core features."
+        },
+        "thirdParty": {
+          "title": "Third-Party Cookies",
+          "content": "We use services from trusted third parties (Google Firebase, Expo) which may set their own cookies. These third parties have their own privacy policies governing the use of such cookies."
         }
       }
     },

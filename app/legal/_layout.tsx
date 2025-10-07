@@ -39,6 +39,20 @@ export default function LegalLayout() {
           headerBackTitle: 'Legal',
         }}
       />
+      <Stack.Screen
+        name="data-rights"
+        options={{
+          title: 'Your Data Rights',
+          headerBackTitle: 'Legal',
+        }}
+      />
+      <Stack.Screen
+        name="cookies"
+        options={{
+          title: 'Cookie Policy',
+          headerBackTitle: 'Legal',
+        }}
+      />
     </Stack>
   );
 }

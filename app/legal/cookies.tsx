@@ -1,0 +1,224 @@
+import { ScreenContainer } from '@/components/screen-container';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { Collapsible } from '@/components/ui/collapsible';
+import { CommonText } from '@/constants/common-styles';
+import { Spacing, Typography } from '@/constants/layout';
+import { useThemeColor } from '@/hooks/use-theme-color';
+import i18n from '@/i18n';
+import { Ionicons } from '@expo/vector-icons';
+import { useEffect } from 'react';
+import { AccessibilityInfo, StyleSheet } from 'react-native';
+
+/**
+ * Cookie Policy Screen
+ *
+ * Explains cookie usage, types of cookies, and user controls.
+ * GDPR and ePrivacy Directive compliance.
+ */
+export default function CookiesScreen() {
+  const primaryColor = useThemeColor({}, 'primary');
+  const surfaceColor = useThemeColor({}, 'surface');
+  const borderColor = useThemeColor({}, 'border');
+
+  useEffect(() => {
+    AccessibilityInfo.announceForAccessibility('Cookie Policy. Information about cookies and tracking technologies.');
+  }, []);
+
+  const cookieTypes = [
+    {
+      icon: 'shield-checkmark' as const,
+      title: i18n.t('screens.legal.cookies.types.essential.title'),
+      description: i18n.t('screens.legal.cookies.types.essential.description'),
+      required: true,
+    },
+    {
+      icon: 'bar-chart' as const,
+      title: i18n.t('screens.legal.cookies.types.analytics.title'),
+      description: i18n.t('screens.legal.cookies.types.analytics.description'),
+      required: false,
+    },
+    {
+      icon: 'megaphone' as const,
+      title: i18n.t('screens.legal.cookies.types.marketing.title'),
+      description: i18n.t('screens.legal.cookies.types.marketing.description'),
+      required: false,
+    },
+    {
+      icon: 'people' as const,
+      title: i18n.t('screens.legal.cookies.types.social.title'),
+      description: i18n.t('screens.legal.cookies.types.social.description'),
+      required: false,
+    },
+  ];
+
+  return (
+    <ScreenContainer scrollable>
+      <ThemedText type="h1" style={CommonText.title} accessibilityRole="header">
+        {i18n.t('screens.legal.cookies.title')}
+      </ThemedText>
+
+      <ThemedText style={styles.lastUpdated} accessibilityLabel={`Last updated: ${i18n.t('screens.legal.cookies.lastUpdated')}`}>
+        {i18n.t('screens.legal.cookies.lastUpdated')}
+      </ThemedText>
+
+      {/* What are Cookies */}
+      <ThemedView style={styles.section}>
+        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+          {i18n.t('screens.legal.cookies.whatAreCookies.title')}
+        </ThemedText>
+        <ThemedText style={styles.sectionContent}>{i18n.t('screens.legal.cookies.whatAreCookies.content')}</ThemedText>
+      </ThemedView>
+
+      {/* Types of Cookies */}
+      <ThemedView style={styles.section}>
+        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+          {i18n.t('screens.legal.cookies.typesTitle')}
+        </ThemedText>
+
+        {cookieTypes.map((cookie, index) => (
+          <ThemedView
+            key={index}
+            style={[styles.cookieItem, { backgroundColor: surfaceColor, borderColor }]}
+            accessible={true}
+            accessibilityLabel={`${cookie.title}. ${cookie.required ? 'Required' : 'Optional'}. ${cookie.description}`}
+          >
+            <ThemedView style={styles.cookieHeader}>
+              <ThemedView style={styles.cookieHeaderLeft}>
+                <ThemedView style={[styles.iconContainer, { backgroundColor: `${primaryColor}20` }]}>
+                  <Ionicons name={cookie.icon} size={24} color={primaryColor} />
+                </ThemedView>
+                <ThemedText type="bodyBold" style={styles.cookieTitle}>
+                  {cookie.title}
+                </ThemedText>
+              </ThemedView>
+              {cookie.required && (
+                <ThemedView style={[styles.badge, { backgroundColor: primaryColor }]}>
+                  <ThemedText style={styles.badgeText}>{i18n.t('screens.legal.cookies.required')}</ThemedText>
+                </ThemedView>
+              )}
+            </ThemedView>
+            <ThemedText style={styles.cookieDescription}>{cookie.description}</ThemedText>
+          </ThemedView>
+        ))}
+      </ThemedView>
+
+      {/* How We Use Cookies */}
+      <ThemedView style={styles.section}>
+        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+          {i18n.t('screens.legal.cookies.howWeUse.title')}
+        </ThemedText>
+
+        <Collapsible title={i18n.t('screens.legal.cookies.howWeUse.authentication.title')}>
+          <ThemedText style={styles.answer}>{i18n.t('screens.legal.cookies.howWeUse.authentication.content')}</ThemedText>
+        </Collapsible>
+
+        <Collapsible title={i18n.t('screens.legal.cookies.howWeUse.preferences.title')}>
+          <ThemedText style={styles.answer}>{i18n.t('screens.legal.cookies.howWeUse.preferences.content')}</ThemedText>
+        </Collapsible>
+
+        <Collapsible title={i18n.t('screens.legal.cookies.howWeUse.security.title')}>
+          <ThemedText style={styles.answer}>{i18n.t('screens.legal.cookies.howWeUse.security.content')}</ThemedText>
+        </Collapsible>
+      </ThemedView>
+
+      {/* Your Choices */}
+      <ThemedView style={styles.section}>
+        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+          {i18n.t('screens.legal.cookies.yourChoices.title')}
+        </ThemedText>
+        <ThemedText style={styles.sectionContent}>{i18n.t('screens.legal.cookies.yourChoices.content')}</ThemedText>
+      </ThemedView>
+
+      {/* Third-Party Cookies */}
+      <ThemedView style={styles.section}>
+        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+          {i18n.t('screens.legal.cookies.thirdParty.title')}
+        </ThemedText>
+        <ThemedText style={styles.sectionContent}>{i18n.t('screens.legal.cookies.thirdParty.content')}</ThemedText>
+      </ThemedView>
+
+      {/* Contact */}
+      <ThemedView style={[styles.infoBox, { backgroundColor: surfaceColor, borderColor }]} accessible={true}>
+        <Ionicons name="help-circle" size={20} color={primaryColor} />
+        <ThemedText style={styles.infoText}>{i18n.t('screens.legal.cookies.contact')}</ThemedText>
+      </ThemedView>
+    </ScreenContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  lastUpdated: {
+    textAlign: 'center',
+    marginBottom: Spacing.lg,
+    opacity: 0.7,
+    fontStyle: 'italic',
+  },
+  section: {
+    marginBottom: Spacing.xl,
+  },
+  sectionContent: {
+    lineHeight: Typography.body.lineHeight,
+    opacity: 0.9,
+    marginBottom: Spacing.md,
+  },
+  cookieItem: {
+    padding: Spacing.md,
+    borderRadius: 12,
+    borderWidth: 1,
+    marginBottom: Spacing.md,
+  },
+  cookieHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: Spacing.sm,
+  },
+  cookieHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    flex: 1,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cookieTitle: {
+    flex: 1,
+  },
+  badge: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  badgeText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  cookieDescription: {
+    opacity: 0.7,
+    lineHeight: Typography.body.lineHeight,
+  },
+  answer: {
+    lineHeight: Typography.body.lineHeight,
+    opacity: 0.9,
+  },
+  infoBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: Spacing.md,
+    borderRadius: 12,
+    borderWidth: 1,
+    gap: Spacing.sm,
+    marginTop: Spacing.md,
+  },
+  infoText: {
+    flex: 1,
+    opacity: 0.8,
+  },
+});

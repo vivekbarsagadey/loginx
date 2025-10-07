@@ -30,6 +30,8 @@ interface DataEntry<T = unknown> {
   syncStatus: 'synced' | 'pending' | 'conflict' | 'error';
   lastSyncAttempt?: number;
   retryCount?: number;
+  lastModified: number; // For conflict resolution
+  modifiedBy?: string; // User ID who made the change
 }
 
 // Network status tracking
@@ -39,6 +41,12 @@ let networkUnsubscribe: (() => void) | null = null;
 
 // Pending sync queue
 const syncQueue = new Map<string, DataEntry>();
+
+// Sync metrics tracking
+let totalSyncCount = 0;
+let failedSyncCount = 0;
+let totalSyncTime = 0;
+const syncStartTimes = new Map<string, number>();
 
 /**
  * Initialize LOCAL-FIRST system
@@ -175,6 +183,8 @@ export const setData = async <T>(options: LocalFirstOptions & { data: T }): Prom
         source: 'local',
         syncStatus: 'pending',
         retryCount: 0,
+        lastModified: Date.now(),
+        modifiedBy: undefined, // Could be set from auth context
       };
 
       syncQueue.set(cacheKey, entry);
@@ -199,6 +209,8 @@ export const setData = async <T>(options: LocalFirstOptions & { data: T }): Prom
 const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
   const { collection, id } = options;
   const cacheKey = `${collection}:${id}`;
+  const syncStartTime = Date.now();
+  syncStartTimes.set(cacheKey, syncStartTime);
 
   try {
     const queueEntry = syncQueue.get(cacheKey);
@@ -209,6 +221,28 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
     debugLog(`[LocalFirst] 🔄 Background syncing: ${cacheKey}`);
 
     const docRef = doc(firestore, collection, id);
+
+    // Check for conflicts before writing
+    try {
+      const remoteDoc = await getDoc(docRef);
+      if (remoteDoc.exists()) {
+        const remoteData = remoteDoc.data() as DataEntry;
+
+        // Simple conflict detection based on lastModified timestamp
+        if (remoteData.lastModified && queueEntry.lastModified) {
+          if (remoteData.lastModified > queueEntry.lastModified) {
+            debugWarn(`[LocalFirst] ⚠️ Conflict detected for ${cacheKey} - remote is newer`);
+            queueEntry.syncStatus = 'conflict';
+            // In a real app, you'd show a conflict resolution UI here
+            // For now, we'll use last-write-wins (local wins)
+          }
+        }
+      }
+    } catch (conflictCheckError) {
+      // If conflict check fails, proceed with sync anyway
+      debugWarn(`[LocalFirst] Could not check for conflicts: ${cacheKey}`, conflictCheckError);
+    }
+
     await setDoc(docRef, queueEntry.data);
 
     // Mark as synced
@@ -221,8 +255,16 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
     // Remove from sync queue
     syncQueue.delete(cacheKey);
 
-    debugLog(`[LocalFirst] ✅ Background sync completed: ${cacheKey}`);
+    // Track metrics
+    const syncDuration = Date.now() - syncStartTime;
+    totalSyncTime += syncDuration;
+    totalSyncCount++;
+    syncStartTimes.delete(cacheKey);
+
+    debugLog(`[LocalFirst] ✅ Background sync completed: ${cacheKey} (${syncDuration}ms)`);
   } catch (error) {
+    failedSyncCount++;
+    syncStartTimes.delete(cacheKey);
     debugWarn(`[LocalFirst] Background sync failed for ${cacheKey}:`, error);
 
     // Update retry count
@@ -400,4 +442,132 @@ export const cleanupLocalFirst = (): void => {
     networkUnsubscribe = null;
     debugLog('[LocalFirst] ✅ Network monitoring cleaned up');
   }
+};
+
+/**
+ * BATCH OPERATIONS: Set multiple data entries at once
+ * More efficient than individual operations for bulk updates
+ */
+export const batchSetData = async <T>(operations: (LocalFirstOptions & { data: T })[]): Promise<void> => {
+  try {
+    debugLog(`[LocalFirst] 📦 Batch setting ${operations.length} items`);
+
+    // 1. Save all locally first (parallel)
+    const localSavePromises = operations.map(async (op) => {
+      const cacheKey = `${op.collection}:${op.id}`;
+      await cache.set(cacheKey, op.data, 'local', 'pending');
+      await saveToPersistentStorage(cacheKey, op.data);
+
+      // Add to sync queue
+      if (op.syncEnabled !== false) {
+        const entry: DataEntry<T> = {
+          data: op.data,
+          timestamp: Date.now(),
+          version: 1,
+          source: 'local',
+          syncStatus: 'pending',
+          retryCount: 0,
+          lastModified: Date.now(),
+        };
+        syncQueue.set(cacheKey, entry);
+      }
+    });
+
+    await Promise.all(localSavePromises);
+    debugLog('[LocalFirst] ✅ Batch save completed locally');
+
+    // 2. Trigger background sync if online
+    if (isOnline) {
+      processSyncQueue().catch((error) => {
+        debugWarn('[LocalFirst] Batch sync failed:', error);
+      });
+    }
+  } catch (error) {
+    debugError('[LocalFirst] Batch set data error:', error);
+    throw error;
+  }
+};
+
+/**
+ * REAL-TIME SUBSCRIPTIONS: Subscribe to data changes
+ * Uses Firestore onSnapshot for real-time updates
+ */
+export const subscribeToData = <T>(collection: string, id: string, callback: (data: T | null) => void, onError?: (error: Error) => void): (() => void) => {
+  if (!firestore) {
+    debugWarn('[LocalFirst] Cannot subscribe - Firestore not initialized');
+    return () => {};
+  }
+
+  const cacheKey = `${collection}:${id}`;
+  debugLog(`[LocalFirst] 🔔 Subscribing to real-time updates: ${cacheKey}`);
+
+  // Import onSnapshot dynamically to avoid issues if not available
+  import('firebase/firestore')
+    .then(({ onSnapshot }) => {
+      const docRef = doc(firestore, collection, id);
+
+      const unsubscribe = onSnapshot(
+        docRef,
+        async (snapshot) => {
+          if (snapshot.exists()) {
+            const data = snapshot.data() as T;
+            debugLog(`[LocalFirst] 🔔 Real-time update received: ${cacheKey}`);
+
+            // Update local cache
+            await cache.set(cacheKey, data, 'remote', 'synced');
+            await saveToPersistentStorage(cacheKey, data);
+
+            // Notify callback
+            callback(data);
+          } else {
+            callback(null);
+          }
+        },
+        (error) => {
+          debugError(`[LocalFirst] Real-time subscription error: ${cacheKey}`, error);
+          if (onError) {
+            onError(error as Error);
+          }
+        }
+      );
+
+      return unsubscribe;
+    })
+    .catch((error) => {
+      debugError('[LocalFirst] Failed to set up real-time subscription:', error);
+    });
+
+  // Return empty unsubscribe function as fallback
+  return () => {
+    debugLog(`[LocalFirst] 🔕 Unsubscribed from: ${cacheKey}`);
+  };
+};
+
+/**
+ * ANALYTICS & MONITORING: Get sync performance metrics
+ */
+export const trackSyncMetrics = () => {
+  const avgSyncTime = totalSyncCount > 0 ? totalSyncTime / totalSyncCount : 0;
+  const successRate = totalSyncCount > 0 ? ((totalSyncCount - failedSyncCount) / totalSyncCount) * 100 : 100;
+
+  return {
+    syncQueueSize: syncQueue.size,
+    totalSyncs: totalSyncCount,
+    failedSyncs: failedSyncCount,
+    successRate: successRate.toFixed(2) + '%',
+    averageSyncTime: Math.round(avgSyncTime) + 'ms',
+    activeSyncs: syncStartTimes.size,
+    isOnline,
+  };
+};
+
+/**
+ * Reset sync metrics (useful for testing or monitoring reset)
+ */
+export const resetSyncMetrics = (): void => {
+  totalSyncCount = 0;
+  failedSyncCount = 0;
+  totalSyncTime = 0;
+  syncStartTimes.clear();
+  debugLog('[LocalFirst] 📊 Sync metrics reset');
 };

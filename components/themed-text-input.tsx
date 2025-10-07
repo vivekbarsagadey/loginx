@@ -1,6 +1,7 @@
 import { AccessibilityHints } from '@/constants/accessibility';
 import { InputField, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { memo } from 'react';
 import { StyleSheet, TextInput, TextInputProps } from 'react-native';
 
 export type ThemedTextInputProps = TextInputProps & {
@@ -10,7 +11,7 @@ export type ThemedTextInputProps = TextInputProps & {
   accessibilityHint?: string;
 };
 
-export function ThemedTextInput({ style, lightColor, darkColor, accessibilityLabel, accessibilityHint, placeholder, placeholderTextColor, ...rest }: ThemedTextInputProps) {
+function ThemedTextInputComponent({ style, lightColor, darkColor, accessibilityLabel, accessibilityHint, placeholder, placeholderTextColor, ...rest }: ThemedTextInputProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'surface');
   const borderColor = useThemeColor({ light: lightColor, dark: darkColor }, 'border');
@@ -29,6 +30,8 @@ export function ThemedTextInput({ style, lightColor, darkColor, accessibilityLab
     />
   );
 }
+
+export const ThemedTextInput = memo(ThemedTextInputComponent);
 
 const styles = StyleSheet.create({
   input: {

@@ -1,5 +1,6 @@
 import { CacheConstants } from '@/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getAdaptiveCacheSize, updateAdaptiveCacheStats } from './adaptive-cache';
 import { debugError, debugLog, debugWarn } from './debug';
 
 interface CacheEntry {
@@ -8,6 +9,7 @@ interface CacheEntry {
   version: number;
   source: 'local' | 'remote';
   syncStatus: 'synced' | 'pending' | 'conflict';
+  lastAccessed: number; // For LRU tracking
 }
 
 // In-memory cache for immediate access (LOCAL-FIRST)
@@ -18,6 +20,85 @@ const CACHE_PREFIX = '@LoginX:cache:';
 const CACHE_INDEX_KEY = '@LoginX:cache_index';
 
 const CACHE_DURATION = CacheConstants.DEFAULT_DURATION;
+
+// Cache eviction constants
+const MAX_CACHE_AGE = 24 * 60 * 60 * 1000; // 24 hours
+
+// Cache statistics for monitoring
+let cacheHits = 0;
+let cacheMisses = 0;
+
+/**
+ * Get maximum cache size (adaptive or fallback)
+ */
+const getMaxCacheSize = (): number => {
+  try {
+    const adaptiveSize = getAdaptiveCacheSize();
+    // If adaptive manager is initialized, use its recommendation
+    if (adaptiveSize > 0) {
+      return adaptiveSize;
+    }
+  } catch (error) {
+    debugWarn('[Cache] Could not get adaptive cache size, using fallback', error);
+  }
+  // Fallback to static default if adaptive manager not ready
+  return 100;
+};
+
+/**
+ * Find the oldest (least recently used) cache entry
+ * @returns Key of the oldest entry or null if cache is empty
+ */
+const findOldestEntry = (): string | null => {
+  let oldestKey: string | null = null;
+  let oldestTime = Date.now();
+
+  for (const [key, entry] of memoryCache.entries()) {
+    if (entry.lastAccessed < oldestTime) {
+      oldestTime = entry.lastAccessed;
+      oldestKey = key;
+    }
+  }
+
+  return oldestKey;
+};
+
+/**
+ * Evict old entries from memory cache using LRU strategy
+ */
+const evictOldEntries = async (): Promise<void> => {
+  try {
+    const maxSize = getMaxCacheSize();
+
+    // Remove entries older than MAX_CACHE_AGE
+    const now = Date.now();
+    const entriesToRemove: string[] = [];
+
+    for (const [key, entry] of memoryCache.entries()) {
+      if (now - entry.timestamp > MAX_CACHE_AGE) {
+        entriesToRemove.push(key);
+      }
+    }
+
+    for (const key of entriesToRemove) {
+      memoryCache.delete(key);
+      debugLog(`[Cache] 🗑️ Evicted expired entry: ${key}`);
+    }
+
+    // If still over limit, use LRU to remove oldest
+    while (memoryCache.size >= maxSize) {
+      const oldestKey = findOldestEntry();
+      if (oldestKey) {
+        memoryCache.delete(oldestKey);
+        debugLog(`[Cache] 🗑️ LRU evicted: ${oldestKey}`);
+      } else {
+        break;
+      }
+    }
+  } catch (error) {
+    debugError('[Cache] Error during cache eviction:', error);
+  }
+};
 
 /**
  * LOCAL-FIRST: Initialize cache system with persistent storage
@@ -75,7 +156,13 @@ export const set = async (key: string, data: unknown, source: 'local' | 'remote'
       version: 1,
       source,
       syncStatus,
+      lastAccessed: Date.now(),
     };
+
+    // Check if eviction is needed before adding new entry
+    if (memoryCache.size >= getMaxCacheSize()) {
+      await evictOldEntries();
+    }
 
     // Set in memory cache first (LOCAL-FIRST priority)
     memoryCache.set(key, entry);
@@ -118,7 +205,14 @@ export const get = async (key: string): Promise<unknown> => {
     // Try memory cache first (LOCAL-FIRST priority)
     let entry = memoryCache.get(key);
 
+    if (entry) {
+      // Update last accessed time for LRU
+      entry.lastAccessed = Date.now();
+      cacheHits++;
+    }
+
     if (!entry) {
+      cacheMisses++;
       // Fallback to persistent storage
       try {
         const entryStr = await AsyncStorage.getItem(`${CACHE_PREFIX}${key}`);
@@ -218,12 +312,26 @@ export const clear = async (): Promise<void> => {
 export const getCacheStats = async () => {
   try {
     const memorySize = memoryCache.size;
+    const maxSize = getMaxCacheSize();
     const cacheIndexStr = await AsyncStorage.getItem(CACHE_INDEX_KEY);
     const persistentSize = cacheIndexStr ? JSON.parse(cacheIndexStr).length : 0;
+    const totalRequests = cacheHits + cacheMisses;
+    const hitRate = totalRequests > 0 ? (cacheHits / totalRequests) * 100 : 0;
+
+    // Update adaptive cache manager with current hit rate
+    try {
+      updateAdaptiveCacheStats(hitRate);
+    } catch (_error) {
+      // Adaptive manager may not be initialized yet, ignore
+    }
 
     return {
       memoryEntries: memorySize,
       persistentEntries: persistentSize,
+      maxMemorySize: maxSize,
+      cacheHits,
+      cacheMisses,
+      hitRate: hitRate.toFixed(2) + '%',
       syncStatus: 'healthy',
       lastUpdate: Date.now(),
     };
@@ -232,6 +340,10 @@ export const getCacheStats = async () => {
     return {
       memoryEntries: 0,
       persistentEntries: 0,
+      maxMemorySize: getMaxCacheSize(),
+      cacheHits: 0,
+      cacheMisses: 0,
+      hitRate: '0%',
       syncStatus: 'error',
       lastUpdate: Date.now(),
     };

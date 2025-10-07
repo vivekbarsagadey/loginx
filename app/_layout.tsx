@@ -12,8 +12,10 @@ import { Routes } from '@/constants/routes';
 import { AuthProvider, useAuth } from '@/hooks/use-auth-provider';
 import { OnboardingProvider, useOnboarding } from '@/hooks/use-onboarding-provider';
 import { ThemeProvider as CustomThemeProvider, useThemeContext } from '@/hooks/use-theme-context';
+import { initializeAdaptiveCache } from '@/utils/adaptive-cache';
 import { initializeLocalFirst } from '@/utils/local-first';
 import { initializeNetworkMonitoring } from '@/utils/network';
+import { enableLayoutAnimations, logPerformanceMetrics } from '@/utils/performance';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -196,7 +198,18 @@ export default function RootLayout() {
     if (loaded) {
       SplashScreen.hideAsync();
 
-      // Initialize network monitoring first
+      // Enable Android layout animations
+      enableLayoutAnimations();
+
+      // Log architecture info (development only)
+      logPerformanceMetrics();
+
+      // Initialize adaptive cache manager FIRST (determines cache size)
+      initializeAdaptiveCache().catch((error) => {
+        console.error('Failed to initialize adaptive cache:', error);
+      });
+
+      // Initialize network monitoring
       const networkUnsubscribe = initializeNetworkMonitoring();
 
       // Initialize LOCAL-FIRST system

@@ -54,6 +54,14 @@ export default function SupportScreen() {
     router.push('/legal/license');
   };
 
+  const handleNavigateToDataRights = () => {
+    router.push('/legal/data-rights');
+  };
+
+  const handleNavigateToCookies = () => {
+    router.push('/legal/cookies');
+  };
+
   return (
     <ScreenContainer scrollable>
       <ThemedText type="h1" style={CommonText.title}>
@@ -100,6 +108,8 @@ export default function SupportScreen() {
         <ThemedButton title={i18n.t('screens.support.resources.privacy')} variant="secondary" onPress={handleNavigateToPrivacy} style={styles.resourceButton} />
         <ThemedButton title={i18n.t('screens.support.resources.terms')} variant="secondary" onPress={handleNavigateToTerms} style={styles.resourceButton} />
         <ThemedButton title={i18n.t('screens.support.resources.license')} variant="secondary" onPress={handleNavigateToLicense} style={styles.resourceButton} />
+        <ThemedButton title={i18n.t('screens.support.resources.dataRights')} variant="secondary" onPress={handleNavigateToDataRights} style={styles.resourceButton} />
+        <ThemedButton title={i18n.t('screens.support.resources.cookies')} variant="secondary" onPress={handleNavigateToCookies} style={styles.resourceButton} />
       </ThemedView>
 
       {/* Device Info Section */}

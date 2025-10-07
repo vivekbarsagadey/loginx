@@ -14,7 +14,8 @@ This document provides a comprehensive overview of all features in LoginX.
 
 ## Authentication
 
-For detailed authentication documentation, see [AUTHENTICATION_GUIDE.md](./AUTHENTICATION_GUIDE.md).
+For detailed authentication documentation, see
+[AUTHENTICATION_GUIDE.md](./AUTHENTICATION_GUIDE.md).
 
 ### Supported Methods
 
@@ -40,7 +41,8 @@ For detailed authentication documentation, see [AUTHENTICATION_GUIDE.md](./AUTHE
 
 **Location**: `/app/notifications/index.tsx`
 
-A dedicated screen that displays all past notifications with full management capabilities.
+A dedicated screen that displays all past notifications with full management
+capabilities.
 
 #### Features
 
@@ -64,21 +66,21 @@ A dedicated screen that displays all past notifications with full management cap
 
 ```typescript
 // Add a notification to history
-import { addNotification } from '@/utils/notification-storage';
+import { addNotification } from "@/utils/notification-storage";
 
 await addNotification({
-  type: 'security',
-  title: 'New Login Detected',
-  message: 'A new login was detected from Chrome on Windows.',
+  type: "security",
+  title: "New Login Detected",
+  message: "A new login was detected from Chrome on Windows."
 });
 
 // Get notification history
-import { getNotificationHistory } from '@/utils/notification-storage';
+import { getNotificationHistory } from "@/utils/notification-storage";
 
 const notifications = await getNotificationHistory();
 
 // Mark as read
-import { markNotificationAsRead } from '@/utils/notification-storage';
+import { markNotificationAsRead } from "@/utils/notification-storage";
 
 await markNotificationAsRead(notificationId);
 ```
@@ -111,7 +113,8 @@ Configure notification preferences:
 
 ## Local-First Architecture
 
-For detailed implementation, see [LOCAL_FIRST_IMPLEMENTATION.md](./LOCAL_FIRST_IMPLEMENTATION.md).
+For detailed implementation, see
+[LOCAL_FIRST_IMPLEMENTATION.md](./LOCAL_FIRST_IMPLEMENTATION.md).
 
 ### Key Principles
 
@@ -150,7 +153,8 @@ For complete design guidelines, see [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md).
 
 ## Security Features
 
-For detailed security audit, see [SECURITY_AUDIT_REPORT.md](./SECURITY_AUDIT_REPORT.md).
+For detailed security audit, see
+[SECURITY_AUDIT_REPORT.md](./SECURITY_AUDIT_REPORT.md).
 
 ### Implemented Security
 
@@ -172,16 +176,19 @@ All constants documented in [CONSTANTS_REFERENCE.md](./CONSTANTS_REFERENCE.md).
 
 ### Implementation Status
 
-Current project status tracked in [IMPLEMENTATION_STATUS.md](./IMPLEMENTATION_STATUS.md).
+Current project status tracked in
+[IMPLEMENTATION_STATUS.md](./IMPLEMENTATION_STATUS.md).
 
 ### Development Setup
 
-Linting and formatting guidelines in [LINTING_FORMATTING.md](./LINTING_FORMATTING.md).
+Linting and formatting guidelines in
+[LINTING_FORMATTING.md](./LINTING_FORMATTING.md).
 
 ---
 
 **Need Help?**
 
 - Check the [main README](../README.md) for setup instructions
-- Review [DOCUMENTATION_STRUCTURE.md](./DOCUMENTATION_STRUCTURE.md) for doc organization
+- Review [DOCUMENTATION_STRUCTURE.md](./DOCUMENTATION_STRUCTURE.md) for doc
+  organization
 - Open an issue on GitHub for support

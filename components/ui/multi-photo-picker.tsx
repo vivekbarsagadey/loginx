@@ -5,7 +5,7 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { Alert, FlatList, Image, Platform, Pressable, StyleSheet, View } from 'react-native';
 
 interface MultiPhotoPickerProps {
@@ -15,6 +15,29 @@ interface MultiPhotoPickerProps {
   maxPhotos?: number;
   maxFileSize?: number; // in bytes
 }
+
+interface PhotoItemProps {
+  item: string;
+  index: number;
+  onRemove: (index: number) => void;
+  borderColor: string;
+  primaryColor: string;
+  errorColor: string;
+}
+
+const PhotoItem = memo(({ item, index, onRemove, borderColor, primaryColor, errorColor }: PhotoItemProps) => (
+  <View style={styles.photoItem}>
+    <Image source={{ uri: item }} style={[styles.photo, { borderColor }]} accessibilityIgnoresInvertColors />
+    <Pressable style={[styles.removeButton, { backgroundColor: errorColor }]} onPress={() => onRemove(index)} accessibilityLabel={`Remove photo ${index + 1}`} accessibilityRole="button">
+      <Ionicons name="close" size={16} color="white" />
+    </Pressable>
+    <View style={[styles.photoNumber, { backgroundColor: primaryColor }]}>
+      <ThemedText style={styles.photoNumberText}>{index + 1}</ThemedText>
+    </View>
+  </View>
+));
+
+PhotoItem.displayName = 'PhotoItem';
 
 /**
  * Multi Photo Picker Component
@@ -96,26 +119,29 @@ export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10
     }
   };
 
-  const removePhoto = (index: number) => {
-    Alert.alert('Remove Photo', 'Are you sure you want to remove this photo?', [
-      {
-        text: 'Cancel',
-        style: 'cancel',
-      },
-      {
-        text: 'Remove',
-        style: 'destructive',
-        onPress: () => {
-          const newPhotos = [...value];
-          newPhotos.splice(index, 1);
-          onChange(newPhotos);
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  const removePhoto = useCallback(
+    (index: number) => {
+      Alert.alert('Remove Photo', 'Are you sure you want to remove this photo?', [
+        {
+          text: 'Cancel',
+          style: 'cancel',
         },
-      },
-    ]);
-  };
+        {
+          text: 'Remove',
+          style: 'destructive',
+          onPress: () => {
+            const newPhotos = [...value];
+            newPhotos.splice(index, 1);
+            onChange(newPhotos);
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          },
+        },
+      ]);
+    },
+    [onChange, value]
+  );
 
-  const clearAll = () => {
+  const clearAll = useCallback(() => {
     Alert.alert('Remove All Photos', 'Are you sure you want to remove all photos?', [
       {
         text: 'Cancel',
@@ -130,19 +156,21 @@ export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10
         },
       },
     ]);
-  };
+  }, [onChange]);
 
-  const renderPhoto = ({ item, index }: { item: string; index: number }) => (
-    <View style={styles.photoItem}>
-      <Image source={{ uri: item }} style={[styles.photo, { borderColor }]} accessibilityIgnoresInvertColors />
-      <Pressable style={[styles.removeButton, { backgroundColor: errorColor }]} onPress={() => removePhoto(index)} accessibilityLabel={`Remove photo ${index + 1}`} accessibilityRole="button">
-        <Ionicons name="close" size={16} color="white" />
-      </Pressable>
-      <View style={[styles.photoNumber, { backgroundColor: primaryColor }]}>
-        <ThemedText style={styles.photoNumberText}>{index + 1}</ThemedText>
-      </View>
-    </View>
+  const renderPhoto = useCallback(
+    ({ item, index }: { item: string; index: number }) => <PhotoItem item={item} index={index} onRemove={removePhoto} borderColor={borderColor} primaryColor={primaryColor} errorColor={errorColor} />,
+    [removePhoto, borderColor, primaryColor, errorColor]
   );
+
+  const getItemLayout = useCallback((_data: ArrayLike<string> | null | undefined, index: number) => {
+    const itemSize = 120;
+    return {
+      length: itemSize,
+      offset: itemSize * index,
+      index,
+    };
+  }, []);
 
   const renderEmpty = () => (
     <View style={[styles.emptyContainer, { borderColor, backgroundColor: bgColor }]}>
@@ -172,7 +200,19 @@ export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10
       {value.length === 0 ? (
         renderEmpty()
       ) : (
-        <FlatList data={value} renderItem={renderPhoto} keyExtractor={(item, index) => `${item}-${index}`} numColumns={3} contentContainerStyle={styles.grid} scrollEnabled={false} />
+        <FlatList
+          data={value}
+          renderItem={renderPhoto}
+          keyExtractor={(item, index) => `${item}-${index}`}
+          numColumns={3}
+          contentContainerStyle={styles.grid}
+          scrollEnabled={false}
+          getItemLayout={getItemLayout}
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={9}
+          windowSize={3}
+          initialNumToRender={9}
+        />
       )}
 
       <ThemedButton

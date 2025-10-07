@@ -243,7 +243,8 @@
     "retry": "Reintentar",
     "loading": "Cargando...",
     "error": "Error",
-    "success": "Éxito"
+    "success": "Éxito",
+    "confirm": "Confirmar"
   },
   "dialogs": {
     "buttons": {
@@ -862,6 +863,108 @@
         "attribution": {
           "title": "Directrices de Atribución",
           "content": "Si bifurcas, modificas o usas este código:\n\n• Mantén el aviso de copyright original\n• Incluye una copia de la Licencia MIT\n• Enlaza al repositorio original: https://github.com/vivekbarsagadey/loginx\n• Acredita a Whiz IT y Vivek Barsagadey en tu documentación\n\nPara uso comercial o preguntas sobre licencias, contacta vivek@whizit.co.in."
+        }
+      },
+      "dataRights": {
+        "title": "Tus Derechos de Datos",
+        "subtitle": "Bajo GDPR, tienes los siguientes derechos con respecto a tus datos personales",
+        "yourRightsTitle": "Tus Derechos",
+        "actionsTitle": "Tomar Acción",
+        "responseTime": "Responderemos a tu solicitud en un plazo de 30 días",
+        "rights": {
+          "access": {
+            "title": "Derecho de Acceso",
+            "description": "Ver y obtener una copia de tus datos personales que tenemos sobre ti"
+          },
+          "rectification": {
+            "title": "Derecho de Rectificación",
+            "description": "Corregir cualquier dato personal inexacto o incompleto que tengamos sobre ti"
+          },
+          "erasure": {
+            "title": "Derecho al Olvido",
+            "description": "Solicitar la eliminación de tus datos personales cuando ya no sea necesario"
+          },
+          "portability": {
+            "title": "Derecho a la Portabilidad de Datos",
+            "description": "Recibir tus datos personales en un formato estructurado y legible por máquina"
+          },
+          "restriction": {
+            "title": "Derecho a la Restricción",
+            "description": "Solicitar que restrinjamos el procesamiento de tus datos personales"
+          },
+          "objection": {
+            "title": "Derecho de Oposición",
+            "description": "Oponerte al procesamiento de tus datos personales en ciertas circunstancias"
+          }
+        },
+        "actions": {
+          "requestData": {
+            "button": "Solicitar Mis Datos",
+            "title": "Solicitud de Exportación de Datos",
+            "description": "Prepararemos una copia de tus datos personales y la enviaremos a tu dirección de correo registrada en un plazo de 30 días.",
+            "success": "Tu solicitud de datos ha sido enviada. Recibirás un correo en un plazo de 30 días."
+          },
+          "deleteData": {
+            "button": "Eliminar Mi Cuenta",
+            "title": "Eliminar Cuenta",
+            "warning": "Esto eliminará permanentemente tu cuenta y todos los datos asociados. Esta acción no se puede deshacer. ¿Estás seguro de que deseas continuar?",
+            "confirm": "Eliminar Permanentemente"
+          },
+          "contact": {
+            "button": "Contactar al Equipo de Privacidad"
+          }
+        }
+      },
+      "cookies": {
+        "title": "Política de Cookies",
+        "lastUpdated": "Última actualización: 7 de octubre de 2025",
+        "required": "Requerido",
+        "typesTitle": "Tipos de Cookies Que Usamos",
+        "contact": "¿Preguntas sobre cookies? Contáctanos en privacy@whizit.co.in",
+        "whatAreCookies": {
+          "title": "¿Qué Son las Cookies?",
+          "content": "Las cookies son pequeños archivos de texto que se colocan en tu dispositivo cuando usas nuestra aplicación. Nos ayudan a proporcionarte una mejor experiencia al recordar tus preferencias y entender cómo usas nuestro servicio."
+        },
+        "types": {
+          "essential": {
+            "title": "Cookies Esenciales",
+            "description": "Estas cookies son necesarias para que la aplicación funcione correctamente. Habilitan funcionalidades básicas como seguridad, autenticación y gestión de sesiones. No se pueden desactivar."
+          },
+          "analytics": {
+            "title": "Cookies de Análisis",
+            "description": "Nos ayudan a entender cómo los usuarios interactúan con nuestra aplicación al recopilar y reportar estadísticas de uso. Estos datos nos ayudan a mejorar la experiencia del usuario."
+          },
+          "marketing": {
+            "title": "Cookies de Marketing",
+            "description": "Se utilizan para entregar anuncios relevantes y rastrear el rendimiento de las campañas publicitarias. Puedes optar por no usar estas cookies en la configuración de tu dispositivo."
+          },
+          "social": {
+            "title": "Cookies de Redes Sociales",
+            "description": "Habilitan funciones de redes sociales como compartir contenido y conectar tus cuentas de redes sociales para un inicio de sesión fácil."
+          }
+        },
+        "howWeUse": {
+          "title": "Cómo Usamos las Cookies",
+          "authentication": {
+            "title": "Autenticación y Seguridad",
+            "content": "Usamos cookies para mantenerte conectado de forma segura y proteger tu cuenta del acceso no autorizado. Estas cookies son esenciales para que la aplicación funcione."
+          },
+          "preferences": {
+            "title": "Preferencias y Configuraciones",
+            "content": "Las cookies recuerdan tu preferencia de idioma, elección de tema y otras configuraciones de personalización para que no tengas que configurarlas cada vez que uses la aplicación."
+          },
+          "security": {
+            "title": "Seguridad y Prevención de Fraude",
+            "content": "Usamos cookies para detectar y prevenir actividades fraudulentas, monitorear comportamientos sospechosos y mantener tu cuenta segura."
+          }
+        },
+        "yourChoices": {
+          "title": "Tus Opciones",
+          "content": "Puedes controlar la configuración de cookies a través de la configuración de tu dispositivo. Ten en cuenta que desactivar las cookies esenciales puede afectar la funcionalidad de la aplicación. Las cookies de análisis y marketing se pueden desactivar sin afectar las funciones principales."
+        },
+        "thirdParty": {
+          "title": "Cookies de Terceros",
+          "content": "Usamos servicios de terceros confiables (Google Firebase, Expo) que pueden establecer sus propias cookies. Estos terceros tienen sus propias políticas de privacidad que rigen el uso de dichas cookies."
         }
       }
     },

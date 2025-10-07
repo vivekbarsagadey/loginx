@@ -1,6 +1,7 @@
 import { AccessibilityHints, AccessibilityRoles } from '@/constants/accessibility';
 import { Button as ButtonConstants, Spacing, TouchTarget } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { memo } from 'react';
 import { ActivityIndicator, StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps, ViewStyle } from 'react-native';
 import { ThemedText } from './themed-text';
 
@@ -17,7 +18,7 @@ export type ThemedButtonProps = TouchableOpacityProps & {
   size?: 'minimum' | 'comfortable' | 'large';
 };
 
-export function ThemedButton({ title, style, variant = 'primary', disabled, loading, accessibilityLabel, accessibilityHint, size = 'comfortable', ...rest }: ThemedButtonProps) {
+function ThemedButtonComponent({ title, style, variant = 'primary', disabled, loading, accessibilityLabel, accessibilityHint, size = 'comfortable', ...rest }: ThemedButtonProps) {
   const primaryColor = useThemeColor({}, 'primary');
   const onPrimaryColor = useThemeColor({}, 'on-primary');
   const surfaceColor = useThemeColor({}, 'surface');
@@ -89,6 +90,8 @@ export function ThemedButton({ title, style, variant = 'primary', disabled, load
     </TouchableOpacity>
   );
 }
+
+export const ThemedButton = memo(ThemedButtonComponent);
 
 const styles = StyleSheet.create({
   button: {

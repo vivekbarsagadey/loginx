@@ -1,5 +1,6 @@
 import { Typography } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { memo } from 'react';
 import { StyleSheet, Text, type TextProps } from 'react-native';
 
 export type ThemedTextProps = TextProps & {
@@ -8,7 +9,7 @@ export type ThemedTextProps = TextProps & {
   type?: 'display' | 'h1' | 'h2' | 'h3' | 'subtitle1' | 'subtitle2' | 'body' | 'bodyBold' | 'button' | 'caption' | 'overline' | 'label' | 'small' | 'muted' | 'inverse';
 };
 
-export function ThemedText({ style, lightColor, darkColor, type = 'body', ...rest }: ThemedTextProps) {
+function ThemedTextComponent({ style, lightColor, darkColor, type = 'body', ...rest }: ThemedTextProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
   const mutedColor = useThemeColor({ light: lightColor, dark: darkColor }, 'text-muted');
   const inverseColor = useThemeColor({ light: lightColor, dark: darkColor }, 'inverse-text');
@@ -26,6 +27,8 @@ export function ThemedText({ style, lightColor, darkColor, type = 'body', ...res
 
   return <Text style={[{ color: colorForType() }, styles[type], style]} {...rest} />;
 }
+
+export const ThemedText = memo(ThemedTextComponent);
 
 const styles = StyleSheet.create({
   display: {
