@@ -1,4 +1,5 @@
 import { getUserProfile } from '@/actions/user.action';
+import { TabHeader } from '@/components/navigation/TabHeader';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
@@ -45,50 +46,53 @@ export default function IndexScreen() {
   }
 
   return (
-    <ScreenContainer scrollable>
-      {userProfile ? (
-        <>
-          <View style={CommonSpacing.marginBottomLarge}>
-            <ThemedText type="h1">Welcome, {userProfile.displayName}!</ThemedText>
-            <ThemedText type="body" style={styles.email}>
-              {userProfile.email}
-            </ThemedText>
-            <ThemedText type="body" style={styles.age}>
-              Age: {userProfile.age}
-            </ThemedText>
-          </View>
-
-          <Card elevation={1} style={CommonSpacing.marginBottomLarge}>
-            <ThemedText type="h2" style={styles.cardTitle}>
-              Your Notification Preferences
-            </ThemedText>
-
-            <View style={styles.preferenceRow}>
-              <ThemedText type="body">Push Notifications</ThemedText>
-              <ThemedText type="body" style={styles.preferenceValue}>
-                {userProfile.pushEnabled ? '✓ Enabled' : '✗ Disabled'}
+    <>
+      <TabHeader title="Home" showBackButton={false} />
+      <ScreenContainer scrollable useSafeArea={false}>
+        {userProfile ? (
+          <>
+            <View style={CommonSpacing.marginBottomLarge}>
+              <ThemedText type="h1">Welcome, {userProfile.displayName}!</ThemedText>
+              <ThemedText type="body" style={styles.email}>
+                {userProfile.email}
+              </ThemedText>
+              <ThemedText type="body" style={styles.age}>
+                Age: {userProfile.age}
               </ThemedText>
             </View>
 
-            <View style={styles.preferenceRow}>
-              <ThemedText type="body">Email Updates</ThemedText>
-              <ThemedText type="body" style={styles.preferenceValue}>
-                {userProfile.emailUpdates ? '✓ Enabled' : '✗ Disabled'}
+            <Card elevation={1} style={CommonSpacing.marginBottomLarge}>
+              <ThemedText type="h2" style={styles.cardTitle}>
+                Your Notification Preferences
               </ThemedText>
-            </View>
 
-            <View style={styles.preferenceRow}>
-              <ThemedText type="body">Marketing Tips</ThemedText>
-              <ThemedText type="body" style={styles.preferenceValue}>
-                {userProfile.marketingTips ? '✓ Enabled' : '✗ Disabled'}
-              </ThemedText>
-            </View>
-          </Card>
-        </>
-      ) : (
-        <ThemedText type="h1">Welcome!</ThemedText>
-      )}
-    </ScreenContainer>
+              <View style={styles.preferenceRow}>
+                <ThemedText type="body">Push Notifications</ThemedText>
+                <ThemedText type="body" style={styles.preferenceValue}>
+                  {userProfile.pushEnabled ? '✓ Enabled' : '✗ Disabled'}
+                </ThemedText>
+              </View>
+
+              <View style={styles.preferenceRow}>
+                <ThemedText type="body">Email Updates</ThemedText>
+                <ThemedText type="body" style={styles.preferenceValue}>
+                  {userProfile.emailUpdates ? '✓ Enabled' : '✗ Disabled'}
+                </ThemedText>
+              </View>
+
+              <View style={styles.preferenceRow}>
+                <ThemedText type="body">Marketing Tips</ThemedText>
+                <ThemedText type="body" style={styles.preferenceValue}>
+                  {userProfile.marketingTips ? '✓ Enabled' : '✗ Disabled'}
+                </ThemedText>
+              </View>
+            </Card>
+          </>
+        ) : (
+          <ThemedText type="h1">Welcome!</ThemedText>
+        )}
+      </ScreenContainer>
+    </>
   );
 }
 

@@ -1,3 +1,4 @@
+import { TabHeader } from '@/components/navigation/TabHeader';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonLists } from '@/constants/common-styles';
@@ -44,17 +45,20 @@ export default function LanguageScreen() {
   );
 
   return (
-    <ThemedView style={styles.container}>
-      <FlatList
-        data={languages}
-        keyExtractor={(item) => item.code}
-        renderItem={({ item }) => (
-          <TouchableOpacity style={styles.item} onPress={() => setLanguage(item.code)}>
-            <ThemedText style={styles.itemText}>{item.name}</ThemedText>
-            {i18n.locale.startsWith(item.code) && <Feather name="check" size={24} color={tintColor} />}
-          </TouchableOpacity>
-        )}
-      />
-    </ThemedView>
+    <>
+      <TabHeader title="Language" showBackButton={true} />
+      <ThemedView style={[styles.container, { paddingTop: 0 }]}>
+        <FlatList
+          data={languages}
+          keyExtractor={(item) => item.code}
+          renderItem={({ item }) => (
+            <TouchableOpacity style={styles.item} onPress={() => setLanguage(item.code)}>
+              <ThemedText style={styles.itemText}>{item.name}</ThemedText>
+              {i18n.locale.startsWith(item.code) && <Feather name="check" size={24} color={tintColor} />}
+            </TouchableOpacity>
+          )}
+        />
+      </ThemedView>
+    </>
   );
 }

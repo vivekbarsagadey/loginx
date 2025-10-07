@@ -1,3 +1,4 @@
+import { TabHeader } from '@/components/navigation/TabHeader';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
@@ -156,106 +157,109 @@ export default function AboutUsScreen() {
   );
 
   return (
-    <ScreenContainer scrollable>
-      {/* Header with Logo */}
-      <View style={styles.header}>
-        <Image source={require('@/assets/images/icon.png')} style={styles.logo} />
-        <ThemedText type="h1" style={styles.appName}>
-          {appName}
-        </ThemedText>
-        <ThemedText style={styles.tagline}>A modern, secure authentication solution</ThemedText>
-        <View style={styles.badge}>
-          <ThemedText style={styles.badgeText}>v{appVersion}</ThemedText>
+    <>
+      <TabHeader title="About Us" showBackButton={true} />
+      <ScreenContainer scrollable useSafeArea={false}>
+        {/* Header with Logo */}
+        <View style={styles.header}>
+          <Image source={require('@/assets/images/icon.png')} style={styles.logo} />
+          <ThemedText type="h1" style={styles.appName}>
+            {appName}
+          </ThemedText>
+          <ThemedText style={styles.tagline}>A modern, secure authentication solution</ThemedText>
+          <View style={styles.badge}>
+            <ThemedText style={styles.badgeText}>v{appVersion}</ThemedText>
+          </View>
         </View>
-      </View>
 
-      {/* Description */}
-      <ThemedText style={styles.description}>
-        LoginX is an enterprise-grade, cross-platform mobile authentication application built with React Native and Expo. It provides a seamless, secure, and accessible user authentication experience
-        with comprehensive profile management.
-      </ThemedText>
-
-      {/* App Information Section */}
-      <View style={styles.section}>
-        <ThemedText type="h2" style={CommonText.sectionTitle}>
-          App Information
+        {/* Description */}
+        <ThemedText style={styles.description}>
+          LoginX is an enterprise-grade, cross-platform mobile authentication application built with React Native and Expo. It provides a seamless, secure, and accessible user authentication
+          experience with comprehensive profile management.
         </ThemedText>
-        <Card elevation={1} noPadding>
-          {infoItems.map((item, index) => (
-            <View key={item.label} style={[styles.infoRow, index === infoItems.length - 1 && styles.infoRowLast]}>
-              <View style={styles.infoIcon}>
-                <Feather name={item.icon as React.ComponentProps<typeof Feather>['name']} size={20} color={primaryColor} />
+
+        {/* App Information Section */}
+        <View style={styles.section}>
+          <ThemedText type="h2" style={CommonText.sectionTitle}>
+            App Information
+          </ThemedText>
+          <Card elevation={1} noPadding>
+            {infoItems.map((item, index) => (
+              <View key={item.label} style={[styles.infoRow, index === infoItems.length - 1 && styles.infoRowLast]}>
+                <View style={styles.infoIcon}>
+                  <Feather name={item.icon as React.ComponentProps<typeof Feather>['name']} size={20} color={primaryColor} />
+                </View>
+                <View style={styles.infoContent}>
+                  <ThemedText style={styles.infoLabel}>{item.label}</ThemedText>
+                  <ThemedText style={styles.infoValue}>{item.value}</ThemedText>
+                </View>
               </View>
-              <View style={styles.infoContent}>
-                <ThemedText style={styles.infoLabel}>{item.label}</ThemedText>
-                <ThemedText style={styles.infoValue}>{item.value}</ThemedText>
-              </View>
-            </View>
-          ))}
-        </Card>
-      </View>
+            ))}
+          </Card>
+        </View>
 
-      {/* Contact Information Section */}
-      <View style={styles.section}>
-        <ThemedText type="h2" style={CommonText.sectionTitle}>
-          Contact Information
-        </ThemedText>
-        <Card elevation={1} noPadding>
-          {contactItems.map((item, index) => (
-            <TouchableOpacity key={item.label} style={[styles.contactRow, index === contactItems.length - 1 && styles.contactRowLast]} onPress={item.action}>
-              <View style={styles.contactIcon}>
-                <Feather name={item.icon as React.ComponentProps<typeof Feather>['name']} size={20} color={primaryColor} />
-              </View>
-              <View style={styles.contactContent}>
-                <ThemedText style={styles.contactLabel}>{item.label}</ThemedText>
-                <ThemedText style={styles.contactValue}>{item.value}</ThemedText>
-              </View>
-              <Feather name="external-link" size={18} color={textMutedColor} />
-            </TouchableOpacity>
-          ))}
-        </Card>
-      </View>
+        {/* Contact Information Section */}
+        <View style={styles.section}>
+          <ThemedText type="h2" style={CommonText.sectionTitle}>
+            Contact Information
+          </ThemedText>
+          <Card elevation={1} noPadding>
+            {contactItems.map((item, index) => (
+              <TouchableOpacity key={item.label} style={[styles.contactRow, index === contactItems.length - 1 && styles.contactRowLast]} onPress={item.action}>
+                <View style={styles.contactIcon}>
+                  <Feather name={item.icon as React.ComponentProps<typeof Feather>['name']} size={20} color={primaryColor} />
+                </View>
+                <View style={styles.contactContent}>
+                  <ThemedText style={styles.contactLabel}>{item.label}</ThemedText>
+                  <ThemedText style={styles.contactValue}>{item.value}</ThemedText>
+                </View>
+                <Feather name="external-link" size={18} color={textMutedColor} />
+              </TouchableOpacity>
+            ))}
+          </Card>
+        </View>
 
-      {/* Features Highlights */}
-      <View style={styles.section}>
-        <ThemedText type="h2" style={CommonText.sectionTitle}>
-          Key Features
-        </ThemedText>
-        <Card elevation={1}>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Firebase Authentication</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Biometric Authentication (Face ID, Touch ID)</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Two-Factor Authentication (2FA)</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Multi-Language Support (EN, ES, HI)</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Light & Dark Mode</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Secure Storage & Encryption</ThemedText>
-          <ThemedText>✅ WCAG 2.1 AA Accessibility Compliance</ThemedText>
-        </Card>
-      </View>
+        {/* Features Highlights */}
+        <View style={styles.section}>
+          <ThemedText type="h2" style={CommonText.sectionTitle}>
+            Key Features
+          </ThemedText>
+          <Card elevation={1}>
+            <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Firebase Authentication</ThemedText>
+            <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Biometric Authentication (Face ID, Touch ID)</ThemedText>
+            <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Two-Factor Authentication (2FA)</ThemedText>
+            <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Multi-Language Support (EN, ES, HI)</ThemedText>
+            <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Light & Dark Mode</ThemedText>
+            <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Secure Storage & Encryption</ThemedText>
+            <ThemedText>✅ WCAG 2.1 AA Accessibility Compliance</ThemedText>
+          </Card>
+        </View>
 
-      {/* Technologies Section */}
-      <View style={styles.section}>
-        <ThemedText type="h2" style={CommonText.sectionTitle}>
-          Built With
-        </ThemedText>
-        <Card elevation={1}>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>• React Native 0.81.4</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>• Expo SDK 54</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>• TypeScript</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>• Firebase</ThemedText>
-          <ThemedText>• Expo Router</ThemedText>
-        </Card>
-      </View>
+        {/* Technologies Section */}
+        <View style={styles.section}>
+          <ThemedText type="h2" style={CommonText.sectionTitle}>
+            Built With
+          </ThemedText>
+          <Card elevation={1}>
+            <ThemedText style={{ marginBottom: Spacing.sm }}>• React Native 0.81.4</ThemedText>
+            <ThemedText style={{ marginBottom: Spacing.sm }}>• Expo SDK 54</ThemedText>
+            <ThemedText style={{ marginBottom: Spacing.sm }}>• TypeScript</ThemedText>
+            <ThemedText style={{ marginBottom: Spacing.sm }}>• Firebase</ThemedText>
+            <ThemedText>• Expo Router</ThemedText>
+          </Card>
+        </View>
 
-      {/* Footer */}
-      <View style={styles.footer}>
-        <ThemedText style={styles.footerText}>
-          Built with ❤️ by{'\n'}
-          <ThemedText style={styles.companyName}>Vivek Barsagadey</ThemedText>
-          {'\n'}at{'\n'}
-          <ThemedText style={styles.companyName}>Whiz IT</ThemedText>
-        </ThemedText>
-        <ThemedText style={[styles.footerText, { marginTop: Spacing.md }]}>© 2025 Whiz IT. All rights reserved.</ThemedText>
-      </View>
-    </ScreenContainer>
+        {/* Footer */}
+        <View style={styles.footer}>
+          <ThemedText style={styles.footerText}>
+            Built with ❤️ by{'\n'}
+            <ThemedText style={styles.companyName}>Vivek Barsagadey</ThemedText>
+            {'\n'}at{'\n'}
+            <ThemedText style={styles.companyName}>Whiz IT</ThemedText>
+          </ThemedText>
+          <ThemedText style={[styles.footerText, { marginTop: Spacing.md }]}>© 2025 Whiz IT. All rights reserved.</ThemedText>
+        </View>
+      </ScreenContainer>
+    </>
   );
 }

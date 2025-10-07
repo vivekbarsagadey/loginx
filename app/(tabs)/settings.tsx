@@ -1,4 +1,5 @@
 import { deleteUserAccount } from '@/actions/user.action';
+import { TabHeader } from '@/components/navigation/TabHeader';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
@@ -169,90 +170,93 @@ export default function SettingsScreen() {
   );
 
   return (
-    <ScreenContainer scrollable noPadding={false}>
-      <Card elevation={1} style={styles.profileCard}>
-        <View style={styles.header}>
-          <Image source={{ uri: user?.photoURL ?? 'https://www.gravatar.com/avatar/?d=mp' }} style={styles.avatar} />
-          <View style={styles.userDetails}>
-            <ThemedText type="h2">{user?.displayName}</ThemedText>
-            <ThemedText style={styles.userInfo}>{user?.email}</ThemedText>
-            <TouchableOpacity onPress={() => router.push('/profile/edit')}>
-              <ThemedText style={styles.editProfile}>Edit profile ›</ThemedText>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Card>
-
-      {settingsSections.map((section, sectionIndex) => (
-        <View key={section.title || `section-${sectionIndex}`} style={styles.section}>
-          {section.title && (
-            <ThemedText type="h2" style={CommonText.sectionTitle}>
-              {section.title}
-            </ThemedText>
-          )}
-          <Card elevation={1} noPadding>
-            {section.items.map((item, itemIndex) => (
-              <TouchableOpacity
-                key={`${sectionIndex}-${itemIndex}-${item.title}`}
-                style={[styles.settingRow, itemIndex === section.items.length - 1 && styles.settingRowLast]}
-                onPress={() => handlePress(item)}
-              >
-                <Feather name={item.icon as React.ComponentProps<typeof Feather>['name']} size={24} color={item.type === 'danger' ? errorColor : textColor} />
-                <View style={styles.settingInfo}>
-                  <ThemedText style={item.type === 'danger' ? styles.settingTitleDanger : styles.settingTitle}>{item.title}</ThemedText>
-                  {item.subtitle && (
-                    <ThemedText type="caption" style={styles.settingSubtitle}>
-                      {item.subtitle}
-                    </ThemedText>
-                  )}
-                </View>
-                {(item.type === 'link' || item.type === 'action' || item.type === 'danger') && <Feather name="chevron-right" size={24} color={textMutedColor} />}
+    <>
+      <TabHeader title="Settings" showBackButton={false} />
+      <ScreenContainer scrollable noPadding={false} useSafeArea={false}>
+        <Card elevation={1} style={styles.profileCard}>
+          <View style={styles.header}>
+            <Image source={{ uri: user?.photoURL ?? 'https://www.gravatar.com/avatar/?d=mp' }} style={styles.avatar} />
+            <View style={styles.userDetails}>
+              <ThemedText type="h2">{user?.displayName}</ThemedText>
+              <ThemedText style={styles.userInfo}>{user?.email}</ThemedText>
+              <TouchableOpacity onPress={() => router.push('/profile/edit')}>
+                <ThemedText style={styles.editProfile}>Edit profile ›</ThemedText>
               </TouchableOpacity>
-            ))}
-          </Card>
-        </View>
-      ))}
+            </View>
+          </View>
+        </Card>
 
-      {/* Confirmation Dialogs */}
-      {logoutDialog.config && (
-        <ConfirmationDialog
-          visible={logoutDialog.visible}
-          onClose={logoutDialog.hide}
-          title={logoutDialog.config.title}
-          message={logoutDialog.config.message}
-          confirmText={i18n.t('dialogs.buttons.logOut')}
-          cancelText={i18n.t('dialogs.buttons.cancel')}
-          onConfirm={logoutDialog.config.onConfirm}
-          destructive={logoutDialog.config.destructive}
-        />
-      )}
+        {settingsSections.map((section, sectionIndex) => (
+          <View key={section.title || `section-${sectionIndex}`} style={styles.section}>
+            {section.title && (
+              <ThemedText type="h2" style={CommonText.sectionTitle}>
+                {section.title}
+              </ThemedText>
+            )}
+            <Card elevation={1} noPadding>
+              {section.items.map((item, itemIndex) => (
+                <TouchableOpacity
+                  key={`${sectionIndex}-${itemIndex}-${item.title}`}
+                  style={[styles.settingRow, itemIndex === section.items.length - 1 && styles.settingRowLast]}
+                  onPress={() => handlePress(item)}
+                >
+                  <Feather name={item.icon as React.ComponentProps<typeof Feather>['name']} size={24} color={item.type === 'danger' ? errorColor : textColor} />
+                  <View style={styles.settingInfo}>
+                    <ThemedText style={item.type === 'danger' ? styles.settingTitleDanger : styles.settingTitle}>{item.title}</ThemedText>
+                    {item.subtitle && (
+                      <ThemedText type="caption" style={styles.settingSubtitle}>
+                        {item.subtitle}
+                      </ThemedText>
+                    )}
+                  </View>
+                  {(item.type === 'link' || item.type === 'action' || item.type === 'danger') && <Feather name="chevron-right" size={24} color={textMutedColor} />}
+                </TouchableOpacity>
+              ))}
+            </Card>
+          </View>
+        ))}
 
-      {clearCacheDialog.config && (
-        <ConfirmationDialog
-          visible={clearCacheDialog.visible}
-          onClose={clearCacheDialog.hide}
-          title={clearCacheDialog.config.title}
-          message={clearCacheDialog.config.message}
-          confirmText={i18n.t('dialogs.buttons.clear')}
-          cancelText={i18n.t('dialogs.buttons.cancel')}
-          onConfirm={clearCacheDialog.config.onConfirm}
-          destructive={clearCacheDialog.config.destructive}
-        />
-      )}
+        {/* Confirmation Dialogs */}
+        {logoutDialog.config && (
+          <ConfirmationDialog
+            visible={logoutDialog.visible}
+            onClose={logoutDialog.hide}
+            title={logoutDialog.config.title}
+            message={logoutDialog.config.message}
+            confirmText={i18n.t('dialogs.buttons.logOut')}
+            cancelText={i18n.t('dialogs.buttons.cancel')}
+            onConfirm={logoutDialog.config.onConfirm}
+            destructive={logoutDialog.config.destructive}
+          />
+        )}
 
-      {deleteAccountDialog.config && (
-        <ConfirmationDialog
-          visible={deleteAccountDialog.visible}
-          onClose={deleteAccountDialog.hide}
-          title={deleteAccountDialog.config.title}
-          message={deleteAccountDialog.config.message}
-          confirmText={i18n.t('dialogs.buttons.delete')}
-          cancelText={i18n.t('dialogs.buttons.cancel')}
-          onConfirm={deleteAccountDialog.config.onConfirm}
-          destructive={deleteAccountDialog.config.destructive}
-          loading={isDeleting}
-        />
-      )}
-    </ScreenContainer>
+        {clearCacheDialog.config && (
+          <ConfirmationDialog
+            visible={clearCacheDialog.visible}
+            onClose={clearCacheDialog.hide}
+            title={clearCacheDialog.config.title}
+            message={clearCacheDialog.config.message}
+            confirmText={i18n.t('dialogs.buttons.clear')}
+            cancelText={i18n.t('dialogs.buttons.cancel')}
+            onConfirm={clearCacheDialog.config.onConfirm}
+            destructive={clearCacheDialog.config.destructive}
+          />
+        )}
+
+        {deleteAccountDialog.config && (
+          <ConfirmationDialog
+            visible={deleteAccountDialog.visible}
+            onClose={deleteAccountDialog.hide}
+            title={deleteAccountDialog.config.title}
+            message={deleteAccountDialog.config.message}
+            confirmText={i18n.t('dialogs.buttons.delete')}
+            cancelText={i18n.t('dialogs.buttons.cancel')}
+            onConfirm={deleteAccountDialog.config.onConfirm}
+            destructive={deleteAccountDialog.config.destructive}
+            loading={isDeleting}
+          />
+        )}
+      </ScreenContainer>
+    </>
   );
 }

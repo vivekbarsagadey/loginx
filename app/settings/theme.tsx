@@ -1,3 +1,4 @@
+import { TabHeader } from '@/components/navigation/TabHeader';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonContainers, CommonText } from '@/constants/common-styles';
@@ -46,55 +47,58 @@ export default function ThemeScreen() {
   };
 
   return (
-    <ThemedView style={CommonContainers.screenContainer}>
-      <ThemedText type="h1" style={CommonText.title}>
-        {i18n.t('screens.settings.theme.title')}
-      </ThemedText>
-      <ThemedText style={CommonText.subtitleMedium}>{i18n.t('screens.settings.theme.subtitle')}</ThemedText>
-
-      <ThemedView style={styles.optionsContainer}>
-        {themeOptions.map((option) => (
-          <TouchableOpacity
-            key={option.key}
-            style={[
-              styles.optionItem,
-              { backgroundColor: surfaceVariant },
-              themePreference === option.key && [
-                styles.selectedOption,
-                {
-                  borderColor: primaryColor,
-                  backgroundColor: primaryColor + '1A',
-                },
-              ],
-            ]}
-            onPress={() => handleThemeSelect(option.key)}
-          >
-            <ThemedView style={styles.optionContent}>
-              <ThemedText style={styles.optionIcon}>{option.icon}</ThemedText>
-              <ThemedView style={styles.optionText}>
-                <ThemedText type="body" style={styles.optionTitle}>
-                  {option.title}
-                </ThemedText>
-                <ThemedText style={styles.optionDescription}>{option.description}</ThemedText>
-              </ThemedView>
-              {themePreference === option.key && <ThemedText style={[styles.checkmark, { color: primaryColor }]}>✓</ThemedText>}
-            </ThemedView>
-          </TouchableOpacity>
-        ))}
-      </ThemedView>
-
-      <ThemedView style={styles.previewSection}>
-        <ThemedText type="h3" style={styles.previewTitle}>
-          {i18n.t('screens.settings.theme.preview')}
+    <>
+      <TabHeader title={i18n.t('screens.settings.theme.title')} showBackButton={true} />
+      <ThemedView style={[CommonContainers.screenContainer, { paddingTop: 0 }]}>
+        <ThemedText type="h1" style={CommonText.title}>
+          {i18n.t('screens.settings.theme.title')}
         </ThemedText>
-        <ThemedView style={styles.previewContainer}>
-          <ThemedView style={[styles.previewBox, { backgroundColor: surfaceVariant }]}>
-            <ThemedText style={styles.previewText}>Sample Text</ThemedText>
-            <ThemedText style={styles.previewSubtext}>This is how text will appear with the selected theme</ThemedText>
+        <ThemedText style={CommonText.subtitleMedium}>{i18n.t('screens.settings.theme.subtitle')}</ThemedText>
+
+        <ThemedView style={styles.optionsContainer}>
+          {themeOptions.map((option) => (
+            <TouchableOpacity
+              key={option.key}
+              style={[
+                styles.optionItem,
+                { backgroundColor: surfaceVariant },
+                themePreference === option.key && [
+                  styles.selectedOption,
+                  {
+                    borderColor: primaryColor,
+                    backgroundColor: primaryColor + '1A',
+                  },
+                ],
+              ]}
+              onPress={() => handleThemeSelect(option.key)}
+            >
+              <ThemedView style={styles.optionContent}>
+                <ThemedText style={styles.optionIcon}>{option.icon}</ThemedText>
+                <ThemedView style={styles.optionText}>
+                  <ThemedText type="body" style={styles.optionTitle}>
+                    {option.title}
+                  </ThemedText>
+                  <ThemedText style={styles.optionDescription}>{option.description}</ThemedText>
+                </ThemedView>
+                {themePreference === option.key && <ThemedText style={[styles.checkmark, { color: primaryColor }]}>✓</ThemedText>}
+              </ThemedView>
+            </TouchableOpacity>
+          ))}
+        </ThemedView>
+
+        <ThemedView style={styles.previewSection}>
+          <ThemedText type="h3" style={styles.previewTitle}>
+            {i18n.t('screens.settings.theme.preview')}
+          </ThemedText>
+          <ThemedView style={styles.previewContainer}>
+            <ThemedView style={[styles.previewBox, { backgroundColor: surfaceVariant }]}>
+              <ThemedText style={styles.previewText}>Sample Text</ThemedText>
+              <ThemedText style={styles.previewSubtext}>This is how text will appear with the selected theme</ThemedText>
+            </ThemedView>
           </ThemedView>
         </ThemedView>
       </ThemedView>
-    </ThemedView>
+    </>
   );
 }
 
