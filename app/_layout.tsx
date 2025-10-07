@@ -117,6 +117,13 @@ function RootLayoutNav() {
           }}
         />
         <Stack.Screen
+          name="notifications"
+          options={{
+            headerShown: false,
+            animation: ScreenTransitions.SLIDE_FROM_RIGHT,
+          }}
+        />
+        <Stack.Screen
           name="legal"
           options={{
             headerShown: false,

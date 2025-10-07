@@ -21,7 +21,8 @@ export const settingsSections: { title?: string; items: SettingsItem[] }[] = [
     items: [
       { type: 'link', icon: 'user', title: i18n.t('settings.editProfile'), href: '/profile/edit' },
       { type: 'link', icon: 'at-sign', title: i18n.t('settings.updateEmail'), href: '/profile/update-email' },
-      { type: 'link', icon: 'bell', title: i18n.t('settings.notifications'), href: '/settings/notifications' },
+      { type: 'link', icon: 'bell', title: i18n.t('settings.notifications'), subtitle: 'Notification preferences', href: '/settings/notifications' },
+      { type: 'link', icon: 'inbox', title: 'Notification Center', subtitle: 'View all past notifications', href: '/notifications' },
     ],
   },
   {

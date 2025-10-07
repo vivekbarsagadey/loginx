@@ -1,5 +1,6 @@
 import { Colors } from '@/constants/theme';
 import { Config } from '@/utils/config';
+import { addNotification } from '@/utils/notification-storage';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
@@ -163,6 +164,19 @@ export const usePushNotifications = (uid?: string) => {
     // Set up notification listeners
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
       setNotification(notification);
+      
+      // Save notification to history
+      const { title, body } = notification.request.content;
+      if (title && body) {
+        addNotification({
+          type: 'info',
+          title: title,
+          message: body,
+        }).catch(error => {
+          console.error('[Push Notifications] Error saving notification:', error);
+        });
+      }
+      
       if (__DEV__) {
         console.warn('[Push Notifications] Notification received:', notification);
       }

@@ -49,6 +49,11 @@ export const Routes = {
     TEXT_SIZE: '/settings/text-size',
   },
 
+  // Notifications
+  NOTIFICATIONS: {
+    CENTER: '/notifications',
+  },
+
   // Legal routes
   LEGAL: {
     TERMS: '/legal/terms',

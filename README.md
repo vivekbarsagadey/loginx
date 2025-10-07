@@ -121,7 +121,9 @@ comprehensive profile management.
 ### 🔔 Notifications & Communication
 
 - **Push Notifications** - Rich push notifications with Firebase
-- **In-App Notifications** - Contextual alerts and messages
+- **Notifications Center** - Dedicated screen showing all past notifications with history
+- **In-App Notifications** - Contextual alerts and messages  
+- **Notification Management** - Mark as read, delete, and clear all notifications
 - **Email Integration** - Automated emails for verification and notifications
 
 ## What's New
