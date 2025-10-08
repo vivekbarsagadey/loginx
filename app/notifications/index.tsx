@@ -7,6 +7,7 @@ import { TabHeader } from '@/components/navigation/TabHeader';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { SkeletonListItem } from '@/components/ui/skeleton-loader';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -15,7 +16,7 @@ import { clearAllNotifications, deleteNotification, getNotificationHistory, mark
 import { Feather, Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 
 export default function NotificationsCenterScreen() {
   const surfaceColor = useThemeColor({}, 'surface');
@@ -268,10 +269,21 @@ export default function NotificationsCenterScreen() {
 
   if (loading) {
     return (
-      <ScreenContainer centerContent>
-        <ActivityIndicator size="large" color={primaryColor} />
-        <ThemedText style={{ marginTop: Spacing.md }}>Loading notifications...</ThemedText>
-      </ScreenContainer>
+      <>
+        <TabHeader title="Notifications" showBackButton={true} />
+        <ScreenContainer useSafeArea={false}>
+          <View style={{ padding: Spacing.lg }}>
+            <View style={styles.header}>
+              <ThemedView>
+                <ThemedText type="h2">Notifications</ThemedText>
+              </ThemedView>
+            </View>
+            {[1, 2, 3, 4, 5].map((i) => (
+              <SkeletonListItem key={i} shimmer />
+            ))}
+          </View>
+        </ScreenContainer>
+      </>
     );
   }
 

@@ -5,6 +5,7 @@ import { ThemedInput } from '@/components/themed-input';
 import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { SkeletonAvatar, SkeletonForm, SkeletonLoader } from '@/components/ui/skeleton-loader';
 import { AccessibilityHints, AccessibilityRoles } from '@/constants/accessibility';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
@@ -297,10 +298,24 @@ export default function EditProfileScreen() {
   // Show loading state while fetching profile
   if (initialLoading) {
     return (
-      <ThemedView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={tintColor} />
-        <ThemedText style={styles.loadingText}>{i18n.t('common.loading')}</ThemedText>
-      </ThemedView>
+      <>
+        <TabHeader title={i18n.t('profile.edit.title')} showBackButton={true} />
+        <ThemedView style={[styles.container, { paddingTop: 0 }]}>
+          <ThemedScrollView contentContainerStyle={styles.scrollContent}>
+            {/* Avatar Skeleton */}
+            <ThemedView style={styles.avatarSection}>
+              <SkeletonAvatar size={128} shimmer />
+              <SkeletonLoader height={16} width={120} style={{ marginTop: Spacing.md }} shimmer />
+            </ThemedView>
+
+            {/* Form Skeleton */}
+            <ThemedView style={styles.formSection}>
+              <SkeletonLoader height={16} width={150} style={{ marginBottom: Spacing.md }} shimmer />
+              <SkeletonForm shimmer />
+            </ThemedView>
+          </ThemedScrollView>
+        </ThemedView>
+      </>
     );
   }
 

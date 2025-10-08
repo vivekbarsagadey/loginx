@@ -3,12 +3,13 @@ import { TabHeader } from '@/components/navigation/TabHeader';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
+import { SkeletonCard, SkeletonText } from '@/components/ui/skeleton-loader';
 import { CommonSpacing } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { useAuth } from '@/hooks/use-auth-provider';
 import { UserProfile } from '@/types/user';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 
 export default function IndexScreen() {
   const { user } = useAuth();
@@ -39,9 +40,18 @@ export default function IndexScreen() {
 
   if (loading) {
     return (
-      <ScreenContainer centerContent>
-        <ActivityIndicator size="large" />
-      </ScreenContainer>
+      <>
+        <TabHeader title="Home" showBackButton={false} />
+        <ScreenContainer scrollable useSafeArea={false}>
+          <View style={CommonSpacing.marginBottomLarge}>
+            <SkeletonText lines={2} shimmer />
+          </View>
+          <SkeletonCard shimmer />
+          <View style={{ marginTop: Spacing.lg }}>
+            <SkeletonCard shimmer />
+          </View>
+        </ScreenContainer>
+      </>
     );
   }
 

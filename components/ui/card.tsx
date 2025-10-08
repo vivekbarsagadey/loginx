@@ -7,8 +7,9 @@ import { BorderRadius, Shadow, Spacing } from '@/constants/layout';
 import { getShadow } from '@/constants/style-utils';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeColor } from '@/hooks/use-theme-color';
-import { PropsWithChildren, ReactNode } from 'react';
-import { StyleSheet, View, ViewProps, ViewStyle } from 'react-native';
+import type { PropsWithChildren, ReactNode } from 'react';
+import type { ViewProps, ViewStyle } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 export type CardElevation = 0 | 1 | 2 | 3 | 4 | 5;
 

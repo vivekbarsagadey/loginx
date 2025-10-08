@@ -2,8 +2,24 @@ import { AnimationDurations, Colors } from '@/constants';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useEffect } from 'react';
 import { DimensionValue, StyleSheet, View, ViewStyle } from 'react-native';
-import Animated, { Easing, interpolate, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, interpolate, useAnimatedStyle, useReducedMotion, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 
+/**
+ * Skeleton loader component for displaying loading states
+ * Supports both pulse and shimmer animation effects
+ * Respects user's reduced motion preferences for accessibility
+ * @example
+ * // Basic usage
+ * <SkeletonLoader height={40} />
+ *
+ * // With shimmer effect
+ * <SkeletonLoader height={40} shimmer />
+ *
+ * // Using presets
+ * <SkeletonText lines={3} />
+ * <SkeletonCard />
+ * <SkeletonListItem />
+ */
 interface SkeletonLoaderProps {
   /** Width of the skeleton */
   width?: DimensionValue;
@@ -17,50 +33,43 @@ interface SkeletonLoaderProps {
   shimmer?: boolean;
 }
 
-export const SkeletonLoader = ({ 
-  width = '100%', 
-  height = 20, 
-  borderRadius = 4, 
-  style,
-  shimmer = false 
-}: SkeletonLoaderProps) => {
+export const SkeletonLoader = ({ width = '100%', height = 20, borderRadius = 4, style, shimmer = false }: SkeletonLoaderProps) => {
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme || 'light'];
+  const reducedMotion = useReducedMotion();
   const opacity = useSharedValue(0.3);
   const shimmerValue = useSharedValue(0);
 
   useEffect(() => {
+    // Respect user's reduced motion preference
+    if (reducedMotion) {
+      opacity.value = 0.5;
+      return;
+    }
+
     if (shimmer) {
       // Shimmer effect - sliding gradient
       shimmerValue.value = withRepeat(
-        withTiming(1, { 
+        withTiming(1, {
           duration: AnimationDurations.SKELETON_SHIMMER,
-          easing: Easing.linear 
+          easing: Easing.linear,
         }),
         -1,
         false
       );
     } else {
       // Pulse effect - opacity animation
-      opacity.value = withRepeat(
-        withTiming(0.8, { duration: AnimationDurations.SKELETON_SHIMMER / 1.5 }),
-        -1,
-        true
-      );
+      opacity.value = withRepeat(withTiming(0.8, { duration: AnimationDurations.SKELETON_SHIMMER / 1.5 }), -1, true);
     }
-  }, [opacity, shimmerValue, shimmer]);
+  }, [opacity, shimmerValue, shimmer, reducedMotion]);
 
   const pulseStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
   }));
 
   const shimmerStyle = useAnimatedStyle(() => {
-    const translateX = interpolate(
-      shimmerValue.value,
-      [0, 1],
-      [-300, 300]
-    );
-    
+    const translateX = interpolate(shimmerValue.value, [0, 1], [-300, 300]);
+
     return {
       transform: [{ translateX }],
     };
@@ -74,54 +83,44 @@ export const SkeletonLoader = ({
   };
 
   if (shimmer) {
-    const shimmerColor = colorScheme === 'dark' 
-      ? 'rgba(255,255,255,0.1)' 
-      : 'rgba(255,255,255,0.7)';
+    const shimmerColor = colorScheme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.7)';
 
     return (
-      <View style={[styles.skeleton, baseStyle, style]}>
-        <Animated.View 
-          style={[
-            styles.shimmerOverlay,
-            shimmerStyle,
-            { backgroundColor: shimmerColor }
-          ]}
-        />
+      <View style={[styles.skeleton, baseStyle, style]} accessibilityRole="none" accessibilityLabel="Loading content" accessible={true}>
+        <Animated.View style={[styles.shimmerOverlay, shimmerStyle, { backgroundColor: shimmerColor }]} />
       </View>
     );
   }
 
-  return (
-    <Animated.View
-      style={[
-        styles.skeleton,
-        baseStyle,
-        pulseStyle,
-        style,
-      ]}
-    />
-  );
+  return <Animated.View style={[styles.skeleton, baseStyle, pulseStyle, style]} accessibilityRole="none" accessibilityLabel="Loading content" accessible={true} />;
 };
 
 // Skeleton presets for common UI elements
+
+/**
+ * Text skeleton with multiple lines
+ * @param lines - Number of text lines to display (default: 1)
+ * @param shimmer - Use shimmer effect instead of pulse (default: false)
+ */
 export const SkeletonText = ({ lines = 1, shimmer = false }: { lines?: number; shimmer?: boolean }) => (
   <View style={styles.textContainer}>
     {Array.from({ length: lines }).map((_, index) => (
-      <SkeletonLoader 
-        key={index} 
-        height={16} 
-        width={index === lines - 1 ? '60%' : '100%'} 
-        style={index < lines - 1 ? styles.textLine : undefined}
-        shimmer={shimmer}
-      />
+      <SkeletonLoader key={index} height={16} width={index === lines - 1 ? '60%' : '100%'} style={index < lines - 1 ? styles.textLine : undefined} shimmer={shimmer} />
     ))}
   </View>
 );
 
-export const SkeletonAvatar = ({ size = 40, shimmer = false }: { size?: number; shimmer?: boolean }) => (
-  <SkeletonLoader width={size} height={size} borderRadius={size / 2} shimmer={shimmer} />
-);
+/**
+ * Circular avatar skeleton
+ * @param size - Diameter of the avatar (default: 40)
+ * @param shimmer - Use shimmer effect instead of pulse (default: false)
+ */
+export const SkeletonAvatar = ({ size = 40, shimmer = false }: { size?: number; shimmer?: boolean }) => <SkeletonLoader width={size} height={size} borderRadius={size / 2} shimmer={shimmer} />;
 
+/**
+ * Card skeleton with avatar, header, and content
+ * @param shimmer - Use shimmer effect instead of pulse (default: false)
+ */
 export const SkeletonCard = ({ shimmer = false }: { shimmer?: boolean }) => (
   <View style={styles.cardContainer}>
     <View style={styles.cardHeader}>
@@ -135,22 +134,26 @@ export const SkeletonCard = ({ shimmer = false }: { shimmer?: boolean }) => (
   </View>
 );
 
-export const SkeletonButton = ({ shimmer = false }: { shimmer?: boolean }) => (
-  <SkeletonLoader height={48} borderRadius={12} style={styles.button} shimmer={shimmer} />
-);
+/**
+ * Button skeleton
+ * @param shimmer - Use shimmer effect instead of pulse (default: false)
+ */
+export const SkeletonButton = ({ shimmer = false }: { shimmer?: boolean }) => <SkeletonLoader height={48} borderRadius={12} style={styles.button} shimmer={shimmer} />;
 
-export const SkeletonImage = ({ 
-  width = '100%', 
-  height = 200,
-  shimmer = false 
-}: { 
-  width?: DimensionValue; 
-  height?: number;
-  shimmer?: boolean;
-}) => (
+/**
+ * Image placeholder skeleton
+ * @param width - Width of the image (default: '100%')
+ * @param height - Height of the image (default: 200)
+ * @param shimmer - Use shimmer effect instead of pulse (default: false)
+ */
+export const SkeletonImage = ({ width = '100%', height = 200, shimmer = false }: { width?: DimensionValue; height?: number; shimmer?: boolean }) => (
   <SkeletonLoader width={width} height={height} borderRadius={8} shimmer={shimmer} />
 );
 
+/**
+ * List item skeleton with avatar and text
+ * @param shimmer - Use shimmer effect instead of pulse (default: false)
+ */
 export const SkeletonListItem = ({ shimmer = false }: { shimmer?: boolean }) => (
   <View style={styles.listItem}>
     <SkeletonAvatar size={40} shimmer={shimmer} />
@@ -161,6 +164,10 @@ export const SkeletonListItem = ({ shimmer = false }: { shimmer?: boolean }) => 
   </View>
 );
 
+/**
+ * Form skeleton with labels, inputs, and button
+ * @param shimmer - Use shimmer effect instead of pulse (default: false)
+ */
 export const SkeletonForm = ({ shimmer = false }: { shimmer?: boolean }) => (
   <View>
     <SkeletonLoader height={16} width="30%" style={styles.formLabel} shimmer={shimmer} />
