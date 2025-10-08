@@ -1,5 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
+import { Badge } from '@/components/ui/data-display/badge';
 import { Spacing, TouchTarget } from '@/constants/layout';
+import { useNotificationCount } from '@/hooks/use-notification-count';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -16,6 +18,7 @@ export function TabHeader({ title, showBackButton = false }: TabHeaderProps) {
   const router = useRouter();
   const _pathname = usePathname();
   const insets = useSafeAreaInsets();
+  const { unreadCount } = useNotificationCount();
 
   const backgroundColor = useThemeColor({}, 'bg');
   const borderColor = useThemeColor({}, 'border');
@@ -102,8 +105,18 @@ export function TabHeader({ title, showBackButton = false }: TabHeaderProps) {
         </View>
 
         <View style={styles.rightSection}>
-          <Pressable onPress={handleNotifications} style={styles.iconButton} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }} accessibilityRole="button" accessibilityLabel="Notifications">
-            {({ pressed }) => <Feather name="bell" size={22} color={pressed ? primaryColor : iconColor} />}
+          <Pressable
+            onPress={handleNotifications}
+            style={styles.iconButton}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            accessibilityRole="button"
+            accessibilityLabel={`Notifications${unreadCount > 0 ? ` (${unreadCount} unread)` : ''}`}
+          >
+            {({ pressed }) => (
+              <Badge content={unreadCount} variant="error" size="small" max={99} invisible={unreadCount === 0}>
+                <Feather name="bell" size={22} color={pressed ? primaryColor : iconColor} />
+              </Badge>
+            )}
           </Pressable>
 
           <Pressable onPress={handleSettings} style={styles.iconButton} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }} accessibilityRole="button" accessibilityLabel="Settings">

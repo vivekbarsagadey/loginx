@@ -10,6 +10,7 @@ import { ThemedView } from '@/components/themed-view';
 import { SkeletonListItem } from '@/components/ui/skeleton-loader';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
+import { useNotificationCount } from '@/hooks/use-notification-count';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import type { NotificationItem, NotificationType } from '@/types/notification';
 import { clearAllNotifications, deleteNotification, getNotificationHistory, markAllNotificationsAsRead, markNotificationAsRead } from '@/utils/notification-storage';
@@ -31,6 +32,9 @@ export default function NotificationsCenterScreen() {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+
+  // Hook to track and refresh badge count
+  const { refreshCount } = useNotificationCount();
 
   const loadNotifications = useCallback(async () => {
     try {
@@ -58,15 +62,17 @@ export default function NotificationsCenterScreen() {
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       await markNotificationAsRead(id);
       await loadNotifications();
+      refreshCount(); // Update badge count
     },
-    [loadNotifications]
+    [loadNotifications, refreshCount]
   );
 
   const handleMarkAllAsRead = useCallback(async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     await markAllNotificationsAsRead();
     await loadNotifications();
-  }, [loadNotifications]);
+    refreshCount(); // Update badge count
+  }, [loadNotifications, refreshCount]);
 
   const handleDelete = useCallback(
     async (id: string) => {
@@ -79,11 +85,12 @@ export default function NotificationsCenterScreen() {
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
             await deleteNotification(id);
             await loadNotifications();
+            refreshCount(); // Update badge count
           },
         },
       ]);
     },
-    [loadNotifications]
+    [loadNotifications, refreshCount]
   );
 
   const handleClearAll = useCallback(async () => {
@@ -96,10 +103,11 @@ export default function NotificationsCenterScreen() {
           await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
           await clearAllNotifications();
           await loadNotifications();
+          refreshCount(); // Update badge count
         },
       },
     ]);
-  }, [loadNotifications]);
+  }, [loadNotifications, refreshCount]);
 
   const getNotificationIcon = (type: NotificationType) => {
     switch (type) {
