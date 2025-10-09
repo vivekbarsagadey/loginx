@@ -17,9 +17,6 @@ export default function TermsScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={CommonText.title} accessibilityRole="header">
-        {i18n.t('screens.legal.terms.title')}
-      </ThemedText>
       <ThemedText style={styles.lastUpdated} accessibilityLabel={`Last updated: ${i18n.t('screens.legal.terms.lastUpdated')}`}>
         {i18n.t('screens.legal.terms.lastUpdated')}
       </ThemedText>

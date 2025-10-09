@@ -12,9 +12,6 @@ export default function WhatsNewScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={CommonText.title}>
-        {i18n.t('screens.whatsNew.title')}
-      </ThemedText>
       <ThemedText type="h2" style={styles.version}>
         {i18n.t('screens.whatsNew.version')}
       </ThemedText>

@@ -1,4 +1,3 @@
-import { TabHeader } from '@/components/navigation/TabHeader';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
@@ -152,84 +151,78 @@ export default function ChangePasswordScreen() {
   }, [user, currentPassword, newPassword, confirmPassword, validatePassword, router]);
 
   return (
-    <>
-      <TabHeader title="Change Password" showBackButton={true} />
-      <ScreenContainer scrollable useSafeArea={false}>
-        <ThemedText type="h1" style={CommonText.title}>
-          {i18n.t('screens.security.changePassword.title')}
-        </ThemedText>
-        <ThemedText style={CommonText.subtitle}>{i18n.t('screens.security.changePassword.subtitle')}</ThemedText>
+    <ScreenContainer scrollable useSafeArea={false}>
+      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.security.changePassword.subtitle')}</ThemedText>
 
-        <ThemedView style={styles.form}>
-          <ThemedInput
-            label={i18n.t('screens.security.changePassword.currentPassword')}
-            value={currentPassword}
-            onChangeText={(text) => {
-              setCurrentPassword(text);
-              if (currentPasswordError) {
-                setCurrentPasswordError('');
-              }
-            }}
-            errorMessage={currentPasswordError}
-            secureTextEntry
-            style={styles.input}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
+      <ThemedView style={styles.form}>
+        <ThemedInput
+          label={i18n.t('screens.security.changePassword.currentPassword')}
+          value={currentPassword}
+          onChangeText={(text) => {
+            setCurrentPassword(text);
+            if (currentPasswordError) {
+              setCurrentPasswordError('');
+            }
+          }}
+          errorMessage={currentPasswordError}
+          secureTextEntry
+          style={styles.input}
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
 
-          <ThemedInput
-            label={i18n.t('screens.security.changePassword.newPassword')}
-            value={newPassword}
-            onChangeText={(text) => {
-              setNewPassword(text);
-              if (newPasswordError) {
-                setNewPasswordError('');
-              }
-            }}
-            errorMessage={newPasswordError}
-            secureTextEntry
-            style={styles.input}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
+        <ThemedInput
+          label={i18n.t('screens.security.changePassword.newPassword')}
+          value={newPassword}
+          onChangeText={(text) => {
+            setNewPassword(text);
+            if (newPasswordError) {
+              setNewPasswordError('');
+            }
+          }}
+          errorMessage={newPasswordError}
+          secureTextEntry
+          style={styles.input}
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
 
-          <ThemedInput
-            label={i18n.t('screens.security.changePassword.confirmPassword')}
-            value={confirmPassword}
-            onChangeText={(text) => {
-              setConfirmPassword(text);
-              if (confirmPasswordError) {
-                setConfirmPasswordError('');
-              }
-            }}
-            errorMessage={confirmPasswordError}
-            secureTextEntry
-            style={styles.input}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
+        <ThemedInput
+          label={i18n.t('screens.security.changePassword.confirmPassword')}
+          value={confirmPassword}
+          onChangeText={(text) => {
+            setConfirmPassword(text);
+            if (confirmPasswordError) {
+              setConfirmPasswordError('');
+            }
+          }}
+          errorMessage={confirmPasswordError}
+          secureTextEntry
+          style={styles.input}
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
 
-          <ThemedView style={styles.requirementsContainer}>
-            <ThemedText type="h3" style={styles.requirementsTitle}>
-              {requirements.title}
-            </ThemedText>
-            <ThemedText style={styles.requirement}>• {requirements.minLength}</ThemedText>
-            <ThemedText style={styles.requirement}>• {requirements.uppercase}</ThemedText>
-            <ThemedText style={styles.requirement}>• {requirements.lowercase}</ThemedText>
-            <ThemedText style={styles.requirement}>• {requirements.numbers}</ThemedText>
-            <ThemedText style={styles.requirement}>• {requirements.symbols}</ThemedText>
-          </ThemedView>
-
-          <ThemedButton
-            title={loading ? 'Changing Password...' : i18n.t('screens.security.changePassword.changeButton')}
-            onPress={handleChangePassword}
-            disabled={loading || !currentPassword || !newPassword || !confirmPassword}
-            loading={loading}
-            style={styles.changeButton}
-          />
+        <ThemedView style={styles.requirementsContainer}>
+          <ThemedText type="h3" style={styles.requirementsTitle}>
+            {requirements.title}
+          </ThemedText>
+          <ThemedText style={styles.requirement}>• {requirements.minLength}</ThemedText>
+          <ThemedText style={styles.requirement}>• {requirements.uppercase}</ThemedText>
+          <ThemedText style={styles.requirement}>• {requirements.lowercase}</ThemedText>
+          <ThemedText style={styles.requirement}>• {requirements.numbers}</ThemedText>
+          <ThemedText style={styles.requirement}>• {requirements.symbols}</ThemedText>
         </ThemedView>
-      </ScreenContainer>
-    </>
+
+        <ThemedButton
+          title={loading ? 'Changing Password...' : i18n.t('screens.security.changePassword.changeButton')}
+          onPress={handleChangePassword}
+          disabled={loading || !currentPassword || !newPassword || !confirmPassword}
+          loading={loading}
+          style={styles.changeButton}
+        />
+      </ThemedView>
+    </ScreenContainer>
   );
 }
 

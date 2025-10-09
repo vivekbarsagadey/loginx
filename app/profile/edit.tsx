@@ -1,5 +1,4 @@
 import { getUserProfile, updateUser } from '@/actions/user.action';
-import { TabHeader } from '@/components/navigation/TabHeader';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedScrollView } from '@/components/themed-scroll-view';
@@ -298,216 +297,210 @@ export default function EditProfileScreen() {
   // Show loading state while fetching profile
   if (initialLoading) {
     return (
-      <>
-        <TabHeader title={i18n.t('profile.edit.title')} showBackButton={true} />
-        <ThemedView style={[styles.container, { paddingTop: 0 }]}>
-          <ThemedScrollView contentContainerStyle={styles.scrollContent}>
-            {/* Avatar Skeleton */}
-            <ThemedView style={styles.avatarSection}>
-              <SkeletonAvatar size={128} shimmer />
-              <SkeletonLoader height={16} width={120} style={{ marginTop: Spacing.md }} shimmer />
-            </ThemedView>
+      <ThemedView style={styles.container}>
+        <ThemedScrollView contentContainerStyle={styles.scrollContent}>
+          {/* Avatar Skeleton */}
+          <ThemedView style={styles.avatarSection}>
+            <SkeletonAvatar size={128} shimmer />
+            <SkeletonLoader height={16} width={120} style={{ marginTop: Spacing.md }} shimmer />
+          </ThemedView>
 
-            {/* Form Skeleton */}
-            <ThemedView style={styles.formSection}>
-              <SkeletonLoader height={16} width={150} style={{ marginBottom: Spacing.md }} shimmer />
-              <SkeletonForm shimmer />
-            </ThemedView>
-          </ThemedScrollView>
-        </ThemedView>
-      </>
+          {/* Form Skeleton */}
+          <ThemedView style={styles.formSection}>
+            <SkeletonLoader height={16} width={150} style={{ marginBottom: Spacing.md }} shimmer />
+            <SkeletonForm shimmer />
+          </ThemedView>
+        </ThemedScrollView>
+      </ThemedView>
     );
   }
 
   return (
-    <>
-      <TabHeader title={i18n.t('profile.edit.title')} showBackButton={true} />
-      <ThemedView style={[styles.container, { paddingTop: 0 }]}>
-        <ThemedScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-          {/* Avatar Section */}
-          <ThemedView style={styles.avatarSection}>
-            <TouchableOpacity
-              onPress={handleImagePick}
-              style={[styles.avatarContainer, { borderColor }]}
-              disabled={imageLoading || loading}
-              accessible={true}
-              accessibilityRole={AccessibilityRoles.BUTTON}
-              accessibilityLabel="Change profile photo"
-              accessibilityHint={AccessibilityHints.BUTTON_TAP}
-            >
-              <Image source={{ uri: photoURL || defaultAvatarUri }} style={[styles.avatar, { borderColor }]} accessibilityIgnoresInvertColors={true} />
-              {imageLoading && (
-                <ThemedView style={[styles.imageLoadingOverlay, { backgroundColor: overlayColor + '80' }]}>
-                  <ActivityIndicator size="large" color={tintColor} />
-                  <ThemedText style={[styles.uploadingText, { color: tintColor }]}>Uploading...</ThemedText>
-                </ThemedView>
-              )}
-            </TouchableOpacity>
+    <ThemedView style={styles.container}>
+      <ThemedScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
+        {/* Avatar Section */}
+        <ThemedView style={styles.avatarSection}>
+          <TouchableOpacity
+            onPress={handleImagePick}
+            style={[styles.avatarContainer, { borderColor }]}
+            disabled={imageLoading || loading}
+            accessible={true}
+            accessibilityRole={AccessibilityRoles.BUTTON}
+            accessibilityLabel="Change profile photo"
+            accessibilityHint={AccessibilityHints.BUTTON_TAP}
+          >
+            <Image source={{ uri: photoURL || defaultAvatarUri }} style={[styles.avatar, { borderColor }]} accessibilityIgnoresInvertColors={true} />
+            {imageLoading && (
+              <ThemedView style={[styles.imageLoadingOverlay, { backgroundColor: overlayColor + '80' }]}>
+                <ActivityIndicator size="large" color={tintColor} />
+                <ThemedText style={[styles.uploadingText, { color: tintColor }]}>Uploading...</ThemedText>
+              </ThemedView>
+            )}
+          </TouchableOpacity>
 
-            <TouchableOpacity onPress={handleImagePick} disabled={imageLoading || loading} accessible={true} accessibilityRole={AccessibilityRoles.BUTTON} accessibilityLabel="Change profile photo">
-              <ThemedText style={[styles.changePhotoText, { color: tintColor }]}>{imageLoading ? 'Uploading...' : i18n.t('profile.edit.changePhoto')}</ThemedText>
-            </TouchableOpacity>
-          </ThemedView>
-
-          {/* Form Section */}
-          <ThemedView style={styles.formSection}>
-            <ThemedText style={CommonText.sectionTitle}>Basic Information</ThemedText>
-
-            <ThemedInput
-              label={i18n.t('profile.edit.nameLabel')}
-              value={displayName}
-              onChangeText={(text) => {
-                setDisplayName(text);
-                if (displayNameError) {
-                  setDisplayNameError('');
-                }
-              }}
-              onBlur={() => validateDisplayName(displayName)}
-              errorMessage={displayNameError}
-              maxLength={ValidationConstants.NAME_MAX_LENGTH}
-              autoCapitalize="words"
-              autoCorrect={false}
-              returnKeyType="next"
-              onSubmitEditing={() => ageInputRef.current?.focus()}
-              accessible={true}
-              accessibilityLabel="Display name input"
-              accessibilityHint="Enter your display name"
-            />
-
-            <ThemedInput
-              label="Email Address"
-              value={user?.email || ''}
-              editable={false}
-              selectTextOnFocus={false}
-              style={styles.disabledInput}
-              helperText="To change your email, use the Update Email option in Settings"
-              accessible={true}
-              accessibilityLabel="Email address (read-only)"
-              accessibilityHint="Email address cannot be changed here"
-            />
-
-            <ThemedInput
-              ref={ageInputRef}
-              label="Age"
-              value={age}
-              onChangeText={(text) => {
-                const numericText = text.replace(/[^0-9]/g, '');
-                setAge(numericText);
-                if (ageError) {
-                  setAgeError('');
-                }
-              }}
-              onBlur={() => validateAge(age)}
-              errorMessage={ageError}
-              keyboardType="number-pad"
-              maxLength={3}
-              placeholder="Enter your age"
-              returnKeyType="next"
-              onSubmitEditing={() => addressInputRef.current?.focus()}
-              accessible={true}
-              accessibilityLabel="Age input"
-              accessibilityHint="Enter your age (optional)"
-            />
-
-            <ThemedText style={[CommonText.sectionTitle, styles.sectionTitleSpacing]}>Address (Optional)</ThemedText>
-
-            <ThemedInput
-              ref={addressInputRef}
-              label="Street Address"
-              value={address}
-              onChangeText={setAddress}
-              placeholder="123 Main St"
-              maxLength={200}
-              autoCapitalize="words"
-              autoCorrect={false}
-              returnKeyType="next"
-              onSubmitEditing={() => cityInputRef.current?.focus()}
-              accessible={true}
-              accessibilityLabel="Street address input"
-              accessibilityHint="Enter your street address (optional)"
-            />
-
-            <ThemedInput
-              ref={cityInputRef}
-              label="City"
-              value={city}
-              onChangeText={setCity}
-              placeholder="City"
-              maxLength={100}
-              autoCapitalize="words"
-              autoCorrect={false}
-              returnKeyType="next"
-              onSubmitEditing={() => stateInputRef.current?.focus()}
-              accessible={true}
-              accessibilityLabel="City input"
-              accessibilityHint="Enter your city (optional)"
-            />
-
-            <ThemedView style={styles.inlineInputs}>
-              <ThemedInput
-                ref={stateInputRef}
-                label="State"
-                value={state}
-                onChangeText={(text) => setState(text.toUpperCase())}
-                placeholder="CA"
-                maxLength={2}
-                autoCapitalize="characters"
-                autoCorrect={false}
-                returnKeyType="next"
-                onSubmitEditing={() => zipCodeInputRef.current?.focus()}
-                containerStyle={styles.stateInput}
-                accessible={true}
-                accessibilityLabel="State code input"
-                accessibilityHint="Enter your state code (optional)"
-              />
-
-              <ThemedInput
-                ref={zipCodeInputRef}
-                label="Zip Code"
-                value={zipCode}
-                onChangeText={(text) => {
-                  setZipCode(text);
-                  if (zipCodeError) {
-                    setZipCodeError('');
-                  }
-                }}
-                onBlur={() => validateZipCode(zipCode)}
-                errorMessage={zipCodeError}
-                placeholder="12345"
-                keyboardType={Platform.OS === 'ios' ? 'numbers-and-punctuation' : 'default'}
-                maxLength={10}
-                returnKeyType="done"
-                onSubmitEditing={handleUpdate}
-                containerStyle={styles.zipCodeInput}
-                accessible={true}
-                accessibilityLabel="Zip code input"
-                accessibilityHint="Enter your zip code (optional)"
-              />
-            </ThemedView>
-          </ThemedView>
-
-          {/* Helper text */}
-          {hasChanges && (
-            <ThemedView style={styles.helperSection}>
-              <ThemedText style={[styles.helperText, { color: tintColor }]}>You have unsaved changes</ThemedText>
-            </ThemedView>
-          )}
-        </ThemedScrollView>
-
-        {/* Actions Section - Fixed at bottom */}
-        <ThemedView style={styles.actionsSection}>
-          <ThemedButton
-            title={loading ? i18n.t('profile.edit.savingButton') : i18n.t('profile.edit.saveButton')}
-            onPress={handleUpdate}
-            disabled={loading || imageLoading || !hasChanges}
-            loading={loading}
-            variant="primary"
-            accessibilityLabel={loading ? 'Saving profile changes' : 'Save profile changes'}
-            accessibilityHint={loading ? 'Please wait while changes are being saved' : hasChanges ? 'Tap to save your profile changes' : 'No changes to save'}
-          />
+          <TouchableOpacity onPress={handleImagePick} disabled={imageLoading || loading} accessible={true} accessibilityRole={AccessibilityRoles.BUTTON} accessibilityLabel="Change profile photo">
+            <ThemedText style={[styles.changePhotoText, { color: tintColor }]}>{imageLoading ? 'Uploading...' : i18n.t('profile.edit.changePhoto')}</ThemedText>
+          </TouchableOpacity>
         </ThemedView>
+
+        {/* Form Section */}
+        <ThemedView style={styles.formSection}>
+          <ThemedText style={CommonText.sectionTitle}>Basic Information</ThemedText>
+
+          <ThemedInput
+            label={i18n.t('profile.edit.nameLabel')}
+            value={displayName}
+            onChangeText={(text) => {
+              setDisplayName(text);
+              if (displayNameError) {
+                setDisplayNameError('');
+              }
+            }}
+            onBlur={() => validateDisplayName(displayName)}
+            errorMessage={displayNameError}
+            maxLength={ValidationConstants.NAME_MAX_LENGTH}
+            autoCapitalize="words"
+            autoCorrect={false}
+            returnKeyType="next"
+            onSubmitEditing={() => ageInputRef.current?.focus()}
+            accessible={true}
+            accessibilityLabel="Display name input"
+            accessibilityHint="Enter your display name"
+          />
+
+          <ThemedInput
+            label="Email Address"
+            value={user?.email || ''}
+            editable={false}
+            selectTextOnFocus={false}
+            style={styles.disabledInput}
+            helperText="To change your email, use the Update Email option in Settings"
+            accessible={true}
+            accessibilityLabel="Email address (read-only)"
+            accessibilityHint="Email address cannot be changed here"
+          />
+
+          <ThemedInput
+            ref={ageInputRef}
+            label="Age"
+            value={age}
+            onChangeText={(text) => {
+              const numericText = text.replace(/[^0-9]/g, '');
+              setAge(numericText);
+              if (ageError) {
+                setAgeError('');
+              }
+            }}
+            onBlur={() => validateAge(age)}
+            errorMessage={ageError}
+            keyboardType="number-pad"
+            maxLength={3}
+            placeholder="Enter your age"
+            returnKeyType="next"
+            onSubmitEditing={() => addressInputRef.current?.focus()}
+            accessible={true}
+            accessibilityLabel="Age input"
+            accessibilityHint="Enter your age (optional)"
+          />
+
+          <ThemedText style={[CommonText.sectionTitle, styles.sectionTitleSpacing]}>Address (Optional)</ThemedText>
+
+          <ThemedInput
+            ref={addressInputRef}
+            label="Street Address"
+            value={address}
+            onChangeText={setAddress}
+            placeholder="123 Main St"
+            maxLength={200}
+            autoCapitalize="words"
+            autoCorrect={false}
+            returnKeyType="next"
+            onSubmitEditing={() => cityInputRef.current?.focus()}
+            accessible={true}
+            accessibilityLabel="Street address input"
+            accessibilityHint="Enter your street address (optional)"
+          />
+
+          <ThemedInput
+            ref={cityInputRef}
+            label="City"
+            value={city}
+            onChangeText={setCity}
+            placeholder="City"
+            maxLength={100}
+            autoCapitalize="words"
+            autoCorrect={false}
+            returnKeyType="next"
+            onSubmitEditing={() => stateInputRef.current?.focus()}
+            accessible={true}
+            accessibilityLabel="City input"
+            accessibilityHint="Enter your city (optional)"
+          />
+
+          <ThemedView style={styles.inlineInputs}>
+            <ThemedInput
+              ref={stateInputRef}
+              label="State"
+              value={state}
+              onChangeText={(text) => setState(text.toUpperCase())}
+              placeholder="CA"
+              maxLength={2}
+              autoCapitalize="characters"
+              autoCorrect={false}
+              returnKeyType="next"
+              onSubmitEditing={() => zipCodeInputRef.current?.focus()}
+              containerStyle={styles.stateInput}
+              accessible={true}
+              accessibilityLabel="State code input"
+              accessibilityHint="Enter your state code (optional)"
+            />
+
+            <ThemedInput
+              ref={zipCodeInputRef}
+              label="Zip Code"
+              value={zipCode}
+              onChangeText={(text) => {
+                setZipCode(text);
+                if (zipCodeError) {
+                  setZipCodeError('');
+                }
+              }}
+              onBlur={() => validateZipCode(zipCode)}
+              errorMessage={zipCodeError}
+              placeholder="12345"
+              keyboardType={Platform.OS === 'ios' ? 'numbers-and-punctuation' : 'default'}
+              maxLength={10}
+              returnKeyType="done"
+              onSubmitEditing={handleUpdate}
+              containerStyle={styles.zipCodeInput}
+              accessible={true}
+              accessibilityLabel="Zip code input"
+              accessibilityHint="Enter your zip code (optional)"
+            />
+          </ThemedView>
+        </ThemedView>
+
+        {/* Helper text */}
+        {hasChanges && (
+          <ThemedView style={styles.helperSection}>
+            <ThemedText style={[styles.helperText, { color: tintColor }]}>You have unsaved changes</ThemedText>
+          </ThemedView>
+        )}
+      </ThemedScrollView>
+
+      {/* Actions Section - Fixed at bottom */}
+      <ThemedView style={styles.actionsSection}>
+        <ThemedButton
+          title={loading ? i18n.t('profile.edit.savingButton') : i18n.t('profile.edit.saveButton')}
+          onPress={handleUpdate}
+          disabled={loading || imageLoading || !hasChanges}
+          loading={loading}
+          variant="primary"
+          accessibilityLabel={loading ? 'Saving profile changes' : 'Save profile changes'}
+          accessibilityHint={loading ? 'Please wait while changes are being saved' : hasChanges ? 'Tap to save your profile changes' : 'No changes to save'}
+        />
       </ThemedView>
-    </>
+    </ThemedView>
   );
 }
 

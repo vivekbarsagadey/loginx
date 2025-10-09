@@ -127,9 +127,6 @@ export default function DialogExamplesScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={CommonText.title}>
-        Dialog Components
-      </ThemedText>
       <ThemedText type="body" style={CommonText.subtitle}>
         Examples of all dialog components available in the app.
       </ThemedText>

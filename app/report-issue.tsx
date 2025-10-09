@@ -115,12 +115,6 @@ export default function ReportIssueScreen() {
 
   return (
     <ScreenContainer scrollable>
-      {/* Header */}
-      <ThemedText type="h1" style={CommonText.title}>
-        Report an Issue
-      </ThemedText>
-      <ThemedText style={CommonText.subtitle}>Help us fix problems by providing detailed information</ThemedText>
-
       {/* Issue Type Selection */}
       <ThemedView style={styles.section}>
         <ThemedText type="h3" style={CommonText.sectionTitle}>

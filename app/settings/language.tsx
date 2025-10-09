@@ -1,4 +1,3 @@
-import { TabHeader } from '@/components/navigation/TabHeader';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonLists } from '@/constants/common-styles';
@@ -82,20 +81,17 @@ export default function LanguageScreen() {
   );
 
   return (
-    <>
-      <TabHeader title="Language" showBackButton={true} />
-      <ThemedView style={[styles.container, { paddingTop: 0 }]}>
-        <FlatList
-          data={languages}
-          keyExtractor={(item) => item.code}
-          renderItem={renderItem}
-          getItemLayout={getItemLayout}
-          removeClippedSubviews={true}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={3}
-        />
-      </ThemedView>
-    </>
+    <ThemedView style={styles.container}>
+      <FlatList
+        data={languages}
+        keyExtractor={(item) => item.code}
+        renderItem={renderItem}
+        getItemLayout={getItemLayout}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={10}
+        windowSize={5}
+        initialNumToRender={3}
+      />
+    </ThemedView>
   );
 }

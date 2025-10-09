@@ -64,11 +64,6 @@ export default function SupportScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={CommonText.title}>
-        {i18n.t('screens.support.title')}
-      </ThemedText>
-      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.support.subtitle')}</ThemedText>
-
       {/* Contact Section */}
       <ThemedView style={styles.section}>
         <ThemedText type="h3" style={CommonText.sectionTitle}>

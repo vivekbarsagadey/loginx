@@ -1,6 +1,5 @@
 import { updateSetting } from '@/actions/setting.action';
 import { getUserProfile } from '@/actions/user.action';
-import { TabHeader } from '@/components/navigation/TabHeader';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { CommonText } from '@/constants/common-styles';
@@ -153,55 +152,49 @@ export default function NotificationsScreen() {
 
   if (initialLoading) {
     return (
-      <>
-        <TabHeader title="Notification Preferences" showBackButton={true} />
-        <ScreenContainer centerContent useSafeArea={false}>
-          <ActivityIndicator size="large" color={tintColor} />
-          <ThemedText style={styles.loadingText}>Loading settings...</ThemedText>
-        </ScreenContainer>
-      </>
+      <ScreenContainer centerContent useSafeArea={false}>
+        <ActivityIndicator size="large" color={tintColor} />
+        <ThemedText style={styles.loadingText}>Loading settings...</ThemedText>
+      </ScreenContainer>
     );
   }
 
   return (
-    <>
-      <TabHeader title="Notification Preferences" showBackButton={true} />
-      <ScreenContainer scrollable useSafeArea={false}>
-        <View style={styles.header}>
-          <ThemedText type="h2">Notification Preferences</ThemedText>
-          <ThemedText type="caption" style={CommonText.descriptionText}>
-            Choose what notifications you want to receive
-          </ThemedText>
-        </View>
+    <ScreenContainer scrollable useSafeArea={false}>
+      <View style={styles.header}>
+        <ThemedText type="h2">Notification Preferences</ThemedText>
+        <ThemedText type="caption" style={CommonText.descriptionText}>
+          Choose what notifications you want to receive
+        </ThemedText>
+      </View>
 
-        <View style={styles.settingsContainer}>
-          {notificationSettings.map((setting, index) => (
-            <View key={setting.key} style={[styles.settingRow, index === notificationSettings.length - 1 && styles.settingRowLast]}>
-              <View style={styles.iconContainer}>
-                <Feather name={setting.icon as React.ComponentProps<typeof Feather>['name']} size={20} color={tintColor} />
-              </View>
-              <View style={styles.settingInfo}>
-                <ThemedText style={styles.settingTitle}>{setting.title}</ThemedText>
-                <ThemedText type="caption" style={styles.settingDescription}>
-                  {setting.description}
-                </ThemedText>
-              </View>
-              {loading[setting.key] ? (
-                <ActivityIndicator />
-              ) : (
-                <Switch
-                  value={settings[setting.key]}
-                  onValueChange={(value) => handleToggle(setting.key, value)}
-                  trackColor={{
-                    false: borderColor,
-                    true: tintColor,
-                  }}
-                />
-              )}
+      <View style={styles.settingsContainer}>
+        {notificationSettings.map((setting, index) => (
+          <View key={setting.key} style={[styles.settingRow, index === notificationSettings.length - 1 && styles.settingRowLast]}>
+            <View style={styles.iconContainer}>
+              <Feather name={setting.icon as React.ComponentProps<typeof Feather>['name']} size={20} color={tintColor} />
             </View>
-          ))}
-        </View>
-      </ScreenContainer>
-    </>
+            <View style={styles.settingInfo}>
+              <ThemedText style={styles.settingTitle}>{setting.title}</ThemedText>
+              <ThemedText type="caption" style={styles.settingDescription}>
+                {setting.description}
+              </ThemedText>
+            </View>
+            {loading[setting.key] ? (
+              <ActivityIndicator />
+            ) : (
+              <Switch
+                value={settings[setting.key]}
+                onValueChange={(value) => handleToggle(setting.key, value)}
+                trackColor={{
+                  false: borderColor,
+                  true: tintColor,
+                }}
+              />
+            )}
+          </View>
+        ))}
+      </View>
+    </ScreenContainer>
   );
 }

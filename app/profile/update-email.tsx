@@ -1,4 +1,3 @@
-import { TabHeader } from '@/components/navigation/TabHeader';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
@@ -128,99 +127,93 @@ export default function UpdateEmailScreen() {
   const currentEmail = user?.email || '';
 
   return (
-    <>
-      <TabHeader title={i18n.t('profile.updateEmail.title') || 'Update Email Address'} showBackButton={true} />
-      <ScreenContainer scrollable keyboardAvoiding useSafeArea={false}>
-        <ThemedView style={styles.header}>
-          <ThemedText type="h1" style={CommonText.title}>
-            {i18n.t('profile.updateEmail.title') || 'Update Email Address'}
+    <ScreenContainer scrollable keyboardAvoiding useSafeArea={false}>
+      <ThemedView style={styles.header}>
+        <ThemedText type="body" style={CommonText.subtitle}>
+          {i18n.t('profile.updateEmail.subtitle') || 'Enter your new email address to update your account.'}
+        </ThemedText>
+      </ThemedView>
+
+      {/* Current Email Display */}
+      <ThemedView style={styles.currentEmailSection}>
+        <ThemedText type="caption" style={CommonText.sectionTitle}>
+          Current Email
+        </ThemedText>
+        <ThemedView style={[styles.currentEmailBox, { borderColor: warningColor + '40', backgroundColor: warningColor + '10' }]}>
+          <ThemedText type="body" style={styles.currentEmailText}>
+            {currentEmail}
           </ThemedText>
-          <ThemedText type="body" style={CommonText.subtitle}>
-            {i18n.t('profile.updateEmail.subtitle') || 'Enter your new email address to update your account.'}
+        </ThemedView>
+      </ThemedView>
+
+      {/* New Email Form */}
+      <ThemedView style={styles.formSection}>
+        <ThemedInput
+          label="New Email Address"
+          value={newEmail}
+          onChangeText={(text) => {
+            setNewEmail(text);
+            if (emailError) {
+              setEmailError('');
+            }
+          }}
+          onBlur={() => validateEmail(newEmail)}
+          errorMessage={emailError}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
+          autoCorrect={false}
+          returnKeyType="next"
+          accessible={true}
+          accessibilityLabel="New email address input"
+          accessibilityHint="Enter your new email address"
+        />
+
+        <ThemedInput
+          label="Confirm New Email"
+          value={confirmEmail}
+          onChangeText={(text) => {
+            setConfirmEmail(text);
+            if (confirmError) {
+              setConfirmError('');
+            }
+          }}
+          onBlur={() => validateConfirmEmail(confirmEmail)}
+          errorMessage={confirmError}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
+          autoCorrect={false}
+          returnKeyType="done"
+          onSubmitEditing={handleUpdateEmail}
+          accessible={true}
+          accessibilityLabel="Confirm new email address input"
+          accessibilityHint="Re-enter your new email address to confirm"
+        />
+      </ThemedView>
+
+      {/* Warning Notice */}
+      <ThemedView style={styles.warningSection}>
+        <ThemedView style={[styles.warningBox, { borderColor: warningColor, backgroundColor: warningColor + '10' }]}>
+          <ThemedText type="caption" style={[styles.warningText, { color: warningColor }]}>
+            ⚠️ Important: You will need to verify your new email address before the change takes effect. Make sure you have access to the new email account.
           </ThemedText>
         </ThemedView>
+      </ThemedView>
 
-        {/* Current Email Display */}
-        <ThemedView style={styles.currentEmailSection}>
-          <ThemedText type="caption" style={CommonText.sectionTitle}>
-            Current Email
-          </ThemedText>
-          <ThemedView style={[styles.currentEmailBox, { borderColor: warningColor + '40', backgroundColor: warningColor + '10' }]}>
-            <ThemedText type="body" style={styles.currentEmailText}>
-              {currentEmail}
-            </ThemedText>
-          </ThemedView>
-        </ThemedView>
-
-        {/* New Email Form */}
-        <ThemedView style={styles.formSection}>
-          <ThemedInput
-            label="New Email Address"
-            value={newEmail}
-            onChangeText={(text) => {
-              setNewEmail(text);
-              if (emailError) {
-                setEmailError('');
-              }
-            }}
-            onBlur={() => validateEmail(newEmail)}
-            errorMessage={emailError}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoComplete="email"
-            autoCorrect={false}
-            returnKeyType="next"
-            accessible={true}
-            accessibilityLabel="New email address input"
-            accessibilityHint="Enter your new email address"
-          />
-
-          <ThemedInput
-            label="Confirm New Email"
-            value={confirmEmail}
-            onChangeText={(text) => {
-              setConfirmEmail(text);
-              if (confirmError) {
-                setConfirmError('');
-              }
-            }}
-            onBlur={() => validateConfirmEmail(confirmEmail)}
-            errorMessage={confirmError}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoComplete="email"
-            autoCorrect={false}
-            returnKeyType="done"
-            onSubmitEditing={handleUpdateEmail}
-            accessible={true}
-            accessibilityLabel="Confirm new email address input"
-            accessibilityHint="Re-enter your new email address to confirm"
-          />
-        </ThemedView>
-
-        {/* Warning Notice */}
-        <ThemedView style={styles.warningSection}>
-          <ThemedView style={[styles.warningBox, { borderColor: warningColor, backgroundColor: warningColor + '10' }]}>
-            <ThemedText type="caption" style={[styles.warningText, { color: warningColor }]}>
-              ⚠️ Important: You will need to verify your new email address before the change takes effect. Make sure you have access to the new email account.
-            </ThemedText>
-          </ThemedView>
-        </ThemedView>
-
-        {/* Actions */}
-        <ThemedView style={styles.actionsSection}>
-          <ThemedButton
-            title={loading ? 'Sending Verification...' : 'Update Email Address'}
-            onPress={handleUpdateEmail}
-            disabled={loading || !newEmail || !confirmEmail || !!emailError || !!confirmError}
-            loading={loading}
-            variant="primary"
-            accessibilityLabel={loading ? 'Sending email verification' : 'Update email address'}
-            accessibilityHint={loading ? 'Please wait while verification email is being sent' : 'Tap to update your email address'}
-          />
-        </ThemedView>
-      </ScreenContainer>
-    </>
+      {/* Actions */}
+      <ThemedView style={styles.actionsSection}>
+        <ThemedButton
+          title={loading ? 'Sending Verification...' : 'Update Email Address'}
+          onPress={handleUpdateEmail}
+          disabled={loading || !newEmail || !confirmEmail || !!emailError || !!confirmError}
+          loading={loading}
+          variant="primary"
+          accessibilityLabel={loading ? 'Sending email verification' : 'Update email address'}
+          accessibilityHint={loading ? 'Please wait while verification email is being sent' : 'Tap to update your email address'}
+        />
+      </ThemedView>
+    </ScreenContainer>
   );
 }
 

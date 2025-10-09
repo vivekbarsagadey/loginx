@@ -17,10 +17,6 @@ export default function LicenseScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={CommonText.title} accessibilityRole="header">
-        {i18n.t('screens.legal.license.title')}
-      </ThemedText>
-
       <ThemedView style={styles.section} accessible={true} accessibilityLabel="Application License">
         <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
           {i18n.t('screens.legal.license.appLicense.title')}

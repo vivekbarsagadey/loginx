@@ -21,9 +21,6 @@ import { StyleSheet, View } from 'react-native';
 export default function LayeredSurfacesExampleScreen() {
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={CommonText.title}>
-        Layered Surfaces
-      </ThemedText>
       <ThemedText type="body" style={CommonText.subtitle}>
         Examples of elevation and surface variants
       </ThemedText>

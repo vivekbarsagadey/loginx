@@ -104,10 +104,6 @@ export default function DataRightsScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={CommonText.title} accessibilityRole="header">
-        {i18n.t('screens.legal.dataRights.title')}
-      </ThemedText>
-
       <ThemedText style={CommonText.subtitle}>{i18n.t('screens.legal.dataRights.subtitle')}</ThemedText>
 
       {/* Your Rights Section */}

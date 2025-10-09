@@ -1,4 +1,3 @@
-import { TabHeader } from '@/components/navigation/TabHeader';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
@@ -98,36 +97,30 @@ export default function SessionsScreen() {
   );
 
   return (
-    <>
-      <TabHeader title="Active Sessions" showBackButton={true} />
-      <ScreenContainer scrollable useSafeArea={false}>
-        <ThemedText type="h1" style={CommonText.title}>
-          {i18n.t('screens.security.sessions.title')}
+    <ScreenContainer scrollable useSafeArea={false}>
+      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.security.sessions.subtitle')}</ThemedText>
+
+      <ThemedView style={styles.section}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
+          {i18n.t('screens.security.sessions.currentSession')}
         </ThemedText>
-        <ThemedText style={CommonText.subtitle}>{i18n.t('screens.security.sessions.subtitle')}</ThemedText>
+        {currentSessions.map(renderSession)}
+      </ThemedView>
 
-        <ThemedView style={styles.section}>
-          <ThemedText type="h3" style={CommonText.sectionTitle}>
-            {i18n.t('screens.security.sessions.currentSession')}
-          </ThemedText>
-          {currentSessions.map(renderSession)}
-        </ThemedView>
-
-        <ThemedView style={styles.section}>
-          <ThemedText type="h3" style={CommonText.sectionTitle}>
-            {i18n.t('screens.security.sessions.otherSessions')}
-          </ThemedText>
-          {otherSessions.length > 0 ? (
-            <>
-              {otherSessions.map(renderSession)}
-              <ThemedButton title={i18n.t('screens.security.sessions.actions.endAll')} variant="secondary" onPress={handleEndAllSessions} style={styles.endAllButton} />
-            </>
-          ) : (
-            <ThemedText style={styles.noSessionsText}>{i18n.t('screens.security.sessions.noOtherSessions')}</ThemedText>
-          )}
-        </ThemedView>
-      </ScreenContainer>
-    </>
+      <ThemedView style={styles.section}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
+          {i18n.t('screens.security.sessions.otherSessions')}
+        </ThemedText>
+        {otherSessions.length > 0 ? (
+          <>
+            {otherSessions.map(renderSession)}
+            <ThemedButton title={i18n.t('screens.security.sessions.actions.endAll')} variant="secondary" onPress={handleEndAllSessions} style={styles.endAllButton} />
+          </>
+        ) : (
+          <ThemedText style={styles.noSessionsText}>{i18n.t('screens.security.sessions.noOtherSessions')}</ThemedText>
+        )}
+      </ThemedView>
+    </ScreenContainer>
   );
 }
 

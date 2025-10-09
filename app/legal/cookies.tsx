@@ -54,10 +54,6 @@ export default function CookiesScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={CommonText.title} accessibilityRole="header">
-        {i18n.t('screens.legal.cookies.title')}
-      </ThemedText>
-
       <ThemedText style={styles.lastUpdated} accessibilityLabel={`Last updated: ${i18n.t('screens.legal.cookies.lastUpdated')}`}>
         {i18n.t('screens.legal.cookies.lastUpdated')}
       </ThemedText>

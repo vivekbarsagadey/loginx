@@ -1,4 +1,3 @@
-import { TabHeader } from '@/components/navigation/TabHeader';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
@@ -34,51 +33,45 @@ export default function TextSizeScreen() {
   });
 
   return (
-    <>
-      <TabHeader title={i18n.t('screens.settings.textSize.title')} showBackButton={true} />
-      <ThemedView style={[styles.container, { paddingTop: 0 }]}>
-        <ThemedText type="h1" style={CommonText.title}>
-          {i18n.t('screens.settings.textSize.title')}
+    <ThemedView style={styles.container}>
+      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.settings.textSize.subtitle')}</ThemedText>
+
+      <ThemedView style={styles.optionsContainer}>
+        {sizeOptions.map((option) => (
+          <TouchableOpacity
+            key={option.key}
+            style={[
+              styles.option,
+              { backgroundColor: surfaceVariant },
+              selectedSize === option.key && [
+                styles.selectedOption,
+                {
+                  borderColor: primaryColor,
+                  backgroundColor: primaryColor + '1A',
+                },
+              ],
+            ]}
+            onPress={() => handleSizeSelect(option.key)}
+          >
+            <ThemedView style={styles.optionContent}>
+              <ThemedText style={[styles.optionTitle, getPreviewStyles(option.multiplier)]}>{option.title}</ThemedText>
+              {selectedSize === option.key && <ThemedText style={[styles.checkmark, { color: primaryColor }]}>✓</ThemedText>}
+            </ThemedView>
+          </TouchableOpacity>
+        ))}
+      </ThemedView>
+
+      <ThemedView style={styles.previewSection}>
+        <ThemedText type="h3" style={styles.previewTitle}>
+          {i18n.t('screens.settings.textSize.preview.title')}
         </ThemedText>
-        <ThemedText style={CommonText.subtitle}>{i18n.t('screens.settings.textSize.subtitle')}</ThemedText>
-
-        <ThemedView style={styles.optionsContainer}>
-          {sizeOptions.map((option) => (
-            <TouchableOpacity
-              key={option.key}
-              style={[
-                styles.option,
-                { backgroundColor: surfaceVariant },
-                selectedSize === option.key && [
-                  styles.selectedOption,
-                  {
-                    borderColor: primaryColor,
-                    backgroundColor: primaryColor + '1A',
-                  },
-                ],
-              ]}
-              onPress={() => handleSizeSelect(option.key)}
-            >
-              <ThemedView style={styles.optionContent}>
-                <ThemedText style={[styles.optionTitle, getPreviewStyles(option.multiplier)]}>{option.title}</ThemedText>
-                {selectedSize === option.key && <ThemedText style={[styles.checkmark, { color: primaryColor }]}>✓</ThemedText>}
-              </ThemedView>
-            </TouchableOpacity>
-          ))}
-        </ThemedView>
-
-        <ThemedView style={styles.previewSection}>
-          <ThemedText type="h3" style={styles.previewTitle}>
-            {i18n.t('screens.settings.textSize.preview.title')}
+        <ThemedView style={styles.previewContainer}>
+          <ThemedText style={[styles.previewText, getPreviewStyles(sizeOptions.find((o) => o.key === selectedSize)?.multiplier || 1)]}>
+            {i18n.t('screens.settings.textSize.preview.content')}
           </ThemedText>
-          <ThemedView style={styles.previewContainer}>
-            <ThemedText style={[styles.previewText, getPreviewStyles(sizeOptions.find((o) => o.key === selectedSize)?.multiplier || 1)]}>
-              {i18n.t('screens.settings.textSize.preview.content')}
-            </ThemedText>
-          </ThemedView>
         </ThemedView>
       </ThemedView>
-    </>
+    </ThemedView>
   );
 }
 

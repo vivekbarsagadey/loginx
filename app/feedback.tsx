@@ -101,12 +101,6 @@ export default function FeedbackScreen() {
 
   return (
     <ScreenContainer scrollable>
-      {/* Header */}
-      <ThemedText type="h1" style={CommonText.title}>
-        {i18n.t('screens.feedback.title')}
-      </ThemedText>
-      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.feedback.subtitle')}</ThemedText>
-
       {/* Category Selection */}
       <ThemedView style={styles.section}>
         <ThemedText type="h3" style={CommonText.sectionTitle}>

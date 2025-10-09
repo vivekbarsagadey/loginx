@@ -108,12 +108,6 @@ export default function RateAppScreen() {
 
   return (
     <ScreenContainer scrollable>
-      {/* Header */}
-      <ThemedText type="h1" style={CommonText.title}>
-        {i18n.t('screens.rateApp.title')}
-      </ThemedText>
-      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.rateApp.subtitle')}</ThemedText>
-
       {/* Star Rating */}
       <ThemedView style={styles.ratingSection}>
         <ThemedText type="h3" style={CommonText.sectionTitle}>

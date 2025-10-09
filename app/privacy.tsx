@@ -14,11 +14,6 @@ export default function PrivacyScreen() {
 
   return (
     <ScreenContainer scrollable>
-      {/* Header */}
-      <ThemedText type="h1" style={CommonText.title}>
-        {i18n.t('screens.privacy.title')}
-      </ThemedText>
-      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.privacy.subtitle')}</ThemedText>
       <ThemedText style={[styles.lastUpdated, { color: textMuted }]}>{i18n.t('screens.privacy.lastUpdated')}</ThemedText>
 
       {/* Introduction */}
