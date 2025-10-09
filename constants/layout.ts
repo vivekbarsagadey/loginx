@@ -5,6 +5,45 @@
 
 import { Dimensions, Platform } from 'react-native';
 
+/**
+ * Platform-specific font families
+ * iOS uses San Francisco (system default)
+ * Android uses Roboto (system default)
+ */
+export const FontFamily = {
+  regular: Platform.select({
+    ios: 'System',
+    android: 'Roboto',
+    default: 'System',
+  }),
+  medium: Platform.select({
+    ios: 'System',
+    android: 'Roboto-Medium',
+    default: 'System',
+  }),
+  bold: Platform.select({
+    ios: 'System',
+    android: 'Roboto-Bold',
+    default: 'System',
+  }),
+  // iOS San Francisco font weights are handled through fontWeight
+  // Android Roboto requires specific font family names
+} as const;
+
+/**
+ * Font weights that work consistently across platforms
+ * iOS: numeric weights (100-900)
+ * Android: string weights or specific font family names
+ */
+export const FontWeight = {
+  light: '300' as const,
+  regular: '400' as const,
+  medium: '500' as const,
+  semibold: '600' as const,
+  bold: '700' as const,
+  extrabold: '800' as const,
+} as const;
+
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 /**
@@ -44,78 +83,209 @@ export const TouchTarget = {
 } as const;
 
 /**
- * Font sizes with proper line heights
+ * Typography system with platform-specific fonts
+ *
+ * Font Families:
+ * - iOS: San Francisco (system default) - Clean, legible at all sizes
+ * - Android: Roboto - Designed for digital interfaces
+ *
+ * Type Scale: Complete hierarchy from hero text to small labels
+ * - Display: 40px - Hero/landing screens, marketing
+ * - Title (H1): 32px - Page titles, main headings
+ * - Heading (H2): 28px - Section headers
+ * - Subheading (H3): 24px - Subsection headers
+ * - Subtitle1: 20px - Emphasized content, list headers
+ * - Subtitle2: 18px - Secondary headers
+ * - Body: 16px - Main content (optimal for readability)
+ * - Body Small: 14px - Dense content
+ * - Caption: 12px - Supporting text, metadata
+ * - Label: 10px - Form labels, tiny text
+ *
+ * Line Heights: 1.4-1.6 for body text, 1.2-1.3 for headings
+ * Font Weights: Light (300), Regular (400), Medium (500), Semibold (600), Bold (700)
+ *
+ * @example
+ * // Using typography in styles
+ * import { Typography, FontFamily } from '@/constants/layout';
+ *
+ * const styles = StyleSheet.create({
+ *   title: {
+ *     ...Typography.title,
+ *     fontFamily: FontFamily.bold,
+ *   },
+ *   body: Typography.body,
+ * });
+ *
+ * // Or use ThemedText component
+ * <ThemedText type="title">My Title</ThemedText>
  */
 export const Typography = {
+  // Display - Hero text (40px)
   display: {
+    fontSize: 40,
+    lineHeight: 48,
+    fontWeight: FontWeight.bold,
+    fontFamily: FontFamily.bold,
+    letterSpacing: -0.5, // Tighter spacing for large text
+  },
+  // Title/H1 - Page titles (32px)
+  title: {
     fontSize: 32,
     lineHeight: 40,
-    fontWeight: '700' as const,
+    fontWeight: FontWeight.bold,
+    fontFamily: FontFamily.bold,
+    letterSpacing: -0.4,
   },
-  h1: {
+  // Heading/H2 - Section headers (28px)
+  heading: {
     fontSize: 28,
     lineHeight: 36,
-    fontWeight: '700' as const,
+    fontWeight: FontWeight.semibold,
+    fontFamily: FontFamily.bold,
+    letterSpacing: -0.3,
   },
-  h2: {
+  // Subheading/H3 - Subsection headers (24px)
+  subheading: {
     fontSize: 24,
     lineHeight: 32,
-    fontWeight: '600' as const,
+    fontWeight: FontWeight.semibold,
+    fontFamily: FontFamily.medium,
+    letterSpacing: -0.2,
   },
-  h3: {
+  // Subtitle1 - Emphasized content (20px)
+  subtitle1: {
     fontSize: 20,
     lineHeight: 28,
-    fontWeight: '600' as const,
+    fontWeight: FontWeight.medium,
+    fontFamily: FontFamily.medium,
+    letterSpacing: 0,
   },
-  subtitle1: {
+  // Subtitle2 - Secondary headers (18px)
+  subtitle2: {
     fontSize: 18,
     lineHeight: 26,
-    fontWeight: '500' as const,
+    fontWeight: FontWeight.medium,
+    fontFamily: FontFamily.medium,
+    letterSpacing: 0,
   },
-  subtitle2: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontWeight: '500' as const,
-  },
+  // Body - Main content (16px) - Optimal for mobile readability
   body: {
     fontSize: 16,
-    lineHeight: 24,
-    fontWeight: '400' as const,
+    lineHeight: 24, // 1.5 ratio for excellent readability
+    fontWeight: FontWeight.regular,
+    fontFamily: FontFamily.regular,
+    letterSpacing: 0.15,
   },
+  // Body Bold - Emphasized body text (16px)
   bodyBold: {
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: '600' as const,
+    fontWeight: FontWeight.semibold,
+    fontFamily: FontFamily.medium,
+    letterSpacing: 0.15,
   },
+  // Body Small - Dense content (14px)
+  bodySmall: {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: FontWeight.regular,
+    fontFamily: FontFamily.regular,
+    letterSpacing: 0.25,
+  },
+  // Button - Button text (14px)
   button: {
     fontSize: 14,
     lineHeight: 20,
-    fontWeight: '500' as const,
-    letterSpacing: 1.25,
+    fontWeight: FontWeight.medium,
+    fontFamily: FontFamily.medium,
+    letterSpacing: 1.25, // Wide spacing for buttons
   },
+  // Caption - Supporting text (12px)
   caption: {
-    fontSize: 14,
-    lineHeight: 20,
-    fontWeight: '400' as const,
+    fontSize: 12,
+    lineHeight: 16,
+    fontWeight: FontWeight.regular,
+    fontFamily: FontFamily.regular,
+    letterSpacing: 0.4,
   },
+  // Label - Form labels, tiny text (10px)
+  label: {
+    fontSize: 10,
+    lineHeight: 14,
+    fontWeight: FontWeight.medium,
+    fontFamily: FontFamily.medium,
+    letterSpacing: 0.5,
+  },
+  // Overline - All caps labels (10px)
   overline: {
     fontSize: 10,
     lineHeight: 16,
-    fontWeight: '500' as const,
+    fontWeight: FontWeight.medium,
+    fontFamily: FontFamily.medium,
     letterSpacing: 1.5,
     textTransform: 'uppercase' as const,
   },
-  label: {
-    fontSize: 12,
-    lineHeight: 16,
-    fontWeight: '500' as const,
+  // Legacy aliases for backward compatibility
+  h1: {
+    fontSize: 32,
+    lineHeight: 40,
+    fontWeight: FontWeight.bold,
+    fontFamily: FontFamily.bold,
+  },
+  h2: {
+    fontSize: 28,
+    lineHeight: 36,
+    fontWeight: FontWeight.semibold,
+    fontFamily: FontFamily.bold,
+  },
+  h3: {
+    fontSize: 24,
+    lineHeight: 32,
+    fontWeight: FontWeight.semibold,
+    fontFamily: FontFamily.medium,
   },
   small: {
     fontSize: 12,
     lineHeight: 16,
-    fontWeight: '400' as const,
+    fontWeight: FontWeight.regular,
+    fontFamily: FontFamily.regular,
   },
 } as const;
+
+/**
+ * Dynamic Type Support
+ * Helps scale text sizes based on user's system font size preference
+ *
+ * @param baseSize - Base font size
+ * @param maxScale - Maximum scale factor (default 1.3)
+ * @returns Scaled font size
+ *
+ * @example
+ * import { useWindowDimensions } from 'react-native';
+ * import { getScaledFontSize } from '@/constants/layout';
+ *
+ * const { fontScale } = useWindowDimensions();
+ * const fontSize = getScaledFontSize(16, fontScale);
+ */
+export const getScaledFontSize = (baseSize: number, fontScale: number = 1, maxScale: number = 1.3): number => {
+  const scale = Math.min(fontScale, maxScale);
+  return baseSize * scale;
+};
+
+/**
+ * Line height calculator
+ * Automatically calculates optimal line height for given font size
+ *
+ * @param fontSize - Font size in pixels
+ * @param ratio - Line height ratio (default 1.5 for body text)
+ * @returns Calculated line height
+ *
+ * @example
+ * const lineHeight = getLineHeight(16); // Returns 24 (16 * 1.5)
+ */
+export const getLineHeight = (fontSize: number, ratio: number = 1.5): number => {
+  return Math.round(fontSize * ratio);
+};
 
 /**
  * Shadow/Elevation system for both platforms
