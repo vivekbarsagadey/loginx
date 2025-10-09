@@ -7,6 +7,7 @@ import { ThemedView } from '@/components/themed-view';
 import { StarRating } from '@/components/ui/star-rating';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
+import { useAlert } from '@/hooks/use-alert';
 import { useAuth } from '@/hooks/use-auth-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -15,7 +16,7 @@ import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 
 interface CategoryOption {
   id: FeedbackCategory;
@@ -26,6 +27,7 @@ interface CategoryOption {
 export default function FeedbackScreen() {
   const router = useRouter();
   const { user } = useAuth();
+  const { show: showAlert, AlertComponent } = useAlert();
   const primaryColor = useThemeColor({}, 'primary');
   const [selectedCategory, setSelectedCategory] = useState<FeedbackCategory>('improvement');
   const [subject, setSubject] = useState('');
@@ -48,22 +50,22 @@ export default function FeedbackScreen() {
   const handleSubmit = async () => {
     // Validation
     if (!subject.trim()) {
-      Alert.alert(i18n.t('screens.feedback.validation.subjectRequired.title'), i18n.t('screens.feedback.validation.subjectRequired.message'));
+      showAlert(i18n.t('screens.feedback.validation.subjectRequired.title'), i18n.t('screens.feedback.validation.subjectRequired.message'), [{ text: 'OK' }], { variant: 'warning' });
       return;
     }
 
     if (!message.trim()) {
-      Alert.alert(i18n.t('screens.feedback.validation.messageRequired.title'), i18n.t('screens.feedback.validation.messageRequired.message'));
+      showAlert(i18n.t('screens.feedback.validation.messageRequired.title'), i18n.t('screens.feedback.validation.messageRequired.message'), [{ text: 'OK' }], { variant: 'warning' });
       return;
     }
 
     if (message.trim().length < 10) {
-      Alert.alert(i18n.t('screens.feedback.validation.messageTooShort.title'), i18n.t('screens.feedback.validation.messageTooShort.message'));
+      showAlert(i18n.t('screens.feedback.validation.messageTooShort.title'), i18n.t('screens.feedback.validation.messageTooShort.message'), [{ text: 'OK' }], { variant: 'warning' });
       return;
     }
 
     if (!user) {
-      Alert.alert('Error', 'You must be logged in to submit feedback');
+      showAlert('Error', 'You must be logged in to submit feedback', [{ text: 'OK' }], { variant: 'error' });
       return;
     }
 
@@ -75,12 +77,17 @@ export default function FeedbackScreen() {
 
       if (result.success) {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        Alert.alert(i18n.t('screens.feedback.success.title'), i18n.t('screens.feedback.success.message'), [
-          {
-            text: i18n.t('screens.feedback.success.button'),
-            onPress: () => router.back(),
-          },
-        ]);
+        showAlert(
+          i18n.t('screens.feedback.success.title'),
+          i18n.t('screens.feedback.success.message'),
+          [
+            {
+              text: i18n.t('screens.feedback.success.button'),
+              onPress: () => router.back(),
+            },
+          ],
+          { variant: 'success' }
+        );
 
         // Reset form
         setSubject('');
@@ -89,11 +96,11 @@ export default function FeedbackScreen() {
         setSelectedCategory('improvement');
       } else {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-        Alert.alert(i18n.t('screens.feedback.error.title'), result.error || i18n.t('screens.feedback.error.message'));
+        showAlert(i18n.t('screens.feedback.error.title'), result.error || i18n.t('screens.feedback.error.message'), [{ text: 'OK' }], { variant: 'error' });
       }
     } catch (_error) {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      Alert.alert(i18n.t('screens.feedback.error.title'), i18n.t('screens.feedback.error.message'));
+      showAlert(i18n.t('screens.feedback.error.title'), i18n.t('screens.feedback.error.message'), [{ text: 'OK' }], { variant: 'error' });
     } finally {
       setIsSubmitting(false);
     }
@@ -175,6 +182,7 @@ export default function FeedbackScreen() {
         accessibilityLabel="Submit feedback"
         accessibilityHint="Submits your feedback to the team"
       />
+      {AlertComponent}
     </ScreenContainer>
   );
 }
@@ -266,3 +274,6 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
 });
+
+// Add AlertComponent before closing ScreenContainer
+// Note: This should be added in the return statement JSX

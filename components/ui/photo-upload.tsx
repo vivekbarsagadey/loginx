@@ -1,11 +1,12 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
-import { ActivityIndicator, Alert, Image, Platform, Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Image, Platform, Pressable, StyleSheet, View } from 'react-native';
 
 interface PhotoUploadProps {
   value?: string;
@@ -19,6 +20,7 @@ interface PhotoUploadProps {
  */
 export function PhotoUpload({ value, onChange, onError }: PhotoUploadProps) {
   const [loading, setLoading] = useState(false);
+  const { show: showAlert, AlertComponent } = useAlert();
   const primaryColor = useThemeColor({}, 'primary');
   const borderColor = useThemeColor({}, 'border');
   const bgColor = useThemeColor({}, 'surface-variant');
@@ -31,7 +33,7 @@ export function PhotoUpload({ value, onChange, onError }: PhotoUploadProps) {
       const { status: libraryStatus } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       if (cameraStatus !== 'granted' || libraryStatus !== 'granted') {
-        Alert.alert('Permissions Required', 'Please grant camera and photo library permissions to upload a profile photo.', [{ text: 'OK' }]);
+        showAlert('Permissions Required', 'Please grant camera and photo library permissions to upload a profile photo.', [{ text: 'OK' }], { variant: 'warning' });
         return false;
       }
     }
@@ -68,7 +70,7 @@ export function PhotoUpload({ value, onChange, onError }: PhotoUploadProps) {
         // Validate file size (max 5MB)
         if (asset.fileSize && asset.fileSize > 5 * 1024 * 1024) {
           await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-          Alert.alert('Image Too Large', 'Image must be smaller than 5MB. Please select a smaller image.', [{ text: 'OK' }]);
+          showAlert('Image Too Large', 'Image must be smaller than 5MB. Please select a smaller image.', [{ text: 'OK' }], { variant: 'warning' });
           onError?.(new Error('Image file size exceeds 5MB limit'));
           return;
         }
@@ -81,14 +83,14 @@ export function PhotoUpload({ value, onChange, onError }: PhotoUploadProps) {
       console.error('[PhotoUpload] Error picking image:', error);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       onError?.(error instanceof Error ? error : new Error('Failed to pick image'));
-      Alert.alert('Error', 'Failed to pick image. Please try again.');
+      showAlert('Error', 'Failed to pick image. Please try again.', [{ text: 'OK' }], { variant: 'error' });
     } finally {
       setLoading(false);
     }
   };
 
   const showImagePicker = () => {
-    Alert.alert('Profile Photo', 'Choose an option', [
+    showAlert('Profile Photo', 'Choose an option', [
       {
         text: 'Take Photo',
         onPress: () => pickImage('camera'),
@@ -105,7 +107,7 @@ export function PhotoUpload({ value, onChange, onError }: PhotoUploadProps) {
   };
 
   const removePhoto = () => {
-    Alert.alert('Remove Photo', 'Are you sure you want to remove your profile photo?', [
+    showAlert('Remove Photo', 'Are you sure you want to remove your profile photo?', [
       {
         text: 'Cancel',
         style: 'cancel',
@@ -160,6 +162,7 @@ export function PhotoUpload({ value, onChange, onError }: PhotoUploadProps) {
       <ThemedText type="caption" style={[styles.helperText, { color: textColor }]}>
         {value ? 'Tap to change photo or press X to remove' : 'Add a profile photo to personalize your account'}
       </ThemedText>
+      {AlertComponent}
     </ThemedView>
   );
 }

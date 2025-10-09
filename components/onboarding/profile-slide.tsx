@@ -1,11 +1,12 @@
 import { Colors } from '@/constants/theme';
+import { useAlert } from '@/hooks/use-alert';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
 import i18n from '@/i18n';
 import { savePendingProfileData } from '@/utils/pending-profile';
 import { Ionicons } from '@expo/vector-icons';
 import { useCallback, useState } from 'react';
-import { Alert, ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { ThemedButton } from '../themed-button';
 import { ThemedText } from '../themed-text';
 import { ThemedTextInput } from '../themed-text-input';
@@ -22,6 +23,7 @@ export const ProfileSlide = ({ width, onNext, onSkip }: ProfileSlideProps) => {
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme || 'light'];
   const { trackSlideCompletion } = useOnboarding();
+  const { show: showAlert, AlertComponent } = useAlert();
 
   const [displayName, setDisplayName] = useState('');
   const [photoURL, setPhotoURL] = useState('');
@@ -46,11 +48,11 @@ export const ProfileSlide = ({ width, onNext, onSkip }: ProfileSlideProps) => {
       onNext?.();
     } catch (error) {
       console.error('Failed to save profile data:', error);
-      Alert.alert('Error', 'Failed to save profile information. You can set this up later in Settings.', [{ text: 'OK', onPress: onNext }]);
+      showAlert('Error', 'Failed to save profile information. You can set this up later in Settings.', [{ text: 'OK', onPress: onNext }], { variant: 'error' });
     } finally {
       setIsCompleting(false);
     }
-  }, [displayName, photoURL, trackSlideCompletion, onNext]);
+  }, [displayName, photoURL, trackSlideCompletion, onNext, showAlert]);
 
   const handleSkip = useCallback(async () => {
     await trackSlideCompletion('profile');
@@ -97,7 +99,7 @@ export const ProfileSlide = ({ width, onNext, onSkip }: ProfileSlideProps) => {
               }}
               onError={(error) => {
                 console.error('Photo upload error:', error);
-                Alert.alert('Upload Error', 'Failed to upload photo. You can add one later.');
+                showAlert('Upload Error', 'Failed to upload photo. You can add one later.', [{ text: 'OK' }], { variant: 'error' });
               }}
             />
           </ThemedView>
@@ -179,6 +181,7 @@ export const ProfileSlide = ({ width, onNext, onSkip }: ProfileSlideProps) => {
           </ThemedText>
         </ThemedView>
       </ThemedView>
+      {AlertComponent}
     </ThemedView>
   );
 };

@@ -4,6 +4,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonButtons, CommonContainers, CommonInputs, CommonText } from '@/constants/common-styles';
 import { auth } from '@/firebase-config';
+import { useAlert } from '@/hooks/use-alert';
 import i18n from '@/i18n';
 import { AuthMethod, isAuthMethodEnabled } from '@/utils/auth-methods';
 import { showError } from '@/utils/error';
@@ -13,7 +14,7 @@ import { useRouter } from 'expo-router';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { ActivityIndicator, Alert, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -23,18 +24,24 @@ const schema = z.object({
 export default function ForgotPasswordScreen() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { show: showAlert, AlertComponent } = useAlert();
 
   // Check if forgot password feature is enabled
   useEffect(() => {
     if (!isAuthMethodEnabled(AuthMethod.FORGOT_PASSWORD)) {
-      Alert.alert('Feature Disabled', 'Password reset is currently unavailable. Please contact support for assistance.', [
-        {
-          text: 'OK',
-          onPress: () => router.replace('/(auth)/login'),
-        },
-      ]);
+      showAlert(
+        'Feature Disabled',
+        'Password reset is currently unavailable. Please contact support for assistance.',
+        [
+          {
+            text: 'OK',
+            onPress: () => router.replace('/(auth)/login'),
+          },
+        ],
+        { variant: 'warning' }
+      );
     }
-  }, [router]);
+  }, [router, showAlert]);
 
   const {
     control,
@@ -98,6 +105,7 @@ export default function ForgotPasswordScreen() {
       {loading && <ActivityIndicator style={styles.loading} />}
 
       <ThemedButton title={i18n.t('forgotPassword.backToLogin')} variant="link" onPress={() => router.push('/(auth)/login')} style={CommonButtons.linkButton} />
+      {AlertComponent}
     </ThemedView>
   );
 }

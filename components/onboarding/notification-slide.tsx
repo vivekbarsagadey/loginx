@@ -1,6 +1,7 @@
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { getShadow } from '@/constants/style-utils';
 import { Colors } from '@/constants/theme';
+import { useAlert } from '@/hooks/use-alert';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -8,7 +9,7 @@ import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import * as Device from 'expo-device';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { ThemedButton } from '../themed-button';
 import { ThemedText } from '../themed-text';
 import { ThemedView } from '../themed-view';
@@ -42,6 +43,7 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme || 'light'];
   const { setNotificationPermission, trackSlideSkip } = useOnboarding();
+  const { show: showAlert, AlertComponent } = useAlert();
 
   const warningColor = useThemeColor({}, 'warning');
   const shadowColor = useThemeColor({}, 'text');
@@ -74,12 +76,14 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
   };
   const requestNotificationPermission = async () => {
     if (!Device.isDevice) {
-      Alert.alert(i18n.t('onb.notifications.error.title'), i18n.t('onb.notifications.error.emulator'), [{ text: 'OK', onPress: onNext }]);
+      showAlert(i18n.t('onb.notifications.error.title'), i18n.t('onb.notifications.error.emulator'), [{ text: 'OK', onPress: onNext }], { variant: 'error' });
       return;
     }
 
     if (!isNotificationsAvailable()) {
-      Alert.alert('Notifications Unavailable', 'Push notifications require a development build. Please use expo-dev-client instead of Expo Go.', [{ text: 'Skip', onPress: onSkip }]);
+      showAlert('Notifications Unavailable', 'Push notifications require a development build. Please use expo-dev-client instead of Expo Go.', [{ text: 'Skip', onPress: onSkip }], {
+        variant: 'warning',
+      });
       return;
     }
 
@@ -117,27 +121,32 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
         // Track permission grant
         await setNotificationPermission(true);
 
-        Alert.alert(i18n.t('onb.notifications.success.title'), i18n.t('onb.notifications.success.message'), [{ text: i18n.t('onb.cta.next'), onPress: onNext }]);
+        showAlert(i18n.t('onb.notifications.success.title'), i18n.t('onb.notifications.success.message'), [{ text: i18n.t('onb.cta.next'), onPress: onNext }], { variant: 'success' });
       } else {
-        Alert.alert(i18n.t('onb.notifications.denied.title'), i18n.t('onb.notifications.denied.message'), [
-          { text: i18n.t('onb.notifications.openSettings'), onPress: handleOpenSettings },
-          { text: i18n.t('onb.notifications.skipButton'), onPress: onSkip, style: 'cancel' },
-        ]);
+        showAlert(
+          i18n.t('onb.notifications.denied.title'),
+          i18n.t('onb.notifications.denied.message'),
+          [
+            { text: i18n.t('onb.notifications.openSettings'), onPress: handleOpenSettings },
+            { text: i18n.t('onb.notifications.skipButton'), onPress: onSkip, style: 'cancel' },
+          ],
+          { variant: 'warning' }
+        );
       }
     } catch (error) {
       console.error('Error requesting notification permissions:', error);
-      Alert.alert(i18n.t('onb.notifications.error.title'), i18n.t('onb.notifications.error.message'), [{ text: 'OK' }]);
+      showAlert(i18n.t('onb.notifications.error.title'), i18n.t('onb.notifications.error.message'), [{ text: 'OK' }], { variant: 'error' });
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleOpenSettings = useCallback(() => {
-    Alert.alert(i18n.t('onb.notifications.settings.title'), i18n.t('onb.notifications.settings.message'), [{ text: 'OK', onPress: onSkip }]);
-  }, [onSkip]);
+    showAlert(i18n.t('onb.notifications.settings.title'), i18n.t('onb.notifications.settings.message'), [{ text: 'OK', onPress: onSkip }]);
+  }, [onSkip, showAlert]);
 
   const handleSkip = useCallback(() => {
-    Alert.alert(i18n.t('onb.notifications.skipConfirm.title'), i18n.t('onb.notifications.skipConfirm.message'), [
+    showAlert(i18n.t('onb.notifications.skipConfirm.title'), i18n.t('onb.notifications.skipConfirm.message'), [
       { text: i18n.t('onb.notifications.skipConfirm.cancel'), style: 'cancel' },
       {
         text: i18n.t('onb.notifications.skipConfirm.skip'),
@@ -149,7 +158,7 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
         style: 'destructive',
       },
     ]);
-  }, [onSkip, setNotificationPermission, trackSlideSkip]);
+  }, [onSkip, setNotificationPermission, trackSlideSkip, showAlert]);
 
   const getStatusIcon = () => {
     switch (permissionStatus) {
@@ -245,6 +254,7 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
           </ThemedView>
         )}
       </ThemedView>
+      {AlertComponent}
     </ThemedView>
   );
 };

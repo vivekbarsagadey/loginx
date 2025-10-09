@@ -7,6 +7,7 @@ import { ThemedView } from '@/components/themed-view';
 import { StarRating } from '@/components/ui/star-rating';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
+import { useAlert } from '@/hooks/use-alert';
 import { useAuth } from '@/hooks/use-auth-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -14,7 +15,7 @@ import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 
 const RATING_LABELS = ['Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
 
@@ -39,6 +40,7 @@ const IMPROVEMENT_OPTIONS = [
 export default function RateAppScreen() {
   const router = useRouter();
   const { user } = useAuth();
+  const { show: showAlert, AlertComponent } = useAlert();
   const primaryColor = useThemeColor({}, 'primary');
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
@@ -63,12 +65,12 @@ export default function RateAppScreen() {
 
   const handleSubmit = async () => {
     if (rating === 0) {
-      Alert.alert(i18n.t('screens.rateApp.validation.ratingRequired.title'), i18n.t('screens.rateApp.validation.ratingRequired.message'));
+      showAlert(i18n.t('screens.rateApp.validation.ratingRequired.title'), i18n.t('screens.rateApp.validation.ratingRequired.message'), [{ text: 'OK' }], { variant: 'warning' });
       return;
     }
 
     if (!user) {
-      Alert.alert('Error', 'You must be logged in to submit a rating');
+      showAlert('Error', 'You must be logged in to submit a rating', [{ text: 'OK' }], { variant: 'error' });
       return;
     }
 
@@ -88,19 +90,24 @@ export default function RateAppScreen() {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
         // Show success message
-        Alert.alert(i18n.t('screens.rateApp.success.title'), i18n.t('screens.rateApp.success.message'), [
-          {
-            text: i18n.t('screens.rateApp.success.button'),
-            onPress: () => router.back(),
-          },
-        ]);
+        showAlert(
+          i18n.t('screens.rateApp.success.title'),
+          i18n.t('screens.rateApp.success.message'),
+          [
+            {
+              text: i18n.t('screens.rateApp.success.button'),
+              onPress: () => router.back(),
+            },
+          ],
+          { variant: 'success' }
+        );
       } else {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-        Alert.alert(i18n.t('screens.rateApp.error.title'), result.error || i18n.t('screens.rateApp.error.message'));
+        showAlert(i18n.t('screens.rateApp.error.title'), result.error || i18n.t('screens.rateApp.error.message'), [{ text: 'OK' }], { variant: 'error' });
       }
     } catch (_error) {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      Alert.alert(i18n.t('screens.rateApp.error.title'), i18n.t('screens.rateApp.error.message'));
+      showAlert(i18n.t('screens.rateApp.error.title'), i18n.t('screens.rateApp.error.message'), [{ text: 'OK' }], { variant: 'error' });
     } finally {
       setIsSubmitting(false);
     }
@@ -185,6 +192,7 @@ export default function RateAppScreen() {
           accessibilityHint="Submits your rating and review"
         />
       )}
+      {AlertComponent}
     </ScreenContainer>
   );
 }

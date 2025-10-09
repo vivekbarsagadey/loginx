@@ -1,11 +1,12 @@
 import { Colors } from '@/constants/theme';
+import { useAlert } from '@/hooks/use-alert';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
 import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { ThemedButton } from '../themed-button';
 import { ThemedText } from '../themed-text';
 import { ThemedView } from '../themed-view';
@@ -21,6 +22,7 @@ export const BiometricSlide = ({ width, onNext, onSkip }: BiometricSlideProps) =
   const theme = Colors[colorScheme || 'light'];
   const { setBiometricPermission, trackSlideCompletion } = useOnboarding();
   const { isAvailable, biometryType, isEnabled, isLoading, error, enableBiometric, biometricTypeName, checkBiometricSupport } = useBiometricAuth();
+  const { show: showAlert, AlertComponent } = useAlert();
 
   const [setupAttempted, setSetupAttempted] = useState(false);
 
@@ -38,25 +40,32 @@ export const BiometricSlide = ({ width, onNext, onSkip }: BiometricSlideProps) =
         await trackSlideCompletion('biometric');
 
         // Show success feedback
-        Alert.alert(i18n.t('onb.biometric.success.title'), i18n.t('onb.biometric.success.message', { biometricType: biometricTypeName }), [{ text: i18n.t('onb.cta.next'), onPress: onNext }]);
+        showAlert(i18n.t('onb.biometric.success.title'), i18n.t('onb.biometric.success.message', { biometricType: biometricTypeName }), [{ text: i18n.t('onb.cta.next'), onPress: onNext }], {
+          variant: 'success',
+        });
       } else {
         // Handle setup failure
-        Alert.alert(i18n.t('onb.biometric.error.title'), error || i18n.t('onb.biometric.error.message'), [
-          { text: i18n.t('onb.biometric.tryAgain'), onPress: () => setSetupAttempted(false) },
-          { text: i18n.t('onb.biometric.skipButton'), onPress: onSkip, style: 'cancel' },
-        ]);
+        showAlert(
+          i18n.t('onb.biometric.error.title'),
+          error || i18n.t('onb.biometric.error.message'),
+          [
+            { text: i18n.t('onb.biometric.tryAgain'), onPress: () => setSetupAttempted(false) },
+            { text: i18n.t('onb.biometric.skipButton'), onPress: onSkip, style: 'cancel' },
+          ],
+          { variant: 'error' }
+        );
       }
     } catch (_err) {
-      Alert.alert(i18n.t('onb.biometric.error.title'), i18n.t('onb.biometric.error.unexpected'), [{ text: i18n.t('common.ok'), onPress: () => setSetupAttempted(false) }]);
+      showAlert(i18n.t('onb.biometric.error.title'), i18n.t('onb.biometric.error.unexpected'), [{ text: i18n.t('common.ok'), onPress: () => setSetupAttempted(false) }], { variant: 'error' });
     }
-  }, [enableBiometric, biometricTypeName, error, onNext, onSkip, biometryType, setBiometricPermission, trackSlideCompletion]);
+  }, [enableBiometric, biometricTypeName, error, onNext, onSkip, biometryType, setBiometricPermission, trackSlideCompletion, showAlert]);
 
   const handleSkip = useCallback(() => {
-    Alert.alert(i18n.t('onb.biometric.skipConfirm.title'), i18n.t('onb.biometric.skipConfirm.message'), [
+    showAlert(i18n.t('onb.biometric.skipConfirm.title'), i18n.t('onb.biometric.skipConfirm.message'), [
       { text: i18n.t('onb.biometric.skipConfirm.cancel'), style: 'cancel' },
       { text: i18n.t('onb.biometric.skipConfirm.skip'), onPress: onSkip, style: 'destructive' },
     ]);
-  }, [onSkip]);
+  }, [onSkip, showAlert]);
 
   const getBiometricIcon = () => {
     switch (biometryType) {
@@ -152,6 +161,7 @@ export const BiometricSlide = ({ width, onNext, onSkip }: BiometricSlideProps) =
           </ThemedView>
         )}
       </ThemedView>
+      {AlertComponent}
     </ThemedView>
   );
 };

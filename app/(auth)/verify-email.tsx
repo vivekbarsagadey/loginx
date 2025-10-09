@@ -4,11 +4,12 @@ import { ThemedView } from '@/components/themed-view';
 import { CommonButtons, CommonContainers, CommonText } from '@/constants/common-styles';
 import { Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
+import { useAlert } from '@/hooks/use-alert';
 import i18n from '@/i18n';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { sendEmailVerification, signOut } from 'firebase/auth';
 import { useEffect, useState } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const getFirebaseAuthErrorMessage = (errorCode: string) => {
   switch (errorCode) {
@@ -22,6 +23,7 @@ const getFirebaseAuthErrorMessage = (errorCode: string) => {
 export default function VerifyEmailScreen() {
   const router = useRouter();
   const { email } = useLocalSearchParams();
+  const { show: showAlert, AlertComponent } = useAlert();
   const [isResending, setIsResending] = useState(false);
 
   useEffect(() => {
@@ -36,7 +38,7 @@ export default function VerifyEmailScreen() {
             } catch (navError) {
               console.error('[VerifyEmail] Navigation failed:', navError);
               // User is verified, they can manually navigate
-              Alert.alert(i18n.t('success.title'), 'Email verified successfully! Please restart the app to continue.', [{ text: 'OK' }]);
+              showAlert(i18n.t('success.title'), 'Email verified successfully! Please restart the app to continue.', [{ text: 'OK' }], { variant: 'success' });
             }
           }
         } catch (reloadError) {
@@ -47,21 +49,21 @@ export default function VerifyEmailScreen() {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [router]);
+  }, [router, showAlert]);
 
   const handleResend = async () => {
     if (!auth.currentUser) {
-      Alert.alert(i18n.t('errors.generic.title'), i18n.t('screens.verifyEmail.errors.noUser'));
+      showAlert(i18n.t('errors.generic.title'), i18n.t('screens.verifyEmail.errors.noUser'), [{ text: 'OK' }], { variant: 'error' });
       return;
     }
     setIsResending(true);
     try {
       await sendEmailVerification(auth.currentUser);
-      Alert.alert(i18n.t('screens.verifyEmail.success.emailSent'), i18n.t('screens.verifyEmail.success.emailSentMessage'));
+      showAlert(i18n.t('screens.verifyEmail.success.emailSent'), i18n.t('screens.verifyEmail.success.emailSentMessage'), [{ text: 'OK' }], { variant: 'success' });
     } catch (err: unknown) {
       const errorCode = (err as { code?: string })?.code ?? '';
       const friendlyMessage = getFirebaseAuthErrorMessage(errorCode);
-      Alert.alert(i18n.t('errors.generic.title'), friendlyMessage);
+      showAlert(i18n.t('errors.generic.title'), friendlyMessage, [{ text: 'OK' }], { variant: 'error' });
     } finally {
       setIsResending(false);
     }
@@ -91,6 +93,7 @@ export default function VerifyEmailScreen() {
         style={CommonButtons.button}
       />
       <ThemedButton title={i18n.t('screens.verifyEmail.goToLogin')} onPress={handleLoginRedirect} variant="link" style={CommonButtons.linkButtonSmall} />
+      {AlertComponent}
     </ThemedView>
   );
 }

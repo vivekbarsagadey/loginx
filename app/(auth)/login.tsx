@@ -7,6 +7,7 @@ import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { ValidationConstants, ValidationMessages } from '@/constants/validation';
 import { auth } from '@/firebase-config';
+import { useAlert } from '@/hooks/use-alert';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
 import { useSecuritySettings } from '@/hooks/use-security-settings';
 import { useSocialAuth } from '@/hooks/use-social-auth';
@@ -21,7 +22,7 @@ import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { z } from 'zod';
 
 // SECURITY: Use consolidated validation from constants
@@ -38,6 +39,7 @@ export default function LoginScreen() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [biometricAttempted, setBiometricAttempted] = useState(false);
+  const { show: showAlert, AlertComponent } = useAlert();
   const { signInWithGoogle, signInWithApple, signInWithFacebook, loading: socialLoading } = useSocialAuth();
   const { isAvailable: biometricAvailable, isEnabled: biometricEnabled, authenticateWithBiometric, biometricTypeName } = useBiometricAuth();
 
@@ -125,7 +127,7 @@ export default function LoginScreen() {
     // Check if account is locked before attempting login
     if (isAccountLocked()) {
       const timeUntilUnlock = getTimeUntilUnlock();
-      Alert.alert('Account Temporarily Locked', `Too many failed login attempts. Please try again in ${timeUntilUnlock} minutes.`, [{ text: 'OK' }]);
+      showAlert('Account Temporarily Locked', `Too many failed login attempts. Please try again in ${timeUntilUnlock} minutes.`, [{ text: 'OK' }], { variant: 'error' });
       return;
     }
 
@@ -173,9 +175,9 @@ export default function LoginScreen() {
 
       // Check if account will be locked after this attempt
       if (remainingAttempts <= 1) {
-        Alert.alert('Account Will Be Locked', 'This was your last login attempt. Your account will be temporarily locked after one more failed attempt.', [{ text: 'OK' }]);
+        showAlert('Account Will Be Locked', 'This was your last login attempt. Your account will be temporarily locked after one more failed attempt.', [{ text: 'OK' }], { variant: 'warning' });
       } else if (remainingAttempts <= 3) {
-        Alert.alert('Login Attempts Warning', `You have ${remainingAttempts - 1} login attempts remaining before your account is temporarily locked.`, [{ text: 'OK' }]);
+        showAlert('Login Attempts Warning', `You have ${remainingAttempts - 1} login attempts remaining before your account is temporarily locked.`, [{ text: 'OK' }], { variant: 'warning' });
       }
 
       showError(error);
@@ -331,6 +333,7 @@ export default function LoginScreen() {
       )}
 
       <ThemedButton title={i18n.t('screens.login.noAccount')} variant="link" onPress={() => router.push('/(auth)/register')} style={styles.linkButton} />
+      {AlertComponent}
     </ScreenContainer>
   );
 }

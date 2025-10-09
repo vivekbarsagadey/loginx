@@ -6,6 +6,7 @@ import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
+import { useAlert } from '@/hooks/use-alert';
 import { useAuth } from '@/hooks/use-auth-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import type { IssueType } from '@/types/feedback';
@@ -13,7 +14,7 @@ import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 
 interface IssueOption {
   id: IssueType;
@@ -34,6 +35,7 @@ const ISSUE_TYPES: IssueOption[] = [
 export default function ReportIssueScreen() {
   const router = useRouter();
   const { user } = useAuth();
+  const { show: showAlert, AlertComponent } = useAlert();
   const primaryColor = useThemeColor({}, 'primary');
   const [selectedIssue, setSelectedIssue] = useState<IssueType>('functionality');
   const [subject, setSubject] = useState('');
@@ -51,22 +53,22 @@ export default function ReportIssueScreen() {
   const handleSubmit = async () => {
     // Validation
     if (!subject.trim()) {
-      Alert.alert('Subject Required', 'Please enter a subject for your issue report.');
+      showAlert('Subject Required', 'Please enter a subject for your issue report.', [{ text: 'OK' }], { variant: 'warning' });
       return;
     }
 
     if (!description.trim()) {
-      Alert.alert('Description Required', 'Please describe the issue you encountered.');
+      showAlert('Description Required', 'Please describe the issue you encountered.', [{ text: 'OK' }], { variant: 'warning' });
       return;
     }
 
     if (description.trim().length < 20) {
-      Alert.alert('Description Too Short', 'Please provide more details about the issue (at least 20 characters).');
+      showAlert('Description Too Short', 'Please provide more details about the issue (at least 20 characters).', [{ text: 'OK' }], { variant: 'warning' });
       return;
     }
 
     if (!user) {
-      Alert.alert('Error', 'You must be logged in to report an issue');
+      showAlert('Error', 'You must be logged in to report an issue', [{ text: 'OK' }], { variant: 'error' });
       return;
     }
 
@@ -87,12 +89,17 @@ export default function ReportIssueScreen() {
 
       if (result.success) {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        Alert.alert('Issue Reported!', 'Thank you for reporting this issue. Our team will investigate and work on a fix.', [
-          {
-            text: 'OK',
-            onPress: () => router.back(),
-          },
-        ]);
+        showAlert(
+          'Issue Reported!',
+          'Thank you for reporting this issue. Our team will investigate and work on a fix.',
+          [
+            {
+              text: 'OK',
+              onPress: () => router.back(),
+            },
+          ],
+          { variant: 'success' }
+        );
 
         // Reset form
         setSubject('');
@@ -103,11 +110,11 @@ export default function ReportIssueScreen() {
         setSelectedIssue('functionality');
       } else {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-        Alert.alert('Submission Failed', result.error || 'Failed to submit issue report. Please try again.');
+        showAlert('Submission Failed', result.error || 'Failed to submit issue report. Please try again.', [{ text: 'OK' }], { variant: 'error' });
       }
     } catch (_error) {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      Alert.alert('Submission Failed', 'An unexpected error occurred. Please try again.');
+      showAlert('Submission Failed', 'An unexpected error occurred. Please try again.', [{ text: 'OK' }], { variant: 'error' });
     } finally {
       setIsSubmitting(false);
     }
@@ -223,6 +230,7 @@ export default function ReportIssueScreen() {
         style={styles.submitButton}
         accessibilityLabel="Submit issue report"
       />
+      {AlertComponent}
     </ScreenContainer>
   );
 }
