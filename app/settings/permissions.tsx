@@ -7,7 +7,7 @@ import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import React from 'react';
-import { ActivityIndicator, Alert, Linking, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Alert, Linking, Platform, Pressable, StyleSheet, View } from 'react-native';
 
 interface PermissionCardProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -124,6 +124,26 @@ export default function PermissionsScreen() {
   const primaryColor = useThemeColor({}, 'primary');
   const mutedColor = useThemeColor({}, 'text-muted');
 
+  // Debug logging
+  React.useEffect(() => {
+    console.warn('[PermissionsScreen] Mounted');
+    console.warn('[PermissionsScreen] Permissions Status:', JSON.stringify(permissionsStatus, null, 2));
+    console.warn('[PermissionsScreen] BgColor:', bgColor);
+    console.warn('[PermissionsScreen] PrimaryColor:', primaryColor);
+  }, [permissionsStatus, bgColor, primaryColor]);
+
+  // Add loading state check
+  if (!permissionsStatus) {
+    return (
+      <ScreenContainer scrollable style={{ backgroundColor: bgColor }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color={primaryColor} />
+          <ThemedText style={{ marginTop: Spacing.md }}>Loading permissions...</ThemedText>
+        </View>
+      </ScreenContainer>
+    );
+  }
+
   const handleRequestPermission = async (type: 'camera' | 'mediaLibrary' | 'location' | 'notifications', requestFn: () => Promise<boolean>) => {
     setLoading((prev) => ({ ...prev, [type]: true }));
     try {
@@ -173,70 +193,64 @@ export default function PermissionsScreen() {
   ];
 
   return (
-    <ScreenContainer style={{ backgroundColor: bgColor }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={[styles.headerIcon, { backgroundColor: `${primaryColor}15` }]}>
-            <Ionicons name="shield-checkmark" size={48} color={primaryColor} />
-          </View>
-
-          <ThemedText type="h3" style={styles.headerTitle}>
-            {i18n.t('settings.permissions.header.title')}
-          </ThemedText>
-
-          <ThemedText type="body" style={[styles.headerDescription, { color: mutedColor }]}>
-            {i18n.t('settings.permissions.header.description')}
-          </ThemedText>
+    <ScreenContainer scrollable style={{ backgroundColor: bgColor }} contentContainerStyle={styles.content}>
+      {/* Header */}
+      <View style={styles.header}>
+        <View style={[styles.headerIcon, { backgroundColor: `${primaryColor}15` }]}>
+          <Ionicons name="shield-checkmark" size={48} color={primaryColor} />
         </View>
 
-        {/* Permission Cards */}
-        <View style={styles.permissionsList}>
-          {permissions.map((permission) => (
-            <PermissionCard
-              key={permission.type}
-              icon={permission.icon}
-              title={permission.title}
-              description={permission.description}
-              granted={permissionsStatus[permission.type].granted}
-              canAskAgain={permissionsStatus[permission.type].canAskAgain}
-              onRequest={() => handleRequestPermission(permission.type, permission.requestFn)}
-              loading={loading[permission.type]}
-            />
-          ))}
-        </View>
+        <ThemedText type="h3" style={styles.headerTitle}>
+          {i18n.t('settings.permissions.header.title')}
+        </ThemedText>
 
-        {/* Refresh Button */}
-        <Pressable
-          onPress={handleRefreshAll}
-          style={[styles.refreshButton, { backgroundColor: `${primaryColor}10` }]}
-          accessibilityRole="button"
-          accessibilityLabel={i18n.t('settings.permissions.refresh')}
-        >
-          <Ionicons name="refresh" size={20} color={primaryColor} />
-          <ThemedText type="body" style={{ color: primaryColor }}>
-            {i18n.t('settings.permissions.refresh')}
-          </ThemedText>
-        </Pressable>
+        <ThemedText type="body" style={[styles.headerDescription, { color: mutedColor }]}>
+          {i18n.t('settings.permissions.header.description')}
+        </ThemedText>
+      </View>
 
-        {/* Info Note */}
-        <View style={[styles.infoBox, { backgroundColor: `${primaryColor}10`, borderColor: `${primaryColor}30` }]}>
-          <Ionicons name="information-circle" size={20} color={primaryColor} />
-          <ThemedText type="caption" style={[styles.infoText, { color: mutedColor }]}>
-            {i18n.t('settings.permissions.info')}
-          </ThemedText>
-        </View>
-      </ScrollView>
+      {/* Permission Cards */}
+      <View style={styles.permissionsList}>
+        {permissions.map((permission) => (
+          <PermissionCard
+            key={permission.type}
+            icon={permission.icon}
+            title={permission.title}
+            description={permission.description}
+            granted={permissionsStatus[permission.type].granted}
+            canAskAgain={permissionsStatus[permission.type].canAskAgain}
+            onRequest={() => handleRequestPermission(permission.type, permission.requestFn)}
+            loading={loading[permission.type]}
+          />
+        ))}
+      </View>
+
+      {/* Refresh Button */}
+      <Pressable
+        onPress={handleRefreshAll}
+        style={[styles.refreshButton, { backgroundColor: `${primaryColor}10` }]}
+        accessibilityRole="button"
+        accessibilityLabel={i18n.t('settings.permissions.refresh')}
+      >
+        <Ionicons name="refresh" size={20} color={primaryColor} />
+        <ThemedText type="body" style={{ color: primaryColor }}>
+          {i18n.t('settings.permissions.refresh')}
+        </ThemedText>
+      </Pressable>
+
+      {/* Info Note */}
+      <View style={[styles.infoBox, { backgroundColor: `${primaryColor}10`, borderColor: `${primaryColor}30` }]}>
+        <Ionicons name="information-circle" size={20} color={primaryColor} />
+        <ThemedText type="caption" style={[styles.infoText, { color: mutedColor }]}>
+          {i18n.t('settings.permissions.info')}
+        </ThemedText>
+      </View>
     </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   content: {
-    padding: Spacing.lg,
     paddingBottom: Spacing.xxl,
   },
   header: {
