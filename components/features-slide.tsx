@@ -13,14 +13,14 @@ export const FeaturesSlide = ({ slide }: { slide: SlideProps }) => {
   return (
     <ThemedView style={styles.container}>
       <ThemedView style={styles.content}>
-        <Image source={{ uri: slide.icon }} style={styles.image} />
+        <Image source={{ uri: slide.icon }} style={styles.image} accessible={true} accessibilityRole="image" accessibilityLabel={`Feature: ${slide.title}`} />
         <ThemedText type="h1" style={styles.title} numberOfLines={2}>
           {slide.title}
         </ThemedText>
         <ThemedText type="h3" style={styles.subtitle} numberOfLines={2}>
           {slide.subtitle}
         </ThemedText>
-        <ThemedText type="body" style={styles.description} numberOfLines={4}>
+        <ThemedText type="body" style={styles.description} numberOfLines={5}>
           {slide.description}
         </ThemedText>
       </ThemedView>
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
+    padding: 32,
   },
   content: {
     width: '100%',
@@ -41,23 +41,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 100,
-    height: 100,
-    marginBottom: 20,
+    width: 120,
+    height: 120,
+    marginBottom: 24,
     resizeMode: 'contain',
   },
   title: {
-    marginBottom: 12,
+    marginBottom: 16,
     textAlign: 'center',
     paddingHorizontal: 16,
+    lineHeight: 32,
   },
   subtitle: {
     marginBottom: 12,
     textAlign: 'center',
     paddingHorizontal: 16,
+    opacity: 0.9,
+    lineHeight: 26,
   },
   description: {
     textAlign: 'center',
     paddingHorizontal: 16,
+    opacity: 0.8,
+    lineHeight: 24,
   },
 });

@@ -95,16 +95,17 @@ export function Toast({ message, type = 'info', duration = 3000, visible, onHide
           padding: Spacing.md,
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.15,
-          shadowRadius: 8,
+          shadowOpacity: 0.2,
+          shadowRadius: 12,
           elevation: 8,
         },
         iconContainer: {
-          marginRight: Spacing.sm,
+          marginRight: Spacing.md,
         },
         message: {
           flex: 1,
           color: textColor,
+          lineHeight: 20,
         },
       }),
     [backgroundColor, borderColor, textColor]

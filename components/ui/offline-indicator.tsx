@@ -76,12 +76,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 8,
+    paddingVertical: 10,
     paddingHorizontal: 16,
-    gap: 8,
+    gap: 10,
+    minHeight: 44,
   },
   text: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '600',
+    lineHeight: 20,
   },
 });

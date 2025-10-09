@@ -94,6 +94,10 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     padding: Spacing.sm,
+    minHeight: 44,
+    minWidth: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   closeText: {
     fontSize: 24,
@@ -104,11 +108,12 @@ const styles = StyleSheet.create({
     padding: Spacing.lg,
   },
   footer: {
-    borderTopWidth: 1,
+    borderTopWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
-    gap: Spacing.sm,
+    gap: Spacing.md,
     justifyContent: 'flex-end',
     padding: Spacing.md,
+    flexWrap: 'wrap',
   },
   fullscreen: {
     borderRadius: 0,
@@ -117,10 +122,11 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: Spacing.md,
+    minHeight: 56,
   },
   modal: {
     borderRadius: BorderRadius.lg,
@@ -130,6 +136,7 @@ const styles = StyleSheet.create({
     shadowOffset: { height: 4, width: 0 },
     shadowOpacity: 0.3,
     shadowRadius: 12,
+    elevation: 8,
   },
   title: {
     flex: 1,

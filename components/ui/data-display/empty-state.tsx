@@ -120,6 +120,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: Spacing.md,
     marginTop: Spacing.xl,
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   container: {
     alignItems: 'center',
@@ -129,11 +131,13 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.xxl,
   },
   description: {
-    marginTop: Spacing.sm,
+    marginTop: Spacing.md,
     textAlign: 'center',
+    lineHeight: 22,
+    paddingHorizontal: Spacing.sm,
   },
   emoji: {
-    fontSize: 64,
+    fontSize: 72,
   },
   illustration: {
     height: 200,
@@ -146,5 +150,6 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
+    paddingHorizontal: Spacing.sm,
   },
 });

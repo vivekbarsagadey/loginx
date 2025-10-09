@@ -1,8 +1,9 @@
 import { AccessibilityHints, AccessibilityRoles } from '@/constants/accessibility';
 import { Button as ButtonConstants, Spacing, TouchTarget } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import * as Haptics from 'expo-haptics';
 import { memo } from 'react';
-import { ActivityIndicator, StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps, ViewStyle } from 'react-native';
+import { ActivityIndicator, GestureResponderEvent, StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps, ViewStyle } from 'react-native';
 import { ThemedText } from './themed-text';
 
 export type ThemedButtonProps = TouchableOpacityProps & {
@@ -23,6 +24,16 @@ function ThemedButtonComponent({ title, style, variant = 'primary', disabled, lo
   const onPrimaryColor = useThemeColor({}, 'on-primary');
   const surfaceColor = useThemeColor({}, 'surface');
   const borderColor = useThemeColor({}, 'border');
+
+  const handlePress = (e: GestureResponderEvent) => {
+    if (!disabled && !loading) {
+      // Fire haptic feedback without blocking the press handler
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {
+        // Silently ignore haptic errors (device may not support it)
+      });
+      rest.onPress?.(e);
+    }
+  };
 
   const buttonStyles: { [key: string]: ViewStyle } = {
     primary: {
@@ -84,7 +95,9 @@ function ThemedButtonComponent({ title, style, variant = 'primary', disabled, lo
       accessibilityLabel={accessibilityLabel || title}
       accessibilityHint={accessibilityHint || (loading ? 'Loading' : AccessibilityHints.BUTTON_TAP)}
       accessibilityState={{ disabled: disabled || loading, busy: loading }}
+      activeOpacity={0.7}
       {...rest}
+      onPress={handlePress}
     >
       {loading ? <ActivityIndicator color={variant === 'primary' ? onPrimaryColor : primaryColor} /> : <ThemedText style={[styles.text, textStyle]}>{title}</ThemedText>}
     </TouchableOpacity>

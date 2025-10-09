@@ -101,30 +101,36 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: 24,
   },
   title: {
     marginBottom: 16,
     textAlign: 'center',
+    paddingHorizontal: 16,
   },
   message: {
-    marginBottom: 24,
+    marginBottom: 32,
     textAlign: 'center',
-    opacity: 0.7,
+    opacity: 0.8,
+    paddingHorizontal: 16,
+    lineHeight: 22,
   },
   errorDetails: {
-    marginBottom: 24,
+    marginBottom: 32,
     padding: 16,
-    borderRadius: 8,
+    borderRadius: 12,
     maxWidth: '100%',
   },
   errorText: {
     marginBottom: 8,
+    lineHeight: 18,
   },
   stackText: {
     fontSize: 10,
+    lineHeight: 14,
   },
   button: {
     minWidth: 200,
+    marginTop: 8,
   },
 });

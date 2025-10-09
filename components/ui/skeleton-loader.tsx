@@ -52,14 +52,21 @@ export const SkeletonLoader = ({ width = '100%', height = 20, borderRadius = 4, 
       shimmerValue.value = withRepeat(
         withTiming(1, {
           duration: AnimationDurations.SKELETON_SHIMMER,
-          easing: Easing.linear,
+          easing: Easing.bezier(0.4, 0, 0.2, 1),
         }),
         -1,
         false
       );
     } else {
       // Pulse effect - opacity animation
-      opacity.value = withRepeat(withTiming(0.8, { duration: AnimationDurations.SKELETON_SHIMMER / 1.5 }), -1, true);
+      opacity.value = withRepeat(
+        withTiming(0.8, {
+          duration: AnimationDurations.SKELETON_SHIMMER / 1.5,
+          easing: Easing.bezier(0.4, 0, 0.6, 1),
+        }),
+        -1,
+        true
+      );
     }
   }, [opacity, shimmerValue, shimmer, reducedMotion]);
 

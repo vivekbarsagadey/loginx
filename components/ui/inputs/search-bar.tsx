@@ -208,10 +208,15 @@ export function SearchBar({
 
 const styles = StyleSheet.create({
   clearButton: {
-    padding: Spacing.xs,
+    padding: Spacing.sm,
+    minHeight: 44,
+    minWidth: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   clearIcon: {
     fontSize: 18,
+    lineHeight: 18,
   },
   container: {
     position: 'relative',
@@ -220,29 +225,30 @@ const styles = StyleSheet.create({
   dropdown: {
     borderRadius: BorderRadius.md,
     borderWidth: 1,
-    marginTop: Spacing.xs,
+    marginTop: Spacing.sm,
     maxHeight: 300,
     shadowColor: '#000',
-    shadowOffset: { height: 2, width: 0 },
+    shadowOffset: { height: 4, width: 0 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
+    elevation: 8,
   },
   dropdownHeader: {
-    borderBottomWidth: 1,
-    padding: Spacing.sm,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    padding: Spacing.md,
   },
   dropdownIcon: {
-    fontSize: 16,
-    marginRight: Spacing.sm,
+    fontSize: 18,
+    marginRight: Spacing.md,
   },
   dropdownItem: {
     alignItems: 'center',
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    minHeight: 44,
+    minHeight: 52,
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
   },
   dropdownItemContent: {
     alignItems: 'center',
@@ -254,20 +260,27 @@ const styles = StyleSheet.create({
   },
   dropdownText: {
     flex: 1,
+    lineHeight: 20,
   },
   input: {
     flex: 1,
     fontSize: 16,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
+    lineHeight: 22,
   },
   loader: {
     marginLeft: Spacing.sm,
   },
   removeButton: {
-    padding: Spacing.xs,
+    padding: Spacing.sm,
+    minHeight: 44,
+    minWidth: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   removeIcon: {
     fontSize: 16,
+    lineHeight: 16,
   },
   searchContainer: {
     alignItems: 'center',
@@ -275,9 +288,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     flexDirection: 'row',
     paddingHorizontal: Spacing.md,
+    minHeight: 52,
   },
   searchIcon: {
-    fontSize: 18,
-    marginRight: Spacing.sm,
+    fontSize: 20,
+    marginRight: Spacing.md,
   },
 });

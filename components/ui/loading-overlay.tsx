@@ -35,11 +35,13 @@ export function LoadingOverlay({ visible, message, transparent = false }: Loadin
         },
         content: {
           alignItems: 'center',
-          gap: Spacing.md,
+          gap: Spacing.lg,
         },
         message: {
           color: textColor,
           textAlign: 'center',
+          lineHeight: 22,
+          paddingHorizontal: Spacing.lg,
         },
       }),
     [backgroundColor, overlayColor, textColor, transparent]

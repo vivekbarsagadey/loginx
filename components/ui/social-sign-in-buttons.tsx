@@ -95,20 +95,22 @@ export function SocialSignInButtons({ onGoogleSignIn, onAppleSignIn, onFacebookS
 
 const styles = StyleSheet.create({
   container: {
-    gap: 16,
+    gap: 20,
   },
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 16,
+    marginVertical: 20,
   },
   divider: {
     flex: 1,
-    height: 1,
+    height: StyleSheet.hairlineWidth,
   },
   dividerText: {
     marginHorizontal: 16,
-    opacity: 0.6,
+    opacity: 0.7,
+    fontSize: 13,
+    fontWeight: '600',
   },
   buttonsContainer: {
     gap: 12,
@@ -118,6 +120,6 @@ const styles = StyleSheet.create({
   },
   appleButton: {
     width: '100%',
-    height: 48,
+    height: 52,
   },
 });

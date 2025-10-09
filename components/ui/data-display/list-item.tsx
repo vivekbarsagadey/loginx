@@ -81,15 +81,15 @@ export function ListItem({ title, subtitle, caption, leading, trailing, onPress,
 
 const styles = StyleSheet.create({
   caption: {
-    marginTop: 2,
+    marginTop: 4,
     opacity: 0.7,
   },
   container: {
     alignItems: 'center',
     flexDirection: 'row',
-    minHeight: 56,
+    minHeight: 60,
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
   },
   content: {
     flex: 1,
@@ -102,17 +102,17 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   divider: {
-    height: 1,
+    height: StyleSheet.hairlineWidth,
     marginLeft: Spacing.md,
   },
   leading: {
     marginRight: Spacing.md,
   },
   pressed: {
-    opacity: 0.7,
+    opacity: 0.6,
   },
   subtitle: {
-    marginTop: 2,
+    marginTop: 4,
   },
   title: {
     fontWeight: '500',

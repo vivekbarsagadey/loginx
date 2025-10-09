@@ -2,6 +2,7 @@ import { getAllThemes } from '@/constants/theme';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { useThemeContext } from '@/hooks/use-theme-context';
 import i18n from '@/i18n';
+import * as Haptics from 'expo-haptics';
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { ThemedText } from './themed-text';
@@ -42,6 +43,11 @@ export const ThemeSelector = () => {
     [borderColor, primaryColor, surfaceColor, onPrimaryColor, textColor]
   );
 
+  const handleThemeSelect = async (themeName: string) => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setThemePreference(themeName as any);
+  };
+
   return (
     <ThemedView>
       <ThemedText style={styles.label}>{i18n.t('onb.personalize.theme')}</ThemedText>
@@ -49,8 +55,11 @@ export const ThemeSelector = () => {
         {themes.map((theme) => (
           <Pressable
             key={theme.name}
-            style={[styles.chip, themePreference === theme.name ? dynamicStyles.chipActive : dynamicStyles.chipInactive]}
-            onPress={() => setThemePreference(theme.name as any)}
+            style={({ pressed }) => [styles.chip, themePreference === theme.name ? dynamicStyles.chipActive : dynamicStyles.chipInactive, pressed && styles.chipPressed]}
+            onPress={() => handleThemeSelect(theme.name)}
+            accessibilityRole="button"
+            accessibilityLabel={`Select ${theme.displayName} theme`}
+            accessibilityState={{ selected: themePreference === theme.name }}
           >
             <ThemedText style={themePreference === theme.name ? dynamicStyles.textActive : dynamicStyles.textInactive}>
               {theme.icon} {theme.displayName}
@@ -78,12 +87,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   chip: {
-    paddingVertical: 10,
+    paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
     minWidth: '30%',
+    minHeight: 44,
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  chipPressed: {
+    opacity: 0.7,
   },
 });

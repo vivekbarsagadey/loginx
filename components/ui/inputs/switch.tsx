@@ -1,4 +1,5 @@
 import { useThemeColor } from '@/hooks/use-theme-color';
+import * as Haptics from 'expo-haptics';
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
@@ -42,8 +43,9 @@ export function Switch({ value, onValueChange, disabled = false, size = 'medium'
     transform: [{ translateX: translateX.value }],
   }));
 
-  const handlePress = () => {
+  const handlePress = async () => {
     if (!disabled) {
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       onValueChange(!value);
     }
   };

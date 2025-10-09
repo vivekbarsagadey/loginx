@@ -186,7 +186,7 @@ export function ThemedAlert({ visible, onClose, title, message, buttonText = i18
         button: {
           minHeight: TouchTarget.comfortable,
           paddingHorizontal: Spacing.lg,
-          paddingVertical: Spacing.sm,
+          paddingVertical: Spacing.md,
           borderRadius: 8,
           justifyContent: 'center',
           alignItems: 'center',
@@ -195,6 +195,7 @@ export function ThemedAlert({ visible, onClose, title, message, buttonText = i18
         buttonText: {
           color: '#FFFFFF',
           fontWeight: '600',
+          fontSize: 16,
         },
       }),
     [primaryColor]
@@ -261,7 +262,7 @@ export function ConfirmationDialog({
         button: {
           minHeight: TouchTarget.comfortable,
           paddingHorizontal: Spacing.lg,
-          paddingVertical: Spacing.sm,
+          paddingVertical: Spacing.md,
           borderRadius: 8,
           justifyContent: 'center',
           alignItems: 'center',
@@ -278,10 +279,12 @@ export function ConfirmationDialog({
         cancelButtonText: {
           color: textMutedColor,
           fontWeight: '600',
+          fontSize: 16,
         },
         confirmButtonText: {
           color: '#FFFFFF',
           fontWeight: '600',
+          fontSize: 16,
         },
         loadingButton: {
           opacity: 0.6,
@@ -369,14 +372,14 @@ export function BottomSheet({ visible, onClose, title, children, dismissable = t
           paddingBottom: Spacing.xl,
         },
         handle: {
-          width: 40,
-          height: 4,
+          width: 48,
+          height: 5,
           backgroundColor: textMutedColor,
-          borderRadius: 2,
+          borderRadius: 3,
           alignSelf: 'center',
           marginTop: Spacing.md,
-          marginBottom: Spacing.sm,
-          opacity: 0.3,
+          marginBottom: Spacing.md,
+          opacity: 0.4,
         },
         header: {
           paddingHorizontal: Spacing.lg,

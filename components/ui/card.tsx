@@ -198,5 +198,6 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: StyleSheet.hairlineWidth,
+    opacity: 0.8,
   },
 });

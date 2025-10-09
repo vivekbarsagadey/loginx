@@ -87,8 +87,8 @@ export function ActionSheet({ visible, onClose, title, message, options, showCan
         },
         header: {
           paddingHorizontal: Spacing.lg,
-          paddingVertical: Spacing.md,
-          borderBottomWidth: 1,
+          paddingVertical: Spacing.lg,
+          borderBottomWidth: StyleSheet.hairlineWidth,
           borderBottomColor: borderColor,
         },
         title: {
@@ -112,7 +112,7 @@ export function ActionSheet({ visible, onClose, title, message, options, showCan
           paddingHorizontal: Spacing.lg,
           paddingVertical: Spacing.md,
           minHeight: TouchTarget.large,
-          borderBottomWidth: 1,
+          borderBottomWidth: StyleSheet.hairlineWidth,
           borderBottomColor: borderColor,
         },
         optionDisabled: {
@@ -124,6 +124,8 @@ export function ActionSheet({ visible, onClose, title, message, options, showCan
         optionLabel: {
           flex: 1,
           color: textColor,
+          fontSize: 16,
+          lineHeight: 22,
         },
         optionLabelDestructive: {
           color: errorColor,

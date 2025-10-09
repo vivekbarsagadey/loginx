@@ -10,6 +10,8 @@ export function ExternalLink({ href, ...rest }: Props) {
       target="_blank"
       {...rest}
       href={href}
+      accessibilityRole="link"
+      accessibilityHint="Opens in external browser"
       onPress={async (event) => {
         if (process.env.EXPO_OS !== 'web') {
           // Prevent the default behavior of linking to the default browser on native.

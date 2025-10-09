@@ -200,11 +200,17 @@ export function PasswordStrengthMeter({ password, onStrengthChange }: PasswordSt
   return (
     <ThemedView style={styles.container}>
       <View style={styles.meterContainer}>
-        <View style={[styles.meterTrack, { backgroundColor: borderColor }]}>
+        <View style={[styles.meterTrack, { backgroundColor: borderColor }]} accessible={true} accessibilityRole="progressbar" accessibilityLabel="Password strength">
           <Animated.View style={[styles.meterFill, animatedStyle]} />
         </View>
       </View>
-      <ThemedText type="caption" style={[styles.label, { color: getStrengthColor(strength, colors) }]}>
+      <ThemedText
+        type="caption"
+        style={[styles.label, { color: getStrengthColor(strength, colors) }]}
+        accessible={true}
+        accessibilityRole="text"
+        accessibilityLabel={`Password strength: ${getStrengthLabel(strength)}`}
+      >
         Password strength: {getStrengthLabel(strength)}
       </ThemedText>
     </ThemedView>
@@ -213,22 +219,23 @@ export function PasswordStrengthMeter({ password, onStrengthChange }: PasswordSt
 
 const styles = StyleSheet.create({
   container: {
-    gap: 6,
+    gap: 8,
   },
   meterContainer: {
     marginTop: 4,
   },
   meterTrack: {
-    height: 6,
-    borderRadius: 3,
+    height: 8,
+    borderRadius: 4,
     overflow: 'hidden',
   },
   meterFill: {
     height: '100%',
-    borderRadius: 3,
+    borderRadius: 4,
   },
   label: {
-    fontSize: 12,
-    fontWeight: '500',
+    fontSize: 13,
+    fontWeight: '600',
+    lineHeight: 18,
   },
 });

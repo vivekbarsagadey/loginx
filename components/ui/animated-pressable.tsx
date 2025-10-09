@@ -40,26 +40,35 @@ export function AnimatedPressable({ children, animationType = 'both', pressedSca
 
   const handlePressIn = () => {
     if (animationType === 'scale' || animationType === 'both') {
-      scale.value = useSpring ? withSpring(pressedScale, { damping: 15, stiffness: 150 }) : withTiming(pressedScale, { duration: 100 });
+      scale.value = useSpring ? withSpring(pressedScale, { damping: 20, stiffness: 200 }) : withTiming(pressedScale, { duration: 150 });
     }
 
     if (animationType === 'opacity' || animationType === 'both') {
-      opacity.value = withTiming(pressedOpacity, { duration: 100 });
+      opacity.value = withTiming(pressedOpacity, { duration: 150 });
     }
   };
 
   const handlePressOut = () => {
     if (animationType === 'scale' || animationType === 'both') {
-      scale.value = useSpring ? withSpring(1, { damping: 15, stiffness: 150 }) : withTiming(1, { duration: 100 });
+      scale.value = useSpring ? withSpring(1, { damping: 20, stiffness: 200 }) : withTiming(1, { duration: 150 });
     }
 
     if (animationType === 'opacity' || animationType === 'both') {
-      opacity.value = withTiming(1, { duration: 100 });
+      opacity.value = withTiming(1, { duration: 150 });
     }
   };
 
   return (
-    <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut} disabled={disabled} style={disabled ? styles.disabled : undefined} {...props}>
+    <Pressable
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      disabled={disabled}
+      style={disabled ? styles.disabled : undefined}
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityState={{ disabled: disabled || false }}
+      {...props}
+    >
       <Animated.View style={[animatedStyle, style]}>{children}</Animated.View>
     </Pressable>
   );

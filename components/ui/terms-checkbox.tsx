@@ -89,20 +89,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 2,
+    minHeight: 24,
+    minWidth: 24,
   },
   textContainer: {
     flex: 1,
   },
   text: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 15,
+    lineHeight: 22,
   },
   link: {
     textDecorationLine: 'underline',
     fontWeight: '600',
   },
   errorText: {
-    fontSize: 12,
-    marginTop: 4,
+    fontSize: 13,
+    marginTop: 6,
+    lineHeight: 18,
   },
 });

@@ -111,17 +111,21 @@ export function StarRating({
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    gap: 8,
+    gap: 12,
   },
   starsContainer: {
     flexDirection: 'row',
-    gap: 4,
+    gap: 8,
   },
   starButton: {
-    padding: 4,
+    padding: 6,
+    minHeight: 44,
+    minWidth: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   label: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '600',
     marginTop: 4,
   },

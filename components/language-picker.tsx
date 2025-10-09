@@ -2,6 +2,7 @@ import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { useLanguage } from '@/hooks/use-language';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
+import * as Haptics from 'expo-haptics';
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { ThemedText } from './themed-text';
@@ -38,12 +39,24 @@ export const LanguagePicker = () => {
     [primaryColor, surfaceColor, onPrimaryColor, textColor]
   );
 
+  const handleLanguageSelect = async (option: string) => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    persistLanguage(option);
+  };
+
   return (
     <ThemedView>
       <ThemedText style={styles.label}>{i18n.t('onb.personalize.language')}</ThemedText>
       <ThemedView style={styles.container}>
         {LANGUAGE_OPTIONS.map((option) => (
-          <Pressable key={option} style={[styles.chip, language === option ? dynamicStyles.chipActive : dynamicStyles.chipInactive]} onPress={() => persistLanguage(option)}>
+          <Pressable
+            key={option}
+            style={({ pressed }) => [styles.chip, language === option ? dynamicStyles.chipActive : dynamicStyles.chipInactive, pressed && styles.chipPressed]}
+            onPress={() => handleLanguageSelect(option)}
+            accessibilityRole="button"
+            accessibilityLabel={`Select ${option} language`}
+            accessibilityState={{ selected: language === option }}
+          >
             <ThemedText style={language === option ? dynamicStyles.textActive : dynamicStyles.textInactive}>{option.toUpperCase()}</ThemedText>
           </Pressable>
         ))}
@@ -69,5 +82,9 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: 44,
+  },
+  chipPressed: {
+    opacity: 0.7,
   },
 });

@@ -1,6 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { BorderRadius } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import * as Haptics from 'expo-haptics';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
@@ -25,8 +26,9 @@ export function Checkbox({ checked, onCheckedChange, label, disabled = false, in
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
 
-  const handlePress = () => {
+  const handlePress = async () => {
     if (!disabled) {
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       onCheckedChange(!checked);
     }
   };

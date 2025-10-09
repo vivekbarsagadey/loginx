@@ -1,5 +1,6 @@
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 import React, { forwardRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, TextInputProps, TextStyle, View, ViewStyle } from 'react-native';
 
@@ -38,7 +39,8 @@ export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(({ label, hel
     dynamicStyle.borderWidth = 2;
   }
 
-  const togglePasswordVisibility = () => {
+  const togglePasswordVisibility = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setIsPasswordVisible((prev) => !prev);
   };
 
@@ -84,38 +86,42 @@ ThemedInput.displayName = 'ThemedInput';
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 8,
+    marginVertical: 12,
   },
   label: {
     fontSize: 16,
+    fontWeight: '500',
     marginBottom: 8,
+    lineHeight: 22,
   },
   inputContainer: {
     position: 'relative',
     width: '100%',
   },
   input: {
-    height: 48,
+    height: 52,
     borderWidth: 1,
     borderRadius: 12,
     paddingHorizontal: 16,
     fontSize: 16,
+    lineHeight: 22,
   },
   inputWithIcon: {
-    paddingRight: 48, // Make room for the icon
+    paddingRight: 52, // Make room for the icon
   },
   iconButton: {
     position: 'absolute',
-    right: 12,
+    right: 8,
     top: '50%',
-    transform: [{ translateY: -20 }], // Half of icon size (24/2)
+    transform: [{ translateY: -22 }], // Half of button height (44/2)
     justifyContent: 'center',
     alignItems: 'center',
-    width: 40,
-    height: 40,
+    width: 44,
+    height: 44,
   },
   helperText: {
     fontSize: 13,
     marginTop: 8,
+    lineHeight: 18,
   },
 });
