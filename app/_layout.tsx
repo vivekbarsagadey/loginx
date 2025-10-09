@@ -4,6 +4,8 @@ import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
+import i18n from '@/i18n';
+
 import { ErrorBoundary } from '@/components/error-boundary';
 import { GlobalDialogProvider } from '@/components/global-dialog-provider';
 import { OfflineIndicator } from '@/components/ui/offline-indicator';
@@ -137,7 +139,8 @@ function RootLayoutNav() {
         <Stack.Screen
           name="modal"
           options={{
-            headerShown: false,
+            headerShown: true,
+            title: i18n.t('navigation.titles.modal'),
             animation: ScreenTransitions.MODAL,
             presentation: 'modal',
           }}
@@ -145,7 +148,8 @@ function RootLayoutNav() {
         <Stack.Screen
           name="feedback"
           options={{
-            headerShown: false,
+            headerShown: true,
+            title: i18n.t('navigation.titles.feedback'),
             animation: ScreenTransitions.MODAL,
             presentation: 'modal',
           }}
@@ -153,28 +157,50 @@ function RootLayoutNav() {
         <Stack.Screen
           name="help"
           options={{
-            headerShown: false,
+            headerShown: true,
+            title: i18n.t('navigation.titles.help'),
             animation: ScreenTransitions.SLIDE_FROM_RIGHT,
           }}
         />
         <Stack.Screen
           name="privacy"
           options={{
-            headerShown: false,
+            headerShown: true,
+            title: i18n.t('navigation.titles.privacy'),
             animation: ScreenTransitions.SLIDE_FROM_RIGHT,
           }}
         />
         <Stack.Screen
           name="support"
           options={{
-            headerShown: false,
+            headerShown: true,
+            title: i18n.t('navigation.titles.support'),
             animation: ScreenTransitions.SLIDE_FROM_RIGHT,
+          }}
+        />
+        <Stack.Screen
+          name="rate-app"
+          options={{
+            headerShown: true,
+            title: i18n.t('navigation.titles.rateApp'),
+            animation: ScreenTransitions.MODAL,
+            presentation: 'modal',
+          }}
+        />
+        <Stack.Screen
+          name="report-issue"
+          options={{
+            headerShown: true,
+            title: i18n.t('navigation.titles.reportIssue'),
+            animation: ScreenTransitions.MODAL,
+            presentation: 'modal',
           }}
         />
 
         <Stack.Screen
           name="+not-found"
           options={{
+            title: i18n.t('navigation.titles.notFound'),
             animation: ScreenTransitions.FADE,
           }}
         />

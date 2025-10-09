@@ -479,6 +479,40 @@
       "emailNotAvailable": "Email is not configured on this device."
     }
   },
+  "navigation": {
+    "titles": {
+      "modal": "Modal",
+      "feedback": "Send Feedback",
+      "help": "Help & FAQ",
+      "privacy": "Privacy Policy",
+      "support": "Support",
+      "rateApp": "Rate App",
+      "reportIssue": "Report Issue",
+      "notFound": "Page Not Found",
+      "login": "Login",
+      "forgotPassword": "Forgot Password",
+      "otpLogin": "OTP Login",
+      "passwordlessLogin": "Passwordless Login",
+      "verifyEmail": "Verify Email",
+      "verifyPhone": "Verify Phone",
+      "verify2FA": "Two-Factor Authentication",
+      "verifyMagicLink": "Verify Magic Link",
+      "welcome": "Welcome",
+      "home": "Home",
+      "items": "Items",
+      "settings": "Settings",
+      "theme": "Theme",
+      "language": "Language",
+      "textSize": "Text Size",
+      "notifications": "Notifications",
+      "aboutUs": "About Us",
+      "twoFactorAuth": "Two-Factor Authentication",
+      "changePassword": "Change Password",
+      "activeSessions": "Active Sessions",
+      "editProfile": "Edit Profile",
+      "updateEmail": "Update Email"
+    }
+  },
   "screens": {
     "login": {
       "title": "Welcome Back",

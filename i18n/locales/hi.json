@@ -477,6 +477,40 @@
       "emailNotAvailable": "इस डिवाइस पर ईमेल कॉन्फ़िगर नहीं है।"
     }
   },
+  "navigation": {
+    "titles": {
+      "modal": "मॉडल",
+      "feedback": "प्रतिक्रिया भेजें",
+      "help": "सहायता और FAQ",
+      "privacy": "गोपनीयता नीति",
+      "support": "सहायता",
+      "rateApp": "ऐप को रेट करें",
+      "reportIssue": "समस्या रिपोर्ट करें",
+      "notFound": "पेज नहीं मिला",
+      "login": "लॉगिन",
+      "forgotPassword": "पासवर्ड भूल गए",
+      "otpLogin": "OTP लॉगिन",
+      "passwordlessLogin": "पासवर्ड रहित लॉगिन",
+      "verifyEmail": "ईमेल सत्यापित करें",
+      "verifyPhone": "फोन सत्यापित करें",
+      "verify2FA": "दो-कारक प्रमाणीकरण",
+      "verifyMagicLink": "मैजिक लिंक सत्यापित करें",
+      "welcome": "स्वागत है",
+      "home": "होम",
+      "items": "आइटम",
+      "settings": "सेटिंग्स",
+      "theme": "थीम",
+      "language": "भाषा",
+      "textSize": "पाठ का आकार",
+      "notifications": "सूचनाएं",
+      "aboutUs": "हमारे बारे में",
+      "twoFactorAuth": "दो-कारक प्रमाणीकरण",
+      "changePassword": "पासवर्ड बदलें",
+      "activeSessions": "सक्रिय सत्र",
+      "editProfile": "प्रोफ़ाइल संपादित करें",
+      "updateEmail": "ईमेल अपडेट करें"
+    }
+  },
   "screens": {
     "login": {
       "title": "वापसी पर स्वागत है",

@@ -1,11 +1,20 @@
 import { AnimationDurations, ScreenTransitions } from '@/constants/animation';
+import { useThemeColor } from '@/hooks/use-theme-color';
+import i18n from '@/i18n';
 import { Stack } from 'expo-router';
 
 export default function SecurityLayout() {
+  const backgroundColor = useThemeColor({}, 'bg');
+  const textColor = useThemeColor({}, 'text');
+
   return (
     <Stack
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
+        headerStyle: {
+          backgroundColor,
+        },
+        headerTintColor: textColor,
         presentation: 'card',
         animation: ScreenTransitions.DEFAULT,
         animationDuration: AnimationDurations.SCREEN_TRANSITION,
@@ -14,19 +23,19 @@ export default function SecurityLayout() {
       <Stack.Screen
         name="2fa"
         options={{
-          title: 'Two-Factor Authentication',
+          title: i18n.t('navigation.titles.twoFactorAuth'),
         }}
       />
       <Stack.Screen
         name="change-password"
         options={{
-          title: 'Change Password',
+          title: i18n.t('navigation.titles.changePassword'),
         }}
       />
       <Stack.Screen
         name="sessions"
         options={{
-          title: 'Active Sessions',
+          title: i18n.t('navigation.titles.activeSessions'),
         }}
       />
     </Stack>

@@ -483,6 +483,40 @@
       "emailNotAvailable": "El correo electrónico no está configurado en este dispositivo."
     }
   },
+  "navigation": {
+    "titles": {
+      "modal": "Modal",
+      "feedback": "Enviar Comentarios",
+      "help": "Ayuda y Preguntas Frecuentes",
+      "privacy": "Política de Privacidad",
+      "support": "Soporte",
+      "rateApp": "Calificar Aplicación",
+      "reportIssue": "Reportar Problema",
+      "notFound": "Página No Encontrada",
+      "login": "Iniciar Sesión",
+      "forgotPassword": "Olvidé mi Contraseña",
+      "otpLogin": "Iniciar Sesión con OTP",
+      "passwordlessLogin": "Iniciar Sesión sin Contraseña",
+      "verifyEmail": "Verificar Correo",
+      "verifyPhone": "Verificar Teléfono",
+      "verify2FA": "Autenticación de Dos Factores",
+      "verifyMagicLink": "Verificar Enlace Mágico",
+      "welcome": "Bienvenido",
+      "home": "Inicio",
+      "items": "Elementos",
+      "settings": "Configuración",
+      "theme": "Tema",
+      "language": "Idioma",
+      "textSize": "Tamaño del Texto",
+      "notifications": "Notificaciones",
+      "aboutUs": "Sobre Nosotros",
+      "twoFactorAuth": "Autenticación de Dos Factores",
+      "changePassword": "Cambiar Contraseña",
+      "activeSessions": "Sesiones Activas",
+      "editProfile": "Editar Perfil",
+      "updateEmail": "Actualizar Correo"
+    }
+  },
   "screens": {
     "login": {
       "title": "Bienvenido de Nuevo",
