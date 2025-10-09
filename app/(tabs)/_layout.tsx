@@ -12,6 +12,12 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].icon,
+        tabBarStyle: {
+          backgroundColor: Colors[colorScheme ?? 'light']['bg-elevated'],
+          borderTopColor: Colors[colorScheme ?? 'light'].border,
+          borderTopWidth: 1,
+        },
         headerShown: false, // Hide header for tab screens - only show tab bar
         // Smooth fade animation for tab switches (150ms duration is optimal)
         animation: 'fade',

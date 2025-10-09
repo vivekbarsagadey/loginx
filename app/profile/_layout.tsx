@@ -4,7 +4,7 @@ import i18n from '@/i18n';
 import { Stack } from 'expo-router';
 
 export default function ProfileLayout() {
-  const backgroundColor = useThemeColor({}, 'bg');
+  const backgroundColor = useThemeColor({}, 'bg-elevated');
   const textColor = useThemeColor({}, 'text');
 
   return (

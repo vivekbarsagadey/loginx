@@ -3,7 +3,7 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 import { Stack } from 'expo-router';
 
 export default function ExamplesLayout() {
-  const backgroundColor = useThemeColor({}, 'bg');
+  const backgroundColor = useThemeColor({}, 'bg-elevated');
   const textColor = useThemeColor({}, 'text');
 
   return (
