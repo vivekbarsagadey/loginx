@@ -5,11 +5,12 @@ import { ThemedText } from '@/components/themed-text';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
+import { useLanguage } from '@/hooks/use-language-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
 import { Feather } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Switch, View } from 'react-native';
 
 interface NotificationSetting {
@@ -21,6 +22,7 @@ interface NotificationSetting {
 
 export default function NotificationsScreen() {
   const user = auth.currentUser;
+  const { language } = useLanguage();
   const borderColor = useThemeColor({}, 'border');
   const backgroundColor = useThemeColor({}, 'bg');
   const tintColor = useThemeColor({}, 'primary');
@@ -34,26 +36,32 @@ export default function NotificationsScreen() {
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const [initialLoading, setInitialLoading] = useState(true);
 
-  const notificationSettings: NotificationSetting[] = [
-    {
-      key: 'pushEnabled',
-      icon: 'bell',
-      title: i18n.t('screens.settings.notifications.items.pushEnabled.title'),
-      description: i18n.t('screens.settings.notifications.items.pushEnabled.description'),
-    },
-    {
-      key: 'emailUpdates',
-      icon: 'mail',
-      title: i18n.t('screens.settings.notifications.items.emailUpdates.title'),
-      description: i18n.t('screens.settings.notifications.items.emailUpdates.description'),
-    },
-    {
-      key: 'marketingTips',
-      icon: 'trending-up',
-      title: i18n.t('screens.settings.notifications.items.marketingTips.title'),
-      description: i18n.t('screens.settings.notifications.items.marketingTips.description'),
-    },
-  ];
+  // Re-create notification settings when language changes to update translations
+  const notificationSettings: NotificationSetting[] = useMemo(() => {
+    // Force re-computation when language changes (even though we don't use it directly)
+    void language;
+
+    return [
+      {
+        key: 'pushEnabled',
+        icon: 'bell',
+        title: i18n.t('screens.settings.notifications.items.pushEnabled.title'),
+        description: i18n.t('screens.settings.notifications.items.pushEnabled.description'),
+      },
+      {
+        key: 'emailUpdates',
+        icon: 'mail',
+        title: i18n.t('screens.settings.notifications.items.emailUpdates.title'),
+        description: i18n.t('screens.settings.notifications.items.emailUpdates.description'),
+      },
+      {
+        key: 'marketingTips',
+        icon: 'trending-up',
+        title: i18n.t('screens.settings.notifications.items.marketingTips.title'),
+        description: i18n.t('screens.settings.notifications.items.marketingTips.description'),
+      },
+    ];
+  }, [language]);
 
   const styles = React.useMemo(
     () =>

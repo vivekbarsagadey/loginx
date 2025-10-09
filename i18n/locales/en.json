@@ -45,7 +45,7 @@
   },
   "onb": {
     "welcome": {
-      "title": "Welcome to {app}",
+      "title": "Welcome to {{app}}",
       "body": "Sign in securely and keep your data synced."
     },
     "features": {
@@ -92,12 +92,12 @@
           "Your biometric data never leaves your device"
         ]
       },
-      "enable": "Enable {biometricType}",
+      "enable": "Enable {{biometricType}}",
       "skipButton": "Use Password Only",
       "notAvailable": "Continue with Password",
       "success": {
         "title": "Biometric Login Enabled!",
-        "message": "You can now use {biometricType} to sign in quickly and securely."
+        "message": "You can now use {{biometricType}} to sign in quickly and securely."
       },
       "error": {
         "title": "Setup Failed",
@@ -197,7 +197,7 @@
     },
     "completion": {
       "title": "You're All Set!",
-      "subtitle": "Welcome to {app}. Let's get started!",
+      "subtitle": "Welcome to {{app}}. Let's get started!",
       "summary": "Setup completed:",
       "features": {
         "account": "Account created",
@@ -205,7 +205,7 @@
         "preferences": "Preferences set",
         "notifications": "Notifications enabled"
       },
-      "start": "Start Using {app}",
+      "start": "Start Using {{app}}",
       "footerText": "You can always change these settings later in your account preferences."
     },
     "tutorials": {
@@ -266,12 +266,12 @@
       "back": "Back"
     },
     "accessibility": {
-      "slideAnnouncement": "Slide {{current}} of {{total}}",
+      "slideAnnouncement": "Slide {{{current}}} of {{{total}}}",
       "sessionRecovered": "Your previous session has been restored",
       "onboardingComplete": "Onboarding completed successfully",
       "slideContainer": "Onboarding slides",
       "swipeHint": "Swipe left or right to navigate between slides",
-      "progress": "Progress: {{current}} of {{total}} steps completed",
+      "progress": "Progress: {{{current}}} of {{{total}}} steps completed",
       "slideIndicators": "Slide navigation indicators"
     }
   },
@@ -481,7 +481,7 @@
     "copy": "Copy",
     "shareVia": "Share Via",
     "whyShare": "Why Share LoginX?",
-    "message": "Check out LoginX - the most secure authentication app! Join me and simplify your login experience.\n\n{link}",
+    "message": "Check out LoginX - the most secure authentication app! Join me and simplify your login experience.\n\n{{link}}",
     "emailSubject": "Join me on LoginX!",
     "options": {
       "whatsapp": "Share via WhatsApp",
@@ -565,7 +565,7 @@
     },
     "welcome": {
       "title": "Welcome!",
-      "subtitle": "You have successfully registered with the email: {email}",
+      "subtitle": "You have successfully registered with the email: {{email}}",
       "goToLogin": "Go to Login"
     },
     "verifyEmail": {
@@ -685,9 +685,9 @@
       },
       "deviceInfo": {
         "title": "Device Information",
-        "version": "App Version: {version}",
-        "platform": "Platform: {platform}",
-        "os": "OS Version: {os}"
+        "version": "App Version: {{version}}",
+        "platform": "Platform: {{platform}}",
+        "os": "OS Version: {{os}}"
       }
     },
     "legal": {
@@ -1100,9 +1100,9 @@
           "apps": "Recommended apps: Google Authenticator, Authy, Microsoft Authenticator"
         },
         "biometric": {
-          "title": "{type} Authentication",
-          "description": "Use {type} to quickly and securely access your account.",
-          "enableLabel": "Enable {type}"
+          "title": "{{type}} Authentication",
+          "description": "Use {{type}} to quickly and securely access your account.",
+          "enableLabel": "Enable {{type}}"
         },
         "alerts": {
           "disable": {
@@ -1112,8 +1112,8 @@
             "confirm": "Disable"
           },
           "backupCodes": {
-            "title": "Backup Codes ({count})",
-            "message": "Save these codes in a secure location:\n\n{codes}"
+            "title": "Backup Codes ({{count}})",
+            "message": "Save these codes in a secure location:\n\n{{codes}}"
           },
           "generateCodes": {
             "title": "Generate New Backup Codes",
@@ -1133,11 +1133,11 @@
           },
           "biometricEnabled": {
             "title": "Biometric Enabled",
-            "message": "{type} authentication has been enabled"
+            "message": "{{type}} authentication has been enabled"
           },
           "biometricDisabled": {
             "title": "Biometric Disabled",
-            "message": "{type} authentication has been disabled"
+            "message": "{{type}} authentication has been disabled"
           },
           "codesGenerated": {
             "title": "New Codes Generated",
@@ -1167,7 +1167,7 @@
         "changeButton": "Change Password",
         "changingButton": "Changing Password...",
         "success": "Password changed successfully!",
-        "lastChanged": "Password last changed: {date}",
+        "lastChanged": "Password last changed: {{date}}",
         "validation": {
           "currentRequired": "Current password is required",
           "newRequired": "New password is required",
@@ -1192,10 +1192,10 @@
         "otherSessions": "Other Sessions",
         "noOtherSessions": "No other active sessions",
         "sessionInfo": {
-          "device": "Device: {device}",
-          "location": "Location: {location}",
-          "lastActive": "Last active: {time}",
-          "ipAddress": "IP Address: {ip}"
+          "device": "Device: {{device}}",
+          "location": "Location: {{location}}",
+          "lastActive": "Last active: {{time}}",
+          "ipAddress": "IP Address: {{ip}}"
         },
         "actions": {
           "endSession": "End Session",
@@ -1376,7 +1376,7 @@
         },
         "noNotifications": {
           "question": "Not receiving notifications",
-          "answer": "Check these settings:\n\n1. Enable notifications in device Settings → Notifications → LoginX\n2. Make sure &ldquo;Do Not Disturb&rdquo; is off\n3. Check in-app notification settings\n4. Re-enable notification permissions in the app\n\n{platformNote}"
+          "answer": "Check these settings:\n\n1. Enable notifications in device Settings → Notifications → LoginX\n2. Make sure &ldquo;Do Not Disturb&rdquo; is off\n3. Check in-app notification settings\n4. Re-enable notification permissions in the app\n\n{{platformNote}}"
         },
         "syncIssues": {
           "question": "Sync issues across devices",
@@ -1598,14 +1598,14 @@
     },
     "home": {
       "title": "Home",
-      "welcome": "Welcome, {name}!",
+      "welcome": "Welcome, {{name}}!",
       "notificationPreferences": "Your Notification Preferences",
       "pushNotifications": "Push Notifications",
       "emailUpdates": "Email Updates",
       "marketingTips": "Marketing Tips",
       "enabled": "✓ Enabled",
       "disabled": "✗ Disabled",
-      "age": "Age: {age}"
+      "age": "Age: {{age}}"
     },
     "items": {
       "title": "Items",
@@ -1672,7 +1672,7 @@
       "infoText": "The more details you provide, the faster we can identify and fix the issue. Device information will be automatically included.",
       "submitButton": "Submit Issue Report",
       "submitting": "Submitting...",
-      "charCount": "{current}/{max}",
+      "charCount": "{{current}}/{{max}}",
       "validation": {
         "subjectRequired": {
           "title": "Subject Required",

@@ -4,11 +4,12 @@ import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
 import { ConfirmationDialog } from '@/components/ui/dialog';
-import { SettingsItem, settingsSections } from '@/config/settings';
+import { getSettingsSections, SettingsItem } from '@/config/settings';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing, TouchTarget } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useConfirmation } from '@/hooks/use-dialog';
+import { useLanguage } from '@/hooks/use-language-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { clear as clearCache } from '@/utils/cache';
@@ -18,17 +19,22 @@ import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { Href, useRouter } from 'expo-router';
 import { deleteUser } from 'firebase/auth';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 export default function SettingsScreen() {
   const router = useRouter();
   const user = auth.currentUser;
+  const { language } = useLanguage();
   const borderColor = useThemeColor({}, 'border');
   const textMutedColor = useThemeColor({}, 'text-muted');
   const tintColor = useThemeColor({}, 'primary');
   const errorColor = useThemeColor({}, 'error');
   const textColor = useThemeColor({}, 'text');
+
+  // Get settings sections with current language
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const settingsSections = useMemo(() => getSettingsSections(), [language]);
 
   // Dialog states
   const logoutDialog = useConfirmation();
@@ -171,7 +177,7 @@ export default function SettingsScreen() {
 
   return (
     <>
-      <TabHeader title="Settings" showBackButton={false} />
+      <TabHeader title={i18n.t('navigation.titles.settings')} showBackButton={false} />
       <ScreenContainer scrollable noPadding={false} useSafeArea={false}>
         <Card elevation={1} style={styles.profileCard}>
           <View style={styles.header}>
@@ -180,7 +186,7 @@ export default function SettingsScreen() {
               <ThemedText type="h2">{user?.displayName}</ThemedText>
               <ThemedText style={styles.userInfo}>{user?.email}</ThemedText>
               <TouchableOpacity onPress={() => router.push('/profile/edit')}>
-                <ThemedText style={styles.editProfile}>Edit profile ›</ThemedText>
+                <ThemedText style={styles.editProfile}>{i18n.t('settings.editProfile')} ›</ThemedText>
               </TouchableOpacity>
             </View>
           </View>

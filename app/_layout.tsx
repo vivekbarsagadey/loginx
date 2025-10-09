@@ -12,6 +12,7 @@ import { OfflineIndicator } from '@/components/ui/offline-indicator';
 import { AnimationDurations, ScreenTransitions } from '@/constants/animation';
 import { Routes } from '@/constants/routes';
 import { AuthProvider, useAuth } from '@/hooks/use-auth-provider';
+import { LanguageProvider } from '@/hooks/use-language-provider';
 import { OnboardingProvider, useOnboarding } from '@/hooks/use-onboarding-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { ThemeProvider as CustomThemeProvider, useThemeContext } from '@/hooks/use-theme-context';
@@ -267,15 +268,17 @@ export default function RootLayout() {
   return (
     <ErrorBoundary>
       <CustomThemeProvider>
-        <GlobalDialogProvider>
-          <AuthProvider>
-            <OnboardingProvider>
-              <NavigationThemeProvider>
-                <RootLayoutNav />
-              </NavigationThemeProvider>
-            </OnboardingProvider>
-          </AuthProvider>
-        </GlobalDialogProvider>
+        <LanguageProvider>
+          <GlobalDialogProvider>
+            <AuthProvider>
+              <OnboardingProvider>
+                <NavigationThemeProvider>
+                  <RootLayoutNav />
+                </NavigationThemeProvider>
+              </OnboardingProvider>
+            </AuthProvider>
+          </GlobalDialogProvider>
+        </LanguageProvider>
       </CustomThemeProvider>
     </ErrorBoundary>
   );

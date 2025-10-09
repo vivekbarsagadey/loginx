@@ -7,7 +7,11 @@ export type SettingsItem =
   | { type: 'action'; icon: string; title: string; subtitle?: string; action: 'clearCache' }
   | { type: 'danger'; icon: string; title: string; subtitle?: string; action: 'logout' | 'deleteAccount' };
 
-export const settingsSections: { title?: string; items: SettingsItem[] }[] = [
+/**
+ * Get settings sections with current locale translations
+ * Call this function to get fresh translations when language changes
+ */
+export const getSettingsSections = (): { title?: string; items: SettingsItem[] }[] => [
   {
     title: i18n.t('settings.appearance'),
     items: [
@@ -66,3 +70,9 @@ export const settingsSections: { title?: string; items: SettingsItem[] }[] = [
     ],
   },
 ];
+
+/**
+ * @deprecated Use getSettingsSections() instead for proper i18n support
+ * This export exists for backward compatibility but should not be used
+ */
+export const settingsSections = getSettingsSections();

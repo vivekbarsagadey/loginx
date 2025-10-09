@@ -1,7 +1,7 @@
 {
   "onb": {
     "welcome": {
-      "title": "Bienvenido a {app}",
+      "title": "Bienvenido a {{app}}",
       "body": "Inicia sesión de forma segura y mantén tus datos sincronizados."
     },
     "features": {
@@ -48,12 +48,12 @@
           "Tus datos biométricos nunca salen de tu dispositivo"
         ]
       },
-      "enable": "Habilitar {biometricType}",
+      "enable": "Habilitar {{biometricType}}",
       "skipButton": "Solo usar contraseña",
       "notAvailable": "Continuar con contraseña",
       "success": {
         "title": "¡Inicio biométrico habilitado!",
-        "message": "Ahora puedes usar {biometricType} para iniciar sesión rápida y seguramente."
+        "message": "Ahora puedes usar {{biometricType}} para iniciar sesión rápida y seguramente."
       },
       "error": {
         "title": "Configuración falló",
@@ -158,7 +158,7 @@
     },
     "completion": {
       "title": "¡Todo listo!",
-      "subtitle": "Bienvenido a {app}. ¡Comencemos!",
+      "subtitle": "Bienvenido a {{app}}. ¡Comencemos!",
       "summary": "Configuración completada:",
       "features": {
         "account": "Cuenta creada",
@@ -166,7 +166,7 @@
         "preferences": "Preferencias establecidas",
         "notifications": "Notificaciones habilitadas"
       },
-      "start": "Comenzar a usar {app}",
+      "start": "Comenzar a usar {{app}}",
       "footerText": "Siempre puedes cambiar estas configuraciones más tarde en las preferencias de tu cuenta."
     },
     "tutorials": {
@@ -227,12 +227,12 @@
       "back": "Atrás"
     },
     "accessibility": {
-      "slideAnnouncement": "Diapositiva {{current}} de {{total}}",
+      "slideAnnouncement": "Diapositiva {{{current}}} de {{{total}}}",
       "sessionRecovered": "Tu sesión anterior ha sido restaurada",
       "onboardingComplete": "Incorporación completada exitosamente",
       "slideContainer": "Diapositivas de incorporación",
       "swipeHint": "Desliza hacia la izquierda o derecha para navegar entre diapositivas",
-      "progress": "Progreso: {{current}} de {{total}} pasos completados",
+      "progress": "Progreso: {{{current}}} de {{{total}}} pasos completados",
       "slideIndicators": "Indicadores de navegación de diapositivas"
     }
   },
@@ -451,7 +451,7 @@
     "copy": "Copiar",
     "shareVia": "Compartir vía",
     "whyShare": "¿Por qué compartir LoginX?",
-    "message": "Descubre LoginX - ¡la aplicación de autenticación más segura! Únete a mí y simplifica tu experiencia de inicio de sesión.\n\n{link}",
+    "message": "Descubre LoginX - ¡la aplicación de autenticación más segura! Únete a mí y simplifica tu experiencia de inicio de sesión.\n\n{{link}}",
     "emailSubject": "¡Únete a mí en LoginX!",
     "options": {
       "whatsapp": "Compartir vía WhatsApp",
@@ -535,7 +535,7 @@
     },
     "welcome": {
       "title": "¡Bienvenido!",
-      "subtitle": "Te has registrado exitosamente con el correo: {email}",
+      "subtitle": "Te has registrado exitosamente con el correo: {{email}}",
       "goToLogin": "Ir a Iniciar Sesión"
     },
     "verifyEmail": {
@@ -554,6 +554,17 @@
         "emailSent": "Correo Enviado",
         "emailSentMessage": "Un nuevo correo de verificación ha sido enviado a tu bandeja de entrada."
       }
+    },
+    "home": {
+      "title": "Inicio",
+      "welcome": "Bienvenido, {{name}}!",
+      "notificationPreferences": "Tus Preferencias de Notificación",
+      "pushNotifications": "Notificaciones Push",
+      "emailUpdates": "Actualizaciones por Correo",
+      "marketingTips": "Consejos de Marketing",
+      "enabled": "✓ Habilitado",
+      "disabled": "✗ Deshabilitado",
+      "age": "Edad: {{age}}"
     },
     "whatsNew": {
       "title": "Novedades",
@@ -660,9 +671,9 @@
       },
       "deviceInfo": {
         "title": "Información del Dispositivo",
-        "version": "Versión de la App: {version}",
-        "platform": "Plataforma: {platform}",
-        "os": "Versión del SO: {os}"
+        "version": "Versión de la App: {{version}}",
+        "platform": "Plataforma: {{platform}}",
+        "os": "Versión del SO: {{os}}"
       }
     },
     "legal": {
@@ -1075,9 +1086,9 @@
           "apps": "Aplicaciones recomendadas: Google Authenticator, Authy, Microsoft Authenticator"
         },
         "biometric": {
-          "title": "Autenticación {type}",
-          "description": "Usa {type} para acceder rápida y seguramente a tu cuenta.",
-          "enableLabel": "Habilitar {type}"
+          "title": "Autenticación {{type}}",
+          "description": "Usa {{type}} para acceder rápida y seguramente a tu cuenta.",
+          "enableLabel": "Habilitar {{type}}"
         },
         "alerts": {
           "disable": {
@@ -1087,8 +1098,8 @@
             "confirm": "Deshabilitar"
           },
           "backupCodes": {
-            "title": "Códigos de Respaldo ({count})",
-            "message": "Guarda estos códigos en un lugar seguro:\n\n{codes}"
+            "title": "Códigos de Respaldo ({{count}})",
+            "message": "Guarda estos códigos en un lugar seguro:\n\n{{codes}}"
           },
           "generateCodes": {
             "title": "Generar Nuevos Códigos de Respaldo",
@@ -1108,11 +1119,11 @@
           },
           "biometricEnabled": {
             "title": "Biométrico Habilitado",
-            "message": "La autenticación {type} ha sido habilitada"
+            "message": "La autenticación {{type}} ha sido habilitada"
           },
           "biometricDisabled": {
             "title": "Biométrico Deshabilitado",
-            "message": "La autenticación {type} ha sido deshabilitada"
+            "message": "La autenticación {{type}} ha sido deshabilitada"
           },
           "codesGenerated": {
             "title": "Nuevos Códigos Generados",
@@ -1142,7 +1153,7 @@
         "changeButton": "Cambiar Contraseña",
         "changingButton": "Cambiando Contraseña...",
         "success": "¡Contraseña cambiada exitosamente!",
-        "lastChanged": "Contraseña cambiada por última vez: {date}",
+        "lastChanged": "Contraseña cambiada por última vez: {{date}}",
         "validation": {
           "currentRequired": "Se requiere la contraseña actual",
           "newRequired": "Se requiere una nueva contraseña",
@@ -1167,10 +1178,10 @@
         "otherSessions": "Otras Sesiones",
         "noOtherSessions": "No hay otras sesiones activas",
         "sessionInfo": {
-          "device": "Dispositivo: {device}",
-          "location": "Ubicación: {location}",
-          "lastActive": "Última actividad: {time}",
-          "ipAddress": "Dirección IP: {ip}"
+          "device": "Dispositivo: {{device}}",
+          "location": "Ubicación: {{location}}",
+          "lastActive": "Última actividad: {{time}}",
+          "ipAddress": "Dirección IP: {{ip}}"
         },
         "actions": {
           "endSession": "Terminar Sesión",
@@ -1351,7 +1362,7 @@
         },
         "noNotifications": {
           "question": "No recibo notificaciones",
-          "answer": "Verifica estas configuraciones:\n\n1. Habilita las notificaciones en Configuración del dispositivo → Notificaciones → LoginX\n2. Asegúrate de que &ldquo;No Molestar&rdquo; esté desactivado\n3. Verifica la configuración de notificaciones en la aplicación\n4. Vuelve a habilitar los permisos de notificación en la aplicación\n\n{platformNote}"
+          "answer": "Verifica estas configuraciones:\n\n1. Habilita las notificaciones en Configuración del dispositivo → Notificaciones → LoginX\n2. Asegúrate de que &ldquo;No Molestar&rdquo; esté desactivado\n3. Verifica la configuración de notificaciones en la aplicación\n4. Vuelve a habilitar los permisos de notificación en la aplicación\n\n{{platformNote}}"
         },
         "syncIssues": {
           "question": "Problemas de sincronización entre dispositivos",

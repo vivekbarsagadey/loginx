@@ -9,30 +9,48 @@ import { Spacing } from '@/constants/layout';
 import { useAuth } from '@/hooks/use-auth-provider';
 import i18n from '@/i18n';
 import { UserProfile } from '@/types/user';
-import { useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useEffect, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 
 export default function IndexScreen() {
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [, forceUpdate] = useState(0);
+
+  // Force re-render when screen comes into focus (handles language changes)
+  useFocusEffect(
+    useCallback(() => {
+      forceUpdate((n) => n + 1);
+    }, [])
+  );
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (user) {
         try {
+          console.warn('[Home] Fetching profile for user:', user.uid);
           const profile = await getUserProfile(user.uid);
+          console.warn('[Home] Profile fetched:', profile);
+          console.warn('[Home] DisplayName:', profile?.displayName);
+          console.warn('[Home] Age:', profile?.age);
+
           if (profile) {
             setUserProfile(profile);
           } else {
-            Alert.alert('Error', 'User profile not found.');
+            console.warn('[Home] User profile is null');
+            Alert.alert('Error', 'User profile not found. Please complete your registration.');
           }
         } catch (error) {
-          console.error('Error fetching user profile: ', error);
+          console.error('[Home] Error fetching user profile:', error);
           Alert.alert('Error', 'Failed to fetch user profile.');
         } finally {
           setLoading(false);
         }
+      } else {
+        console.warn('[Home] No user logged in');
+        setLoading(false);
       }
     };
 
@@ -42,7 +60,7 @@ export default function IndexScreen() {
   if (loading) {
     return (
       <>
-        <TabHeader title="Home" showBackButton={false} />
+        <TabHeader title={i18n.t('screens.home.title')} showBackButton={false} />
         <ScreenContainer scrollable useSafeArea={false}>
           <View style={CommonSpacing.marginBottomLarge}>
             <SkeletonText lines={2} shimmer />
@@ -63,13 +81,19 @@ export default function IndexScreen() {
         {userProfile ? (
           <>
             <View style={CommonSpacing.marginBottomLarge}>
-              <ThemedText type="h1">{i18n.t('screens.home.welcome', { name: userProfile.displayName })}</ThemedText>
+              <ThemedText type="h1">
+                {i18n.t('screens.home.welcome', {
+                  name: userProfile.displayName || user?.email?.split('@')[0] || 'User',
+                })}
+              </ThemedText>
               <ThemedText type="body" style={styles.email}>
                 {userProfile.email}
               </ThemedText>
-              <ThemedText type="body" style={styles.age}>
-                {i18n.t('screens.home.age', { age: userProfile.age })}
-              </ThemedText>
+              {userProfile.age && userProfile.age > 0 && (
+                <ThemedText type="body" style={styles.age}>
+                  {i18n.t('screens.home.age', { age: userProfile.age })}
+                </ThemedText>
+              )}
             </View>
 
             <Card elevation={1} style={CommonSpacing.marginBottomLarge}>

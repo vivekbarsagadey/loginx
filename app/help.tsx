@@ -4,6 +4,7 @@ import { ThemedView } from '@/components/themed-view';
 import { Collapsible } from '@/components/ui/collapsible';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
+import { useLanguage } from '@/hooks/use-language-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Feather } from '@expo/vector-icons';
@@ -40,6 +41,7 @@ function QuickAction({ icon, title, description, onPress }: QuickActionProps) {
 
 export default function HelpScreen() {
   const router = useRouter();
+  const { language } = useLanguage();
   const primaryColor = useThemeColor({}, 'primary');
 
   const handleContactSupport = async () => {

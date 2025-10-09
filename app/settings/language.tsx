@@ -2,8 +2,8 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonLists } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
+import { useLanguage } from '@/hooks/use-language-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
-import i18n from '@/i18n';
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { memo, useCallback } from 'react';
@@ -35,15 +35,16 @@ LanguageItem.displayName = 'LanguageItem';
 
 export default function LanguageScreen() {
   const router = useRouter();
+  const { language, persistLanguage } = useLanguage();
   const borderColor = useThemeColor({}, 'border');
   const tintColor = useThemeColor({}, 'primary');
 
   const setLanguage = useCallback(
-    (code: string) => {
-      i18n.locale = code;
+    async (code: string) => {
+      await persistLanguage(code);
       router.back();
     },
-    [router]
+    [persistLanguage, router]
   );
 
   const styles = React.useMemo(
@@ -66,9 +67,9 @@ export default function LanguageScreen() {
 
   const renderItem = useCallback(
     ({ item }: { item: { code: string; name: string } }) => (
-      <LanguageItem item={item} isSelected={i18n.locale.startsWith(item.code)} onPress={setLanguage} itemStyle={styles.item} itemTextStyle={styles.itemText} tintColor={tintColor} />
+      <LanguageItem item={item} isSelected={language.startsWith(item.code)} onPress={setLanguage} itemStyle={styles.item} itemTextStyle={styles.itemText} tintColor={tintColor} />
     ),
-    [setLanguage, styles, tintColor]
+    [language, setLanguage, styles, tintColor]
   );
 
   const getItemLayout = useCallback(

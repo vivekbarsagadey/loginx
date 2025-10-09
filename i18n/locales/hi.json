@@ -1,7 +1,7 @@
 {
   "onb": {
     "welcome": {
-      "title": "आपका स्वागत है {app} में",
+      "title": "आपका स्वागत है {{app}} में",
       "body": "सुरक्षित रूप से साइन इन करें और अपने डेटा को सिंक रखें।"
     },
     "features": {
@@ -48,12 +48,12 @@
           "आपका बायोमेट्रिक डेटा कभी आपके डिवाइस को नहीं छोड़ता"
         ]
       },
-      "enable": "{biometricType} सक्षम करें",
+      "enable": "{{biometricType}} सक्षम करें",
       "skipButton": "केवल पासवर्ड का उपयोग करें",
       "notAvailable": "पासवर्ड के साथ जारी रखें",
       "success": {
         "title": "बायोमेट्रिक लॉगिन सक्षम!",
-        "message": "अब आप त्वरित और सुरक्षित रूप से साइन इन करने के लिए {biometricType} का उपयोग कर सकते हैं।"
+        "message": "अब आप त्वरित और सुरक्षित रूप से साइन इन करने के लिए {{biometricType}} का उपयोग कर सकते हैं।"
       },
       "error": {
         "title": "सेटअप विफल",
@@ -153,7 +153,7 @@
     },
     "completion": {
       "title": "आप तैयार हैं!",
-      "subtitle": "{app} में आपका स्वागत है। चलिए शुरू करते हैं!",
+      "subtitle": "{{app}} में आपका स्वागत है। चलिए शुरू करते हैं!",
       "summary": "सेटअप पूरा:",
       "features": {
         "account": "खाता बनाया गया",
@@ -161,7 +161,7 @@
         "preferences": "प्राथमिकताएं सेट की गईं",
         "notifications": "सूचनाएं सक्षम की गईं"
       },
-      "start": "{app} का उपयोग शुरू करें",
+      "start": "{{app}} का उपयोग शुरू करें",
       "footerText": "आप हमेशा बाद में अपनी खाता प्राथमिकताओं में इन सेटिंग्स को बदल सकते हैं।"
     },
     "tutorials": {
@@ -222,12 +222,12 @@
       "back": "वापस"
     },
     "accessibility": {
-      "slideAnnouncement": "स्लाइड {{current}} का {{total}}",
+      "slideAnnouncement": "स्लाइड {{{current}}} का {{{total}}}",
       "sessionRecovered": "आपका पिछला सत्र बहाल कर दिया गया है",
       "onboardingComplete": "ऑनबोर्डिंग सफलतापूर्वक पूरी हुई",
       "slideContainer": "ऑनबोर्डिंग स्लाइड्स",
       "swipeHint": "स्लाइड्स के बीच नेविगेट करने के लिए बाएं या दाएं स्वाइप करें",
-      "progress": "प्रगति: {{total}} में से {{current}} चरण पूरे",
+      "progress": "प्रगति: {{{total}}} में से {{{current}}} चरण पूरे",
       "slideIndicators": "स्लाइड नेविगेशन संकेतक"
     }
   },
@@ -458,7 +458,7 @@
     "copy": "कॉपी करें",
     "shareVia": "इसके माध्यम से साझा करें",
     "whyShare": "LoginX क्यों शेयर करें?",
-    "message": "LoginX को देखें - सबसे सुरक्षित प्रमाणीकरण ऐप! मेरे साथ जुड़ें और अपने लॉगिन अनुभव को सरल बनाएं।\n\n{link}",
+    "message": "LoginX को देखें - सबसे सुरक्षित प्रमाणीकरण ऐप! मेरे साथ जुड़ें और अपने लॉगिन अनुभव को सरल बनाएं।\n\n{{link}}",
     "emailSubject": "LoginX पर मेरे साथ जुड़ें!",
     "options": {
       "whatsapp": "WhatsApp के माध्यम से साझा करें",
@@ -542,7 +542,7 @@
     },
     "welcome": {
       "title": "स्वागत है!",
-      "subtitle": "आपने ईमेल के साथ सफलतापूर्वक पंजीकरण कर लिया है: {email}",
+      "subtitle": "आपने ईमेल के साथ सफलतापूर्वक पंजीकरण कर लिया है: {{email}}",
       "goToLogin": "लॉगिन पर जाएं"
     },
     "verifyEmail": {
@@ -561,6 +561,17 @@
         "emailSent": "ईमेल भेजा गया",
         "emailSentMessage": "आपके इनबॉक्स में एक नया सत्यापन ईमेल भेजा गया है।"
       }
+    },
+    "home": {
+      "title": "होम",
+      "welcome": "स्वागत है, {{name}}!",
+      "notificationPreferences": "आपकी अधिसूचना प्राथमिकताएं",
+      "pushNotifications": "पुश नोटिफिकेशन",
+      "emailUpdates": "ईमेल अपडेट",
+      "marketingTips": "मार्केटिंग टिप्स",
+      "enabled": "✓ सक्षम",
+      "disabled": "✗ अक्षम",
+      "age": "आयु: {{age}}"
     },
     "whatsNew": {
       "title": "नया क्या है",
@@ -662,9 +673,9 @@
       },
       "deviceInfo": {
         "title": "डिवाइस जानकारी",
-        "version": "ऐप संस्करण: {version}",
-        "platform": "प्लेटफ़ॉर्म: {platform}",
-        "os": "OS संस्करण: {os}"
+        "version": "ऐप संस्करण: {{version}}",
+        "platform": "प्लेटफ़ॉर्म: {{platform}}",
+        "os": "OS संस्करण: {{os}}"
       }
     },
     "legal": {
@@ -1077,9 +1088,9 @@
           "apps": "अनुशंसित ऐप्स: Google Authenticator, Authy, Microsoft Authenticator"
         },
         "biometric": {
-          "title": "{type} प्रमाणीकरण",
-          "description": "अपने खाते तक शीघ्र और सुरक्षित रूप से पहुँचने के लिए {type} का उपयोग करें।",
-          "enableLabel": "{type} सक्षम करें"
+          "title": "{{type}} प्रमाणीकरण",
+          "description": "अपने खाते तक शीघ्र और सुरक्षित रूप से पहुँचने के लिए {{type}} का उपयोग करें।",
+          "enableLabel": "{{type}} सक्षम करें"
         },
         "alerts": {
           "disable": {
@@ -1089,8 +1100,8 @@
             "confirm": "अक्षम करें"
           },
           "backupCodes": {
-            "title": "बैकअप कोड ({count})",
-            "message": "इन कोड को सुरक्षित स्थान पर सहेजें:\n\n{codes}"
+            "title": "बैकअप कोड ({{count}})",
+            "message": "इन कोड को सुरक्षित स्थान पर सहेजें:\n\n{{codes}}"
           },
           "generateCodes": {
             "title": "नए बैकअप कोड जेनरेट करें",
@@ -1110,11 +1121,11 @@
           },
           "biometricEnabled": {
             "title": "बायोमेट्रिक सक्षम किया गया",
-            "message": "{type} प्रमाणीकरण सक्षम कर दिया गया है"
+            "message": "{{type}} प्रमाणीकरण सक्षम कर दिया गया है"
           },
           "biometricDisabled": {
             "title": "बायोमेट्रिक अक्षम किया गया",
-            "message": "{type} प्रमाणीकरण अक्षम कर दिया गया है"
+            "message": "{{type}} प्रमाणीकरण अक्षम कर दिया गया है"
           },
           "codesGenerated": {
             "title": "नए कोड जेनरेट किए गए",
@@ -1144,7 +1155,7 @@
         "changeButton": "पासवर्ड बदलें",
         "changingButton": "पासवर्ड बदला जा रहा है...",
         "success": "पासवर्ड सफलतापूर्वक बदल दिया गया!",
-        "lastChanged": "पासवर्ड अंतिम बार बदला गया: {date}",
+        "lastChanged": "पासवर्ड अंतिम बार बदला गया: {{date}}",
         "validation": {
           "currentRequired": "वर्तमान पासवर्ड आवश्यक है",
           "newRequired": "नया पासवर्ड आवश्यक है",
@@ -1169,10 +1180,10 @@
         "otherSessions": "अन्य सत्र",
         "noOtherSessions": "कोई अन्य सक्रिय सत्र नहीं",
         "sessionInfo": {
-          "device": "डिवाइस: {device}",
-          "location": "स्थान: {location}",
-          "lastActive": "अंतिम सक्रिय: {time}",
-          "ipAddress": "आईपी पता: {ip}"
+          "device": "डिवाइस: {{device}}",
+          "location": "स्थान: {{location}}",
+          "lastActive": "अंतिम सक्रिय: {{time}}",
+          "ipAddress": "आईपी पता: {{ip}}"
         },
         "actions": {
           "endSession": "सत्र समाप्त करें",
@@ -1353,7 +1364,7 @@
         },
         "noNotifications": {
           "question": "सूचनाएं प्राप्त नहीं हो रही हैं",
-          "answer": "इन सेटिंग्स की जांच करें:\n\n1. डिवाइस सेटिंग्स → सूचनाएं → LoginX में सूचनाएं सक्षम करें\n2. सुनिश्चित करें कि &ldquo;डू नॉट डिस्टर्ब&rdquo; बंद है\n3. इन-ऐप सूचना सेटिंग्स की जांच करें\n4. ऐप में सूचना अनुमतियों को फिर से सक्षम करें\n\n{platformNote}"
+          "answer": "इन सेटिंग्स की जांच करें:\n\n1. डिवाइस सेटिंग्स → सूचनाएं → LoginX में सूचनाएं सक्षम करें\n2. सुनिश्चित करें कि &ldquo;डू नॉट डिस्टर्ब&rdquo; बंद है\n3. इन-ऐप सूचना सेटिंग्स की जांच करें\n4. ऐप में सूचना अनुमतियों को फिर से सक्षम करें\n\n{{platformNote}}"
         },
         "syncIssues": {
           "question": "उपकरणों में सिंक समस्याएं",
