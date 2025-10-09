@@ -1,3 +1,4 @@
+import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonContainers, CommonText } from '@/constants/common-styles';
@@ -42,7 +43,7 @@ export default function ThemeScreen() {
   };
 
   return (
-    <ThemedView style={CommonContainers.screenContainer}>
+    <ThemedScrollView style={CommonContainers.screenContainer} showsVerticalScrollIndicator={false}>
       <ThemedText style={CommonText.subtitleMedium}>{i18n.t('screens.settings.theme.subtitle')}</ThemedText>
 
       <ThemedView style={styles.optionsContainer}>
@@ -87,7 +88,7 @@ export default function ThemeScreen() {
           </ThemedView>
         </ThemedView>
       </ThemedView>
-    </ThemedView>
+    </ThemedScrollView>
   );
 }
 
