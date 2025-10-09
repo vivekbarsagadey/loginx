@@ -13,16 +13,13 @@ import { useThemeContext } from './use-theme-context';
  * const primaryColor = useThemeColor({}, 'primary');
  * const customBg = useThemeColor({ light: '#fff', dark: '#000' }, 'bg');
  */
-export function useThemeColor(
-  props: Partial<Record<string, string>>,
-  colorName: keyof ThemeColors
-) {
+export function useThemeColor(props: Partial<Record<string, string>>, colorName: keyof ThemeColors) {
   const { resolvedTheme } = useThemeContext();
   const colorFromProps = props[resolvedTheme];
 
   if (colorFromProps) {
     return colorFromProps;
   }
-  
+
   return Colors[resolvedTheme][colorName];
 }
