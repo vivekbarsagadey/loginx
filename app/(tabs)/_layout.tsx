@@ -1,25 +1,18 @@
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Tabs } from 'expo-router';
 import React from 'react';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const backgroundColor = useThemeColor({}, 'bg');
-  const textColor = useThemeColor({}, 'text');
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: true,
-        headerStyle: {
-          backgroundColor,
-        },
-        headerTintColor: textColor,
+        headerShown: false, // Hide header for tab screens - only show tab bar
         // Smooth fade animation for tab switches (150ms duration is optimal)
         animation: 'fade',
       }}
