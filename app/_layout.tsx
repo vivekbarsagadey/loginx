@@ -212,7 +212,10 @@ function RootLayoutNav() {
 function NavigationThemeProvider({ children }: { children: React.ReactNode }) {
   const { resolvedTheme } = useThemeContext();
 
-  return <ThemeProvider value={resolvedTheme === 'dark' ? DarkTheme : DefaultTheme}>{children}</ThemeProvider>;
+  // Map resolved theme to React Navigation theme
+  const isDark = resolvedTheme.includes('dark') || resolvedTheme === 'dark';
+
+  return <ThemeProvider value={isDark ? DarkTheme : DefaultTheme}>{children}</ThemeProvider>;
 }
 
 export default function RootLayout() {

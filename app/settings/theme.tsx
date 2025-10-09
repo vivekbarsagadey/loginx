@@ -3,12 +3,11 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonContainers, CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
+import { getAllThemes } from '@/constants/theme';
 import { useThemeColor } from '@/hooks/use-theme-color';
-import { useThemeContext } from '@/hooks/use-theme-context';
+import { useThemeContext, type ThemePreference } from '@/hooks/use-theme-context';
 import i18n from '@/i18n';
 import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
-
-type ThemeOption = 'system' | 'light' | 'dark';
 
 export default function ThemeScreen() {
   const { themePreference, setThemePreference } = useThemeContext();
@@ -16,28 +15,25 @@ export default function ThemeScreen() {
   const primaryColor = useThemeColor({}, 'primary');
   const surfaceVariant = useThemeColor({}, 'surface-variant');
 
+  // Get all available themes
+  const availableThemes = getAllThemes();
+
   const themeOptions = [
     {
-      key: 'system' as ThemeOption,
+      key: 'system' as ThemePreference,
       title: i18n.t('screens.settings.theme.options.system.title'),
       description: i18n.t('screens.settings.theme.options.system.description'),
       icon: '📱',
     },
-    {
-      key: 'light' as ThemeOption,
-      title: i18n.t('screens.settings.theme.options.light.title'),
-      description: i18n.t('screens.settings.theme.options.light.description'),
-      icon: '☀️',
-    },
-    {
-      key: 'dark' as ThemeOption,
-      title: i18n.t('screens.settings.theme.options.dark.title'),
-      description: i18n.t('screens.settings.theme.options.dark.description'),
-      icon: '🌙',
-    },
+    ...availableThemes.map((theme) => ({
+      key: theme.name as ThemePreference,
+      title: theme.displayName,
+      description: `${theme.displayName} color theme with light and dark modes`,
+      icon: theme.icon,
+    })),
   ];
 
-  const handleThemeSelect = async (theme: ThemeOption) => {
+  const handleThemeSelect = async (theme: ThemePreference) => {
     try {
       await setThemePreference(theme);
       Alert.alert(i18n.t('success.profileUpdate.title'), i18n.t('screens.settings.theme.applied'));

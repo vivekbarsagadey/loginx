@@ -1,10 +1,9 @@
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
-import { Colors } from '@/constants/theme';
 import { useLanguage } from '@/hooks/use-language';
-import { useTheme } from '@/hooks/use-theme';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import React from 'react';
-import { Pressable, StyleSheet, useColorScheme } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
@@ -12,29 +11,31 @@ const LANGUAGE_OPTIONS = ['en', 'es', 'hi'];
 
 export const LanguagePicker = () => {
   const { language, persistLanguage } = useLanguage();
-  const { theme } = useTheme();
-  const colorScheme = useColorScheme();
-  const colors = Colors[theme === 'system' ? colorScheme || 'light' : theme];
+  const primaryColor = useThemeColor({}, 'primary');
+  const onPrimaryColor = useThemeColor({}, 'on-primary');
+  const surfaceColor = useThemeColor({}, 'surface');
+  const textColor = useThemeColor({}, 'text');
+  const borderColor = useThemeColor({}, 'border');
 
   const dynamicStyles = React.useMemo(
     () =>
       StyleSheet.create({
         chipActive: {
-          backgroundColor: colors.primary,
+          backgroundColor: primaryColor,
         },
         chipInactive: {
-          backgroundColor: colors.surface,
+          backgroundColor: surfaceColor,
         },
         textActive: {
-          color: colors['on-primary'],
+          color: onPrimaryColor,
           fontWeight: Typography.bodyBold.fontWeight,
         },
         textInactive: {
-          color: colors.text,
+          color: textColor,
           fontWeight: Typography.bodyBold.fontWeight,
         },
       }),
-    [colors]
+    [primaryColor, surfaceColor, onPrimaryColor, textColor]
   );
 
   return (
@@ -61,7 +62,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: BorderRadius.md,
     borderWidth: 1,
-    borderColor: Colors.light.border,
     overflow: 'hidden',
   },
   chip: {

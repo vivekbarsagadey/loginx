@@ -4,16 +4,17 @@
  */
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Colors } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 
 export function ExpoGoBanner() {
-  const { theme } = useTheme();
-  const colors = Colors[theme === 'system' ? 'light' : theme];
+  const warningColor = useThemeColor({}, 'warning');
+  const borderColor = useThemeColor({}, 'border');
+  const textColor = useThemeColor({}, 'text');
+  const textMutedColor = useThemeColor({}, 'text-muted');
   const [dismissed, setDismissed] = useState(false);
 
   // Check if running in Expo Go

@@ -1,3 +1,4 @@
+import { getAllThemes } from '@/constants/theme';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { useThemeContext } from '@/hooks/use-theme-context';
 import i18n from '@/i18n';
@@ -6,8 +7,6 @@ import { Pressable, StyleSheet } from 'react-native';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
-const THEME_OPTIONS = ['system', 'light', 'dark'];
-
 export const ThemeSelector = () => {
   const { themePreference, setThemePreference } = useThemeContext();
   const primaryColor = useThemeColor({}, 'primary');
@@ -15,6 +14,9 @@ export const ThemeSelector = () => {
   const surfaceColor = useThemeColor({}, 'surface');
   const textColor = useThemeColor({}, 'text');
   const borderColor = useThemeColor({}, 'border');
+
+  // Get all available themes
+  const themes = [{ name: 'system', displayName: 'System', icon: '📱' }, ...getAllThemes()];
 
   const dynamicStyles = React.useMemo(
     () =>
@@ -44,13 +46,15 @@ export const ThemeSelector = () => {
     <ThemedView>
       <ThemedText style={styles.label}>{i18n.t('onb.personalize.theme')}</ThemedText>
       <ThemedView style={[styles.container, dynamicStyles.containerBorder]}>
-        {THEME_OPTIONS.map((option) => (
+        {themes.map((theme) => (
           <Pressable
-            key={option}
-            style={[styles.chip, themePreference === option ? dynamicStyles.chipActive : dynamicStyles.chipInactive]}
-            onPress={() => setThemePreference(option as 'light' | 'dark' | 'system')}
+            key={theme.name}
+            style={[styles.chip, themePreference === theme.name ? dynamicStyles.chipActive : dynamicStyles.chipInactive]}
+            onPress={() => setThemePreference(theme.name as any)}
           >
-            <ThemedText style={themePreference === option ? dynamicStyles.textActive : dynamicStyles.textInactive}>{option.charAt(0).toUpperCase() + option.slice(1)}</ThemedText>
+            <ThemedText style={themePreference === theme.name ? dynamicStyles.textActive : dynamicStyles.textInactive}>
+              {theme.icon} {theme.displayName}
+            </ThemedText>
           </Pressable>
         ))}
       </ThemedView>
@@ -66,14 +70,19 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     borderRadius: 12,
     borderWidth: 1,
-    overflow: 'hidden',
+    padding: 4,
+    gap: 8,
     backgroundColor: 'transparent',
   },
   chip: {
-    flex: 1,
-    paddingVertical: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    minWidth: '30%',
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -9,20 +9,24 @@
  * 5. Updates when device theme changes (if preference is 'system')
  */
 
+import { THEME_NAMES } from '@/constants/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useColorScheme as useRNColorScheme } from 'react-native';
 
-export type ThemePreference = 'system' | 'light' | 'dark';
-export type ResolvedTheme = 'light' | 'dark';
+export type ThemePreference = 'system' | 'default' | 'ocean' | 'sunset' | 'forest' | 'purple';
+export type ResolvedTheme = 'light' | 'dark' | 'default' | 'ocean' | 'ocean-dark' | 'sunset' | 'sunset-dark' | 'forest' | 'forest-dark' | 'purple' | 'purple-dark';
 
 interface ThemeContextType {
   /**
    * User's theme preference (what they selected in settings)
-   * - 'system': Follow device theme
-   * - 'light': Always use light theme
-   * - 'dark': Always use dark theme
+   * - 'system': Follow device theme with default colors
+   * - 'default': Default blue theme (respects light/dark mode)
+   * - 'ocean': Ocean cyan theme (respects light/dark mode)
+   * - 'sunset': Sunset orange theme (respects light/dark mode)
+   * - 'forest': Forest green theme (respects light/dark mode)
+   * - 'purple': Purple violet theme (respects light/dark mode)
    */
   themePreference: ThemePreference;
 
@@ -33,8 +37,8 @@ interface ThemeContextType {
 
   /**
    * Resolved theme (what should actually display)
-   * - If preference is 'system', this will be the device theme ('light' | 'dark')
-   * - If preference is 'light' or 'dark', this will be that explicit choice
+   * - If preference is 'system', this will be 'light' or 'dark' based on device
+   * - If preference is a theme name, this will be 'themeName' or 'themeName-dark'
    */
   resolvedTheme: ResolvedTheme;
 
@@ -54,14 +58,22 @@ export function ThemeProvider({ children }: PropsWithChildren) {
   const [isLoading, setIsLoading] = useState(true);
 
   // Resolve the theme based on preference and system theme
-  const resolvedTheme: ResolvedTheme = themePreference === 'system' ? systemTheme : themePreference;
+  const resolvedTheme: ResolvedTheme = (() => {
+    if (themePreference === 'system' || themePreference === 'default') {
+      // System and default preference use default theme with device appearance
+      return systemTheme;
+    }
+    // All other themes append -dark when system is in dark mode
+    return systemTheme === 'dark' ? `${themePreference}-dark` : themePreference;
+  })() as ResolvedTheme;
 
   // Load saved theme preference on mount
   useEffect(() => {
     const loadTheme = async () => {
       try {
         const saved = await AsyncStorage.getItem(THEME_STORAGE_KEY);
-        if (saved && ['system', 'light', 'dark'].includes(saved)) {
+        const validThemes = ['system', ...THEME_NAMES];
+        if (saved && validThemes.includes(saved)) {
           setThemePreferenceState(saved as ThemePreference);
         }
       } catch (error) {
@@ -110,13 +122,13 @@ export function ThemeProvider({ children }: PropsWithChildren) {
  * const { themePreference, setThemePreference, resolvedTheme } = useThemeContext();
  *
  * // Get current user preference
- * console.log(themePreference); // 'system' | 'light' | 'dark'
+ * console.log(themePreference); // 'system' | 'default' | 'ocean' | 'sunset' | 'forest' | 'purple'
  *
  * // Get resolved theme for rendering
- * console.log(resolvedTheme); // 'light' | 'dark'
+ * console.log(resolvedTheme); // 'light' | 'dark' | 'ocean' | 'ocean-dark' | etc.
  *
  * // Change theme preference
- * await setThemePreference('dark');
+ * await setThemePreference('ocean');
  */
 export function useThemeContext() {
   const context = useContext(ThemeContext);

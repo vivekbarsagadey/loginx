@@ -5,9 +5,8 @@
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Colors } from '@/constants/theme';
 import { useIsOnline } from '@/hooks/use-network-status';
-import { useTheme } from '@/hooks/use-theme';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet } from 'react-native';
 
@@ -36,11 +35,8 @@ interface OfflineIndicatorProps {
  */
 export function OfflineIndicator({ message, visible }: OfflineIndicatorProps) {
   const isOnline = useIsOnline();
-  const { theme } = useTheme();
-
-  // Resolve system theme
-  const resolvedTheme = theme === 'system' ? 'light' : theme;
-  const colors = Colors[resolvedTheme];
+  const warningColor = useThemeColor({}, 'warning');
+  const onPrimaryColor = useThemeColor({}, 'on-primary');
 
   // Don't show if online (unless manually overridden)
   const shouldShow = visible !== undefined ? visible : !isOnline;
@@ -56,16 +52,16 @@ export function OfflineIndicator({ message, visible }: OfflineIndicatorProps) {
       style={[
         styles.container,
         {
-          backgroundColor: colors.warning,
+          backgroundColor: warningColor,
         },
       ]}
     >
-      <Ionicons name="cloud-offline-outline" size={20} color={colors['on-primary']} />
+      <Ionicons name="cloud-offline-outline" size={20} color={onPrimaryColor} />
       <ThemedText
         style={[
           styles.text,
           {
-            color: colors['on-primary'],
+            color: onPrimaryColor,
           },
         ]}
       >
