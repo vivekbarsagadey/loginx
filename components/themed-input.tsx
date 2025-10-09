@@ -1,15 +1,18 @@
 import { useThemeColor } from '@/hooks/use-theme-color';
-import React, { forwardRef } from 'react';
-import { StyleSheet, Text, TextInput, TextInputProps, TextStyle, View, ViewStyle } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import React, { forwardRef, useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, TextInputProps, TextStyle, View, ViewStyle } from 'react-native';
 
 export type ThemedInputProps = TextInputProps & {
   label?: string;
   helperText?: string;
   errorMessage?: string;
   containerStyle?: ViewStyle;
+  /** Whether this is a password field that should show a toggle icon */
+  showPasswordToggle?: boolean;
 };
 
-export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(({ label, helperText, errorMessage, style, containerStyle, ...rest }, ref) => {
+export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(({ label, helperText, errorMessage, style, containerStyle, showPasswordToggle, secureTextEntry, ...rest }, ref) => {
   const textColor = useThemeColor({}, 'text');
   const mutedColor = useThemeColor({}, 'text-muted');
   const errorColor = useThemeColor({}, 'error');
@@ -17,7 +20,14 @@ export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(({ label, hel
   const primaryColor = useThemeColor({}, 'primary');
   const backgroundColor = useThemeColor({}, 'surface');
 
-  const [isFocused, setIsFocused] = React.useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  // Determine if we should show the password toggle icon
+  const shouldShowToggle = showPasswordToggle ?? secureTextEntry;
+
+  // Determine the actual secureTextEntry value
+  const actualSecureTextEntry = shouldShowToggle ? !isPasswordVisible : secureTextEntry;
 
   const dynamicStyle: TextStyle = {};
   if (errorMessage) {
@@ -28,23 +38,42 @@ export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(({ label, hel
     dynamicStyle.borderWidth = 2;
   }
 
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prev) => !prev);
+  };
+
   return (
     <View style={[styles.container, containerStyle]}>
       {label && <Text style={[styles.label, { color: mutedColor }]}>{label}</Text>}
-      <TextInput
-        ref={ref}
-        style={[styles.input, { color: textColor, backgroundColor, borderColor }, dynamicStyle, style]}
-        placeholderTextColor={mutedColor}
-        onFocus={(e) => {
-          setIsFocused(true);
-          rest.onFocus?.(e);
-        }}
-        onBlur={(e) => {
-          setIsFocused(false);
-          rest.onBlur?.(e);
-        }}
-        {...rest}
-      />
+      <View style={styles.inputContainer}>
+        <TextInput
+          ref={ref}
+          style={[styles.input, { color: textColor, backgroundColor, borderColor }, dynamicStyle, shouldShowToggle && styles.inputWithIcon, style]}
+          placeholderTextColor={mutedColor}
+          secureTextEntry={actualSecureTextEntry}
+          onFocus={(e) => {
+            setIsFocused(true);
+            rest.onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            setIsFocused(false);
+            rest.onBlur?.(e);
+          }}
+          {...rest}
+        />
+        {shouldShowToggle && (
+          <Pressable
+            onPress={togglePasswordVisibility}
+            style={styles.iconButton}
+            accessibilityLabel={isPasswordVisible ? 'Hide password' : 'Show password'}
+            accessibilityRole="button"
+            accessibilityHint="Toggle password visibility"
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Ionicons name={isPasswordVisible ? 'eye-off-outline' : 'eye-outline'} size={24} color={mutedColor} />
+          </Pressable>
+        )}
+      </View>
       {errorMessage && <Text style={[styles.helperText, { color: errorColor }]}>{errorMessage}</Text>}
       {helperText && !errorMessage && <Text style={[styles.helperText, { color: mutedColor }]}>{helperText}</Text>}
     </View>
@@ -61,12 +90,29 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
   },
+  inputContainer: {
+    position: 'relative',
+    width: '100%',
+  },
   input: {
     height: 48,
     borderWidth: 1,
     borderRadius: 12,
     paddingHorizontal: 16,
     fontSize: 16,
+  },
+  inputWithIcon: {
+    paddingRight: 48, // Make room for the icon
+  },
+  iconButton: {
+    position: 'absolute',
+    right: 12,
+    top: '50%',
+    transform: [{ translateY: -20 }], // Half of icon size (24/2)
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 40,
+    height: 40,
   },
   helperText: {
     fontSize: 13,
