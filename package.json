@@ -113,6 +113,7 @@
     "zod-form-data": "^3.0.1"
   },
   "devDependencies": {
+    "@types/node": "^24.7.1",
     "@types/react": "~19.1.0",
     "@typescript-eslint/eslint-plugin": "^8.45.0",
     "@typescript-eslint/parser": "^8.45.0",
@@ -131,6 +132,7 @@
     "remark-lint-strong-marker": "^4.0.0",
     "remark-preset-lint-consistent": "^6.0.0",
     "remark-preset-lint-recommended": "^7.0.0",
+    "ts-node": "^10.9.2",
     "typescript": "~5.9.2"
   },
   "private": true,

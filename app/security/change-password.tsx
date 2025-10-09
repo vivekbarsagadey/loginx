@@ -76,34 +76,34 @@ export default function ChangePasswordScreen() {
 
     // Validate current password
     if (!currentPassword) {
-      setCurrentPasswordError('Current password is required');
+      setCurrentPasswordError(i18n.t('screens.security.changePassword.validation.currentRequired'));
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       return;
     }
 
     // Validate new password
     if (!newPassword) {
-      setNewPasswordError('New password is required');
+      setNewPasswordError(i18n.t('screens.security.changePassword.validation.newRequired'));
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       return;
     }
 
     if (!validatePassword(newPassword)) {
-      setNewPasswordError('Password does not meet security requirements');
+      setNewPasswordError(i18n.t('screens.security.changePassword.validation.requirementsNotMet'));
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       return;
     }
 
     // Validate confirm password
     if (newPassword !== confirmPassword) {
-      setConfirmPasswordError('Passwords do not match');
+      setConfirmPasswordError(i18n.t('screens.security.changePassword.validation.mismatch'));
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       return;
     }
 
     // Check if new password is different from current
     if (currentPassword === newPassword) {
-      setNewPasswordError('New password must be different from current password');
+      setNewPasswordError(i18n.t('screens.security.changePassword.validation.sameAsOld'));
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       return;
     }
@@ -137,11 +137,11 @@ export default function ChangePasswordScreen() {
       // Handle specific Firebase errors
       const firebaseError = error as { code?: string };
       if (firebaseError.code === 'auth/wrong-password') {
-        setCurrentPasswordError('Current password is incorrect');
+        setCurrentPasswordError(i18n.t('screens.security.changePassword.errors.wrongPassword'));
       } else if (firebaseError.code === 'auth/weak-password') {
-        setNewPasswordError('Password is too weak');
+        setNewPasswordError(i18n.t('screens.security.changePassword.errors.weakPassword'));
       } else if (firebaseError.code === 'auth/requires-recent-login') {
-        Alert.alert('Session Expired', 'For security reasons, please log out and log back in before changing your password.', [{ text: 'OK' }]);
+        Alert.alert(i18n.t('screens.security.changePassword.errors.sessionExpired.title'), i18n.t('screens.security.changePassword.errors.sessionExpired.message'), [{ text: i18n.t('common.ok') }]);
       } else {
         showError(error);
       }
@@ -215,7 +215,7 @@ export default function ChangePasswordScreen() {
         </ThemedView>
 
         <ThemedButton
-          title={loading ? 'Changing Password...' : i18n.t('screens.security.changePassword.changeButton')}
+          title={loading ? i18n.t('screens.security.changePassword.changingButton') : i18n.t('screens.security.changePassword.changeButton')}
           onPress={handleChangePassword}
           disabled={loading || !currentPassword || !newPassword || !confirmPassword}
           loading={loading}

@@ -80,7 +80,7 @@ export default function SessionsScreen() {
         </ThemedText>
         {session.isCurrent && (
           <ThemedView style={[styles.currentBadge, { backgroundColor: successColor }]}>
-            <ThemedText style={[styles.currentBadgeText, { color: onSuccessColor }]}>Current</ThemedText>
+            <ThemedText style={[styles.currentBadgeText, { color: onSuccessColor }]}>{i18n.t('screens.security.sessions.currentBadge')}</ThemedText>
           </ThemedView>
         )}
       </ThemedView>

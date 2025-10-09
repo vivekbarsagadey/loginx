@@ -44,7 +44,7 @@ export default function UpdateEmailScreen() {
       }
 
       if (sanitized === user?.email) {
-        setEmailError('New email must be different from current email');
+        setEmailError(i18n.t('screens.updateEmail.errors.sameEmail'));
         return false;
       }
 
@@ -57,7 +57,7 @@ export default function UpdateEmailScreen() {
   const validateConfirmEmail = useCallback(
     (confirmEmail: string): boolean => {
       if (confirmEmail !== newEmail) {
-        setConfirmError('Email addresses do not match');
+        setConfirmError(i18n.t('screens.updateEmail.errors.mismatch'));
         return false;
       }
       setConfirmError('');
@@ -86,7 +86,7 @@ export default function UpdateEmailScreen() {
       // Use verifyBeforeUpdateEmail for better security
       await verifyBeforeUpdateEmail(user, sanitizedEmail);
 
-      showSuccess('Verification Email Sent', 'Please check your new email address and click the verification link to complete the email update.', () => router.back());
+      showSuccess(i18n.t('screens.updateEmail.success.title'), i18n.t('screens.updateEmail.success.message'), () => router.back());
     } catch (error: unknown) {
       console.error('Error updating email: ', error);
 
@@ -95,10 +95,10 @@ export default function UpdateEmailScreen() {
         const firebaseError = error as { code: string; message: string };
         switch (firebaseError.code) {
           case 'auth/requires-recent-login':
-            Alert.alert('Re-authentication Required', 'For security reasons, please log out and log back in before changing your email address.', [
-              { text: 'Cancel', style: 'cancel' },
+            Alert.alert(i18n.t('screens.updateEmail.errors.reauthRequired.title'), i18n.t('screens.updateEmail.errors.reauthRequired.message'), [
+              { text: i18n.t('screens.updateEmail.errors.reauthRequired.cancel'), style: 'cancel' },
               {
-                text: 'Sign Out',
+                text: i18n.t('screens.updateEmail.errors.reauthRequired.signOut'),
                 onPress: () => {
                   auth.signOut();
                   router.replace('/(auth)/login');
@@ -108,10 +108,10 @@ export default function UpdateEmailScreen() {
             ]);
             break;
           case 'auth/email-already-in-use':
-            setEmailError('This email is already associated with another account');
+            setEmailError(i18n.t('screens.updateEmail.errors.emailInUse'));
             break;
           case 'auth/invalid-email':
-            setEmailError('Invalid email address');
+            setEmailError(i18n.t('screens.updateEmail.errors.invalidEmail'));
             break;
           default:
             showError(error);
@@ -137,7 +137,7 @@ export default function UpdateEmailScreen() {
       {/* Current Email Display */}
       <ThemedView style={styles.currentEmailSection}>
         <ThemedText type="caption" style={CommonText.sectionTitle}>
-          Current Email
+          {i18n.t('screens.updateEmail.currentEmailLabel')}
         </ThemedText>
         <ThemedView style={[styles.currentEmailBox, { borderColor: warningColor + '40', backgroundColor: warningColor + '10' }]}>
           <ThemedText type="body" style={styles.currentEmailText}>
@@ -149,7 +149,7 @@ export default function UpdateEmailScreen() {
       {/* New Email Form */}
       <ThemedView style={styles.formSection}>
         <ThemedInput
-          label="New Email Address"
+          label={i18n.t('screens.updateEmail.newEmailLabel')}
           value={newEmail}
           onChangeText={(text) => {
             setNewEmail(text);
@@ -165,12 +165,12 @@ export default function UpdateEmailScreen() {
           autoCorrect={false}
           returnKeyType="next"
           accessible={true}
-          accessibilityLabel="New email address input"
-          accessibilityHint="Enter your new email address"
+          accessibilityLabel={i18n.t('screens.updateEmail.accessibility.newEmail')}
+          accessibilityHint={i18n.t('screens.updateEmail.accessibility.newEmailHint')}
         />
 
         <ThemedInput
-          label="Confirm New Email"
+          label={i18n.t('screens.updateEmail.confirmEmailLabel')}
           value={confirmEmail}
           onChangeText={(text) => {
             setConfirmEmail(text);
@@ -187,8 +187,8 @@ export default function UpdateEmailScreen() {
           returnKeyType="done"
           onSubmitEditing={handleUpdateEmail}
           accessible={true}
-          accessibilityLabel="Confirm new email address input"
-          accessibilityHint="Re-enter your new email address to confirm"
+          accessibilityLabel={i18n.t('screens.updateEmail.accessibility.confirmEmail')}
+          accessibilityHint={i18n.t('screens.updateEmail.accessibility.confirmEmailHint')}
         />
       </ThemedView>
 
@@ -196,7 +196,7 @@ export default function UpdateEmailScreen() {
       <ThemedView style={styles.warningSection}>
         <ThemedView style={[styles.warningBox, { borderColor: warningColor, backgroundColor: warningColor + '10' }]}>
           <ThemedText type="caption" style={[styles.warningText, { color: warningColor }]}>
-            ⚠️ Important: You will need to verify your new email address before the change takes effect. Make sure you have access to the new email account.
+            {i18n.t('screens.updateEmail.warning.message')}
           </ThemedText>
         </ThemedView>
       </ThemedView>
@@ -204,13 +204,13 @@ export default function UpdateEmailScreen() {
       {/* Actions */}
       <ThemedView style={styles.actionsSection}>
         <ThemedButton
-          title={loading ? 'Sending Verification...' : 'Update Email Address'}
+          title={loading ? i18n.t('screens.updateEmail.updatingButton') : i18n.t('screens.updateEmail.updateButton')}
           onPress={handleUpdateEmail}
           disabled={loading || !newEmail || !confirmEmail || !!emailError || !!confirmError}
           loading={loading}
           variant="primary"
-          accessibilityLabel={loading ? 'Sending email verification' : 'Update email address'}
-          accessibilityHint={loading ? 'Please wait while verification email is being sent' : 'Tap to update your email address'}
+          accessibilityLabel={loading ? i18n.t('screens.updateEmail.accessibility.sendingHint') : i18n.t('screens.updateEmail.accessibility.updateButton')}
+          accessibilityHint={loading ? i18n.t('screens.updateEmail.accessibility.sendingHint') : i18n.t('screens.updateEmail.accessibility.updateButtonHint')}
         />
       </ThemedView>
     </ScreenContainer>

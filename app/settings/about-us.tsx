@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import i18n from '@/i18n';
 import { Feather } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import * as Linking from 'expo-linking';
@@ -163,22 +164,19 @@ export default function AboutUsScreen() {
         <ThemedText type="h2" style={styles.appName}>
           {appName}
         </ThemedText>
-        <ThemedText style={styles.tagline}>A modern, secure authentication solution</ThemedText>
+        <ThemedText style={styles.tagline}>{i18n.t('screens.settings.aboutUs.tagline')}</ThemedText>
         <View style={styles.badge}>
           <ThemedText style={styles.badgeText}>v{appVersion}</ThemedText>
         </View>
       </View>
 
       {/* Description */}
-      <ThemedText style={styles.description}>
-        LoginX is an enterprise-grade, cross-platform mobile authentication application built with React Native and Expo. It provides a seamless, secure, and accessible user authentication experience
-        with comprehensive profile management.
-      </ThemedText>
+      <ThemedText style={styles.description}>{i18n.t('screens.settings.aboutUs.description')}</ThemedText>
 
       {/* App Information Section */}
       <View style={styles.section}>
         <ThemedText type="h3" style={CommonText.sectionTitle}>
-          App Information
+          {i18n.t('screens.settings.aboutUs.sections.appInfo.title')}
         </ThemedText>
         <Card elevation={1} noPadding>
           {infoItems.map((item, index) => (
@@ -198,7 +196,7 @@ export default function AboutUsScreen() {
       {/* Contact Information Section */}
       <View style={styles.section}>
         <ThemedText type="h3" style={CommonText.sectionTitle}>
-          Contact Information
+          {i18n.t('screens.settings.aboutUs.sections.contact.title')}
         </ThemedText>
         <Card elevation={1} noPadding>
           {contactItems.map((item, index) => (
@@ -219,42 +217,43 @@ export default function AboutUsScreen() {
       {/* Features Highlights */}
       <View style={styles.section}>
         <ThemedText type="h3" style={CommonText.sectionTitle}>
-          Key Features
+          {i18n.t('screens.settings.aboutUs.sections.features.title')}
         </ThemedText>
         <Card elevation={1}>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Firebase Authentication</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Biometric Authentication (Face ID, Touch ID)</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Two-Factor Authentication (2FA)</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Multi-Language Support (EN, ES, HI)</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Light & Dark Mode</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>✅ Secure Storage & Encryption</ThemedText>
-          <ThemedText>✅ WCAG 2.1 AA Accessibility Compliance</ThemedText>
+          {(i18n.t('screens.settings.aboutUs.sections.features.items', { returnObjects: true }) as string[]).map((feature, index, arr) => (
+            <ThemedText key={index} style={{ marginBottom: index < arr.length - 1 ? Spacing.sm : 0 }}>
+              {feature}
+            </ThemedText>
+          ))}
         </Card>
       </View>
 
       {/* Technologies Section */}
       <View style={styles.section}>
         <ThemedText type="h3" style={CommonText.sectionTitle}>
-          Built With
+          {i18n.t('screens.settings.aboutUs.sections.builtWith.title')}
         </ThemedText>
         <Card elevation={1}>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>• React Native 0.81.4</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>• Expo SDK 54</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>• TypeScript</ThemedText>
-          <ThemedText style={{ marginBottom: Spacing.sm }}>• Firebase</ThemedText>
-          <ThemedText>• Expo Router</ThemedText>
+          {(i18n.t('screens.settings.aboutUs.sections.builtWith.items', { returnObjects: true }) as string[]).map((tech, index, arr) => (
+            <ThemedText key={index} style={{ marginBottom: index < arr.length - 1 ? Spacing.sm : 0 }}>
+              {tech}
+            </ThemedText>
+          ))}
         </Card>
       </View>
 
       {/* Footer */}
       <View style={styles.footer}>
         <ThemedText style={styles.footerText}>
-          Built with ❤️ by{'\n'}
-          <ThemedText style={styles.companyName}>Vivek Barsagadey</ThemedText>
-          {'\n'}at{'\n'}
-          <ThemedText style={styles.companyName}>Whiz IT</ThemedText>
+          {i18n.t('screens.settings.aboutUs.footer.builtWith')}
+          {'\n'}
+          <ThemedText style={styles.companyName}>{i18n.t('screens.settings.aboutUs.footer.developer')}</ThemedText>
+          {'\n'}
+          {i18n.t('screens.settings.aboutUs.footer.at')}
+          {'\n'}
+          <ThemedText style={styles.companyName}>{i18n.t('screens.settings.aboutUs.footer.company')}</ThemedText>
         </ThemedText>
-        <ThemedText style={[styles.footerText, { marginTop: Spacing.md }]}>© 2025 Whiz IT. All rights reserved.</ThemedText>
+        <ThemedText style={[styles.footerText, { marginTop: Spacing.md }]}>{i18n.t('screens.settings.aboutUs.footer.copyright')}</ThemedText>
       </View>
     </ScreenContainer>
   );

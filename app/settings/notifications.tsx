@@ -6,6 +6,7 @@ import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import i18n from '@/i18n';
 import { showError } from '@/utils/error';
 import { Feather } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
@@ -17,27 +18,6 @@ interface NotificationSetting {
   title: string;
   description: string;
 }
-
-const notificationSettings: NotificationSetting[] = [
-  {
-    key: 'pushEnabled',
-    icon: 'bell',
-    title: 'Push Notifications',
-    description: 'Receive push notifications for important updates and alerts',
-  },
-  {
-    key: 'emailUpdates',
-    icon: 'mail',
-    title: 'Email Updates',
-    description: 'Get email updates about your account activity and new features',
-  },
-  {
-    key: 'marketingTips',
-    icon: 'trending-up',
-    title: 'Tips & Recommendations',
-    description: 'Receive helpful tips and personalized recommendations',
-  },
-];
 
 export default function NotificationsScreen() {
   const user = auth.currentUser;
@@ -53,6 +33,27 @@ export default function NotificationsScreen() {
   });
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const [initialLoading, setInitialLoading] = useState(true);
+
+  const notificationSettings: NotificationSetting[] = [
+    {
+      key: 'pushEnabled',
+      icon: 'bell',
+      title: i18n.t('screens.settings.notifications.items.pushEnabled.title'),
+      description: i18n.t('screens.settings.notifications.items.pushEnabled.description'),
+    },
+    {
+      key: 'emailUpdates',
+      icon: 'mail',
+      title: i18n.t('screens.settings.notifications.items.emailUpdates.title'),
+      description: i18n.t('screens.settings.notifications.items.emailUpdates.description'),
+    },
+    {
+      key: 'marketingTips',
+      icon: 'trending-up',
+      title: i18n.t('screens.settings.notifications.items.marketingTips.title'),
+      description: i18n.t('screens.settings.notifications.items.marketingTips.description'),
+    },
+  ];
 
   const styles = React.useMemo(
     () =>
@@ -154,7 +155,7 @@ export default function NotificationsScreen() {
     return (
       <ScreenContainer centerContent useSafeArea={false}>
         <ActivityIndicator size="large" color={tintColor} />
-        <ThemedText style={styles.loadingText}>Loading settings...</ThemedText>
+        <ThemedText style={styles.loadingText}>{i18n.t('screens.settings.notifications.loading')}</ThemedText>
       </ScreenContainer>
     );
   }
@@ -162,9 +163,9 @@ export default function NotificationsScreen() {
   return (
     <ScreenContainer scrollable useSafeArea={false}>
       <View style={styles.header}>
-        <ThemedText type="h2">Notification Preferences</ThemedText>
+        <ThemedText type="h2">{i18n.t('screens.settings.notifications.title')}</ThemedText>
         <ThemedText type="caption" style={CommonText.descriptionText}>
-          Choose what notifications you want to receive
+          {i18n.t('screens.settings.notifications.subtitle')}
         </ThemedText>
       </View>
 

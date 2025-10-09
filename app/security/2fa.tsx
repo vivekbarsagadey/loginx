@@ -29,7 +29,7 @@ export default function TwoFactorAuthScreen() {
     try {
       const success = await enableTwoFactor();
       if (success) {
-        showSuccess('2FA Enabled', '2FA has been successfully enabled for your account');
+        showSuccess(i18n.t('screens.security.twoFactor.success.enabled.title'), i18n.t('screens.security.twoFactor.success.enabled.message'));
       }
     } catch (err) {
       showError(err);
@@ -37,15 +37,15 @@ export default function TwoFactorAuthScreen() {
   };
 
   const handleDisable2FA = async () => {
-    Alert.alert('Disable 2FA', 'Are you sure you want to disable two-factor authentication? This will reduce the security of your account.', [
-      { text: 'Cancel', style: 'cancel' },
+    Alert.alert(i18n.t('screens.security.twoFactor.alerts.disable.title'), i18n.t('screens.security.twoFactor.alerts.disable.message'), [
+      { text: i18n.t('screens.security.twoFactor.alerts.disable.cancel'), style: 'cancel' },
       {
-        text: 'Disable',
+        text: i18n.t('screens.security.twoFactor.alerts.disable.confirm'),
         style: 'destructive',
         onPress: async () => {
           try {
             await disableTwoFactor();
-            showSuccess('2FA Disabled', '2FA has been disabled for your account');
+            showSuccess(i18n.t('screens.security.twoFactor.success.disabled.title'), i18n.t('screens.security.twoFactor.success.disabled.message'));
           } catch (err) {
             showError(err);
           }
@@ -56,18 +56,22 @@ export default function TwoFactorAuthScreen() {
 
   const handleShowBackupCodes = () => {
     const formattedCodes = backupCodes.map((code) => formatBackupCode(code)).join('\n');
-    Alert.alert(`Backup Codes (${backupCodesCount})`, `Save these codes in a secure location:\n\n${formattedCodes}`, [{ text: 'OK' }]);
+    Alert.alert(
+      i18n.t('screens.security.twoFactor.alerts.backupCodes.title', { count: backupCodesCount }),
+      i18n.t('screens.security.twoFactor.alerts.backupCodes.message', { codes: formattedCodes }),
+      [{ text: i18n.t('common.ok') }]
+    );
   };
 
   const handleGenerateNewBackupCodes = async () => {
-    Alert.alert('Generate New Backup Codes', 'This will invalidate all existing backup codes. Make sure to save the new codes.', [
-      { text: 'Cancel', style: 'cancel' },
+    Alert.alert(i18n.t('screens.security.twoFactor.alerts.generateCodes.title'), i18n.t('screens.security.twoFactor.alerts.generateCodes.message'), [
+      { text: i18n.t('screens.security.twoFactor.alerts.generateCodes.cancel'), style: 'cancel' },
       {
-        text: 'Generate',
+        text: i18n.t('screens.security.twoFactor.alerts.generateCodes.confirm'),
         onPress: async () => {
           try {
             await generateBackupCodes();
-            showSuccess('New Codes Generated', 'Your backup codes have been regenerated');
+            showSuccess(i18n.t('screens.security.twoFactor.success.codesGenerated.title'), i18n.t('screens.security.twoFactor.success.codesGenerated.message'));
           } catch (err) {
             showError(err);
           }
@@ -81,11 +85,11 @@ export default function TwoFactorAuthScreen() {
       if (enabled) {
         const success = await enableBiometric();
         if (success) {
-          showSuccess('Biometric Enabled', `${biometricTypeName} authentication has been enabled`);
+          showSuccess(i18n.t('screens.security.twoFactor.success.biometricEnabled.title'), i18n.t('screens.security.twoFactor.success.biometricEnabled.message', { type: biometricTypeName }));
         }
       } else {
         await disableBiometric();
-        showSuccess('Biometric Disabled', `${biometricTypeName} authentication has been disabled`);
+        showSuccess(i18n.t('screens.security.twoFactor.success.biometricDisabled.title'), i18n.t('screens.security.twoFactor.success.biometricDisabled.message', { type: biometricTypeName }));
       }
     } catch (err) {
       showError(err);
@@ -96,7 +100,7 @@ export default function TwoFactorAuthScreen() {
     return (
       <ScreenContainer centerContent useSafeArea={false}>
         <ActivityIndicator size="large" />
-        <ThemedText style={styles.loadingText}>Loading...</ThemedText>
+        <ThemedText style={styles.loadingText}>{i18n.t('screens.security.twoFactor.loading')}</ThemedText>
       </ScreenContainer>
     );
   }
@@ -104,8 +108,11 @@ export default function TwoFactorAuthScreen() {
   if (error) {
     return (
       <ScreenContainer centerContent useSafeArea={false}>
-        <ThemedText style={[styles.errorText, { color: errorColor }]}>Error: {error}</ThemedText>
-        <ThemedButton title="Retry" onPress={() => window.location.reload()} />
+        <ThemedText style={[styles.errorText, { color: errorColor }]}>
+          {i18n.t('screens.security.twoFactor.error.prefix')}
+          {error}
+        </ThemedText>
+        <ThemedButton title={i18n.t('screens.security.twoFactor.error.retryButton')} onPress={() => window.location.reload()} />
       </ScreenContainer>
     );
   }
@@ -118,11 +125,11 @@ export default function TwoFactorAuthScreen() {
       {biometricAvailable && (
         <ThemedView style={styles.section}>
           <ThemedText type="h3" style={[CommonText.sectionTitle, { color: primaryColor }]}>
-            {biometricTypeName} Authentication
+            {i18n.t('screens.security.twoFactor.biometric.title', { type: biometricTypeName })}
           </ThemedText>
-          <ThemedText style={styles.description}>Use {biometricTypeName.toLowerCase()} to quickly and securely access your account.</ThemedText>
+          <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.biometric.description', { type: biometricTypeName.toLowerCase() })}</ThemedText>
           <View style={[styles.switchContainer, { backgroundColor: surfaceVariant }]}>
-            <ThemedText>Enable {biometricTypeName}</ThemedText>
+            <ThemedText>{i18n.t('screens.security.twoFactor.biometric.enableLabel', { type: biometricTypeName })}</ThemedText>
             <Switch value={biometricEnabled} onValueChange={handleToggleBiometric} disabled={biometricLoading} />
           </View>
         </ThemedView>
@@ -174,10 +181,10 @@ export default function TwoFactorAuthScreen() {
             <ThemedText style={[styles.backupCodesTitle, { color: isBackupCodesLow ? warningColor : successColor }]}>
               {i18n.t('screens.security.twoFactor.enabled.backupCodes.title')} ({backupCodesCount} remaining)
             </ThemedText>
-            {isBackupCodesLow && <ThemedText style={[styles.warningText, { color: warningColor }]}>You&apos;re running low on backup codes. Consider generating new ones.</ThemedText>}
+            {isBackupCodesLow && <ThemedText style={[styles.warningText, { color: warningColor }]}>{i18n.t('screens.security.twoFactor.enabled.backupCodes.warningLow')}</ThemedText>}
             <View style={styles.backupButtonsContainer}>
-              <ThemedButton title="View Codes" variant="secondary" onPress={handleShowBackupCodes} style={styles.backupButton} />
-              <ThemedButton title="Generate New" variant="secondary" onPress={handleGenerateNewBackupCodes} style={styles.backupButton} />
+              <ThemedButton title={i18n.t('screens.security.twoFactor.enabled.backupCodes.viewButton')} variant="secondary" onPress={handleShowBackupCodes} style={styles.backupButton} />
+              <ThemedButton title={i18n.t('screens.security.twoFactor.enabled.backupCodes.generateButton')} variant="secondary" onPress={handleGenerateNewBackupCodes} style={styles.backupButton} />
             </View>
           </ThemedView>
 

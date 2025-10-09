@@ -9,6 +9,7 @@ import { Spacing } from '@/constants/layout';
 import { useAlert } from '@/hooks/use-alert';
 import { useAuth } from '@/hooks/use-auth-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import i18n from '@/i18n';
 import type { IssueType } from '@/types/feedback';
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -24,12 +25,12 @@ interface IssueOption {
 }
 
 const ISSUE_TYPES: IssueOption[] = [
-  { id: 'crash', icon: 'x-circle', label: 'App Crash', description: 'App closes unexpectedly' },
-  { id: 'performance', icon: 'zap-off', label: 'Performance', description: 'Slow or laggy performance' },
-  { id: 'ui-bug', icon: 'layout', label: 'UI Bug', description: 'Visual or display issues' },
-  { id: 'functionality', icon: 'tool', label: 'Functionality', description: 'Feature not working as expected' },
-  { id: 'security', icon: 'shield-off', label: 'Security', description: 'Security or privacy concern' },
-  { id: 'other', icon: 'help-circle', label: 'Other', description: 'Something else' },
+  { id: 'crash', icon: 'x-circle', label: i18n.t('screens.reportIssue.issueTypes.crash.label'), description: i18n.t('screens.reportIssue.issueTypes.crash.description') },
+  { id: 'performance', icon: 'zap-off', label: i18n.t('screens.reportIssue.issueTypes.performance.label'), description: i18n.t('screens.reportIssue.issueTypes.performance.description') },
+  { id: 'ui-bug', icon: 'layout', label: i18n.t('screens.reportIssue.issueTypes.uiBug.label'), description: i18n.t('screens.reportIssue.issueTypes.uiBug.description') },
+  { id: 'functionality', icon: 'tool', label: i18n.t('screens.reportIssue.issueTypes.functionality.label'), description: i18n.t('screens.reportIssue.issueTypes.functionality.description') },
+  { id: 'security', icon: 'shield-off', label: i18n.t('screens.reportIssue.issueTypes.security.label'), description: i18n.t('screens.reportIssue.issueTypes.security.description') },
+  { id: 'other', icon: 'help-circle', label: i18n.t('screens.reportIssue.issueTypes.other.label'), description: i18n.t('screens.reportIssue.issueTypes.other.description') },
 ];
 
 export default function ReportIssueScreen() {
@@ -53,22 +54,28 @@ export default function ReportIssueScreen() {
   const handleSubmit = async () => {
     // Validation
     if (!subject.trim()) {
-      showAlert('Subject Required', 'Please enter a subject for your issue report.', [{ text: 'OK' }], { variant: 'warning' });
+      showAlert(i18n.t('screens.reportIssue.validation.subjectRequired.title'), i18n.t('screens.reportIssue.validation.subjectRequired.message'), [{ text: i18n.t('common.ok') }], {
+        variant: 'warning',
+      });
       return;
     }
 
     if (!description.trim()) {
-      showAlert('Description Required', 'Please describe the issue you encountered.', [{ text: 'OK' }], { variant: 'warning' });
+      showAlert(i18n.t('screens.reportIssue.validation.descriptionRequired.title'), i18n.t('screens.reportIssue.validation.descriptionRequired.message'), [{ text: i18n.t('common.ok') }], {
+        variant: 'warning',
+      });
       return;
     }
 
     if (description.trim().length < 20) {
-      showAlert('Description Too Short', 'Please provide more details about the issue (at least 20 characters).', [{ text: 'OK' }], { variant: 'warning' });
+      showAlert(i18n.t('screens.reportIssue.validation.descriptionTooShort.title'), i18n.t('screens.reportIssue.validation.descriptionTooShort.message'), [{ text: i18n.t('common.ok') }], {
+        variant: 'warning',
+      });
       return;
     }
 
     if (!user) {
-      showAlert('Error', 'You must be logged in to report an issue', [{ text: 'OK' }], { variant: 'error' });
+      showAlert(i18n.t('common.error'), 'You must be logged in to report an issue', [{ text: i18n.t('common.ok') }], { variant: 'error' });
       return;
     }
 
@@ -90,11 +97,11 @@ export default function ReportIssueScreen() {
       if (result.success) {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         showAlert(
-          'Issue Reported!',
-          'Thank you for reporting this issue. Our team will investigate and work on a fix.',
+          i18n.t('screens.reportIssue.success.title'),
+          i18n.t('screens.reportIssue.success.message'),
           [
             {
-              text: 'OK',
+              text: i18n.t('common.ok'),
               onPress: () => router.back(),
             },
           ],
@@ -110,11 +117,11 @@ export default function ReportIssueScreen() {
         setSelectedIssue('functionality');
       } else {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-        showAlert('Submission Failed', result.error || 'Failed to submit issue report. Please try again.', [{ text: 'OK' }], { variant: 'error' });
+        showAlert(i18n.t('screens.reportIssue.error.title'), result.error || i18n.t('screens.reportIssue.error.message'), [{ text: i18n.t('common.ok') }], { variant: 'error' });
       }
     } catch (_error) {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      showAlert('Submission Failed', 'An unexpected error occurred. Please try again.', [{ text: 'OK' }], { variant: 'error' });
+      showAlert(i18n.t('screens.reportIssue.error.title'), i18n.t('screens.reportIssue.error.message'), [{ text: i18n.t('common.ok') }], { variant: 'error' });
     } finally {
       setIsSubmitting(false);
     }
@@ -125,7 +132,7 @@ export default function ReportIssueScreen() {
       {/* Issue Type Selection */}
       <ThemedView style={styles.section}>
         <ThemedText type="h3" style={CommonText.sectionTitle}>
-          What type of issue are you experiencing?
+          {i18n.t('screens.reportIssue.issueType')}
         </ThemedText>
         <ThemedView style={styles.issueGrid}>
           {ISSUE_TYPES.map((issue) => (
@@ -137,21 +144,28 @@ export default function ReportIssueScreen() {
       {/* Subject */}
       <ThemedView style={styles.section}>
         <ThemedText type="h3" style={CommonText.sectionTitle}>
-          Subject *
+          {i18n.t('screens.reportIssue.subject')}
         </ThemedText>
-        <ThemedTextInput value={subject} onChangeText={setSubject} placeholder="Brief summary of the issue" maxLength={100} editable={!isSubmitting} accessibilityLabel="Issue subject" />
+        <ThemedTextInput
+          value={subject}
+          onChangeText={setSubject}
+          placeholder={i18n.t('screens.reportIssue.subjectPlaceholder')}
+          maxLength={100}
+          editable={!isSubmitting}
+          accessibilityLabel="Issue subject"
+        />
         <ThemedText style={styles.charCount}>{subject.length}/100</ThemedText>
       </ThemedView>
 
       {/* Description */}
       <ThemedView style={styles.section}>
         <ThemedText type="h3" style={CommonText.sectionTitle}>
-          Description *
+          {i18n.t('screens.reportIssue.description')}
         </ThemedText>
         <ThemedTextInput
           value={description}
           onChangeText={setDescription}
-          placeholder="Describe the issue in detail..."
+          placeholder={i18n.t('screens.reportIssue.descriptionPlaceholder')}
           multiline
           numberOfLines={6}
           maxLength={1000}
@@ -165,12 +179,12 @@ export default function ReportIssueScreen() {
       {/* Steps to Reproduce */}
       <ThemedView style={styles.section}>
         <ThemedText type="h3" style={CommonText.sectionTitle}>
-          Steps to Reproduce (Optional)
+          {i18n.t('screens.reportIssue.stepsToReproduce')}
         </ThemedText>
         <ThemedTextInput
           value={stepsToReproduce}
           onChangeText={setStepsToReproduce}
-          placeholder="1. Go to...&#10;2. Click on...&#10;3. See error..."
+          placeholder={i18n.t('screens.reportIssue.stepsPlaceholder')}
           multiline
           numberOfLines={5}
           maxLength={500}
@@ -184,12 +198,12 @@ export default function ReportIssueScreen() {
       {/* Expected vs Actual Behavior */}
       <ThemedView style={styles.section}>
         <ThemedText type="h3" style={CommonText.sectionTitle}>
-          Expected Behavior (Optional)
+          {i18n.t('screens.reportIssue.expectedBehavior')}
         </ThemedText>
         <ThemedTextInput
           value={expectedBehavior}
           onChangeText={setExpectedBehavior}
-          placeholder="What did you expect to happen?"
+          placeholder={i18n.t('screens.reportIssue.expectedPlaceholder')}
           multiline
           numberOfLines={3}
           maxLength={300}
@@ -201,12 +215,12 @@ export default function ReportIssueScreen() {
 
       <ThemedView style={styles.section}>
         <ThemedText type="h3" style={CommonText.sectionTitle}>
-          Actual Behavior (Optional)
+          {i18n.t('screens.reportIssue.actualBehavior')}
         </ThemedText>
         <ThemedTextInput
           value={actualBehavior}
           onChangeText={setActualBehavior}
-          placeholder="What actually happened?"
+          placeholder={i18n.t('screens.reportIssue.actualPlaceholder')}
           multiline
           numberOfLines={3}
           maxLength={300}
@@ -219,12 +233,12 @@ export default function ReportIssueScreen() {
       {/* Info Box */}
       <ThemedView style={styles.infoBox}>
         <Feather name="info" size={20} color={primaryColor} />
-        <ThemedText style={styles.infoText}>The more details you provide, the faster we can identify and fix the issue. Device information will be automatically included.</ThemedText>
+        <ThemedText style={styles.infoText}>{i18n.t('screens.reportIssue.infoText')}</ThemedText>
       </ThemedView>
 
       {/* Submit Button */}
       <ThemedButton
-        title={isSubmitting ? 'Submitting...' : 'Submit Issue Report'}
+        title={isSubmitting ? i18n.t('screens.reportIssue.submitting') : i18n.t('screens.reportIssue.submitButton')}
         onPress={handleSubmit}
         disabled={isSubmitting}
         style={styles.submitButton}

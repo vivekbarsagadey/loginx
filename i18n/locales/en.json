@@ -365,7 +365,41 @@
     },
     "updateEmail": {
       "title": "Update Email Address",
-      "subtitle": "Enter your new email address to update your account."
+      "subtitle": "Enter your new email address to update your account.",
+      "currentEmailLabel": "Current Email",
+      "newEmailLabel": "New Email Address",
+      "confirmEmailLabel": "Confirm New Email",
+      "updateButton": "Update Email Address",
+      "updatingButton": "Sending Verification...",
+      "warning": {
+        "title": "⚠️ Important",
+        "message": "You will need to verify your new email address before the change takes effect. Make sure you have access to the new email account."
+      },
+      "success": {
+        "title": "Verification Email Sent",
+        "message": "Please check your new email address and click the verification link to complete the email update."
+      },
+      "errors": {
+        "sameEmail": "New email must be different from current email",
+        "mismatch": "Email addresses do not match",
+        "reauthRequired": {
+          "title": "Re-authentication Required",
+          "message": "For security reasons, please log out and log back in before changing your email address.",
+          "cancel": "Cancel",
+          "signOut": "Sign Out"
+        },
+        "emailInUse": "This email is already associated with another account",
+        "invalidEmail": "Invalid email address"
+      },
+      "accessibility": {
+        "newEmail": "New email address input",
+        "newEmailHint": "Enter your new email address",
+        "confirmEmail": "Confirm new email address input",
+        "confirmEmailHint": "Re-enter your new email address to confirm",
+        "updateButton": "Update email address",
+        "updateButtonHint": "Tap to update your email address",
+        "sendingHint": "Please wait while verification email is being sent"
+      }
     }
   },
   "register": {
@@ -1049,13 +1083,71 @@
           "title": "2FA Enabled",
           "description": "Two-factor authentication is active on your account. Your account is protected with an additional security layer.",
           "disableButton": "Disable Two-Factor Authentication",
-          "backupCodes": "View Backup Codes"
+          "backupCodes": {
+            "title": "Backup Codes",
+            "viewButton": "View Codes",
+            "generateButton": "Generate New",
+            "warningLow": "You're running low on backup codes. Consider generating new ones."
+          },
+          "setup": {
+            "title": "Setup Instructions"
+          }
         },
         "setup": {
           "step1": "Step 1: Download an authenticator app",
           "step2": "Step 2: Scan the QR code",
           "step3": "Step 3: Enter the verification code",
           "apps": "Recommended apps: Google Authenticator, Authy, Microsoft Authenticator"
+        },
+        "biometric": {
+          "title": "{type} Authentication",
+          "description": "Use {type} to quickly and securely access your account.",
+          "enableLabel": "Enable {type}"
+        },
+        "alerts": {
+          "disable": {
+            "title": "Disable 2FA",
+            "message": "Are you sure you want to disable two-factor authentication? This will reduce the security of your account.",
+            "cancel": "Cancel",
+            "confirm": "Disable"
+          },
+          "backupCodes": {
+            "title": "Backup Codes ({count})",
+            "message": "Save these codes in a secure location:\n\n{codes}"
+          },
+          "generateCodes": {
+            "title": "Generate New Backup Codes",
+            "message": "This will invalidate all existing backup codes. Make sure to save the new codes.",
+            "cancel": "Cancel",
+            "confirm": "Generate"
+          }
+        },
+        "success": {
+          "enabled": {
+            "title": "2FA Enabled",
+            "message": "2FA has been successfully enabled for your account"
+          },
+          "disabled": {
+            "title": "2FA Disabled",
+            "message": "2FA has been disabled for your account"
+          },
+          "biometricEnabled": {
+            "title": "Biometric Enabled",
+            "message": "{type} authentication has been enabled"
+          },
+          "biometricDisabled": {
+            "title": "Biometric Disabled",
+            "message": "{type} authentication has been disabled"
+          },
+          "codesGenerated": {
+            "title": "New Codes Generated",
+            "message": "Your backup codes have been regenerated"
+          }
+        },
+        "loading": "Loading...",
+        "error": {
+          "prefix": "Error: ",
+          "retryButton": "Retry"
         }
       },
       "changePassword": {
@@ -1073,13 +1165,30 @@
           "symbols": "Contains special characters"
         },
         "changeButton": "Change Password",
+        "changingButton": "Changing Password...",
         "success": "Password changed successfully!",
-        "lastChanged": "Password last changed: {date}"
+        "lastChanged": "Password last changed: {date}",
+        "validation": {
+          "currentRequired": "Current password is required",
+          "newRequired": "New password is required",
+          "requirementsNotMet": "Password does not meet security requirements",
+          "mismatch": "Passwords do not match",
+          "sameAsOld": "New password must be different from current password"
+        },
+        "errors": {
+          "wrongPassword": "Current password is incorrect",
+          "weakPassword": "Password is too weak",
+          "sessionExpired": {
+            "title": "Session Expired",
+            "message": "For security reasons, please log out and log back in before changing your password."
+          }
+        }
       },
       "sessions": {
         "title": "Active Sessions",
         "subtitle": "Manage your active login sessions",
         "currentSession": "Current Session",
+        "currentBadge": "Current",
         "otherSessions": "Other Sessions",
         "noOtherSessions": "No other active sessions",
         "sessionInfo": {
@@ -1101,6 +1210,25 @@
       }
     },
     "settings": {
+      "notifications": {
+        "title": "Notification Preferences",
+        "subtitle": "Choose what notifications you want to receive",
+        "loading": "Loading settings...",
+        "items": {
+          "pushEnabled": {
+            "title": "Push Notifications",
+            "description": "Receive push notifications for important updates and alerts"
+          },
+          "emailUpdates": {
+            "title": "Email Updates",
+            "description": "Get email updates about your account activity and new features"
+          },
+          "marketingTips": {
+            "title": "Tips & Recommendations",
+            "description": "Receive helpful tips and personalized recommendations"
+          }
+        }
+      },
       "theme": {
         "title": "Theme",
         "subtitle": "Choose your preferred appearance",
@@ -1135,6 +1263,49 @@
           "content": "This is how your text will appear throughout the app. Choose the size that's most comfortable for you to read."
         },
         "applied": "Text size changed successfully!"
+      },
+      "aboutUs": {
+        "title": "About Us",
+        "tagline": "A modern, secure authentication solution",
+        "description": "LoginX is an enterprise-grade, cross-platform mobile authentication application built with React Native and Expo. It provides a seamless, secure, and accessible user authentication experience with comprehensive profile management.",
+        "sections": {
+          "appInfo": {
+            "title": "App Information",
+            "appName": "App Name",
+            "version": "Version",
+            "buildNumber": "Build Number",
+            "platform": "Platform"
+          },
+          "contact": {
+            "title": "Contact Information",
+            "email": "Email",
+            "website": "Website",
+            "github": "GitHub"
+          },
+          "features": {
+            "title": "Key Features",
+            "items": [
+              "✅ Firebase Authentication",
+              "✅ Biometric Authentication (Face ID, Touch ID)",
+              "✅ Two-Factor Authentication (2FA)",
+              "✅ Multi-Language Support (EN, ES, HI)",
+              "✅ Light & Dark Mode",
+              "✅ Secure Storage & Encryption",
+              "✅ WCAG 2.1 AA Accessibility Compliance"
+            ]
+          },
+          "builtWith": {
+            "title": "Built With",
+            "items": ["• React Native 0.81.4", "• Expo SDK 54", "• TypeScript", "• Firebase", "• Expo Router"]
+          }
+        },
+        "footer": {
+          "builtWith": "Built with ❤️ by",
+          "developer": "Vivek Barsagadey",
+          "at": "at",
+          "company": "Whiz IT",
+          "copyright": "© 2025 Whiz IT. All rights reserved."
+        }
       }
     },
     "help": {
@@ -1424,6 +1595,115 @@
         "confirm": "Rate on Store",
         "later": "Maybe Later"
       }
+    },
+    "home": {
+      "title": "Home",
+      "welcome": "Welcome, {name}!",
+      "notificationPreferences": "Your Notification Preferences",
+      "pushNotifications": "Push Notifications",
+      "emailUpdates": "Email Updates",
+      "marketingTips": "Marketing Tips",
+      "enabled": "✓ Enabled",
+      "disabled": "✗ Disabled",
+      "age": "Age: {age}"
+    },
+    "items": {
+      "title": "Items",
+      "emptyState": "No items yet",
+      "addItem": "Add Item"
+    },
+    "updateEmail": {
+      "title": "Update Email Address",
+      "subtitle": "Enter your new email address to update your account.",
+      "currentEmail": "Current Email",
+      "newEmail": "New Email",
+      "confirmEmail": "Confirm New Email",
+      "updateButton": "Update Email",
+      "updating": "Updating...",
+      "success": {
+        "title": "Email Updated",
+        "message": "Your email has been updated successfully. Please verify your new email address."
+      },
+      "errors": {
+        "emailsDoNotMatch": "Email addresses do not match",
+        "sameEmail": "New email must be different from current email"
+      }
+    },
+    "reportIssue": {
+      "title": "Report Issue",
+      "subtitle": "Help us fix bugs by reporting issues",
+      "issueType": "What type of issue are you experiencing?",
+      "issueTypes": {
+        "crash": {
+          "label": "App Crash",
+          "description": "App closes unexpectedly"
+        },
+        "performance": {
+          "label": "Performance",
+          "description": "Slow or laggy performance"
+        },
+        "uiBug": {
+          "label": "UI Bug",
+          "description": "Visual or display issues"
+        },
+        "functionality": {
+          "label": "Functionality",
+          "description": "Feature not working as expected"
+        },
+        "security": {
+          "label": "Security",
+          "description": "Security or privacy concern"
+        },
+        "other": {
+          "label": "Other",
+          "description": "Something else"
+        }
+      },
+      "subject": "Subject *",
+      "subjectPlaceholder": "Brief summary of the issue",
+      "description": "Description *",
+      "descriptionPlaceholder": "Describe the issue in detail...",
+      "stepsToReproduce": "Steps to Reproduce (Optional)",
+      "stepsPlaceholder": "1. Go to...\n2. Click on...\n3. See error...",
+      "expectedBehavior": "Expected Behavior (Optional)",
+      "expectedPlaceholder": "What did you expect to happen?",
+      "actualBehavior": "Actual Behavior (Optional)",
+      "actualPlaceholder": "What actually happened?",
+      "infoText": "The more details you provide, the faster we can identify and fix the issue. Device information will be automatically included.",
+      "submitButton": "Submit Issue Report",
+      "submitting": "Submitting...",
+      "charCount": "{current}/{max}",
+      "validation": {
+        "subjectRequired": {
+          "title": "Subject Required",
+          "message": "Please enter a subject for your issue report."
+        },
+        "descriptionRequired": {
+          "title": "Description Required",
+          "message": "Please describe the issue you encountered."
+        },
+        "descriptionTooShort": {
+          "title": "Description Too Short",
+          "message": "Please provide more details about the issue (at least 20 characters)."
+        }
+      },
+      "success": {
+        "title": "Issue Reported!",
+        "message": "Thank you for reporting this issue. Our team will investigate and work on a fix."
+      },
+      "error": {
+        "title": "Submission Failed",
+        "message": "Failed to submit issue report. Please try again."
+      }
+    },
+    "notFound": {
+      "title": "Oops!",
+      "message": "This screen doesn't exist.",
+      "goHome": "Go to home screen!"
+    },
+    "modal": {
+      "title": "This is a modal",
+      "goHome": "Go to home screen"
     }
   }
 }

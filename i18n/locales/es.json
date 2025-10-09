@@ -1058,13 +1058,71 @@
           "title": "2FA Habilitado",
           "description": "La autenticación de dos factores está activa en tu cuenta. Tu cuenta está protegida con una capa de seguridad adicional.",
           "disableButton": "Deshabilitar Autenticación de Dos Factores",
-          "backupCodes": "Ver Códigos de Respaldo"
+          "backupCodes": {
+            "title": "Códigos de Respaldo",
+            "viewButton": "Ver Códigos",
+            "generateButton": "Generar Nuevos",
+            "warningLow": "Te estás quedando sin códigos de respaldo. Considera generar nuevos."
+          },
+          "setup": {
+            "title": "Instrucciones de Configuración"
+          }
         },
         "setup": {
           "step1": "Paso 1: Descarga una aplicación autenticadora",
           "step2": "Paso 2: Escanea el código QR",
           "step3": "Paso 3: Ingresa el código de verificación",
           "apps": "Aplicaciones recomendadas: Google Authenticator, Authy, Microsoft Authenticator"
+        },
+        "biometric": {
+          "title": "Autenticación {type}",
+          "description": "Usa {type} para acceder rápida y seguramente a tu cuenta.",
+          "enableLabel": "Habilitar {type}"
+        },
+        "alerts": {
+          "disable": {
+            "title": "Deshabilitar 2FA",
+            "message": "¿Estás seguro de que quieres deshabilitar la autenticación de dos factores? Esto reducirá la seguridad de tu cuenta.",
+            "cancel": "Cancelar",
+            "confirm": "Deshabilitar"
+          },
+          "backupCodes": {
+            "title": "Códigos de Respaldo ({count})",
+            "message": "Guarda estos códigos en un lugar seguro:\n\n{codes}"
+          },
+          "generateCodes": {
+            "title": "Generar Nuevos Códigos de Respaldo",
+            "message": "Esto invalidará todos los códigos de respaldo existentes. Asegúrate de guardar los nuevos códigos.",
+            "cancel": "Cancelar",
+            "confirm": "Generar"
+          }
+        },
+        "success": {
+          "enabled": {
+            "title": "2FA Habilitado",
+            "message": "2FA se ha habilitado exitosamente para tu cuenta"
+          },
+          "disabled": {
+            "title": "2FA Deshabilitado",
+            "message": "2FA se ha deshabilitado para tu cuenta"
+          },
+          "biometricEnabled": {
+            "title": "Biométrico Habilitado",
+            "message": "La autenticación {type} ha sido habilitada"
+          },
+          "biometricDisabled": {
+            "title": "Biométrico Deshabilitado",
+            "message": "La autenticación {type} ha sido deshabilitada"
+          },
+          "codesGenerated": {
+            "title": "Nuevos Códigos Generados",
+            "message": "Tus códigos de respaldo han sido regenerados"
+          }
+        },
+        "loading": "Cargando...",
+        "error": {
+          "prefix": "Error: ",
+          "retryButton": "Reintentar"
         }
       },
       "changePassword": {
@@ -1082,13 +1140,30 @@
           "symbols": "Contiene caracteres especiales"
         },
         "changeButton": "Cambiar Contraseña",
+        "changingButton": "Cambiando Contraseña...",
         "success": "¡Contraseña cambiada exitosamente!",
-        "lastChanged": "Contraseña cambiada por última vez: {date}"
+        "lastChanged": "Contraseña cambiada por última vez: {date}",
+        "validation": {
+          "currentRequired": "Se requiere la contraseña actual",
+          "newRequired": "Se requiere una nueva contraseña",
+          "requirementsNotMet": "La contraseña no cumple con los requisitos de seguridad",
+          "mismatch": "Las contraseñas no coinciden",
+          "sameAsOld": "La nueva contraseña debe ser diferente de la actual"
+        },
+        "errors": {
+          "wrongPassword": "La contraseña actual es incorrecta",
+          "weakPassword": "La contraseña es demasiado débil",
+          "sessionExpired": {
+            "title": "Sesión Expirada",
+            "message": "Por razones de seguridad, cierra sesión y vuelve a iniciarla antes de cambiar tu contraseña."
+          }
+        }
       },
       "sessions": {
         "title": "Sesiones Activas",
         "subtitle": "Administra tus sesiones de inicio de sesión activas",
         "currentSession": "Sesión Actual",
+        "currentBadge": "Actual",
         "otherSessions": "Otras Sesiones",
         "noOtherSessions": "No hay otras sesiones activas",
         "sessionInfo": {
@@ -1110,6 +1185,25 @@
       }
     },
     "settings": {
+      "notifications": {
+        "title": "Preferencias de Notificación",
+        "subtitle": "Elige qué notificaciones quieres recibir",
+        "loading": "Cargando configuración...",
+        "items": {
+          "pushEnabled": {
+            "title": "Notificaciones Push",
+            "description": "Recibe notificaciones push para actualizaciones y alertas importantes"
+          },
+          "emailUpdates": {
+            "title": "Actualizaciones por Email",
+            "description": "Recibe actualizaciones por correo sobre la actividad de tu cuenta y nuevas funciones"
+          },
+          "marketingTips": {
+            "title": "Consejos y Recomendaciones",
+            "description": "Recibe consejos útiles y recomendaciones personalizadas"
+          }
+        }
+      },
       "theme": {
         "title": "Tema",
         "subtitle": "Elige tu apariencia preferida",
@@ -1144,6 +1238,49 @@
           "content": "Así es como aparecerá tu texto en toda la aplicación. Elige el tamaño que sea más cómodo para leer."
         },
         "applied": "¡Tamaño de texto cambiado exitosamente!"
+      },
+      "aboutUs": {
+        "title": "Sobre Nosotros",
+        "tagline": "Una solución de autenticación moderna y segura",
+        "description": "LoginX es una aplicación de autenticación móvil multiplataforma de nivel empresarial construida con React Native y Expo. Proporciona una experiencia de autenticación de usuario fluida, segura y accesible con gestión integral de perfiles.",
+        "sections": {
+          "appInfo": {
+            "title": "Información de la Aplicación",
+            "appName": "Nombre de la App",
+            "version": "Versión",
+            "buildNumber": "Número de Compilación",
+            "platform": "Plataforma"
+          },
+          "contact": {
+            "title": "Información de Contacto",
+            "email": "Email",
+            "website": "Sitio Web",
+            "github": "GitHub"
+          },
+          "features": {
+            "title": "Características Principales",
+            "items": [
+              "✅ Autenticación Firebase",
+              "✅ Autenticación Biométrica (Face ID, Touch ID)",
+              "✅ Autenticación de Dos Factores (2FA)",
+              "✅ Soporte Multi-Idioma (EN, ES, HI)",
+              "✅ Modo Claro y Oscuro",
+              "✅ Almacenamiento Seguro y Cifrado",
+              "✅ Cumplimiento de Accesibilidad WCAG 2.1 AA"
+            ]
+          },
+          "builtWith": {
+            "title": "Construido Con",
+            "items": ["• React Native 0.81.4", "• Expo SDK 54", "• TypeScript", "• Firebase", "• Expo Router"]
+          }
+        },
+        "footer": {
+          "builtWith": "Construido con ❤️ por",
+          "developer": "Vivek Barsagadey",
+          "at": "en",
+          "company": "Whiz IT",
+          "copyright": "© 2025 Whiz IT. Todos los derechos reservados."
+        }
       }
     },
     "help": {
@@ -1358,6 +1495,23 @@
       "contact": {
         "title": "Contáctanos",
         "content": "Si tienes alguna pregunta, inquietud o solicitud con respecto a esta Política de Privacidad o tus datos personales, contáctanos a través de la sección de Soporte en la aplicación."
+      }
+    },
+    "updateEmail": {
+      "title": "Actualizar Dirección de Email",
+      "subtitle": "Ingresa tu nueva dirección de email para actualizar tu cuenta.",
+      "currentEmail": "Email Actual",
+      "newEmail": "Nuevo Email",
+      "confirmEmail": "Confirmar Nuevo Email",
+      "updateButton": "Actualizar Email",
+      "updating": "Actualizando...",
+      "success": {
+        "title": "Email Actualizado",
+        "message": "Tu email se ha actualizado exitosamente. Por favor verifica tu nueva dirección de email."
+      },
+      "errors": {
+        "emailsDoNotMatch": "Las direcciones de email no coinciden",
+        "sameEmail": "El nuevo email debe ser diferente del email actual"
       }
     },
     "feedback": {

@@ -2,6 +2,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import i18n from '@/i18n';
 import { Link, Stack } from 'expo-router';
 import React from 'react';
 import { StyleSheet } from 'react-native';
@@ -32,11 +33,11 @@ export default function NotFoundScreen() {
 
   return (
     <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
+      <Stack.Screen options={{ title: i18n.t('screens.notFound.title') }} />
       <ThemedView style={styles.container}>
-        <ThemedText type="h2">This screen doesn&apos;t exist.</ThemedText>
+        <ThemedText type="h2">{i18n.t('screens.notFound.message')}</ThemedText>
         <Link href="/" style={styles.link}>
-          <ThemedText style={styles.linkText}>Go to home screen!</ThemedText>
+          <ThemedText style={styles.linkText}>{i18n.t('screens.notFound.goHome')}</ThemedText>
         </Link>
       </ThemedView>
     </>

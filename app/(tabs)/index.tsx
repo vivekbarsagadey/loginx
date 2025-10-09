@@ -7,6 +7,7 @@ import { SkeletonCard, SkeletonText } from '@/components/ui/skeleton-loader';
 import { CommonSpacing } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { useAuth } from '@/hooks/use-auth-provider';
+import i18n from '@/i18n';
 import { UserProfile } from '@/types/user';
 import { useEffect, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
@@ -57,49 +58,49 @@ export default function IndexScreen() {
 
   return (
     <>
-      <TabHeader title="Home" showBackButton={false} />
+      <TabHeader title={i18n.t('screens.home.title')} showBackButton={false} />
       <ScreenContainer scrollable useSafeArea={false}>
         {userProfile ? (
           <>
             <View style={CommonSpacing.marginBottomLarge}>
-              <ThemedText type="h1">Welcome, {userProfile.displayName}!</ThemedText>
+              <ThemedText type="h1">{i18n.t('screens.home.welcome', { name: userProfile.displayName })}</ThemedText>
               <ThemedText type="body" style={styles.email}>
                 {userProfile.email}
               </ThemedText>
               <ThemedText type="body" style={styles.age}>
-                Age: {userProfile.age}
+                {i18n.t('screens.home.age', { age: userProfile.age })}
               </ThemedText>
             </View>
 
             <Card elevation={1} style={CommonSpacing.marginBottomLarge}>
               <ThemedText type="h2" style={styles.cardTitle}>
-                Your Notification Preferences
+                {i18n.t('screens.home.notificationPreferences')}
               </ThemedText>
 
               <View style={styles.preferenceRow}>
-                <ThemedText type="body">Push Notifications</ThemedText>
+                <ThemedText type="body">{i18n.t('screens.home.pushNotifications')}</ThemedText>
                 <ThemedText type="body" style={styles.preferenceValue}>
-                  {userProfile.pushEnabled ? '✓ Enabled' : '✗ Disabled'}
+                  {userProfile.pushEnabled ? i18n.t('screens.home.enabled') : i18n.t('screens.home.disabled')}
                 </ThemedText>
               </View>
 
               <View style={styles.preferenceRow}>
-                <ThemedText type="body">Email Updates</ThemedText>
+                <ThemedText type="body">{i18n.t('screens.home.emailUpdates')}</ThemedText>
                 <ThemedText type="body" style={styles.preferenceValue}>
-                  {userProfile.emailUpdates ? '✓ Enabled' : '✗ Disabled'}
+                  {userProfile.emailUpdates ? i18n.t('screens.home.enabled') : i18n.t('screens.home.disabled')}
                 </ThemedText>
               </View>
 
               <View style={styles.preferenceRow}>
-                <ThemedText type="body">Marketing Tips</ThemedText>
+                <ThemedText type="body">{i18n.t('screens.home.marketingTips')}</ThemedText>
                 <ThemedText type="body" style={styles.preferenceValue}>
-                  {userProfile.marketingTips ? '✓ Enabled' : '✗ Disabled'}
+                  {userProfile.marketingTips ? i18n.t('screens.home.enabled') : i18n.t('screens.home.disabled')}
                 </ThemedText>
               </View>
             </Card>
           </>
         ) : (
-          <ThemedText type="h1">Welcome!</ThemedText>
+          <ThemedText type="h1">{i18n.t('screens.home.welcome', { name: '' })}</ThemedText>
         )}
       </ScreenContainer>
     </>
