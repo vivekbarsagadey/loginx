@@ -6,7 +6,6 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { Stack } from 'expo-router';
 import React from 'react';
 import { ActivityIndicator, Alert, Linking, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
@@ -175,13 +174,6 @@ export default function PermissionsScreen() {
 
   return (
     <ScreenContainer style={{ backgroundColor: bgColor }}>
-      <Stack.Screen
-        options={{
-          title: i18n.t('settings.permissions.title'),
-          headerShown: true,
-        }}
-      />
-
       <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>

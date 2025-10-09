@@ -50,6 +50,18 @@ export default function SettingsLayout() {
           title: i18n.t('navigation.titles.aboutUs'),
         }}
       />
+      <Stack.Screen
+        name="permissions"
+        options={{
+          title: i18n.t('navigation.titles.permissions'),
+        }}
+      />
+      <Stack.Screen
+        name="share-app"
+        options={{
+          title: i18n.t('settings.shareApp'),
+        }}
+      />
     </Stack>
   );
 }

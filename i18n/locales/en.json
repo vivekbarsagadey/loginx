@@ -561,6 +561,24 @@
       "emailNotAvailable": "Email is not configured on this device."
     }
   },
+  "permissions": {
+    "camera": {
+      "title": "Camera",
+      "description": "Take photos for your profile and share content"
+    },
+    "mediaLibrary": {
+      "title": "Photo Library",
+      "description": "Choose photos from your library to personalize your profile"
+    },
+    "location": {
+      "title": "Location",
+      "description": "Enable location-based features and personalized experiences"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Stay updated with important alerts and security notifications"
+    }
+  },
   "navigation": {
     "titles": {
       "modal": "Modal",

@@ -566,6 +566,24 @@
       "emailNotAvailable": "El correo electrónico no está configurado en este dispositivo."
     }
   },
+  "permissions": {
+    "camera": {
+      "title": "Cámara",
+      "description": "Toma fotos para tu perfil y comparte contenido"
+    },
+    "mediaLibrary": {
+      "title": "Biblioteca de fotos",
+      "description": "Elige fotos de tu biblioteca para personalizar tu perfil"
+    },
+    "location": {
+      "title": "Ubicación",
+      "description": "Habilita funciones basadas en la ubicación y experiencias personalizadas"
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "description": "Mantente actualizado con alertas importantes y notificaciones de seguridad"
+    }
+  },
   "navigation": {
     "titles": {
       "modal": "Modal",
