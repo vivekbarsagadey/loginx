@@ -12,6 +12,7 @@ import { BiometricSlide } from '@/components/onboarding/biometric-slide';
 import { CompletionSlide } from '@/components/onboarding/completion-slide';
 import { Features } from '@/components/onboarding/features';
 import { NotificationSlide } from '@/components/onboarding/notification-slide';
+import { PermissionsSlide } from '@/components/onboarding/permissions-slide';
 import { Personalize } from '@/components/onboarding/personalize';
 import { PrivacySlide } from '@/components/onboarding/privacy-slide';
 import { ProfileSlide } from '@/components/onboarding/profile-slide';
@@ -25,6 +26,7 @@ const SLIDES = [
   { key: 'welcome' },
   { key: 'features' },
   { key: 'privacy' },
+  { key: 'permissions' },
   { key: 'notifications' },
   { key: 'biometric' },
   { key: 'tutorials' },
@@ -229,6 +231,8 @@ export default function Onboarding() {
         return <Features />;
       case 'privacy':
         return <PrivacySlide width={width} onNext={next} />;
+      case 'permissions':
+        return <PermissionsSlide width={width} onNext={next} onSkip={next} />;
       case 'notifications':
         return <NotificationSlide width={width} onNext={next} onSkip={next} />;
       case 'biometric':

@@ -233,7 +233,7 @@ export default function OTPLoginScreen() {
           render={({ field: { onChange, onBlur, value } }) => (
             <ThemedInput
               ref={(ref) => {
-                if (ref) otpRefs.current[0] = ref as TextInput;
+                if (ref) {otpRefs.current[0] = ref as TextInput;}
               }}
               placeholder={i18n.t('otpLogin.codePlaceholder')}
               onBlur={onBlur}

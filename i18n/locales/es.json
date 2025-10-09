@@ -156,6 +156,30 @@
       },
       "trustBadge": "Tus datos son seguros y privados"
     },
+    "permissions": {
+      "title": "Permisos de la aplicación",
+      "subtitle": "Para ofrecerte la mejor experiencia, necesitamos acceso a ciertas funciones del dispositivo. Puedes gestionar estos permisos en cualquier momento en la configuración.",
+      "optional": "Opcional",
+      "infoText": "Puedes omitir los permisos opcionales ahora y habilitarlos más tarde en la configuración. Los permisos obligatorios están marcados correspondientemente.",
+      "skipButton": "Continuar sin todos los permisos",
+      "continueButton": "Continuar",
+      "camera": {
+        "title": "Cámara",
+        "description": "Toma fotos para tu perfil y comparte contenido con la aplicación"
+      },
+      "mediaLibrary": {
+        "title": "Biblioteca de fotos",
+        "description": "Elige fotos de tu biblioteca para personalizar tu perfil"
+      },
+      "location": {
+        "title": "Ubicación",
+        "description": "Habilita funciones basadas en ubicación y experiencias personalizadas"
+      },
+      "notifications": {
+        "title": "Notificaciones",
+        "description": "Mantente actualizado con alertas importantes, recordatorios y actualizaciones de la aplicación"
+      }
+    },
     "completion": {
       "title": "¡Todo listo!",
       "subtitle": "Bienvenido a {{app}}. ¡Comencemos!",
@@ -476,7 +500,31 @@
     "licenseInformation": "Información de licencia",
     "deleteAccount": "Eliminar cuenta",
     "deleteAccountSubtitle": "Eliminar permanentemente su cuenta y datos",
-    "logOut": "Cerrar sesión"
+    "logOut": "Cerrar sesión",
+    "permissions": {
+      "title": "Permisos de la aplicación",
+      "subtitle": "Cámara, ubicación y más",
+      "header": {
+        "title": "Gestionar permisos",
+        "description": "Controla qué funciones y datos puede acceder la aplicación. Puedes cambiar esta configuración en cualquier momento."
+      },
+      "status": {
+        "granted": "Concedido",
+        "notGranted": "No concedido",
+        "denied": "Denegado"
+      },
+      "alreadyGranted": {
+        "title": "Permiso concedido",
+        "message": "El permiso de {{permission}} ya está habilitado. Puedes administrar esto en la configuración de tu dispositivo si es necesario."
+      },
+      "openSettings": {
+        "title": "Permiso requerido",
+        "message": "Para habilitar {{permission}}, permite el acceso en la configuración de tu dispositivo.",
+        "button": "Abrir configuración"
+      },
+      "refresh": "Actualizar permisos",
+      "info": "Algunos permisos requieren que los habilites en la configuración de tu dispositivo. Toca 'Abrir configuración' para administrar los permisos que han sido denegados."
+    }
   },
   "shareApp": {
     "title": "Compartir aplicación",
@@ -549,7 +597,8 @@
       "changePassword": "Cambiar Contraseña",
       "activeSessions": "Sesiones Activas",
       "editProfile": "Editar Perfil",
-      "updateEmail": "Actualizar Correo"
+      "updateEmail": "Actualizar Correo",
+      "permissions": "Permisos de la Aplicación"
     }
   },
   "screens": {

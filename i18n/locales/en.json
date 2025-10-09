@@ -195,6 +195,30 @@
       },
       "trustBadge": "Your data is secure and private"
     },
+    "permissions": {
+      "title": "App Permissions",
+      "subtitle": "To provide you with the best experience, we need access to certain device features. You can manage these anytime in settings.",
+      "optional": "Optional",
+      "infoText": "You can skip optional permissions now and enable them later in settings. Required permissions are marked accordingly.",
+      "skipButton": "Continue Without All Permissions",
+      "continueButton": "Continue",
+      "camera": {
+        "title": "Camera",
+        "description": "Take photos for your profile and share content with the app"
+      },
+      "mediaLibrary": {
+        "title": "Photo Library",
+        "description": "Choose photos from your library to personalize your profile"
+      },
+      "location": {
+        "title": "Location",
+        "description": "Enable location-based features and personalized experiences"
+      },
+      "notifications": {
+        "title": "Notifications",
+        "description": "Stay updated with important alerts, reminders, and app updates"
+      }
+    },
     "completion": {
       "title": "You're All Set!",
       "subtitle": "Welcome to {{app}}. Let's get started!",
@@ -471,7 +495,31 @@
     "licenseInformation": "License information",
     "deleteAccount": "Delete Account",
     "deleteAccountSubtitle": "Permanently delete your account and data",
-    "logOut": "Log out"
+    "logOut": "Log out",
+    "permissions": {
+      "title": "App Permissions",
+      "subtitle": "Camera, location, and more",
+      "header": {
+        "title": "Manage Permissions",
+        "description": "Control which features and data the app can access. You can change these settings anytime."
+      },
+      "status": {
+        "granted": "Granted",
+        "notGranted": "Not Granted",
+        "denied": "Denied"
+      },
+      "alreadyGranted": {
+        "title": "Permission Granted",
+        "message": "{{permission}} permission is already enabled. You can manage this in your device settings if needed."
+      },
+      "openSettings": {
+        "title": "Permission Required",
+        "message": "To enable {{permission}}, please allow access in your device settings.",
+        "button": "Open Settings"
+      },
+      "refresh": "Refresh Permissions",
+      "info": "Some permissions require you to enable them in your device settings. Tap 'Open Settings' to manage permissions that have been denied."
+    }
   },
   "shareApp": {
     "title": "Share App",
@@ -544,7 +592,8 @@
       "changePassword": "Change Password",
       "activeSessions": "Active Sessions",
       "editProfile": "Edit Profile",
-      "updateEmail": "Update Email"
+      "updateEmail": "Update Email",
+      "permissions": "App Permissions"
     }
   },
   "screens": {

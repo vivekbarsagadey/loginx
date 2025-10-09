@@ -282,8 +282,7 @@ export default function LoginScreen() {
             <ThemedButton
               title={i18n.t('screens.login.magicLink', { defaultValue: 'Magic Link (Passwordless)' })}
               variant="secondary"
-              // @ts-expect-error - Route exists but typed routes need regeneration
-              onPress={() => router.push('/(auth)/passwordless-login')}
+              onPress={() => router.push('/(auth)/passwordless-login' as any)}
               style={styles.alternativeButton}
             />
           )}
@@ -292,8 +291,7 @@ export default function LoginScreen() {
             <ThemedButton
               title={i18n.t('screens.login.emailOtp', { defaultValue: 'Email OTP' })}
               variant="secondary"
-              // @ts-expect-error - Route exists but typed routes need regeneration
-              onPress={() => router.push('/(auth)/otp-login')}
+              onPress={() => router.push('/(auth)/email-otp-login' as any)}
               style={styles.alternativeButton}
             />
           )}

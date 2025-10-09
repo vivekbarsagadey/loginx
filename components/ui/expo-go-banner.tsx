@@ -2,36 +2,32 @@
  * Expo Go Banner
  * Shows a banner when running in Expo Go to inform users about limited features
  */
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { Colors } from '@/constants/theme';
+import { useThemeContext } from '@/hooks/use-theme-context';
 import { Ionicons } from '@expo/vector-icons';
-import Constants from 'expo-constants';
-import { useState } from 'react';
+import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { ThemedText } from '../themed-text';
+import { ThemedView } from '../themed-view';
 
-export function ExpoGoBanner() {
-  const warningColor = useThemeColor({}, 'warning');
-  const borderColor = useThemeColor({}, 'border');
-  const textColor = useThemeColor({}, 'text');
-  const textMutedColor = useThemeColor({}, 'text-muted');
-  const [dismissed, setDismissed] = useState(false);
+interface ExpoGoBannerProps {
+  onDismiss?: () => void;
+}
 
-  // Check if running in Expo Go
-  const isExpoGo = Constants.appOwnership === 'expo';
-
-  // Don't show banner if not in Expo Go or dismissed
-  if (!isExpoGo || dismissed) {
-    return null;
-  }
+export function ExpoGoBanner({ onDismiss }: ExpoGoBannerProps) {
+  const { resolvedTheme } = useThemeContext();
+  const colors = Colors[resolvedTheme];
 
   return (
-    <ThemedView
+    <Animated.View
+      entering={FadeIn.duration(300)}
+      exiting={FadeOut.duration(200)}
       style={[
         styles.banner,
         {
           backgroundColor: colors.warning + '20', // 20% opacity
-          borderColor: colors.border,
+          borderBottomColor: colors.border,
         },
       ]}
     >
@@ -44,10 +40,12 @@ export function ExpoGoBanner() {
           Google Sign-In is not available. Use email/password or create a development build.
         </ThemedText>
       </ThemedView>
-      <Pressable onPress={() => setDismissed(true)} style={styles.closeButton} accessibilityRole="button" accessibilityLabel="Dismiss banner">
-        <Ionicons name="close" size={20} color={colors.text} />
-      </Pressable>
-    </ThemedView>
+      {onDismiss && (
+        <Pressable onPress={onDismiss} style={styles.closeButton} accessibilityRole="button" accessibilityLabel="Dismiss banner">
+          <Ionicons name="close" size={20} color={colors.text} />
+        </Pressable>
+      )}
+    </Animated.View>
   );
 }
 

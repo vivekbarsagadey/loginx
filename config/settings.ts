@@ -36,6 +36,7 @@ export const getSettingsSections = (): { title?: string; items: SettingsItem[] }
       { type: 'link', icon: 'shield', title: i18n.t('settings.twoFactorAuth'), href: '/security/2fa' },
       { type: 'link', icon: 'smartphone', title: i18n.t('settings.activeSessions'), href: '/security/sessions' },
       { type: 'link', icon: 'lock', title: i18n.t('settings.dataAndPrivacy'), href: '/privacy' },
+      { type: 'link', icon: 'check-circle', title: i18n.t('settings.permissions.title'), subtitle: i18n.t('settings.permissions.subtitle'), href: '/settings/permissions' },
     ],
   },
   {
