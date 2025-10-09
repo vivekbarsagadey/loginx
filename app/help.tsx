@@ -1,8 +1,8 @@
 import { ScreenContainer } from '@/components/screen-container';
-import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Collapsible } from '@/components/ui/collapsible';
+import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -76,7 +76,7 @@ export default function HelpScreen() {
     <ScreenContainer scrollable>
       {/* Quick Actions */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.help.quickActions.title')}
         </ThemedText>
         <QuickAction
@@ -107,7 +107,7 @@ export default function HelpScreen() {
 
       {/* Getting Started */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.help.gettingStarted.title')}
         </ThemedText>
         <Collapsible title={i18n.t('screens.help.gettingStarted.createAccount.question')}>
@@ -125,7 +125,7 @@ export default function HelpScreen() {
 
       {/* Account & Security */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.help.accountSecurity.title')}
         </ThemedText>
         <Collapsible title={i18n.t('screens.help.accountSecurity.changeEmail.question')}>
@@ -147,7 +147,7 @@ export default function HelpScreen() {
 
       {/* Troubleshooting */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.help.troubleshooting.title')}
         </ThemedText>
         <Collapsible title={i18n.t('screens.help.troubleshooting.appCrashing.question')}>
@@ -173,7 +173,7 @@ export default function HelpScreen() {
 
       {/* Features & Settings */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.help.features.title')}
         </ThemedText>
         <Collapsible title={i18n.t('screens.help.features.changeTheme.question')}>
@@ -195,7 +195,7 @@ export default function HelpScreen() {
 
       {/* Privacy & Legal */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={styles.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.help.privacy.title')}
         </ThemedText>
         <Collapsible title={i18n.t('screens.help.privacy.dataUsage.question')}>
@@ -211,20 +211,13 @@ export default function HelpScreen() {
         </Collapsible>
       </ThemedView>
 
-      {/* Still Need Help */}
+      {/* Need More Help? */}
       <ThemedView style={[styles.section, styles.helpSection]}>
         <Feather name="help-circle" size={48} color={primaryColor} style={styles.helpIcon} />
         <ThemedText type="h3" style={styles.helpTitle}>
-          {i18n.t('screens.help.stillNeedHelp.title')}
+          {i18n.t('screens.help.needMoreHelp.title')}
         </ThemedText>
-        <ThemedText style={styles.helpDescription}>{i18n.t('screens.help.stillNeedHelp.description')}</ThemedText>
-        <ThemedButton
-          title={i18n.t('screens.help.stillNeedHelp.button')}
-          onPress={handleContactSupport}
-          style={styles.supportButton}
-          accessibilityLabel="Contact support team"
-          accessibilityHint="Opens the support screen to send a message"
-        />
+        <ThemedText style={styles.helpDescription}>{i18n.t('screens.help.needMoreHelp.description')}</ThemedText>
       </ThemedView>
     </ScreenContainer>
   );
@@ -233,10 +226,6 @@ export default function HelpScreen() {
 const styles = StyleSheet.create({
   section: {
     marginBottom: Spacing.xl,
-  },
-  sectionTitle: {
-    marginBottom: Spacing.md,
-    fontWeight: 'bold',
   },
   quickAction: {
     flexDirection: 'row',

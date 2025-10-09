@@ -1259,6 +1259,11 @@
           "answer": "Al usar esta aplicación, aceptas:\n\n• Usar la aplicación de manera responsable\n• Mantener tu cuenta segura\n• No violar los derechos de otros\n• Cumplir con las leyes aplicables\n\nVe los Términos de Servicio completos en Configuración → Legal."
         }
       },
+      "needMoreHelp": {
+        "title": "¿Necesitas más ayuda?",
+        "description": "Nuestro equipo de soporte está aquí para ayudarte con cualquier pregunta o problema. ¡Contáctanos en cualquier momento!",
+        "contactUs": "Contactar Soporte"
+      },
       "stillNeedHelp": {
         "title": "¿Aún Necesitas Ayuda?",
         "description": "Nuestro equipo de soporte está aquí para ayudarte con cualquier pregunta o problema.",

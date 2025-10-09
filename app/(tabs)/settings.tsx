@@ -189,7 +189,7 @@ export default function SettingsScreen() {
         {settingsSections.map((section, sectionIndex) => (
           <View key={section.title || `section-${sectionIndex}`} style={styles.section}>
             {section.title && (
-              <ThemedText type="h2" style={CommonText.sectionTitle}>
+              <ThemedText type="h3" style={CommonText.sectionTitle}>
                 {section.title}
               </ThemedText>
             )}

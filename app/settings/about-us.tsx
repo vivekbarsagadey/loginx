@@ -177,7 +177,7 @@ export default function AboutUsScreen() {
 
       {/* App Information Section */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={CommonText.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           App Information
         </ThemedText>
         <Card elevation={1} noPadding>
@@ -197,7 +197,7 @@ export default function AboutUsScreen() {
 
       {/* Contact Information Section */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={CommonText.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           Contact Information
         </ThemedText>
         <Card elevation={1} noPadding>
@@ -218,7 +218,7 @@ export default function AboutUsScreen() {
 
       {/* Features Highlights */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={CommonText.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           Key Features
         </ThemedText>
         <Card elevation={1}>
@@ -234,7 +234,7 @@ export default function AboutUsScreen() {
 
       {/* Technologies Section */}
       <View style={styles.section}>
-        <ThemedText type="h2" style={CommonText.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           Built With
         </ThemedText>
         <Card elevation={1}>

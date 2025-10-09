@@ -23,7 +23,7 @@ export default function PrivacyScreen() {
 
       {/* Information We Collect */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h2" style={CommonText.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.privacy.informationWeCollect.title')}
         </ThemedText>
         <Collapsible title={i18n.t('screens.privacy.informationWeCollect.accountInfo.title')}>
@@ -41,7 +41,7 @@ export default function PrivacyScreen() {
 
       {/* How We Use Your Information */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h2" style={CommonText.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.privacy.howWeUse.title')}
         </ThemedText>
         <Collapsible title={i18n.t('screens.privacy.howWeUse.provideServices.title')}>
@@ -59,7 +59,7 @@ export default function PrivacyScreen() {
 
       {/* Data Security */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h2" style={CommonText.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.privacy.dataSecurity.title')}
         </ThemedText>
         <ThemedText style={styles.description}>{i18n.t('screens.privacy.dataSecurity.description')}</ThemedText>
@@ -67,7 +67,7 @@ export default function PrivacyScreen() {
 
       {/* Data Sharing */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h2" style={CommonText.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.privacy.dataSharing.title')}
         </ThemedText>
         <Collapsible title={i18n.t('screens.privacy.dataSharing.noSelling.title')}>
@@ -85,7 +85,7 @@ export default function PrivacyScreen() {
 
       {/* Your Rights */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h2" style={CommonText.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.privacy.yourRights.title')}
         </ThemedText>
         <Collapsible title={i18n.t('screens.privacy.yourRights.accessData.title')}>
@@ -107,7 +107,7 @@ export default function PrivacyScreen() {
 
       {/* Children's Privacy */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h2" style={CommonText.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.privacy.childrenPrivacy.title')}
         </ThemedText>
         <ThemedText style={styles.description}>{i18n.t('screens.privacy.childrenPrivacy.content')}</ThemedText>
@@ -115,7 +115,7 @@ export default function PrivacyScreen() {
 
       {/* Changes to Policy */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h2" style={CommonText.sectionTitle}>
+        <ThemedText type="h3" style={CommonText.sectionTitle}>
           {i18n.t('screens.privacy.changes.title')}
         </ThemedText>
         <ThemedText style={styles.description}>{i18n.t('screens.privacy.changes.content')}</ThemedText>
@@ -124,7 +124,7 @@ export default function PrivacyScreen() {
       {/* Contact */}
       <ThemedView style={[styles.section, styles.contactSection]}>
         <Feather name="mail" size={32} color={textMuted} style={styles.contactIcon} />
-        <ThemedText type="h2" style={styles.contactTitle}>
+        <ThemedText type="h3" style={styles.contactTitle}>
           {i18n.t('screens.privacy.contact.title')}
         </ThemedText>
         <ThemedText style={styles.contactDescription}>{i18n.t('screens.privacy.contact.content')}</ThemedText>

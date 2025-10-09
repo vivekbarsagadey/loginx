@@ -1250,6 +1250,11 @@
           "answer": "By using this app, you agree to:\n\n• Use the app responsibly\n• Keep your account secure\n• Not violate others&apos; rights\n• Comply with applicable laws\n\nView the complete Terms of Service in Settings → Legal."
         }
       },
+      "needMoreHelp": {
+        "title": "Need More Help?",
+        "description": "Our support team is here to assist you with any questions or issues. Contact us anytime!",
+        "contactUs": "Contact Support"
+      },
       "stillNeedHelp": {
         "title": "Still Need Help?",
         "description": "Our support team is here to assist you with any questions or issues.",
