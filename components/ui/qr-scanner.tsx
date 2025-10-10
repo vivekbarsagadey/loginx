@@ -1,12 +1,13 @@
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { Ionicons } from '@expo/vector-icons';
 import { Camera, CameraView } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Platform, Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Platform, Pressable, StyleSheet, View } from 'react-native';
 
 interface QRScannerProps {
   onScan: (data: string) => void;
@@ -23,6 +24,7 @@ export function QRScanner({ onScan, onClose, title = 'Scan QR Code', description
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState(false);
   const [isActive, setIsActive] = useState(true);
+  const alert = useAlert();
 
   const primaryColor = useThemeColor({}, 'primary');
   const bgColor = useThemeColor({}, 'bg');
@@ -35,7 +37,7 @@ export function QRScanner({ onScan, onClose, title = 'Scan QR Code', description
       setHasPermission(status === 'granted');
 
       if (status !== 'granted') {
-        Alert.alert('Camera Permission Required', 'Please grant camera permission to scan QR codes.', [
+        alert.show('Camera Permission Required', 'Please grant camera permission to scan QR codes.', [
           {
             text: 'Cancel',
             style: 'cancel',
@@ -46,7 +48,7 @@ export function QRScanner({ onScan, onClose, title = 'Scan QR Code', description
             onPress: () => {
               if (Platform.OS === 'ios') {
                 // On iOS, user needs to manually open settings
-                Alert.alert('Open Settings', 'Please go to Settings > Privacy > Camera to enable camera access.');
+                alert.show('Open Settings', 'Please go to Settings > Privacy > Camera to enable camera access.', [{ text: 'OK' }]);
               }
               onClose();
             },
@@ -55,10 +57,10 @@ export function QRScanner({ onScan, onClose, title = 'Scan QR Code', description
       }
     } catch (error) {
       console.error('[QRScanner] Error requesting camera permission:', error);
-      Alert.alert('Error', 'Failed to request camera permission. Please try again.');
+      alert.show('Error', 'Failed to request camera permission. Please try again.', [{ text: 'OK' }], { variant: 'error' });
       onClose();
     }
-  }, [onClose]);
+  }, [onClose, alert]);
 
   useEffect(() => {
     requestCameraPermission();
@@ -78,15 +80,20 @@ export function QRScanner({ onScan, onClose, title = 'Scan QR Code', description
       onScan(data);
     } else {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      Alert.alert('Invalid QR Code', 'The scanned QR code is invalid. Please try again.', [
-        {
-          text: 'OK',
-          onPress: () => {
-            setScanned(false);
-            setIsActive(true);
+      alert.show(
+        'Invalid QR Code',
+        'The scanned QR code is invalid. Please try again.',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              setScanned(false);
+              setIsActive(true);
+            },
           },
-        },
-      ]);
+        ],
+        { variant: 'error' }
+      );
     }
   };
 
@@ -98,23 +105,29 @@ export function QRScanner({ onScan, onClose, title = 'Scan QR Code', description
 
   if (hasPermission === null) {
     return (
-      <ThemedView style={styles.container}>
-        <ActivityIndicator size="large" color={primaryColor} />
-        <ThemedText style={styles.loadingText}>Requesting camera permission...</ThemedText>
-      </ThemedView>
+      <>
+        <ThemedView style={styles.container}>
+          <ActivityIndicator size="large" color={primaryColor} />
+          <ThemedText style={styles.loadingText}>Requesting camera permission...</ThemedText>
+        </ThemedView>
+        {alert.AlertComponent}
+      </>
     );
   }
 
   if (hasPermission === false) {
     return (
-      <ThemedView style={styles.container}>
-        <Ionicons name="videocam-off" size={64} color={textColor} style={styles.icon} />
-        <ThemedText type="h2" style={styles.title}>
-          Camera Access Denied
-        </ThemedText>
-        <ThemedText style={styles.description}>Please enable camera access in your device settings to scan QR codes.</ThemedText>
-        <ThemedButton title="Close" onPress={onClose} variant="secondary" style={styles.button} />
-      </ThemedView>
+      <>
+        <ThemedView style={styles.container}>
+          <Ionicons name="videocam-off" size={64} color={textColor} style={styles.icon} />
+          <ThemedText type="h2" style={styles.title}>
+            Camera Access Denied
+          </ThemedText>
+          <ThemedText style={styles.description}>Please enable camera access in your device settings to scan QR codes.</ThemedText>
+          <ThemedButton title="Close" onPress={onClose} variant="secondary" style={styles.button} />
+        </ThemedView>
+        {alert.AlertComponent}
+      </>
     );
   }
 
@@ -162,6 +175,7 @@ export function QRScanner({ onScan, onClose, title = 'Scan QR Code', description
           {scanned && <ThemedButton title="Scan Again" onPress={handleRescan} variant="secondary" style={styles.button} accessibilityLabel="Scan another QR code" />}
         </ThemedView>
       </CameraView>
+      {alert.AlertComponent}
     </View>
   );
 }

@@ -7,6 +7,7 @@ import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { ValidationConstants } from '@/constants/validation';
 import { auth } from '@/firebase-config';
+import { useAlert } from '@/hooks/use-alert';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
@@ -14,10 +15,11 @@ import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
 import { useCallback, useState } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default function ChangePasswordScreen() {
   const router = useRouter();
+  const alert = useAlert();
   const user = auth.currentUser;
 
   const [currentPassword, setCurrentPassword] = useState('');
@@ -141,7 +143,7 @@ export default function ChangePasswordScreen() {
       } else if (firebaseError.code === 'auth/weak-password') {
         setNewPasswordError(i18n.t('screens.security.changePassword.errors.weakPassword'));
       } else if (firebaseError.code === 'auth/requires-recent-login') {
-        Alert.alert(i18n.t('screens.security.changePassword.errors.sessionExpired.title'), i18n.t('screens.security.changePassword.errors.sessionExpired.message'), [{ text: i18n.t('common.ok') }]);
+        alert.show(i18n.t('screens.security.changePassword.errors.sessionExpired.title'), i18n.t('screens.security.changePassword.errors.sessionExpired.message'), [{ text: i18n.t('common.ok') }]);
       } else {
         showError(error);
       }
@@ -151,78 +153,81 @@ export default function ChangePasswordScreen() {
   }, [user, currentPassword, newPassword, confirmPassword, validatePassword, router]);
 
   return (
-    <ScreenContainer scrollable useSafeArea={false}>
-      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.security.changePassword.subtitle')}</ThemedText>
+    <>
+      <ScreenContainer scrollable useSafeArea={false}>
+        <ThemedText style={CommonText.subtitle}>{i18n.t('screens.security.changePassword.subtitle')}</ThemedText>
 
-      <ThemedView style={styles.form}>
-        <ThemedInput
-          label={i18n.t('screens.security.changePassword.currentPassword')}
-          value={currentPassword}
-          onChangeText={(text) => {
-            setCurrentPassword(text);
-            if (currentPasswordError) {
-              setCurrentPasswordError('');
-            }
-          }}
-          errorMessage={currentPasswordError}
-          secureTextEntry
-          style={styles.input}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
+        <ThemedView style={styles.form}>
+          <ThemedInput
+            label={i18n.t('screens.security.changePassword.currentPassword')}
+            value={currentPassword}
+            onChangeText={(text) => {
+              setCurrentPassword(text);
+              if (currentPasswordError) {
+                setCurrentPasswordError('');
+              }
+            }}
+            errorMessage={currentPasswordError}
+            secureTextEntry
+            style={styles.input}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
 
-        <ThemedInput
-          label={i18n.t('screens.security.changePassword.newPassword')}
-          value={newPassword}
-          onChangeText={(text) => {
-            setNewPassword(text);
-            if (newPasswordError) {
-              setNewPasswordError('');
-            }
-          }}
-          errorMessage={newPasswordError}
-          secureTextEntry
-          style={styles.input}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
+          <ThemedInput
+            label={i18n.t('screens.security.changePassword.newPassword')}
+            value={newPassword}
+            onChangeText={(text) => {
+              setNewPassword(text);
+              if (newPasswordError) {
+                setNewPasswordError('');
+              }
+            }}
+            errorMessage={newPasswordError}
+            secureTextEntry
+            style={styles.input}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
 
-        <ThemedInput
-          label={i18n.t('screens.security.changePassword.confirmPassword')}
-          value={confirmPassword}
-          onChangeText={(text) => {
-            setConfirmPassword(text);
-            if (confirmPasswordError) {
-              setConfirmPasswordError('');
-            }
-          }}
-          errorMessage={confirmPasswordError}
-          secureTextEntry
-          style={styles.input}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
+          <ThemedInput
+            label={i18n.t('screens.security.changePassword.confirmPassword')}
+            value={confirmPassword}
+            onChangeText={(text) => {
+              setConfirmPassword(text);
+              if (confirmPasswordError) {
+                setConfirmPasswordError('');
+              }
+            }}
+            errorMessage={confirmPasswordError}
+            secureTextEntry
+            style={styles.input}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
 
-        <ThemedView style={styles.requirementsContainer}>
-          <ThemedText type="h3" style={styles.requirementsTitle}>
-            {requirements.title}
-          </ThemedText>
-          <ThemedText style={styles.requirement}>• {requirements.minLength}</ThemedText>
-          <ThemedText style={styles.requirement}>• {requirements.uppercase}</ThemedText>
-          <ThemedText style={styles.requirement}>• {requirements.lowercase}</ThemedText>
-          <ThemedText style={styles.requirement}>• {requirements.numbers}</ThemedText>
-          <ThemedText style={styles.requirement}>• {requirements.symbols}</ThemedText>
+          <ThemedView style={styles.requirementsContainer}>
+            <ThemedText type="h3" style={styles.requirementsTitle}>
+              {requirements.title}
+            </ThemedText>
+            <ThemedText style={styles.requirement}>• {requirements.minLength}</ThemedText>
+            <ThemedText style={styles.requirement}>• {requirements.uppercase}</ThemedText>
+            <ThemedText style={styles.requirement}>• {requirements.lowercase}</ThemedText>
+            <ThemedText style={styles.requirement}>• {requirements.numbers}</ThemedText>
+            <ThemedText style={styles.requirement}>• {requirements.symbols}</ThemedText>
+          </ThemedView>
+
+          <ThemedButton
+            title={loading ? i18n.t('screens.security.changePassword.changingButton') : i18n.t('screens.security.changePassword.changeButton')}
+            onPress={handleChangePassword}
+            disabled={loading || !currentPassword || !newPassword || !confirmPassword}
+            loading={loading}
+            style={styles.changeButton}
+          />
         </ThemedView>
-
-        <ThemedButton
-          title={loading ? i18n.t('screens.security.changePassword.changingButton') : i18n.t('screens.security.changePassword.changeButton')}
-          onPress={handleChangePassword}
-          disabled={loading || !currentPassword || !newPassword || !confirmPassword}
-          loading={loading}
-          style={styles.changeButton}
-        />
-      </ThemedView>
-    </ScreenContainer>
+      </ScreenContainer>
+      {alert.AlertComponent}
+    </>
   );
 }
 

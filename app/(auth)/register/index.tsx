@@ -6,6 +6,7 @@ import { SocialSignInButtons } from '@/components/ui/social-sign-in-buttons';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
+import { useAlert } from '@/hooks/use-alert';
 import { useSocialAuth } from '@/hooks/use-social-auth';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { showError } from '@/utils/error';
@@ -17,7 +18,7 @@ import { Stack, useRouter } from 'expo-router';
 import { createUserWithEmailAndPassword, deleteUser, sendEmailVerification } from 'firebase/auth';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { z } from 'zod';
 import RegisterStep1 from './step-1';
 import RegisterStep2 from './step-2';
@@ -89,6 +90,7 @@ export const useRegister = () => useContext(RegisterContext);
 
 export default function RegisterScreen() {
   const router = useRouter();
+  const alert = useAlert();
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { signInWithGoogle, signInWithApple, loading: socialLoading } = useSocialAuth();
@@ -150,7 +152,7 @@ export default function RegisterScreen() {
       setCurrentStep(currentStep - 1);
     } else {
       // Confirm before leaving registration
-      Alert.alert('Cancel Registration?', 'Are you sure you want to cancel? Your progress will be lost.', [
+      alert.show('Cancel Registration?', 'Are you sure you want to cancel? Your progress will be lost.', [
         {
           text: 'Continue Registering',
           style: 'cancel',

@@ -6,6 +6,7 @@ import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
+import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
@@ -15,11 +16,12 @@ import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { verifyBeforeUpdateEmail } from 'firebase/auth';
 import { useCallback, useState } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default function UpdateEmailScreen() {
   const user = auth.currentUser;
   const router = useRouter();
+  const alert = useAlert();
   const [newEmail, setNewEmail] = useState('');
   const [confirmEmail, setConfirmEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -95,7 +97,7 @@ export default function UpdateEmailScreen() {
         const firebaseError = error as { code: string; message: string };
         switch (firebaseError.code) {
           case 'auth/requires-recent-login':
-            Alert.alert(i18n.t('screens.updateEmail.errors.reauthRequired.title'), i18n.t('screens.updateEmail.errors.reauthRequired.message'), [
+            alert.show(i18n.t('screens.updateEmail.errors.reauthRequired.title'), i18n.t('screens.updateEmail.errors.reauthRequired.message'), [
               { text: i18n.t('screens.updateEmail.errors.reauthRequired.cancel'), style: 'cancel' },
               {
                 text: i18n.t('screens.updateEmail.errors.reauthRequired.signOut'),
@@ -127,93 +129,96 @@ export default function UpdateEmailScreen() {
   const currentEmail = user?.email || '';
 
   return (
-    <ScreenContainer scrollable keyboardAvoiding useSafeArea={false}>
-      <ThemedView style={styles.header}>
-        <ThemedText type="body" style={CommonText.subtitle}>
-          {i18n.t('profile.updateEmail.subtitle') || 'Enter your new email address to update your account.'}
-        </ThemedText>
-      </ThemedView>
-
-      {/* Current Email Display */}
-      <ThemedView style={styles.currentEmailSection}>
-        <ThemedText type="caption" style={CommonText.sectionTitle}>
-          {i18n.t('screens.updateEmail.currentEmailLabel')}
-        </ThemedText>
-        <ThemedView style={[styles.currentEmailBox, { borderColor: warningColor + '40', backgroundColor: warningColor + '10' }]}>
-          <ThemedText type="body" style={styles.currentEmailText}>
-            {currentEmail}
+    <>
+      <ScreenContainer scrollable keyboardAvoiding useSafeArea={false}>
+        <ThemedView style={styles.header}>
+          <ThemedText type="body" style={CommonText.subtitle}>
+            {i18n.t('profile.updateEmail.subtitle') || 'Enter your new email address to update your account.'}
           </ThemedText>
         </ThemedView>
-      </ThemedView>
 
-      {/* New Email Form */}
-      <ThemedView style={styles.formSection}>
-        <ThemedInput
-          label={i18n.t('screens.updateEmail.newEmailLabel')}
-          value={newEmail}
-          onChangeText={(text) => {
-            setNewEmail(text);
-            if (emailError) {
-              setEmailError('');
-            }
-          }}
-          onBlur={() => validateEmail(newEmail)}
-          errorMessage={emailError}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoComplete="email"
-          autoCorrect={false}
-          returnKeyType="next"
-          accessible={true}
-          accessibilityLabel={i18n.t('screens.updateEmail.accessibility.newEmail')}
-          accessibilityHint={i18n.t('screens.updateEmail.accessibility.newEmailHint')}
-        />
-
-        <ThemedInput
-          label={i18n.t('screens.updateEmail.confirmEmailLabel')}
-          value={confirmEmail}
-          onChangeText={(text) => {
-            setConfirmEmail(text);
-            if (confirmError) {
-              setConfirmError('');
-            }
-          }}
-          onBlur={() => validateConfirmEmail(confirmEmail)}
-          errorMessage={confirmError}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoComplete="email"
-          autoCorrect={false}
-          returnKeyType="done"
-          onSubmitEditing={handleUpdateEmail}
-          accessible={true}
-          accessibilityLabel={i18n.t('screens.updateEmail.accessibility.confirmEmail')}
-          accessibilityHint={i18n.t('screens.updateEmail.accessibility.confirmEmailHint')}
-        />
-      </ThemedView>
-
-      {/* Warning Notice */}
-      <ThemedView style={styles.warningSection}>
-        <ThemedView style={[styles.warningBox, { borderColor: warningColor, backgroundColor: warningColor + '10' }]}>
-          <ThemedText type="caption" style={[styles.warningText, { color: warningColor }]}>
-            {i18n.t('screens.updateEmail.warning.message')}
+        {/* Current Email Display */}
+        <ThemedView style={styles.currentEmailSection}>
+          <ThemedText type="caption" style={CommonText.sectionTitle}>
+            {i18n.t('screens.updateEmail.currentEmailLabel')}
           </ThemedText>
+          <ThemedView style={[styles.currentEmailBox, { borderColor: warningColor + '40', backgroundColor: warningColor + '10' }]}>
+            <ThemedText type="body" style={styles.currentEmailText}>
+              {currentEmail}
+            </ThemedText>
+          </ThemedView>
         </ThemedView>
-      </ThemedView>
 
-      {/* Actions */}
-      <ThemedView style={styles.actionsSection}>
-        <ThemedButton
-          title={loading ? i18n.t('screens.updateEmail.updatingButton') : i18n.t('screens.updateEmail.updateButton')}
-          onPress={handleUpdateEmail}
-          disabled={loading || !newEmail || !confirmEmail || !!emailError || !!confirmError}
-          loading={loading}
-          variant="primary"
-          accessibilityLabel={loading ? i18n.t('screens.updateEmail.accessibility.sendingHint') : i18n.t('screens.updateEmail.accessibility.updateButton')}
-          accessibilityHint={loading ? i18n.t('screens.updateEmail.accessibility.sendingHint') : i18n.t('screens.updateEmail.accessibility.updateButtonHint')}
-        />
-      </ThemedView>
-    </ScreenContainer>
+        {/* New Email Form */}
+        <ThemedView style={styles.formSection}>
+          <ThemedInput
+            label={i18n.t('screens.updateEmail.newEmailLabel')}
+            value={newEmail}
+            onChangeText={(text) => {
+              setNewEmail(text);
+              if (emailError) {
+                setEmailError('');
+              }
+            }}
+            onBlur={() => validateEmail(newEmail)}
+            errorMessage={emailError}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            autoCorrect={false}
+            returnKeyType="next"
+            accessible={true}
+            accessibilityLabel={i18n.t('screens.updateEmail.accessibility.newEmail')}
+            accessibilityHint={i18n.t('screens.updateEmail.accessibility.newEmailHint')}
+          />
+
+          <ThemedInput
+            label={i18n.t('screens.updateEmail.confirmEmailLabel')}
+            value={confirmEmail}
+            onChangeText={(text) => {
+              setConfirmEmail(text);
+              if (confirmError) {
+                setConfirmError('');
+              }
+            }}
+            onBlur={() => validateConfirmEmail(confirmEmail)}
+            errorMessage={confirmError}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            autoCorrect={false}
+            returnKeyType="done"
+            onSubmitEditing={handleUpdateEmail}
+            accessible={true}
+            accessibilityLabel={i18n.t('screens.updateEmail.accessibility.confirmEmail')}
+            accessibilityHint={i18n.t('screens.updateEmail.accessibility.confirmEmailHint')}
+          />
+        </ThemedView>
+
+        {/* Warning Notice */}
+        <ThemedView style={styles.warningSection}>
+          <ThemedView style={[styles.warningBox, { borderColor: warningColor, backgroundColor: warningColor + '10' }]}>
+            <ThemedText type="caption" style={[styles.warningText, { color: warningColor }]}>
+              {i18n.t('screens.updateEmail.warning.message')}
+            </ThemedText>
+          </ThemedView>
+        </ThemedView>
+
+        {/* Actions */}
+        <ThemedView style={styles.actionsSection}>
+          <ThemedButton
+            title={loading ? i18n.t('screens.updateEmail.updatingButton') : i18n.t('screens.updateEmail.updateButton')}
+            onPress={handleUpdateEmail}
+            disabled={loading || !newEmail || !confirmEmail || !!emailError || !!confirmError}
+            loading={loading}
+            variant="primary"
+            accessibilityLabel={loading ? i18n.t('screens.updateEmail.accessibility.sendingHint') : i18n.t('screens.updateEmail.accessibility.updateButton')}
+            accessibilityHint={loading ? i18n.t('screens.updateEmail.accessibility.sendingHint') : i18n.t('screens.updateEmail.accessibility.updateButtonHint')}
+          />
+        </ThemedView>
+      </ScreenContainer>
+      {alert.AlertComponent}
+    </>
   );
 }
 

@@ -1,13 +1,14 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { BorderRadius, Spacing } from '@/constants/layout';
+import { useAlert } from '@/hooks/use-alert';
 import { usePermissions } from '@/hooks/use-permissions';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import React from 'react';
-import { ActivityIndicator, Alert, Linking, Platform, Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Linking, Platform, Pressable, StyleSheet, View } from 'react-native';
 
 interface PermissionCardProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -17,9 +18,10 @@ interface PermissionCardProps {
   canAskAgain: boolean;
   onRequest: () => Promise<void>;
   loading: boolean;
+  alert: ReturnType<typeof useAlert>;
 }
 
-function PermissionCard({ icon, title, description, granted, canAskAgain, onRequest, loading }: PermissionCardProps) {
+function PermissionCard({ icon, title, description, granted, canAskAgain, onRequest, loading, alert }: PermissionCardProps) {
   const primaryColor = useThemeColor({}, 'primary');
   const successColor = useThemeColor({}, 'success');
   const errorColor = useThemeColor({}, 'error');
@@ -38,10 +40,10 @@ function PermissionCard({ icon, title, description, granted, canAskAgain, onRequ
 
     if (granted) {
       // Show info that permission is already granted
-      Alert.alert(i18n.t('settings.permissions.alreadyGranted.title'), i18n.t('settings.permissions.alreadyGranted.message', { permission: title }));
+      alert.show(i18n.t('settings.permissions.alreadyGranted.title'), i18n.t('settings.permissions.alreadyGranted.message', { permission: title }));
     } else if (!canAskAgain) {
       // Show instructions to open settings
-      Alert.alert(i18n.t('settings.permissions.openSettings.title'), i18n.t('settings.permissions.openSettings.message', { permission: title }), [
+      alert.show(i18n.t('settings.permissions.openSettings.title'), i18n.t('settings.permissions.openSettings.message', { permission: title }), [
         { text: i18n.t('common.cancel'), style: 'cancel' },
         {
           text: i18n.t('settings.permissions.openSettings.button'),
@@ -112,6 +114,7 @@ function PermissionCard({ icon, title, description, granted, canAskAgain, onRequ
 
 export default function PermissionsScreen() {
   const { permissionsStatus, requestCameraPermission, requestMediaLibraryPermission, requestLocationPermission, requestNotificationPermission, checkAllPermissions } = usePermissions();
+  const alert = useAlert();
 
   const [loading, setLoading] = React.useState<Record<string, boolean>>({
     camera: false,
@@ -221,6 +224,7 @@ export default function PermissionsScreen() {
             canAskAgain={permissionsStatus[permission.type].canAskAgain}
             onRequest={() => handleRequestPermission(permission.type, permission.requestFn)}
             loading={loading[permission.type]}
+            alert={alert}
           />
         ))}
       </View>
@@ -245,6 +249,7 @@ export default function PermissionsScreen() {
           {i18n.t('settings.permissions.info')}
         </ThemedText>
       </View>
+      {alert.AlertComponent}
     </ScreenContainer>
   );
 }

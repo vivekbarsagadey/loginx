@@ -4,15 +4,17 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing } from '@/constants/layout';
+import { useAlert } from '@/hooks/use-alert';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
-import { ActivityIndicator, Alert, StyleSheet, Switch, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Switch, View } from 'react-native';
 
 export default function TwoFactorAuthScreen() {
+  const alert = useAlert();
   const { isEnabled, backupCodes, isLoading, error, enableTwoFactor, disableTwoFactor, generateBackupCodes, backupCodesCount, isBackupCodesLow, formatBackupCode } = useTwoFactorAuth();
 
   const { isAvailable: biometricAvailable, isEnabled: biometricEnabled, biometricTypeName, enableBiometric, disableBiometric, isLoading: biometricLoading } = useBiometricAuth();
@@ -37,7 +39,7 @@ export default function TwoFactorAuthScreen() {
   };
 
   const handleDisable2FA = async () => {
-    Alert.alert(i18n.t('screens.security.twoFactor.alerts.disable.title'), i18n.t('screens.security.twoFactor.alerts.disable.message'), [
+    alert.show(i18n.t('screens.security.twoFactor.alerts.disable.title'), i18n.t('screens.security.twoFactor.alerts.disable.message'), [
       { text: i18n.t('screens.security.twoFactor.alerts.disable.cancel'), style: 'cancel' },
       {
         text: i18n.t('screens.security.twoFactor.alerts.disable.confirm'),
@@ -56,15 +58,13 @@ export default function TwoFactorAuthScreen() {
 
   const handleShowBackupCodes = () => {
     const formattedCodes = backupCodes.map((code) => formatBackupCode(code)).join('\n');
-    Alert.alert(
-      i18n.t('screens.security.twoFactor.alerts.backupCodes.title', { count: backupCodesCount }),
-      i18n.t('screens.security.twoFactor.alerts.backupCodes.message', { codes: formattedCodes }),
-      [{ text: i18n.t('common.ok') }]
-    );
+    alert.show(i18n.t('screens.security.twoFactor.alerts.backupCodes.title', { count: backupCodesCount }), i18n.t('screens.security.twoFactor.alerts.backupCodes.message', { codes: formattedCodes }), [
+      { text: i18n.t('common.ok') },
+    ]);
   };
 
   const handleGenerateNewBackupCodes = async () => {
-    Alert.alert(i18n.t('screens.security.twoFactor.alerts.generateCodes.title'), i18n.t('screens.security.twoFactor.alerts.generateCodes.message'), [
+    alert.show(i18n.t('screens.security.twoFactor.alerts.generateCodes.title'), i18n.t('screens.security.twoFactor.alerts.generateCodes.message'), [
       { text: i18n.t('screens.security.twoFactor.alerts.generateCodes.cancel'), style: 'cancel' },
       {
         text: i18n.t('screens.security.twoFactor.alerts.generateCodes.confirm'),
@@ -96,104 +96,113 @@ export default function TwoFactorAuthScreen() {
     }
   };
 
-  if (isLoading || biometricLoading) {
+  if (isLoading) {
     return (
-      <ScreenContainer centerContent useSafeArea={false}>
-        <ActivityIndicator size="large" />
-        <ThemedText style={styles.loadingText}>{i18n.t('screens.security.twoFactor.loading')}</ThemedText>
-      </ScreenContainer>
+      <>
+        <ScreenContainer>
+          <ActivityIndicator size="large" />
+          <ThemedText style={styles.loadingText}>{i18n.t('screens.security.twoFactor.loading')}</ThemedText>
+        </ScreenContainer>
+        {alert.AlertComponent}
+      </>
     );
   }
 
   if (error) {
     return (
-      <ScreenContainer centerContent useSafeArea={false}>
-        <ThemedText style={[styles.errorText, { color: errorColor }]}>
-          {i18n.t('screens.security.twoFactor.error.prefix')}
-          {error}
-        </ThemedText>
-        <ThemedButton title={i18n.t('screens.security.twoFactor.error.retryButton')} onPress={() => window.location.reload()} />
-      </ScreenContainer>
+      <>
+        <ScreenContainer>
+          <ThemedText style={[styles.errorText, { color: errorColor }]}>
+            {i18n.t('screens.security.twoFactor.error.prefix')}
+            {error}
+          </ThemedText>
+          <ThemedButton title={i18n.t('screens.security.twoFactor.error.retryButton')} onPress={() => window.location.reload()} />
+        </ScreenContainer>
+        {alert.AlertComponent}
+      </>
     );
   }
 
   return (
-    <ScreenContainer scrollable useSafeArea={false}>
-      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.security.twoFactor.subtitle')}</ThemedText>
+    <>
+      <ScreenContainer scrollable useSafeArea={false}>
+        <ThemedText style={CommonText.subtitle}>{i18n.t('screens.security.twoFactor.subtitle')}</ThemedText>
 
-      {/* Biometric Authentication Section */}
-      {biometricAvailable && (
-        <ThemedView style={styles.section}>
-          <ThemedText type="h3" style={[CommonText.sectionTitle, { color: primaryColor }]}>
-            {i18n.t('screens.security.twoFactor.biometric.title', { type: biometricTypeName })}
-          </ThemedText>
-          <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.biometric.description', { type: biometricTypeName.toLowerCase() })}</ThemedText>
-          <View style={[styles.switchContainer, { backgroundColor: surfaceVariant }]}>
-            <ThemedText>{i18n.t('screens.security.twoFactor.biometric.enableLabel', { type: biometricTypeName })}</ThemedText>
-            <Switch value={biometricEnabled} onValueChange={handleToggleBiometric} disabled={biometricLoading} />
-          </View>
-        </ThemedView>
-      )}
-
-      {/* 2FA Section */}
-      {!isEnabled ? (
-        <ThemedView style={styles.section}>
-          <ThemedText type="h3" style={[CommonText.sectionTitle, { color: primaryColor }]}>
-            {i18n.t('screens.security.twoFactor.notEnabled.title')}
-          </ThemedText>
-          <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.notEnabled.description')}</ThemedText>
-
-          <ThemedView style={styles.benefitsContainer}>
-            {benefits.map((benefit, index) => (
-              <ThemedView key={index} style={styles.benefitItem}>
-                <ThemedText style={[styles.bulletPoint, { color: successColor }]}>✓</ThemedText>
-                <ThemedText style={styles.benefitText}>{benefit}</ThemedText>
-              </ThemedView>
-            ))}
-          </ThemedView>
-
-          <ThemedButton title={i18n.t('screens.security.twoFactor.notEnabled.enableButton')} onPress={handleEnable2FA} style={styles.enableButton} disabled={isLoading} />
-        </ThemedView>
-      ) : (
-        <ThemedView style={styles.section}>
-          <ThemedText type="h3" style={[CommonText.sectionTitle, { color: primaryColor }]}>
-            {i18n.t('screens.security.twoFactor.enabled.setup.title')}
-          </ThemedText>
-          <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.enabled.description')}</ThemedText>
-
-          <ThemedView style={styles.setupContainer}>
-            <ThemedText style={styles.setupStep}>{i18n.t('screens.security.twoFactor.setup.step1')}</ThemedText>
-            <ThemedText style={styles.setupStep}>{i18n.t('screens.security.twoFactor.setup.step2')}</ThemedText>
-            <ThemedText style={styles.setupStep}>{i18n.t('screens.security.twoFactor.setup.step3')}</ThemedText>
-            <ThemedText style={styles.appsRecommendation}>{i18n.t('screens.security.twoFactor.setup.apps')}</ThemedText>
-          </ThemedView>
-
-          {/* Backup Codes Section */}
-          <ThemedView
-            style={[
-              styles.backupCodesContainer,
-              {
-                backgroundColor: isBackupCodesLow ? warningColor + '1A' : successColor + '1A',
-                borderColor: isBackupCodesLow ? warningColor + '4D' : successColor + '4D',
-              },
-            ]}
-          >
-            <ThemedText style={[styles.backupCodesTitle, { color: isBackupCodesLow ? warningColor : successColor }]}>
-              {i18n.t('screens.security.twoFactor.enabled.backupCodes.title')} ({backupCodesCount} remaining)
+        {/* Biometric Authentication Section */}
+        {biometricAvailable && (
+          <ThemedView style={styles.section}>
+            <ThemedText type="h3" style={[CommonText.sectionTitle, { color: primaryColor }]}>
+              {i18n.t('screens.security.twoFactor.biometric.title', { type: biometricTypeName })}
             </ThemedText>
-            {isBackupCodesLow && <ThemedText style={[styles.warningText, { color: warningColor }]}>{i18n.t('screens.security.twoFactor.enabled.backupCodes.warningLow')}</ThemedText>}
-            <View style={styles.backupButtonsContainer}>
-              <ThemedButton title={i18n.t('screens.security.twoFactor.enabled.backupCodes.viewButton')} variant="secondary" onPress={handleShowBackupCodes} style={styles.backupButton} />
-              <ThemedButton title={i18n.t('screens.security.twoFactor.enabled.backupCodes.generateButton')} variant="secondary" onPress={handleGenerateNewBackupCodes} style={styles.backupButton} />
+            <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.biometric.description', { type: biometricTypeName.toLowerCase() })}</ThemedText>
+            <View style={[styles.switchContainer, { backgroundColor: surfaceVariant }]}>
+              <ThemedText>{i18n.t('screens.security.twoFactor.biometric.enableLabel', { type: biometricTypeName })}</ThemedText>
+              <Switch value={biometricEnabled} onValueChange={handleToggleBiometric} disabled={biometricLoading} />
             </View>
           </ThemedView>
+        )}
 
-          <ThemedView style={styles.buttonContainer}>
-            <ThemedButton title={i18n.t('screens.security.twoFactor.enabled.disableButton')} variant="link" onPress={handleDisable2FA} style={styles.button} />
+        {/* 2FA Section */}
+        {!isEnabled ? (
+          <ThemedView style={styles.section}>
+            <ThemedText type="h3" style={[CommonText.sectionTitle, { color: primaryColor }]}>
+              {i18n.t('screens.security.twoFactor.notEnabled.title')}
+            </ThemedText>
+            <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.notEnabled.description')}</ThemedText>
+
+            <ThemedView style={styles.benefitsContainer}>
+              {benefits.map((benefit, index) => (
+                <ThemedView key={index} style={styles.benefitItem}>
+                  <ThemedText style={[styles.bulletPoint, { color: successColor }]}>✓</ThemedText>
+                  <ThemedText style={styles.benefitText}>{benefit}</ThemedText>
+                </ThemedView>
+              ))}
+            </ThemedView>
+
+            <ThemedButton title={i18n.t('screens.security.twoFactor.notEnabled.enableButton')} onPress={handleEnable2FA} style={styles.enableButton} disabled={isLoading} />
           </ThemedView>
-        </ThemedView>
-      )}
-    </ScreenContainer>
+        ) : (
+          <ThemedView style={styles.section}>
+            <ThemedText type="h3" style={[CommonText.sectionTitle, { color: primaryColor }]}>
+              {i18n.t('screens.security.twoFactor.enabled.setup.title')}
+            </ThemedText>
+            <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.enabled.description')}</ThemedText>
+
+            <ThemedView style={styles.setupContainer}>
+              <ThemedText style={styles.setupStep}>{i18n.t('screens.security.twoFactor.setup.step1')}</ThemedText>
+              <ThemedText style={styles.setupStep}>{i18n.t('screens.security.twoFactor.setup.step2')}</ThemedText>
+              <ThemedText style={styles.setupStep}>{i18n.t('screens.security.twoFactor.setup.step3')}</ThemedText>
+              <ThemedText style={styles.appsRecommendation}>{i18n.t('screens.security.twoFactor.setup.apps')}</ThemedText>
+            </ThemedView>
+
+            {/* Backup Codes Section */}
+            <ThemedView
+              style={[
+                styles.backupCodesContainer,
+                {
+                  backgroundColor: isBackupCodesLow ? warningColor + '1A' : successColor + '1A',
+                  borderColor: isBackupCodesLow ? warningColor + '4D' : successColor + '4D',
+                },
+              ]}
+            >
+              <ThemedText style={[styles.backupCodesTitle, { color: isBackupCodesLow ? warningColor : successColor }]}>
+                {i18n.t('screens.security.twoFactor.enabled.backupCodes.title')} ({backupCodesCount} remaining)
+              </ThemedText>
+              {isBackupCodesLow && <ThemedText style={[styles.warningText, { color: warningColor }]}>{i18n.t('screens.security.twoFactor.enabled.backupCodes.warningLow')}</ThemedText>}
+              <View style={styles.backupButtonsContainer}>
+                <ThemedButton title={i18n.t('screens.security.twoFactor.enabled.backupCodes.viewButton')} variant="secondary" onPress={handleShowBackupCodes} style={styles.backupButton} />
+                <ThemedButton title={i18n.t('screens.security.twoFactor.enabled.backupCodes.generateButton')} variant="secondary" onPress={handleGenerateNewBackupCodes} style={styles.backupButton} />
+              </View>
+            </ThemedView>
+
+            <ThemedView style={styles.buttonContainer}>
+              <ThemedButton title={i18n.t('screens.security.twoFactor.enabled.disableButton')} variant="link" onPress={handleDisable2FA} style={styles.button} />
+            </ThemedView>
+          </ThemedView>
+        )}
+      </ScreenContainer>
+      {alert.AlertComponent}
+    </>
   );
 }
 

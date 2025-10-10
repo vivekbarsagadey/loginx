@@ -9,6 +9,7 @@ import { ThemedView } from '@/components/themed-view';
 import { SkeletonListItem } from '@/components/ui/skeleton-loader';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
+import { useAlert } from '@/hooks/use-alert';
 import { useNotificationCount } from '@/hooks/use-notification-count';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import type { NotificationItem, NotificationType } from '@/types/notification';
@@ -16,9 +17,10 @@ import { clearAllNotifications, deleteNotification, getNotificationHistory, mark
 import { Feather, Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 
 export default function NotificationsCenterScreen() {
+  const alert = useAlert();
   const surfaceColor = useThemeColor({}, 'surface');
   const borderColor = useThemeColor({}, 'border');
   const textColor = useThemeColor({}, 'text');
@@ -75,7 +77,7 @@ export default function NotificationsCenterScreen() {
 
   const handleDelete = useCallback(
     async (id: string) => {
-      Alert.alert('Delete Notification', 'Are you sure you want to delete this notification?', [
+      alert.show('Delete Notification', 'Are you sure you want to delete this notification?', [
         { text: 'Cancel', style: 'cancel' },
         {
           text: 'Delete',
@@ -89,11 +91,11 @@ export default function NotificationsCenterScreen() {
         },
       ]);
     },
-    [loadNotifications, refreshCount]
+    [alert, loadNotifications, refreshCount]
   );
 
   const handleClearAll = useCallback(async () => {
-    Alert.alert('Clear All Notifications', 'This will permanently delete all notifications. This action cannot be undone.', [
+    alert.show('Clear All Notifications', 'This will permanently delete all notifications. This action cannot be undone.', [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Clear All',
@@ -106,7 +108,7 @@ export default function NotificationsCenterScreen() {
         },
       },
     ]);
-  }, [loadNotifications, refreshCount]);
+  }, [alert, loadNotifications, refreshCount]);
 
   const getNotificationIcon = (type: NotificationType) => {
     switch (type) {
@@ -359,6 +361,7 @@ export default function NotificationsCenterScreen() {
           })
         )}
       </ScrollView>
+      {alert.AlertComponent}
     </ScreenContainer>
   );
 }

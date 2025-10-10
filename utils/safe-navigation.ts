@@ -4,7 +4,8 @@
  */
 
 import { router } from 'expo-router';
-import { Alert } from 'react-native';
+// Note: Alert.alert replaced with themed useAlert hook in components
+// This utility provides the navigation logic, but dialogs should be shown via useAlert
 import { showError } from './error';
 
 interface NavigationOptions {
@@ -87,32 +88,34 @@ export function safeReplace(options: NavigationOptions): void {
 /**
  * Safe back navigation with confirmation
  */
-export function safeBack(options?: { confirmMessage?: string; onCancel?: () => void }): void {
-  const { confirmMessage, onCancel } = options || {};
+/**
+ * Safe back navigation with confirmation
+ * @param options.confirmMessage - Optional confirmation message
+ * @param options.onCancel - Optional cancel callback
+ * @param options.showConfirm - Optional callback to show confirmation dialog (use useAlert in component)
+ */
+export function safeBack(options?: { 
+  confirmMessage?: string; 
+  onCancel?: () => void;
+  showConfirm?: (config: { title: string; message: string; onConfirm: () => void; onCancel?: () => void }) => void;
+}): void {
+  const { confirmMessage, onCancel, showConfirm } = options || {};
 
   try {
-    if (confirmMessage) {
-      Alert.alert(
-        'Go Back?',
-        confirmMessage,
-        [
-          {
-            text: 'Cancel',
-            style: 'cancel',
-            onPress: onCancel,
-          },
-          {
-            text: 'Go Back',
-            style: 'destructive',
-            onPress: () => {
-              try {
-                if (router.canGoBack()) {
-                  router.back();
-                } else {
-                  router.replace('/(tabs)/' as never);
-                }
-              } catch (error) {
-                console.error('[Navigation] Failed to go back:', error);
+    if (confirmMessage && showConfirm) {
+      // Use provided showConfirm callback (should be useAlert from component)
+      showConfirm({
+        title: 'Go Back?',
+        message: confirmMessage,
+        onConfirm: () => {
+          try {
+            if (router.canGoBack()) {
+              router.back();
+            } else {
+              router.replace('/(tabs)/' as never);
+            }
+          } catch (error) {
+            console.error('[Navigation] Failed to go back:', error);
                 showError(new Error('Cannot go back. Try closing the app.'));
               }
             },

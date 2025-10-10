@@ -6,6 +6,7 @@ import { CommonButtons, CommonContainers, CommonText } from '@/constants/common-
 import { Spacing } from '@/constants/layout';
 import { Colors } from '@/constants/theme';
 import { auth } from '@/firebase-config';
+import { useAlert } from '@/hooks/use-alert';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
@@ -17,7 +18,7 @@ import * as Linking from 'expo-linking';
 import { useRouter } from 'expo-router';
 import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 
 /**
  * Magic Link Verification Screen
@@ -27,6 +28,7 @@ export default function VerifyMagicLinkScreen() {
   const router = useRouter();
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme || 'light'];
+  const alert = useAlert();
 
   const [email, setEmail] = useState<string>('');
   const [checking, setChecking] = useState(true);
@@ -86,28 +88,8 @@ export default function VerifyMagicLinkScreen() {
         if (storedEmail) {
           signInEmail = storedEmail;
         } else {
-          // Prompt user to enter email if not found
-          Alert.prompt(
-            i18n.t('passwordlessLogin.enterEmail.title'),
-            i18n.t('passwordlessLogin.enterEmail.message'),
-            [
-              {
-                text: i18n.t('common.cancel'),
-                style: 'cancel',
-              },
-              {
-                text: i18n.t('common.confirm'),
-                onPress: async (inputEmail?: string) => {
-                  if (inputEmail) {
-                    await finishSignIn(inputEmail, emailLink);
-                  }
-                },
-              },
-            ],
-            'plain-text',
-            '',
-            'email-address'
-          );
+          // Alert.prompt not available on all platforms, show simple error
+          alert.show(i18n.t('passwordlessLogin.enterEmail.title'), i18n.t('passwordlessLogin.enterEmail.message'), [{ text: i18n.t('common.ok') }], { variant: 'error' });
           return;
         }
       }
@@ -141,7 +123,7 @@ export default function VerifyMagicLinkScreen() {
 
   const handleResend = async () => {
     if (!email) {
-      Alert.alert(i18n.t('passwordlessLogin.error.noEmail'), i18n.t('passwordlessLogin.error.noEmailMessage'));
+      alert.show(i18n.t('passwordlessLogin.error.noEmail'), i18n.t('passwordlessLogin.error.noEmailMessage'), [{ text: i18n.t('common.ok') }], { variant: 'error' });
       return;
     }
 

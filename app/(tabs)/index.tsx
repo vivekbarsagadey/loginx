@@ -6,15 +6,17 @@ import { Card } from '@/components/ui/card';
 import { SkeletonCard, SkeletonText } from '@/components/ui/skeleton-loader';
 import { CommonSpacing } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
+import { useAlert } from '@/hooks/use-alert';
 import { useAuth } from '@/hooks/use-auth-provider';
 import i18n from '@/i18n';
 import { UserProfile } from '@/types/user';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 export default function IndexScreen() {
   const { user } = useAuth();
+  const alert = useAlert();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [, forceUpdate] = useState(0);
@@ -40,11 +42,11 @@ export default function IndexScreen() {
             setUserProfile(profile);
           } else {
             console.warn('[Home] User profile is null');
-            Alert.alert('Error', 'User profile not found. Please complete your registration.');
+            alert.show('Error', 'User profile not found. Please complete your registration.', [{ text: 'OK' }], { variant: 'error' });
           }
         } catch (error) {
           console.error('[Home] Error fetching user profile:', error);
-          Alert.alert('Error', 'Failed to fetch user profile.');
+          alert.show('Error', 'Failed to fetch user profile.', [{ text: 'OK' }], { variant: 'error' });
         } finally {
           setLoading(false);
         }
@@ -127,6 +129,7 @@ export default function IndexScreen() {
           <ThemedText type="h1">{i18n.t('screens.home.welcome', { name: '' })}</ThemedText>
         )}
       </ScreenContainer>
+      {alert.AlertComponent}
     </>
   );
 }

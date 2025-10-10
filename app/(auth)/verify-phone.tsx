@@ -5,12 +5,13 @@ import { ThemedView } from '@/components/themed-view';
 import { CommonButtons, CommonContainers, CommonText } from '@/constants/common-styles';
 import { Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
+import { useAlert } from '@/hooks/use-alert';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { Alert, StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 
 /**
  * Phone Verification Screen
@@ -19,6 +20,7 @@ import { Alert, StyleSheet, TextInput, View } from 'react-native';
 export default function VerifyPhoneScreen() {
   const router = useRouter();
   const { phoneNumber } = useLocalSearchParams<{ phoneNumber: string }>();
+  const alert = useAlert();
 
   const [verificationCode, setVerificationCode] = useState('');
   const [_verificationId, setVerificationId] = useState<string>('');
@@ -90,7 +92,7 @@ export default function VerifyPhoneScreen() {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       setCountdown(60);
 
-      Alert.alert('Demo Mode', `In production, an SMS would be sent to ${phoneNumber}. For demo purposes, use code: 123456`, [{ text: 'OK' }]);
+      alert.show('Demo Mode', `In production, an SMS would be sent to ${phoneNumber}. For demo purposes, use code: 123456`, [{ text: 'OK' }]);
     } catch (error) {
       console.error('[PhoneVerification] Error sending code:', error);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
@@ -142,7 +144,7 @@ export default function VerifyPhoneScreen() {
   };
 
   const handleSkip = () => {
-    Alert.alert('Skip Verification?', 'You can add and verify your phone number later in settings.', [
+    alert.show('Skip Verification?', 'You can add and verify your phone number later in settings.', [
       {
         text: 'Cancel',
         style: 'cancel',
@@ -192,6 +194,7 @@ export default function VerifyPhoneScreen() {
 
         <ThemedButton title="Skip for Now" variant="link" onPress={handleSkip} style={CommonButtons.linkButtonSmall} />
       </View>
+      {alert.AlertComponent}
     </ThemedView>
   );
 }

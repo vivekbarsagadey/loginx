@@ -4,13 +4,14 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing, Typography } from '@/constants/layout';
+import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
-import { AccessibilityInfo, Alert, Linking, StyleSheet } from 'react-native';
+import { AccessibilityInfo, Linking, StyleSheet } from 'react-native';
 
 /**
  * Data Rights Screen - GDPR Compliance
@@ -20,6 +21,7 @@ import { AccessibilityInfo, Alert, Linking, StyleSheet } from 'react-native';
  */
 export default function DataRightsScreen() {
   const router = useRouter();
+  const alert = useAlert();
   const primaryColor = useThemeColor({}, 'primary');
   const surfaceColor = useThemeColor({}, 'surface');
   const borderColor = useThemeColor({}, 'border');
@@ -30,13 +32,13 @@ export default function DataRightsScreen() {
 
   const handleRequestData = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    Alert.alert(i18n.t('screens.legal.dataRights.actions.requestData.title'), i18n.t('screens.legal.dataRights.actions.requestData.description'), [
+    alert.show(i18n.t('screens.legal.dataRights.actions.requestData.title'), i18n.t('screens.legal.dataRights.actions.requestData.description'), [
       { text: i18n.t('common.cancel'), style: 'cancel' },
       {
         text: i18n.t('common.confirm'),
         onPress: () => {
           // TODO: Implement data export functionality
-          Alert.alert(i18n.t('common.success'), i18n.t('screens.legal.dataRights.actions.requestData.success'));
+          alert.show(i18n.t('common.success'), i18n.t('screens.legal.dataRights.actions.requestData.success'), [{ text: 'OK' }], { variant: 'success' });
         },
       },
     ]);
@@ -44,7 +46,7 @@ export default function DataRightsScreen() {
 
   const handleDeleteData = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-    Alert.alert(i18n.t('screens.legal.dataRights.actions.deleteData.title'), i18n.t('screens.legal.dataRights.actions.deleteData.warning'), [
+    alert.show(i18n.t('screens.legal.dataRights.actions.deleteData.title'), i18n.t('screens.legal.dataRights.actions.deleteData.warning'), [
       { text: i18n.t('common.cancel'), style: 'cancel' },
       {
         text: i18n.t('screens.legal.dataRights.actions.deleteData.confirm'),
@@ -164,6 +166,7 @@ export default function DataRightsScreen() {
         <ThemedText style={styles.infoText}>{i18n.t('screens.legal.dataRights.responseTime')}</ThemedText>
       </ThemedView>
     </ScreenContainer>
+    {alert.AlertComponent}
   );
 }
 

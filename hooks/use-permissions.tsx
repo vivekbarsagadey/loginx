@@ -3,7 +3,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import * as Notifications from 'expo-notifications';
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, Linking, Platform } from 'react-native';
+import { Linking, Platform } from 'react-native';
 
 export type PermissionType = 'camera' | 'mediaLibrary' | 'location' | 'notifications';
 
@@ -224,13 +224,19 @@ export function usePermissions() {
 
   /**
    * Show alert for denied permission with option to open settings
+   * Note: This returns JSX that must be rendered by the parent component
    */
   const showPermissionAlert = useCallback(
-    (permissionName: string, permissionDescription: string) => {
-      Alert.alert(`${permissionName} Permission Required`, `${permissionDescription}\n\nPlease enable this permission in your device settings.`, [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Open Settings', onPress: openSettings },
-      ]);
+    (permissionName: string, permissionDescription: string, onConfirm?: () => void) => {
+      // Return a configuration object that parent can use with useAlert
+      return {
+        title: `${permissionName} Permission Required`,
+        message: `${permissionDescription}\n\nPlease enable this permission in your device settings.`,
+        buttons: [
+          { text: 'Cancel', style: 'cancel' as const },
+          { text: 'Open Settings', onPress: onConfirm || openSettings },
+        ],
+      };
     },
     [openSettings]
   );

@@ -4,6 +4,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonButtons, CommonContainers, CommonText } from '@/constants/common-styles';
 import { Spacing, Typography } from '@/constants/layout';
+import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import { showError } from '@/utils/error';
@@ -11,7 +12,7 @@ import { showSuccess } from '@/utils/success';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, TextInput, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, TextInput, View } from 'react-native';
 
 /**
  * Two-Factor Authentication Code Input Screen
@@ -20,6 +21,7 @@ import { ActivityIndicator, Alert, StyleSheet, TextInput, View } from 'react-nat
 export default function Verify2FAScreen() {
   const router = useRouter();
   const { email } = useLocalSearchParams<{ email: string }>();
+  const alert = useAlert();
 
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
@@ -124,7 +126,7 @@ export default function Verify2FAScreen() {
   };
 
   const handleUseBackupCode = () => {
-    Alert.alert('Use Backup Code', "Backup codes are one-time use codes that can be used if you don't have access to your authenticator app.", [
+    alert.show('Use Backup Code', "Backup codes are one-time use codes that can be used if you don't have access to your authenticator app.", [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Use Backup Code',
@@ -142,7 +144,7 @@ export default function Verify2FAScreen() {
   };
 
   const handleCancel = () => {
-    Alert.alert('Cancel 2FA Verification', 'You need to complete 2FA verification to access your account.', [
+    alert.show('Cancel 2FA Verification', 'You need to complete 2FA verification to access your account.', [
       { text: 'Continue', style: 'cancel' },
       {
         text: 'Logout',
@@ -203,6 +205,7 @@ export default function Verify2FAScreen() {
 
           <ThemedButton title="Cancel" variant="link" onPress={handleCancel} style={styles.cancelButton} />
         </View>
+        {alert.AlertComponent}
       </ThemedView>
     );
   }
@@ -245,6 +248,7 @@ export default function Verify2FAScreen() {
 
         <ThemedButton title="Cancel" variant="link" onPress={handleCancel} style={styles.cancelButton} />
       </View>
+      {alert.AlertComponent}
     </ThemedView>
   );
 }

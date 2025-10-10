@@ -4,10 +4,11 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing } from '@/constants/layout';
+import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { useState } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 interface Session {
   id: string;
@@ -19,8 +20,13 @@ interface Session {
 }
 
 export default function SessionsScreen() {
+  const alert = useAlert();
+  const primaryColor = useThemeColor({}, 'primary');
+  const surfaceColor = useThemeColor({}, 'surface');
+  const borderColor = useThemeColor({}, 'border');
+  const errorColor = useThemeColor({}, 'error');
   const successColor = useThemeColor({}, 'success');
-  const onSuccessColor = useThemeColor({}, 'on-primary'); // Using on-primary for contrast
+  const onSuccessColor = useThemeColor({}, 'on-primary'); // White text on success color
 
   const [sessions, setSessions] = useState<Session[]>([
     {
@@ -57,7 +63,7 @@ export default function SessionsScreen() {
   };
 
   const handleEndAllSessions = () => {
-    Alert.alert(i18n.t('screens.security.sessions.confirmEndAll.title'), i18n.t('screens.security.sessions.confirmEndAll.message'), [
+    alert.show(i18n.t('screens.security.sessions.confirmEndAll.title'), i18n.t('screens.security.sessions.confirmEndAll.message'), [
       {
         text: i18n.t('screens.security.sessions.confirmEndAll.cancel'),
         style: 'cancel',
@@ -97,30 +103,33 @@ export default function SessionsScreen() {
   );
 
   return (
-    <ScreenContainer scrollable useSafeArea={false}>
-      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.security.sessions.subtitle')}</ThemedText>
+    <>
+      <ScreenContainer scrollable useSafeArea={false}>
+        <ThemedText style={CommonText.subtitle}>{i18n.t('screens.security.sessions.subtitle')}</ThemedText>
 
-      <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={CommonText.sectionTitle}>
-          {i18n.t('screens.security.sessions.currentSession')}
-        </ThemedText>
-        {currentSessions.map(renderSession)}
-      </ThemedView>
+        <ThemedView style={styles.section}>
+          <ThemedText type="h3" style={CommonText.sectionTitle}>
+            {i18n.t('screens.security.sessions.currentSession')}
+          </ThemedText>
+          {currentSessions.map(renderSession)}
+        </ThemedView>
 
-      <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={CommonText.sectionTitle}>
-          {i18n.t('screens.security.sessions.otherSessions')}
-        </ThemedText>
-        {otherSessions.length > 0 ? (
-          <>
-            {otherSessions.map(renderSession)}
-            <ThemedButton title={i18n.t('screens.security.sessions.actions.endAll')} variant="secondary" onPress={handleEndAllSessions} style={styles.endAllButton} />
-          </>
-        ) : (
-          <ThemedText style={styles.noSessionsText}>{i18n.t('screens.security.sessions.noOtherSessions')}</ThemedText>
-        )}
-      </ThemedView>
-    </ScreenContainer>
+        <ThemedView style={styles.section}>
+          <ThemedText type="h3" style={CommonText.sectionTitle}>
+            {i18n.t('screens.security.sessions.otherSessions')}
+          </ThemedText>
+          {otherSessions.length > 0 ? (
+            <>
+              {otherSessions.map(renderSession)}
+              <ThemedButton title={i18n.t('screens.security.sessions.actions.endAll')} variant="secondary" onPress={handleEndAllSessions} style={styles.endAllButton} />
+            </>
+          ) : (
+            <ThemedText style={styles.noSessionsText}>{i18n.t('screens.security.sessions.noOtherSessions')}</ThemedText>
+          )}
+        </ThemedView>
+      </ScreenContainer>
+      {alert.AlertComponent}
+    </>
   );
 }
 

@@ -4,13 +4,15 @@ import { ThemedView } from '@/components/themed-view';
 import { CommonContainers, CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { getAllThemes } from '@/constants/theme';
+import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { type ThemePreference, useThemeContext } from '@/hooks/use-theme-context';
 import i18n from '@/i18n';
-import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 export default function ThemeScreen() {
   const { themePreference, setThemePreference } = useThemeContext();
+  const alert = useAlert();
 
   const primaryColor = useThemeColor({}, 'primary');
   const surfaceVariant = useThemeColor({}, 'surface-variant');
@@ -36,59 +38,62 @@ export default function ThemeScreen() {
   const handleThemeSelect = async (theme: ThemePreference) => {
     try {
       await setThemePreference(theme);
-      Alert.alert(i18n.t('success.profileUpdate.title'), i18n.t('screens.settings.theme.applied'));
+      alert.show(i18n.t('success.profileUpdate.title'), i18n.t('screens.settings.theme.applied'));
     } catch (_error) {
-      Alert.alert('Error', 'Failed to save theme preference');
+      alert.show('Error', 'Failed to save theme preference', undefined, 'error');
     }
   };
 
   return (
-    <ThemedScrollView style={CommonContainers.screenContainer} showsVerticalScrollIndicator={false}>
-      <ThemedText style={CommonText.subtitleMedium}>{i18n.t('screens.settings.theme.subtitle')}</ThemedText>
+    <>
+      <ThemedScrollView style={CommonContainers.screenContainer} showsVerticalScrollIndicator={false}>
+        <ThemedText style={CommonText.subtitleMedium}>{i18n.t('screens.settings.theme.subtitle')}</ThemedText>
 
-      <ThemedView style={styles.optionsContainer}>
-        {themeOptions.map((option) => (
-          <TouchableOpacity
-            key={option.key}
-            style={[
-              styles.optionItem,
-              { backgroundColor: surfaceVariant },
-              themePreference === option.key && [
-                styles.selectedOption,
-                {
-                  borderColor: primaryColor,
-                  backgroundColor: primaryColor + '1A',
-                },
-              ],
-            ]}
-            onPress={() => handleThemeSelect(option.key)}
-          >
-            <ThemedView style={styles.optionContent}>
-              <ThemedText style={styles.optionIcon}>{option.icon}</ThemedText>
-              <ThemedView style={styles.optionText}>
-                <ThemedText type="body" style={styles.optionTitle}>
-                  {option.title}
-                </ThemedText>
-                <ThemedText style={styles.optionDescription}>{option.description}</ThemedText>
+        <ThemedView style={styles.optionsContainer}>
+          {themeOptions.map((option) => (
+            <TouchableOpacity
+              key={option.key}
+              style={[
+                styles.optionItem,
+                { backgroundColor: surfaceVariant },
+                themePreference === option.key && [
+                  styles.selectedOption,
+                  {
+                    borderColor: primaryColor,
+                    backgroundColor: primaryColor + '1A',
+                  },
+                ],
+              ]}
+              onPress={() => handleThemeSelect(option.key)}
+            >
+              <ThemedView style={styles.optionContent}>
+                <ThemedText style={styles.optionIcon}>{option.icon}</ThemedText>
+                <ThemedView style={styles.optionText}>
+                  <ThemedText type="body" style={styles.optionTitle}>
+                    {option.title}
+                  </ThemedText>
+                  <ThemedText style={styles.optionDescription}>{option.description}</ThemedText>
+                </ThemedView>
+                {themePreference === option.key && <ThemedText style={[styles.checkmark, { color: primaryColor }]}>✓</ThemedText>}
               </ThemedView>
-              {themePreference === option.key && <ThemedText style={[styles.checkmark, { color: primaryColor }]}>✓</ThemedText>}
-            </ThemedView>
-          </TouchableOpacity>
-        ))}
-      </ThemedView>
+            </TouchableOpacity>
+          ))}
+        </ThemedView>
 
-      <ThemedView style={styles.previewSection}>
-        <ThemedText type="h3" style={styles.previewTitle}>
-          {i18n.t('screens.settings.theme.preview')}
-        </ThemedText>
-        <ThemedView style={styles.previewContainer}>
-          <ThemedView style={[styles.previewBox, { backgroundColor: surfaceVariant }]}>
-            <ThemedText style={styles.previewText}>Sample Text</ThemedText>
-            <ThemedText style={styles.previewSubtext}>This is how text will appear with the selected theme</ThemedText>
+        <ThemedView style={styles.previewSection}>
+          <ThemedText type="h3" style={styles.previewTitle}>
+            {i18n.t('screens.settings.theme.preview')}
+          </ThemedText>
+          <ThemedView style={styles.previewContainer}>
+            <ThemedView style={[styles.previewBox, { backgroundColor: surfaceVariant }]}>
+              <ThemedText style={styles.previewText}>Sample Text</ThemedText>
+              <ThemedText style={styles.previewSubtext}>This is how text will appear with the selected theme</ThemedText>
+            </ThemedView>
           </ThemedView>
         </ThemedView>
-      </ThemedView>
-    </ThemedScrollView>
+      </ThemedScrollView>
+      {alert.AlertComponent}
+    </>
   );
 }
 
