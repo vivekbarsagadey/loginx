@@ -1,15 +1,15 @@
 import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { CommonContainers, CommonText } from '@/constants/common-styles';
-import { BorderRadius, Spacing, Typography } from '@/constants/layout';
+import { CommonContainers, CommonSelectionCards, CommonText } from '@/constants/common-styles';
+import { Shadow, Spacing } from '@/constants/layout';
 import { getAllThemes, getTheme } from '@/constants/theme';
 import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { type ThemePreference, useThemeContext } from '@/hooks/use-theme-context';
 import i18n from '@/i18n';
 import { provideLightFeedback } from '@/utils/feedback';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 export default function ThemeScreen() {
   const { themePreference, setThemePreference } = useThemeContext();
@@ -144,114 +144,61 @@ export default function ThemeScreen() {
 
 const styles = StyleSheet.create({
   scrollContent: {
-    paddingBottom: Spacing.xxl * 2, // Extra space at bottom for scrolling
+    paddingBottom: Spacing.xxl * 2,
   },
   optionsContainer: {
     gap: Spacing.md,
     marginTop: Spacing.lg,
   },
   optionItem: {
-    borderRadius: BorderRadius.lg,
-    borderWidth: 2,
-    borderColor: 'transparent',
-    overflow: 'hidden',
-    minHeight: 72, // Reduced from 88 for more compact design
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 8,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
+    ...CommonSelectionCards.selectionCard,
+    ...Shadow.sm,
+    minHeight: Spacing.xxl + Spacing.xl, // 72px (40 + 32)
   },
-  selectedOption: {
-    // Border and background colors applied inline
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.12,
-        shadowRadius: 12,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
-  },
-  optionContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: Spacing.md,
-    gap: Spacing.md,
-  },
+  selectedOption: Shadow.lg,
+  optionContent: CommonSelectionCards.selectionCardContent,
   iconContainer: {
     position: 'relative',
-    width: 48,
-    height: 48,
+    width: Spacing.xxxl, // 48px
+    height: Spacing.xxxl, // 48px
     justifyContent: 'center',
     alignItems: 'center',
   },
   colorIndicator: {
-    width: 48,
-    height: 48,
-    borderRadius: BorderRadius.md,
+    width: Spacing.xxxl, // 48px
+    height: Spacing.xxxl, // 48px
+    borderRadius: Spacing.sm, // 8px
     justifyContent: 'center',
     alignItems: 'center',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
+    ...Shadow.sm,
   },
   iconEmoji: {
-    fontSize: 24,
+    fontSize: Spacing.lg, // 24px
     textAlign: 'center',
   },
   iconEmojiOverlay: {
     position: 'absolute',
-    fontSize: 24,
+    fontSize: Spacing.lg, // 24px
     textAlign: 'center',
-    top: 12,
-    left: 12,
+    top: Spacing.md - Spacing.xs, // 12px
+    left: Spacing.md - Spacing.xs, // 12px
   },
-  optionText: {
-    flex: 1,
-    gap: Spacing.xs,
-  },
-  optionTitle: {
-    fontWeight: Typography.bodyBold.fontWeight,
-    fontSize: Typography.body.fontSize,
-    lineHeight: Typography.body.lineHeight,
-  },
+  optionText: CommonSelectionCards.selectionTextContainer,
+  optionTitle: CommonSelectionCards.selectionCardTitle,
   optionDescription: {
-    fontSize: Typography.caption.fontSize,
-    lineHeight: Typography.caption.lineHeight,
+    ...CommonSelectionCards.selectionCardDescription,
     opacity: 0.8,
   },
   radioContainer: {
     paddingLeft: Spacing.sm,
   },
   radioOuter: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    ...CommonSelectionCards.checkmark,
     borderWidth: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   radioInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: Spacing.md - Spacing.xs, // 12px
+    height: Spacing.md - Spacing.xs, // 12px
+    borderRadius: Spacing.xs + 2, // 6px
   },
 });
