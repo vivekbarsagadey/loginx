@@ -1,8 +1,8 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
-import { CommonText } from '@/constants/common-styles';
-import { BorderRadius, Spacing } from '@/constants/layout';
+import { CommonLists, CommonText } from '@/constants/common-styles';
+import { BorderRadius, FontWeight, IconSize, Spacing, Typography } from '@/constants/layout';
 import { getAppInfoItems, getContactItems, openURL } from '@/data';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -52,65 +52,37 @@ export default function AboutUsScreen() {
         },
         badgeText: {
           color: primaryColor,
-          fontSize: Spacing.md - Spacing.xs, // 12px
-          fontWeight: '600',
+          fontSize: Typography.caption.fontSize,
+          fontWeight: FontWeight.semibold,
         },
         section: {
           marginBottom: Spacing.lg,
         },
         infoRow: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingVertical: Spacing.md,
-          borderBottomWidth: 1,
+          ...CommonLists.infoRow,
           borderBottomColor: borderColor,
         },
-        infoRowLast: {
-          borderBottomWidth: 0,
-        },
-        infoIcon: {
-          marginRight: Spacing.md,
-          width: Spacing.lg, // 24px
-          alignItems: 'center',
-        },
-        infoContent: {
-          flex: 1,
-        },
+        infoRowLast: CommonLists.infoRowLast,
+        infoIcon: CommonLists.infoIconContainer,
+        infoContent: CommonLists.infoContent,
         infoLabel: {
+          ...CommonLists.infoLabel,
           color: textMutedColor,
-          fontSize: Spacing.md - Spacing.xs, // 12px
-          marginBottom: Spacing.xs,
         },
-        infoValue: {
-          fontSize: Spacing.md, // 16px
-          fontWeight: '500',
-        },
+        infoValue: CommonLists.infoValue,
         contactRow: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingVertical: Spacing.md,
-          borderBottomWidth: 1,
+          ...CommonLists.infoRow,
           borderBottomColor: borderColor,
         },
-        contactRowLast: {
-          borderBottomWidth: 0,
-        },
-        contactIcon: {
-          marginRight: Spacing.md,
-          width: Spacing.lg, // 24px
-          alignItems: 'center',
-        },
-        contactContent: {
-          flex: 1,
-        },
+        contactRowLast: CommonLists.infoRowLast,
+        contactIcon: CommonLists.infoIconContainer,
+        contactContent: CommonLists.infoContent,
         contactLabel: {
+          ...CommonLists.infoLabel,
           color: textMutedColor,
-          fontSize: Spacing.md - Spacing.xs, // 12px
-          marginBottom: Spacing.xs,
         },
         contactValue: {
-          fontSize: Spacing.md, // 16px
-          fontWeight: '500',
+          ...CommonLists.infoValue,
           color: primaryColor,
         },
         description: {
@@ -125,12 +97,18 @@ export default function AboutUsScreen() {
         },
         footerText: {
           color: textMutedColor,
-          fontSize: Spacing.sm + Spacing.xs + 2, // 14px
+          fontSize: Typography.bodySmall.fontSize,
           textAlign: 'center',
         },
         companyName: {
           color: primaryColor,
-          fontWeight: '600',
+          fontWeight: FontWeight.semibold,
+        },
+        listItem: {
+          marginBottom: Spacing.sm,
+        },
+        copyrightText: {
+          marginTop: Spacing.md,
         },
       }),
     [primaryColor, textMutedColor, borderColor]
@@ -162,7 +140,7 @@ export default function AboutUsScreen() {
           {infoItems.map((item, index) => (
             <View key={item.label} style={[styles.infoRow, index === infoItems.length - 1 && styles.infoRowLast]}>
               <View style={styles.infoIcon}>
-                <Feather name={item.icon as React.ComponentProps<typeof Feather>['name']} size={20} color={primaryColor} />
+                <Feather name={item.icon} size={IconSize.md} color={primaryColor} />
               </View>
               <View style={styles.infoContent}>
                 <ThemedText style={styles.infoLabel}>{item.label}</ThemedText>
@@ -182,13 +160,13 @@ export default function AboutUsScreen() {
           {contactItems.map((item, index) => (
             <TouchableOpacity key={item.label} style={[styles.contactRow, index === contactItems.length - 1 && styles.contactRowLast]} onPress={item.action}>
               <View style={styles.contactIcon}>
-                <Feather name={item.icon as React.ComponentProps<typeof Feather>['name']} size={20} color={primaryColor} />
+                <Feather name={item.icon} size={IconSize.md} color={primaryColor} />
               </View>
               <View style={styles.contactContent}>
                 <ThemedText style={styles.contactLabel}>{item.label}</ThemedText>
                 <ThemedText style={styles.contactValue}>{item.value}</ThemedText>
               </View>
-              <Feather name="external-link" size={18} color={textMutedColor} />
+              <Feather name="external-link" size={IconSize.sm} color={textMutedColor} />
             </TouchableOpacity>
           ))}
         </Card>
@@ -201,7 +179,7 @@ export default function AboutUsScreen() {
         </ThemedText>
         <Card elevation={1}>
           {(i18n.t('screens.settings.aboutUs.sections.features.items', { returnObjects: true }) as string[]).map((feature, index, arr) => (
-            <ThemedText key={index} style={{ marginBottom: index < arr.length - 1 ? Spacing.sm : 0 }}>
+            <ThemedText key={index} style={index < arr.length - 1 ? styles.listItem : undefined}>
               {feature}
             </ThemedText>
           ))}
@@ -215,7 +193,7 @@ export default function AboutUsScreen() {
         </ThemedText>
         <Card elevation={1}>
           {(i18n.t('screens.settings.aboutUs.sections.builtWith.items', { returnObjects: true }) as string[]).map((tech, index, arr) => (
-            <ThemedText key={index} style={{ marginBottom: index < arr.length - 1 ? Spacing.sm : 0 }}>
+            <ThemedText key={index} style={index < arr.length - 1 ? styles.listItem : undefined}>
               {tech}
             </ThemedText>
           ))}
@@ -233,7 +211,7 @@ export default function AboutUsScreen() {
           {'\n'}
           <ThemedText style={styles.companyName}>{i18n.t('screens.settings.aboutUs.footer.company')}</ThemedText>
         </ThemedText>
-        <ThemedText style={[styles.footerText, { marginTop: Spacing.md }]}>{i18n.t('screens.settings.aboutUs.footer.copyright')}</ThemedText>
+        <ThemedText style={[styles.footerText, styles.copyrightText]}>{i18n.t('screens.settings.aboutUs.footer.copyright')}</ThemedText>
       </View>
     </ScreenContainer>
   );

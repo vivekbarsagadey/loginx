@@ -3,7 +3,7 @@ import { getUserProfile } from '@/actions/user.action';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { CommonText } from '@/constants/common-styles';
-import { BorderRadius, Spacing, Typography } from '@/constants/layout';
+import { BorderRadius, IconSize, Spacing, Typography } from '@/constants/layout';
 import { DEFAULT_NOTIFICATION_SETTINGS, getNotificationSettings } from '@/data';
 import { auth } from '@/firebase-config';
 import { useLanguage } from '@/hooks/use-language-provider';
@@ -152,7 +152,7 @@ export default function NotificationsScreen() {
         {notificationSettings.map((setting, index) => (
           <View key={setting.key} style={[styles.settingRow, index === notificationSettings.length - 1 && styles.settingRowLast]}>
             <View style={styles.iconContainer}>
-              <Feather name={setting.icon as React.ComponentProps<typeof Feather>['name']} size={20} color={tintColor} />
+              <Feather name={setting.icon} size={IconSize.md} color={tintColor} />
             </View>
             <View style={styles.settingInfo}>
               <ThemedText style={styles.settingTitle}>{setting.title}</ThemedText>

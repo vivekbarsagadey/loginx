@@ -553,6 +553,43 @@ export const CommonLists = StyleSheet.create({
     paddingVertical: Spacing.sm,
     fontWeight: Typography.bodyBold.fontWeight as 'bold',
   },
+
+  /** Info/Contact row container */
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: Spacing.md,
+    borderBottomWidth: 1,
+  },
+
+  /** Last info row (no bottom border) */
+  infoRowLast: {
+    borderBottomWidth: 0,
+  },
+
+  /** Info icon container */
+  infoIconContainer: {
+    marginRight: Spacing.md,
+    width: Spacing.lg,
+    alignItems: 'center',
+  },
+
+  /** Info content container */
+  infoContent: {
+    flex: 1,
+  },
+
+  /** Info label text */
+  infoLabel: {
+    fontSize: Typography.caption.fontSize,
+    marginBottom: Spacing.xs,
+  },
+
+  /** Info value text */
+  infoValue: {
+    fontSize: Typography.body.fontSize,
+    fontWeight: Typography.bodyBold.fontWeight as 'bold',
+  },
 });
 
 /**

@@ -2,7 +2,7 @@ import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
 import { CommonText } from '@/constants/common-styles';
-import { Spacing, TouchTarget } from '@/constants/layout';
+import { IconSize, Spacing, TouchTarget, Typography } from '@/constants/layout';
 import { generateReferralLink, getShareBenefits, getShareEmailSubject, getShareMessage, getShareOptionConfigs } from '@/data';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -194,8 +194,8 @@ export default function ShareAppScreen() {
         referralLink: {
           flex: 1,
           color: primaryColor,
-          fontSize: Spacing.sm + Spacing.xs + 2, // 14px
-          fontWeight: '600',
+          fontSize: Typography.bodySmall.fontSize,
+          fontWeight: Typography.bodyBold.fontWeight,
         },
         copyButton: {
           paddingHorizontal: Spacing.md,
@@ -206,8 +206,8 @@ export default function ShareAppScreen() {
         },
         copyButtonText: {
           color: '#FFFFFF',
-          fontSize: Spacing.sm + Spacing.xs + 2, // 14px
-          fontWeight: '600',
+          fontSize: Typography.bodySmall.fontSize,
+          fontWeight: Typography.bodyBold.fontWeight,
         },
         section: {
           marginBottom: Spacing.lg,
@@ -236,13 +236,13 @@ export default function ShareAppScreen() {
         },
         shareTitle: {
           color: textColor,
-          fontSize: Spacing.md, // 16px
-          fontWeight: '600',
+          fontSize: Typography.body.fontSize,
+          fontWeight: Typography.bodyBold.fontWeight,
           marginBottom: 2,
         },
         shareSubtitle: {
           color: textMutedColor,
-          fontSize: Spacing.sm + Spacing.xs + 2, // 14px
+          fontSize: Typography.bodySmall.fontSize,
         },
         benefitsCard: {
           marginBottom: Spacing.lg,
@@ -263,8 +263,8 @@ export default function ShareAppScreen() {
         benefitText: {
           flex: 1,
           color: textColor,
-          fontSize: Spacing.sm + Spacing.xs + 2, // 14px
-          lineHeight: Spacing.lg - Spacing.xs, // 20px
+          fontSize: Typography.bodySmall.fontSize,
+          lineHeight: Typography.bodySmall.lineHeight,
         },
       }),
     [textColor, textMutedColor, primaryColor, borderColor]
@@ -329,13 +329,13 @@ export default function ShareAppScreen() {
                     { backgroundColor: option.color + '15' }, // 8% opacity
                   ]}
                 >
-                  <Feather name={option.icon} size={24} color={option.color} />
+                  <Feather name={option.icon} size={IconSize.lg} color={option.color} />
                 </View>
-                <View style={styles.shareInfo}>
-                  <ThemedText style={styles.shareTitle}>{option.title}</ThemedText>
-                  <ThemedText style={styles.shareSubtitle}>{option.subtitle}</ThemedText>
+                <View style={styles.shareOptionContent}>
+                  <ThemedText style={styles.shareOptionTitle}>{option.title}</ThemedText>
+                  <ThemedText style={styles.shareOptionSubtitle}>{option.subtitle}</ThemedText>
                 </View>
-                <Feather name="chevron-right" size={24} color={textMutedColor} />
+                <Feather name="chevron-right" size={IconSize.lg} color={textMutedColor} />
               </TouchableOpacity>
             ))}
           </Card>
@@ -349,7 +349,7 @@ export default function ShareAppScreen() {
           <Card elevation={1} style={styles.benefitsCard}>
             {getShareBenefits().map((benefit, index, array) => (
               <View key={index} style={[styles.benefitItem, index === array.length - 1 && styles.benefitItemLast]}>
-                <Feather name="check-circle" size={20} color={successColor} style={styles.benefitIcon} />
+                <Feather name="check-circle" size={IconSize.md} color={successColor} style={styles.benefitIcon} />
                 <ThemedText style={styles.benefitText}>{benefit}</ThemedText>
               </View>
             ))}

@@ -83,6 +83,20 @@ export const TouchTarget = {
 } as const;
 
 /**
+ * Icon sizes for consistent icon usage
+ */
+export const IconSize = {
+  xs: 12,
+  sm: 16,
+  md: 20,
+  lg: 24,
+  xl: 28,
+  xxl: 32,
+  xxxl: 48,
+  huge: 64,
+} as const;
+
+/**
  * Typography system with platform-specific fonts
  *
  * Font Families:

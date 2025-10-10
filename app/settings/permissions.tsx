@@ -1,6 +1,6 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
-import { BorderRadius, Spacing } from '@/constants/layout';
+import { BorderRadius, IconSize, Spacing, Typography } from '@/constants/layout';
 import { getPermissions } from '@/data';
 import { useAlert } from '@/hooks/use-alert';
 import { usePermissions } from '@/hooks/use-permissions';
@@ -73,7 +73,7 @@ function PermissionCard({ icon, title, description, granted, canAskAgain, onRequ
     >
       <View style={styles.cardHeader}>
         <View style={[styles.iconContainer, { backgroundColor: `${statusColor}15` }]}>
-          <Ionicons name={icon} size={28} color={statusColor} />
+          <Ionicons name={icon} size={IconSize.xl} color={statusColor} />
         </View>
 
         <View style={styles.cardContent}>
@@ -89,7 +89,7 @@ function PermissionCard({ icon, title, description, granted, canAskAgain, onRequ
           {loading ? (
             <ActivityIndicator size="small" color={primaryColor} />
           ) : (
-            <Ionicons name={granted ? 'checkmark-circle' : canAskAgain ? 'help-circle' : 'close-circle'} size={24} color={statusColor} />
+            <Ionicons name={granted ? 'checkmark-circle' : canAskAgain ? 'help-circle' : 'close-circle'} size={IconSize.lg} color={statusColor} />
           )}
         </View>
       </View>
@@ -159,7 +159,7 @@ export default function PermissionsScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View style={[styles.headerIcon, { backgroundColor: `${primaryColor}15` }]}>
-          <Ionicons name="shield-checkmark" size={48} color={primaryColor} />
+          <Ionicons name="shield-checkmark" size={IconSize.xxxl} color={primaryColor} />
         </View>
 
         <ThemedText type="h3" style={styles.headerTitle}>
@@ -280,9 +280,9 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   statusText: {
-    fontSize: Spacing.md - Spacing.xs - 1, // 11px
-    fontWeight: '600',
-    textTransform: 'uppercase',
+    fontSize: Typography.label.fontSize,
+    fontWeight: Typography.bodyBold.fontWeight,
+    textTransform: 'uppercase' as const,
   },
   refreshButton: {
     flexDirection: 'row',
@@ -302,6 +302,6 @@ const styles = StyleSheet.create({
   },
   infoText: {
     flex: 1,
-    lineHeight: Spacing.lg - Spacing.xs - 2, // 18px
+    lineHeight: Typography.bodySmall.lineHeight,
   },
 });
