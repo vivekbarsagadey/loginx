@@ -165,8 +165,8 @@ export default function DataRightsScreen() {
         <Ionicons name="time" size={20} color={primaryColor} />
         <ThemedText style={styles.infoText}>{i18n.t('screens.legal.dataRights.responseTime')}</ThemedText>
       </ThemedView>
+      {alert.AlertComponent}
     </ScreenContainer>
-    {alert.AlertComponent}
   );
 }
 

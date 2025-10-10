@@ -5,13 +5,14 @@ import { ThemedView } from '@/components/themed-view';
 import { CommonButtons, CommonContainers, CommonText } from '@/constants/common-styles';
 import { Spacing, Typography } from '@/constants/layout';
 import { useAlert } from '@/hooks/use-alert';
+import { useAutoFocus } from '@/hooks/use-auto-focus';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, TextInput, View } from 'react-native';
 
 /**
@@ -34,17 +35,8 @@ export default function Verify2FAScreen() {
   const codeRef = useRef<TextInput>(null);
   const backupCodeRef = useRef<TextInput>(null);
 
-  // Auto-focus code input on mount
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (showBackupCodes) {
-        backupCodeRef.current?.focus();
-      } else {
-        codeRef.current?.focus();
-      }
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [showBackupCodes]);
+  // Auto-focus appropriate input based on mode
+  useAutoFocus(showBackupCodes ? backupCodeRef : codeRef, 100, true);
 
   const handleVerifyCode = async () => {
     if (!code.trim()) {

@@ -10,6 +10,7 @@ import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
+import { validateEmailField } from '@/utils/form-validation';
 import { sanitizeEmail } from '@/utils/sanitize';
 import { showSuccess } from '@/utils/success';
 import * as Haptics from 'expo-haptics';
@@ -33,18 +34,14 @@ export default function UpdateEmailScreen() {
 
   const validateEmail = useCallback(
     (email: string): boolean => {
+      const result = validateEmailField(email);
+
+      if (!result.isValid) {
+        setEmailError(result.error || '');
+        return false;
+      }
+
       const sanitized = sanitizeEmail(email);
-      if (!sanitized) {
-        setEmailError(i18n.t('errors.validation.invalidEmail'));
-        return false;
-      }
-
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(sanitized)) {
-        setEmailError(i18n.t('errors.validation.invalidEmail'));
-        return false;
-      }
-
       if (sanitized === user?.email) {
         setEmailError(i18n.t('screens.updateEmail.errors.sameEmail'));
         return false;

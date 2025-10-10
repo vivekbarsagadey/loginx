@@ -116,13 +116,11 @@ export function safeBack(options?: {
             }
           } catch (error) {
             console.error('[Navigation] Failed to go back:', error);
-                showError(new Error('Cannot go back. Try closing the app.'));
-              }
-            },
-          },
-        ],
-        { cancelable: true }
-      );
+            showError(new Error('Cannot go back. Try closing the app.'));
+          }
+        },
+        onCancel: onCancel
+      });
     } else {
       if (router.canGoBack()) {
         router.back();

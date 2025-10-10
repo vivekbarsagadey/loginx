@@ -6,8 +6,9 @@ import { ReferralCodeInput } from '@/components/ui/referral-code-input';
 import { TermsCheckbox } from '@/components/ui/terms-checkbox';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
+import { useAutoFocus } from '@/hooks/use-auto-focus';
 import i18n from '@/i18n';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Controller, FieldErrors, useFormContext } from 'react-hook-form';
 import { StyleSheet, TextInput } from 'react-native';
 
@@ -25,12 +26,7 @@ export default function RegisterStep1({ errors }: { errors: FieldErrors<FormData
   const lastNameRef = useRef<TextInput>(null);
 
   // Auto-focus first input on mount
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      firstNameRef.current?.focus();
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
+  useAutoFocus(firstNameRef);
 
   return (
     <ThemedView style={styles.container}>

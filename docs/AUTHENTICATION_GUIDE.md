@@ -370,6 +370,15 @@ FACEBOOK_CLIENT_TOKEN="your-facebook-client-token"
 
 - `hooks/use-social-auth.tsx` - Facebook Sign-In infrastructure
 
+**Implementation Guide:**
+
+See [FACEBOOK_AUTH_IMPLEMENTATION.md](./FACEBOOK_AUTH_IMPLEMENTATION.md) for:
+
+- Complete setup instructions
+- Full implementation code
+- Testing and troubleshooting guide
+- Configuration examples
+
 ---
 
 ### 8. Biometric Authentication

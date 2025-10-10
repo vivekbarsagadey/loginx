@@ -6,6 +6,7 @@ import { CommonButtons, CommonContainers, CommonText } from '@/constants/common-
 import { Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
+import { useAutoFocus } from '@/hooks/use-auto-focus';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
 import * as Haptics from 'expo-haptics';
@@ -31,12 +32,7 @@ export default function VerifyPhoneScreen() {
   const codeRef = useRef<TextInput>(null);
 
   // Auto-focus code input
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      codeRef.current?.focus();
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
+  useAutoFocus(codeRef);
 
   // Countdown timer for resend button
   useEffect(() => {

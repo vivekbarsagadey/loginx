@@ -8,11 +8,12 @@ import { SkeletonAvatar, SkeletonForm, SkeletonLoader } from '@/components/ui/sk
 import { AccessibilityHints, AccessibilityRoles } from '@/constants/accessibility';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
-import { ValidationConstants, ValidationMessages } from '@/constants/validation';
+import { ValidationConstants } from '@/constants/validation';
 import { auth } from '@/firebase-config';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
+import { validateAgeField, validateDisplayNameField, validateZipCodeField } from '@/utils/form-validation';
 import { sanitizeUserInput } from '@/utils/sanitize';
 import { showSuccess } from '@/utils/success';
 import * as Haptics from 'expo-haptics';
@@ -103,69 +104,23 @@ export default function EditProfileScreen() {
     setHasChanges(hasAnyChanges);
   }, [user, displayName, photoURL, age, address, city, state, zipCode, initialLoading]);
 
-  // Validation functions
+  // Validation functions using centralized utilities
   const validateDisplayName = useCallback((value: string): boolean => {
-    const sanitized = sanitizeUserInput(value.trim());
-
-    if (!sanitized) {
-      setDisplayNameError(i18n.t('errors.validation.emptyDisplayName'));
-      return false;
-    }
-
-    if (sanitized.length < ValidationConstants.NAME_MIN_LENGTH) {
-      setDisplayNameError(ValidationMessages.NAME_TOO_SHORT);
-      return false;
-    }
-
-    if (sanitized.length > ValidationConstants.NAME_MAX_LENGTH) {
-      setDisplayNameError(ValidationMessages.NAME_TOO_LONG);
-      return false;
-    }
-
-    setDisplayNameError('');
-    return true;
+    const result = validateDisplayNameField(value);
+    setDisplayNameError(result.error || '');
+    return result.isValid;
   }, []);
 
   const validateAge = useCallback((value: string): boolean => {
-    if (!value) {
-      setAgeError('');
-      return true; // Age is optional
-    }
-
-    const ageNum = parseInt(value, 10);
-    if (isNaN(ageNum)) {
-      setAgeError('Please enter a valid age');
-      return false;
-    }
-
-    if (ageNum < ValidationConstants.MIN_AGE) {
-      setAgeError(ValidationMessages.AGE_TOO_LOW);
-      return false;
-    }
-
-    if (ageNum > ValidationConstants.MAX_AGE) {
-      setAgeError(ValidationMessages.AGE_TOO_HIGH);
-      return false;
-    }
-
-    setAgeError('');
-    return true;
+    const result = validateAgeField(value);
+    setAgeError(result.error || '');
+    return result.isValid;
   }, []);
 
   const validateZipCode = useCallback((value: string): boolean => {
-    if (!value) {
-      setZipCodeError('');
-      return true; // Zip code is optional
-    }
-
-    const sanitized = sanitizeUserInput(value.trim());
-    if (sanitized.length > 0 && sanitized.length < 5) {
-      setZipCodeError(i18n.t('errors.validation.zipCodeTooShort'));
-      return false;
-    }
-
-    setZipCodeError('');
-    return true;
+    const result = validateZipCodeField(value);
+    setZipCodeError(result.error || '');
+    return result.isValid;
   }, []);
 
   const handleUpdate = useCallback(async () => {

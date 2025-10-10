@@ -40,7 +40,7 @@ export default function ThemeScreen() {
       await setThemePreference(theme);
       alert.show(i18n.t('success.profileUpdate.title'), i18n.t('screens.settings.theme.applied'));
     } catch (_error) {
-      alert.show('Error', 'Failed to save theme preference', undefined, 'error');
+      alert.show('Error', 'Failed to save theme preference');
     }
   };
 

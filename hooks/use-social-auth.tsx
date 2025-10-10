@@ -1,11 +1,10 @@
-import { createUserProfile } from '@/actions/user.action';
 import { auth } from '@/firebase-config';
 import { Config } from '@/utils/config';
 import { showError } from '@/utils/error';
-import { showSuccess } from '@/utils/success';
+import { provideErrorFeedback } from '@/utils/feedback';
+import { getAppleFullName, handleSocialAuthError, handleSocialAuthSuccess, isAuthCancellation } from '@/utils/social-auth-helpers';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import Constants from 'expo-constants';
-import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { GoogleAuthProvider, OAuthProvider, signInWithCredential } from 'firebase/auth';
 import { useState } from 'react';
@@ -110,36 +109,10 @@ export function useSocialAuth() {
       // Sign in to Firebase with Google credential
       const { user } = await signInWithCredential(auth, googleCredential);
 
-      // Check if this is a new user
-      const isNewUser = user.metadata.creationTime === user.metadata.lastSignInTime;
-
-      if (isNewUser) {
-        // Create user profile for new users
-        await createUserProfile(user.uid, {
-          displayName: user.displayName || 'User',
-          email: user.email || '',
-          age: 0,
-          photoURL: user.photoURL || '',
-          pushEnabled: false,
-          emailUpdates: false,
-          marketingTips: false,
-          address: '',
-          city: '',
-          state: '',
-          zipCode: '',
-        });
-      }
-
-      // Success haptic
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      showSuccess('Success', isNewUser ? 'Account created successfully!' : 'Signed in successfully!');
-
-      // Navigate to home
-      router.replace('/(tabs)');
+      // Handle successful authentication (creates profile, feedback, navigation)
+      await handleSocialAuthSuccess(user, undefined, undefined, router);
     } catch (error) {
-      console.error('[SocialAuth] Google sign-in error:', error);
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      showError(error);
+      await handleSocialAuthError(error, 'Google sign-in error');
     } finally {
       setLoading(false);
     }
@@ -177,45 +150,19 @@ export function useSocialAuth() {
       // Sign in to Firebase with Apple credential
       const { user } = await signInWithCredential(auth, oauthCredential);
 
-      // Check if this is a new user
-      const isNewUser = user.metadata.creationTime === user.metadata.lastSignInTime;
+      // Extract full name from Apple credential
+      const fullName = getAppleFullName(credential.fullName?.givenName, credential.fullName?.familyName, user.displayName || 'User');
 
-      if (isNewUser) {
-        // Create user profile for new users
-        const fullName = credential.fullName ? `${credential.fullName.givenName || ''} ${credential.fullName.familyName || ''}`.trim() : user.displayName || 'User';
-
-        await createUserProfile(user.uid, {
-          displayName: fullName,
-          email: credential.email || user.email || '',
-          age: 0,
-          photoURL: user.photoURL || '',
-          pushEnabled: false,
-          emailUpdates: false,
-          marketingTips: false,
-          address: '',
-          city: '',
-          state: '',
-          zipCode: '',
-        });
-      }
-
-      // Success haptic
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      showSuccess('Success', isNewUser ? 'Account created successfully!' : 'Signed in successfully!');
-
-      // Navigate to home
-      router.replace('/(tabs)');
+      // Handle successful authentication (creates profile, feedback, navigation)
+      await handleSocialAuthSuccess(user, fullName, credential.email || user.email || '', router);
     } catch (error: unknown) {
       // User cancelled - don't show error
-      if (error && typeof error === 'object' && 'code' in error && error.code === 'ERR_REQUEST_CANCELED') {
-        // Silently handle cancellation
+      if (isAuthCancellation(error)) {
         setLoading(false);
         return;
       }
 
-      console.error('[SocialAuth] Apple sign-in error:', error);
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      showError(error);
+      await handleSocialAuthError(error, 'Apple sign-in error');
     } finally {
       setLoading(false);
     }
@@ -223,6 +170,7 @@ export function useSocialAuth() {
 
   /**
    * Handle Facebook Sign-In
+   * Full implementation available in docs/FACEBOOK_AUTH_IMPLEMENTATION.md
    */
   const signInWithFacebook = async () => {
     if (loading) {
@@ -247,61 +195,19 @@ export function useSocialAuth() {
     setLoading(true);
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const { useAuthRequest } = require('expo-auth-session/providers/facebook');
-
-      // Note: This is a simplified implementation
-      // In production, you'd use the full expo-auth-session flow
-      // For now, we'll show a user-friendly error
+      // Note: Facebook authentication integration is pending
+      // See docs/FACEBOOK_AUTH_IMPLEMENTATION.md for complete implementation guide
       throw new Error(
         'Facebook Sign-In integration is pending.\n\n' +
           `To complete setup:\n` +
           `1. Configure Facebook App at developers.facebook.com\n` +
           `2. Add Facebook App ID to environment variables\n` +
-          `3. Implement expo-auth-session flow\n\n` +
+          `3. See docs/FACEBOOK_AUTH_IMPLEMENTATION.md for full implementation\n\n` +
           `Facebook App ID: ${Config.services.facebookAppId || 'Not configured'}\n\n` +
           'Please use Google, Apple, or email authentication for now.'
       );
-
-      // Production implementation would look like this:
-      /*
-      const [request, response, promptAsync] = useAuthRequest({
-        clientId: Config.social.facebookAppId || '',
-        responseType: ResponseType.Token,
-        scopes: ['public_profile', 'email'],
-      });
-
-      if (response?.type === 'success') {
-        const { access_token } = response.params;
-        const credential = FacebookAuthProvider.credential(access_token);
-        const { user } = await signInWithCredential(auth, credential);
-        
-        const isNewUser = user.metadata.creationTime === user.metadata.lastSignInTime;
-        if (isNewUser) {
-          await createUserProfile(user.uid, {
-            displayName: user.displayName || 'User',
-            email: user.email || '',
-            age: 0,
-            photoURL: user.photoURL || '',
-            pushEnabled: false,
-            emailUpdates: false,
-            marketingTips: false,
-            address: '',
-            city: '',
-            state: '',
-            zipCode: '',
-          });
-        }
-        
-        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        showSuccess('Success', isNewUser ? 'Account created successfully!' : 'Signed in successfully!');
-        router.replace('/(tabs)');
-      }
-      */
     } catch (error) {
-      console.error('[SocialAuth] Facebook sign-in error:', error);
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      showError(error);
+      await provideErrorFeedback(error);
     } finally {
       setLoading(false);
     }

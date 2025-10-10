@@ -573,12 +573,11 @@ export const CommonStyles = {
 };
 
 /**
- * Helper function to combine common styles with custom styles
+ * Note: For combining styles, use the `combine()` function from style-utils
+ * @see constants/style-utils.ts
  * @example
+ * import { combine, padding, rounded } from '@/constants/style-utils';
  * const styles = StyleSheet.create({
- *   ...combineStyles(CommonContainers.centeredContainer, { backgroundColor: 'red' }),
+ *   container: combine(padding.md, rounded.lg),
  * });
  */
-export function combineStyles(...styles: Record<string, unknown>[]) {
-  return Object.assign({}, ...styles);
-}

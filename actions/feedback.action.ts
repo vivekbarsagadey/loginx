@@ -8,6 +8,7 @@ import { firestore as db } from '@/firebase-config';
 import type { AppRating, DeviceInfo, FeedbackSubmission, IssueReport } from '@/types/feedback';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
+import * as Localization from 'expo-localization';
 import { addDoc, collection, doc, getDocs, limit, orderBy, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import { Dimensions, Platform } from 'react-native';
 
@@ -24,7 +25,7 @@ export function getDeviceInfo(): DeviceInfo {
     appVersion: Constants.expoConfig?.version || '1.0.0',
     buildNumber: Constants.expoConfig?.extra?.buildNumber,
     screenSize: { width, height },
-    locale: Platform.OS === 'ios' ? 'en-US' : 'en-US', // TODO: Get from device
+    locale: Localization.getLocales()[0]?.languageCode || 'en',
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
   };
 }
@@ -73,7 +74,7 @@ export async function submitFeedback(
 
     return { success: true, feedbackId: feedbackRef.id };
   } catch (error) {
-    console.error('Error submitting feedback:', error);
+    // Error already logged by Firebase, return user-friendly message
     return { success: false, error: 'Failed to submit feedback. Please try again.' };
   }
 }
@@ -106,7 +107,6 @@ export async function submitRating(userId: string, rating: number, review?: stri
 
     return { success: true, ratingId: ratingRef.id };
   } catch (error) {
-    console.error('Error submitting rating:', error);
     return { success: false, error: 'Failed to submit rating. Please try again.' };
   }
 }
@@ -158,7 +158,6 @@ export async function submitIssueReport(
 
     return { success: true, issueId: issueRef.id };
   } catch (error) {
-    console.error('Error submitting issue report:', error);
     return { success: false, error: 'Failed to submit issue report. Please try again.' };
   }
 }
@@ -181,7 +180,6 @@ export async function getUserFeedback(userId: string, limitCount = 10): Promise<
 
     return { success: true, feedback };
   } catch (error) {
-    console.error('Error fetching user feedback:', error);
     return { success: false, error: 'Failed to fetch feedback history' };
   }
 }
@@ -204,7 +202,6 @@ export async function getUserRatings(userId: string): Promise<{ success: boolean
 
     return { success: true, ratings };
   } catch (error) {
-    console.error('Error fetching user ratings:', error);
     return { success: false, error: 'Failed to fetch rating history' };
   }
 }
@@ -224,7 +221,6 @@ export async function updateFeedbackStatus(feedbackId: string, status: FeedbackS
 
     return { success: true };
   } catch (error) {
-    console.error('Error updating feedback status:', error);
     return { success: false, error: 'Failed to update feedback status' };
   }
 }
@@ -242,7 +238,6 @@ export async function checkRecentFeedback(userId: string, withinMinutes = 5): Pr
 
     return !querySnapshot.empty;
   } catch (error) {
-    console.error('Error checking recent feedback:', error);
     return false;
   }
 }
@@ -269,7 +264,6 @@ export async function getAverageRating(): Promise<{ averageRating: number; total
 
     return { averageRating, totalRatings: count };
   } catch (error) {
-    console.error('Error calculating average rating:', error);
     return { averageRating: 0, totalRatings: 0 };
   }
 }

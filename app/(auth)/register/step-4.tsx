@@ -3,7 +3,8 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
-import { useEffect, useRef } from 'react';
+import { useAutoFocus } from '@/hooks/use-auto-focus';
+import { useRef } from 'react';
 import { Controller, FieldErrors, useFormContext } from 'react-hook-form';
 import { StyleSheet, TextInput } from 'react-native';
 
@@ -16,12 +17,7 @@ export default function RegisterStep4({ errors }: { errors: FieldErrors<FormData
   const phoneRef = useRef<TextInput>(null);
 
   // Auto-focus phone input on mount
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      phoneRef.current?.focus();
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
+  useAutoFocus(phoneRef);
 
   return (
     <ThemedView style={styles.container}>

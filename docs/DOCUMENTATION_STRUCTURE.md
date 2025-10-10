@@ -19,12 +19,13 @@ These files are actively maintained and essential for developers:
 
 ### 3. Features & Flows
 
-- **LOGIN_FLOW_DOCUMENTATION.md** - Complete authentication documentation
-  - All login methods (email, social, biometric, 2FA)
+- **AUTHENTICATION_GUIDE.md** - Complete authentication documentation
+  - All auth methods (email, social, biometric, 2FA)
   - User flows, security, error handling
-- **REGISTRATION_FLOW.md** - Registration process documentation
-  - 4-step multi-step form
-  - All advanced features (social auth, phone verification, etc.)
+- **FACEBOOK_AUTH_IMPLEMENTATION.md** - Facebook Sign-In implementation guide
+  - Step-by-step setup instructions
+  - Complete code implementation
+  - Testing and troubleshooting
 
 ### 4. Reference Guides
 
@@ -46,6 +47,21 @@ These files are actively maintained and essential for developers:
 - **LINTING_FORMATTING.md** - Development tools setup
   - ESLint, Prettier, EditorConfig
   - VS Code configuration
+
+### 7. Code Quality & Refactoring
+
+- **CODE_CLEANUP_SUMMARY.md** - Code cleanup and organization
+  - TODOs resolved
+  - Commented code removed
+  - Documentation created
+- **COMMON_CODE_CONSOLIDATION.md** - Common code patterns consolidated
+  - Detailed consolidation report
+  - New utility functions created
+  - Migration guide and examples
+- **COMMON_CODE_QUICK_SUMMARY.md** - Quick reference for code consolidation
+  - Key changes summary
+  - Usage examples
+  - Impact metrics
 
 ## 📦 Archived Documentation
 
