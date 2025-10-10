@@ -3,7 +3,6 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { CommonButtons, CommonContainers, CommonInputs, CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import i18n from '@/i18n';
@@ -172,13 +171,13 @@ export default function OTPLoginScreen() {
 
   if (step === 'email') {
     return (
-      <ScreenContainer>
-        <ThemedView style={CommonContainers.centerContent}>
-          <ThemedText type="h1" style={CommonText.title}>
+      <ScreenContainer scrollable>
+        <ThemedView style={styles.centerContent}>
+          <ThemedText type="h1" style={styles.title}>
             {i18n.t('otpLogin.title')}
           </ThemedText>
 
-          <ThemedText type="body" style={CommonText.subtitle}>
+          <ThemedText type="body" style={styles.subtitle}>
             {i18n.t('otpLogin.subtitle')}
           </ThemedText>
 
@@ -196,7 +195,6 @@ export default function OTPLoginScreen() {
                 autoComplete="email"
                 textContentType="emailAddress"
                 errorMessage={emailForm.formState.errors.email?.message}
-                style={CommonInputs.input}
               />
             )}
           />
@@ -205,25 +203,25 @@ export default function OTPLoginScreen() {
             title={loading ? i18n.t('otpLogin.sendingButton') : i18n.t('otpLogin.sendButton')}
             onPress={emailForm.handleSubmit(handleEmailSubmit)}
             disabled={loading}
-            style={CommonButtons.buttonLarge}
+            style={styles.submitButton}
           />
 
           {loading && <ActivityIndicator style={styles.loading} />}
 
-          <ThemedButton title={i18n.t('otpLogin.backToLogin')} variant="link" onPress={() => router.back()} style={CommonButtons.linkButtonSmall} />
+          <ThemedButton title={i18n.t('otpLogin.backToLogin')} variant="link" onPress={() => router.back()} />
         </ThemedView>
       </ScreenContainer>
     );
   }
 
   return (
-    <ScreenContainer>
-      <ThemedView style={CommonContainers.centerContent}>
-        <ThemedText type="h1" style={CommonText.title}>
+    <ScreenContainer scrollable>
+      <ThemedView style={styles.centerContent}>
+        <ThemedText type="h1" style={styles.title}>
           {i18n.t('otpLogin.verify.title')}
         </ThemedText>
 
-        <ThemedText type="body" style={CommonText.subtitle}>
+        <ThemedText type="body" style={styles.subtitle}>
           {i18n.t('otpLogin.verify.subtitle', { email })}
         </ThemedText>
 
@@ -233,7 +231,9 @@ export default function OTPLoginScreen() {
           render={({ field: { onChange, onBlur, value } }) => (
             <ThemedInput
               ref={(ref) => {
-                if (ref) {otpRefs.current[0] = ref as TextInput;}
+                if (ref) {
+                  otpRefs.current[0] = ref as TextInput;
+                }
               }}
               placeholder={i18n.t('otpLogin.codePlaceholder')}
               onBlur={onBlur}
@@ -244,17 +244,12 @@ export default function OTPLoginScreen() {
               autoComplete="one-time-code"
               textContentType="oneTimeCode"
               errorMessage={otpForm.formState.errors.code?.message}
-              style={[CommonInputs.input, styles.otpInput]}
+              style={styles.otpInput}
             />
           )}
         />
 
-        <ThemedButton
-          title={loading ? i18n.t('otpLogin.verifying') : i18n.t('otpLogin.verifyButton')}
-          onPress={otpForm.handleSubmit(handleOTPSubmit)}
-          disabled={loading}
-          style={CommonButtons.buttonLarge}
-        />
+        <ThemedButton title={loading ? i18n.t('otpLogin.verifying') : i18n.t('otpLogin.verifyButton')} onPress={otpForm.handleSubmit(handleOTPSubmit)} disabled={loading} style={styles.submitButton} />
 
         {loading && <ActivityIndicator style={styles.loading} />}
 
@@ -266,13 +261,29 @@ export default function OTPLoginScreen() {
           style={styles.resendButton}
         />
 
-        <ThemedButton title={i18n.t('otpLogin.changeEmail')} variant="link" onPress={() => setStep('email')} style={CommonButtons.linkButtonSmall} />
+        <ThemedButton title={i18n.t('otpLogin.changeEmail')} variant="link" onPress={() => setStep('email')} />
       </ThemedView>
     </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
+  centerContent: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: Spacing.md,
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: Spacing.sm,
+  },
+  subtitle: {
+    textAlign: 'center',
+    marginBottom: Spacing.xl,
+  },
+  submitButton: {
+    marginTop: Spacing.xl,
+  },
   loading: {
     marginTop: Spacing.md,
   },

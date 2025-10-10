@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
   photoNumberText: {
     fontSize: 12,
     fontWeight: '700',
-    color: 'white',
+    // color: Use colors['on-primary'] inline where this style is used
   },
   emptyContainer: {
     padding: 32,

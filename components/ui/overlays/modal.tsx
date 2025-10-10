@@ -1,5 +1,5 @@
 import { ThemedText } from '@/components/themed-text';
-import { BorderRadius, Spacing } from '@/constants/layout';
+import { BorderRadius, Overlay, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import React from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -81,7 +81,7 @@ export function ModalEnhanced({ visible, onClose, title, children, size = 'mediu
 const styles = StyleSheet.create({
   backdrop: {
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: `rgba(0, 0, 0, ${Overlay.medium})`,
     flex: 1,
     justifyContent: 'center',
     padding: Spacing.lg,

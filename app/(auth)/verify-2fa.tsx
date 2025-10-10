@@ -2,7 +2,6 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { CommonButtons, CommonContainers, CommonText } from '@/constants/common-styles';
 import { Spacing, Typography } from '@/constants/layout';
 import { useAlert } from '@/hooks/use-alert';
 import { useAutoFocus } from '@/hooks/use-auto-focus';
@@ -148,9 +147,9 @@ export default function Verify2FAScreen() {
 
   if (showBackupCodes) {
     return (
-      <ThemedView style={CommonContainers.screenContainer}>
+      <ThemedView style={styles.screenContainer}>
         <View style={styles.content}>
-          <ThemedText type="h1" style={CommonText.title}>
+          <ThemedText type="h1" style={styles.title}>
             Enter Backup Code
           </ThemedText>
           <ThemedText style={styles.subtitle}>Enter one of your backup codes to complete authentication.</ThemedText>
@@ -184,16 +183,10 @@ export default function Verify2FAScreen() {
             )}
           </View>
 
-          <ThemedButton
-            title={loading ? 'Verifying...' : 'Verify Backup Code'}
-            onPress={handleVerifyBackupCode}
-            loading={loading}
-            disabled={loading || backupCode.length !== 8}
-            style={CommonButtons.button}
-          />
+          <ThemedButton title={loading ? 'Verifying...' : 'Verify Backup Code'} onPress={handleVerifyBackupCode} loading={loading} disabled={loading || backupCode.length !== 8} />
           {loading && <ActivityIndicator style={styles.loading} />}
 
-          <ThemedButton title="Back to Authenticator Code" variant="link" onPress={handleBackToCode} style={CommonButtons.linkButtonSmall} />
+          <ThemedButton title="Back to Authenticator Code" variant="link" onPress={handleBackToCode} />
 
           <ThemedButton title="Cancel" variant="link" onPress={handleCancel} style={styles.cancelButton} />
         </View>
@@ -203,9 +196,9 @@ export default function Verify2FAScreen() {
   }
 
   return (
-    <ThemedView style={CommonContainers.screenContainer}>
+    <ThemedView style={styles.screenContainer}>
       <View style={styles.content}>
-        <ThemedText type="h1" style={CommonText.title}>
+        <ThemedText type="h1" style={styles.title}>
           Enter 2FA Code
         </ThemedText>
         <ThemedText style={styles.subtitle}>Open your authenticator app and enter the 6-digit code to complete your login.</ThemedText>
@@ -233,10 +226,10 @@ export default function Verify2FAScreen() {
           </ThemedText>
         </View>
 
-        <ThemedButton title={loading ? 'Verifying...' : 'Verify Code'} onPress={handleVerifyCode} loading={loading} disabled={loading || code.length !== 6} style={CommonButtons.button} />
+        <ThemedButton title={loading ? 'Verifying...' : 'Verify Code'} onPress={handleVerifyCode} loading={loading} disabled={loading || code.length !== 6} />
         {loading && <ActivityIndicator style={styles.loading} />}
 
-        <ThemedButton title="Use Backup Code Instead" variant="link" onPress={handleUseBackupCode} style={CommonButtons.linkButtonSmall} />
+        <ThemedButton title="Use Backup Code Instead" variant="link" onPress={handleUseBackupCode} />
 
         <ThemedButton title="Cancel" variant="link" onPress={handleCancel} style={styles.cancelButton} />
       </View>
@@ -246,10 +239,18 @@ export default function Verify2FAScreen() {
 }
 
 const styles = StyleSheet.create({
+  screenContainer: {
+    flex: 1,
+    padding: Spacing.md,
+  },
   content: {
     flex: 1,
     justifyContent: 'center',
     gap: Spacing.md,
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     textAlign: 'center',

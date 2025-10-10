@@ -1,5 +1,5 @@
 import { ThemedText } from '@/components/themed-text';
-import { BorderRadius, Spacing } from '@/constants/layout';
+import { BorderRadius, Overlay, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import React from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -79,7 +79,7 @@ export function BottomSheet({
 
 const styles = StyleSheet.create({
   backdrop: {
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: `rgba(0, 0, 0, ${Overlay.medium})`,
     bottom: 0,
     left: 0,
     position: 'absolute',

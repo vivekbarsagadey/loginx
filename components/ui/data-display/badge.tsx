@@ -57,6 +57,7 @@ export function Badge({ content, variant = 'default', size = 'medium', dot = fal
   const infoColor = useThemeColor({}, 'info');
   const surfaceColor = useThemeColor({}, 'surface');
   const textColor = useThemeColor({}, 'text');
+  const onPrimaryColor = useThemeColor({}, 'on-primary');
 
   if (invisible) {
     return <>{children}</>;
@@ -82,7 +83,7 @@ export function Badge({ content, variant = 'default', size = 'medium', dot = fal
 
   // Determine text color (white for colored backgrounds, text color for default)
   const getTextColor = (): string => {
-    return variant === 'default' ? textColor : '#FFFFFF';
+    return variant === 'default' ? textColor : onPrimaryColor;
   };
 
   // Format content with max value

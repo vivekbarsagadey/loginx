@@ -8,7 +8,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { SkeletonListItem } from '@/components/ui/skeleton-loader';
 import { CommonText } from '@/constants/common-styles';
-import { BorderRadius, Spacing, Typography } from '@/constants/layout';
+import { BorderRadius, BorderWidth, FontWeight, Spacing, Typography } from '@/constants/layout';
 import { useAlert } from '@/hooks/use-alert';
 import { useNotificationCount } from '@/hooks/use-notification-count';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -166,13 +166,13 @@ export default function NotificationsCenterScreen() {
           paddingHorizontal: Spacing.md,
           paddingVertical: Spacing.sm,
           borderRadius: BorderRadius.sm,
-          borderWidth: 1,
+          borderWidth: BorderWidth.thin,
           borderColor: borderColor,
         },
         actionButtonText: {
-          fontSize: 13,
+          fontSize: Typography.caption.fontSize + 1,
           color: primaryColor,
-          fontWeight: '600',
+          fontWeight: FontWeight.semibold,
         },
         emptyContainer: {
           flex: 1,
@@ -185,7 +185,7 @@ export default function NotificationsCenterScreen() {
         },
         emptyTitle: {
           fontSize: Typography.h3.fontSize,
-          fontWeight: '600' as const,
+          fontWeight: FontWeight.semibold,
           marginBottom: Spacing.sm,
           textAlign: 'center' as const,
         },
@@ -197,7 +197,7 @@ export default function NotificationsCenterScreen() {
         notificationCard: {
           backgroundColor: surfaceColor,
           borderRadius: BorderRadius.md,
-          borderWidth: 1,
+          borderWidth: BorderWidth.thin,
           borderColor: borderColor,
           marginBottom: Spacing.md,
           overflow: 'hidden',
@@ -226,17 +226,17 @@ export default function NotificationsCenterScreen() {
         notificationTitle: {
           flex: 1,
           fontSize: Typography.body.fontSize,
-          fontWeight: '600' as const,
+          fontWeight: FontWeight.semibold,
           marginRight: Spacing.sm,
           color: textColor,
         },
         timestamp: {
-          fontSize: 12,
+          fontSize: Typography.caption.fontSize,
           color: textMutedColor,
         },
         notificationMessage: {
-          fontSize: 14,
-          lineHeight: 20,
+          fontSize: Typography.bodySmall.fontSize,
+          lineHeight: Typography.bodySmall.lineHeight,
           color: textMutedColor,
           marginBottom: Spacing.sm,
         },
@@ -246,13 +246,13 @@ export default function NotificationsCenterScreen() {
           right: Spacing.md,
           width: 8,
           height: 8,
-          borderRadius: 4,
+          borderRadius: BorderRadius.xs,
           backgroundColor: primaryColor,
         },
         notificationActions: {
           flexDirection: 'row',
           justifyContent: 'flex-end',
-          borderTopWidth: 1,
+          borderTopWidth: BorderWidth.thin,
           borderTopColor: borderColor,
           paddingHorizontal: Spacing.md,
           paddingVertical: Spacing.sm,
@@ -263,8 +263,8 @@ export default function NotificationsCenterScreen() {
           marginLeft: Spacing.sm,
         },
         actionText: {
-          fontSize: 13,
-          fontWeight: '600',
+          fontSize: Typography.caption.fontSize + 1,
+          fontWeight: FontWeight.semibold,
         },
         markReadText: {
           color: primaryColor,

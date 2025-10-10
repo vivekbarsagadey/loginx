@@ -74,6 +74,16 @@ export const BorderRadius = {
 } as const;
 
 /**
+ * Border width values for consistency
+ */
+export const BorderWidth = {
+  none: 0,
+  thin: 1,
+  medium: 1.5,
+  thick: 2,
+} as const;
+
+/**
  * Touch target sizes (minimum 44x44 points per Apple HIG)
  */
 export const TouchTarget = {
@@ -281,7 +291,7 @@ export const Typography = {
  * const { fontScale } = useWindowDimensions();
  * const fontSize = getScaledFontSize(16, fontScale);
  */
-export const getScaledFontSize = (baseSize: number, fontScale: number = 1, maxScale: number = 1.3): number => {
+export const getScaledFontSize = (baseSize: number, fontScale = 1, maxScale = 1.3): number => {
   const scale = Math.min(fontScale, maxScale);
   return baseSize * scale;
 };
@@ -297,7 +307,7 @@ export const getScaledFontSize = (baseSize: number, fontScale: number = 1, maxSc
  * @example
  * const lineHeight = getLineHeight(16); // Returns 24 (16 * 1.5)
  */
-export const getLineHeight = (fontSize: number, ratio: number = 1.5): number => {
+export const getLineHeight = (fontSize: number, ratio = 1.5): number => {
   return Math.round(fontSize * ratio);
 };
 
@@ -415,4 +425,29 @@ export const Button = {
   paddingHorizontal: Spacing.lg,
   minWidth: 120,
   fontSize: Typography.bodyBold.fontSize,
+} as const;
+
+/**
+ * Overlay opacity values for modals, dialogs, and backdrops
+ * These are alpha values (0-1) to be used with overlay colors
+ *
+ * Use with theme colors: `backgroundColor: 'rgba(0, 0, 0, ${Overlay.dark})'`
+ * Or with hex opacity suffix: `backgroundColor: '#000000' + Overlay.darkHex`
+ */
+export const Overlay = {
+  /** Light overlay - 30% opacity - for tooltips, hover states */
+  light: 0.3,
+  lightHex: '4D', // 30% in hex
+
+  /** Medium overlay - 50% opacity - for modals, dialogs */
+  medium: 0.5,
+  mediumHex: '80', // 50% in hex
+
+  /** Dark overlay - 70% opacity - for loading overlays */
+  dark: 0.7,
+  darkHex: 'B3', // 70% in hex
+
+  /** Heavy overlay - 85% opacity - for critical blocking overlays */
+  heavy: 0.85,
+  heavyHex: 'D9', // 85% in hex
 } as const;

@@ -3,8 +3,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { SocialSignInButtons } from '@/components/ui/social-sign-in-buttons';
-import { CommonText } from '@/constants/common-styles';
-import { BorderRadius, Spacing } from '@/constants/layout';
+import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
 import { useSocialAuth } from '@/hooks/use-social-auth';
@@ -309,7 +308,7 @@ export default function RegisterScreen() {
           />
         ))}
       </View>
-      <ThemedText type="body" style={[{ color: textColor }, CommonText.sectionTitle]}>
+      <ThemedText type="body" style={[{ color: textColor }, styles.stepTitle]}>
         {STEPS[currentStep].title}
       </ThemedText>
     </ThemedView>
@@ -403,6 +402,10 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 4,
     borderRadius: BorderRadius.xs,
+  },
+  stepTitle: {
+    marginBottom: Spacing.md,
+    fontWeight: Typography.bodyBold.fontWeight as 'bold',
   },
   scrollView: {
     flex: 1,

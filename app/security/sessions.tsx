@@ -3,21 +3,14 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
-import { BorderRadius, Spacing } from '@/constants/layout';
+import { BorderRadius, FontWeight, Spacing, Typography } from '@/constants/layout';
+import { getMockSessions } from '@/data/sessions';
 import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
+import type { Session } from '@/types/session';
 import { useState } from 'react';
 import { StyleSheet } from 'react-native';
-
-interface Session {
-  id: string;
-  device: string;
-  location: string;
-  lastActive: string;
-  ipAddress: string;
-  isCurrent: boolean;
-}
 
 export default function SessionsScreen() {
   const alert = useAlert();
@@ -28,32 +21,7 @@ export default function SessionsScreen() {
   const successColor = useThemeColor({}, 'success');
   const onSuccessColor = useThemeColor({}, 'on-primary'); // White text on success color
 
-  const [sessions, setSessions] = useState<Session[]>([
-    {
-      id: '1',
-      device: 'iPhone 15 Pro',
-      location: 'San Francisco, CA',
-      lastActive: 'Active now',
-      ipAddress: '192.168.1.1',
-      isCurrent: true,
-    },
-    {
-      id: '2',
-      device: 'MacBook Pro',
-      location: 'New York, NY',
-      lastActive: '1 hour ago',
-      ipAddress: '192.168.1.101',
-      isCurrent: false,
-    },
-    {
-      id: '3',
-      device: 'Chrome on Windows',
-      location: 'Los Angeles, CA',
-      lastActive: '2 days ago',
-      ipAddress: '203.45.67.89',
-      isCurrent: false,
-    },
-  ]);
+  const [sessions, setSessions] = useState<Session[]>(getMockSessions());
 
   const currentSessions = sessions.filter((s) => s.isCurrent);
   const otherSessions = sessions.filter((s) => !s.isCurrent);
@@ -150,7 +118,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   deviceName: {
-    fontWeight: 'bold',
+    fontWeight: FontWeight.bold,
     flex: 1,
   },
   currentBadge: {
@@ -160,13 +128,13 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
   },
   currentBadgeText: {
-    fontSize: 12,
-    fontWeight: 'bold',
+    fontSize: Typography.caption.fontSize,
+    fontWeight: FontWeight.bold,
   },
   sessionInfo: {
     marginBottom: Spacing.xs,
     opacity: 0.8,
-    fontSize: 14,
+    fontSize: Typography.bodySmall.fontSize,
   },
   endSessionButton: {
     alignSelf: 'flex-start',

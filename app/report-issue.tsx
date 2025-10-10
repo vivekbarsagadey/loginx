@@ -5,33 +5,21 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
-import { Spacing } from '@/constants/layout';
+import { BorderRadius, BorderWidth, FontWeight, Spacing, Typography } from '@/constants/layout';
+import { getIssueTypes } from '@/data/issue-types';
 import { useAlert } from '@/hooks/use-alert';
 import { useAuth } from '@/hooks/use-auth-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import type { IssueType } from '@/types/feedback';
+import type { IssueOption } from '@/types/issue';
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 
-interface IssueOption {
-  id: IssueType;
-  icon: React.ComponentProps<typeof Feather>['name'];
-  label: string;
-  description: string;
-}
-
-const ISSUE_TYPES: IssueOption[] = [
-  { id: 'crash', icon: 'x-circle', label: i18n.t('screens.reportIssue.issueTypes.crash.label'), description: i18n.t('screens.reportIssue.issueTypes.crash.description') },
-  { id: 'performance', icon: 'zap-off', label: i18n.t('screens.reportIssue.issueTypes.performance.label'), description: i18n.t('screens.reportIssue.issueTypes.performance.description') },
-  { id: 'ui-bug', icon: 'layout', label: i18n.t('screens.reportIssue.issueTypes.uiBug.label'), description: i18n.t('screens.reportIssue.issueTypes.uiBug.description') },
-  { id: 'functionality', icon: 'tool', label: i18n.t('screens.reportIssue.issueTypes.functionality.label'), description: i18n.t('screens.reportIssue.issueTypes.functionality.description') },
-  { id: 'security', icon: 'shield-off', label: i18n.t('screens.reportIssue.issueTypes.security.label'), description: i18n.t('screens.reportIssue.issueTypes.security.description') },
-  { id: 'other', icon: 'help-circle', label: i18n.t('screens.reportIssue.issueTypes.other.label'), description: i18n.t('screens.reportIssue.issueTypes.other.description') },
-];
+const ISSUE_TYPES = getIssueTypes();
 
 export default function ReportIssueScreen() {
   const router = useRouter();
@@ -231,7 +219,7 @@ export default function ReportIssueScreen() {
       </ThemedView>
 
       {/* Info Box */}
-      <ThemedView style={styles.infoBox}>
+      <ThemedView style={[styles.infoBox, { backgroundColor: primaryColor + '1A' }]}>
         <Feather name="info" size={20} color={primaryColor} />
         <ThemedText style={styles.infoText}>{i18n.t('screens.reportIssue.infoText')}</ThemedText>
       </ThemedView>
@@ -249,13 +237,7 @@ export default function ReportIssueScreen() {
   );
 }
 
-interface IssueTypeButtonProps {
-  issue: IssueOption;
-  isSelected: boolean;
-  onPress: () => void;
-}
-
-function IssueTypeButton({ issue, isSelected, onPress }: IssueTypeButtonProps) {
+function IssueTypeButton({ issue, isSelected, onPress }: { issue: IssueOption; isSelected: boolean; onPress: () => void }) {
   const borderColor = useThemeColor({}, 'border');
   const primaryColor = useThemeColor({}, 'primary');
   const surfaceColor = useThemeColor({}, 'surface');
@@ -292,20 +274,20 @@ const styles = StyleSheet.create({
   issueButton: {
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.md,
-    borderRadius: 12,
-    borderWidth: 2,
+    borderRadius: BorderRadius.md,
+    borderWidth: BorderWidth.thick,
     gap: Spacing.xs,
   },
   issueLabel: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: Typography.body.fontSize,
+    fontWeight: FontWeight.semibold,
   },
   issueDescription: {
-    fontSize: 13,
+    fontSize: Typography.caption.fontSize + 1,
     opacity: 0.8,
   },
   charCount: {
-    fontSize: 12,
+    fontSize: Typography.caption.fontSize,
     textAlign: 'right',
     marginTop: Spacing.xs,
     opacity: 0.6,
@@ -319,14 +301,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: Spacing.sm,
     padding: Spacing.md,
-    borderRadius: 8,
-    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+    borderRadius: BorderRadius.sm,
     marginBottom: Spacing.lg,
   },
   infoText: {
     flex: 1,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: Typography.bodySmall.fontSize,
+    lineHeight: Typography.bodySmall.lineHeight,
   },
   submitButton: {
     marginBottom: Spacing.xl,

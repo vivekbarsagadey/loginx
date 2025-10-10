@@ -175,7 +175,7 @@ export default function RateAppScreen() {
 
       {/* Info Box */}
       {rating > 0 && (
-        <ThemedView style={styles.infoBox}>
+        <ThemedView style={[styles.infoBox, { backgroundColor: primaryColor + '1A' }]}>
           <Feather name="heart" size={20} color={primaryColor} />
           <ThemedText style={styles.infoText}>{i18n.t('screens.rateApp.infoMessage')}</ThemedText>
         </ThemedView>
@@ -270,8 +270,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: Spacing.sm,
     padding: Spacing.md,
-    borderRadius: 8,
-    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+    borderRadius: BorderRadius.sm,
     marginBottom: Spacing.lg,
   },
   infoText: {

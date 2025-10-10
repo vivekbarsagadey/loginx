@@ -142,7 +142,7 @@ export default function ResponsiveDesignDemo() {
         <ResponsiveGrid gap="md">
           {gridItems.map((item) => (
             <View key={item.id} style={[styles.gridItem, { backgroundColor: item.color }]}>
-              <ThemedText type="body" style={{ color: '#fff', fontWeight: '600' }}>
+              <ThemedText type="body" style={{ fontWeight: '600' }}>
                 {item.title}
               </ThemedText>
             </View>
@@ -279,14 +279,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.full,
-    backgroundColor: 'rgba(0,0,0,0.05)',
+    // backgroundColor: Use bgElevated or surface with opacity inline
   },
   activeBadge: {
-    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+    // backgroundColor: Use primaryColor + '1A' inline
   },
   activeText: {
     fontWeight: '600',
-    color: '#2563EB',
+    // color: Use primaryColor inline
   },
   section: {
     marginBottom: Spacing.xl,

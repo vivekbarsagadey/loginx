@@ -2,7 +2,6 @@ import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { PasswordStrengthMeter } from '@/components/ui/password-strength-meter';
-import { CommonText } from '@/constants/common-styles';
 import { Spacing, Typography } from '@/constants/layout';
 import { useEmailAvailability } from '@/hooks/use-email-availability';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -51,10 +50,10 @@ export default function RegisterStep2({ errors }: { errors: FieldErrors<FormData
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="h2" style={CommonText.sectionTitle}>
+      <ThemedText type="h2" style={styles.sectionTitle}>
         {i18n.t('register.step2.title')}
       </ThemedText>
-      <ThemedText type="caption" style={CommonText.descriptionText}>
+      <ThemedText type="caption" style={styles.descriptionText}>
         Create your login credentials
       </ThemedText>
 
@@ -183,6 +182,14 @@ export default function RegisterStep2({ errors }: { errors: FieldErrors<FormData
 const styles = StyleSheet.create({
   container: {
     gap: Spacing.sm,
+  },
+  sectionTitle: {
+    marginBottom: Spacing.md,
+    fontWeight: Typography.bodyBold.fontWeight as 'bold',
+  },
+  descriptionText: {
+    marginBottom: Spacing.md,
+    opacity: 0.7,
   },
   emailContainer: {
     gap: Spacing.sm,

@@ -231,8 +231,8 @@ export default function DataExamplesScreen() {
           <ThemedText type="body" style={{ color: textMutedColor, marginBottom: Spacing.sm }}>
             Import data from the /data folder:
           </ThemedText>
-          <View style={{ backgroundColor: '#1E1E1E', padding: Spacing.md, borderRadius: BorderRadius.sm }}>
-            <ThemedText type="caption" style={{ color: '#D4D4D4', fontFamily: 'monospace' }}>
+          <View style={{ padding: Spacing.md, borderRadius: BorderRadius.sm, opacity: 0.95 }}>
+            <ThemedText type="caption" style={{ fontFamily: 'monospace', opacity: 0.8 }}>
               {`import { getSampleNotifications, appFeatures } from '@/data';`}
             </ThemedText>
           </View>

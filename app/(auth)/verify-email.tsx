@@ -1,7 +1,6 @@
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { CommonButtons, CommonContainers, CommonText } from '@/constants/common-styles';
 import { Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
@@ -75,8 +74,8 @@ export default function VerifyEmailScreen() {
   };
 
   return (
-    <ThemedView style={CommonContainers.centeredContainer}>
-      <ThemedText type="h1" style={CommonText.title}>
+    <ThemedView style={styles.centeredContainer}>
+      <ThemedText type="h1" style={styles.title}>
         {i18n.t('screens.verifyEmail.title')}
       </ThemedText>
       <ThemedText style={styles.subtitle}>{i18n.t('screens.verifyEmail.subtitle')}</ThemedText>
@@ -85,20 +84,24 @@ export default function VerifyEmailScreen() {
       </ThemedText>
       <ThemedText style={styles.subtitle}>{i18n.t('screens.verifyEmail.instructions')}</ThemedText>
 
-      <ThemedButton
-        title={isResending ? i18n.t('screens.verifyEmail.sending') : i18n.t('screens.verifyEmail.resendButton')}
-        onPress={handleResend}
-        disabled={isResending}
-        variant="secondary"
-        style={CommonButtons.button}
-      />
-      <ThemedButton title={i18n.t('screens.verifyEmail.goToLogin')} onPress={handleLoginRedirect} variant="link" style={CommonButtons.linkButtonSmall} />
+      <ThemedButton title={isResending ? i18n.t('screens.verifyEmail.sending') : i18n.t('screens.verifyEmail.resendButton')} onPress={handleResend} disabled={isResending} variant="secondary" />
+      <ThemedButton title={i18n.t('screens.verifyEmail.goToLogin')} onPress={handleLoginRedirect} variant="link" />
       {AlertComponent}
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
+  centeredContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: Spacing.md,
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: Spacing.sm,
+  },
   subtitle: {
     textAlign: 'center',
     marginBottom: Spacing.lg,

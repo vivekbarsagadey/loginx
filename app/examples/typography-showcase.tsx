@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     paddingVertical: Spacing.lg,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+    // borderBottomColor: Use borderColor inline
   },
   label: {
     marginBottom: Spacing.xs,
@@ -250,7 +250,8 @@ const styles = StyleSheet.create({
     padding: Spacing.lg,
     margin: Spacing.md,
     borderRadius: 12,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    // backgroundColor: Use surface color inline
+    opacity: 0.95,
   },
   exampleBody: {
     marginTop: Spacing.md,

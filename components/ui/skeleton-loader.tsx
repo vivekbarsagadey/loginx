@@ -1,5 +1,6 @@
 import { AnimationDurations, Colors } from '@/constants';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Opacity } from '@/utils/color';
 import { useEffect } from 'react';
 import { type DimensionValue, StyleSheet, View, type ViewStyle } from 'react-native';
 import Animated, { Easing, interpolate, useAnimatedStyle, useReducedMotion, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
@@ -90,7 +91,7 @@ export const SkeletonLoader = ({ width = '100%', height = 20, borderRadius = 4, 
   };
 
   if (shimmer) {
-    const shimmerColor = colorScheme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.7)';
+    const shimmerColor = colorScheme === 'dark' ? `rgba(255, 255, 255, ${Opacity.subtle})` : `rgba(255, 255, 255, ${Opacity.strong})`;
 
     return (
       <View style={[styles.skeleton, baseStyle, style]} accessibilityRole="none" accessibilityLabel="Loading content" accessible={true}>

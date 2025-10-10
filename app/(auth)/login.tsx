@@ -3,7 +3,6 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { SocialSignInButtons } from '@/components/ui/social-sign-in-buttons';
-import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { ValidationConstants, ValidationMessages } from '@/constants/validation';
 import { auth } from '@/firebase-config';
@@ -187,10 +186,10 @@ export default function LoginScreen() {
 
   return (
     <ScreenContainer scrollable centerContent>
-      <ThemedText type="h1" style={CommonText.title}>
+      <ThemedText type="h1" style={styles.title}>
         {i18n.t('screens.login.title')}
       </ThemedText>
-      <ThemedText type="body" style={CommonText.subtitle}>
+      <ThemedText type="body" style={styles.subtitle}>
         {i18n.t('screens.login.subtitle')}
       </ThemedText>
 
@@ -336,6 +335,14 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
+  title: {
+    textAlign: 'center',
+    marginBottom: Spacing.sm,
+  },
+  subtitle: {
+    textAlign: 'center',
+    marginBottom: Spacing.xl,
+  },
   input: {
     marginVertical: Spacing.sm,
     width: '100%',

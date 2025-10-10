@@ -1,7 +1,6 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { CommonText } from '@/constants/common-styles';
 import { Spacing, Typography } from '@/constants/layout';
 import i18n from '@/i18n';
 import { useEffect } from 'react';
@@ -17,7 +16,7 @@ export default function PrivacyScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText type="h1" style={CommonText.title} accessibilityRole="header">
+      <ThemedText type="h1" style={styles.title} accessibilityRole="header">
         {i18n.t('screens.legal.privacy.title')}
       </ThemedText>
       <ThemedText style={styles.lastUpdated} accessibilityLabel={`Last updated: ${i18n.t('screens.legal.privacy.lastUpdated')}`}>
@@ -26,7 +25,7 @@ export default function PrivacyScreen() {
 
       {Object.entries(sections).map(([key, section], index) => (
         <ThemedView key={key} style={styles.section} accessible={true} accessibilityLabel={`Section ${index + 1}: ${section.title}`}>
-          <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+          <ThemedText type="h3" style={styles.sectionTitle} accessibilityRole="header">
             {section.title}
           </ThemedText>
           <ThemedText style={styles.sectionContent}>{section.content}</ThemedText>
@@ -37,6 +36,10 @@ export default function PrivacyScreen() {
 }
 
 const styles = StyleSheet.create({
+  title: {
+    textAlign: 'center',
+    marginBottom: Spacing.sm,
+  },
   lastUpdated: {
     textAlign: 'center',
     marginBottom: Spacing.lg,
@@ -45,6 +48,10 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: Spacing.lg,
+  },
+  sectionTitle: {
+    marginBottom: Spacing.md,
+    fontWeight: Typography.bodyBold.fontWeight as 'bold',
   },
   sectionContent: {
     lineHeight: Typography.body.lineHeight,

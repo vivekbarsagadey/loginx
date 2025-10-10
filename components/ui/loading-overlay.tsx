@@ -1,5 +1,5 @@
 import { ThemedText } from '@/components/themed-text';
-import { Spacing } from '@/constants/layout';
+import { Overlay, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import React from 'react';
 import { ActivityIndicator, Modal, StyleSheet, View } from 'react-native';
@@ -20,7 +20,7 @@ export interface LoadingOverlayProps {
  */
 export function LoadingOverlay({ visible, message, transparent = false }: LoadingOverlayProps) {
   const backgroundColor = useThemeColor({}, 'surface');
-  const overlayColor = 'rgba(0, 0, 0, 0.7)';
+  const overlayColor = `rgba(0, 0, 0, ${Overlay.dark})`;
   const textColor = useThemeColor({}, 'text');
   const primaryColor = useThemeColor({}, 'primary');
 

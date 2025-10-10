@@ -1,7 +1,6 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import i18n from '@/i18n';
 import { useEffect } from 'react';
@@ -18,14 +17,14 @@ export default function LicenseScreen() {
   return (
     <ScreenContainer scrollable>
       <ThemedView style={styles.section} accessible={true} accessibilityLabel="Application License">
-        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+        <ThemedText type="h3" style={styles.sectionTitle} accessibilityRole="header">
           {i18n.t('screens.legal.license.appLicense.title')}
         </ThemedText>
         <ThemedText style={styles.sectionContent}>{i18n.t('screens.legal.license.appLicense.content')}</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.section} accessible={true} accessibilityLabel="Open Source Libraries">
-        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+        <ThemedText type="h3" style={styles.sectionTitle} accessibilityRole="header">
           {i18n.t('screens.legal.license.openSource.title')}
         </ThemedText>
         <ThemedText style={styles.sectionContent}>{i18n.t('screens.legal.license.openSource.intro')}</ThemedText>
@@ -42,14 +41,14 @@ export default function LicenseScreen() {
       </ThemedView>
 
       <ThemedView style={styles.section} accessible={true} accessibilityLabel="Copyright Information">
-        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+        <ThemedText type="h3" style={styles.sectionTitle} accessibilityRole="header">
           {i18n.t('screens.legal.license.copyright.title')}
         </ThemedText>
         <ThemedText style={styles.sectionContent}>{i18n.t('screens.legal.license.copyright.content')}</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.section} accessible={true} accessibilityLabel="Attribution Requirements">
-        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+        <ThemedText type="h3" style={styles.sectionTitle} accessibilityRole="header">
           {i18n.t('screens.legal.license.attribution.title')}
         </ThemedText>
         <ThemedText style={styles.sectionContent}>{i18n.t('screens.legal.license.attribution.content')}</ThemedText>
@@ -59,6 +58,10 @@ export default function LicenseScreen() {
 }
 
 const styles = StyleSheet.create({
+  sectionTitle: {
+    marginBottom: Spacing.md,
+    fontWeight: Typography.bodyBold.fontWeight,
+  },
   section: {
     marginBottom: Spacing.lg,
   },

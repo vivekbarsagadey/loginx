@@ -4,7 +4,7 @@ import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
-import { Spacing } from '@/constants/layout';
+import { FontWeight, Spacing } from '@/constants/layout';
 import { ValidationConstants } from '@/constants/validation';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   },
   requirementsTitle: {
     marginBottom: Spacing.md,
-    fontWeight: 'bold',
+    fontWeight: FontWeight.bold,
   },
   requirement: {
     marginBottom: Spacing.xs,

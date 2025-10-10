@@ -2,7 +2,6 @@ import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { CommonText } from '@/constants/common-styles';
 import { Spacing, Typography } from '@/constants/layout';
 import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -106,11 +105,11 @@ export default function DataRightsScreen() {
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText style={CommonText.subtitle}>{i18n.t('screens.legal.dataRights.subtitle')}</ThemedText>
+      <ThemedText style={styles.subtitle}>{i18n.t('screens.legal.dataRights.subtitle')}</ThemedText>
 
       {/* Your Rights Section */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+        <ThemedText type="h3" style={styles.sectionTitle} accessibilityRole="header">
           {i18n.t('screens.legal.dataRights.yourRightsTitle')}
         </ThemedText>
 
@@ -131,7 +130,7 @@ export default function DataRightsScreen() {
 
       {/* Actions Section */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+        <ThemedText type="h3" style={styles.sectionTitle} accessibilityRole="header">
           {i18n.t('screens.legal.dataRights.actionsTitle')}
         </ThemedText>
 
@@ -171,6 +170,15 @@ export default function DataRightsScreen() {
 }
 
 const styles = StyleSheet.create({
+  subtitle: {
+    textAlign: 'center',
+    marginBottom: Spacing.xl,
+    opacity: 0.7,
+  },
+  sectionTitle: {
+    marginBottom: Spacing.md,
+    fontWeight: Typography.bodyBold.fontWeight,
+  },
   section: {
     marginBottom: Spacing.xl,
   },

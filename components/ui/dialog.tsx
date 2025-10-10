@@ -1,5 +1,5 @@
 import { ThemedText } from '@/components/themed-text';
-import { Spacing, TouchTarget } from '@/constants/layout';
+import { Overlay, Spacing, TouchTarget } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import * as Haptics from 'expo-haptics';
@@ -62,7 +62,7 @@ export interface AlertDialogProps extends DialogProps {
 export function Dialog({ visible, onClose, title, message, children, dismissable = true, variant = 'default' }: DialogProps) {
   const { width } = useWindowDimensions();
   const backgroundColor = useThemeColor({}, 'surface');
-  const overlayColor = 'rgba(0, 0, 0, 0.5)'; // Semi-transparent overlay
+  const overlayColor = `rgba(0, 0, 0, ${Overlay.medium})`;
   const borderColor = useThemeColor({}, 'border');
   const textColor = useThemeColor({}, 'text');
   const textMutedColor = useThemeColor({}, 'text-muted');
@@ -164,6 +164,7 @@ export function Dialog({ visible, onClose, title, message, children, dismissable
  */
 export function ThemedAlert({ visible, onClose, title, message, buttonText = i18n.t('dialogs.buttons.ok'), onPress, variant = 'default', dismissable = true }: AlertDialogProps) {
   const primaryColor = useThemeColor({}, 'primary');
+  const onPrimaryColor = useThemeColor({}, 'on-primary');
 
   const handlePress = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -193,12 +194,12 @@ export function ThemedAlert({ visible, onClose, title, message, buttonText = i18
           backgroundColor: primaryColor,
         },
         buttonText: {
-          color: '#FFFFFF',
+          color: onPrimaryColor,
           fontWeight: '600',
           fontSize: 16,
         },
       }),
-    [primaryColor]
+    [primaryColor, onPrimaryColor]
   );
 
   return (
@@ -231,6 +232,7 @@ export function ConfirmationDialog({
   dismissable = true,
 }: ConfirmationDialogProps) {
   const primaryColor = useThemeColor({}, 'primary');
+  const onPrimaryColor = useThemeColor({}, 'on-primary');
   const errorColor = useThemeColor({}, 'error');
   const textMutedColor = useThemeColor({}, 'text-muted');
   const borderColor = useThemeColor({}, 'border');
@@ -282,7 +284,7 @@ export function ConfirmationDialog({
           fontSize: 16,
         },
         confirmButtonText: {
-          color: '#FFFFFF',
+          color: onPrimaryColor,
           fontWeight: '600',
           fontSize: 16,
         },
@@ -290,7 +292,7 @@ export function ConfirmationDialog({
           opacity: 0.6,
         },
       }),
-    [primaryColor, errorColor, textMutedColor, borderColor, destructive]
+    [primaryColor, errorColor, textMutedColor, borderColor, destructive, onPrimaryColor]
   );
 
   return (
@@ -341,7 +343,7 @@ export interface BottomSheetProps {
 
 export function BottomSheet({ visible, onClose, title, children, dismissable = true }: BottomSheetProps) {
   const backgroundColor = useThemeColor({}, 'surface');
-  const overlayColor = 'rgba(0, 0, 0, 0.5)';
+  const overlayColor = `rgba(0, 0, 0, ${Overlay.medium})`;
   const borderColor = useThemeColor({}, 'border');
   const textColor = useThemeColor({}, 'text');
   const textMutedColor = useThemeColor({}, 'text-muted');

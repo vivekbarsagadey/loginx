@@ -103,6 +103,7 @@ export function PermissionsSlide({ width, onNext, onSkip }: PermissionsSlideProp
   });
 
   const primaryColor = useThemeColor({}, 'primary');
+  const onPrimaryColor = useThemeColor({}, 'on-primary');
   const mutedColor = useThemeColor({}, 'text-muted');
 
   const handleRequestPermission = useCallback(async (type: 'camera' | 'mediaLibrary' | 'location' | 'notifications', requestFn: () => Promise<boolean>) => {
@@ -218,7 +219,7 @@ export function PermissionsSlide({ width, onNext, onSkip }: PermissionsSlideProp
           accessibilityLabel={i18n.t('permissions.continueButton')}
           accessibilityState={{ disabled: !canContinue }}
         >
-          <ThemedText type="bodyBold" style={{ color: '#FFFFFF' }}>
+          <ThemedText type="bodyBold" style={{ color: onPrimaryColor }}>
             {i18n.t('permissions.continueButton')}
           </ThemedText>
         </Pressable>

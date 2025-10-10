@@ -2,7 +2,7 @@ import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
-import { BorderRadius, Spacing } from '@/constants/layout';
+import { BorderRadius, FontWeight, Spacing, Typography } from '@/constants/layout';
 import i18n from '@/i18n';
 import { StyleSheet } from 'react-native';
 
@@ -65,12 +65,12 @@ const styles = StyleSheet.create({
     // Background handled by theme
   },
   featureTitle: {
-    fontWeight: 'bold',
+    fontWeight: FontWeight.bold,
     marginBottom: Spacing.sm,
   },
   featureDescription: {
     opacity: 0.8,
-    lineHeight: 20,
+    lineHeight: Typography.bodySmall.lineHeight,
   },
   bugFixItem: {
     flexDirection: 'row',
@@ -79,16 +79,16 @@ const styles = StyleSheet.create({
   },
   bulletPoint: {
     marginRight: Spacing.sm,
-    fontWeight: 'bold',
+    fontWeight: FontWeight.bold,
   },
   bugFixText: {
     flex: 1,
-    lineHeight: 20,
+    lineHeight: Typography.bodySmall.lineHeight,
   },
   thankYou: {
     textAlign: 'center',
     fontStyle: 'italic',
     opacity: 0.8,
-    lineHeight: 22,
+    lineHeight: Typography.body.lineHeight - 2,
   },
 });

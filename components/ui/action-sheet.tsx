@@ -1,5 +1,5 @@
 import { ThemedText } from '@/components/themed-text';
-import { Spacing, TouchTarget } from '@/constants/layout';
+import { Overlay, Spacing, TouchTarget } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Feather } from '@expo/vector-icons';
@@ -44,7 +44,7 @@ export interface ActionSheetProps {
  */
 export function ActionSheet({ visible, onClose, title, message, options, showCancel = true, cancelText = i18n.t('dialogs.buttons.cancel') }: ActionSheetProps) {
   const backgroundColor = useThemeColor({}, 'surface');
-  const overlayColor = 'rgba(0, 0, 0, 0.5)';
+  const overlayColor = `rgba(0, 0, 0, ${Overlay.medium})`;
   const borderColor = useThemeColor({}, 'border');
   const textColor = useThemeColor({}, 'text');
   const textMutedColor = useThemeColor({}, 'text-muted');

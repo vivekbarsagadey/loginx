@@ -484,19 +484,22 @@ export const CommonIcons = StyleSheet.create({
 
 /**
  * Common modal/overlay styles
+ * @deprecated Use themed overlay components from @/components/ui instead
+ * These hardcoded colors are kept for backwards compatibility but should not be used in new code
+ * Use Overlay constants from @/constants/layout for overlay opacity values
  */
 export const CommonOverlays = StyleSheet.create({
-  /** Modal backdrop */
+  /** Modal backdrop - @deprecated Use themed Modal/Dialog components */
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Use Overlay.medium for new code
     justifyContent: 'center',
     alignItems: 'center',
   },
 
-  /** Modal content container */
+  /** Modal content container - @deprecated Use themed components */
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: '#fff', // Use colors.surface for new code
     borderRadius: BorderRadius.lg,
     padding: Spacing.lg,
     maxWidth: '90%',

@@ -2,7 +2,6 @@ import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Collapsible } from '@/components/ui/collapsible';
-import { CommonText } from '@/constants/common-styles';
 import { Spacing, Typography } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -20,6 +19,7 @@ export default function CookiesScreen() {
   const primaryColor = useThemeColor({}, 'primary');
   const surfaceColor = useThemeColor({}, 'surface');
   const borderColor = useThemeColor({}, 'border');
+  const onPrimaryColor = useThemeColor({}, 'on-primary');
 
   useEffect(() => {
     AccessibilityInfo.announceForAccessibility('Cookie Policy. Information about cookies and tracking technologies.');
@@ -60,7 +60,7 @@ export default function CookiesScreen() {
 
       {/* What are Cookies */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+        <ThemedText type="h3" style={styles.sectionTitle} accessibilityRole="header">
           {i18n.t('screens.legal.cookies.whatAreCookies.title')}
         </ThemedText>
         <ThemedText style={styles.sectionContent}>{i18n.t('screens.legal.cookies.whatAreCookies.content')}</ThemedText>
@@ -68,7 +68,7 @@ export default function CookiesScreen() {
 
       {/* Types of Cookies */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+        <ThemedText type="h3" style={styles.sectionTitle} accessibilityRole="header">
           {i18n.t('screens.legal.cookies.typesTitle')}
         </ThemedText>
 
@@ -90,7 +90,7 @@ export default function CookiesScreen() {
               </ThemedView>
               {cookie.required && (
                 <ThemedView style={[styles.badge, { backgroundColor: primaryColor }]}>
-                  <ThemedText style={styles.badgeText}>{i18n.t('screens.legal.cookies.required')}</ThemedText>
+                  <ThemedText style={[styles.badgeText, { color: onPrimaryColor }]}>{i18n.t('screens.legal.cookies.required')}</ThemedText>
                 </ThemedView>
               )}
             </ThemedView>
@@ -101,7 +101,7 @@ export default function CookiesScreen() {
 
       {/* How We Use Cookies */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+        <ThemedText type="h3" style={styles.sectionTitle} accessibilityRole="header">
           {i18n.t('screens.legal.cookies.howWeUse.title')}
         </ThemedText>
 
@@ -120,7 +120,7 @@ export default function CookiesScreen() {
 
       {/* Your Choices */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+        <ThemedText type="h3" style={styles.sectionTitle} accessibilityRole="header">
           {i18n.t('screens.legal.cookies.yourChoices.title')}
         </ThemedText>
         <ThemedText style={styles.sectionContent}>{i18n.t('screens.legal.cookies.yourChoices.content')}</ThemedText>
@@ -128,7 +128,7 @@ export default function CookiesScreen() {
 
       {/* Third-Party Cookies */}
       <ThemedView style={styles.section}>
-        <ThemedText type="h3" style={CommonText.sectionTitle} accessibilityRole="header">
+        <ThemedText type="h3" style={styles.sectionTitle} accessibilityRole="header">
           {i18n.t('screens.legal.cookies.thirdParty.title')}
         </ThemedText>
         <ThemedText style={styles.sectionContent}>{i18n.t('screens.legal.cookies.thirdParty.content')}</ThemedText>
@@ -149,6 +149,10 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
     opacity: 0.7,
     fontStyle: 'italic',
+  },
+  sectionTitle: {
+    marginBottom: Spacing.md,
+    fontWeight: Typography.bodyBold.fontWeight,
   },
   section: {
     marginBottom: Spacing.xl,
@@ -194,7 +198,6 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#fff',
   },
   cookieDescription: {
     opacity: 0.7,

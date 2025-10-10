@@ -6,23 +6,19 @@ import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
 import { StarRating } from '@/components/ui/star-rating';
 import { CommonText } from '@/constants/common-styles';
-import { Spacing } from '@/constants/layout';
+import { BorderRadius, BorderWidth, FontWeight, Spacing, Typography } from '@/constants/layout';
+import { getFeedbackCategories } from '@/data/feedback-categories';
 import { useAlert } from '@/hooks/use-alert';
 import { useAuth } from '@/hooks/use-auth-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import type { FeedbackCategory } from '@/types/feedback';
+import type { CategoryOption } from '@/types/feedback-category';
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-
-interface CategoryOption {
-  id: FeedbackCategory;
-  icon: React.ComponentProps<typeof Feather>['name'];
-  labelKey: string;
-}
 
 export default function FeedbackScreen() {
   const router = useRouter();
@@ -35,12 +31,7 @@ export default function FeedbackScreen() {
   const [rating, setRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const categories: CategoryOption[] = [
-    { id: 'bug', icon: 'alert-circle', labelKey: 'screens.feedback.categories.bug' },
-    { id: 'feature', icon: 'zap', labelKey: 'screens.feedback.categories.feature' },
-    { id: 'improvement', icon: 'trending-up', labelKey: 'screens.feedback.categories.improvement' },
-    { id: 'other', icon: 'message-circle', labelKey: 'screens.feedback.categories.other' },
-  ];
+  const categories: CategoryOption[] = getFeedbackCategories();
 
   const handleCategorySelect = async (category: FeedbackCategory) => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -168,7 +159,7 @@ export default function FeedbackScreen() {
       </ThemedView>
 
       {/* Info Box */}
-      <ThemedView style={styles.infoBox}>
+      <ThemedView style={[styles.infoBox, { backgroundColor: primaryColor + '1A' }]}>
         <Feather name="info" size={20} color={primaryColor} />
         <ThemedText style={styles.infoText}>{i18n.t('screens.feedback.infoMessage')}</ThemedText>
       </ThemedView>
@@ -187,13 +178,7 @@ export default function FeedbackScreen() {
   );
 }
 
-interface CategoryButtonProps {
-  category: CategoryOption;
-  isSelected: boolean;
-  onPress: () => void;
-}
-
-function CategoryButton({ category, isSelected, onPress }: CategoryButtonProps) {
+function CategoryButton({ category, isSelected, onPress }: { category: CategoryOption; isSelected: boolean; onPress: () => void }) {
   const borderColor = useThemeColor({}, 'border');
   const primaryColor = useThemeColor({}, 'primary');
   const surfaceColor = useThemeColor({}, 'surface');
@@ -232,18 +217,18 @@ const styles = StyleSheet.create({
     minWidth: '47%',
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.sm,
-    borderRadius: 12,
-    borderWidth: 2,
+    borderRadius: BorderRadius.md,
+    borderWidth: BorderWidth.thick,
     alignItems: 'center',
     gap: Spacing.xs,
   },
   categoryLabel: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: Typography.bodySmall.fontSize,
+    fontWeight: FontWeight.semibold,
     textAlign: 'center',
   },
   charCount: {
-    fontSize: 12,
+    fontSize: Typography.caption.fontSize,
     textAlign: 'right',
     marginTop: Spacing.xs,
     opacity: 0.6,
@@ -261,14 +246,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: Spacing.sm,
     padding: Spacing.md,
-    borderRadius: 8,
-    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+    borderRadius: BorderRadius.sm,
     marginBottom: Spacing.lg,
   },
   infoText: {
     flex: 1,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: Typography.bodySmall.fontSize,
+    lineHeight: Typography.bodySmall.lineHeight,
   },
   submitButton: {
     marginBottom: Spacing.xl,

@@ -1,8 +1,8 @@
+import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { CommonButtons, CommonContainers, CommonInputs, CommonText } from '@/constants/common-styles';
+import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
 import i18n from '@/i18n';
@@ -71,11 +71,11 @@ export default function ForgotPasswordScreen() {
   };
 
   return (
-    <ThemedView style={CommonContainers.centerContent}>
-      <ThemedText type="h1" style={CommonText.title}>
+    <ScreenContainer scrollable>
+      <ThemedText type="h1" style={styles.title}>
         {i18n.t('forgotPassword.title')}
       </ThemedText>
-      <ThemedText type="body" style={CommonText.subtitle}>
+      <ThemedText type="body" style={styles.subtitle}>
         {i18n.t('forgotPassword.subtitle')}
       </ThemedText>
 
@@ -91,26 +91,31 @@ export default function ForgotPasswordScreen() {
             autoCapitalize="none"
             keyboardType="email-address"
             errorMessage={errors.email?.message}
-            style={CommonInputs.input}
           />
         )}
       />
 
-      <ThemedButton
-        title={loading ? i18n.t('forgotPassword.sendingButton') : i18n.t('forgotPassword.sendButton')}
-        onPress={handleSubmit(onSubmit)}
-        disabled={loading}
-        style={CommonButtons.buttonLarge}
-      />
+      <ThemedButton title={loading ? i18n.t('forgotPassword.sendingButton') : i18n.t('forgotPassword.sendButton')} onPress={handleSubmit(onSubmit)} disabled={loading} style={styles.submitButton} />
       {loading && <ActivityIndicator style={styles.loading} />}
 
-      <ThemedButton title={i18n.t('forgotPassword.backToLogin')} variant="link" onPress={() => router.push('/(auth)/login')} style={CommonButtons.linkButton} />
+      <ThemedButton title={i18n.t('forgotPassword.backToLogin')} variant="link" onPress={() => router.push('/(auth)/login')} />
       {AlertComponent}
-    </ThemedView>
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
+  title: {
+    textAlign: 'center',
+    marginBottom: Spacing.sm,
+  },
+  subtitle: {
+    textAlign: 'center',
+    marginBottom: Spacing.xl,
+  },
+  submitButton: {
+    marginTop: Spacing.xl,
+  },
   loading: {
     position: 'absolute',
     top: '50%',

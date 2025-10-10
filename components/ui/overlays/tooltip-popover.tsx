@@ -1,5 +1,5 @@
 import { ThemedText } from '@/components/themed-text';
-import { BorderRadius, Spacing } from '@/constants/layout';
+import { BorderRadius, Overlay, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import React, { useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
@@ -100,7 +100,7 @@ export function Popover({ children, trigger, visible, onClose, position = 'botto
 
 const styles = StyleSheet.create({
   backdrop: {
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    backgroundColor: `rgba(0, 0, 0, ${Overlay.light})`,
     flex: 1,
     justifyContent: 'center',
     padding: Spacing.lg,

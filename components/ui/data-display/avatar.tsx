@@ -1,6 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
 import { useThemeColor } from '@/hooks/use-theme-color';
-import React from 'react';
+import { useMemo } from 'react';
 import { Image, type ImageSourcePropType, Pressable, StyleSheet, View } from 'react-native';
 
 export interface AvatarProps {
@@ -24,16 +24,23 @@ const SIZES = {
   large: 56,
 };
 
-const STATUS_COLORS = {
-  online: '#4CAF50',
-  offline: '#9E9E9E',
-  busy: '#F44336',
-  away: '#FF9800',
-};
-
 export function Avatar({ source, initials, size = 'medium', status, accessibilityLabel, onPress }: AvatarProps) {
   const primaryColor = useThemeColor({}, 'primary');
   const backgroundColor = useThemeColor({}, 'background');
+  const successColor = useThemeColor({}, 'success');
+  const textMutedColor = useThemeColor({}, 'text-muted');
+  const errorColor = useThemeColor({}, 'error');
+  const warningColor = useThemeColor({}, 'warning');
+
+  const STATUS_COLORS = useMemo(
+    () => ({
+      online: successColor,
+      offline: textMutedColor,
+      busy: errorColor,
+      away: warningColor,
+    }),
+    [successColor, textMutedColor, errorColor, warningColor]
+  );
   const avatarSize = SIZES[size];
   const statusSize = size === 'small' ? 8 : size === 'medium' ? 10 : 12;
 

@@ -53,12 +53,13 @@ export default function BadgeExamplesScreen() {
       marginBottom: Spacing.md,
     },
     codeBlock: {
-      backgroundColor: 'rgba(0,0,0,0.05)',
+      backgroundColor: surfaceColor,
       borderRadius: BorderRadius.sm,
       padding: Spacing.sm,
       marginTop: Spacing.sm,
       fontFamily: 'monospace',
       fontSize: 12,
+      opacity: 0.95,
     },
     row: {
       flexDirection: 'row',

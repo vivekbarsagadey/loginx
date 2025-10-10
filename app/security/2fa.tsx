@@ -3,7 +3,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
-import { BorderRadius, Spacing } from '@/constants/layout';
+import { BorderRadius, FontWeight, Spacing, Typography } from '@/constants/layout';
 import { useAlert } from '@/hooks/use-alert';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   description: {
-    lineHeight: 22,
+    lineHeight: Typography.body.lineHeight,
     opacity: 0.9,
     marginBottom: Spacing.lg,
   },
@@ -241,12 +241,12 @@ const styles = StyleSheet.create({
   },
   bulletPoint: {
     marginRight: Spacing.md,
-    fontWeight: 'bold',
-    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    fontSize: Typography.body.fontSize,
   },
   benefitText: {
     flex: 1,
-    lineHeight: 20,
+    lineHeight: Typography.bodySmall.lineHeight,
   },
   enableButton: {
     marginTop: Spacing.md,
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   },
   setupStep: {
     marginBottom: Spacing.md,
-    lineHeight: 20,
+    lineHeight: Typography.bodySmall.lineHeight,
   },
   appsRecommendation: {
     marginTop: Spacing.md,
@@ -275,11 +275,11 @@ const styles = StyleSheet.create({
     // Styles applied inline with theme colors
   },
   backupCodesTitle: {
-    fontWeight: 'bold',
+    fontWeight: FontWeight.bold,
     marginBottom: Spacing.sm,
   },
   warningText: {
-    fontSize: 14,
+    fontSize: Typography.bodySmall.fontSize,
     marginBottom: Spacing.md,
     fontStyle: 'italic',
   },

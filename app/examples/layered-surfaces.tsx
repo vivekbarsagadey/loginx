@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     gap: Spacing.md,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#E5E7EB',
+    // borderBottomColor: Use colors.border inline
   },
   listItemLast: {
     borderBottomWidth: 0,

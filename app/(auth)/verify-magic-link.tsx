@@ -2,7 +2,6 @@ import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { CommonButtons, CommonContainers, CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { Colors } from '@/constants/theme';
 import { auth } from '@/firebase-config';
@@ -165,7 +164,7 @@ export default function VerifyMagicLinkScreen() {
   if (checking) {
     return (
       <ScreenContainer>
-        <ThemedView style={CommonContainers.centerContent}>
+        <ThemedView style={styles.centerContent}>
           <ActivityIndicator size="large" color={theme.primary} />
           <ThemedText style={styles.checkingText}>{i18n.t('passwordlessLogin.checking')}</ThemedText>
         </ThemedView>
@@ -175,14 +174,14 @@ export default function VerifyMagicLinkScreen() {
 
   return (
     <ScreenContainer>
-      <ThemedView style={CommonContainers.centerContent}>
+      <ThemedView style={styles.centerContent}>
         <Ionicons name="mail-outline" size={64} color={theme.primary} style={styles.icon} />
 
-        <ThemedText type="h1" style={CommonText.title}>
+        <ThemedText type="h1" style={styles.title}>
           {i18n.t('passwordlessLogin.verify.title')}
         </ThemedText>
 
-        <ThemedText type="body" style={CommonText.subtitle}>
+        <ThemedText type="body" style={styles.subtitle}>
           {i18n.t('passwordlessLogin.verify.subtitle')}
         </ThemedText>
 
@@ -196,21 +195,28 @@ export default function VerifyMagicLinkScreen() {
           {i18n.t('passwordlessLogin.verify.instructions')}
         </ThemedText>
 
-        <ThemedButton
-          title={resending ? i18n.t('passwordlessLogin.resending') : i18n.t('passwordlessLogin.resendButton')}
-          onPress={handleResend}
-          disabled={resending}
-          variant="secondary"
-          style={CommonButtons.button}
-        />
+        <ThemedButton title={resending ? i18n.t('passwordlessLogin.resending') : i18n.t('passwordlessLogin.resendButton')} onPress={handleResend} disabled={resending} variant="secondary" />
 
-        <ThemedButton title={i18n.t('passwordlessLogin.backToLogin')} onPress={handleBackToLogin} variant="link" style={CommonButtons.linkButtonSmall} />
+        <ThemedButton title={i18n.t('passwordlessLogin.backToLogin')} onPress={handleBackToLogin} variant="link" />
       </ThemedView>
     </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
+  centerContent: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: Spacing.md,
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: Spacing.sm,
+  },
+  subtitle: {
+    textAlign: 'center',
+    marginBottom: Spacing.xl,
+  },
   checkingText: {
     marginTop: Spacing.md,
   },

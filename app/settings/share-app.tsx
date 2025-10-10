@@ -205,7 +205,7 @@ export default function ShareAppScreen() {
           marginLeft: Spacing.sm,
         },
         copyButtonText: {
-          color: '#FFFFFF',
+          color: colors['on-primary'],
           fontSize: Typography.bodySmall.fontSize,
           fontWeight: Typography.bodyBold.fontWeight,
         },

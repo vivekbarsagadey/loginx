@@ -2,7 +2,6 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { CommonButtons, CommonContainers, CommonText } from '@/constants/common-styles';
 import { Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
@@ -154,9 +153,9 @@ export default function VerifyPhoneScreen() {
   };
 
   return (
-    <ThemedView style={CommonContainers.screenContainer}>
+    <ThemedView style={styles.screenContainer}>
       <View style={styles.content}>
-        <ThemedText type="h1" style={CommonText.title}>
+        <ThemedText type="h1" style={styles.title}>
           Verify Your Phone
         </ThemedText>
         <ThemedText style={styles.subtitle}>We&apos;ve sent a 6-digit verification code to:</ThemedText>
@@ -183,9 +182,9 @@ export default function VerifyPhoneScreen() {
           <ThemedButton title={countdown > 0 ? `Resend in ${countdown}s` : 'Resend Code'} variant="link" onPress={sendVerificationCode} disabled={countdown > 0 || resending} loading={resending} />
         </View>
 
-        <ThemedButton title="Verify" onPress={handleVerifyCode} loading={loading} disabled={loading || verificationCode.length !== 6} style={CommonButtons.button} />
+        <ThemedButton title="Verify" onPress={handleVerifyCode} loading={loading} disabled={loading || verificationCode.length !== 6} />
 
-        <ThemedButton title="Skip for Now" variant="link" onPress={handleSkip} style={CommonButtons.linkButtonSmall} />
+        <ThemedButton title="Skip for Now" variant="link" onPress={handleSkip} />
       </View>
       {alert.AlertComponent}
     </ThemedView>
@@ -193,10 +192,18 @@ export default function VerifyPhoneScreen() {
 }
 
 const styles = StyleSheet.create({
+  screenContainer: {
+    flex: 1,
+    padding: Spacing.md,
+  },
   content: {
     flex: 1,
     justifyContent: 'center',
     gap: Spacing.md,
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     textAlign: 'center',
