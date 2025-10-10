@@ -5,6 +5,9 @@
 
 import { InteractionManager, LayoutAnimation, Platform, UIManager } from 'react-native';
 
+// Re-export React for lazy loading
+import React from 'react';
+
 // Global type extensions
 interface GlobalWithArchitecture {
   nativeFabricUIManager?: unknown;
@@ -244,4 +247,127 @@ export const getMemoryUsage = (): { used: number; total: number; percentage: num
     };
   }
   return null;
+};
+
+/**
+ * Preload images for faster rendering
+ * @param uris - Array of image URIs to preload
+ * @returns Promise that resolves when all images are loaded
+ */
+export const preloadImages = async (uris: string[]): Promise<void> => {
+  try {
+    await Promise.all(
+      uris.map((uri) => {
+        return new Promise<void>((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve();
+          img.onerror = reject;
+          img.src = uri;
+        });
+      })
+    );
+  } catch (error) {
+    if (__DEV__) {
+      console.warn('[Performance] Failed to preload some images:', error);
+    }
+  }
+};
+
+/**
+ * Create a lazy component with error boundary
+ * @param importFn - Dynamic import function
+ * @returns Lazy loaded component
+ */
+export const createLazyComponent = <T extends React.ComponentType<any>>(importFn: () => Promise<{ default: T }>): React.LazyExoticComponent<T> => {
+  return React.lazy(importFn);
+};
+
+/**
+ * Optimize heavy computations by scheduling them after interactions
+ * @param computation - Heavy computation function
+ * @returns Promise with the computation result
+ */
+export const scheduleHeavyComputation = <T>(computation: () => T): Promise<T> => {
+  return new Promise((resolve) => {
+    runAfterInteractions(() => {
+      const result = computation();
+      resolve(result);
+    });
+  });
+};
+
+/**
+ * Create a memoized selector for derived state
+ * @param selector - Selector function
+ * @returns Memoized selector
+ */
+export const createMemoizedSelector = <TState, TResult>(selector: (state: TState) => TResult): ((state: TState) => TResult) => {
+  let lastState: TState | undefined;
+  let lastResult: TResult | undefined;
+
+  return (state: TState): TResult => {
+    if (state === lastState && lastResult !== undefined) {
+      return lastResult;
+    }
+    lastState = state;
+    lastResult = selector(state);
+    return lastResult;
+  };
+};
+
+/**
+ * Batch multiple callbacks into a single execution
+ * @param callbacks - Array of callbacks to batch
+ * @param delay - Delay before execution (default: 16ms - one frame)
+ */
+export const batchCallbacks = (callbacks: (() => void)[], delay = 16): void => {
+  const executeAll = () => {
+    batchUpdates(() => {
+      callbacks.forEach((callback) => callback());
+    });
+  };
+
+  setTimeout(executeAll, delay);
+};
+
+/**
+ * Create a ref callback that only updates when dependencies change
+ * Prevents unnecessary ref updates and re-renders
+ */
+export const useStableRef = <T>(value: T): React.MutableRefObject<T> => {
+  const ref = React.useRef(value);
+  ref.current = value;
+  return ref;
+};
+
+/**
+ * Optimize FlatList/SectionList rendering with calculated item layout
+ * @param itemHeight - Fixed item height
+ * @returns Optimized getItemLayout function
+ */
+export const createGetItemLayout = (itemHeight: number) => {
+  return (_data: unknown, index: number) => ({
+    length: itemHeight,
+    offset: itemHeight * index,
+    index,
+  });
+};
+
+/**
+ * Shallow compare two objects for equality
+ * Useful for React.memo comparisons
+ */
+export const shallowEqual = <T extends Record<string, unknown>>(objA: T, objB: T): boolean => {
+  if (objA === objB) {
+    return true;
+  }
+
+  const keysA = Object.keys(objA);
+  const keysB = Object.keys(objB);
+
+  if (keysA.length !== keysB.length) {
+    return false;
+  }
+
+  return keysA.every((key) => objA[key] === objB[key]);
 };

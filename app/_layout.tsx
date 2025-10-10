@@ -2,7 +2,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { memo, useCallback, useEffect, useMemo } from 'react';
 
 import i18n from '@/i18n';
 
@@ -32,7 +32,8 @@ function RootLayoutNav() {
   const backgroundColor = useThemeColor({}, 'bg-elevated');
   const textColor = useThemeColor({}, 'text');
 
-  useEffect(() => {
+  // Memoize navigation logic for performance
+  const handleNavigation = useCallback(() => {
     if (authLoading || checkingOnboarding) {
       return;
     }
@@ -50,6 +51,10 @@ function RootLayoutNav() {
       }
     }
   }, [user, segments, router, authLoading, onboardingCompleted, checkingOnboarding]);
+
+  useEffect(() => {
+    handleNavigation();
+  }, [handleNavigation]);
 
   if (authLoading || checkingOnboarding) {
     return null; // Or a loading spinner
@@ -217,14 +222,18 @@ function RootLayoutNav() {
   );
 }
 
-function NavigationThemeProvider({ children }: { children: React.ReactNode }) {
+const NavigationThemeProvider = memo(({ children }: { children: React.ReactNode }) => {
   const { resolvedTheme } = useThemeContext();
 
-  // Map resolved theme to React Navigation theme
-  const isDark = resolvedTheme.includes('dark') || resolvedTheme === 'dark';
+  // Memoize theme calculation
+  const navigationTheme = useMemo(() => {
+    const isDark = resolvedTheme.includes('dark') || resolvedTheme === 'dark';
+    return isDark ? DarkTheme : DefaultTheme;
+  }, [resolvedTheme]);
 
-  return <ThemeProvider value={isDark ? DarkTheme : DefaultTheme}>{children}</ThemeProvider>;
-}
+  return <ThemeProvider value={navigationTheme}>{children}</ThemeProvider>;
+});
+NavigationThemeProvider.displayName = 'NavigationThemeProvider';
 
 export default function RootLayout() {
   const [loaded] = useFonts({

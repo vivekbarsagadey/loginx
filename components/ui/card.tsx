@@ -7,7 +7,7 @@ import { BorderRadius, type Shadow, Spacing } from '@/constants/layout';
 import { getShadow } from '@/constants/style-utils';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeColor } from '@/hooks/use-theme-color';
-import type { PropsWithChildren, ReactNode } from 'react';
+import { memo, type PropsWithChildren, type ReactNode, useMemo } from 'react';
 import type { ViewProps, ViewStyle } from 'react-native';
 import { StyleSheet, View } from 'react-native';
 
@@ -91,7 +91,7 @@ const ELEVATION_SHADOW_MAP: Record<CardElevation, keyof typeof Shadow> = {
  * Card component that implements layered surface design
  * Higher elevation = slightly brighter background in dark mode, with shadows
  */
-export function Card({
+function CardComponent({
   children,
   elevation = 1,
   variant = 'surface',
@@ -110,25 +110,32 @@ export function Card({
   const backgroundColor = useThemeColor({}, variant);
   const borderColor = useThemeColor({}, 'border');
 
-  // Get shadow based on elevation
-  const shadowStyle = !noShadow && elevation > 0 ? getShadow(ELEVATION_SHADOW_MAP[elevation], colorScheme) : {};
+  // Memoize shadow style calculation
+  const shadowStyle = useMemo(() => (!noShadow && elevation > 0 ? getShadow(ELEVATION_SHADOW_MAP[elevation], colorScheme) : {}), [noShadow, elevation, colorScheme]);
 
   const cardPadding = noPadding ? 0 : (padding ?? Spacing.md);
 
-  const cardStyle: ViewStyle = {
-    backgroundColor,
-    borderRadius: borderRadius ?? BorderRadius.md,
-    padding: header || footer ? 0 : cardPadding,
-    ...shadowStyle,
-    ...(bordered && {
-      borderWidth: 1,
-      borderColor: customBorderColor ?? borderColor,
+  // Memoize styles to prevent recalculation
+  const cardStyle: ViewStyle = useMemo(
+    () => ({
+      backgroundColor,
+      borderRadius: borderRadius ?? BorderRadius.md,
+      padding: header || footer ? 0 : cardPadding,
+      ...shadowStyle,
+      ...(bordered && {
+        borderWidth: 1,
+        borderColor: customBorderColor ?? borderColor,
+      }),
     }),
-  };
+    [backgroundColor, borderRadius, header, footer, cardPadding, shadowStyle, bordered, customBorderColor, borderColor]
+  );
 
-  const contentStyle: ViewStyle = {
-    padding: header || footer ? cardPadding : 0,
-  };
+  const contentStyle: ViewStyle = useMemo(
+    () => ({
+      padding: header || footer ? cardPadding : 0,
+    }),
+    [header, footer, cardPadding]
+  );
 
   // If no header/footer, render simple card
   if (!header && !footer) {
@@ -161,6 +168,9 @@ export function Card({
   );
 }
 
+// Memoized Card export
+export const Card = memo(CardComponent);
+
 /**
  * Specialized card variants for common use cases
  */
@@ -168,23 +178,26 @@ export function Card({
 /**
  * Elevated card - standard card with shadow
  */
-export function ElevatedCard(props: Omit<CardProps, 'elevation'>) {
+export const ElevatedCard = memo((props: Omit<CardProps, 'elevation'>) => {
   return <Card elevation={1} {...props} />;
-}
+});
+ElevatedCard.displayName = 'ElevatedCard';
 
 /**
  * Outlined card - no shadow, with border
  */
-export function OutlinedCard(props: Omit<CardProps, 'elevation' | 'bordered' | 'noShadow'>) {
+export const OutlinedCard = memo((props: Omit<CardProps, 'elevation' | 'bordered' | 'noShadow'>) => {
   return <Card elevation={0} bordered noShadow {...props} />;
-}
+});
+OutlinedCard.displayName = 'OutlinedCard';
 
 /**
  * Filled card - no shadow, uses surface-variant background
  */
-export function FilledCard(props: Omit<CardProps, 'variant' | 'elevation' | 'noShadow'>) {
+export const FilledCard = memo((props: Omit<CardProps, 'variant' | 'elevation' | 'noShadow'>) => {
   return <Card variant="surface-variant" elevation={0} noShadow {...props} />;
-}
+});
+FilledCard.displayName = 'FilledCard';
 
 const styles = StyleSheet.create({
   card: {

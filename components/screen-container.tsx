@@ -7,7 +7,7 @@
 import { KeyboardOffset, Spacing } from '@/constants/layout';
 import { useResponsive } from '@/hooks/use-responsive';
 import { useThemeColor } from '@/hooks/use-theme-color';
-import { type PropsWithChildren, type ReactNode } from 'react';
+import { memo, type PropsWithChildren, type ReactNode, useMemo } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, type ScrollViewProps, StyleSheet, View, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -94,7 +94,7 @@ export type ScreenContainerProps = PropsWithChildren<{
  * - Theme-aware background colors
  * - Flexible layout options
  */
-export function ScreenContainer({
+function ScreenContainerComponent({
   children,
   scrollable = false,
   keyboardAvoiding = true,
@@ -113,22 +113,29 @@ export function ScreenContainer({
   const backgroundColor = useThemeColor({}, variant);
   const { padding: responsivePadding, maxContentWidth } = useResponsive();
 
-  // Use responsive padding if not explicitly set
-  const containerPadding = noPadding ? 0 : (padding ?? responsivePadding.responsive ?? Spacing.md);
+  // Memoize padding calculation
+  const containerPadding = useMemo(() => (noPadding ? 0 : (padding ?? responsivePadding.responsive ?? Spacing.md)), [noPadding, padding, responsivePadding.responsive]);
 
-  const containerStyle: ViewStyle = {
-    flex: 1,
-    backgroundColor,
-  };
+  // Memoize styles
+  const containerStyle: ViewStyle = useMemo(
+    () => ({
+      flex: 1,
+      backgroundColor,
+    }),
+    [backgroundColor]
+  );
 
-  const contentStyle: ViewStyle = {
-    flex: centerContent ? 1 : undefined,
-    padding: containerPadding,
-    justifyContent: centerContent ? 'center' : undefined,
-    width: '100%',
-    maxWidth: maxContentWidth,
-    alignSelf: 'center',
-  };
+  const contentStyle: ViewStyle = useMemo(
+    () => ({
+      flex: centerContent ? 1 : undefined,
+      padding: containerPadding,
+      justifyContent: centerContent ? 'center' : undefined,
+      width: '100%',
+      maxWidth: maxContentWidth,
+      alignSelf: 'center',
+    }),
+    [centerContent, containerPadding, maxContentWidth]
+  );
 
   // Render content based on scrollable prop
   const renderContent = () => {
@@ -191,6 +198,10 @@ export function ScreenContainer({
     </View>
   );
 }
+
+// Memoized export
+export const ScreenContainer = memo(ScreenContainerComponent);
+ScreenContainer.displayName = 'ScreenContainer';
 
 const styles = StyleSheet.create({
   keyboardAvoid: {

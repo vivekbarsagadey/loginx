@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 export interface ListItemProps {
@@ -27,13 +27,13 @@ export interface ListItemProps {
   accessibilityHint?: string;
 }
 
-export function ListItem({ title, subtitle, caption, leading, trailing, onPress, showDivider = false, disabled = false, accessibilityLabel, accessibilityHint }: ListItemProps) {
+function ListItemComponent({ title, subtitle, caption, leading, trailing, onPress, showDivider = false, disabled = false, accessibilityLabel, accessibilityHint }: ListItemProps) {
   const textColor = useThemeColor({}, 'text');
   const secondaryTextColor = useThemeColor({}, 'text-muted');
   const borderColor = useThemeColor({}, 'border');
   const surfaceColor = useThemeColor({}, 'surface');
 
-  const hasMultipleLines = Boolean(subtitle || caption);
+  const hasMultipleLines = useMemo(() => Boolean(subtitle || caption), [subtitle, caption]);
 
   return (
     <View>
@@ -78,6 +78,10 @@ export function ListItem({ title, subtitle, caption, leading, trailing, onPress,
     </View>
   );
 }
+
+// Memoized export
+export const ListItem = memo(ListItemComponent);
+ListItem.displayName = 'ListItem';
 
 const styles = StyleSheet.create({
   caption: {
