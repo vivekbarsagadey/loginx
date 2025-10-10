@@ -20,11 +20,32 @@ export interface AllPermissionsStatus {
   notifications: PermissionStatus;
 }
 
+export interface UsePermissionsReturn {
+  permissionsStatus: AllPermissionsStatus;
+  loading: boolean;
+  requestPermission: (type: PermissionType) => Promise<boolean>;
+  requestAllPermissions: () => Promise<AllPermissionsStatus>;
+  requestCameraPermission: () => Promise<boolean>;
+  requestMediaLibraryPermission: () => Promise<boolean>;
+  requestLocationPermission: () => Promise<boolean>;
+  requestNotificationPermission: () => Promise<boolean>;
+  checkAllPermissions: () => Promise<void>;
+  openSettings: () => void;
+  showPermissionAlert: (permissionName: string, permissionDescription: string, onConfirm?: () => void) => {
+    title: string;
+    message: string;
+    buttons: { text: string; style?: 'cancel'; onPress?: () => void }[];
+  };
+  isPermissionGranted: (type: PermissionType) => boolean;
+  areAllCriticalPermissionsGranted: () => boolean;
+  getPermissionStatus: (type: PermissionType) => PermissionStatus;
+}
+
 /**
  * Hook for managing app permissions
  * Provides methods to check, request, and track permission states
  */
-export function usePermissions() {
+export function usePermissions(): UsePermissionsReturn {
   const [permissionsStatus, setPermissionsStatus] = useState<AllPermissionsStatus>({
     camera: { granted: false, canAskAgain: true, status: 'undetermined' },
     mediaLibrary: { granted: false, canAskAgain: true, status: 'undetermined' },

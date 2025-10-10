@@ -201,36 +201,34 @@ export const getOptimizedImageProps = (size: 'thumbnail' | 'small' | 'medium' | 
 };
 
 /**
- * Memoization helper for expensive computations
+ * Memoization helper for expensive computations with explicit return type
  */
-export const memoize = <T extends (...args: never[]) => unknown>(fn: T): T => {
-  const cache = new Map<string, unknown>();
+export const memoize = <TArgs extends unknown[], TReturn>(fn: (...args: TArgs) => TReturn): ((...args: TArgs) => TReturn) => {
+  const cache = new Map<string, TReturn>();
 
-  return ((...args: Parameters<T>) => {
+  return (...args: TArgs): TReturn => {
     const key = JSON.stringify(args);
-    if (cache.has(key)) {
-      return cache.get(key) as ReturnType<T>;
+    const cached = cache.get(key);
+
+    if (cached !== undefined) {
+      return cached;
     }
 
     const result = fn(...args);
     cache.set(key, result);
     return result;
-  }) as T;
+  };
 };
 
 /**
- * Check if component should update (for class components or advanced optimizations)
+ * Check if component should update with explicit types
  */
-export const shouldComponentUpdate = <T extends Record<string, unknown>>(prevProps: T, nextProps: T, keys?: (keyof T)[]): boolean => {
-  const keysToCheck = keys || (Object.keys(nextProps) as (keyof T)[]);
+export const shouldComponentUpdate = <TProps extends Record<string, unknown>>(prevProps: TProps, nextProps: TProps, keys?: readonly (keyof TProps)[]): boolean => {
+  const propsToCheck = keys ?? (Object.keys(nextProps) as (keyof TProps)[]);
 
-  for (const key of keysToCheck) {
-    if (prevProps[key] !== nextProps[key]) {
-      return true;
-    }
-  }
-
-  return false;
+  return propsToCheck.some((key: keyof TProps) => {
+    return prevProps[key] !== nextProps[key];
+  });
 };
 
 /**

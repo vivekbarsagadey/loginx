@@ -159,17 +159,18 @@ export const sampleActivityLog: ActivityLogEntry[] = [
 ];
 
 /**
- * Get sample data by type
+ * Get sample data by type with explicit return typing
  */
-export function getSampleData<T>(type: 'users' | 'items' | 'activity'): T[] {
+export function getSampleData(type: 'users'): SampleUser[];
+export function getSampleData(type: 'items'): SampleItem[];
+export function getSampleData(type: 'activity'): ActivityLogEntry[];
+export function getSampleData(type: 'users' | 'items' | 'activity'): SampleUser[] | SampleItem[] | ActivityLogEntry[] {
   switch (type) {
     case 'users':
-      return sampleUsers as T[];
+      return sampleUsers;
     case 'items':
-      return sampleItems as T[];
+      return sampleItems;
     case 'activity':
-      return sampleActivityLog as T[];
-    default:
-      return [];
+      return sampleActivityLog;
   }
 }

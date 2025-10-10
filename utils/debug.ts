@@ -23,7 +23,7 @@ const Colors = {
  * Basic debug logging - only works in development
  * Uses console.warn to comply with ESLint restrictions
  */
-export function debugLog(message: string, ...args: unknown[]): void {
+export function debugLog(message: string, ...args: readonly unknown[]): void {
   if (isDevelopment()) {
     console.warn(`${Colors.blue}[DEBUG]${Colors.reset} ${message}`, ...args);
   }
@@ -33,7 +33,7 @@ export function debugLog(message: string, ...args: unknown[]): void {
  * Info level debug logging
  * Uses console.warn to comply with ESLint restrictions
  */
-export function debugInfo(message: string, ...args: unknown[]): void {
+export function debugInfo(message: string, ...args: readonly unknown[]): void {
   if (isDevelopment()) {
     console.warn(`${Colors.cyan}[INFO]${Colors.reset} ${message}`, ...args);
   }
@@ -42,18 +42,26 @@ export function debugInfo(message: string, ...args: unknown[]): void {
 /**
  * Warning level debug logging
  */
-export function debugWarn(message: string, ...args: unknown[]): void {
+export function debugWarn(message: string, ...args: readonly unknown[]): void {
   if (isDevelopment()) {
     console.warn(`${Colors.yellow}[WARN]${Colors.reset} ${message}`, ...args);
   }
 }
 
 /**
- * Error level debug logging
+ * Error level debug logging with proper error type
  */
-export function debugError(message: string, error?: unknown): void {
+export function debugError(message: string, error?: Error | unknown): void {
   if (isDevelopment()) {
-    console.error(`${Colors.red}[ERROR]${Colors.reset} ${message}`, error);
+    if (error instanceof Error) {
+      console.error(`${Colors.red}[ERROR]${Colors.reset} ${message}`, {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      });
+    } else {
+      console.error(`${Colors.red}[ERROR]${Colors.reset} ${message}`, error);
+    }
   }
 }
 
@@ -107,10 +115,10 @@ export function debugAssert(condition: boolean, message: string): void {
  */
 export function createDebugger(namespace: string) {
   return {
-    log: (message: string, ...args: unknown[]) => debugLog(`[${namespace}] ${message}`, ...args),
-    info: (message: string, ...args: unknown[]) => debugInfo(`[${namespace}] ${message}`, ...args),
-    warn: (message: string, ...args: unknown[]) => debugWarn(`[${namespace}] ${message}`, ...args),
-    error: (message: string, error?: unknown) => debugError(`[${namespace}] ${message}`, error),
+    log: (message: string, ...args: readonly unknown[]) => debugLog(`[${namespace}] ${message}`, ...args),
+    info: (message: string, ...args: readonly unknown[]) => debugInfo(`[${namespace}] ${message}`, ...args),
+    warn: (message: string, ...args: readonly unknown[]) => debugWarn(`[${namespace}] ${message}`, ...args),
+    error: (message: string, error?: Error | unknown) => debugError(`[${namespace}] ${message}`, error),
     group: (label: string, callback: () => void) => debugGroup(`[${namespace}] ${label}`, callback),
     time: <T>(label: string, fn: () => T) => debugTime(`[${namespace}] ${label}`, fn),
     object: (label: string, obj: unknown) => debugObject(`[${namespace}] ${label}`, obj),

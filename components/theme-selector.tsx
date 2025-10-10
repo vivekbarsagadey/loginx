@@ -1,6 +1,6 @@
 import { getAllThemes } from '@/constants/theme';
 import { useThemeColor } from '@/hooks/use-theme-color';
-import { useThemeContext } from '@/hooks/use-theme-context';
+import { type ThemePreference, useThemeContext } from '@/hooks/use-theme-context';
 import i18n from '@/i18n';
 import * as Haptics from 'expo-haptics';
 import React from 'react';
@@ -45,7 +45,7 @@ export const ThemeSelector = () => {
 
   const handleThemeSelect = async (themeName: string) => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setThemePreference(themeName as any);
+    setThemePreference(themeName as ThemePreference);
   };
 
   return (

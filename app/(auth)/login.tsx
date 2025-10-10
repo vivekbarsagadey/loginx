@@ -18,6 +18,7 @@ import { showError } from '@/utils/error';
 import { BiometricStorage } from '@/utils/secure-storage';
 import { showSuccess } from '@/utils/success';
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { Href } from 'expo-router';
 import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useEffect, useState } from 'react';
@@ -282,7 +283,7 @@ export default function LoginScreen() {
             <ThemedButton
               title={i18n.t('screens.login.magicLink', { defaultValue: 'Magic Link (Passwordless)' })}
               variant="secondary"
-              onPress={() => router.push('/(auth)/passwordless-login' as any)}
+              onPress={() => router.push('/(auth)/passwordless-login' as Href)}
               style={styles.alternativeButton}
             />
           )}
@@ -291,7 +292,7 @@ export default function LoginScreen() {
             <ThemedButton
               title={i18n.t('screens.login.emailOtp', { defaultValue: 'Email OTP' })}
               variant="secondary"
-              onPress={() => router.push('/(auth)/email-otp-login' as any)}
+              onPress={() => router.push('/(auth)/email-otp-login' as Href)}
               style={styles.alternativeButton}
             />
           )}
