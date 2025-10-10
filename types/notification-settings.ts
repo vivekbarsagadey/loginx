@@ -3,11 +3,14 @@
  * Type definitions for notification preferences
  */
 
+import type { Feather } from '@expo/vector-icons';
+import type { ComponentProps } from 'react';
+
 export type NotificationSettingKey = 'pushEnabled' | 'emailUpdates' | 'marketingTips';
 
 export interface NotificationSetting {
   key: NotificationSettingKey;
-  icon: string;
+  icon: ComponentProps<typeof Feather>['name'];
   title: string;
   description: string;
 }

@@ -14,19 +14,19 @@ export function getNotificationSettings(): NotificationSetting[] {
   return [
     {
       key: 'pushEnabled' as NotificationSettingKey,
-      icon: 'bell',
+      icon: 'bell' as const,
       title: i18n.t('screens.settings.notifications.items.pushEnabled.title'),
       description: i18n.t('screens.settings.notifications.items.pushEnabled.description'),
     },
     {
       key: 'emailUpdates' as NotificationSettingKey,
-      icon: 'mail',
+      icon: 'mail' as const,
       title: i18n.t('screens.settings.notifications.items.emailUpdates.title'),
       description: i18n.t('screens.settings.notifications.items.emailUpdates.description'),
     },
     {
       key: 'marketingTips' as NotificationSettingKey,
-      icon: 'trending-up',
+      icon: 'trending-up' as const,
       title: i18n.t('screens.settings.notifications.items.marketingTips.title'),
       description: i18n.t('screens.settings.notifications.items.marketingTips.description'),
     },

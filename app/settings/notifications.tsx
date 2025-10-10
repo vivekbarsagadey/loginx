@@ -152,7 +152,7 @@ export default function NotificationsScreen() {
         {notificationSettings.map((setting, index) => (
           <View key={setting.key} style={[styles.settingRow, index === notificationSettings.length - 1 && styles.settingRowLast]}>
             <View style={styles.iconContainer}>
-              <Feather name={setting.icon} size={IconSize.md} color={tintColor} />
+              <Feather name={setting.icon as any} size={IconSize.md} color={tintColor} />
             </View>
             <View style={styles.settingInfo}>
               <ThemedText style={styles.settingTitle}>{setting.title}</ThemedText>

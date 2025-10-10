@@ -2,7 +2,7 @@ import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
 import { CommonText } from '@/constants/common-styles';
-import { IconSize, Spacing, TouchTarget, Typography } from '@/constants/layout';
+import { BorderRadius, IconSize, Spacing, TouchTarget, Typography } from '@/constants/layout';
 import { generateReferralLink, getShareBenefits, getShareEmailSubject, getShareMessage, getShareOptionConfigs } from '@/data';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -25,6 +25,7 @@ export default function ShareAppScreen() {
   const primaryColor = useThemeColor({}, 'primary');
   const successColor = useThemeColor({}, 'success');
   const borderColor = useThemeColor({}, 'border');
+  const onPrimaryColor = useThemeColor({}, 'on-primary');
 
   // Generate referral link
   const referralLink = generateReferralLink();
@@ -205,7 +206,7 @@ export default function ShareAppScreen() {
           marginLeft: Spacing.sm,
         },
         copyButtonText: {
-          color: colors['on-primary'],
+          color: onPrimaryColor,
           fontSize: Typography.bodySmall.fontSize,
           fontWeight: Typography.bodyBold.fontWeight,
         },
@@ -241,6 +242,19 @@ export default function ShareAppScreen() {
           marginBottom: 2,
         },
         shareSubtitle: {
+          color: textMutedColor,
+          fontSize: Typography.bodySmall.fontSize,
+        },
+        shareOptionContent: {
+          flex: 1,
+        },
+        shareOptionTitle: {
+          color: textColor,
+          fontSize: Typography.body.fontSize,
+          fontWeight: Typography.bodyBold.fontWeight,
+          marginBottom: 2,
+        },
+        shareOptionSubtitle: {
           color: textMutedColor,
           fontSize: Typography.bodySmall.fontSize,
         },

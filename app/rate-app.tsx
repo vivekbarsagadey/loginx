@@ -6,7 +6,7 @@ import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
 import { StarRating } from '@/components/ui/star-rating';
 import { CommonText } from '@/constants/common-styles';
-import { Spacing } from '@/constants/layout';
+import { BorderRadius, Spacing } from '@/constants/layout';
 import { useAlert } from '@/hooks/use-alert';
 import { useAuth } from '@/hooks/use-auth-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
