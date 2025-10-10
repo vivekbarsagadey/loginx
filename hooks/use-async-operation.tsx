@@ -12,8 +12,9 @@ export interface UseAsyncOperationOptions {
   showErrorToast?: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface UseAsyncOperationResult<T extends (...args: any[]) => Promise<any>> {
+type AsyncFunction = (...args: readonly unknown[]) => Promise<unknown>;
+
+export interface UseAsyncOperationResult<T extends AsyncFunction> {
   loading: boolean;
   error: unknown;
   execute: T;
@@ -31,38 +32,37 @@ export interface UseAsyncOperationResult<T extends (...args: any[]) => Promise<a
  * // Use it
  * await execute(myData);
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useAsyncOperation<T extends (...args: any[]) => Promise<any>>(asyncFunction: T, options: UseAsyncOperationOptions = {}): UseAsyncOperationResult<T> {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<unknown>(null);
+export function useAsyncOperation<T extends AsyncFunction>(asyncFunction: T, options: UseAsyncOperationOptions = {}): UseAsyncOperationResult<T> {
+  const [isLoading, setIsLoading] = useState(false);
+  const [executionError, setExecutionError] = useState<unknown>(null);
 
   const { onSuccess, onError, showErrorToast = true } = options;
 
   const execute = useCallback(
     async (...args: Parameters<T>): Promise<void> => {
-      setLoading(true);
-      setError(null);
+      setIsLoading(true);
+      setExecutionError(null);
 
       try {
         await asyncFunction(...args);
         onSuccess?.();
-      } catch (err: unknown) {
-        setError(err);
+      } catch (operationError: unknown) {
+        setExecutionError(operationError);
         if (showErrorToast) {
-          showError(err);
+          showError(operationError);
         }
-        onError?.(err);
+        onError?.(operationError);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     },
     [asyncFunction, onSuccess, onError, showErrorToast]
   ) as T;
 
   const reset = useCallback(() => {
-    setLoading(false);
-    setError(null);
+    setIsLoading(false);
+    setExecutionError(null);
   }, []);
 
-  return { loading, error, execute, reset };
+  return { loading: isLoading, error: executionError, execute, reset };
 }

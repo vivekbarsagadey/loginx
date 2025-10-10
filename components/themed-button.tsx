@@ -27,16 +27,22 @@ function ThemedButtonComponent({ title, style, variant = 'primary', disabled, lo
   const errorColor = useThemeColor({}, 'error');
 
   const handlePress = (e: GestureResponderEvent) => {
-    if (!disabled && !loading) {
-      // Fire haptic feedback without blocking the press handler
-      // Use heavy haptic for destructive actions to warn users
-      const hapticStyle = variant === 'destructive' ? Haptics.ImpactFeedbackStyle.Heavy : Haptics.ImpactFeedbackStyle.Light;
-
-      Haptics.impactAsync(hapticStyle).catch(() => {
-        // Silently ignore haptic errors (device may not support it)
-      });
-      rest.onPress?.(e);
+    if (disabled || loading) {
+      return;
     }
+
+    // Fire haptic feedback without blocking the press handler
+    // Use heavy haptic for destructive actions to warn users
+    const hapticStyle = variant === 'destructive' ? Haptics.ImpactFeedbackStyle.Heavy : Haptics.ImpactFeedbackStyle.Light;
+
+    Haptics.impactAsync(hapticStyle).catch((hapticError: unknown) => {
+      // Device may not support haptics - log but don't interrupt user experience
+      if (__DEV__ && hapticError instanceof Error) {
+        console.debug('[ThemedButton] Haptic feedback unavailable:', hapticError.message);
+      }
+    });
+
+    rest.onPress?.(e);
   };
 
   const buttonStyles: { [key: string]: ViewStyle } = {

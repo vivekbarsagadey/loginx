@@ -1,5 +1,5 @@
 import { getUserProfile, updateUser } from '@/actions/user.action';
-import { debugLog } from '@/utils/debug';
+import { debugError, debugLog } from '@/utils/debug';
 import { showError } from '@/utils/error';
 
 /**
@@ -11,7 +11,7 @@ import { showError } from '@/utils/error';
 export const updateSetting = async (uid: string, key: string, value: boolean): Promise<void> => {
   try {
     if (!uid) {
-      console.error('[SettingAction] updateSetting called with empty uid');
+      debugLog('[SettingAction] updateSetting called with empty uid');
       return;
     }
 
@@ -26,7 +26,7 @@ export const updateSetting = async (uid: string, key: string, value: boolean): P
 
     debugLog(`[SettingAction] ✅ LOCAL-FIRST: Setting ${key} updated to ${value}`);
   } catch (error) {
-    console.error('[SettingAction] Error updating setting:', error);
+    debugError('[SettingAction] Error updating setting', error);
     showError(error);
     throw error; // Re-throw so UI can handle it
   }

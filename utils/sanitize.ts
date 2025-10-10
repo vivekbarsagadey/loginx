@@ -1,13 +1,27 @@
 import { UserProfile } from '@/types/user';
 
+// Input sanitization constants
+const MAX_INPUT_LENGTH = 500;
+const MAX_DISPLAY_NAME_LENGTH = 100;
+const MAX_EMAIL_LENGTH = 254; // Per RFC 5321
+const MAX_PHONE_LENGTH = 15; // E.164 international format
+const MAX_ADDRESS_LENGTH = 200;
+const MAX_CITY_LENGTH = 100;
+const MAX_STATE_LENGTH = 100;
+const MAX_ZIP_CODE_LENGTH = 20;
+const MIN_PASSWORD_LENGTH = 8;
+const MAX_PASSWORD_LENGTH = 128;
+const MIN_VALID_AGE = 0;
+const MAX_VALID_AGE = 150;
+
 /**
  * Sanitize user input to prevent XSS and injection attacks
  * Removes or escapes potentially dangerous characters
  * @param input - Raw user input string
- * @param maxLength - Maximum allowed length (default 500)
+ * @param maxLength - Maximum allowed length (default MAX_INPUT_LENGTH)
  * @returns Sanitized string
  */
-export const sanitizeUserInput = (input: string, maxLength: number = 500): string => {
+export const sanitizeUserInput = (input: string, maxLength: number = MAX_INPUT_LENGTH): string => {
   if (typeof input !== 'string') {
     return '';
   }
@@ -34,7 +48,7 @@ export const sanitizeEmail = (email: string): string => {
     return '';
   }
 
-  return email.toLowerCase().trim().slice(0, 254); // Max email length per RFC
+  return email.toLowerCase().trim().slice(0, MAX_EMAIL_LENGTH);
 };
 
 /**
@@ -47,7 +61,7 @@ export const sanitizePhone = (phone: string): string => {
     return '';
   }
 
-  return phone.replace(/\D/g, '').slice(0, 15); // Max international phone length
+  return phone.replace(/\D/g, '').slice(0, MAX_PHONE_LENGTH);
 };
 
 /**
@@ -60,7 +74,7 @@ export const sanitizeUserProfile = <T extends Partial<UserProfile>>(profile: T):
 
   // Sanitize string fields
   if (sanitized.displayName) {
-    sanitized.displayName = sanitizeUserInput(sanitized.displayName, 100);
+    sanitized.displayName = sanitizeUserInput(sanitized.displayName, MAX_DISPLAY_NAME_LENGTH);
   }
 
   if (sanitized.email) {
@@ -68,25 +82,25 @@ export const sanitizeUserProfile = <T extends Partial<UserProfile>>(profile: T):
   }
 
   if (sanitized.address) {
-    sanitized.address = sanitizeUserInput(sanitized.address, 200);
+    sanitized.address = sanitizeUserInput(sanitized.address, MAX_ADDRESS_LENGTH);
   }
 
   if (sanitized.city) {
-    sanitized.city = sanitizeUserInput(sanitized.city, 100);
+    sanitized.city = sanitizeUserInput(sanitized.city, MAX_CITY_LENGTH);
   }
 
   if (sanitized.state) {
-    sanitized.state = sanitizeUserInput(sanitized.state, 100);
+    sanitized.state = sanitizeUserInput(sanitized.state, MAX_STATE_LENGTH);
   }
 
   if (sanitized.zipCode) {
-    sanitized.zipCode = sanitizeUserInput(sanitized.zipCode, 20);
+    sanitized.zipCode = sanitizeUserInput(sanitized.zipCode, MAX_ZIP_CODE_LENGTH);
   }
 
   // Validate age if present
   if (sanitized.age !== undefined) {
     const age = Number(sanitized.age);
-    if (isNaN(age) || age < 0 || age > 150) {
+    if (isNaN(age) || age < MIN_VALID_AGE || age > MAX_VALID_AGE) {
       sanitized.age = 0;
     }
   }
@@ -117,11 +131,11 @@ export const validatePassword = (password: string): { isValid: boolean; message?
     return { isValid: false, message: 'Password must be a string' };
   }
 
-  if (password.length < 8) {
-    return { isValid: false, message: 'Password must be at least 8 characters' };
+  if (password.length < MIN_PASSWORD_LENGTH) {
+    return { isValid: false, message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters` };
   }
 
-  if (password.length > 128) {
+  if (password.length > MAX_PASSWORD_LENGTH) {
     return { isValid: false, message: 'Password is too long' };
   }
 

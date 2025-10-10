@@ -13,6 +13,33 @@ import { Platform } from 'react-native';
 // Check if running in Expo Go
 const isExpoGo = Constants.appOwnership === 'expo';
 
+// Error messages as constants for maintainability
+const ERROR_MESSAGES = {
+  GOOGLE_NOT_AVAILABLE:
+    'Google Sign-In is not available in Expo Go.\n\n' +
+    'To use Google Sign-In:\n' +
+    '1. Build a development client: expo install expo-dev-client\n' +
+    '2. Run: npx expo prebuild\n' +
+    '3. Build: eas build --profile development\n\n' +
+    'Or continue with email/password authentication.',
+  APPLE_IOS_ONLY: 'Apple Sign-In is only available on iOS devices',
+  FACEBOOK_NOT_AVAILABLE:
+    'Facebook Sign-In is not available in Expo Go.\n\n' +
+    'To use Facebook Sign-In:\n' +
+    '1. Build a development client: expo install expo-dev-client\n' +
+    '2. Install expo-auth-session: expo install expo-auth-session\n' +
+    '3. Build: eas build --profile development\n\n' +
+    'Or continue with email/password authentication.',
+  FACEBOOK_PENDING:
+    'Facebook Sign-In integration is pending.\n\n' +
+    'To complete setup:\n' +
+    '1. Configure Facebook App at developers.facebook.com\n' +
+    '2. Add Facebook App ID to environment variables\n' +
+    '3. See docs/FACEBOOK_AUTH_IMPLEMENTATION.md for full implementation\n\n' +
+    'Facebook App ID: {appId}\n\n' +
+    'Please use Google, Apple, or email authentication for now.',
+} as const;
+
 // Google Sign-in availability check - returns false in Expo Go
 const isGoogleSigninAvailable = (): boolean => {
   // Always return false in Expo Go to prevent module loading
@@ -54,6 +81,20 @@ const isFacebookSigninAvailable = (): boolean => {
 };
 
 /**
+ * Configure Google Sign-In SDK
+ * Separated for testability and clarity
+ */
+const configureGoogleSignIn = async (GoogleSignin: any) => {
+  await GoogleSignin.configure({
+    webClientId: Config.social.googleWebClientId || '',
+    iosClientId: Config.social.googleIosClientId,
+    androidClientId: Config.social.googleAndroidClientId,
+    offlineAccess: true,
+    profileImageSize: 150,
+  });
+};
+
+/**
  * Hook to handle social authentication (Google, Apple & Facebook)
  */
 export function useSocialAuth() {
@@ -70,16 +111,7 @@ export function useSocialAuth() {
 
     // Check if Google Sign-in is available (not in Expo Go)
     if (!isGoogleSigninAvailable()) {
-      showError(
-        new Error(
-          'Google Sign-In is not available in Expo Go.\n\n' +
-            'To use Google Sign-In:\n' +
-            '1. Build a development client: expo install expo-dev-client\n' +
-            '2. Run: npx expo prebuild\n' +
-            '3. Build: eas build --profile development\n\n' +
-            'Or continue with email/password authentication.'
-        )
-      );
+      showError(new Error(ERROR_MESSAGES.GOOGLE_NOT_AVAILABLE));
       return;
     }
 
@@ -88,14 +120,8 @@ export function useSocialAuth() {
     try {
       const GoogleSignin = getGoogleSignin();
 
-      // Configure Google Sign-In (should be done once, but safe to call multiple times)
-      await GoogleSignin.configure({
-        webClientId: Config.social.googleWebClientId || '',
-        iosClientId: Config.social.googleIosClientId,
-        androidClientId: Config.social.googleAndroidClientId,
-        offlineAccess: true,
-        profileImageSize: 150,
-      });
+      // Configure Google Sign-In
+      await configureGoogleSignIn(GoogleSignin);
 
       // Check if device supports Google Play Services (Android)
       await GoogleSignin.hasPlayServices();
@@ -132,7 +158,7 @@ export function useSocialAuth() {
       if (Platform.OS !== 'ios') {
         // Apple Sign-In is only supported on iOS in this implementation
         // For web/Android, you'd need to implement OAuth flow
-        throw new Error('Apple Sign-In is only available on iOS devices');
+        throw new Error(ERROR_MESSAGES.APPLE_IOS_ONLY);
       }
 
       // Perform Apple authentication
@@ -179,16 +205,7 @@ export function useSocialAuth() {
 
     // Check if Facebook Sign-in is available (not in Expo Go)
     if (!isFacebookSigninAvailable()) {
-      showError(
-        new Error(
-          'Facebook Sign-In is not available in Expo Go.\n\n' +
-            'To use Facebook Sign-In:\n' +
-            '1. Build a development client: expo install expo-dev-client\n' +
-            '2. Install expo-auth-session: expo install expo-auth-session\n' +
-            '3. Build: eas build --profile development\n\n' +
-            'Or continue with email/password authentication.'
-        )
-      );
+      showError(new Error(ERROR_MESSAGES.FACEBOOK_NOT_AVAILABLE));
       return;
     }
 
@@ -197,15 +214,8 @@ export function useSocialAuth() {
     try {
       // Note: Facebook authentication integration is pending
       // See docs/FACEBOOK_AUTH_IMPLEMENTATION.md for complete implementation guide
-      throw new Error(
-        'Facebook Sign-In integration is pending.\n\n' +
-          `To complete setup:\n` +
-          `1. Configure Facebook App at developers.facebook.com\n` +
-          `2. Add Facebook App ID to environment variables\n` +
-          `3. See docs/FACEBOOK_AUTH_IMPLEMENTATION.md for full implementation\n\n` +
-          `Facebook App ID: ${Config.services.facebookAppId || 'Not configured'}\n\n` +
-          'Please use Google, Apple, or email authentication for now.'
-      );
+      const errorMessage = ERROR_MESSAGES.FACEBOOK_PENDING.replace('{appId}', Config.services.facebookAppId || 'Not configured');
+      throw new Error(errorMessage);
     } catch (error) {
       await provideErrorFeedback(error);
     } finally {

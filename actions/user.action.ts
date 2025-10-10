@@ -1,6 +1,6 @@
 import { FirebaseCollections } from '@/constants';
 import { UserProfile } from '@/types/user';
-import { debugLog } from '@/utils/debug';
+import { debugError, debugLog } from '@/utils/debug';
 import { showError } from '@/utils/error';
 import { getData, setData } from '@/utils/local-first';
 import { sanitizeUserProfile } from '@/utils/sanitize';
@@ -13,7 +13,7 @@ import { sanitizeUserProfile } from '@/utils/sanitize';
 export const getUserProfile = async (uid: string): Promise<UserProfile | null> => {
   try {
     if (!uid) {
-      console.error('[UserAction] getUserProfile called with empty uid');
+      debugLog('[UserAction] getUserProfile called with empty uid');
       return null;
     }
 
@@ -26,7 +26,7 @@ export const getUserProfile = async (uid: string): Promise<UserProfile | null> =
 
     return userProfile;
   } catch (error) {
-    console.error('[UserAction] Error getting user profile:', error);
+    debugError('[UserAction] Error getting user profile', error);
     showError(error);
     return null;
   }
@@ -40,7 +40,7 @@ export const getUserProfile = async (uid: string): Promise<UserProfile | null> =
 export const updateUser = async (uid: string, data: Partial<UserProfile>): Promise<void> => {
   try {
     if (!uid) {
-      console.error('[UserAction] updateUser called with empty uid');
+      debugLog('[UserAction] updateUser called with empty uid');
       return;
     }
 
@@ -64,7 +64,7 @@ export const updateUser = async (uid: string, data: Partial<UserProfile>): Promi
 
     debugLog('[UserAction] ✅ LOCAL-FIRST: User profile updated locally');
   } catch (error) {
-    console.error('[UserAction] Error updating user:', error);
+    debugError('[UserAction] Error updating user', error);
     showError(error);
   }
 };
@@ -77,7 +77,7 @@ export const updateUser = async (uid: string, data: Partial<UserProfile>): Promi
 export const createUserProfile = async (uid: string, data: UserProfile): Promise<void> => {
   try {
     if (!uid) {
-      console.error('[UserAction] createUserProfile called with empty uid');
+      debugLog('[UserAction] createUserProfile called with empty uid');
       return;
     }
 
@@ -94,7 +94,7 @@ export const createUserProfile = async (uid: string, data: UserProfile): Promise
 
     debugLog('[UserAction] ✅ LOCAL-FIRST: User profile created locally');
   } catch (error) {
-    console.error('[UserAction] Error creating user profile:', error);
+    debugError('[UserAction] Error creating user profile', error);
     showError(error);
   }
 };
@@ -106,7 +106,7 @@ export const createUserProfile = async (uid: string, data: UserProfile): Promise
 export const deleteUserAccount = async (uid: string): Promise<void> => {
   try {
     if (!uid) {
-      console.error('[UserAction] deleteUserAccount called with empty uid');
+      debugLog('[UserAction] deleteUserAccount called with empty uid');
       return;
     }
 
@@ -133,7 +133,7 @@ export const deleteUserAccount = async (uid: string): Promise<void> => {
 
     debugLog('[UserAction] ✅ LOCAL-FIRST: User account marked as deleted locally');
   } catch (error) {
-    console.error('[UserAction] Error deleting user account:', error);
+    debugError('[UserAction] Error deleting user account', error);
     showError(error);
   }
 };
