@@ -1,6 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
 import { memo, useCallback, useMemo } from 'react';
-import { FlatList, FlatListProps, StyleSheet, View } from 'react-native';
+import { FlatList, type FlatListProps, StyleSheet, View } from 'react-native';
 
 /**
  * VirtualList Component

@@ -9,7 +9,7 @@ import { Spacing } from '@/constants/layout';
 import { useAlert } from '@/hooks/use-alert';
 import { useAuth } from '@/hooks/use-auth-provider';
 import i18n from '@/i18n';
-import { UserProfile } from '@/types/user';
+import { type UserProfile } from '@/types/user';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';

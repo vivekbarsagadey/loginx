@@ -21,8 +21,8 @@
  */
 
 import { useResponsive, useResponsiveSpacing } from '@/hooks/use-responsive';
-import React, { ReactNode } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import React, { type ReactNode } from 'react';
+import { StyleSheet, View, type ViewStyle } from 'react-native';
 
 export interface ResponsiveGridProps {
   /** Child components to render in grid */

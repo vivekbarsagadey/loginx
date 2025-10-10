@@ -1,4 +1,5 @@
 {
+  // Editor Settings
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit",
@@ -11,12 +12,30 @@
     200
   ],
   "editor.wordWrapColumn": 200,
+  // TypeScript Settings - Enhanced for Error Detection
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.suggest.autoImports": true,
+  "typescript.suggest.paths": true,
+  "typescript.inlayHints.parameterNames.enabled": "all",
+  "typescript.inlayHints.parameterTypes.enabled": true,
+  "typescript.inlayHints.variableTypes.enabled": true,
+  "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "typescript.surveys.enabled": false,
+  "typescript.validate.enable": true,
+  "typescript.format.enable": true,
+  // ESLint Settings
   "eslint.validate": [
     "javascript",
     "javascriptreact",
     "typescript",
     "typescriptreact"
   ],
+  "eslint.run": "onType",
+  // Prettier Settings
   "prettier.printWidth": 200,
   "prettier.singleQuote": true,
   "prettier.trailingComma": "es5",

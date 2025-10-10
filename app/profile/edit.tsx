@@ -22,7 +22,7 @@ import { useRouter } from 'expo-router';
 import { updateProfile } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Image, Platform, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Image, Platform, StyleSheet, type TextInput, TouchableOpacity } from 'react-native';
 
 export default function EditProfileScreen() {
   const user = auth.currentUser;

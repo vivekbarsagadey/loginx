@@ -8,7 +8,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import i18n from '@/i18n';
 import { setGlobalErrorHandler } from '@/utils/error';
 import { setGlobalSuccessHandler } from '@/utils/success';
-import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import React, { type PropsWithChildren, useCallback, useEffect, useState } from 'react';
 
 interface DialogConfig {
   title: string;

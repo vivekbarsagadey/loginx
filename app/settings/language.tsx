@@ -7,7 +7,7 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { memo, useCallback } from 'react';
-import { FlatList, StyleProp, StyleSheet, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
+import { FlatList, type StyleProp, StyleSheet, type TextStyle, TouchableOpacity, type ViewStyle } from 'react-native';
 
 const languages = [
   { code: 'en', name: 'English' },

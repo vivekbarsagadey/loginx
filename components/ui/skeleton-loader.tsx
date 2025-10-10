@@ -1,7 +1,7 @@
 import { AnimationDurations, Colors } from '@/constants';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useEffect } from 'react';
-import { DimensionValue, StyleSheet, View, ViewStyle } from 'react-native';
+import { type DimensionValue, StyleSheet, View, type ViewStyle } from 'react-native';
 import Animated, { Easing, interpolate, useAnimatedStyle, useReducedMotion, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 
 /**

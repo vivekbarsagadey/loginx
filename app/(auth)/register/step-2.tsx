@@ -9,8 +9,8 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from 'react';
-import { Controller, FieldErrors, useFormContext } from 'react-hook-form';
-import { ActivityIndicator, StyleSheet, TextInput, View } from 'react-native';
+import { Controller, type FieldErrors, useFormContext } from 'react-hook-form';
+import { ActivityIndicator, StyleSheet, type TextInput, View } from 'react-native';
 
 interface FormData {
   email: string;

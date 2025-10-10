@@ -3,7 +3,7 @@ import { ThemedView } from '@/components/themed-view';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { GooglePlacesAutocomplete, GooglePlacesAutocompleteRef } from 'react-native-google-places-autocomplete';
+import { GooglePlacesAutocomplete, type GooglePlacesAutocompleteRef } from 'react-native-google-places-autocomplete';
 
 interface AddressAutocompleteProps {
   onAddressSelect: (address: AddressComponents) => void;

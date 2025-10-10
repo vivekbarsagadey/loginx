@@ -370,7 +370,7 @@ function showWarningFeedback() {
 
 ## Confirmation Dialog Rules
 
-### ✅ ALWAYS REQUIRE CONFIRMATION FOR:
+### ✅ ALWAYS REQUIRE CONFIRMATION FOR
 
 - Destructive actions (delete, remove, clear)
 - Data loss (discard changes, sign out)
@@ -378,7 +378,7 @@ function showWarningFeedback() {
 - Permanent changes
 - Account modifications
 
-### ❌ DON'T REQUIRE CONFIRMATION FOR:
+### ❌ DON'T REQUIRE CONFIRMATION FOR
 
 - Saving data
 - Canceling an action

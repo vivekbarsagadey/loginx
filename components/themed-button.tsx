@@ -3,7 +3,7 @@ import { Button as ButtonConstants, Spacing, TouchTarget } from '@/constants/lay
 import { useThemeColor } from '@/hooks/use-theme-color';
 import * as Haptics from 'expo-haptics';
 import { memo } from 'react';
-import { ActivityIndicator, GestureResponderEvent, StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps, ViewStyle } from 'react-native';
+import { ActivityIndicator, type GestureResponderEvent, StyleSheet, type TextStyle, TouchableOpacity, type TouchableOpacityProps, type ViewStyle } from 'react-native';
 import { ThemedText } from './themed-text';
 
 export type ThemedButtonProps = TouchableOpacityProps & {

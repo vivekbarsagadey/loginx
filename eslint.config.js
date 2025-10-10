@@ -36,18 +36,40 @@ module.exports = defineConfig([
         },
       ],
 
-      // TypeScript specific
+      // TypeScript specific - Strict rules to never ignore TS errors
+      // These rules don't require type information and are fast
       '@typescript-eslint/no-unused-vars': [
-        'warn',
+        'error', // Changed from 'warn' to 'error'
         {
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
           caughtErrorsIgnorePattern: '^_',
         },
       ],
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'error', // Changed from 'warn' to 'error'
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'warn',
+      '@typescript-eslint/prefer-as-const': 'error',
+      '@typescript-eslint/no-inferrable-types': 'warn',
+      '@typescript-eslint/consistent-type-imports': [
+        'warn',
+        {
+          prefer: 'type-imports',
+          fixStyle: 'inline-type-imports',
+        },
+      ],
+
+      // Note: Rules requiring type information are commented out for performance
+      // Run `pnpm type-check` for full type safety validation
+      // '@typescript-eslint/no-unsafe-assignment': 'warn',
+      // '@typescript-eslint/no-unsafe-call': 'warn',
+      // '@typescript-eslint/no-unsafe-member-access': 'warn',
+      // '@typescript-eslint/no-unsafe-return': 'warn',
+      // '@typescript-eslint/no-floating-promises': 'error',
+      // '@typescript-eslint/await-thenable': 'error',
+      // '@typescript-eslint/no-misused-promises': 'error',
+      // '@typescript-eslint/require-await': 'warn',
 
       // React specific
       'react/prop-types': 'off', // Using TypeScript for prop validation

@@ -3,7 +3,7 @@
  * Provides visual hierarchy through subtle background changes and shadows
  */
 
-import { BorderRadius, Shadow, Spacing } from '@/constants/layout';
+import { BorderRadius, type Shadow, Spacing } from '@/constants/layout';
 import { getShadow } from '@/constants/style-utils';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeColor } from '@/hooks/use-theme-color';

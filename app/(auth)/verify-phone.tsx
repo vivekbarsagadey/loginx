@@ -12,7 +12,7 @@ import { showSuccess } from '@/utils/success';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, type TextInput, View } from 'react-native';
 
 /**
  * Phone Verification Screen

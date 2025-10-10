@@ -21,10 +21,10 @@ interface Session {
 
 export default function SessionsScreen() {
   const alert = useAlert();
-  const primaryColor = useThemeColor({}, 'primary');
-  const surfaceColor = useThemeColor({}, 'surface');
-  const borderColor = useThemeColor({}, 'border');
-  const errorColor = useThemeColor({}, 'error');
+  const _primaryColor = useThemeColor({}, 'primary');
+  const _surfaceColor = useThemeColor({}, 'surface');
+  const _borderColor = useThemeColor({}, 'border');
+  const _errorColor = useThemeColor({}, 'error');
   const successColor = useThemeColor({}, 'success');
   const onSuccessColor = useThemeColor({}, 'on-primary'); // White text on success color
 

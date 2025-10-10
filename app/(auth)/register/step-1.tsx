@@ -9,8 +9,8 @@ import { Spacing } from '@/constants/layout';
 import { useAutoFocus } from '@/hooks/use-auto-focus';
 import i18n from '@/i18n';
 import { useRef } from 'react';
-import { Controller, FieldErrors, useFormContext } from 'react-hook-form';
-import { StyleSheet, TextInput } from 'react-native';
+import { Controller, type FieldErrors, useFormContext } from 'react-hook-form';
+import { StyleSheet, type TextInput } from 'react-native';
 
 interface FormData {
   firstName: string;

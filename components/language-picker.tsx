@@ -16,7 +16,7 @@ export const LanguagePicker = () => {
   const onPrimaryColor = useThemeColor({}, 'on-primary');
   const surfaceColor = useThemeColor({}, 'surface');
   const textColor = useThemeColor({}, 'text');
-  const borderColor = useThemeColor({}, 'border');
+  const _borderColor = useThemeColor({}, 'border');
 
   const dynamicStyles = React.useMemo(
     () =>

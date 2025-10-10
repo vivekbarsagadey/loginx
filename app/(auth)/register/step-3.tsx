@@ -1,14 +1,14 @@
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { AddressAutocomplete, AddressComponents } from '@/components/ui/address-autocomplete';
+import { AddressAutocomplete, type AddressComponents } from '@/components/ui/address-autocomplete';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import i18n from '@/i18n';
 import { GOOGLE_PLACES_API_KEY } from '@/utils/env';
 import { useEffect, useRef, useState } from 'react';
-import { Controller, FieldErrors, useFormContext } from 'react-hook-form';
-import { StyleSheet, TextInput } from 'react-native';
+import { Controller, type FieldErrors, useFormContext } from 'react-hook-form';
+import { StyleSheet, type TextInput } from 'react-native';
 
 interface FormData {
   address: string;

@@ -2,7 +2,7 @@ import { AccessibilityHints } from '@/constants/accessibility';
 import { InputField, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { memo, useState } from 'react';
-import { StyleSheet, TextInput, TextInputProps } from 'react-native';
+import { StyleSheet, TextInput, type TextInputProps } from 'react-native';
 
 export type ThemedTextInputProps = TextInputProps & {
   lightColor?: string;

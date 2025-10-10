@@ -16,7 +16,7 @@ import { useRouter } from 'expo-router';
 import { fetchSignInMethodsForEmail, sendSignInLinkToEmail } from 'firebase/auth';
 import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { ActivityIndicator, StyleSheet, TextInput } from 'react-native';
+import { ActivityIndicator, StyleSheet, type TextInput } from 'react-native';
 import { z } from 'zod';
 
 const emailSchema = z.object({

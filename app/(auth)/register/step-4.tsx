@@ -5,8 +5,8 @@ import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { useAutoFocus } from '@/hooks/use-auto-focus';
 import { useRef } from 'react';
-import { Controller, FieldErrors, useFormContext } from 'react-hook-form';
-import { StyleSheet, TextInput } from 'react-native';
+import { Controller, type FieldErrors, useFormContext } from 'react-hook-form';
+import { StyleSheet, type TextInput } from 'react-native';
 
 interface FormData {
   phoneNumber: string;

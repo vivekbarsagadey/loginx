@@ -236,7 +236,7 @@ adaptiveCacheManager.setMemoryPressure("high");
 
 ---
 
-## 🔜 What's Next?
+## 🔜 What's Next
 
 ### Remaining Low-Priority Enhancements
 

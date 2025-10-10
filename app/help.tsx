@@ -41,7 +41,7 @@ function QuickAction({ icon, title, description, onPress }: QuickActionProps) {
 
 export default function HelpScreen() {
   const router = useRouter();
-  const { language } = useLanguage();
+  const { language: _language } = useLanguage();
   const primaryColor = useThemeColor({}, 'primary');
 
   const handleContactSupport = async () => {

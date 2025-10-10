@@ -3,7 +3,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import React from 'react';
-import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
+import { Image, type ImageSourcePropType, StyleSheet, View } from 'react-native';
 
 export type EmptyStateTemplate = 'no-data' | 'error' | 'search' | 'custom';
 

@@ -7,8 +7,8 @@
 import { KeyboardOffset, Spacing } from '@/constants/layout';
 import { useResponsive } from '@/hooks/use-responsive';
 import { useThemeColor } from '@/hooks/use-theme-color';
-import { PropsWithChildren, ReactNode } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, ScrollViewProps, StyleSheet, View, ViewStyle } from 'react-native';
+import { type PropsWithChildren, type ReactNode } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, type ScrollViewProps, StyleSheet, View, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export type ScreenContainerProps = PropsWithChildren<{

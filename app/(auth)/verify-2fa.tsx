@@ -13,7 +13,7 @@ import { showSuccess } from '@/utils/success';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
-import { ActivityIndicator, StyleSheet, TextInput, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, type TextInput, View } from 'react-native';
 
 /**
  * Two-Factor Authentication Code Input Screen

@@ -5,7 +5,7 @@
 This document tracks the progress of replacing all `Alert.alert` calls with the
 themed dialog system using the `useAlert` hook.
 
-## Why Replace Alert.alert?
+## Why Replace Alert.alert
 
 1. **Theme Consistency** - Alert.alert uses native system dialogs that don't
    match our app theme

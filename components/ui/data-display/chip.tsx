@@ -3,7 +3,7 @@ import { AccessibilityRoles } from '@/constants/accessibility';
 import { BorderRadius, Spacing, TouchTarget } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import React from 'react';
-import { Pressable, StyleSheet, View, ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, View, type ViewStyle } from 'react-native';
 
 export interface ChipProps {
   /** Label text displayed in the chip */

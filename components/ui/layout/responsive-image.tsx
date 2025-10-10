@@ -25,7 +25,7 @@ import { ThemedText } from '@/components/themed-text';
 import { useResponsive } from '@/hooks/use-responsive';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import React, { useState } from 'react';
-import { ActivityIndicator, Image, ImageProps, ImageSourcePropType, StyleSheet, View, ViewStyle } from 'react-native';
+import { ActivityIndicator, Image, type ImageProps, type ImageSourcePropType, StyleSheet, View, type ViewStyle } from 'react-native';
 
 export interface ResponsiveImageProps extends Omit<ImageProps, 'style'> {
   /** Image source (same as Image component) */
