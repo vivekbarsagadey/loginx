@@ -6,6 +6,7 @@
 import type { Theme, ThemeColors } from './base-theme';
 import { defaultTheme } from './default.theme';
 import { forestTheme } from './forest.theme';
+import { marinerTheme } from './mariner.theme';
 import { oceanTheme } from './ocean.theme';
 import { purpleTheme } from './purple.theme';
 import { sunsetTheme } from './sunset.theme';
@@ -20,6 +21,7 @@ export const THEMES: Record<string, Theme> = {
   sunset: sunsetTheme,
   forest: forestTheme,
   purple: purpleTheme,
+  mariner: marinerTheme,
 };
 
 // Available theme names for selection
@@ -70,4 +72,6 @@ export const Colors = {
   'forest-dark': forestTheme.dark,
   purple: purpleTheme.light,
   'purple-dark': purpleTheme.dark,
+  mariner: marinerTheme.light,
+  'mariner-dark': marinerTheme.dark,
 };
