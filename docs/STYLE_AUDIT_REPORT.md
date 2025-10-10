@@ -371,13 +371,13 @@ Most UI components in `components/ui/` already follow good practices:
 
 ## Common Styles Usage Analysis
 
-### ✅ Already Well Used:
+### ✅ Already Well Used
 
 - `CommonSpacing` - Used in multiple screens
 - `CommonText` - Used for consistent text patterns
 - `CommonContainers` - Used in layout components
 
-### ⚠️ Could Use More:
+### ⚠️ Could Use More
 
 - `CommonButtons` - Could replace repeated button margin patterns
 - `CommonInputs` - Could replace repeated input styles
@@ -389,7 +389,7 @@ Most UI components in `components/ui/` already follow good practices:
 
 ## Style Utilities Usage
 
-### Currently Underutilized Utilities:
+### Currently Underutilized Utilities
 
 1. **`gap` utility** - `gap.sm`, `gap.md`, `gap.lg` instead of
    `{ gap: Spacing.sm }`
@@ -400,7 +400,7 @@ Most UI components in `components/ui/` already follow good practices:
 5. **`flex` utility** - `flex.row`, `flex.center` for common flex patterns
 6. **`combine()` function** - For merging multiple style objects
 
-### Example Refactoring:
+### Example Refactoring
 
 ```typescript
 // ❌ Current
@@ -454,14 +454,14 @@ chip: CommonSelectionCards.selectionCard,
 
 ## Action Items Summary
 
-### Immediate Actions:
+### Immediate Actions
 
 1. ✅ Create this audit document
 2. ⚡ Fix `theme-selector.tsx` hardcoded values
 3. ⚡ Fix onboarding slides hardcoded values
 4. ⚡ Replace `borderRadius: 999` with `BorderRadius.full` in input components
 
-### Follow-up Actions:
+### Follow-up Actions
 
 1. 📝 Update developer guidelines to emphasize style utilities usage
 2. 📝 Add ESLint rule to detect hardcoded spacing/radius values (future)

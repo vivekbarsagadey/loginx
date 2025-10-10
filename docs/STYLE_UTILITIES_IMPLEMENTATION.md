@@ -36,47 +36,47 @@ recommendations:
 
 #### UI Components
 
-5. **password-strength-meter.tsx**
+1. **password-strength-meter.tsx**
    - Applied: `gap.sm`, `rounded.xs`
    - Removed: Explicit `BorderRadius` and `Spacing` imports
-6. **terms-checkbox.tsx**
+2. **terms-checkbox.tsx**
    - Applied: `gap.md`, `rounded.xs`
    - Reduced imports footprint
-7. **social-sign-in-buttons.tsx**
+3. **social-sign-in-buttons.tsx**
    - Applied: `gap.lg/md`
    - Cleaner container styling
 
 #### Input Components
 
-8. **checkbox.tsx**
+1. **checkbox.tsx**
    - Applied: `gap.sm/md`, `rounded.sm`
    - Typography for fontSize
-9. **radio-button.tsx**
+2. **radio-button.tsx**
    - Applied: `gap.sm/md`, `rounded.full`
    - Consistent circular styling
-10. **slider.tsx**
-    - Applied: `gap.sm`, `rounded.full/xs`
-    - Better track and thumb styling
-11. **switch.tsx**
-    - Applied: `rounded.full`
-    - Minimal and clean
+3. **slider.tsx**
+   - Applied: `gap.sm`, `rounded.full/xs`
+   - Better track and thumb styling
+4. **switch.tsx**
+   - Applied: `rounded.full`
+   - Minimal and clean
 
 #### Onboarding Components
 
-12. **biometric-slide.tsx**
-    - Applied: `gap.md`, `rounded.full`
-    - Icon circle uses full rounding
-13. **permissions-slide.tsx**
-    - Applied: `gap.xs/sm/md`, `rounded.full/md/lg`
-    - Extensive use of utilities throughout
-14. **privacy-slide.tsx**
-    - Applied: `gap.md`, `rounded.xl`
-    - Mixed approach: BorderRadius for problematic styles
-    - Note: Some styles kept BorderRadius due to ViewStyle/TextStyle
-      compatibility
-15. **profile-slide.tsx**
-    - Applied: `gap.lg/md`, `rounded.full/sm/md`
-    - Form and button containers improved
+1. **biometric-slide.tsx**
+   - Applied: `gap.md`, `rounded.full`
+   - Icon circle uses full rounding
+2. **permissions-slide.tsx**
+   - Applied: `gap.xs/sm/md`, `rounded.full/md/lg`
+   - Extensive use of utilities throughout
+3. **privacy-slide.tsx**
+   - Applied: `gap.md`, `rounded.xl`
+   - Mixed approach: BorderRadius for problematic styles
+   - Note: Some styles kept BorderRadius due to ViewStyle/TextStyle
+     compatibility
+4. **profile-slide.tsx**
+   - Applied: `gap.lg/md`, `rounded.full/sm/md`
+   - Form and button containers improved
 
 ## Technical Details
 
@@ -97,7 +97,7 @@ import { gap, rounded, padding } from "@/constants/style-utils";
 
 ### Style Application Patterns
 
-**Pattern 1: Gap Utility**
+#### Pattern 1: Gap Utility
 
 ```typescript
 // Before
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
 });
 ```
 
-**Pattern 2: Rounded Utility**
+#### Pattern 2: Rounded Utility
 
 ```typescript
 // Before
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
 });
 ```
 
-**Pattern 3: Padding Utility**
+#### Pattern 3: Padding Utility
 
 ```typescript
 // Before
