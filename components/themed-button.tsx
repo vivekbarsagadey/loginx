@@ -8,7 +8,7 @@ import { ThemedText } from './themed-text';
 
 export type ThemedButtonProps = TouchableOpacityProps & {
   title: string;
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'link';
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'link' | 'destructive';
   loading?: boolean;
   accessibilityLabel?: string;
   accessibilityHint?: string;
@@ -24,11 +24,15 @@ function ThemedButtonComponent({ title, style, variant = 'primary', disabled, lo
   const onPrimaryColor = useThemeColor({}, 'on-primary');
   const surfaceColor = useThemeColor({}, 'surface');
   const borderColor = useThemeColor({}, 'border');
+  const errorColor = useThemeColor({}, 'error');
 
   const handlePress = (e: GestureResponderEvent) => {
     if (!disabled && !loading) {
       // Fire haptic feedback without blocking the press handler
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {
+      // Use heavy haptic for destructive actions to warn users
+      const hapticStyle = variant === 'destructive' ? Haptics.ImpactFeedbackStyle.Heavy : Haptics.ImpactFeedbackStyle.Light;
+
+      Haptics.impactAsync(hapticStyle).catch(() => {
         // Silently ignore haptic errors (device may not support it)
       });
       rest.onPress?.(e);
@@ -57,6 +61,11 @@ function ThemedButtonComponent({ title, style, variant = 'primary', disabled, lo
       paddingHorizontal: 0,
       minHeight: TouchTarget.minimum,
     },
+    destructive: {
+      backgroundColor: errorColor,
+      borderWidth: 1,
+      borderColor: 'transparent',
+    },
   };
 
   const textStyles: { [key: string]: TextStyle } = {
@@ -72,6 +81,9 @@ function ThemedButtonComponent({ title, style, variant = 'primary', disabled, lo
     link: {
       color: primaryColor,
       textDecorationLine: 'underline',
+    },
+    destructive: {
+      color: onPrimaryColor,
     },
   };
 

@@ -26,6 +26,216 @@ ensures:
 
 ---
 
+## 🎯 Core Design Principles
+
+### Consistency = Predictability
+
+**Users learn the app faster when elements behave the same way everywhere.**
+
+Consistency reduces cognitive load and frustration by making the interface
+predictable. When users encounter familiar patterns, they instantly know how to
+interact without having to think or relearn.
+
+#### Why Consistency Matters
+
+1. **Faster Learning** - Users build mental models of how the app works
+2. **Reduced Errors** - Predictable behavior prevents accidental actions
+3. **Increased Confidence** - Users feel in control when they know what to
+   expect
+4. **Better Accessibility** - Screen readers and assistive tech work better with
+   consistent patterns
+5. **Easier Maintenance** - Developers can work faster with reusable patterns
+
+#### Consistency Patterns in LoginX
+
+##### 🔴 Destructive Actions (Delete, Remove, Clear)
+
+**Pattern:** All destructive actions follow the same visual and behavioral
+pattern:
+
+- **Color:** Always red (`error` theme color)
+- **Confirmation:** Always require confirmation dialog before executing
+- **Haptic Feedback:** Heavy impact (warning sensation)
+- **Button Text:** Clear action verb ("Delete", "Remove", "Clear All")
+- **Icon:** Consistent iconography (trash, close-circle)
+
+**Example Implementation:**
+
+```tsx
+import { ThemedButton } from "@/components/themed-button";
+import { useAlert } from "@/hooks/use-alert";
+
+function DeleteItemButton({ itemId, onDelete }: Props) {
+  const alert = useAlert();
+
+  const handleDelete = () => {
+    alert.show(
+      "Delete Item",
+      "Are you sure you want to delete this item? This action cannot be undone.",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive", // Red button with heavy haptic
+          onPress: async () => {
+            await onDelete(itemId);
+          }
+        }
+      ]
+    );
+  };
+
+  return (
+    <>
+      <ThemedButton
+        title="Delete"
+        variant="destructive" // Red background, white text
+        onPress={handleDelete}
+        accessibilityLabel="Delete item"
+      />
+      {alert.AlertComponent}
+    </>
+  );
+}
+```
+
+**Benefits:**
+
+- Users instantly recognize destructive actions by color
+- Confirmation prevents accidental taps
+- Heavy haptic provides physical warning feedback
+- Consistent across all delete/remove operations
+
+##### ✅ Success Actions (Save, Submit, Confirm)
+
+**Pattern:** All primary success actions follow consistent styling:
+
+- **Color:** Primary brand color
+- **Haptic Feedback:** Light impact (success sensation)
+- **Button Text:** Clear action verb ("Save", "Submit", "Confirm")
+- **Loading State:** Shows spinner when processing
+- **Icon:** Checkmark or relevant success icon
+
+##### ⚠️ Warning Actions (Sign Out, Cancel)
+
+**Pattern:** Warning actions that need user awareness:
+
+- **Color:** Warning color (orange/amber)
+- **Confirmation:** Confirmation dialog for important actions
+- **Haptic Feedback:** Medium impact
+- **Button Text:** Clear consequence ("Sign Out", "Discard Changes")
+
+##### 🔵 Primary Actions
+
+**Pattern:** Main call-to-action buttons:
+
+- **Color:** Primary brand color
+- **Placement:** Bottom or right side (thumb-friendly on mobile)
+- **Haptic Feedback:** Light impact
+- **Loading State:** Disabled with spinner during processing
+
+##### ⚪ Secondary Actions (Cancel, Back, Skip)
+
+**Pattern:** Secondary or dismissive actions:
+
+- **Color:** Transparent or surface color with border
+- **Placement:** Left side or before primary action
+- **Haptic Feedback:** Light impact
+- **Text Color:** Muted or primary color
+
+#### Button Hierarchy Consistency
+
+```tsx
+// 1. Destructive - Delete, Remove (Red)
+<ThemedButton title="Delete Account" variant="destructive" />
+
+// 2. Primary - Main action (Brand color)
+<ThemedButton title="Save Changes" variant="primary" />
+
+// 3. Secondary - Alternative action (Outlined)
+<ThemedButton title="Cancel" variant="secondary" />
+
+// 4. Tertiary - Subtle action (Surface)
+<ThemedButton title="Learn More" variant="tertiary" />
+
+// 5. Link - Inline action (Text only)
+<ThemedButton title="Skip" variant="link" />
+```
+
+#### Dialog Consistency
+
+All confirmation dialogs follow the same structure:
+
+1. **Title:** Clear, concise action description
+2. **Message:** Explains consequences or asks for confirmation
+3. **Variant Indicator:** Colored bar at top (error=red, warning=orange,
+   success=green)
+4. **Cancel Button:** Left side, outlined, muted text
+5. **Confirm Button:** Right side, filled, colored based on action type
+6. **Destructive Dialog:** Red confirm button for delete/remove actions
+
+```tsx
+// Destructive confirmation
+alert.show(
+  "Delete Photo",
+  "Are you sure you want to delete this photo? This cannot be undone.",
+  [
+    { text: "Cancel", style: "cancel" },
+    { text: "Delete", style: "destructive" } // Red button
+  ]
+);
+
+// Warning confirmation
+alert.show(
+  "Unsaved Changes",
+  "You have unsaved changes. Do you want to discard them?",
+  [
+    { text: "Keep Editing", style: "cancel" },
+    { text: "Discard", style: "destructive" }
+  ]
+);
+```
+
+#### Touch Target Consistency
+
+All interactive elements maintain consistent touch targets:
+
+- **Minimum:** 44x44pt (iOS) / 48x48dp (Android)
+- **Comfortable:** 48px default for most buttons
+- **Large:** 56px for primary CTAs
+- **Spacing:** 8px minimum between adjacent targets
+
+#### Animation Consistency
+
+All animations follow consistent timing and easing:
+
+- **Micro-interactions:** 150-200ms (button presses, toggles)
+- **Transitions:** 200-300ms (screen changes, dialogs)
+- **Haptic Timing:** Fires before visual feedback for responsive feel
+- **Spring Physics:** Used for natural, organic motion
+
+#### Color Semantic Consistency
+
+Colors always carry the same meaning throughout the app:
+
+- **Red (`error`):** Destructive actions, errors, critical alerts
+- **Orange (`warning`):** Warnings, caution, important notices
+- **Green (`success`):** Success states, confirmations, positive actions
+- **Blue (`primary`):** Primary actions, links, brand identity
+- **Gray (`text-muted`):** Secondary info, disabled states, borders
+
+#### Icon Consistency
+
+Icons are used consistently to reinforce meaning:
+
+- **Trash can:** Delete/remove actions
+- **Checkmark:** Success, confirmation, complete
+- **X or Close:** Cancel, dismiss, close
+- **Alert triangle:** Warnings, caution
+- **Info circle:** Information, help
+
+---
+
 ## ✅ Design System Components
 
 ### 1. **Design Tokens** ✅

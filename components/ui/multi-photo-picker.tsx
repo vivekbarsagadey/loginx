@@ -1,12 +1,13 @@
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import { memo, useCallback, useState } from 'react';
-import { Alert, FlatList, Image, Platform, Pressable, StyleSheet, View } from 'react-native';
+import { FlatList, Image, Platform, Pressable, StyleSheet, View } from 'react-native';
 
 interface MultiPhotoPickerProps {
   value?: string[];
@@ -45,6 +46,7 @@ PhotoItem.displayName = 'PhotoItem';
  */
 export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10, maxFileSize = 5 * 1024 * 1024 }: MultiPhotoPickerProps) {
   const [loading, setLoading] = useState(false);
+  const alert = useAlert();
   const primaryColor = useThemeColor({}, 'primary');
   const borderColor = useThemeColor({}, 'border');
   const bgColor = useThemeColor({}, 'surface-variant');
@@ -56,7 +58,7 @@ export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       if (status !== 'granted') {
-        Alert.alert('Permission Required', 'Please grant photo library permission to select photos.', [{ text: 'OK' }]);
+        alert.show('Permission Required', 'Please grant photo library permission to select photos.', [{ text: 'OK' }]);
         return false;
       }
     }
@@ -70,7 +72,7 @@ export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10
     }
 
     if (value.length >= maxPhotos) {
-      Alert.alert('Maximum Photos Reached', `You can only select up to ${maxPhotos} photos.`, [{ text: 'OK' }]);
+      alert.show('Maximum Photos Reached', `You can only select up to ${maxPhotos} photos.`, [{ text: 'OK' }], { variant: 'warning' });
       return;
     }
 
@@ -100,7 +102,9 @@ export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10
 
         if (invalidAssets.length > 0) {
           await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-          Alert.alert('Some Images Too Large', `${invalidAssets.length} image(s) exceeded the ${Math.round(maxFileSize / (1024 * 1024))}MB limit and were skipped.`, [{ text: 'OK' }]);
+          alert.show('Some Images Too Large', `${invalidAssets.length} image(s) exceeded the ${Math.round(maxFileSize / (1024 * 1024))}MB limit and were skipped.`, [{ text: 'OK' }], {
+            variant: 'warning',
+          });
         }
 
         if (validAssets.length > 0) {
@@ -113,7 +117,7 @@ export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10
       console.error('[MultiPhotoPicker] Error picking images:', error);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       onError?.(error instanceof Error ? error : new Error('Failed to pick images'));
-      Alert.alert('Error', 'Failed to pick images. Please try again.');
+      alert.show('Error', 'Failed to pick images. Please try again.', [{ text: 'OK' }], { variant: 'error' });
     } finally {
       setLoading(false);
     }
@@ -121,7 +125,7 @@ export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10
 
   const removePhoto = useCallback(
     (index: number) => {
-      Alert.alert('Remove Photo', 'Are you sure you want to remove this photo?', [
+      alert.show('Remove Photo', 'Are you sure you want to remove this photo?', [
         {
           text: 'Cancel',
           style: 'cancel',
@@ -138,11 +142,11 @@ export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10
         },
       ]);
     },
-    [onChange, value]
+    [alert, onChange, value]
   );
 
   const clearAll = useCallback(() => {
-    Alert.alert('Remove All Photos', 'Are you sure you want to remove all photos?', [
+    alert.show('Remove All Photos', 'Are you sure you want to remove all photos?', [
       {
         text: 'Cancel',
         style: 'cancel',
@@ -156,7 +160,7 @@ export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10
         },
       },
     ]);
-  }, [onChange]);
+  }, [alert, onChange]);
 
   const renderPhoto = useCallback(
     ({ item, index }: { item: string; index: number }) => <PhotoItem item={item} index={index} onRemove={removePhoto} borderColor={borderColor} primaryColor={primaryColor} errorColor={errorColor} />,
@@ -229,6 +233,7 @@ export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10
       <ThemedText type="caption" style={[styles.helperText, { color: textColor }]}>
         Maximum file size: {Math.round(maxFileSize / (1024 * 1024))}MB per photo
       </ThemedText>
+      {alert.AlertComponent}
     </ThemedView>
   );
 }
