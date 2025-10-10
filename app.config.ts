@@ -119,9 +119,9 @@ export default {
       firebaseStorageUrl: process.env.FIREBASE_STORAGE_URL,
 
       // Backend API Configuration
-      apiBaseUrl: process.env.API_BASE_URL || 'https://api.myapp.com',
+      apiBaseUrl: process.env.API_BASE_URL || 'https://api.loginx.whizit.com',
       apiTimeout: process.env.API_TIMEOUT || '10000',
-      wsUrl: process.env.WS_URL || 'wss://ws.myapp.com',
+      wsUrl: process.env.WS_URL || 'wss://ws.loginx.whizit.com',
 
       // Database Configuration
       dbName: process.env.DB_NAME || 'login-x-db',
