@@ -42,16 +42,7 @@ export const testAuthPersistence = async (): Promise<void> => {
 export const logAuthPersistenceInfo = async (): Promise<void> => {
   try {
     const stats = await getAuthPersistenceStats();
-
-    console.warn('🔐 AUTH PERSISTENCE STATUS:');
-    console.warn('├─ Has Auth State:', stats.hasAuthState ? '✅' : '❌');
-    console.warn('├─ Is Authenticated:', stats.isAuthenticated ? '✅' : '❌');
-    console.warn('├─ User ID:', stats.userId || 'None');
-    console.warn('├─ Has User Info:', stats.hasUserInfo ? '✅' : '❌');
-    console.warn('├─ Has Token:', stats.hasToken ? '✅' : '❌');
-    console.warn('├─ Last Login:', stats.lastLoginTime ? new Date(stats.lastLoginTime).toLocaleString() : 'Never');
-    console.warn('├─ Expires At:', stats.expiresAt ? new Date(stats.expiresAt).toLocaleString() : 'N/A');
-    console.warn('└─ Time Until Expiry:', stats.timeUntilExpiry > 0 ? `${Math.round(stats.timeUntilExpiry / (1000 * 60 * 60 * 24))} days` : 'Expired');
+    // Auth persistence logging disabled
   } catch (error) {
     console.error('❌ Failed to get auth persistence info:', error);
   }

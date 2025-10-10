@@ -17,10 +17,6 @@ export const validateHttps = (url: string): boolean => {
     throw new Error(`SECURITY: API URL must use HTTPS in production: ${url}`);
   }
 
-  if (!isHttps && __DEV__) {
-    console.warn(`⚠️ SECURITY WARNING: API URL should use HTTPS: ${url}`);
-  }
-
   return isHttps;
 };
 

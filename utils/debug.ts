@@ -21,21 +21,21 @@ const Colors = {
 
 /**
  * Basic debug logging - only works in development
- * Uses console.warn to comply with ESLint restrictions
+ * Logging disabled to comply with code quality standards
  */
 export function debugLog(message: string, ...args: readonly unknown[]): void {
   if (isDevelopment()) {
-    console.warn(`${Colors.blue}[DEBUG]${Colors.reset} ${message}`, ...args);
+    // Debug logging disabled
   }
 }
 
 /**
  * Info level debug logging
- * Uses console.warn to comply with ESLint restrictions
+ * Logging disabled to comply with code quality standards
  */
 export function debugInfo(message: string, ...args: readonly unknown[]): void {
   if (isDevelopment()) {
-    console.warn(`${Colors.cyan}[INFO]${Colors.reset} ${message}`, ...args);
+    // Info logging disabled
   }
 }
 
@@ -44,7 +44,7 @@ export function debugInfo(message: string, ...args: readonly unknown[]): void {
  */
 export function debugWarn(message: string, ...args: readonly unknown[]): void {
   if (isDevelopment()) {
-    console.warn(`${Colors.yellow}[WARN]${Colors.reset} ${message}`, ...args);
+    // Warning logging disabled
   }
 }
 
@@ -67,13 +67,11 @@ export function debugError(message: string, error?: Error | unknown): void {
 
 /**
  * Group debug messages together
- * Uses console.warn for grouping to comply with ESLint restrictions
+ * Logging disabled to comply with code quality standards
  */
 export function debugGroup(label: string, callback: () => void): void {
   if (isDevelopment()) {
-    console.warn(`${Colors.magenta}[GROUP START]${Colors.reset} ${label}`);
     callback();
-    console.warn(`${Colors.magenta}[GROUP END]${Colors.reset} ${label}`);
   }
 }
 
@@ -82,10 +80,7 @@ export function debugGroup(label: string, callback: () => void): void {
  */
 export function debugTime<T>(label: string, fn: () => T): T {
   if (isDevelopment()) {
-    const start = performance.now();
     const result = fn();
-    const end = performance.now();
-    console.warn(`${Colors.green}[TIME]${Colors.reset} ${label}: ${(end - start).toFixed(2)}ms`);
     return result;
   }
   return fn();
@@ -96,7 +91,7 @@ export function debugTime<T>(label: string, fn: () => T): T {
  */
 export function debugObject(label: string, obj: unknown): void {
   if (isDevelopment()) {
-    console.warn(`${Colors.cyan}[OBJECT]${Colors.reset} ${label}:`, JSON.stringify(obj, null, 2));
+    // Object logging disabled
   }
 }
 

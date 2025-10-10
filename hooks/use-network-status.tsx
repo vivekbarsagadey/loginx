@@ -49,7 +49,7 @@ export function useNetworkStatus(): NetworkStatus {
         setNetworkStatus(status);
       })
       .catch((error) => {
-        console.warn('[useNetworkStatus] Failed to get initial status:', error);
+        // Failed to get initial status
       });
 
     // Subscribe to network changes
@@ -59,7 +59,7 @@ export function useNetworkStatus(): NetworkStatus {
           setNetworkStatus(status);
         })
         .catch((error) => {
-          console.warn('[useNetworkStatus] Failed to update status:', error);
+          // Failed to update status
         });
     });
 

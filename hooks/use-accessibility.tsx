@@ -44,9 +44,8 @@ export function useAccessibility(): AccessibilityState {
           isBoldTextEnabled: boldText,
           preferredContentSizeCategory: null,
         });
-      } catch (error) {
-        // Handle gracefully - continue with default values
-        console.warn('Failed to initialize accessibility settings:', error);
+      } catch (_error) {
+        // Failed to initialize accessibility settings
       }
     };
 

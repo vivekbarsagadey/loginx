@@ -79,9 +79,6 @@ export default function VerifyPhoneScreen() {
       // 2. Call signInWithPhoneNumber or verifyPhoneNumber
       // 3. Get verificationId
 
-      console.warn('[PhoneVerification] Phone verification requires additional setup');
-      console.warn('[PhoneVerification] See: https://firebase.google.com/docs/auth/web/phone-auth');
-
       // Mock verification ID for demo purposes
       setVerificationId('mock-verification-id');
 

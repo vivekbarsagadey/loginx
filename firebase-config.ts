@@ -18,11 +18,6 @@ const firebaseConfig = {
   measurementId: Config.firebase.measurementId,
 };
 
-// Log Firebase configuration in development (without exposing sensitive data)
-if (__DEV__) {
-  console.warn('[Firebase] Initializing with project:', Config.firebase.projectId);
-}
-
 // ---- initialize (reuse if already created) ----
 let app: ReturnType<typeof initializeApp>;
 try {
@@ -42,7 +37,7 @@ if (Platform.OS === 'web') {
   auth = getAuth(app);
   // Set persistence to keep users logged in across browser sessions
   setPersistence(auth, browserLocalPersistence).catch((error) => {
-    console.warn('[Firebase] Failed to set persistence:', error);
+    // Failed to set persistence
   });
 } else {
   // React Native: Default persistence should work, but let's be explicit
@@ -50,13 +45,8 @@ if (Platform.OS === 'web') {
     // For React Native, Firebase should automatically use AsyncStorage
     // if @react-native-async-storage/async-storage is installed
     auth = initializeAuth(app);
-
-    if (__DEV__) {
-      console.warn('[Firebase] ✅ AUTH PERSISTENCE: Initialized for React Native with default persistence');
-    }
   } catch (_initError) {
     // Fallback for Fast Refresh or already-initialized
-    console.warn('[Firebase] Auth already initialized, using existing instance');
     auth = getAuth(app);
   }
 }
@@ -76,9 +66,8 @@ try {
     if (__DEV__ && Config.development.useFirebaseEmulator) {
       try {
         connectFirestoreEmulator(firestoreInstance, 'localhost', 8080);
-        console.warn('[Firebase] Connected to Firestore emulator at localhost:8080');
       } catch (emulatorError) {
-        console.warn('[Firebase] Failed to connect to emulator:', emulatorError);
+        // Failed to connect to emulator
       }
     }
 
@@ -87,17 +76,14 @@ try {
       // Try multi-tab persistence first, fall back to single-tab
       enableMultiTabIndexedDbPersistence(firestoreInstance)
         .then(() => {
-          console.warn('[Firebase] 🏠 LOCAL-FIRST: Multi-tab offline persistence enabled');
           firestoreInitialized = true;
         })
         .catch((err) => {
           if (err.code === 'failed-precondition') {
             // Multiple tabs open, persistence can only be enabled in one tab at a time
-            console.warn('[Firebase] 🏠 LOCAL-FIRST: Multi-tab persistence failed, trying single-tab');
             return enableIndexedDbPersistence(firestoreInstance!);
           } else if (err.code === 'unimplemented') {
             // The current browser doesn't support persistence
-            console.warn('[Firebase] ⚠️  LOCAL-FIRST: Offline persistence not supported in this browser');
           } else {
             console.error('[Firebase] LOCAL-FIRST: Persistence error:', err);
           }
@@ -105,53 +91,26 @@ try {
         })
         .then(() => {
           if (!firestoreInitialized) {
-            console.warn('[Firebase] 🏠 LOCAL-FIRST: Single-tab offline persistence enabled');
             firestoreInitialized = true;
           }
         })
         .catch((err) => {
-          console.warn('[Firebase] ⚠️  LOCAL-FIRST: Could not enable offline persistence:', err);
           firestoreInitialized = true;
         });
     } else {
       // Native platforms have built-in offline support - PERFECT for local-first
       firestoreInitialized = true;
-      if (__DEV__) {
-        console.warn('[Firebase] 🏠 LOCAL-FIRST: Native offline persistence enabled by default');
-      }
     }
 
     // Monitor connection state for LOCAL-FIRST behavior
     if (__DEV__) {
-      // Set up connection monitoring
-      const checkConnection = () => {
-        if (typeof navigator !== 'undefined' && 'onLine' in navigator) {
-          if (navigator.onLine) {
-            console.warn('[Firebase] 🌐 LOCAL-FIRST: Network ONLINE - Syncing in background');
-          } else {
-            console.warn('[Firebase] 🏠 LOCAL-FIRST: Network OFFLINE - Using local data ONLY');
-          }
-        }
-      };
-
-      // Only set up window event listeners on web platform
-      if (Platform.OS === 'web' && typeof window !== 'undefined') {
-        window.addEventListener('online', () => {
-          console.warn('[Firebase] 🔄 LOCAL-FIRST: Connection restored - Background sync starting');
-        });
-        window.addEventListener('offline', () => {
-          console.warn('[Firebase] 🏠 LOCAL-FIRST: Gone offline - Continuing with local data');
-        });
-      }
-
-      checkConnection();
+      // Connection monitoring disabled
     }
 
     // Set up LOCAL-FIRST data loading preferences
     if (firestoreInstance) {
       // Configure Firestore for local-first behavior
       // This ensures all reads attempt local cache first
-      console.warn('[Firebase] 🏠 LOCAL-FIRST: Configured for cache-first operations');
     }
   } else {
     // Configuration missing - don't initialize Firestore

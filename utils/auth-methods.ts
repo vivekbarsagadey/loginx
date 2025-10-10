@@ -94,12 +94,6 @@ export const validateAuthMethodsConfig = (): void => {
   if (enabledCount === 0) {
     throw new Error('Configuration Error: No authentication methods are enabled. ' + 'Please enable at least one authentication method in your environment configuration.');
   }
-
-  // Log enabled methods in development
-  if (__DEV__) {
-    const enabledMethods = getEnabledAuthMethods();
-    console.warn(`[Auth Config] ${enabledCount} authentication method(s) enabled:`, enabledMethods.map(getAuthMethodLabel).join(', '));
-  }
 };
 
 /**

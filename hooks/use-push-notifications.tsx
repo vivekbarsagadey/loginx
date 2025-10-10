@@ -28,26 +28,17 @@ Notifications.setNotificationHandler({
 function isPushNotificationsAvailable(): boolean {
   // Check if push notifications feature is enabled via environment variable
   if (!Config.features.pushNotifications) {
-    if (__DEV__) {
-      console.warn('[Push Notifications] Disabled via ENABLE_PUSH_NOTIFICATIONS env variable');
-    }
     return false;
   }
 
   // Check if running in Expo Go (push notifications don't work reliably in Expo Go)
   const isExpoGo = Constants.appOwnership === 'expo';
   if (isExpoGo) {
-    if (__DEV__) {
-      console.warn('[Push Notifications] Not available in Expo Go. Please use a development build.');
-    }
     return false;
   }
 
   // Check if it's a physical device
   if (!Device.isDevice) {
-    if (__DEV__) {
-      console.warn('[Push Notifications] Not available on simulator/emulator. Use a physical device.');
-    }
     return false;
   }
 
@@ -87,9 +78,6 @@ async function registerForPushNotificationsAsync() {
     }
 
     if (finalStatus !== 'granted') {
-      if (__DEV__) {
-        console.warn('[Push Notifications] Permission not granted');
-      }
       return undefined;
     }
 
@@ -102,10 +90,6 @@ async function registerForPushNotificationsAsync() {
 
     const pushToken = await Notifications.getExpoPushTokenAsync({ projectId });
     token = pushToken.data;
-
-    if (__DEV__) {
-      console.warn('[Push Notifications] Token obtained:', token);
-    }
   } catch (error) {
     console.error('[Push Notifications] Error registering:', error);
     return undefined;
@@ -176,16 +160,10 @@ export const usePushNotifications = (uid?: string) => {
           console.error('[Push Notifications] Error saving notification:', error);
         });
       }
-
-      if (__DEV__) {
-        console.warn('[Push Notifications] Notification received:', notification);
-      }
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-      if (__DEV__) {
-        console.warn('[Push Notifications] Notification response received:', response);
-      }
+      // Notification response received
     });
 
     // Cleanup listeners

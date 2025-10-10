@@ -39,8 +39,4 @@ export async function seedSampleNotifications() {
     // Add small delay to ensure different timestamps
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
-
-  if (__DEV__) {
-    console.warn('✅ Sample notifications seeded');
-  }
 }

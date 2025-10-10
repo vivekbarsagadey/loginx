@@ -39,13 +39,6 @@ export const provideFeedback = async (type: FeedbackType): Promise<void> => {
     }
   } catch (error: unknown) {
     // Silently fail - haptics not critical
-    if (__DEV__) {
-      if (error instanceof Error) {
-        console.warn('[Feedback] Haptic feedback failed:', error.message);
-      } else {
-        console.warn('[Feedback] Haptic feedback failed:', error);
-      }
-    }
   }
 };
 

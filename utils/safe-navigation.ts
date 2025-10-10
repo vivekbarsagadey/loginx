@@ -94,8 +94,8 @@ export function safeReplace(options: NavigationOptions): void {
  * @param options.onCancel - Optional cancel callback
  * @param options.showConfirm - Optional callback to show confirmation dialog (use useAlert in component)
  */
-export function safeBack(options?: { 
-  confirmMessage?: string; 
+export function safeBack(options?: {
+  confirmMessage?: string;
   onCancel?: () => void;
   showConfirm?: (config: { title: string; message: string; onConfirm: () => void; onCancel?: () => void }) => void;
 }): void {
@@ -119,7 +119,7 @@ export function safeBack(options?: {
             showError(new Error('Cannot go back. Try closing the app.'));
           }
         },
-        onCancel: onCancel
+        onCancel: onCancel,
       });
     } else {
       if (router.canGoBack()) {
@@ -142,7 +142,6 @@ export function isValidRoute(pathname: string): boolean {
   try {
     // Basic validation - check if route starts with /
     if (!pathname.startsWith('/')) {
-      console.warn('[Navigation] Invalid route format:', pathname);
       return false;
     }
 

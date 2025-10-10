@@ -165,25 +165,7 @@ export const logConfigStatus = (): void => {
     return;
   }
 
-  // Use warn for development logging (ESLint allows warn)
-  console.warn(
-    '[Config] Configuration loaded:',
-    JSON.stringify(
-      {
-        app: Config.app.name,
-        version: Config.app.version,
-        firebase: {
-          project: Config.firebase.projectId,
-          hasApiKey: !isConfigMissing(Config.firebase.apiKey),
-        },
-        features: Config.features,
-        authMethods: Config.authMethods,
-        development: Config.development,
-      },
-      null,
-      2
-    )
-  );
+  // Configuration logging disabled
 };
 
 // Validate configuration on import in development

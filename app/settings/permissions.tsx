@@ -127,14 +127,6 @@ export default function PermissionsScreen() {
   const primaryColor = useThemeColor({}, 'primary');
   const mutedColor = useThemeColor({}, 'text-muted');
 
-  // Debug logging
-  React.useEffect(() => {
-    console.warn('[PermissionsScreen] Mounted');
-    console.warn('[PermissionsScreen] Permissions Status:', JSON.stringify(permissionsStatus, null, 2));
-    console.warn('[PermissionsScreen] BgColor:', bgColor);
-    console.warn('[PermissionsScreen] PrimaryColor:', primaryColor);
-  }, [permissionsStatus, bgColor, primaryColor]);
-
   // Add loading state check
   if (!permissionsStatus) {
     return (

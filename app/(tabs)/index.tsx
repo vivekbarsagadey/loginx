@@ -32,16 +32,11 @@ export default function IndexScreen() {
     const fetchUserProfile = async () => {
       if (user) {
         try {
-          console.warn('[Home] Fetching profile for user:', user.uid);
           const profile = await getUserProfile(user.uid);
-          console.warn('[Home] Profile fetched:', profile);
-          console.warn('[Home] DisplayName:', profile?.displayName);
-          console.warn('[Home] Age:', profile?.age);
 
           if (profile) {
             setUserProfile(profile);
           } else {
-            console.warn('[Home] User profile is null');
             alert.show('Error', 'User profile not found. Please complete your registration.', [{ text: 'OK' }], { variant: 'error' });
           }
         } catch (error) {
@@ -51,7 +46,6 @@ export default function IndexScreen() {
           setLoading(false);
         }
       } else {
-        console.warn('[Home] No user logged in');
         setLoading(false);
       }
     };

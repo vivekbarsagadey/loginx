@@ -44,9 +44,6 @@ export function useHapticAction<T extends unknown[]>(action: (...args: T) => voi
         await action(...args);
       } catch (error) {
         // Silently fail haptics - not critical
-        if (__DEV__) {
-          console.warn('[useHapticAction] Haptic feedback failed:', error);
-        }
       }
     },
     [action, style]

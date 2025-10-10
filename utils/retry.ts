@@ -78,7 +78,6 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions =
 
       // Check if we should retry this error
       if (!opts.shouldRetry(error)) {
-        console.warn(`[Retry] Not retrying error:`, error);
         throw error;
       }
 
@@ -90,7 +89,6 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions =
 
       // Calculate delay and wait
       const delay = calculateDelay(attempt, opts);
-      console.warn(`[Retry] Attempt ${attempt + 1}/${opts.maxRetries + 1} failed. Retrying in ${Math.round(delay)}ms...`);
       await sleep(delay);
     }
   }

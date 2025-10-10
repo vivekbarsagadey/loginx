@@ -89,7 +89,6 @@ export default function LoginScreen() {
           }
         } catch (_error) {
           // Silently fail to password login if biometric fails
-          console.warn('[Login] Biometric authentication failed, showing password login');
         }
       }
     };
@@ -166,7 +165,6 @@ export default function LoginScreen() {
         }
       } catch (_storageError) {
         // Continue to main app if 2FA check fails
-        console.warn('[Login] Could not check 2FA status, continuing to main app');
       }
 
       // If 2FA is not enabled, user will be redirected to main app by root layout observer

@@ -185,11 +185,9 @@ export function runRegistrationDiagnostics(): void {
 
   // Only show warnings for actual issues, not startup timing
   if (hasWarnings.length > 0) {
-    console.warn('⚠️ Registration has warnings:');
     hasWarnings.forEach((result) => {
-      console.warn(`  [${result.category}] ${result.message}`);
       if (result.details) {
-        console.warn(`    Details: ${result.details}`);
+        // Warning details suppressed
       }
     });
   }
@@ -209,8 +207,7 @@ export function logStateChange(component: string, stateName: string, oldValue: u
     return; // Skip initial step setup
   }
 
-  // Use console.warn for debugging visibility
-  console.warn(`[${component}] ${stateName}:`, oldValue, '→', newValue);
+  // State change logging disabled
 }
 
 /**

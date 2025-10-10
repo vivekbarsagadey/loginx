@@ -201,7 +201,6 @@ export default function RegisterScreen() {
       try {
         await sendEmailVerification(user);
       } catch (verificationError) {
-        console.warn('[Registration] Failed to send verification email:', verificationError);
         // Continue even if email verification fails - user can resend later
       }
 

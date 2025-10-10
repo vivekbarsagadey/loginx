@@ -59,7 +59,6 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
   const checkNotificationPermission = async () => {
     try {
       if (!isNotificationsAvailable()) {
-        console.warn('[Notifications] Notifications not available in Expo Go');
         setPermissionStatus('denied');
         setHasCheckedPermission(true);
         return;

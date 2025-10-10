@@ -21,8 +21,7 @@ export function getEnvVar(key: string, defaultValue?: string): string {
       throw new Error(`Missing required environment variable: ${key}`);
     }
 
-    // In development, warn but don't crash
-    console.warn(`⚠️  Missing environment variable: ${key}`);
+    // In development, return empty string
     return '';
   }
 
