@@ -172,6 +172,68 @@ export function validateRequiredField(value: string, fieldName = 'Field'): Valid
 }
 
 /**
+ * Validate text with minimum length
+ * @param text - Text to validate
+ * @param minLength - Minimum required length
+ * @param fieldName - Name of field for error message
+ * @returns Validation result with error message if invalid
+ */
+export function validateMinLength(text: string, minLength: number, fieldName = 'Text'): ValidationResult {
+  const sanitized = sanitizeUserInput(text.trim());
+
+  if (!sanitized) {
+    return {
+      isValid: false,
+      error: `${fieldName} is required`,
+    };
+  }
+
+  if (sanitized.length < minLength) {
+    return {
+      isValid: false,
+      error: `${fieldName} must be at least ${minLength} characters`,
+    };
+  }
+
+  return { isValid: true };
+}
+
+/**
+ * Validate text with maximum length
+ * @param text - Text to validate
+ * @param maxLength - Maximum allowed length
+ * @param fieldName - Name of field for error message
+ * @returns Validation result with error message if invalid
+ */
+export function validateMaxLength(text: string, maxLength: number, fieldName = 'Text'): ValidationResult {
+  if (text.length > maxLength) {
+    return {
+      isValid: false,
+      error: `${fieldName} must be no more than ${maxLength} characters`,
+    };
+  }
+
+  return { isValid: true };
+}
+
+/**
+ * Validate text with length range
+ * @param text - Text to validate
+ * @param minLength - Minimum required length
+ * @param maxLength - Maximum allowed length
+ * @param fieldName - Name of field for error message
+ * @returns Validation result with error message if invalid
+ */
+export function validateLengthRange(text: string, minLength: number, maxLength: number, fieldName = 'Text'): ValidationResult {
+  const minResult = validateMinLength(text, minLength, fieldName);
+  if (!minResult.isValid) {
+    return minResult;
+  }
+
+  return validateMaxLength(text, maxLength, fieldName);
+}
+
+/**
  * Validate multiple fields at once
  * @param validations - Array of validation functions to run
  * @returns True if all validations pass
