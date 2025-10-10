@@ -3,7 +3,7 @@
  * Ensures consistent layouts across all device types
  */
 
-import { Dimensions, Platform, ScaledSize } from 'react-native';
+import { Dimensions, Platform, type ScaledSize } from 'react-native';
 
 /**
  * Breakpoints for responsive design

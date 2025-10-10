@@ -150,7 +150,7 @@ export default function ChangePasswordScreen() {
     } finally {
       setLoading(false);
     }
-  }, [user, currentPassword, newPassword, confirmPassword, validatePassword, router]);
+  }, [user, currentPassword, newPassword, confirmPassword, validatePassword, router, alert]);
 
   return (
     <>

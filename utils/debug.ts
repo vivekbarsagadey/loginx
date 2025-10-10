@@ -23,7 +23,7 @@ const Colors = {
  * Basic debug logging - only works in development
  * Logging disabled to comply with code quality standards
  */
-export function debugLog(message: string, ...args: readonly unknown[]): void {
+export function debugLog(_message: string, ..._args: readonly unknown[]): void {
   if (isDevelopment()) {
     // Debug logging disabled
   }
@@ -33,7 +33,7 @@ export function debugLog(message: string, ...args: readonly unknown[]): void {
  * Info level debug logging
  * Logging disabled to comply with code quality standards
  */
-export function debugInfo(message: string, ...args: readonly unknown[]): void {
+export function debugInfo(_message: string, ..._args: readonly unknown[]): void {
   if (isDevelopment()) {
     // Info logging disabled
   }
@@ -42,7 +42,7 @@ export function debugInfo(message: string, ...args: readonly unknown[]): void {
 /**
  * Warning level debug logging
  */
-export function debugWarn(message: string, ...args: readonly unknown[]): void {
+export function debugWarn(_message: string, ..._args: readonly unknown[]): void {
   if (isDevelopment()) {
     // Warning logging disabled
   }
@@ -89,7 +89,7 @@ export function debugTime<T>(label: string, fn: () => T): T {
 /**
  * Debug log an object with pretty formatting
  */
-export function debugObject(label: string, obj: unknown): void {
+export function debugObject(_label: string, _obj: unknown): void {
   if (isDevelopment()) {
     // Object logging disabled
   }

@@ -32,12 +32,15 @@ export function AlertBanner({ message, variant = 'info', title, actionLabel, onA
   const textColor = useThemeColor({}, 'text');
   const shadowColor = useThemeColor({}, 'shadow');
 
-  const variantColors = {
-    error: errorColor,
-    info: primaryColor,
-    success: successColor,
-    warning: warningColor,
-  };
+  const variantColors = React.useMemo(
+    () => ({
+      error: errorColor,
+      info: primaryColor,
+      success: successColor,
+      warning: warningColor,
+    }),
+    [errorColor, primaryColor, successColor, warningColor]
+  );
 
   const icons = {
     error: '✕',

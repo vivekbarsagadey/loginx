@@ -71,7 +71,7 @@ export async function optimizeImage(uri: string, options: ImageOptimizationOptio
 /**
  * Compress image to target file size (approximate)
  */
-export async function compressImageToSize(uri: string, targetSizeBytes: number, maxIterations: number = 5): Promise<OptimizedImage> {
+export async function compressImageToSize(uri: string, targetSizeBytes: number, maxIterations = 5): Promise<OptimizedImage> {
   let currentQuality = 0.9;
   let result = await optimizeImage(uri, { quality: currentQuality });
 
@@ -92,7 +92,7 @@ export async function compressImageToSize(uri: string, targetSizeBytes: number, 
 /**
  * Create thumbnail from image
  */
-export async function createThumbnail(uri: string, size: number = 200): Promise<OptimizedImage> {
+export async function createThumbnail(uri: string, size = 200): Promise<OptimizedImage> {
   return optimizeImage(uri, {
     maxWidth: size,
     maxHeight: size,
@@ -118,7 +118,7 @@ export async function flipImage(uri: string, direction: 'horizontal' | 'vertical
 /**
  * Convert image to WebP format for smaller file size
  */
-export async function convertToWebP(uri: string, quality: number = 0.8): Promise<OptimizedImage> {
+export async function convertToWebP(uri: string, quality = 0.8): Promise<OptimizedImage> {
   return optimizeImage(uri, {
     format: 'webp',
     quality,
@@ -173,14 +173,7 @@ export function calculateOptimalDimensions(originalWidth: number, originalHeight
 /**
  * Validate image dimensions
  */
-export function validateImageDimensions(
-  width: number,
-  height: number,
-  minWidth: number = 100,
-  minHeight: number = 100,
-  maxWidth: number = 4096,
-  maxHeight: number = 4096
-): { valid: boolean; error?: string } {
+export function validateImageDimensions(width: number, height: number, minWidth = 100, minHeight = 100, maxWidth = 4096, maxHeight = 4096): { valid: boolean; error?: string } {
   if (width < minWidth || height < minHeight) {
     return {
       valid: false,

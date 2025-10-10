@@ -199,7 +199,7 @@ export default function RegisterScreen() {
       // Step 2: Send email verification
       try {
         await sendEmailVerification(user);
-      } catch (verificationError) {
+      } catch (_verificationError) {
         // Continue even if email verification fails - user can resend later
       }
 

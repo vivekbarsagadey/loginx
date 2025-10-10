@@ -3,7 +3,7 @@ import { debugError, debugLog } from '@/utils/debug';
 import { showError } from '@/utils/error';
 import { applyPendingProfileData, clearPendingProfileData } from '@/utils/pending-profile';
 import { clearSecureStorage } from '@/utils/secure-storage';
-import { signOut as firebaseSignOut, onAuthStateChanged, User } from 'firebase/auth';
+import { signOut as firebaseSignOut, onAuthStateChanged, type User } from 'firebase/auth';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { auth } from '../firebase-config';
 

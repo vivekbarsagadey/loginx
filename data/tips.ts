@@ -194,7 +194,7 @@ export function getRandomTip(): Tip {
 /**
  * Get random tips by category
  */
-export function getRandomTipsByCategory(category: Tip['category'], count: number = 1): Tip[] {
+export function getRandomTipsByCategory(category: Tip['category'], count = 1): Tip[] {
   const categoryTips = getTipsByCategory(category);
   const shuffled = [...categoryTips].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count);

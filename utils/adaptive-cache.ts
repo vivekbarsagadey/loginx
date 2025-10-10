@@ -4,7 +4,7 @@
  */
 
 import { debugError, debugLog, debugWarn } from './debug';
-import { DeviceCapabilities, getDeviceCapabilities, getDeviceDescription } from './device-info';
+import { type DeviceCapabilities, getDeviceCapabilities, getDeviceDescription } from './device-info';
 
 interface CacheAdjustmentHistory {
   timestamp: number;
@@ -15,13 +15,13 @@ interface CacheAdjustmentHistory {
 }
 
 class AdaptiveCacheManager {
-  private currentCacheSize: number = 100; // Default fallback
+  private currentCacheSize = 100; // Default fallback
   private deviceCapabilities: DeviceCapabilities | null = null;
   private cacheHitRateHistory: number[] = [];
   private memoryPressureLevel: 'low' | 'medium' | 'high' = 'low';
   private adjustmentHistory: CacheAdjustmentHistory[] = [];
   private monitoringInterval: ReturnType<typeof setInterval> | null = null;
-  private isInitialized: boolean = false;
+  private isInitialized = false;
 
   // Configuration
   private readonly MIN_CACHE_SIZE = 30;

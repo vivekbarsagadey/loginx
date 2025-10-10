@@ -5,7 +5,7 @@
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { User } from 'firebase/auth';
+import { type User } from 'firebase/auth';
 import { debugError, debugLog, debugWarn } from './debug';
 import { securelyDeleteItem, securelyGetItem, securelySetItem } from './secure-storage';
 

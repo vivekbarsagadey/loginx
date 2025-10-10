@@ -76,7 +76,7 @@ export const isAuthCancellation = (error: unknown): boolean => {
 /**
  * Extract full name from Apple credential
  */
-export const getAppleFullName = (givenName: string | null | undefined, familyName: string | null | undefined, fallback: string = 'User'): string => {
+export const getAppleFullName = (givenName: string | null | undefined, familyName: string | null | undefined, fallback = 'User'): string => {
   if (givenName || familyName) {
     return `${givenName || ''} ${familyName || ''}`.trim() || fallback;
   }

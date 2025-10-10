@@ -51,7 +51,7 @@ export default function IndexScreen() {
     };
 
     fetchUserProfile();
-  }, [user]);
+  }, [user, alert]);
 
   if (loading) {
     return (

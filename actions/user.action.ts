@@ -1,5 +1,5 @@
 import { FirebaseCollections } from '@/constants';
-import { UserProfile } from '@/types/user';
+import { type UserProfile } from '@/types/user';
 import { debugError, debugLog } from '@/utils/debug';
 import { showError } from '@/utils/error';
 import { getData, setData } from '@/utils/local-first';

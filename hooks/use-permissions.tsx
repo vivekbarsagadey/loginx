@@ -31,7 +31,11 @@ export interface UsePermissionsReturn {
   requestNotificationPermission: () => Promise<boolean>;
   checkAllPermissions: () => Promise<void>;
   openSettings: () => void;
-  showPermissionAlert: (permissionName: string, permissionDescription: string, onConfirm?: () => void) => {
+  showPermissionAlert: (
+    permissionName: string,
+    permissionDescription: string,
+    onConfirm?: () => void
+  ) => {
     title: string;
     message: string;
     buttons: { text: string; style?: 'cancel'; onPress?: () => void }[];

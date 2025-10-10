@@ -1,4 +1,4 @@
-import { UserProfile } from '@/types/user';
+import { type UserProfile } from '@/types/user';
 
 // Input sanitization constants
 const MAX_INPUT_LENGTH = 500;

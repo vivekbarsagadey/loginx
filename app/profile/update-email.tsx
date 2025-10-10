@@ -121,7 +121,7 @@ export default function UpdateEmailScreen() {
     } finally {
       setLoading(false);
     }
-  }, [user, newEmail, confirmEmail, validateEmail, validateConfirmEmail, router]);
+  }, [user, newEmail, confirmEmail, validateEmail, validateConfirmEmail, router, alert]);
 
   const currentEmail = user?.email || '';
 

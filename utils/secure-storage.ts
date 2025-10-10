@@ -74,7 +74,7 @@ export const securelySetBoolean = async (key: string, value: boolean): Promise<v
  * @param defaultValue - Default value if key doesn't exist
  * @returns Promise that resolves to the boolean value
  */
-export const securelyGetBoolean = async (key: string, defaultValue: boolean = false): Promise<boolean> => {
+export const securelyGetBoolean = async (key: string, defaultValue = false): Promise<boolean> => {
   const value = await securelyGetItem(key);
   if (value === null) {
     return defaultValue;
@@ -97,7 +97,7 @@ export const securelySetNumber = async (key: string, value: number): Promise<voi
  * @param defaultValue - Default value if key doesn't exist
  * @returns Promise that resolves to the number value
  */
-export const securelyGetNumber = async (key: string, defaultValue: number = 0): Promise<number> => {
+export const securelyGetNumber = async (key: string, defaultValue = 0): Promise<number> => {
   const value = await securelyGetItem(key);
   if (value === null) {
     return defaultValue;

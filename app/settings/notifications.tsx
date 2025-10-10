@@ -12,6 +12,7 @@ import i18n from '@/i18n';
 import type { NotificationSettings } from '@/types/notification-settings';
 import { showError } from '@/utils/error';
 import { Feather } from '@expo/vector-icons';
+import type { ComponentProps } from 'react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Switch, View } from 'react-native';
 
@@ -152,7 +153,7 @@ export default function NotificationsScreen() {
         {notificationSettings.map((setting, index) => (
           <View key={setting.key} style={[styles.settingRow, index === notificationSettings.length - 1 && styles.settingRowLast]}>
             <View style={styles.iconContainer}>
-              <Feather name={setting.icon as any} size={IconSize.md} color={tintColor} />
+              <Feather name={setting.icon as ComponentProps<typeof Feather>['name']} size={IconSize.md} color={tintColor} />
             </View>
             <View style={styles.settingInfo}>
               <ThemedText style={styles.settingTitle}>{setting.title}</ThemedText>

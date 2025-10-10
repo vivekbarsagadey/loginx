@@ -38,7 +38,7 @@ function ThemedButtonComponent({ title, style, variant = 'primary', disabled, lo
     Haptics.impactAsync(hapticStyle).catch((hapticError: unknown) => {
       // Device may not support haptics - log but don't interrupt user experience
       if (__DEV__ && hapticError instanceof Error) {
-        console.debug('[ThemedButton] Haptic feedback unavailable:', hapticError.message);
+        console.warn('[ThemedButton] Haptic feedback unavailable:', hapticError.message);
       }
     });
 

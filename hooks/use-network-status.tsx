@@ -48,7 +48,7 @@ export function useNetworkStatus(): NetworkStatus {
       .then((status) => {
         setNetworkStatus(status);
       })
-      .catch((error) => {
+      .catch((_error) => {
         // Failed to get initial status
       });
 
@@ -58,7 +58,7 @@ export function useNetworkStatus(): NetworkStatus {
         .then((status) => {
           setNetworkStatus(status);
         })
-        .catch((error) => {
+        .catch((_error) => {
           // Failed to update status
         });
     });

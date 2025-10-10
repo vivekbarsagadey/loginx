@@ -4,7 +4,7 @@ import { addNotification } from '@/utils/notification-storage';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import { Subscription } from 'expo-notifications';
+import { type Subscription } from 'expo-notifications';
 import { doc, updateDoc } from 'firebase/firestore';
 import { useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
@@ -162,7 +162,7 @@ export const usePushNotifications = (uid?: string) => {
       }
     });
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
+    responseListener.current = Notifications.addNotificationResponseReceivedListener((_response) => {
       // Notification response received
     });
 

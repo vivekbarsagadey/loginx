@@ -74,7 +74,9 @@ export default function OTPLoginScreen() {
 
       // In production, send OTP via email service (SendGrid, Mailgun, etc.)
       // For now, we'll use Firebase email link as a workaround
-      console.log(`[OTP Login] OTP Code: ${otp}`); // DEV ONLY - Remove in production
+      if (__DEV__) {
+        console.warn(`[OTP Login] OTP Code: ${otp}`); // DEV ONLY - Remove in production
+      }
 
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 

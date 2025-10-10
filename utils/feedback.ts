@@ -37,7 +37,7 @@ export const provideFeedback = async (type: FeedbackType): Promise<void> => {
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         break;
     }
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     // Silently fail - haptics not critical
   }
 };

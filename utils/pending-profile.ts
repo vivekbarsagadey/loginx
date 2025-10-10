@@ -1,7 +1,7 @@
 import { updateUser } from '@/actions/user.action';
 import { CacheConstants } from '@/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { updateProfile, User } from 'firebase/auth';
+import { updateProfile, type User } from 'firebase/auth';
 
 interface PendingProfileData {
   displayName: string;

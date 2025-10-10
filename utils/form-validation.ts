@@ -158,7 +158,7 @@ export function validatePhoneField(phone: string): ValidationResult {
  * @param fieldName - Name of field for error message
  * @returns Validation result with error message if invalid
  */
-export function validateRequiredField(value: string, fieldName: string = 'Field'): ValidationResult {
+export function validateRequiredField(value: string, fieldName = 'Field'): ValidationResult {
   const sanitized = sanitizeUserInput(value.trim());
 
   if (!sanitized) {

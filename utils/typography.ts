@@ -49,7 +49,7 @@ export function getPlatformFontFamily(weight: 'regular' | 'medium' | 'bold' = 'r
  */
 export function createScaledTextStyle(
   fontSize: number,
-  fontScale: number = 1,
+  fontScale = 1,
   options: {
     weight?: 'regular' | 'medium' | 'bold';
     maxScale?: number;
@@ -139,7 +139,7 @@ export function getLetterSpacing(fontSize: number): number {
  *   Long text that will be truncated after two lines...
  * </Text>
  */
-export function getTruncationStyle(numberOfLines: number = 1): TextStyle {
+export function getTruncationStyle(numberOfLines = 1): TextStyle {
   return {
     numberOfLines,
     ellipsizeMode: 'tail',
@@ -225,7 +225,7 @@ export function getMonospaceFont(): string {
  *   const code = 'example';
  * </Text>
  */
-export function getCodeTextStyle(fontSize: number = 14): TextStyle {
+export function getCodeTextStyle(fontSize = 14): TextStyle {
   return {
     fontFamily: getMonospaceFont(),
     fontSize,

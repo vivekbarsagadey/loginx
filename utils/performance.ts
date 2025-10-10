@@ -239,7 +239,10 @@ export const shouldComponentUpdate = <TProps extends Record<string, unknown>>(pr
  */
 export const getMemoryUsage = (): { used: number; total: number; percentage: number } | null => {
   if (__DEV__ && (performance as PerformanceWithMemory).memory) {
-    const memory = (performance as PerformanceWithMemory).memory!;
+    const memory = (performance as PerformanceWithMemory).memory;
+    if (!memory) {
+      return null;
+    }
     return {
       used: Math.round(memory.usedJSHeapSize / 1024 / 1024),
       total: Math.round(memory.totalJSHeapSize / 1024 / 1024),
@@ -278,7 +281,7 @@ export const preloadImages = async (uris: string[]): Promise<void> => {
  * @param importFn - Dynamic import function
  * @returns Lazy loaded component
  */
-export const createLazyComponent = <T extends React.ComponentType<any>>(importFn: () => Promise<{ default: T }>): React.LazyExoticComponent<T> => {
+export const createLazyComponent = <T extends React.ComponentType<unknown>>(importFn: () => Promise<{ default: T }>): React.LazyExoticComponent<T> => {
   return React.lazy(importFn);
 };
 

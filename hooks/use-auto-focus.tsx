@@ -3,8 +3,8 @@
  * Automatically focuses a TextInput after component mounts
  */
 
-import { RefObject, useEffect } from 'react';
-import { TextInput } from 'react-native';
+import { type RefObject, useEffect } from 'react';
+import { type TextInput } from 'react-native';
 
 /**
  * Auto-focus a text input after component mounts
@@ -24,7 +24,7 @@ import { TextInput } from 'react-native';
  * const inputRef = useRef<TextInput>(null);
  * useAutoFocus(inputRef, 100, shouldFocus);
  */
-export function useAutoFocus(ref: RefObject<TextInput | null>, delay: number = 100, enabled: boolean = true): void {
+export function useAutoFocus(ref: RefObject<TextInput | null>, delay = 100, enabled = true): void {
   useEffect(() => {
     if (!enabled) {
       return;

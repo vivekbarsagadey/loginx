@@ -59,7 +59,7 @@ export async function loadSampleNotifications(): Promise<void> {
  * Initialize sample data on first app launch
  * This can be called during app initialization or onboarding
  */
-export async function initializeSampleData(force: boolean = false): Promise<void> {
+export async function initializeSampleData(force = false): Promise<void> {
   try {
     const alreadyLoaded = await isSampleDataLoaded();
 

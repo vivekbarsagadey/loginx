@@ -10,7 +10,7 @@ import { debugLog, debugWarn } from './debug';
 // Network status state
 let isConnected = true;
 let isInternetReachable = true;
-let connectionType: string = 'unknown';
+let connectionType = 'unknown';
 
 // Listeners for network changes
 const networkListeners = new Set<(isOnline: boolean) => void>();

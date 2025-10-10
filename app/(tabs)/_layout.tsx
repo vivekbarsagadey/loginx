@@ -8,7 +8,7 @@ import { useMemo } from 'react';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { language } = useLanguage(); // Subscribe to language changes
+  const { language: _language } = useLanguage(); // Subscribe to language changes
 
   // Recompute tab options when language changes
   const tabOptions = useMemo(
@@ -23,7 +23,7 @@ export default function TabLayout() {
         title: i18n.t('navigation.titles.settings'),
       },
     }),
-    [language]
+    []
   );
 
   return (

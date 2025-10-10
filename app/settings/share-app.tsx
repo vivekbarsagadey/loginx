@@ -281,7 +281,7 @@ export default function ShareAppScreen() {
           lineHeight: Typography.bodySmall.lineHeight,
         },
       }),
-    [textColor, textMutedColor, primaryColor, borderColor]
+    [textColor, textMutedColor, primaryColor, borderColor, onPrimaryColor]
   );
 
   return (

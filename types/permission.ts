@@ -4,6 +4,7 @@
  */
 
 import type { Ionicons } from '@expo/vector-icons';
+import type React from 'react';
 
 export type PermissionType = 'camera' | 'mediaLibrary' | 'location' | 'notifications';
 
@@ -23,7 +24,7 @@ export interface PermissionStatus {
 export type PermissionsStatusMap = Record<PermissionType, PermissionStatus>;
 
 export interface PermissionCardProps {
-  icon: React.ComponentProps<typeof import('@expo/vector-icons').Ionicons>['name'];
+  icon: React.ComponentProps<typeof Ionicons>['name'];
   title: string;
   description: string;
   granted: boolean;
@@ -34,7 +35,7 @@ export interface PermissionCardProps {
     show: (
       title: string,
       message: string,
-      buttons?: Array<{ text: string; onPress?: () => void; style?: 'default' | 'cancel' | 'destructive' }>,
+      buttons?: { text: string; onPress?: () => void; style?: 'default' | 'cancel' | 'destructive' }[],
       options?: { variant?: 'default' | 'success' | 'warning' | 'error' }
     ) => void;
   };

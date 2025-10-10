@@ -3,7 +3,7 @@
  * Helper functions and shortcuts for common style patterns
  */
 
-import { ColorSchemeName, ImageStyle, TextStyle, ViewStyle } from 'react-native';
+import { type ColorSchemeName, type ImageStyle, type TextStyle, type ViewStyle } from 'react-native';
 import { BorderRadius, Shadow, Spacing, TouchTarget, ZIndex } from './layout';
 import { Colors } from './theme';
 

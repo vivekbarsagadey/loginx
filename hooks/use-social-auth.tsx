@@ -84,11 +84,11 @@ const isFacebookSigninAvailable = (): boolean => {
  * Configure Google Sign-In SDK
  * Separated for testability and clarity
  */
-const configureGoogleSignIn = async (GoogleSignin: any) => {
-  await GoogleSignin.configure({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const configureGoogleSignIn = async (GoogleSigninInstance: any) => {
+  await GoogleSigninInstance.configure({
     webClientId: Config.social.googleWebClientId || '',
     iosClientId: Config.social.googleIosClientId,
-    androidClientId: Config.social.googleAndroidClientId,
     offlineAccess: true,
     profileImageSize: 150,
   });

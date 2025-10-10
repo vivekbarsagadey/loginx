@@ -42,7 +42,7 @@ export function useHapticAction<T extends unknown[]>(action: (...args: T) => voi
 
         // Execute the action
         await action(...args);
-      } catch (error) {
+      } catch (_error) {
         // Silently fail haptics - not critical
       }
     },

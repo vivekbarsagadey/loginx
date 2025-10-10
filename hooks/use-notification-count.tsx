@@ -13,7 +13,7 @@ import { AppState, type AppStateStatus } from 'react-native';
  * @returns unreadCount - Number of unread notifications
  * @returns refreshCount - Function to manually refresh the count
  */
-export function useNotificationCount(refreshInterval: number = 30000) {
+export function useNotificationCount(refreshInterval = 30000) {
   const [unreadCount, setUnreadCount] = useState<number>(0);
 
   const refreshCount = useCallback(async () => {
