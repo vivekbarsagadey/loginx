@@ -1,5 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Spacing, Typography } from '@/constants/layout';
+import { gap, rounded } from '@/constants/style-utils';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -78,34 +80,29 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginVertical: 16,
-    gap: 12,
+    ...gap.md,
   },
   checkbox: {
     width: 24,
     height: 24,
-    borderRadius: 6,
+    ...rounded.xs,
     borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 2,
-    minHeight: 24,
-    minWidth: 24,
   },
   textContainer: {
     flex: 1,
   },
   text: {
-    fontSize: 15,
+    fontSize: Typography.body.fontSize,
     lineHeight: 22,
   },
   link: {
     textDecorationLine: 'underline',
-    fontWeight: '600',
   },
   errorText: {
-    fontSize: 13,
-    marginTop: 6,
-    lineHeight: 18,
+    fontSize: Typography.caption.fontSize,
+    marginTop: Spacing.xs,
   },
 });

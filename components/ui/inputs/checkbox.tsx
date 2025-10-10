@@ -1,5 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
-import { BorderRadius } from '@/constants/layout';
+import { Typography } from '@/constants/layout';
+import { gap, rounded } from '@/constants/style-utils';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import * as Haptics from 'expo-haptics';
 import React from 'react';
@@ -111,7 +112,7 @@ export function CheckboxGroup({ items, onChange, disabled = false, accessibility
 const styles = StyleSheet.create({
   box: {
     alignItems: 'center',
-    borderRadius: BorderRadius.sm,
+    ...rounded.sm,
     borderWidth: 2,
     height: 20,
     justifyContent: 'center',
@@ -120,14 +121,14 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: 8,
+    ...gap.sm,
     minHeight: 44,
   },
   group: {
-    gap: 12,
+    ...gap.md,
   },
   icon: {
-    fontSize: 14,
+    fontSize: Typography.bodySmall.fontSize,
     fontWeight: '700',
     lineHeight: 14,
   },

@@ -1,5 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Typography } from '@/constants/layout';
+import { gap, rounded } from '@/constants/style-utils';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -219,22 +221,22 @@ export function PasswordStrengthMeter({ password, onStrengthChange }: PasswordSt
 
 const styles = StyleSheet.create({
   container: {
-    gap: 8,
+    ...gap.sm,
   },
   meterContainer: {
     marginTop: 4,
   },
   meterTrack: {
     height: 8,
-    borderRadius: 4,
+    ...rounded.xs,
     overflow: 'hidden',
   },
   meterFill: {
     height: '100%',
-    borderRadius: 4,
+    ...rounded.xs,
   },
   label: {
-    fontSize: 13,
+    fontSize: Typography.caption.fontSize,
     fontWeight: '600',
     lineHeight: 18,
   },

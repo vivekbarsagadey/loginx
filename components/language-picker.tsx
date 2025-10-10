@@ -1,4 +1,5 @@
-import { BorderRadius, Spacing, Typography } from '@/constants/layout';
+import { Spacing, Typography } from '@/constants/layout';
+import { rounded } from '@/constants/style-utils';
 import { useLanguage } from '@/hooks/use-language';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    borderRadius: BorderRadius.md,
+    ...rounded.md,
     borderWidth: 1,
     overflow: 'hidden',
   },

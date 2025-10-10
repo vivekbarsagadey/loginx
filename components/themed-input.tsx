@@ -1,3 +1,4 @@
+import { BorderRadius, Typography } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   label: {
-    fontSize: 16,
+    fontSize: Typography.body.fontSize,
     fontWeight: '500',
     marginBottom: 8,
     lineHeight: 22,
@@ -101,9 +102,9 @@ const styles = StyleSheet.create({
   input: {
     height: 52,
     borderWidth: 1,
-    borderRadius: 12,
+    borderRadius: BorderRadius.md,
     paddingHorizontal: 16,
-    fontSize: 16,
+    fontSize: Typography.body.fontSize,
     lineHeight: 22,
   },
   inputWithIcon: {
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     height: 44,
   },
   helperText: {
-    fontSize: 13,
+    fontSize: Typography.caption.fontSize,
     marginTop: 8,
     lineHeight: 18,
   },

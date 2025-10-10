@@ -1,9 +1,11 @@
+import { ThemedButton } from '@/components/themed-button';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { Spacing } from '@/constants/layout';
+import { rounded } from '@/constants/style-utils';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import React, { Component, type ErrorInfo, type ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ThemedButton } from './themed-button';
-import { ThemedText } from './themed-text';
-import { ThemedView } from './themed-view';
 
 interface Props {
   children: ReactNode;
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
+    padding: Spacing.lg,
   },
   title: {
     marginBottom: 16,
@@ -118,7 +120,7 @@ const styles = StyleSheet.create({
   errorDetails: {
     marginBottom: 32,
     padding: 16,
-    borderRadius: 12,
+    ...rounded.md,
     maxWidth: '100%',
   },
   errorText: {

@@ -1,3 +1,8 @@
+import { ThemedButton } from '@/components/themed-button';
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { Spacing } from '@/constants/layout';
+import { gap, rounded } from '@/constants/style-utils';
 import { Colors } from '@/constants/theme';
 import { useAlert } from '@/hooks/use-alert';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
@@ -7,9 +12,6 @@ import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { ThemedButton } from '../themed-button';
-import { ThemedText } from '../themed-text';
-import { ThemedView } from '../themed-view';
 
 interface BiometricSlideProps {
   width: number;
@@ -169,9 +171,8 @@ export const BiometricSlide = ({ width, onNext, onSkip }: BiometricSlideProps) =
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: Spacing.lg,
+    justifyContent: 'space-between',
   },
   content: {
     width: '100%',
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
   iconCircle: {
     width: 120,
     height: 120,
-    borderRadius: 60,
+    ...rounded.full,
     justifyContent: 'center',
     alignItems: 'center',
     // Shadow color handled by platform defaults
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: '100%',
-    gap: 12,
+    ...gap.md,
   },
   primaryButton: {
     width: '100%',

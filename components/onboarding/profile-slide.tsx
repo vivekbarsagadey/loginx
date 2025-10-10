@@ -1,3 +1,4 @@
+import { gap, rounded } from '@/constants/style-utils';
 import { Colors } from '@/constants/theme';
 import { useAlert } from '@/hooks/use-alert';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 80,
     height: 80,
-    borderRadius: 40,
+    ...rounded.full,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   form: {
-    gap: 24,
+    ...gap.lg,
   },
   photoSection: {
     alignItems: 'center',
@@ -270,7 +271,7 @@ const styles = StyleSheet.create({
   benefitIcon: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    ...rounded.full,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -290,13 +291,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     padding: 12,
-    borderRadius: 8,
+    ...rounded.sm,
     backgroundColor: 'transparent',
   },
   noticeIcon: {
     width: 24,
     height: 24,
-    borderRadius: 12,
+    ...rounded.md,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
@@ -314,7 +315,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    gap: 12,
+    ...gap.md,
     marginBottom: 12,
   },
   skipButton: {

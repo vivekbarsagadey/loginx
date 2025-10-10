@@ -1,4 +1,5 @@
 import { ThemedText } from '@/components/themed-text';
+import { gap, rounded } from '@/constants/style-utils';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -123,14 +124,14 @@ export function Slider({ value, min = 0, max = 100, step = 1, onValueChange, sho
 
 const styles = StyleSheet.create({
   container: {
-    gap: 8,
+    ...gap.sm,
     width: '100%',
   },
   label: {
     textAlign: 'center',
   },
   thumb: {
-    borderRadius: 999,
+    ...rounded.full,
     borderWidth: 2,
     height: 24,
     left: -12,
@@ -148,12 +149,12 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   trackBackground: {
-    borderRadius: 4,
+    ...rounded.xs,
     height: 8,
     width: '100%',
   },
   trackFill: {
-    borderRadius: 4,
+    ...rounded.xs,
     height: 8,
     left: 0,
     position: 'absolute',

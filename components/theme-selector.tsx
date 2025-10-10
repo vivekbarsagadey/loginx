@@ -1,3 +1,5 @@
+import { Spacing, Typography } from '@/constants/layout';
+import { gap, padding, rounded } from '@/constants/style-utils';
 import { getAllThemes } from '@/constants/theme';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { type ThemePreference, useThemeContext } from '@/hooks/use-theme-context';
@@ -73,23 +75,22 @@ export const ThemeSelector = () => {
 
 const styles = StyleSheet.create({
   label: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
+    fontSize: Typography.body.fontSize,
+    fontWeight: Typography.bodyBold.fontWeight,
+    marginBottom: Spacing.sm,
   },
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    borderRadius: 12,
+    ...rounded.md,
     borderWidth: 1,
-    padding: 4,
-    gap: 8,
+    ...padding.xs,
+    ...gap.sm,
     backgroundColor: 'transparent',
   },
   chip: {
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
+    ...padding.md,
+    ...rounded.sm,
     minWidth: '30%',
     minHeight: 44,
     flexGrow: 1,

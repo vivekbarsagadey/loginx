@@ -1,6 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { BorderRadius, Spacing, TouchTarget, Typography } from '@/constants/layout';
+import { Spacing, TouchTarget, Typography } from '@/constants/layout';
+import { gap, rounded } from '@/constants/style-utils';
 import { usePermissions } from '@/hooks/use-permissions';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -157,7 +158,7 @@ export function PermissionsSlide({ width, onNext, onSkip }: PermissionsSlideProp
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
-          <View style={[styles.iconContainer, { backgroundColor: `${primaryColor}15` }]}>
+          <View style={[styles.iconCircle, { backgroundColor: `${primaryColor}15` }]}>
             <Ionicons name="shield-checkmark" size={64} color={primaryColor} />
           </View>
 
@@ -244,12 +245,12 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xxl,
     marginBottom: Spacing.xl,
   },
-  iconContainer: {
+  iconCircle: {
     width: 120,
     height: 120,
-    borderRadius: 60,
-    alignItems: 'center',
+    ...rounded.full,
     justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: Spacing.lg,
   },
   title: {
@@ -262,15 +263,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
   },
   permissionsList: {
-    gap: Spacing.md,
+    ...gap.md,
     marginBottom: Spacing.lg,
   },
   permissionItem: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: Spacing.md,
-    borderRadius: BorderRadius.lg,
-    gap: Spacing.md,
+    ...rounded.lg,
+    ...gap.md,
   },
   permissionIcon: {
     width: 48,
@@ -280,12 +281,12 @@ const styles = StyleSheet.create({
   },
   permissionContent: {
     flex: 1,
-    gap: Spacing.xs,
+    ...gap.xs,
   },
   permissionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
+    ...gap.sm,
   },
   permissionTitle: {
     flex: 1,
@@ -307,8 +308,8 @@ const styles = StyleSheet.create({
   infoBox: {
     flexDirection: 'row',
     padding: Spacing.md,
-    borderRadius: BorderRadius.md,
-    gap: Spacing.sm,
+    ...rounded.md,
+    ...gap.sm,
     borderWidth: 1,
   },
   infoText: {
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   buttonContainer: {
-    gap: Spacing.md,
+    ...gap.md,
     paddingBottom: Spacing.lg,
   },
   skipButton: {
@@ -326,7 +327,7 @@ const styles = StyleSheet.create({
   },
   continueButton: {
     height: TouchTarget.comfortable,
-    borderRadius: BorderRadius.md,
+    ...rounded.md,
     alignItems: 'center',
     justifyContent: 'center',
   },

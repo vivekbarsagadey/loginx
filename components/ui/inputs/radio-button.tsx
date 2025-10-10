@@ -1,4 +1,5 @@
 import { ThemedText } from '@/components/themed-text';
+import { gap, rounded } from '@/constants/style-utils';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -107,14 +108,14 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: 8,
+    ...gap.sm,
     minHeight: 44,
   },
   group: {
-    gap: 12,
+    ...gap.md,
   },
   inner: {
-    borderRadius: 999,
+    ...rounded.full,
     height: 10,
     width: 10,
   },
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
   },
   radio: {
     alignItems: 'center',
-    borderRadius: 999,
+    ...rounded.full,
     borderWidth: 2,
     height: 20,
     justifyContent: 'center',

@@ -1,3 +1,5 @@
+import { BorderRadius } from '@/constants/layout';
+import { gap, rounded } from '@/constants/style-utils';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
@@ -188,7 +190,7 @@ const styles = StyleSheet.create({
   iconCircle: {
     width: 100,
     height: 100,
-    borderRadius: 50,
+    borderRadius: BorderRadius.full,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 24,
@@ -224,7 +226,7 @@ const styles = StyleSheet.create({
   featureIcon: {
     width: 48,
     height: 48,
-    borderRadius: 24,
+    ...rounded.xl,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
@@ -250,14 +252,14 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   linksContainer: {
-    gap: 12,
+    ...gap.md,
   },
   link: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 16,
     paddingHorizontal: 16,
-    borderRadius: 12,
+    borderRadius: BorderRadius.md,
     borderWidth: 1,
   },
   linkText: {

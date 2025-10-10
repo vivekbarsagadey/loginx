@@ -1,6 +1,8 @@
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Spacing } from '@/constants/layout';
+import { gap } from '@/constants/style-utils';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import Constants from 'expo-constants';
@@ -95,7 +97,10 @@ export function SocialSignInButtons({ onGoogleSignIn, onAppleSignIn, onFacebookS
 
 const styles = StyleSheet.create({
   container: {
-    gap: 20,
+    width: '100%',
+    ...gap.lg,
+    marginTop: Spacing.xl,
+    marginBottom: Spacing.md,
   },
   dividerContainer: {
     flexDirection: 'row',
@@ -113,7 +118,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   buttonsContainer: {
-    gap: 12,
+    ...gap.md,
   },
   socialButton: {
     width: '100%',

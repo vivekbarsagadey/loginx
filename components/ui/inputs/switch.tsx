@@ -1,3 +1,4 @@
+import { rounded } from '@/constants/style-utils';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import * as Haptics from 'expo-haptics';
 import React from 'react';
@@ -85,14 +86,10 @@ export function Switch({ value, onValueChange, disabled = false, size = 'medium'
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 999,
+    ...rounded.full,
     justifyContent: 'center',
   },
   thumb: {
-    borderRadius: 999,
-    shadowColor: '#000',
-    shadowOffset: { height: 2, width: 0 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
+    ...rounded.full,
   },
 });
