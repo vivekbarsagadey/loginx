@@ -1,25 +1,16 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { BorderRadius, Spacing } from '@/constants/layout';
+import { getPermissions } from '@/data';
 import { useAlert } from '@/hooks/use-alert';
 import { usePermissions } from '@/hooks/use-permissions';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
+import type { PermissionCardProps } from '@/types/permission';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import React from 'react';
 import { ActivityIndicator, Linking, Platform, Pressable, StyleSheet, View } from 'react-native';
-
-interface PermissionCardProps {
-  icon: keyof typeof Ionicons.glyphMap;
-  title: string;
-  description: string;
-  granted: boolean;
-  canAskAgain: boolean;
-  onRequest: () => Promise<void>;
-  loading: boolean;
-  alert: ReturnType<typeof useAlert>;
-}
 
 function PermissionCard({ icon, title, description, granted, canAskAgain, onRequest, loading, alert }: PermissionCardProps) {
   const primaryColor = useThemeColor({}, 'primary');
@@ -156,36 +147,12 @@ export default function PermissionsScreen() {
     }
   };
 
-  const permissions = [
-    {
-      type: 'notifications' as const,
-      icon: 'notifications' as const,
-      title: i18n.t('permissions.notifications.title'),
-      description: i18n.t('permissions.notifications.description'),
-      requestFn: requestNotificationPermission,
-    },
-    {
-      type: 'camera' as const,
-      icon: 'camera' as const,
-      title: i18n.t('permissions.camera.title'),
-      description: i18n.t('permissions.camera.description'),
-      requestFn: requestCameraPermission,
-    },
-    {
-      type: 'mediaLibrary' as const,
-      icon: 'images' as const,
-      title: i18n.t('permissions.mediaLibrary.title'),
-      description: i18n.t('permissions.mediaLibrary.description'),
-      requestFn: requestMediaLibraryPermission,
-    },
-    {
-      type: 'location' as const,
-      icon: 'location' as const,
-      title: i18n.t('permissions.location.title'),
-      description: i18n.t('permissions.location.description'),
-      requestFn: requestLocationPermission,
-    },
-  ];
+  const permissions = getPermissions({
+    requestNotificationPermission,
+    requestCameraPermission,
+    requestMediaLibraryPermission,
+    requestLocationPermission,
+  });
 
   return (
     <ScreenContainer scrollable style={{ backgroundColor: bgColor }} contentContainerStyle={styles.content}>
@@ -255,9 +222,9 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
   headerIcon: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
+    width: Spacing.huge + Spacing.xl, // 96px (64+32)
+    height: Spacing.huge + Spacing.xl, // 96px
+    borderRadius: Spacing.xxxl, // 48px
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.lg,
@@ -268,7 +235,7 @@ const styles = StyleSheet.create({
   },
   headerDescription: {
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: Spacing.lg - 2, // 22px
     paddingHorizontal: Spacing.md,
   },
   permissionsList: {
@@ -286,9 +253,9 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   iconContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: Spacing.xxxl + Spacing.sm, // 56px (48+8)
+    height: Spacing.xxxl + Spacing.sm, // 56px
+    borderRadius: Spacing.lg + Spacing.xs, // 28px
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -298,11 +265,11 @@ const styles = StyleSheet.create({
   },
   cardTitle: {},
   cardDescription: {
-    lineHeight: 18,
+    lineHeight: Spacing.lg - Spacing.xs - 2, // 18px
   },
   statusContainer: {
-    width: 32,
-    height: 32,
+    width: Spacing.xl, // 32px
+    height: Spacing.xl, // 32px
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -313,7 +280,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   statusText: {
-    fontSize: 11,
+    fontSize: Spacing.md - Spacing.xs - 1, // 11px
     fontWeight: '600',
     textTransform: 'uppercase',
   },
@@ -335,6 +302,6 @@ const styles = StyleSheet.create({
   },
   infoText: {
     flex: 1,
-    lineHeight: 18,
+    lineHeight: Spacing.lg - Spacing.xs - 2, // 18px
   },
 });

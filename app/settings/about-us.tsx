@@ -3,44 +3,24 @@ import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing } from '@/constants/layout';
+import { getAppInfoItems, getContactItems, openURL } from '@/data';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Feather } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-import * as Linking from 'expo-linking';
 import React from 'react';
-import { Image, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 export default function AboutUsScreen() {
   const primaryColor = useThemeColor({}, 'primary');
   const textMutedColor = useThemeColor({}, 'text-muted');
   const borderColor = useThemeColor({}, 'border');
 
-  // Get app information from app.config.ts via Constants
+  // Get app information from centralized data
   const appName = Constants.expoConfig?.extra?.appName || 'LoginX';
   const appVersion = Constants.expoConfig?.version || '1.0.0';
-  const appBuildNumber = Platform.select({
-    ios: Constants.expoConfig?.ios?.buildNumber || '100',
-    android: Constants.expoConfig?.android?.versionCode?.toString() || '100',
-    default: '100',
-  });
-
-  const handleLinkPress = (url: string) => {
-    Linking.openURL(url);
-  };
-
-  const infoItems = [
-    { icon: 'smartphone', label: 'App Name', value: appName },
-    { icon: 'tag', label: 'Version', value: appVersion },
-    { icon: 'hash', label: 'Build Number', value: appBuildNumber },
-    { icon: 'code', label: 'Platform', value: Platform.OS === 'ios' ? 'iOS' : Platform.OS === 'android' ? 'Android' : 'Web' },
-  ];
-
-  const contactItems = [
-    { icon: 'mail', label: 'Email', value: 'vivek@whizit.co.in', action: () => handleLinkPress('mailto:vivek@whizit.co.in') },
-    { icon: 'globe', label: 'Website', value: 'whizit.co.in', action: () => handleLinkPress('https://whizit.co.in') },
-    { icon: 'github', label: 'GitHub', value: 'vivekbarsagadey/loginx', action: () => handleLinkPress('https://github.com/vivekbarsagadey/loginx') },
-  ];
+  const infoItems = getAppInfoItems();
+  const contactItems = getContactItems(openURL);
 
   const styles = React.useMemo(
     () =>
@@ -50,8 +30,8 @@ export default function AboutUsScreen() {
           marginBottom: Spacing.xl,
         },
         logo: {
-          width: 100,
-          height: 100,
+          width: Spacing.huge + Spacing.xl + Spacing.xs, // 100px (64+32+4)
+          height: Spacing.huge + Spacing.xl + Spacing.xs, // 100px
           borderRadius: BorderRadius.xl,
           marginBottom: Spacing.md,
         },
@@ -72,7 +52,7 @@ export default function AboutUsScreen() {
         },
         badgeText: {
           color: primaryColor,
-          fontSize: 12,
+          fontSize: Spacing.md - Spacing.xs, // 12px
           fontWeight: '600',
         },
         section: {
@@ -90,7 +70,7 @@ export default function AboutUsScreen() {
         },
         infoIcon: {
           marginRight: Spacing.md,
-          width: 24,
+          width: Spacing.lg, // 24px
           alignItems: 'center',
         },
         infoContent: {
@@ -98,11 +78,11 @@ export default function AboutUsScreen() {
         },
         infoLabel: {
           color: textMutedColor,
-          fontSize: 12,
+          fontSize: Spacing.md - Spacing.xs, // 12px
           marginBottom: Spacing.xs,
         },
         infoValue: {
-          fontSize: 16,
+          fontSize: Spacing.md, // 16px
           fontWeight: '500',
         },
         contactRow: {
@@ -117,7 +97,7 @@ export default function AboutUsScreen() {
         },
         contactIcon: {
           marginRight: Spacing.md,
-          width: 24,
+          width: Spacing.lg, // 24px
           alignItems: 'center',
         },
         contactContent: {
@@ -125,18 +105,18 @@ export default function AboutUsScreen() {
         },
         contactLabel: {
           color: textMutedColor,
-          fontSize: 12,
+          fontSize: Spacing.md - Spacing.xs, // 12px
           marginBottom: Spacing.xs,
         },
         contactValue: {
-          fontSize: 16,
+          fontSize: Spacing.md, // 16px
           fontWeight: '500',
           color: primaryColor,
         },
         description: {
           textAlign: 'center',
           color: textMutedColor,
-          lineHeight: 22,
+          lineHeight: Spacing.lg - 2, // 22px
           marginBottom: Spacing.lg,
         },
         footer: {
@@ -145,7 +125,7 @@ export default function AboutUsScreen() {
         },
         footerText: {
           color: textMutedColor,
-          fontSize: 14,
+          fontSize: Spacing.sm + Spacing.xs + 2, // 14px
           textAlign: 'center',
         },
         companyName: {

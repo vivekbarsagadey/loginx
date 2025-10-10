@@ -4,21 +4,16 @@ import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
+import { DEFAULT_NOTIFICATION_SETTINGS, getNotificationSettings } from '@/data';
 import { auth } from '@/firebase-config';
 import { useLanguage } from '@/hooks/use-language-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
+import type { NotificationSettings } from '@/types/notification-settings';
 import { showError } from '@/utils/error';
 import { Feather } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Switch, View } from 'react-native';
-
-interface NotificationSetting {
-  key: 'pushEnabled' | 'emailUpdates' | 'marketingTips';
-  icon: string;
-  title: string;
-  description: string;
-}
 
 export default function NotificationsScreen() {
   const user = auth.currentUser;
@@ -28,39 +23,15 @@ export default function NotificationsScreen() {
   const tintColor = useThemeColor({}, 'primary');
   const textMutedColor = useThemeColor({}, 'text-muted');
 
-  const [settings, setSettings] = useState<Record<string, boolean>>({
-    pushEnabled: false,
-    emailUpdates: false,
-    marketingTips: false,
-  });
+  const [settings, setSettings] = useState<NotificationSettings>(DEFAULT_NOTIFICATION_SETTINGS);
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const [initialLoading, setInitialLoading] = useState(true);
 
   // Re-create notification settings when language changes to update translations
-  const notificationSettings: NotificationSetting[] = useMemo(() => {
-    // Force re-computation when language changes (even though we don't use it directly)
+  const notificationSettings = useMemo(() => {
+    // Force re-computation when language changes
     void language;
-
-    return [
-      {
-        key: 'pushEnabled',
-        icon: 'bell',
-        title: i18n.t('screens.settings.notifications.items.pushEnabled.title'),
-        description: i18n.t('screens.settings.notifications.items.pushEnabled.description'),
-      },
-      {
-        key: 'emailUpdates',
-        icon: 'mail',
-        title: i18n.t('screens.settings.notifications.items.emailUpdates.title'),
-        description: i18n.t('screens.settings.notifications.items.emailUpdates.description'),
-      },
-      {
-        key: 'marketingTips',
-        icon: 'trending-up',
-        title: i18n.t('screens.settings.notifications.items.marketingTips.title'),
-        description: i18n.t('screens.settings.notifications.items.marketingTips.description'),
-      },
-    ];
+    return getNotificationSettings();
   }, [language]);
 
   const styles = React.useMemo(
@@ -87,9 +58,9 @@ export default function NotificationsScreen() {
           borderBottomWidth: 0,
         },
         iconContainer: {
-          width: 40,
-          height: 40,
-          borderRadius: 20,
+          width: Spacing.xxl, // 40px
+          height: Spacing.xxl, // 40px
+          borderRadius: Spacing.lg - Spacing.xs, // 20px
           backgroundColor: tintColor + '20',
           justifyContent: 'center',
           alignItems: 'center',

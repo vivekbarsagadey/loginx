@@ -2,27 +2,22 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
+import { DEFAULT_TEXT_SIZE, getTextSizeOptions } from '@/data';
 import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
+import type { TextSizeOption } from '@/types/text-size';
 import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-type TextSizeOption = 'small' | 'default' | 'large' | 'extraLarge';
-
 export default function TextSizeScreen() {
-  const [selectedSize, setSelectedSize] = useState<TextSizeOption>('default');
+  const [selectedSize, setSelectedSize] = useState<TextSizeOption>(DEFAULT_TEXT_SIZE);
   const alert = useAlert();
 
   const primaryColor = useThemeColor({}, 'primary');
   const surfaceVariant = useThemeColor({}, 'surface-variant');
 
-  const sizeOptions = [
-    { key: 'small' as TextSizeOption, title: i18n.t('screens.settings.textSize.options.small'), multiplier: 0.85 },
-    { key: 'default' as TextSizeOption, title: i18n.t('screens.settings.textSize.options.default'), multiplier: 1.0 },
-    { key: 'large' as TextSizeOption, title: i18n.t('screens.settings.textSize.options.large'), multiplier: 1.15 },
-    { key: 'extraLarge' as TextSizeOption, title: i18n.t('screens.settings.textSize.options.extraLarge'), multiplier: 1.3 },
-  ];
+  const sizeOptions = getTextSizeOptions();
 
   const handleSizeSelect = (size: TextSizeOption) => {
     setSelectedSize(size);
@@ -30,8 +25,8 @@ export default function TextSizeScreen() {
   };
 
   const getPreviewStyles = (multiplier: number) => ({
-    fontSize: 16 * multiplier,
-    lineHeight: 22 * multiplier,
+    fontSize: Spacing.md * multiplier, // 16px base
+    lineHeight: (Spacing.lg - 2) * multiplier, // 22px base
   });
 
   return (

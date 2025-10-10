@@ -3,6 +3,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing, TouchTarget } from '@/constants/layout';
+import { generateReferralLink, getShareBenefits, getShareEmailSubject, getShareMessage, getShareOptionConfigs } from '@/data';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
@@ -25,20 +26,9 @@ export default function ShareAppScreen() {
   const successColor = useThemeColor({}, 'success');
   const borderColor = useThemeColor({}, 'border');
 
-  // Generate referral link (you can customize this with actual user referral code)
-  const generateReferralLink = (): string => {
-    // TODO: Replace with actual referral code from user profile
-    const referralCode = 'LOGINX2025'; // This should be unique per user
-    const appUrl = 'https://loginx.app'; // Replace with your actual app URL
-    return `${appUrl}/invite?ref=${referralCode}`;
-  };
-
+  // Generate referral link
   const referralLink = generateReferralLink();
-
-  const shareMessage = i18n.t('shareApp.message', {
-    link: referralLink,
-    defaultValue: `Check out LoginX - the most secure authentication app! Join me and simplify your login experience.\n\n${referralLink}`,
-  });
+  const shareMessage = getShareMessage(referralLink);
 
   /**
    * Share via native share dialog (supports all apps)
@@ -127,9 +117,7 @@ export default function ShareAppScreen() {
     try {
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
-      const subject = i18n.t('shareApp.emailSubject', {
-        defaultValue: 'Join me on LoginX!',
-      });
+      const subject = getShareEmailSubject();
       const emailUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(shareMessage)}`;
 
       const canOpen = await Linking.canOpenURL(emailUrl);
@@ -167,48 +155,15 @@ export default function ShareAppScreen() {
     }
   };
 
-  const shareOptions = [
+  const shareOptions = getShareOptionConfigs(
     {
-      id: 'whatsapp',
-      icon: 'message-circle' as const,
-      title: i18n.t('shareApp.options.whatsapp', { defaultValue: 'Share via WhatsApp' }),
-      subtitle: i18n.t('shareApp.options.whatsappSubtitle', {
-        defaultValue: 'Share your referral link with friends on WhatsApp',
-      }),
-      onPress: handleShareWhatsApp,
-      color: '#25D366', // WhatsApp green
+      handleShareWhatsApp,
+      handleShareSMS,
+      handleShareEmail,
+      handleNativeShare,
     },
-    {
-      id: 'sms',
-      icon: 'message-square' as const,
-      title: i18n.t('shareApp.options.sms', { defaultValue: 'Share via SMS' }),
-      subtitle: i18n.t('shareApp.options.smsSubtitle', {
-        defaultValue: 'Send your referral link via text message',
-      }),
-      onPress: handleShareSMS,
-      color: primaryColor,
-    },
-    {
-      id: 'email',
-      icon: 'mail' as const,
-      title: i18n.t('shareApp.options.email', { defaultValue: 'Share via Email' }),
-      subtitle: i18n.t('shareApp.options.emailSubtitle', {
-        defaultValue: 'Send your referral link via email',
-      }),
-      onPress: handleShareEmail,
-      color: primaryColor,
-    },
-    {
-      id: 'more',
-      icon: 'share-2' as const,
-      title: i18n.t('shareApp.options.more', { defaultValue: 'More Options' }),
-      subtitle: i18n.t('shareApp.options.moreSubtitle', {
-        defaultValue: 'Share via other apps and platforms',
-      }),
-      onPress: handleNativeShare,
-      color: primaryColor,
-    },
-  ];
+    primaryColor
+  );
 
   const styles = React.useMemo(
     () =>
@@ -231,27 +186,27 @@ export default function ShareAppScreen() {
           justifyContent: 'space-between',
           paddingVertical: Spacing.md,
           paddingHorizontal: Spacing.md,
-          backgroundColor: primaryColor + '10', // 6% opacity
-          borderRadius: 12,
+          backgroundColor: primaryColor + '10',
+          borderRadius: BorderRadius.md, // 12px
           borderWidth: 1,
           borderColor: primaryColor + '30', // 19% opacity
         },
         referralLink: {
           flex: 1,
           color: primaryColor,
-          fontSize: 14,
+          fontSize: Spacing.sm + Spacing.xs + 2, // 14px
           fontWeight: '600',
         },
         copyButton: {
           paddingHorizontal: Spacing.md,
           paddingVertical: Spacing.sm,
           backgroundColor: primaryColor,
-          borderRadius: 8,
+          borderRadius: Spacing.sm, // 8px
           marginLeft: Spacing.sm,
         },
         copyButtonText: {
           color: '#FFFFFF',
-          fontSize: 14,
+          fontSize: Spacing.sm + Spacing.xs + 2, // 14px
           fontWeight: '600',
         },
         section: {
@@ -269,9 +224,9 @@ export default function ShareAppScreen() {
           borderBottomWidth: 0,
         },
         iconContainer: {
-          width: 48,
-          height: 48,
-          borderRadius: 24,
+          width: Spacing.xxxl, // 48px
+          height: Spacing.xxxl, // 48px
+          borderRadius: Spacing.lg, // 24px
           justifyContent: 'center',
           alignItems: 'center',
           marginRight: Spacing.md,
@@ -281,13 +236,13 @@ export default function ShareAppScreen() {
         },
         shareTitle: {
           color: textColor,
-          fontSize: 16,
+          fontSize: Spacing.md, // 16px
           fontWeight: '600',
           marginBottom: 2,
         },
         shareSubtitle: {
           color: textMutedColor,
-          fontSize: 14,
+          fontSize: Spacing.sm + Spacing.xs + 2, // 14px
         },
         benefitsCard: {
           marginBottom: Spacing.lg,
@@ -308,8 +263,8 @@ export default function ShareAppScreen() {
         benefitText: {
           flex: 1,
           color: textColor,
-          fontSize: 14,
-          lineHeight: 20,
+          fontSize: Spacing.sm + Spacing.xs + 2, // 14px
+          lineHeight: Spacing.lg - Spacing.xs, // 20px
         },
       }),
     [textColor, textMutedColor, primaryColor, borderColor]
@@ -392,20 +347,7 @@ export default function ShareAppScreen() {
             {i18n.t('shareApp.whyShare', { defaultValue: 'Why Share LoginX?' })}
           </ThemedText>
           <Card elevation={1} style={styles.benefitsCard}>
-            {[
-              i18n.t('shareApp.benefits.secure', {
-                defaultValue: 'Help friends secure their accounts with biometric authentication',
-              }),
-              i18n.t('shareApp.benefits.simple', {
-                defaultValue: 'Share a simple, modern authentication solution',
-              }),
-              i18n.t('shareApp.benefits.privacy', {
-                defaultValue: 'Spread the word about privacy-focused technology',
-              }),
-              i18n.t('shareApp.benefits.community', {
-                defaultValue: 'Grow our community of security-conscious users',
-              }),
-            ].map((benefit, index, array) => (
+            {getShareBenefits().map((benefit, index, array) => (
               <View key={index} style={[styles.benefitItem, index === array.length - 1 && styles.benefitItemLast]}>
                 <Feather name="check-circle" size={20} color={successColor} style={styles.benefitIcon} />
                 <ThemedText style={styles.benefitText}>{benefit}</ThemedText>

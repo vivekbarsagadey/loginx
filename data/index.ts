@@ -43,3 +43,24 @@ export type { ActivityLogEntry, SampleItem, SampleUser } from './examples';
 
 // Languages
 export { getDefaultLanguage, getLanguageByCode, getLanguageCodes, isLanguageSupported, languages } from './languages';
+
+// Notification Settings
+export { DEFAULT_NOTIFICATION_SETTINGS, getNotificationSettings } from './notification-settings';
+
+// Text Size Options
+export { DEFAULT_TEXT_SIZE, getTextSizeMultiplier, getTextSizeOptions } from './text-size-options';
+
+// Share Options
+export { SHARE_BENEFITS, WHATSAPP_COLOR, generateReferralLink, getShareBenefits, getShareEmailSubject, getShareMessage } from './share-options';
+
+// Share Option Configs
+export { getShareOptionConfigs } from './share-option-configs';
+
+// Theme Options
+export { getThemeOptions } from './theme-options';
+
+// Permissions
+export { getPermissions } from './permissions';
+
+// About Info
+export { getAppInfoItems, getContactItems, openURL } from './about-info';

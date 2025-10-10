@@ -3,7 +3,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonContainers, CommonSelectionCards, CommonText } from '@/constants/common-styles';
 import { Shadow, Spacing } from '@/constants/layout';
-import { getAllThemes, getTheme } from '@/constants/theme';
+import { getThemeOptions } from '@/data';
 import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { type ThemePreference, useThemeContext } from '@/hooks/use-theme-context';
@@ -21,28 +21,8 @@ export default function ThemeScreen() {
   const textMutedColor = useThemeColor({}, 'text-muted');
   const borderColor = useThemeColor({}, 'border');
 
-  // Get all available themes
-  const availableThemes = getAllThemes();
-
-  const themeOptions = [
-    {
-      key: 'system' as ThemePreference,
-      title: i18n.t('screens.settings.theme.options.system.title'),
-      description: i18n.t('screens.settings.theme.options.system.description'),
-      icon: '📱',
-      color: textColor,
-    },
-    ...availableThemes.map((themeInfo) => {
-      const theme = getTheme(themeInfo.name);
-      return {
-        key: themeInfo.name as ThemePreference,
-        title: themeInfo.displayName,
-        description: `${themeInfo.displayName} color theme with light and dark modes`,
-        icon: themeInfo.icon,
-        color: theme.light.primary, // Use theme's primary color
-      };
-    }),
-  ];
+  // Get all available theme options
+  const themeOptions = getThemeOptions(textColor);
 
   const handleThemeSelect = async (theme: ThemePreference) => {
     try {
