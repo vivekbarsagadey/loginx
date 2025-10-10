@@ -556,6 +556,93 @@ export const CommonLists = StyleSheet.create({
 });
 
 /**
+ * Common selection card styles (for theme, language, etc.)
+ */
+export const CommonSelectionCards = StyleSheet.create({
+  /** Selection options container */
+  optionsContainer: {
+    gap: Spacing.lg,
+    marginTop: Spacing.lg,
+  },
+
+  /** Base selection card */
+  selectionCard: {
+    borderRadius: BorderRadius.xl,
+    borderWidth: 2,
+    borderColor: 'transparent',
+    overflow: 'hidden',
+    minHeight: 68,
+  },
+
+  /** Selection card content */
+  selectionCardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: Spacing.md,
+    gap: Spacing.md,
+  },
+
+  /** Icon/Flag container for selection cards */
+  selectionIconContainer: {
+    width: 44,
+    height: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: BorderRadius.md,
+  },
+
+  /** Icon/Flag emoji style */
+  selectionIconEmoji: {
+    fontSize: 30,
+    textAlign: 'center',
+  },
+
+  /** Selection card text container */
+  selectionTextContainer: {
+    flex: 1,
+    gap: Spacing.xs / 2,
+  },
+
+  /** Selection card title */
+  selectionCardTitle: {
+    fontWeight: Typography.bodyBold.fontWeight as 'bold',
+    fontSize: Typography.body.fontSize,
+    lineHeight: Typography.body.lineHeight,
+  },
+
+  /** Selection card description */
+  selectionCardDescription: {
+    fontSize: Typography.caption.fontSize,
+    lineHeight: Typography.caption.lineHeight,
+    opacity: 0.65,
+    marginTop: 2,
+  },
+
+  /** Checkmark container */
+  checkmarkContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  /** Checkmark circle badge */
+  checkmark: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  /** Checkmark text */
+  checkmarkText: {
+    fontSize: 16,
+    fontWeight: '900' as const,
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+});
+
+/**
  * Export all common styles as a single object for convenience
  */
 export const CommonStyles = {
@@ -570,6 +657,7 @@ export const CommonStyles = {
   icons: CommonIcons,
   overlays: CommonOverlays,
   lists: CommonLists,
+  selectionCards: CommonSelectionCards,
 };
 
 /**

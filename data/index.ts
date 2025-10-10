@@ -9,11 +9,12 @@
  * - Menu structures
  * - Tips and hints
  * - Example/demo data
+ * - Available languages
  *
  * Usage:
  * ```typescript
- * import { sampleNotifications, appFeatures, faqData } from '@/data';
- * import { getSampleNotifications } from '@/data';
+ * import { sampleNotifications, appFeatures, faqData, languages } from '@/data';
+ * import { getSampleNotifications, getLanguageByCode } from '@/data';
  * ```
  */
 
@@ -39,3 +40,6 @@ export type { Tip } from './tips';
 // Examples
 export { getSampleData, sampleActivityLog, sampleItems, sampleUsers } from './examples';
 export type { ActivityLogEntry, SampleItem, SampleUser } from './examples';
+
+// Languages
+export { getDefaultLanguage, getLanguageByCode, getLanguageCodes, isLanguageSupported, languages } from './languages';
