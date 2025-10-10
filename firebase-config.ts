@@ -36,7 +36,7 @@ if (Platform.OS === 'web') {
   // Web: keep users signed in (local persistence)
   auth = getAuth(app);
   // Set persistence to keep users logged in across browser sessions
-  setPersistence(auth, browserLocalPersistence).catch((error) => {
+  setPersistence(auth, browserLocalPersistence).catch((_error) => {
     // Failed to set persistence
   });
 } else {
@@ -66,7 +66,7 @@ try {
     if (__DEV__ && Config.development.useFirebaseEmulator) {
       try {
         connectFirestoreEmulator(firestoreInstance, 'localhost', 8080);
-      } catch (emulatorError) {
+      } catch (_emulatorError) {
         // Failed to connect to emulator
       }
     }
@@ -81,7 +81,10 @@ try {
         .catch((err) => {
           if (err.code === 'failed-precondition') {
             // Multiple tabs open, persistence can only be enabled in one tab at a time
-            return enableIndexedDbPersistence(firestoreInstance!);
+            // firestoreInstance is guaranteed to be defined here since we're in its initialization block
+            if (firestoreInstance) {
+              return enableIndexedDbPersistence(firestoreInstance);
+            }
           } else if (err.code === 'unimplemented') {
             // The current browser doesn't support persistence
           } else {
@@ -94,7 +97,7 @@ try {
             firestoreInitialized = true;
           }
         })
-        .catch((err) => {
+        .catch((_err) => {
           firestoreInitialized = true;
         });
     } else {
