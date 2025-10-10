@@ -3,10 +3,9 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
-import { Colors } from '@/constants/theme';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
@@ -25,8 +24,7 @@ import { ActivityIndicator, StyleSheet } from 'react-native';
  */
 export default function VerifyMagicLinkScreen() {
   const router = useRouter();
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme || 'light'];
+  const primaryColor = useThemeColor({}, 'primary');
   const alert = useAlert();
 
   const [email, setEmail] = useState<string>('');
@@ -165,7 +163,7 @@ export default function VerifyMagicLinkScreen() {
     return (
       <ScreenContainer>
         <ThemedView style={styles.centerContent}>
-          <ActivityIndicator size="large" color={theme.primary} />
+          <ActivityIndicator size="large" color={primaryColor} />
           <ThemedText style={styles.checkingText}>{i18n.t('passwordlessLogin.checking')}</ThemedText>
         </ThemedView>
       </ScreenContainer>
@@ -175,7 +173,7 @@ export default function VerifyMagicLinkScreen() {
   return (
     <ScreenContainer>
       <ThemedView style={styles.centerContent}>
-        <Ionicons name="mail-outline" size={64} color={theme.primary} style={styles.icon} />
+        <Ionicons name="mail-outline" size={64} color={primaryColor} style={styles.icon} />
 
         <ThemedText type="h1" style={styles.title}>
           {i18n.t('passwordlessLogin.verify.title')}

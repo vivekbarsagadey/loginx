@@ -37,6 +37,7 @@ export function Menu({ items, visible, onSelect, onClose, trigger, accessibility
   const textColor = useThemeColor({}, 'text');
   const borderColor = useThemeColor({}, 'border');
   const primaryColor = useThemeColor({}, 'primary');
+  const shadowColor = useThemeColor({}, 'shadow');
 
   return (
     <View>
@@ -50,6 +51,7 @@ export function Menu({ items, visible, onSelect, onClose, trigger, accessibility
                 {
                   backgroundColor: surfaceColor,
                   borderColor,
+                  shadowColor,
                 },
               ]}
             >
@@ -124,7 +126,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     maxHeight: 400,
     minWidth: 200,
-    shadowColor: '#000',
     shadowOffset: { height: 4, width: 0 },
     shadowOpacity: 0.2,
     shadowRadius: 8,

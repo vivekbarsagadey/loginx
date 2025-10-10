@@ -21,6 +21,7 @@ export function Tooltip({ content, children, position = 'top', delay = 500, acce
   const [visible, setVisible] = useState(false);
   const surfaceColor = useThemeColor({}, 'surface');
   const textColor = useThemeColor({}, 'text');
+  const shadowColor = useThemeColor({}, 'shadow');
 
   let timeout: ReturnType<typeof setTimeout>;
 
@@ -42,7 +43,7 @@ export function Tooltip({ content, children, position = 'top', delay = 500, acce
       </Pressable>
 
       {visible && (
-        <View style={[styles.tooltip, { backgroundColor: surfaceColor }, styles[position]]}>
+        <View style={[styles.tooltip, { backgroundColor: surfaceColor, shadowColor }, styles[position]]}>
           <ThemedText type="caption" style={[styles.text, { color: textColor }]}>
             {content}
           </ThemedText>
@@ -73,6 +74,7 @@ export interface PopoverProps {
 export function Popover({ children, trigger, visible, onClose, position = 'bottom', accessibilityLabel }: PopoverProps) {
   const surfaceColor = useThemeColor({}, 'surface');
   const borderColor = useThemeColor({}, 'border');
+  const shadowColor = useThemeColor({}, 'shadow');
 
   return (
     <View>
@@ -85,6 +87,7 @@ export function Popover({ children, trigger, visible, onClose, position = 'botto
               {
                 backgroundColor: surfaceColor,
                 borderColor,
+                shadowColor,
               },
               styles[`popover-${position}`],
             ]}
@@ -119,7 +122,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     maxWidth: 300,
     padding: Spacing.md,
-    shadowColor: '#000',
     shadowOffset: { height: 2, width: 0 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -148,7 +150,6 @@ const styles = StyleSheet.create({
     maxWidth: 150,
     padding: Spacing.sm,
     position: 'absolute',
-    shadowColor: '#000',
     shadowOffset: { height: 2, width: 0 },
     shadowOpacity: 0.2,
     shadowRadius: 4,

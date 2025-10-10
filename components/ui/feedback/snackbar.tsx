@@ -33,6 +33,7 @@ export function Snackbar({ message, variant = 'info', position = 'bottom', visib
   const errorColor = useThemeColor({}, 'error');
   const surfaceColor = useThemeColor({}, 'surface');
   const textColor = useThemeColor({}, 'text');
+  const shadowColor = useThemeColor({}, 'shadow');
 
   const translateY = useSharedValue(position === 'bottom' ? 100 : -100);
   const opacity = useSharedValue(0);
@@ -43,6 +44,17 @@ export function Snackbar({ message, variant = 'info', position = 'bottom', visib
     success: successColor,
     warning: warningColor,
   };
+
+  const dynamicStyles = React.useMemo(
+    () =>
+      StyleSheet.create({
+        contentDynamic: {
+          backgroundColor: surfaceColor,
+          shadowColor,
+        },
+      }),
+    [surfaceColor, shadowColor]
+  );
 
   useEffect(() => {
     if (visible) {
@@ -85,8 +97,8 @@ export function Snackbar({ message, variant = 'info', position = 'bottom', visib
       <View
         style={[
           styles.content,
+          dynamicStyles.contentDynamic,
           {
-            backgroundColor: surfaceColor,
             borderLeftColor: variantColors[variant],
           },
         ]}
@@ -132,7 +144,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: Spacing.sm,
     padding: Spacing.md,
-    shadowColor: '#000',
     shadowOffset: { height: 2, width: 0 },
     shadowOpacity: 0.25,
     shadowRadius: 4,

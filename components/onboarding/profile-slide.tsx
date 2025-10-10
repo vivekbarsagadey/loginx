@@ -1,8 +1,7 @@
 import { gap, rounded } from '@/constants/style-utils';
-import { Colors } from '@/constants/theme';
 import { useAlert } from '@/hooks/use-alert';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { savePendingProfileData } from '@/utils/pending-profile';
 import { Ionicons } from '@expo/vector-icons';
@@ -21,8 +20,9 @@ interface ProfileSlideProps {
 }
 
 export const ProfileSlide = ({ width, onNext, onSkip }: ProfileSlideProps) => {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme || 'light'];
+  const primaryColor = useThemeColor({}, 'primary');
+  const successColor = useThemeColor({}, 'success');
+  const textMutedColor = useThemeColor({}, 'text-muted');
   const { trackSlideCompletion } = useOnboarding();
   const { show: showAlert, AlertComponent } = useAlert();
 
@@ -73,8 +73,8 @@ export const ProfileSlide = ({ width, onNext, onSkip }: ProfileSlideProps) => {
     <ThemedView style={[styles.container, { width }]}>
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} bounces={false}>
         <ThemedView style={styles.header}>
-          <ThemedView style={[styles.iconContainer, { backgroundColor: `${theme.primary}20` }]}>
-            <Ionicons name="person-circle" size={48} color={theme.primary} />
+          <ThemedView style={[styles.iconContainer, { backgroundColor: `${primaryColor}20` }]}>
+            <Ionicons name="person-circle" size={48} color={primaryColor} />
           </ThemedView>
 
           <ThemedText type="h1" style={styles.title}>
@@ -135,8 +135,8 @@ export const ProfileSlide = ({ width, onNext, onSkip }: ProfileSlideProps) => {
 
             {profileBenefits.map((benefit, index) => (
               <ThemedView key={index} style={styles.benefitItem}>
-                <ThemedView style={[styles.benefitIcon, { backgroundColor: `${theme.success}20` }]}>
-                  <Ionicons name={benefit.icon} size={20} color={theme.success} />
+                <ThemedView style={[styles.benefitIcon, { backgroundColor: `${successColor}20` }]}>
+                  <Ionicons name={benefit.icon} size={20} color={successColor} />
                 </ThemedView>
                 <ThemedView style={styles.benefitContent}>
                   <ThemedText type="body" style={styles.benefitTitle}>
@@ -152,8 +152,8 @@ export const ProfileSlide = ({ width, onNext, onSkip }: ProfileSlideProps) => {
 
           {/* Optional Notice */}
           <ThemedView style={styles.noticeSection}>
-            <ThemedView style={[styles.noticeIcon, { backgroundColor: `${theme['text-muted']}20` }]}>
-              <Ionicons name="information-circle" size={20} color={theme['text-muted']} />
+            <ThemedView style={[styles.noticeIcon, { backgroundColor: `${textMutedColor}20` }]}>
+              <Ionicons name="information-circle" size={20} color={textMutedColor} />
             </ThemedView>
             <ThemedText type="caption" style={styles.noticeText}>
               This step is optional. You can always complete your profile later in Settings.

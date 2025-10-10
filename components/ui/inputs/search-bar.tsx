@@ -59,6 +59,7 @@ export function SearchBar({
   const secondaryTextColor = useThemeColor({}, 'text-muted');
   const borderColor = useThemeColor({}, 'border');
   const surfaceColor = useThemeColor({}, 'surface');
+  const shadowColor = useThemeColor({}, 'shadow');
 
   const [isFocused, setIsFocused] = useState(false);
 
@@ -148,6 +149,7 @@ export function SearchBar({
             {
               backgroundColor: surfaceColor,
               borderColor,
+              shadowColor,
             },
           ]}
         >
@@ -182,6 +184,7 @@ export function SearchBar({
             {
               backgroundColor: surfaceColor,
               borderColor,
+              shadowColor,
             },
           ]}
         >
@@ -227,7 +230,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: Spacing.sm,
     maxHeight: 300,
-    shadowColor: '#000',
     shadowOffset: { height: 4, width: 0 },
     shadowOpacity: 0.15,
     shadowRadius: 8,

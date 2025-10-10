@@ -26,6 +26,7 @@ export const sunsetTheme: Theme = {
     warning: '#EAB308',
     error: '#DC2626',
     info: '#F97316',
+    shadow: '#000000',
 
     // Legacy/Compatibility Aliases
     background: '#FFFFFF',
@@ -51,6 +52,7 @@ export const sunsetTheme: Theme = {
     warning: '#FBBF24',
     error: '#FCA5A5',
     info: '#FB923C',
+    shadow: '#000000',
 
     // Legacy/Compatibility Aliases
     background: '#431407',

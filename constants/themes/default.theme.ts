@@ -26,6 +26,7 @@ export const defaultTheme: Theme = {
     warning: '#D97706',
     error: '#DC2626',
     info: '#2563EB', // Using primary for info
+    shadow: '#000000', // Black shadow for light mode
 
     // Legacy/Compatibility Aliases
     background: '#FFFFFF',
@@ -51,6 +52,7 @@ export const defaultTheme: Theme = {
     warning: '#FBBF24',
     error: '#F87171',
     info: '#60A5FA', // Using primary for info
+    shadow: '#000000', // Black shadow for dark mode
 
     // Legacy/Compatibility Aliases
     background: '#0B1220',

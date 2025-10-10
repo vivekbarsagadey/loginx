@@ -20,6 +20,7 @@ export interface ThemeColors {
   warning: string;
   error: string;
   info: string;
+  shadow: string; // Shadow color for elevation effects
 
   // Legacy/Compatibility Aliases
   background: string;

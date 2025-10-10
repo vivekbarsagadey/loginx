@@ -1,7 +1,7 @@
-import { AnimationDurations, Colors } from '@/constants';
+import { AnimationDurations } from '@/constants';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { useCallback, useState } from 'react';
@@ -26,8 +26,12 @@ interface Tutorial {
 }
 
 export const TutorialSlide = ({ width, onNext }: TutorialSlideProps) => {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme || 'light'];
+  const primaryColor = useThemeColor({}, 'primary');
+  const successColor = useThemeColor({}, 'success');
+  const textMutedColor = useThemeColor({}, 'text-muted');
+  const borderColor = useThemeColor({}, 'border');
+  const borderStrongColor = useThemeColor({}, 'border-strong');
+  const backgroundColor = useThemeColor({}, 'bg');
   const { trackSlideCompletion } = useOnboarding();
 
   const [currentTutorial, setCurrentTutorial] = useState(0);
@@ -150,12 +154,12 @@ export const TutorialSlide = ({ width, onNext }: TutorialSlideProps) => {
             <ThemedText type="caption" style={styles.progressText}>
               {currentTutorial + 1} {i18n.t('onb.tutorials.of')} {tutorials.length}
             </ThemedText>
-            <ThemedView style={[styles.progressTrack, { backgroundColor: `${theme.primary}20` }]}>
+            <ThemedView style={[styles.progressTrack, { backgroundColor: `${primaryColor}20` }]}>
               <ThemedView
                 style={[
                   styles.progressBar,
                   {
-                    backgroundColor: theme.primary,
+                    backgroundColor: primaryColor,
                     width: `${((currentTutorial + 1) / tutorials.length) * 100}%`,
                   },
                 ]}
@@ -167,8 +171,8 @@ export const TutorialSlide = ({ width, onNext }: TutorialSlideProps) => {
         <ThemedView style={styles.tutorialCard}>
           {/* Tutorial Icon and Info */}
           <ThemedView style={styles.tutorialHeader}>
-            <ThemedView style={[styles.tutorialIcon, { backgroundColor: `${theme.primary}20` }]}>
-              <Ionicons name={currentTut.icon} size={32} color={theme.primary} />
+            <ThemedView style={[styles.tutorialIcon, { backgroundColor: `${primaryColor}20` }]}>
+              <Ionicons name={currentTut.icon} size={32} color={primaryColor} />
             </ThemedView>
 
             <ThemedView style={styles.tutorialInfo}>
@@ -182,7 +186,7 @@ export const TutorialSlide = ({ width, onNext }: TutorialSlideProps) => {
 
             {isCurrentCompleted && (
               <ThemedView style={styles.completedBadge}>
-                <Ionicons name="checkmark-circle" size={24} color={theme.success} />
+                <Ionicons name="checkmark-circle" size={24} color={successColor} />
               </ThemedView>
             )}
           </ThemedView>
@@ -194,10 +198,10 @@ export const TutorialSlide = ({ width, onNext }: TutorialSlideProps) => {
                 {i18n.t('onb.tutorials.tryItOut')}
               </ThemedText>
 
-              <Pressable onPress={playDemo} disabled={isPlayingDemo} style={[styles.demoArea, { borderColor: theme.border }]}>
+              <Pressable onPress={playDemo} disabled={isPlayingDemo} style={[styles.demoArea, { borderColor: borderColor }]}>
                 <Animated.View style={[styles.demoContent, demoAnimatedStyle]}>
-                  <Ionicons name={currentTut.icon} size={48} color={isPlayingDemo ? theme.primary : theme['text-muted']} />
-                  <ThemedText type="body" style={[styles.demoText, { color: isPlayingDemo ? theme.primary : theme['text-muted'] }]}>
+                  <Ionicons name={currentTut.icon} size={48} color={isPlayingDemo ? primaryColor : textMutedColor} />
+                  <ThemedText type="body" style={[styles.demoText, { color: isPlayingDemo ? primaryColor : textMutedColor }]}>
                     {isPlayingDemo ? i18n.t('onb.tutorials.running') : i18n.t('onb.tutorials.tapToTry')}
                   </ThemedText>
                 </Animated.View>
@@ -205,8 +209,8 @@ export const TutorialSlide = ({ width, onNext }: TutorialSlideProps) => {
                 {/* Progress Bar for Demo */}
                 {isPlayingDemo && (
                   <ThemedView style={styles.demoProgress}>
-                    <ThemedView style={[styles.demoProgressTrack, { backgroundColor: `${theme.primary}20` }]}>
-                      <Animated.View style={[styles.demoProgressBar, { backgroundColor: theme.primary }, progressAnimatedStyle]} />
+                    <ThemedView style={[styles.demoProgressTrack, { backgroundColor: `${primaryColor}20` }]}>
+                      <Animated.View style={[styles.demoProgressBar, { backgroundColor: primaryColor }, progressAnimatedStyle]} />
                     </ThemedView>
                   </ThemedView>
                 )}
@@ -222,8 +226,8 @@ export const TutorialSlide = ({ width, onNext }: TutorialSlideProps) => {
 
             {currentTut.steps.map((step, index) => (
               <ThemedView key={index} style={styles.stepItem}>
-                <ThemedView style={[styles.stepNumber, { backgroundColor: theme.primary }]}>
-                  <ThemedText type="caption" style={[styles.stepNumberText, { color: theme.background }]}>
+                <ThemedView style={[styles.stepNumber, { backgroundColor: primaryColor }]}>
+                  <ThemedText type="caption" style={[styles.stepNumberText, { color: backgroundColor }]}>
                     {index + 1}
                   </ThemedText>
                 </ThemedView>
@@ -245,7 +249,7 @@ export const TutorialSlide = ({ width, onNext }: TutorialSlideProps) => {
               style={[
                 styles.navDot,
                 {
-                  backgroundColor: index === currentTutorial ? theme.primary : index < currentTutorial ? theme.success : theme['border-strong'],
+                  backgroundColor: index === currentTutorial ? primaryColor : index < currentTutorial ? successColor : borderStrongColor,
                 },
               ]}
             />

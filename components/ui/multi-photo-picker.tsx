@@ -24,15 +24,16 @@ interface PhotoItemProps {
   borderColor: string;
   primaryColor: string;
   errorColor: string;
+  shadowColor: string;
 }
 
-const PhotoItem = memo(({ item, index, onRemove, borderColor, primaryColor, errorColor }: PhotoItemProps) => (
+const PhotoItem = memo(({ item, index, onRemove, borderColor, primaryColor, errorColor, shadowColor }: PhotoItemProps) => (
   <View style={styles.photoItem}>
     <Image source={{ uri: item }} style={[styles.photo, { borderColor }]} accessibilityIgnoresInvertColors />
-    <Pressable style={[styles.removeButton, { backgroundColor: errorColor }]} onPress={() => onRemove(index)} accessibilityLabel={`Remove photo ${index + 1}`} accessibilityRole="button">
+    <Pressable style={[styles.removeButton, { backgroundColor: errorColor, shadowColor }]} onPress={() => onRemove(index)} accessibilityLabel={`Remove photo ${index + 1}`} accessibilityRole="button">
       <Ionicons name="close" size={16} color="white" />
     </Pressable>
-    <View style={[styles.photoNumber, { backgroundColor: primaryColor }]}>
+    <View style={[styles.photoNumber, { backgroundColor: primaryColor, shadowColor }]}>
       <ThemedText style={styles.photoNumberText}>{index + 1}</ThemedText>
     </View>
   </View>
@@ -52,6 +53,7 @@ export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10
   const bgColor = useThemeColor({}, 'surface-variant');
   const textColor = useThemeColor({}, 'text');
   const errorColor = useThemeColor({}, 'error');
+  const shadowColor = useThemeColor({}, 'shadow');
 
   const requestPermissions = async () => {
     if (Platform.OS !== 'web') {
@@ -163,8 +165,10 @@ export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10
   }, [alert, onChange]);
 
   const renderPhoto = useCallback(
-    ({ item, index }: { item: string; index: number }) => <PhotoItem item={item} index={index} onRemove={removePhoto} borderColor={borderColor} primaryColor={primaryColor} errorColor={errorColor} />,
-    [removePhoto, borderColor, primaryColor, errorColor]
+    ({ item, index }: { item: string; index: number }) => (
+      <PhotoItem item={item} index={index} onRemove={removePhoto} borderColor={borderColor} primaryColor={primaryColor} errorColor={errorColor} shadowColor={shadowColor} />
+    ),
+    [removePhoto, borderColor, primaryColor, errorColor, shadowColor]
   );
 
   const getItemLayout = useCallback((_data: ArrayLike<string> | null | undefined, index: number) => {
@@ -280,7 +284,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
@@ -295,7 +298,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,

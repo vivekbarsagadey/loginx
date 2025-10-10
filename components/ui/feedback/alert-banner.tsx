@@ -30,6 +30,7 @@ export function AlertBanner({ message, variant = 'info', title, actionLabel, onA
   const errorColor = useThemeColor({}, 'error');
   const surfaceColor = useThemeColor({}, 'surface');
   const textColor = useThemeColor({}, 'text');
+  const shadowColor = useThemeColor({}, 'shadow');
 
   const variantColors = {
     error: errorColor,
@@ -45,15 +46,21 @@ export function AlertBanner({ message, variant = 'info', title, actionLabel, onA
     warning: '⚠',
   };
 
-  return (
-    <View
-      style={[
-        styles.container,
-        {
+  const dynamicStyles = React.useMemo(
+    () =>
+      StyleSheet.create({
+        containerDynamic: {
           backgroundColor: surfaceColor,
           borderLeftColor: variantColors[variant],
+          shadowColor,
         },
-      ]}
+      }),
+    [surfaceColor, variantColors, variant, shadowColor]
+  );
+
+  return (
+    <View
+      style={[styles.container, dynamicStyles.containerDynamic]}
       accessible={true}
       accessibilityRole="alert"
       accessibilityLabel={accessibilityLabel || `${variant}: ${title || message}`}
@@ -101,7 +108,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: Spacing.md,
     padding: Spacing.md,
-    shadowColor: '#000',
     shadowOffset: { height: 2, width: 0 },
     shadowOpacity: 0.1,
     shadowRadius: 4,

@@ -3,11 +3,10 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
 import { gap, rounded } from '@/constants/style-utils';
-import { Colors } from '@/constants/theme';
 import { useAlert } from '@/hooks/use-alert';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { useCallback, useEffect, useState } from 'react';
@@ -20,8 +19,10 @@ interface BiometricSlideProps {
 }
 
 export const BiometricSlide = ({ width, onNext, onSkip }: BiometricSlideProps) => {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme || 'light'];
+  const primaryColor = useThemeColor({}, 'primary');
+  const backgroundColor = useThemeColor({}, 'bg');
+  const successColor = useThemeColor({}, 'success');
+  const errorColor = useThemeColor({}, 'error');
   const { setBiometricPermission, trackSlideCompletion } = useOnboarding();
   const { isAvailable, biometryType, isEnabled, isLoading, error, enableBiometric, biometricTypeName, checkBiometricSupport } = useBiometricAuth();
   const { show: showAlert, AlertComponent } = useAlert();
@@ -108,8 +109,8 @@ export const BiometricSlide = ({ width, onNext, onSkip }: BiometricSlideProps) =
     <ThemedView style={[styles.container, { width }]}>
       <ThemedView style={styles.content}>
         <ThemedView style={styles.iconContainer}>
-          <ThemedView style={[styles.iconCircle, { backgroundColor: theme.primary }]}>
-            <Ionicons name={getBiometricIcon() as keyof typeof Ionicons.glyphMap} size={64} color={theme.background} />
+          <ThemedView style={[styles.iconCircle, { backgroundColor: primaryColor }]}>
+            <Ionicons name={getBiometricIcon() as keyof typeof Ionicons.glyphMap} size={64} color={backgroundColor} />
           </ThemedView>
         </ThemedView>
 
@@ -128,7 +129,7 @@ export const BiometricSlide = ({ width, onNext, onSkip }: BiometricSlideProps) =
             </ThemedText>
             {(i18n.t('onb.biometric.benefits.items', { returnObjects: true }) as string[]).map((benefit, index) => (
               <ThemedView key={index} style={styles.benefitItem}>
-                <Ionicons name="checkmark-circle" size={20} color={theme.success} />
+                <Ionicons name="checkmark-circle" size={20} color={successColor} />
                 <ThemedText type="body" style={styles.benefitText}>
                   {benefit}
                 </ThemedText>
@@ -157,7 +158,7 @@ export const BiometricSlide = ({ width, onNext, onSkip }: BiometricSlideProps) =
 
         {error && (
           <ThemedView style={styles.errorContainer}>
-            <ThemedText type="caption" style={[styles.errorText, { color: theme.error }]}>
+            <ThemedText type="caption" style={[styles.errorText, { color: errorColor }]}>
               {error}
             </ThemedText>
           </ThemedView>

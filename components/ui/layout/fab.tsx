@@ -24,6 +24,7 @@ export interface FABProps {
 export function FAB({ icon, label, size = 'medium', position = 'bottom-right', onPress, disabled = false, accessibilityLabel }: FABProps) {
   const primaryColor = useThemeColor({}, 'primary');
   const onPrimaryColor = useThemeColor({}, 'on-primary');
+  const shadowColor = useThemeColor({}, 'shadow');
 
   const sizes = {
     large: 64,
@@ -39,15 +40,26 @@ export function FAB({ icon, label, size = 'medium', position = 'bottom-right', o
     'bottom-right': { bottom: Spacing.lg, right: Spacing.lg },
   };
 
+  const dynamicStyles = React.useMemo(
+    () =>
+      StyleSheet.create({
+        fabDynamic: {
+          backgroundColor: primaryColor,
+          shadowColor,
+        },
+      }),
+    [primaryColor, shadowColor]
+  );
+
   return (
     <Pressable
       onPress={onPress}
       disabled={disabled}
       style={[
         styles.fab,
+        dynamicStyles.fabDynamic,
         label ? styles.extended : {},
         {
-          backgroundColor: primaryColor,
           height: fabSize,
           minWidth: label ? undefined : fabSize,
           opacity: disabled ? 0.6 : 1,
@@ -80,7 +92,6 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.full,
     justifyContent: 'center',
     position: 'absolute',
-    shadowColor: '#000',
     shadowOffset: { height: 4, width: 0 },
     shadowOpacity: 0.3,
     shadowRadius: 8,

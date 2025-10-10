@@ -26,6 +26,7 @@ export const purpleTheme: Theme = {
     warning: '#F59E0B',
     error: '#DC2626',
     info: '#9333EA',
+    shadow: '#000000',
 
     // Legacy/Compatibility Aliases
     background: '#FFFFFF',
@@ -51,6 +52,7 @@ export const purpleTheme: Theme = {
     warning: '#FBBF24',
     error: '#F87171',
     info: '#A855F7',
+    shadow: '#000000',
 
     // Legacy/Compatibility Aliases
     background: '#2e1065',

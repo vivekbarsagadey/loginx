@@ -1,10 +1,10 @@
-import { AnimationDurations, Colors } from '@/constants';
+import { AnimationDurations } from '@/constants';
 import { BorderRadius, Spacing, TouchTarget, Typography } from '@/constants/layout';
 import i18n from '@/i18n';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { AccessibilityInfo, type FlatList, Platform, Pressable, StyleSheet, useColorScheme, useWindowDimensions, View } from 'react-native';
+import { AccessibilityInfo, type FlatList, Platform, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Animated, { Extrapolation, interpolate, runOnJS, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -21,6 +21,7 @@ import { WelcomeSlide } from '@/components/onboarding/welcome';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
+import { useThemeColor } from '@/hooks/use-theme-color';
 
 const SLIDES = [
   { key: 'welcome' },
@@ -43,8 +44,9 @@ export default function Onboarding() {
   const [accessibilityEnabled, setAccessibilityEnabled] = useState(false);
   const [isRecoveredSession, setIsRecoveredSession] = useState(false);
   const ref = useRef<FlatList>(null);
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme || 'light'];
+  const primaryColor = useThemeColor({}, 'primary');
+  const surfaceColor = useThemeColor({}, 'surface');
+  const borderStrongColor = useThemeColor({}, 'border-strong');
   const { width } = useWindowDimensions();
   const { top, bottom } = useSafeAreaInsets();
 
@@ -302,7 +304,7 @@ export default function Onboarding() {
         {/* Enhanced Progress Indicator with Accessibility */}
         <View style={styles.progressWrapper}>
           <View
-            style={[styles.progressBar, { backgroundColor: theme['border-strong'] }]}
+            style={[styles.progressBar, { backgroundColor: borderStrongColor }]}
             accessible={true}
             accessibilityRole="progressbar"
             accessibilityLabel={i18n.t('onb.accessibility.progress', {
@@ -315,7 +317,7 @@ export default function Onboarding() {
               now: i + 1,
             }}
           >
-            <Animated.View style={[styles.progressFill, { backgroundColor: theme.primary }, progressBarAnimatedStyle]} />
+            <Animated.View style={[styles.progressFill, { backgroundColor: primaryColor }, progressBarAnimatedStyle]} />
           </View>
 
           <View style={styles.indicatorsContainer} accessible={true} accessibilityRole="tablist" accessibilityLabel={i18n.t('onb.accessibility.slideIndicators')}>
@@ -331,7 +333,7 @@ export default function Onboarding() {
                     height: isActive ? 12 : 8,
                     borderRadius: isActive ? 6 : 4,
                     marginHorizontal: Spacing.xs,
-                    backgroundColor: isCompleted || isActive ? theme.primary : theme['border-strong'],
+                    backgroundColor: isCompleted || isActive ? primaryColor : borderStrongColor,
                     transform: [{ scale: isActive ? 1.2 : 1 }],
                   }}
                   accessible={true}
@@ -348,11 +350,11 @@ export default function Onboarding() {
         </View>
         <View style={styles.buttonContainer}>
           {i > 0 && (
-            <Pressable onPress={back} style={[styles.backButton, { backgroundColor: theme.surface }]}>
+            <Pressable onPress={back} style={[styles.backButton, { backgroundColor: surfaceColor }]}>
               <ThemedText style={styles.buttonText}>{i18n.t('onb.cta.back')}</ThemedText>
             </Pressable>
           )}
-          <Pressable onPress={next} style={[styles.nextButton, { backgroundColor: theme.primary, flex: i > 0 ? 2 : 1 }]}>
+          <Pressable onPress={next} style={[styles.nextButton, { backgroundColor: primaryColor, flex: i > 0 ? 2 : 1 }]}>
             <ThemedText type="inverse" style={styles.buttonText}>
               {i < SLIDES.length - 1 ? i18n.t('onb.cta.next') : i18n.t('onb.cta.start')}
             </ThemedText>

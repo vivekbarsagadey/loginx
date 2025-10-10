@@ -1,8 +1,7 @@
 import { BorderRadius } from '@/constants/layout';
 import { gap, rounded } from '@/constants/style-utils';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { ScrollView, StyleSheet } from 'react-native';
@@ -17,8 +16,11 @@ interface PrivacySlideProps {
 }
 
 export const PrivacySlide = ({ width, onNext }: PrivacySlideProps) => {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme || 'light'];
+  const primaryColor = useThemeColor({}, 'primary');
+  const backgroundColor = useThemeColor({}, 'bg');
+  const successColor = useThemeColor({}, 'success');
+  const borderColor = useThemeColor({}, 'border');
+  const textMutedColor = useThemeColor({}, 'text-muted');
   const { trackSlideCompletion } = useOnboarding();
 
   const handleNext = async () => {
@@ -71,8 +73,8 @@ export const PrivacySlide = ({ width, onNext }: PrivacySlideProps) => {
     <ThemedView style={[styles.container, { width }]}>
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} bounces={false}>
         <ThemedView style={styles.header}>
-          <ThemedView style={[styles.iconCircle, { backgroundColor: theme.primary }]}>
-            <Ionicons name="lock-closed" size={64} color={theme.background} />
+          <ThemedView style={[styles.iconCircle, { backgroundColor: primaryColor }]}>
+            <Ionicons name="lock-closed" size={64} color={backgroundColor} />
           </ThemedView>
 
           <ThemedText type="h1" style={styles.title}>
@@ -91,8 +93,8 @@ export const PrivacySlide = ({ width, onNext }: PrivacySlideProps) => {
 
           {securityFeatures.map((feature, index) => (
             <ThemedView key={index} style={styles.featureItem}>
-              <ThemedView style={[styles.featureIcon, { backgroundColor: `${theme.primary}20` }]}>
-                <Ionicons name={feature.icon} size={24} color={theme.primary} />
+              <ThemedView style={[styles.featureIcon, { backgroundColor: `${primaryColor}20` }]}>
+                <Ionicons name={feature.icon} size={24} color={primaryColor} />
               </ThemedView>
               <ThemedView style={styles.featureContent}>
                 <ThemedText type="h3" style={styles.featureTitle}>
@@ -113,8 +115,8 @@ export const PrivacySlide = ({ width, onNext }: PrivacySlideProps) => {
 
           {complianceFeatures.map((feature, index) => (
             <ThemedView key={index} style={styles.featureItem}>
-              <ThemedView style={[styles.featureIcon, { backgroundColor: `${theme.success}20` }]}>
-                <Ionicons name={feature.icon} size={24} color={theme.success} />
+              <ThemedView style={[styles.featureIcon, { backgroundColor: `${successColor}20` }]}>
+                <Ionicons name={feature.icon} size={24} color={successColor} />
               </ThemedView>
               <ThemedView style={styles.featureContent}>
                 <ThemedText type="h3" style={styles.featureTitle}>
@@ -134,20 +136,20 @@ export const PrivacySlide = ({ width, onNext }: PrivacySlideProps) => {
           </ThemedText>
 
           <ThemedView style={styles.linksContainer}>
-            <ExternalLink href="/legal/privacy" style={[styles.link, { borderColor: theme.border }]}>
-              <Ionicons name="document-text" size={20} color={theme.primary} />
-              <ThemedText type="body" style={[styles.linkText, { color: theme.primary }]}>
+            <ExternalLink href="/legal/privacy" style={[styles.link, { borderColor: borderColor }]}>
+              <Ionicons name="document-text" size={20} color={primaryColor} />
+              <ThemedText type="body" style={[styles.linkText, { color: primaryColor }]}>
                 {i18n.t('onb.privacy.links.privacyPolicy')}
               </ThemedText>
-              <Ionicons name="chevron-forward" size={16} color={theme['text-muted']} />
+              <Ionicons name="chevron-forward" size={16} color={textMutedColor} />
             </ExternalLink>
 
-            <ExternalLink href="/security/sessions" style={[styles.link, { borderColor: theme.border }]}>
-              <Ionicons name="shield-checkmark" size={20} color={theme.primary} />
-              <ThemedText type="body" style={[styles.linkText, { color: theme.primary }]}>
+            <ExternalLink href="/security/sessions" style={[styles.link, { borderColor: borderColor }]}>
+              <Ionicons name="shield-checkmark" size={20} color={primaryColor} />
+              <ThemedText type="body" style={[styles.linkText, { color: primaryColor }]}>
                 {i18n.t('onb.privacy.links.securityDetails')}
               </ThemedText>
-              <Ionicons name="chevron-forward" size={16} color={theme['text-muted']} />
+              <Ionicons name="chevron-forward" size={16} color={textMutedColor} />
             </ExternalLink>
           </ThemedView>
         </ThemedView>
@@ -155,8 +157,8 @@ export const PrivacySlide = ({ width, onNext }: PrivacySlideProps) => {
 
       <ThemedView style={styles.footer}>
         <ThemedView style={styles.trustBadge}>
-          <Ionicons name="checkmark-circle" size={20} color={theme.success} />
-          <ThemedText type="caption" style={[styles.trustText, { color: theme.success }]}>
+          <Ionicons name="checkmark-circle" size={20} color={successColor} />
+          <ThemedText type="caption" style={[styles.trustText, { color: successColor }]}>
             {i18n.t('onb.privacy.trustBadge')}
           </ThemedText>
         </ThemedView>

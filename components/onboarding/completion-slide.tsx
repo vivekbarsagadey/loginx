@@ -1,7 +1,5 @@
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { getShadow } from '@/constants/style-utils';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -17,10 +15,11 @@ interface CompletionSlideProps {
 }
 
 export const CompletionSlide = ({ width, onComplete }: CompletionSlideProps) => {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme || 'light'];
-  const { permissions, analytics } = useOnboarding();
+  const successColor = useThemeColor({}, 'success');
+  const backgroundColor = useThemeColor({}, 'bg');
+  const textMutedColor = useThemeColor({}, 'text-muted');
   const shadowColor = useThemeColor({}, 'text');
+  const { permissions, analytics } = useOnboarding();
 
   const completedFeatures = [
     {
@@ -53,8 +52,8 @@ export const CompletionSlide = ({ width, onComplete }: CompletionSlideProps) => 
     <ThemedView style={[styles.container, { width }]}>
       <ThemedView style={styles.content}>
         <ThemedView style={styles.header}>
-          <ThemedView style={[styles.iconCircle, { backgroundColor: theme.success, shadowColor }, getShadow('md', colorScheme)]}>
-            <Ionicons name="checkmark-circle" size={64} color={theme.background} />
+          <ThemedView style={[styles.iconCircle, { backgroundColor: successColor, shadowColor }, getShadow('md')]}>
+            <Ionicons name="checkmark-circle" size={64} color={backgroundColor} />
           </ThemedView>
 
           <ThemedText type="h1" style={styles.title}>
@@ -73,13 +72,13 @@ export const CompletionSlide = ({ width, onComplete }: CompletionSlideProps) => 
 
           {completedFeatures.map((feature) => (
             <ThemedView key={feature.key} style={styles.featureItem}>
-              <ThemedView style={[styles.featureIcon, { backgroundColor: feature.completed ? `${theme.success}20` : `${theme['text-muted']}20` }]}>
-                <Ionicons name={feature.icon} size={20} color={feature.completed ? theme.success : theme['text-muted']} />
+              <ThemedView style={[styles.featureIcon, { backgroundColor: feature.completed ? `${successColor}20` : `${textMutedColor}20` }]}>
+                <Ionicons name={feature.icon} size={20} color={feature.completed ? successColor : textMutedColor} />
               </ThemedView>
               <ThemedText type="body" style={[styles.featureTitle, { opacity: feature.completed ? 1 : 0.6 }]}>
                 {feature.title}
               </ThemedText>
-              <Ionicons name={feature.completed ? 'checkmark-circle' : 'ellipse-outline'} size={20} color={feature.completed ? theme.success : theme['text-muted']} />
+              <Ionicons name={feature.completed ? 'checkmark-circle' : 'ellipse-outline'} size={20} color={feature.completed ? successColor : textMutedColor} />
             </ThemedView>
           ))}
         </ThemedView>

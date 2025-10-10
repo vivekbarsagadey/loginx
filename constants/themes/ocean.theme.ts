@@ -26,6 +26,7 @@ export const oceanTheme: Theme = {
     warning: '#F59E0B',
     error: '#DC2626',
     info: '#0891B2',
+    shadow: '#000000',
 
     // Legacy/Compatibility Aliases
     background: '#FFFFFF',
@@ -51,6 +52,7 @@ export const oceanTheme: Theme = {
     warning: '#FBBF24',
     error: '#F87171',
     info: '#22D3EE',
+    shadow: '#000000',
 
     // Legacy/Compatibility Aliases
     background: '#082f49',

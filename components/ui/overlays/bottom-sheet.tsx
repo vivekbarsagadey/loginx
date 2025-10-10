@@ -39,6 +39,7 @@ export function BottomSheet({
   const surfaceColor = useThemeColor({}, 'surface');
   const textColor = useThemeColor({}, 'text');
   const borderColor = useThemeColor({}, 'border');
+  const shadowColor = useThemeColor({}, 'shadow');
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose} accessible={true} accessibilityLabel={accessibilityLabel || title || 'Bottom sheet'}>
@@ -50,6 +51,7 @@ export function BottomSheet({
             {
               backgroundColor: surfaceColor,
               borderColor,
+              shadowColor,
             },
           ]}
         >
@@ -122,7 +124,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: BorderRadius.xl,
     borderTopWidth: 1,
     maxHeight: '90%',
-    shadowColor: '#000',
     shadowOffset: { height: -2, width: 0 },
     shadowOpacity: 0.2,
     shadowRadius: 12,

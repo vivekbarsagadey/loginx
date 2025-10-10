@@ -26,6 +26,7 @@ export const forestTheme: Theme = {
     warning: '#F59E0B',
     error: '#DC2626',
     info: '#16A34A',
+    shadow: '#000000',
 
     // Legacy/Compatibility Aliases
     background: '#FFFFFF',
@@ -51,6 +52,7 @@ export const forestTheme: Theme = {
     warning: '#FBBF24',
     error: '#F87171',
     info: '#4ADE80',
+    shadow: '#000000',
 
     // Legacy/Compatibility Aliases
     background: '#052e16',

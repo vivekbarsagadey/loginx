@@ -26,6 +26,7 @@ export const marinerTheme: Theme = {
     warning: '#F97316',
     error: '#EF4444',
     info: '#3B82F6',
+    shadow: '#000000',
 
     // Legacy/Compatibility Aliases
     background: '#FFFFFF',
@@ -51,6 +52,7 @@ export const marinerTheme: Theme = {
     warning: '#FB923C',
     error: '#F87171',
     info: '#60A5FA',
+    shadow: '#000000',
 
     // Legacy/Compatibility Aliases
     background: '#0B1220',

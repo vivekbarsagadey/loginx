@@ -29,6 +29,7 @@ export function ModalEnhanced({ visible, onClose, title, children, size = 'mediu
   const surfaceColor = useThemeColor({}, 'surface');
   const textColor = useThemeColor({}, 'text');
   const borderColor = useThemeColor({}, 'border');
+  const shadowColor = useThemeColor({}, 'shadow');
 
   const sizes = {
     fullscreen: '100%' as const,
@@ -48,6 +49,7 @@ export function ModalEnhanced({ visible, onClose, title, children, size = 'mediu
                 backgroundColor: surfaceColor,
                 borderColor,
                 width: sizes[size],
+                shadowColor,
               },
               size === 'fullscreen' && styles.fullscreen,
             ]}
@@ -132,7 +134,6 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     borderWidth: 1,
     maxHeight: '90%',
-    shadowColor: '#000',
     shadowOffset: { height: 4, width: 0 },
     shadowOpacity: 0.3,
     shadowRadius: 12,

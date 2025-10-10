@@ -28,6 +28,7 @@ export function Toast({ message, type = 'info', duration = 3000, visible, onHide
   const backgroundColor = useThemeColor({}, 'surface');
   const borderColor = useThemeColor({}, 'border');
   const textColor = useThemeColor({}, 'text');
+  const shadowColor = useThemeColor({}, 'shadow');
 
   const iconColor = useThemeColor({}, type === 'success' ? 'success' : type === 'error' ? 'error' : type === 'warning' ? 'warning' : 'primary');
 
@@ -93,7 +94,7 @@ export function Toast({ message, type = 'info', duration = 3000, visible, onHide
           borderColor,
           borderRadius: 12,
           padding: Spacing.md,
-          shadowColor: '#000',
+          shadowColor,
           shadowOffset: { width: 0, height: 4 },
           shadowOpacity: 0.2,
           shadowRadius: 12,
@@ -108,7 +109,7 @@ export function Toast({ message, type = 'info', duration = 3000, visible, onHide
           lineHeight: 20,
         },
       }),
-    [backgroundColor, borderColor, textColor]
+    [backgroundColor, borderColor, textColor, shadowColor]
   );
 
   if (!visible) {

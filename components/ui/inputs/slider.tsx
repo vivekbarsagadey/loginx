@@ -29,6 +29,7 @@ export function Slider({ value, min = 0, max = 100, step = 1, onValueChange, sho
   const primaryColor = useThemeColor({}, 'primary');
   const borderColor = useThemeColor({}, 'border');
   const backgroundColor = useThemeColor({}, 'background');
+  const shadowColor = useThemeColor({}, 'shadow');
 
   const [sliderWidth, setSliderWidth] = useState(0);
   const translateX = useSharedValue(0);
@@ -75,6 +76,27 @@ export function Slider({ value, min = 0, max = 100, step = 1, onValueChange, sho
     width: translateX.value,
   }));
 
+  const dynamicStyles = React.useMemo(
+    () =>
+      StyleSheet.create({
+        thumbDynamic: {
+          borderColor: primaryColor,
+          backgroundColor,
+          shadowColor,
+          shadowOffset: { height: 2, width: 0 },
+          shadowOpacity: 0.2,
+          shadowRadius: 2,
+        },
+        fillDynamic: {
+          backgroundColor: primaryColor,
+        },
+        trackDynamic: {
+          backgroundColor: borderColor,
+        },
+      }),
+    [primaryColor, backgroundColor, borderColor, shadowColor]
+  );
+
   return (
     <View style={styles.container}>
       <View
@@ -102,9 +124,8 @@ export function Slider({ value, min = 0, max = 100, step = 1, onValueChange, sho
           <Animated.View
             style={[
               styles.thumb,
+              dynamicStyles.thumbDynamic,
               {
-                backgroundColor,
-                borderColor: primaryColor,
                 opacity: disabled ? 0.4 : 1,
               },
               thumbStyle,
@@ -136,10 +157,6 @@ const styles = StyleSheet.create({
     height: 24,
     left: -12,
     position: 'absolute',
-    shadowColor: '#000',
-    shadowOffset: { height: 2, width: 0 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
     top: -8,
     width: 24,
   },

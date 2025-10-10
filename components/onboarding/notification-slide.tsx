@@ -1,8 +1,6 @@
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { getShadow } from '@/constants/style-utils';
-import { Colors } from '@/constants/theme';
 import { useAlert } from '@/hooks/use-alert';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -40,13 +38,14 @@ interface NotificationSlideProps {
 }
 
 export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlideProps) => {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme || 'light'];
-  const { setNotificationPermission, trackSlideSkip } = useOnboarding();
-  const { show: showAlert, AlertComponent } = useAlert();
-
+  const primaryColor = useThemeColor({}, 'primary');
+  const backgroundColor = useThemeColor({}, 'bg');
+  const successColor = useThemeColor({}, 'success');
+  const errorColor = useThemeColor({}, 'error');
   const warningColor = useThemeColor({}, 'warning');
   const shadowColor = useThemeColor({}, 'text');
+  const { setNotificationPermission, trackSlideSkip } = useOnboarding();
+  const { show: showAlert, AlertComponent } = useAlert();
 
   const [permissionStatus, setPermissionStatus] = useState<'undetermined' | 'granted' | 'denied'>('undetermined');
   const [isLoading, setIsLoading] = useState(false);
@@ -96,7 +95,7 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
           name: 'default',
           importance: Notifications.AndroidImportance.MAX,
           vibrationPattern: [0, 250, 250, 250],
-          lightColor: theme.primary,
+          lightColor: primaryColor,
           enableLights: true,
           enableVibrate: true,
         });
@@ -173,11 +172,11 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
   const getStatusColor = () => {
     switch (permissionStatus) {
       case 'granted':
-        return theme.success;
+        return successColor;
       case 'denied':
-        return theme.error;
+        return errorColor;
       default:
-        return theme.primary;
+        return primaryColor;
     }
   };
 
@@ -213,7 +212,7 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
           </ThemedText>
           {(i18n.t('onb.notifications.benefits.items', { returnObjects: true }) as string[]).map((benefit, index) => (
             <ThemedView key={index} style={styles.benefitItem}>
-              <Ionicons name="checkmark-circle" size={20} color={theme.success} />
+              <Ionicons name="checkmark-circle" size={20} color={successColor} />
               <ThemedText type="body" style={styles.benefitText}>
                 {benefit}
               </ThemedText>
@@ -233,8 +232,8 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
     <ThemedView style={[styles.container, { width }]}>
       <ThemedView style={styles.content}>
         <ThemedView style={styles.iconContainer}>
-          <ThemedView style={[styles.iconCircle, { backgroundColor: getStatusColor(), shadowColor }, getShadow('md', colorScheme)]}>
-            <Ionicons name={getStatusIcon() as keyof typeof Ionicons.glyphMap} size={64} color={theme.background} />
+          <ThemedView style={[styles.iconCircle, { backgroundColor: getStatusColor(), shadowColor }, getShadow('md')]}>
+            <Ionicons name={getStatusIcon() as keyof typeof Ionicons.glyphMap} size={64} color={backgroundColor} />
           </ThemedView>
         </ThemedView>
 
@@ -246,8 +245,8 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
 
         {permissionStatus === 'denied' && (
           <ThemedView style={[styles.warningContainer, { backgroundColor: warningColor + '1A' }]}>
-            <Ionicons name="warning" size={20} color={theme.warning} />
-            <ThemedText type="caption" style={[styles.warningText, { color: theme.warning }]}>
+            <Ionicons name="warning" size={20} color={warningColor} />
+            <ThemedText type="caption" style={[styles.warningText, { color: warningColor }]}>
               {i18n.t('onb.notifications.settingsNote')}
             </ThemedText>
           </ThemedView>
