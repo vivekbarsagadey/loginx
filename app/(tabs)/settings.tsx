@@ -1,37 +1,27 @@
 import { deleteUserAccount } from '@/actions/user.action';
 import { TabHeader } from '@/components/navigation/TabHeader';
+import { SettingsSection, type SettingsItemConfig } from '@/components/organisms/settings-section';
+import { UserProfileHeader } from '@/components/organisms/user-profile-header';
 import { ScreenContainer } from '@/components/screen-container';
-import { ThemedText } from '@/components/themed-text';
-import { Card } from '@/components/ui/card';
 import { ConfirmationDialog } from '@/components/ui/dialog';
-import { getSettingsSections, type SettingsItem } from '@/config/settings';
-import { CommonText } from '@/constants/common-styles';
-import { Spacing, TouchTarget } from '@/constants/layout';
+import { getSettingsSections } from '@/config/settings';
 import { auth } from '@/firebase-config';
 import { useConfirmation } from '@/hooks/use-dialog';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useLanguage } from '@/hooks/use-language-provider';
-import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { clear as clearCache } from '@/utils/cache';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
-import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { type Href } from 'expo-router';
 import { deleteUser } from 'firebase/auth';
 import React, { useMemo } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 export default function SettingsScreen() {
   const { push } = useHapticNavigation();
   const user = auth.currentUser;
   const { language } = useLanguage();
-  const borderColor = useThemeColor({}, 'border');
-  const textMutedColor = useThemeColor({}, 'text-muted');
-  const tintColor = useThemeColor({}, 'primary');
-  const errorColor = useThemeColor({}, 'error');
-  const textColor = useThemeColor({}, 'text');
 
   // Get settings sections with current language
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -98,7 +88,7 @@ export default function SettingsScreen() {
     });
   };
 
-  const handlePress = async (item: SettingsItem) => {
+  const handlePress = async (item: SettingsItemConfig) => {
     // Add haptic feedback for all interactions
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
@@ -117,110 +107,14 @@ export default function SettingsScreen() {
     }
   };
 
-  const styles = React.useMemo(
-    () =>
-      StyleSheet.create({
-        profileCard: {
-          marginBottom: Spacing.lg,
-        },
-        header: {
-          flexDirection: 'row',
-          alignItems: 'center',
-        },
-        avatar: {
-          width: 64,
-          height: 64,
-          borderRadius: 32,
-          marginRight: Spacing.md,
-          opacity: 0.5,
-        },
-        userDetails: {
-          flex: 1,
-        },
-        userInfo: {
-          color: textMutedColor,
-          marginTop: Spacing.xs,
-        },
-        editProfile: {
-          color: tintColor,
-          marginTop: Spacing.sm,
-        },
-        section: {
-          marginBottom: Spacing.lg,
-        },
-        settingRow: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          padding: Spacing.md,
-          minHeight: TouchTarget.large,
-          borderBottomWidth: 1,
-          borderBottomColor: borderColor,
-        },
-        settingRowLast: {
-          borderBottomWidth: 0,
-        },
-        settingInfo: {
-          flex: 1,
-          marginLeft: Spacing.md,
-        },
-        settingTitle: {
-          color: textColor,
-        },
-        settingTitleDanger: {
-          color: errorColor,
-        },
-        settingSubtitle: {
-          color: textMutedColor,
-        },
-      }),
-    [borderColor, textMutedColor, tintColor, textColor, errorColor]
-  );
-
   return (
     <>
       <TabHeader title={i18n.t('navigation.titles.settings')} showBackButton={false} />
       <ScreenContainer scrollable noPadding={false} useSafeArea={false}>
-        <Card elevation={1} style={styles.profileCard}>
-          <View style={styles.header}>
-            <Image source={{ uri: user?.photoURL ?? 'https://www.gravatar.com/avatar/?d=mp' }} style={styles.avatar} />
-            <View style={styles.userDetails}>
-              <ThemedText type="h2">{user?.displayName}</ThemedText>
-              <ThemedText style={styles.userInfo}>{user?.email}</ThemedText>
-              <TouchableOpacity onPress={() => push('/profile/edit')}>
-                <ThemedText style={styles.editProfile}>{i18n.t('settings.editProfile')} ›</ThemedText>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Card>
+        <UserProfileHeader avatarUrl={user?.photoURL ?? undefined} displayName={user?.displayName || 'User'} email={user?.email || ''} onEditPress={() => push('/profile/edit')} />
 
-        {settingsSections.map((section, sectionIndex) => (
-          <View key={section.title || `section-${sectionIndex}`} style={styles.section}>
-            {section.title && (
-              <ThemedText type="h3" style={CommonText.sectionTitle}>
-                {section.title}
-              </ThemedText>
-            )}
-            <Card elevation={1} noPadding>
-              {section.items.map((item, itemIndex) => (
-                <TouchableOpacity
-                  key={`${sectionIndex}-${itemIndex}-${item.title}`}
-                  style={[styles.settingRow, itemIndex === section.items.length - 1 && styles.settingRowLast]}
-                  onPress={() => handlePress(item)}
-                >
-                  <Feather name={item.icon as React.ComponentProps<typeof Feather>['name']} size={24} color={item.type === 'danger' ? errorColor : textColor} />
-                  <View style={styles.settingInfo}>
-                    <ThemedText style={item.type === 'danger' ? styles.settingTitleDanger : styles.settingTitle}>{item.title}</ThemedText>
-                    {item.subtitle && (
-                      <ThemedText type="caption" style={styles.settingSubtitle}>
-                        {item.subtitle}
-                      </ThemedText>
-                    )}
-                  </View>
-                  {(item.type === 'link' || item.type === 'action' || item.type === 'danger') && <Feather name="chevron-right" size={24} color={textMutedColor} />}
-                </TouchableOpacity>
-              ))}
-            </Card>
-          </View>
+        {settingsSections.map((section, index) => (
+          <SettingsSection key={`section-${index}`} title={section.title} items={section.items as SettingsItemConfig[]} onItemPress={handlePress} />
         ))}
 
         {/* Confirmation Dialogs */}

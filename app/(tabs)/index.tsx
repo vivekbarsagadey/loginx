@@ -1,22 +1,25 @@
 import { getUserProfile } from '@/actions/user.action';
 import { TabHeader } from '@/components/navigation/TabHeader';
+import { NotificationPreferencesCard } from '@/components/organisms/notification-preferences-card';
+import { UserWelcomeSection } from '@/components/organisms/user-welcome-section';
 import { ScreenContainer } from '@/components/screen-container';
-import { ThemedText } from '@/components/themed-text';
-import { Card } from '@/components/ui/card';
 import { SkeletonCard, SkeletonText } from '@/components/ui/skeleton-loader';
 import { CommonSpacing } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
+import { Routes } from '@/constants/routes';
 import { useAlert } from '@/hooks/use-alert';
 import { useAuth } from '@/hooks/use-auth-provider';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
 import { type UserProfile } from '@/types/user';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 export default function IndexScreen() {
   const { user } = useAuth();
   const alert = useAlert();
+  const { push } = useHapticNavigation();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [, forceUpdate] = useState(0);
@@ -76,77 +79,21 @@ export default function IndexScreen() {
       <ScreenContainer scrollable useSafeArea={false}>
         {userProfile ? (
           <>
-            <View style={CommonSpacing.marginBottomLarge}>
-              <ThemedText type="h1">
-                {i18n.t('screens.home.welcome', {
-                  name: userProfile.displayName || user?.email?.split('@')[0] || 'User',
-                })}
-              </ThemedText>
-              <ThemedText type="body" style={styles.email}>
-                {userProfile.email}
-              </ThemedText>
-              {userProfile.age && userProfile.age > 0 && (
-                <ThemedText type="body" style={styles.age}>
-                  {i18n.t('screens.home.age', { age: userProfile.age })}
-                </ThemedText>
-              )}
-            </View>
+            <UserWelcomeSection displayName={userProfile.displayName || user?.email?.split('@')[0] || 'User'} email={userProfile.email} age={userProfile.age} style={CommonSpacing.marginBottomLarge} />
 
-            <Card elevation={1} style={CommonSpacing.marginBottomLarge}>
-              <ThemedText type="h2" style={styles.cardTitle}>
-                {i18n.t('screens.home.notificationPreferences')}
-              </ThemedText>
-
-              <View style={styles.preferenceRow}>
-                <ThemedText type="body">{i18n.t('screens.home.pushNotifications')}</ThemedText>
-                <ThemedText type="body" style={styles.preferenceValue}>
-                  {userProfile.pushEnabled ? i18n.t('screens.home.enabled') : i18n.t('screens.home.disabled')}
-                </ThemedText>
-              </View>
-
-              <View style={styles.preferenceRow}>
-                <ThemedText type="body">{i18n.t('screens.home.emailUpdates')}</ThemedText>
-                <ThemedText type="body" style={styles.preferenceValue}>
-                  {userProfile.emailUpdates ? i18n.t('screens.home.enabled') : i18n.t('screens.home.disabled')}
-                </ThemedText>
-              </View>
-
-              <View style={styles.preferenceRow}>
-                <ThemedText type="body">{i18n.t('screens.home.marketingTips')}</ThemedText>
-                <ThemedText type="body" style={styles.preferenceValue}>
-                  {userProfile.marketingTips ? i18n.t('screens.home.enabled') : i18n.t('screens.home.disabled')}
-                </ThemedText>
-              </View>
-            </Card>
+            <NotificationPreferencesCard
+              pushEnabled={userProfile.pushEnabled}
+              emailUpdates={userProfile.emailUpdates}
+              marketingTips={userProfile.marketingTips}
+              onPress={() => push(Routes.SETTINGS.NOTIFICATIONS)}
+              style={CommonSpacing.marginBottomLarge}
+            />
           </>
         ) : (
-          <ThemedText type="h1">{i18n.t('screens.home.welcome', { name: '' })}</ThemedText>
+          <UserWelcomeSection displayName={user?.email?.split('@')[0] || 'User'} email={user?.email || ''} />
         )}
       </ScreenContainer>
       {alert.AlertComponent}
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  email: {
-    marginTop: Spacing.sm,
-    opacity: 0.8,
-  },
-  age: {
-    marginTop: Spacing.xs,
-    opacity: 0.7,
-  },
-  cardTitle: {
-    marginBottom: Spacing.md,
-  },
-  preferenceRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: Spacing.sm,
-  },
-  preferenceValue: {
-    opacity: 0.8,
-  },
-});
