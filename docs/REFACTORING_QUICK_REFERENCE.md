@@ -310,4 +310,6 @@ import {
 
 ---
 
-_Last Updated: October 11, 2025_
+## Last Updated
+
+October 11, 2025

@@ -42,140 +42,141 @@ functions.
 
 #### Settings & Profile Screens (5)
 
-6. **notifications/index.tsx** - ✅ Refactored
+1. **notifications/index.tsx** - ✅ Refactored
    - Uses: useLoadingState for async operations
    - Removed: Manual loading state management, try-catch blocks
    - Reduction: ~15 lines saved (cleaner async handling)
 
-7. **settings/theme.tsx** - ✅ Refactored
+2. **settings/theme.tsx** - ✅ Refactored
    - Uses: useLoadingState for theme changes
    - Removed: Manual try-catch, error handling
    - Reduction: ~10 lines saved (consistent error handling)
 
-8. **settings/language.tsx** - ✅ Refactored
+3. **settings/language.tsx** - ✅ Refactored
    - Uses: useLoadingState for language changes
    - Removed: Manual try-catch, error handling
    - Reduction: ~10 lines saved (consistent error handling)
 
-9. **profile/edit.tsx** - ✅ Refactored
+4. **profile/edit.tsx** - ✅ Refactored
    - Uses: useFormSubmit, useHapticNavigation
    - Removed: Manual form submission, loading states, haptic feedback
    - Reduction: ~60 lines → cleaner validation and submission
 
-10. **settings/text-size.tsx** - ✅ Refactored
-    - Uses: SelectableButton (large variant), automatic haptic feedback
-    - Removed: TouchableOpacity with manual selection styling, checkmark logic
-    - Reduction: ~126 lines → ~90 lines (28% reduction, ~36 lines saved)
-    - Pattern consistency: Now matches other selection screens
+5. **settings/text-size.tsx** - ✅ Refactored
+   - Uses: SelectableButton (large variant), automatic haptic feedback
+   - Removed: TouchableOpacity with manual selection styling, checkmark logic
+   - Reduction: ~126 lines → ~90 lines (28% reduction, ~36 lines saved)
+   - Pattern consistency: Now matches other selection screens
 
 ### Authentication & Security Screens (10)
 
-11. **security/change-password.tsx** - ✅ Refactored
-    - Replaced manual form submission with useFormSubmit
+1. **security/change-password.tsx** - ✅ Refactored
+   - Replaced manual form submission with useFormSubmit
+   - Uses useHapticNavigation for all navigation
+   - Consolidated validation into single function
+   - Removed manual loading/error handling (~80 lines saved)
+
+2. **(auth)/forgot-password.tsx** - ✅ Refactored
+   - Replaced manual loading state with useFormSubmit
+   - Uses useHapticNavigation for navigation
+   - Cleaner async operation handling (~20 lines saved)
+
+3. **(auth)/otp-login.tsx** - ✅ Refactored
+   - Replaced manual form submission with useFormSubmit for both email and OTP
+     steps
+   - Uses useHapticNavigation for back navigation
+   - Removed manual try-catch blocks and loading states
+   - Cleaner async operation handling (~30 lines saved)
+
+4. **(auth)/passwordless-login.tsx** - ✅ Refactored
+   - Replaced manual loading state with useFormSubmit
+   - Uses useHapticNavigation for all navigation (push, back)
+   - Removed manual haptic feedback and error handling (~25 lines saved)
+
+5. **(auth)/verify-magic-link.tsx** - ✅ Refactored
+   - Replaced manual resend logic with useFormSubmit
+   - Uses useHapticNavigation for replace navigation
+   - Cleaner async operation handling for sign-in and resend (~20 lines saved)
+
+6. **(auth)/verify-phone.tsx** - ✅ Refactored
+   - Replaced manual loading states with useFormSubmit for verification and
+     resend
+   - Uses useHapticNavigation for navigation (replace, back)
+   - Removed manual haptic feedback calls (~25 lines saved)
+
+7. **(auth)/welcome.tsx** - ✅ Refactored
+   - Uses useHapticNavigation for navigation
+   - Simple screen with minimal changes (~5 lines saved)
+
+8. **(auth)/verify-email.tsx** - ✅ Refactored
+   - Replaced manual loading state (isResending) with useFormSubmit
+   - Uses useHapticNavigation for replace navigation (to tabs, to login)
+   - Removed manual try-catch-finally blocks in handleResend
+   - Cleaner async operation handling (~20 lines saved)
+
+9. **(auth)/verify-2fa.tsx** - ✅ Refactored
+   - Replaced manual loading states with TWO useFormSubmit hooks (TOTP and
+     backup code verification)
+   - Uses useHapticNavigation for replace navigation
+   - Removed manual haptic feedback calls
+   - Cleaner async operation handling with better error management (~30 lines
+     saved)
+
+10. **settings/permissions.tsx** - ✅ Refactored
+    - Replaced manual refresh operation with useLoadingState
     - Uses useHapticNavigation for all navigation
-    - Consolidated validation into single function
-    - Removed manual loading/error handling (~80 lines saved)
+    - Removed manual try-catch blocks and haptic feedback calls (~20 lines
+      saved)
 
-12. **(auth)/forgot-password.tsx** - ✅ Refactored
-    - Replaced manual loading state with useFormSubmit
-    - Uses useHapticNavigation for navigation
-    - Cleaner async operation handling (~20 lines saved)
+### Main UI Screens (6)
 
-13. **(auth)/otp-login.tsx** - ✅ Refactored
-    - Replaced manual form submission with useFormSubmit for both email and OTP
-      steps
-    - Uses useHapticNavigation for back navigation
-    - Removed manual try-catch blocks and loading states
-    - Cleaner async operation handling (~30 lines saved)
+1. **(auth)/login.tsx** - ✅ Refactored
+   - Uses useHapticNavigation for all navigation (push, replace)
+   - Replaced all router.push/replace calls with automatic haptic feedback
+   - Removed ActivityIndicator (using ThemedButton loading prop)
+   - Security features preserved: account locking, login attempts, biometric
+     auth, 2FA support
+   - Complex validation and error handling maintained (~25 lines saved)
 
-14. **(auth)/passwordless-login.tsx** - ✅ Refactored
-    - Replaced manual loading state with useFormSubmit
-    - Uses useHapticNavigation for all navigation (push, back)
-    - Removed manual haptic feedback and error handling (~25 lines saved)
+2. **(auth)/register/index.tsx** - ✅ Refactored
+   - Uses useHapticNavigation for navigation (back, replace)
+   - Replaced router.back and router.replace calls with automatic haptic
+     feedback
+   - Multi-step form haptics preserved (Haptics.impactAsync for validation
+     feedback)
+   - Kept router for setParams (required for Stack navigation title updates)
+   - Complex registration flow maintained (~15 lines saved, cleaner navigation
+     pattern)
 
-15. **(auth)/verify-magic-link.tsx** - ✅ Refactored
-    - Replaced manual resend logic with useFormSubmit
-    - Uses useHapticNavigation for replace navigation
-    - Cleaner async operation handling for sign-in and resend (~20 lines saved)
+3. **profile/update-email.tsx** - ✅ Refactored
+   - Uses useFormSubmit for email update operation
+   - Uses useHapticNavigation for navigation (back, replace)
+   - Replaced manual loading state (useState) with isSubmitting from
+     useFormSubmit
+   - Removed manual try-catch-finally blocks (~30 lines saved)
+   - Automatic haptic feedback on submit
+   - Complex Firebase error handling preserved (requires-recent-login,
+     email-already-in-use)
 
-16. **(auth)/verify-phone.tsx** - ✅ Refactored
-    - Replaced manual loading states with useFormSubmit for verification and
-      resend
-    - Uses useHapticNavigation for navigation (replace, back)
-    - Removed manual haptic feedback calls (~25 lines saved)
+4. **(tabs)/settings.tsx** - ✅ Refactored
+   - Uses useHapticNavigation for all navigation (push)
+   - Replaced router.push calls (3 locations) with automatic haptic feedback
+   - Cleaner navigation pattern (~8 lines saved)
+   - Preserved manual Haptics.impactAsync for setting item taps (intentional UX
+     feedback)
 
-17. **(auth)/welcome.tsx** - ✅ Refactored
-    - Uses useHapticNavigation for navigation
-    - Simple screen with minimal changes (~5 lines saved)
+5. **help.tsx** - ✅ Refactored
+   - Uses useHapticNavigation for all internal navigation
+   - Replaced router.push + Haptics.impactAsync (4 locations: /support,
+     /feedback, /privacy, plus website link handler)
+   - Simplified handler functions (~12 lines saved)
+   - External link handler (website) preserved without haptics
 
-18. **(auth)/verify-email.tsx** - ✅ Refactored
-    - Replaced manual loading state (isResending) with useFormSubmit
-    - Uses useHapticNavigation for replace navigation (to tabs, to login)
-    - Removed manual try-catch-finally blocks in handleResend
-    - Cleaner async operation handling (~20 lines saved)
-
-19. **(auth)/verify-2fa.tsx** - ✅ Refactored
-    - Replaced manual loading states with TWO useFormSubmit hooks (TOTP and
-      backup code verification)
-    - Uses useHapticNavigation for replace navigation
-    - Removed manual haptic feedback calls (Haptics.notificationAsync in 4
-      locations)
-    - Separate loading states: `loading` for TOTP, `loadingBackup` for backup
-      codes
-    - Cleaner async operation handling (~40 lines saved)
-
-20. **settings/permissions.tsx** - ✅ Refactored
-    - Removed redundant Platform.OS checks for haptics
-    - Consistent haptic feedback on iOS and Android
-    - Cleaner code structure (~10 lines saved)
-
-21. **(auth)/login.tsx** - ✅ Refactored
-    - Uses useHapticNavigation for all navigation (push, replace)
-    - Replaced all router.push/replace calls with automatic haptic feedback
-    - Removed ActivityIndicator (using ThemedButton loading prop)
-    - Security features preserved: account locking, login attempts, biometric
-      auth, 2FA support
-    - Complex validation and error handling maintained (~25 lines saved)
-
-22. **(auth)/register/index.tsx** - ✅ Refactored
-    - Uses useHapticNavigation for navigation (back, replace)
-    - Replaced router.back and router.replace calls with automatic haptic
-      feedback
-    - Multi-step form haptics preserved (Haptics.impactAsync for validation
-      feedback)
-    - Kept router for setParams (required for Stack navigation title updates)
-    - Complex registration flow maintained (~15 lines saved, cleaner navigation
-      pattern)
-
-23. **profile/update-email.tsx** - ✅ Refactored
-    - Uses useFormSubmit for email update operation
-    - Uses useHapticNavigation for navigation (back, replace)
-    - Replaced manual loading state (useState) with isSubmitting from
-      useFormSubmit
-    - Removed manual try-catch-finally blocks (~30 lines saved)
-    - Automatic haptic feedback on submit
-    - Complex Firebase error handling preserved (requires-recent-login,
-      email-already-in-use)
-
-24. **(tabs)/settings.tsx** - ✅ Refactored
-    - Uses useHapticNavigation for all navigation (push)
-    - Replaced router.push calls (3 locations) with automatic haptic feedback
-    - Cleaner navigation pattern (~8 lines saved)
-    - Preserved manual Haptics.impactAsync for setting item taps (intentional UX
-      feedback)
-
-25. **help.tsx** - ✅ Refactored
-    - Uses useHapticNavigation for all internal navigation
-    - Replaced router.push + Haptics.impactAsync (4 locations: /support,
-      /feedback, /privacy, plus website link handler)
-    - Simplified handler functions (~12 lines saved)
-    - External link handler (website) preserved without haptics
-
-26. **legal/data-rights.tsx** - ✅ Refactored
-    - Uses useHapticNavigation for navigation to support
-    - Replaced router.push with push in delete data confirmation
-    - Consistent navigation pattern (~3 lines saved)
-    - Alert dialogs and email link handler preserved
+6. **legal/data-rights.tsx** - ✅ Refactored
+   - Uses useHapticNavigation for navigation to support
+   - Replaced router.push with push in delete data confirmation
+   - Consistent navigation pattern (~3 lines saved)
+   - Alert dialogs and email link handler preserved
 
 ### 📊 Overall Impact
 
@@ -718,17 +719,17 @@ refactorings:
 
 ### Medium Priority (Moderate Code Reduction)
 
-6. **notifications.tsx** - Uses SettingRow pattern
-7. **theme.tsx** - Uses SelectionCard pattern
-8. **language.tsx** - Uses SelectionCard pattern
-9. **profile/edit.tsx** - Uses validation utilities, loading states
-10. **login.tsx** - Uses validation, form submission
-11. **forgot-password.tsx** - Uses validation, form submission
+1. **notifications.tsx** - Uses SettingRow pattern
+2. **theme.tsx** - Uses SelectionCard pattern
+3. **language.tsx** - Uses SelectionCard pattern
+4. **profile/edit.tsx** - Uses validation utilities, loading states
+5. **login.tsx** - Uses validation, form submission
+6. **forgot-password.tsx** - Uses validation, form submission
 
 ### Low Priority (Minor Improvements)
 
-12. **privacy.tsx** - Minor refactoring opportunities
-13. Other settings screens - Can use SettingRow where applicable
+1. **privacy.tsx** - Minor refactoring opportunities
+2. Other settings screens - Can use SettingRow where applicable
 
 ---
 
@@ -826,4 +827,6 @@ features.
 
 ---
 
-_Last Updated: October 11, 2025_
+## Last Updated
+
+October 11, 2025
