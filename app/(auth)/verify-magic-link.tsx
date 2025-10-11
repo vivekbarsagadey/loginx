@@ -104,18 +104,6 @@ export default function VerifyMagicLinkScreen() {
     await AsyncStorage.removeItem('emailForSignIn');
   };
 
-  const { submit: submitSignIn } = useFormSubmit(
-    async () => {
-      // This will be called after completeSignIn prepares the data
-    },
-    {
-      successTitle: i18n.t('passwordlessLogin.success.signInTitle'),
-      successMessage: i18n.t('passwordlessLogin.success.signInMessage'),
-      onSuccess: () => replace('/(tabs)'),
-      showSuccessAlert: false, // showSuccess already called in original
-    }
-  );
-
   const resendMagicLink = async () => {
     if (!email) {
       alert.show(i18n.t('passwordlessLogin.error.noEmail'), i18n.t('passwordlessLogin.error.noEmailMessage'), [{ text: i18n.t('common.ok') }], { variant: 'error' });

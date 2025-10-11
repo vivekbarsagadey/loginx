@@ -7,12 +7,6 @@ import * as SecureStore from 'expo-secure-store';
 import { debugError, debugLog, debugWarn } from './debug';
 
 /**
- * Secure storage keys for different types of sensitive data
- * @deprecated Use SecureStorageKeys from constants instead
- */
-export const SECURE_KEYS = SecureStorageKeys;
-
-/**
  * Securely save a string value to encrypted storage
  * @param key - Storage key
  * @param value - Value to store
@@ -177,9 +171,9 @@ export const BiometricStorage = {
    * @param type - Type of biometric auth (fingerprint, face, etc.)
    */
   setBiometricEnabled: async (enabled: boolean, type?: string): Promise<void> => {
-    await securelySetBoolean(SECURE_KEYS.BIOMETRIC_ENABLED, enabled);
+    await securelySetBoolean(SecureStorageKeys.BIOMETRIC_ENABLED, enabled);
     if (type) {
-      await securelySetItem(SECURE_KEYS.BIOMETRIC_TYPE, type);
+      await securelySetItem(SecureStorageKeys.BIOMETRIC_TYPE, type);
     }
     debugLog(`[BiometricStorage] Biometric auth ${enabled ? 'enabled' : 'disabled'}${type ? ` with type: ${type}` : ''}`);
   },
@@ -290,7 +284,7 @@ export const TwoFactorStorage = {
    * @returns Promise that resolves to array of backup codes
    */
   getBackupCodes: async (): Promise<string[]> => {
-    const codes = await securelyGetObject<string[]>(SECURE_KEYS.TWO_FA_BACKUP_CODES, []);
+    const codes = await securelyGetObject<string[]>(SecureStorageKeys.TWO_FA_BACKUP_CODES, []);
     return codes || [];
   },
 
@@ -301,7 +295,7 @@ export const TwoFactorStorage = {
   consumeBackupCode: async (code: string): Promise<void> => {
     const codes = await TwoFactorStorage.getBackupCodes();
     const updatedCodes = codes.filter((c) => c !== code);
-    await securelySetObject(SECURE_KEYS.TWO_FA_BACKUP_CODES, updatedCodes);
+    await securelySetObject(SecureStorageKeys.TWO_FA_BACKUP_CODES, updatedCodes);
     debugLog(`[TwoFactorStorage] Consumed backup code, ${updatedCodes.length} codes remaining`);
   },
 
@@ -309,8 +303,8 @@ export const TwoFactorStorage = {
    * Clear all 2FA data
    */
   clearTwoFactorSettings: async (): Promise<void> => {
-    await securelyDeleteItem(SECURE_KEYS.TWO_FA_ENABLED);
-    await securelyDeleteItem(SECURE_KEYS.TWO_FA_BACKUP_CODES);
+    await securelyDeleteItem(SecureStorageKeys.TWO_FA_ENABLED);
+    await securelyDeleteItem(SecureStorageKeys.TWO_FA_BACKUP_CODES);
     debugLog('[TwoFactorStorage] Cleared 2FA settings');
   },
 };
@@ -325,9 +319,9 @@ export const SecurityStorage = {
    * @param timeout - Timeout in minutes
    */
   setAutoLock: async (enabled: boolean, timeout?: number): Promise<void> => {
-    await securelySetBoolean(SECURE_KEYS.AUTO_LOCK_ENABLED, enabled);
+    await securelySetBoolean(SecureStorageKeys.AUTO_LOCK_ENABLED, enabled);
     if (timeout !== undefined) {
-      await securelySetNumber(SECURE_KEYS.AUTO_LOCK_TIMEOUT, timeout);
+      await securelySetNumber(SecureStorageKeys.AUTO_LOCK_TIMEOUT, timeout);
     }
     debugLog(`[SecurityStorage] Auto-lock ${enabled ? 'enabled' : 'disabled'}${timeout ? ` with ${timeout}min timeout` : ''}`);
   },
@@ -337,7 +331,7 @@ export const SecurityStorage = {
    * @returns Promise that resolves to auto-lock settings
    */
   getAutoLockSettings: async (): Promise<{ enabled: boolean; timeout: number }> => {
-    const enabled = await securelyGetBoolean(SECURE_KEYS.AUTO_LOCK_ENABLED);
+    const enabled = await securelyGetBoolean(SecureStorageKeys.AUTO_LOCK_ENABLED);
     const timeout = await securelyGetNumber(SecureStorageKeys.AUTO_LOCK_TIMEOUT, 5); // Default 5 minutes
     return { enabled, timeout };
   },
@@ -347,7 +341,7 @@ export const SecurityStorage = {
    * @param enabled - Whether security notifications are enabled
    */
   setSecurityNotifications: async (enabled: boolean): Promise<void> => {
-    await securelySetBoolean(SECURE_KEYS.SECURITY_NOTIFICATIONS, enabled);
+    await securelySetBoolean(SecureStorageKeys.SECURITY_NOTIFICATIONS, enabled);
     debugLog(`[SecurityStorage] Security notifications ${enabled ? 'enabled' : 'disabled'}`);
   },
 
@@ -356,7 +350,7 @@ export const SecurityStorage = {
    * @returns Promise that resolves to whether security notifications are enabled
    */
   getSecurityNotifications: async (): Promise<boolean> => {
-    return await securelyGetBoolean(SECURE_KEYS.SECURITY_NOTIFICATIONS, true); // Default enabled
+    return await securelyGetBoolean(SecureStorageKeys.SECURITY_NOTIFICATIONS, true); // Default enabled
   },
 
   /**
@@ -364,7 +358,7 @@ export const SecurityStorage = {
    * @param attempts - Number of failed login attempts
    */
   setLoginAttempts: async (attempts: number): Promise<void> => {
-    await securelySetNumber(SECURE_KEYS.LOGIN_ATTEMPTS, attempts);
+    await securelySetNumber(SecureStorageKeys.LOGIN_ATTEMPTS, attempts);
   },
 
   /**
@@ -372,13 +366,13 @@ export const SecurityStorage = {
    * @returns Promise that resolves to number of failed login attempts
    */
   getLoginAttempts: async (): Promise<number> => {
-    return await securelyGetNumber(SECURE_KEYS.LOGIN_ATTEMPTS, 0);
+    return await securelyGetNumber(SecureStorageKeys.LOGIN_ATTEMPTS, 0);
   },
 
   /**
    * Clear login attempts (successful login)
    */
   clearLoginAttempts: async (): Promise<void> => {
-    await securelyDeleteItem(SECURE_KEYS.LOGIN_ATTEMPTS);
+    await securelyDeleteItem(SecureStorageKeys.LOGIN_ATTEMPTS);
   },
 };
