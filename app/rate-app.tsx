@@ -4,18 +4,20 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
+import { CharacterCounter } from '@/components/ui/character-counter';
+import { InfoBox } from '@/components/ui/info-box';
+import { SelectableButton } from '@/components/ui/selectable-button';
 import { StarRating } from '@/components/ui/star-rating';
 import { CommonText } from '@/constants/common-styles';
-import { BorderRadius, Spacing } from '@/constants/layout';
+import { Spacing } from '@/constants/layout';
 import { useAlert } from '@/hooks/use-alert';
 import { useAuth } from '@/hooks/use-auth-provider';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useFormSubmit } from '@/hooks/use-form-submit';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
-import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const RATING_LABELS = ['Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
 
@@ -38,15 +40,14 @@ const IMPROVEMENT_OPTIONS = [
 ];
 
 export default function RateAppScreen() {
-  const router = useRouter();
   const { user } = useAuth();
   const { show: showAlert, AlertComponent } = useAlert();
-  const primaryColor = useThemeColor({}, 'primary');
+  const { back } = useHapticNavigation();
+
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [selectedLikes, setSelectedLikes] = useState<string[]>([]);
   const [selectedImprovements, setSelectedImprovements] = useState<string[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleRatingChange = async (newRating: number) => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -63,21 +64,28 @@ export default function RateAppScreen() {
     setSelectedImprovements((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
   };
 
-  const handleSubmit = async () => {
+  // Validation function
+  const validateForm = () => {
     if (rating === 0) {
       showAlert(i18n.t('screens.rateApp.validation.ratingRequired.title'), i18n.t('screens.rateApp.validation.ratingRequired.message'), [{ text: 'OK' }], { variant: 'warning' });
-      return;
+      return false;
     }
 
     if (!user) {
       showAlert('Error', 'You must be logged in to submit a rating', [{ text: 'OK' }], { variant: 'error' });
-      return;
+      return false;
     }
 
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    setIsSubmitting(true);
+    return true;
+  };
 
-    try {
+  // Form submission with hook
+  const { submit, isSubmitting } = useFormSubmit(
+    async () => {
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
       const result = await submitRating(
         user.uid,
         rating,
@@ -86,32 +94,17 @@ export default function RateAppScreen() {
         selectedImprovements.length > 0 ? selectedImprovements : undefined
       );
 
-      if (result.success) {
-        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-
-        // Show success message
-        showAlert(
-          i18n.t('screens.rateApp.success.title'),
-          i18n.t('screens.rateApp.success.message'),
-          [
-            {
-              text: i18n.t('screens.rateApp.success.button'),
-              onPress: () => router.back(),
-            },
-          ],
-          { variant: 'success' }
-        );
-      } else {
-        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-        showAlert(i18n.t('screens.rateApp.error.title'), result.error || i18n.t('screens.rateApp.error.message'), [{ text: 'OK' }], { variant: 'error' });
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to submit rating');
       }
-    } catch (_error) {
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      showAlert(i18n.t('screens.rateApp.error.title'), i18n.t('screens.rateApp.error.message'), [{ text: 'OK' }], { variant: 'error' });
-    } finally {
-      setIsSubmitting(false);
+    },
+    {
+      successTitle: i18n.t('screens.rateApp.success.title'),
+      successMessage: i18n.t('screens.rateApp.success.message'),
+      onSuccess: () => back(),
+      validate: validateForm,
     }
-  };
+  );
 
   return (
     <ScreenContainer scrollable>
@@ -131,7 +124,7 @@ export default function RateAppScreen() {
           </ThemedText>
           <ThemedView style={styles.optionsGrid}>
             {LIKE_OPTIONS.map((option) => (
-              <OptionButton key={option.id} option={option} isSelected={selectedLikes.includes(option.id)} onPress={() => handleLikeToggle(option.id)} />
+              <SelectableButton key={option.id} label={option.label} icon={option.icon} isSelected={selectedLikes.includes(option.id)} onPress={() => handleLikeToggle(option.id)} variant="compact" />
             ))}
           </ThemedView>
         </ThemedView>
@@ -145,7 +138,14 @@ export default function RateAppScreen() {
           </ThemedText>
           <ThemedView style={styles.optionsGrid}>
             {IMPROVEMENT_OPTIONS.map((option) => (
-              <OptionButton key={option.id} option={option} isSelected={selectedImprovements.includes(option.id)} onPress={() => handleImprovementToggle(option.id)} />
+              <SelectableButton
+                key={option.id}
+                label={option.label}
+                icon={option.icon}
+                isSelected={selectedImprovements.includes(option.id)}
+                onPress={() => handleImprovementToggle(option.id)}
+                variant="compact"
+              />
             ))}
           </ThemedView>
         </ThemedView>
@@ -169,23 +169,18 @@ export default function RateAppScreen() {
             accessibilityLabel="Review text"
             accessibilityHint="Enter your detailed review"
           />
-          <ThemedText style={styles.charCount}>{review.length}/500</ThemedText>
+          <CharacterCounter count={review.length} maxLength={500} />
         </ThemedView>
       )}
 
       {/* Info Box */}
-      {rating > 0 && (
-        <ThemedView style={[styles.infoBox, { backgroundColor: primaryColor + '1A' }]}>
-          <Feather name="heart" size={20} color={primaryColor} />
-          <ThemedText style={styles.infoText}>{i18n.t('screens.rateApp.infoMessage')}</ThemedText>
-        </ThemedView>
-      )}
+      {rating > 0 && <InfoBox message={i18n.t('screens.rateApp.infoMessage')} icon="heart" variant="info" style={styles.infoBox} />}
 
       {/* Submit Button */}
       {rating > 0 && (
         <ThemedButton
           title={isSubmitting ? i18n.t('screens.rateApp.submitting') : i18n.t('screens.rateApp.submitButton')}
-          onPress={handleSubmit}
+          onPress={submit}
           disabled={isSubmitting}
           style={styles.submitButton}
           accessibilityLabel="Submit rating"
@@ -194,37 +189,6 @@ export default function RateAppScreen() {
       )}
       {AlertComponent}
     </ScreenContainer>
-  );
-}
-
-interface OptionButtonProps {
-  option: { id: string; label: string; icon: React.ComponentProps<typeof Feather>['name'] };
-  isSelected: boolean;
-  onPress: () => void;
-}
-
-function OptionButton({ option, isSelected, onPress }: OptionButtonProps) {
-  const borderColor = useThemeColor({}, 'border');
-  const primaryColor = useThemeColor({}, 'primary');
-  const surfaceColor = useThemeColor({}, 'surface');
-
-  return (
-    <Pressable
-      onPress={onPress}
-      style={[
-        styles.optionButton,
-        {
-          borderColor: isSelected ? primaryColor : borderColor,
-          backgroundColor: isSelected ? `${primaryColor}15` : surfaceColor,
-        },
-      ]}
-      accessibilityRole="button"
-      accessibilityState={{ selected: isSelected }}
-      accessibilityLabel={option.label}
-    >
-      <Feather name={option.icon} size={20} color={isSelected ? primaryColor : borderColor} />
-      <ThemedText style={[styles.optionLabel, { color: isSelected ? primaryColor : undefined }]}>{option.label}</ThemedText>
-    </Pressable>
   );
 }
 
@@ -242,41 +206,13 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: Spacing.sm,
   },
-  optionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.md,
-    borderRadius: 20,
-    borderWidth: 1.5,
-    gap: Spacing.xs,
-  },
-  optionLabel: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
   reviewInput: {
     minHeight: 120,
     textAlignVertical: 'top',
     paddingTop: Spacing.sm,
   },
-  charCount: {
-    fontSize: 12,
-    textAlign: 'right',
-    marginTop: Spacing.xs,
-    opacity: 0.6,
-  },
   infoBox: {
-    flexDirection: 'row',
-    gap: Spacing.sm,
-    padding: Spacing.md,
-    borderRadius: BorderRadius.sm,
     marginBottom: Spacing.lg,
-  },
-  infoText: {
-    flex: 1,
-    fontSize: 14,
-    lineHeight: 20,
   },
   submitButton: {
     marginBottom: Spacing.xl,

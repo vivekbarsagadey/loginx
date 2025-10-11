@@ -5,6 +5,7 @@ import { CommonContainers, CommonSelectionCards, CommonText } from '@/constants/
 import { Shadow, Spacing } from '@/constants/layout';
 import { getThemeOptions } from '@/data';
 import { useAlert } from '@/hooks/use-alert';
+import { useLoadingState } from '@/hooks/use-loading-state';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { type ThemePreference, useThemeContext } from '@/hooks/use-theme-context';
 import i18n from '@/i18n';
@@ -24,15 +25,19 @@ export default function ThemeScreen() {
   // Get all available theme options
   const themeOptions = getThemeOptions(textColor);
 
-  const handleThemeSelect = async (theme: ThemePreference) => {
-    try {
+  // Use loading state for theme changes
+  const { execute: handleThemeSelect } = useLoadingState(
+    async (theme: ThemePreference) => {
       await provideLightFeedback();
       await setThemePreference(theme);
       alert.show(i18n.t('success.profileUpdate.title'), i18n.t('screens.settings.theme.applied'));
-    } catch (_error) {
-      alert.show('Error', 'Failed to save theme preference');
+    },
+    {
+      errorTitle: 'Error',
+      errorMessage: 'Failed to save theme preference',
+      enableHaptics: false, // Already handled by provideLightFeedback
     }
-  };
+  );
 
   return (
     <>

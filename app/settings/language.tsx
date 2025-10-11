@@ -6,6 +6,7 @@ import { Shadow, Spacing } from '@/constants/layout';
 import { languages } from '@/data/languages';
 import { useAlert } from '@/hooks/use-alert';
 import { useLanguage } from '@/hooks/use-language-provider';
+import { useLoadingState } from '@/hooks/use-loading-state';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { provideLightFeedback } from '@/utils/feedback';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
@@ -21,15 +22,19 @@ export default function LanguageScreen() {
   const borderColor = useThemeColor({}, 'border');
   const onPrimaryColor = useThemeColor({}, 'on-primary');
 
-  const handleLanguageSelect = async (code: string) => {
-    try {
+  // Use loading state for language changes
+  const { execute: handleLanguageSelect } = useLoadingState(
+    async (code: string) => {
       await provideLightFeedback();
       await persistLanguage(code);
       alert.show('Success', `Language changed to ${languages.find((l) => l.code === code)?.name}`);
-    } catch (_error) {
-      alert.show('Error', 'Failed to change language');
+    },
+    {
+      errorTitle: 'Error',
+      errorMessage: 'Failed to change language',
+      enableHaptics: false, // Already handled by provideLightFeedback
     }
-  };
+  );
 
   return (
     <>

@@ -10,6 +10,7 @@ import { SkeletonListItem } from '@/components/ui/skeleton-loader';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, BorderWidth, FontWeight, Spacing, Typography } from '@/constants/layout';
 import { useAlert } from '@/hooks/use-alert';
+import { useLoadingState } from '@/hooks/use-loading-state';
 import { useNotificationCount } from '@/hooks/use-notification-count';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import type { NotificationItem, NotificationType } from '@/types/notification';
@@ -31,23 +32,20 @@ export default function NotificationsCenterScreen() {
   const warningColor = useThemeColor({}, 'warning');
 
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   // Hook to track and refresh badge count
   const { refreshCount } = useNotificationCount();
 
-  const loadNotifications = useCallback(async () => {
-    try {
+  // Use loading state hook for initial load
+  const { execute: loadNotifications, isLoading: loading } = useLoadingState(
+    async () => {
       const history = await getNotificationHistory();
       setNotifications(history);
-    } catch (error) {
-      console.error('Error loading notifications:', error);
-    } finally {
-      setLoading(false);
       setRefreshing(false);
-    }
-  }, []);
+    },
+    { showErrorAlert: false }
+  );
 
   useEffect(() => {
     loadNotifications();

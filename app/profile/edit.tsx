@@ -10,15 +10,15 @@ import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { ValidationConstants } from '@/constants/validation';
 import { auth } from '@/firebase-config';
+import { useFormSubmit } from '@/hooks/use-form-submit';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
 import { validateAgeField, validateDisplayNameField, validateZipCodeField } from '@/utils/form-validation';
 import { sanitizeUserInput } from '@/utils/sanitize';
-import { showSuccess } from '@/utils/success';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
-import { useRouter } from 'expo-router';
 import { updateProfile } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -26,7 +26,7 @@ import { ActivityIndicator, Image, Platform, StyleSheet, type TextInput, Touchab
 
 export default function EditProfileScreen() {
   const user = auth.currentUser;
-  const router = useRouter();
+  const { back } = useHapticNavigation();
 
   // Form state
   const [displayName, setDisplayName] = useState('');
@@ -41,7 +41,6 @@ export default function EditProfileScreen() {
   const [zipCodeError, setZipCodeError] = useState('');
 
   // Loading states
-  const [loading, setLoading] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [hasChanges, setHasChanges] = useState(false);
@@ -123,26 +122,20 @@ export default function EditProfileScreen() {
     return result.isValid;
   }, []);
 
-  const handleUpdate = useCallback(async () => {
-    if (!user) {
-      return;
-    }
-
-    // Validate all fields
+  // Validation function for useFormSubmit
+  const validateForm = useCallback(() => {
     const isDisplayNameValid = validateDisplayName(displayName);
     const isAgeValid = validateAge(age);
     const isZipCodeValid = validateZipCode(zipCode);
+    return isDisplayNameValid && isAgeValid && isZipCodeValid;
+  }, [displayName, age, zipCode, validateDisplayName, validateAge, validateZipCode]);
 
-    if (!isDisplayNameValid || !isAgeValid || !isZipCodeValid) {
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      // Haptic feedback
-      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  // Form submission with hook
+  const { submit: handleUpdate, isSubmitting: loading } = useFormSubmit(
+    async () => {
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
 
       const sanitizedDisplayName = sanitizeUserInput(displayName.trim());
 
@@ -175,19 +168,14 @@ export default function EditProfileScreen() {
       }
 
       await updateUser(user.uid, updateData);
-
-      // Success haptic
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-
-      showSuccess(i18n.t('success.profileUpdate.title'), i18n.t('success.profileUpdate.message'), () => router.back());
-    } catch (error) {
-      console.error('[EditProfile] Error updating profile:', error);
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      showError(error);
-    } finally {
-      setLoading(false);
+    },
+    {
+      successTitle: i18n.t('success.profileUpdate.title'),
+      successMessage: i18n.t('success.profileUpdate.message'),
+      onSuccess: () => back(),
+      validate: validateForm,
     }
-  }, [user, displayName, photoURL, age, address, city, state, zipCode, validateDisplayName, validateAge, validateZipCode, router]);
+  );
 
   const handleImagePick = useCallback(async () => {
     try {

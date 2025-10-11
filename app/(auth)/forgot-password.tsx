@@ -5,14 +5,13 @@ import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
+import { useFormSubmit } from '@/hooks/use-form-submit';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
 import { AuthMethod, isAuthMethodEnabled } from '@/utils/auth-methods';
-import { showError } from '@/utils/error';
-import { showSuccess } from '@/utils/success';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'expo-router';
 import { sendPasswordResetEmail } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ActivityIndicator, StyleSheet } from 'react-native';
 import { z } from 'zod';
@@ -22,8 +21,7 @@ const schema = z.object({
 });
 
 export default function ForgotPasswordScreen() {
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const { push, replace } = useHapticNavigation();
   const { show: showAlert, AlertComponent } = useAlert();
 
   // Check if forgot password feature is enabled
@@ -35,13 +33,13 @@ export default function ForgotPasswordScreen() {
         [
           {
             text: 'OK',
-            onPress: () => router.replace('/(auth)/login'),
+            onPress: () => replace('/(auth)/login'),
           },
         ],
         { variant: 'warning' }
       );
     }
-  }, [router, showAlert]);
+  }, [replace, showAlert]);
 
   const {
     control,
@@ -54,21 +52,22 @@ export default function ForgotPasswordScreen() {
     },
   });
 
-  const onSubmit = async (data: { email: string }) => {
-    setLoading(true);
-    try {
+  // Form submission with hook
+  const { submit: handlePasswordReset, isSubmitting: loading } = useFormSubmit(
+    async (data: { email: string }) => {
       // SECURITY: Sanitize email input before sending to Firebase
       const { sanitizeEmail } = await import('@/utils/sanitize');
       const sanitizedEmail = sanitizeEmail(data.email);
-
       await sendPasswordResetEmail(auth, sanitizedEmail);
-      showSuccess(i18n.t('success.passwordReset.title'), i18n.t('success.passwordReset.message'), () => router.push('/(auth)/login'));
-    } catch (err: unknown) {
-      showError(err);
-    } finally {
-      setLoading(false);
+    },
+    {
+      successTitle: i18n.t('success.passwordReset.title'),
+      successMessage: i18n.t('success.passwordReset.message'),
+      onSuccess: () => push('/(auth)/login'),
     }
-  };
+  );
+
+  const onSubmit = (data: { email: string }) => handlePasswordReset(data);
 
   return (
     <ScreenContainer scrollable>
@@ -98,7 +97,7 @@ export default function ForgotPasswordScreen() {
       <ThemedButton title={loading ? i18n.t('forgotPassword.sendingButton') : i18n.t('forgotPassword.sendButton')} onPress={handleSubmit(onSubmit)} disabled={loading} style={styles.submitButton} />
       {loading && <ActivityIndicator style={styles.loading} />}
 
-      <ThemedButton title={i18n.t('forgotPassword.backToLogin')} variant="link" onPress={() => router.push('/(auth)/login')} />
+      <ThemedButton title={i18n.t('forgotPassword.backToLogin')} variant="link" onPress={() => push('/(auth)/login')} />
       {AlertComponent}
     </ScreenContainer>
   );

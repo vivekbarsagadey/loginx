@@ -8,9 +8,10 @@ import { FontWeight, Spacing } from '@/constants/layout';
 import { ValidationConstants } from '@/constants/validation';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
+import { useFormSubmit } from '@/hooks/use-form-submit';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
-import { showSuccess } from '@/utils/success';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
@@ -18,7 +19,7 @@ import { useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 export default function ChangePasswordScreen() {
-  const router = useRouter();
+  const { back } = useHapticNavigation();
   const alert = useAlert();
   const user = auth.currentUser;
 
@@ -28,7 +29,6 @@ export default function ChangePasswordScreen() {
   const [newPasswordError, setNewPasswordError] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
-  const [loading, setLoading] = useState(false);
 
   const requirements = i18n.t('screens.security.changePassword.requirements', { returnObjects: true }) as Record<string, string>;
 
@@ -65,73 +65,77 @@ export default function ChangePasswordScreen() {
     return true;
   }, []);
 
-  const handleChangePassword = useCallback(async () => {
-    if (!user || !user.email) {
-      showError(new Error('No authenticated user found'));
-      return;
-    }
-
+  // Validation function
+  const validateForm = useCallback(() => {
     // Reset errors
     setCurrentPasswordError('');
     setNewPasswordError('');
     setConfirmPasswordError('');
 
+    if (!user || !user.email) {
+      showError(new Error('No authenticated user found'));
+      return false;
+    }
+
     // Validate current password
     if (!currentPassword) {
       setCurrentPasswordError(i18n.t('screens.security.changePassword.validation.currentRequired'));
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      return;
+      return false;
     }
 
     // Validate new password
     if (!newPassword) {
       setNewPasswordError(i18n.t('screens.security.changePassword.validation.newRequired'));
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      return;
+      return false;
     }
 
     if (!validatePassword(newPassword)) {
       setNewPasswordError(i18n.t('screens.security.changePassword.validation.requirementsNotMet'));
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      return;
+      return false;
     }
 
     // Validate confirm password
     if (newPassword !== confirmPassword) {
       setConfirmPasswordError(i18n.t('screens.security.changePassword.validation.mismatch'));
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      return;
+      return false;
     }
 
     // Check if new password is different from current
     if (currentPassword === newPassword) {
       setNewPasswordError(i18n.t('screens.security.changePassword.validation.sameAsOld'));
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      return;
+      return false;
     }
 
-    setLoading(true);
+    return true;
+  }, [user, currentPassword, newPassword, confirmPassword, validatePassword]);
 
-    try {
-      // Haptic feedback
-      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  // Form submission with hook
+  const { submit: handleChangePassword, isSubmitting: loading } = useFormSubmit(
+    async () => {
+      if (!user || !user.email) {
+        throw new Error('No authenticated user found');
+      }
 
-      // Step 1: Reauthenticate user with current password
+            // Step 1: Reauthenticate user with current password
       const credential = EmailAuthProvider.credential(user.email, currentPassword);
       await reauthenticateWithCredential(user, credential);
 
       // Step 2: Update password
       await updatePassword(user, newPassword);
 
-      // Success haptic
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-
-      // Clear form
+      // Reset form
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-
-      showSuccess(i18n.t('success.profileUpdate.title'), i18n.t('screens.security.changePassword.success'), () => router.back());
+    },
+    {
+      successTitle: i18n.t('success.passwordChanged.title'),
+      successMessage: i18n.t('success.passwordChanged.message'),
+      onSuccess: () => back(),
+      validate: validateForm,
+      errorTitle: i18n.t('screens.security.changePassword.error.title'),
+    }
+  );
     } catch (error: unknown) {
       console.error('[ChangePassword] Error changing password:', error);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);

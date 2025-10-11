@@ -4,73 +4,79 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
+import { CharacterCounter } from '@/components/ui/character-counter';
+import { InfoBox } from '@/components/ui/info-box';
+import { SelectableButton } from '@/components/ui/selectable-button';
 import { CommonText } from '@/constants/common-styles';
-import { BorderRadius, BorderWidth, FontWeight, Spacing, Typography } from '@/constants/layout';
+import { Spacing } from '@/constants/layout';
 import { getIssueTypes } from '@/data/issue-types';
 import { useAlert } from '@/hooks/use-alert';
 import { useAuth } from '@/hooks/use-auth-provider';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useFormSubmit } from '@/hooks/use-form-submit';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
 import type { IssueType } from '@/types/feedback';
-import type { IssueOption } from '@/types/issue';
-import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const ISSUE_TYPES = getIssueTypes();
 
 export default function ReportIssueScreen() {
-  const router = useRouter();
   const { user } = useAuth();
   const { show: showAlert, AlertComponent } = useAlert();
-  const primaryColor = useThemeColor({}, 'primary');
+  const { back } = useHapticNavigation();
+
   const [selectedIssue, setSelectedIssue] = useState<IssueType>('functionality');
   const [subject, setSubject] = useState('');
   const [description, setDescription] = useState('');
   const [stepsToReproduce, setStepsToReproduce] = useState('');
   const [expectedBehavior, setExpectedBehavior] = useState('');
   const [actualBehavior, setActualBehavior] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleIssueSelect = async (issueType: IssueType) => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedIssue(issueType);
   };
 
-  const handleSubmit = async () => {
-    // Validation
+  // Validation function
+  const validateForm = () => {
     if (!subject.trim()) {
       showAlert(i18n.t('screens.reportIssue.validation.subjectRequired.title'), i18n.t('screens.reportIssue.validation.subjectRequired.message'), [{ text: i18n.t('common.ok') }], {
         variant: 'warning',
       });
-      return;
+      return false;
     }
 
     if (!description.trim()) {
       showAlert(i18n.t('screens.reportIssue.validation.descriptionRequired.title'), i18n.t('screens.reportIssue.validation.descriptionRequired.message'), [{ text: i18n.t('common.ok') }], {
         variant: 'warning',
       });
-      return;
+      return false;
     }
 
     if (description.trim().length < 20) {
       showAlert(i18n.t('screens.reportIssue.validation.descriptionTooShort.title'), i18n.t('screens.reportIssue.validation.descriptionTooShort.message'), [{ text: i18n.t('common.ok') }], {
         variant: 'warning',
       });
-      return;
+      return false;
     }
 
     if (!user) {
       showAlert(i18n.t('common.error'), 'You must be logged in to report an issue', [{ text: i18n.t('common.ok') }], { variant: 'error' });
-      return;
+      return false;
     }
 
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    setIsSubmitting(true);
+    return true;
+  };
 
-    try {
+  // Form submission with hook
+  const { submit, isSubmitting } = useFormSubmit(
+    async () => {
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
       const result = await submitIssueReport(
         user.uid,
         user.email || undefined,
@@ -82,38 +88,25 @@ export default function ReportIssueScreen() {
         actualBehavior.trim() || undefined
       );
 
-      if (result.success) {
-        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        showAlert(
-          i18n.t('screens.reportIssue.success.title'),
-          i18n.t('screens.reportIssue.success.message'),
-          [
-            {
-              text: i18n.t('common.ok'),
-              onPress: () => router.back(),
-            },
-          ],
-          { variant: 'success' }
-        );
-
-        // Reset form
-        setSubject('');
-        setDescription('');
-        setStepsToReproduce('');
-        setExpectedBehavior('');
-        setActualBehavior('');
-        setSelectedIssue('functionality');
-      } else {
-        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-        showAlert(i18n.t('screens.reportIssue.error.title'), result.error || i18n.t('screens.reportIssue.error.message'), [{ text: i18n.t('common.ok') }], { variant: 'error' });
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to submit issue report');
       }
-    } catch (_error) {
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      showAlert(i18n.t('screens.reportIssue.error.title'), i18n.t('screens.reportIssue.error.message'), [{ text: i18n.t('common.ok') }], { variant: 'error' });
-    } finally {
-      setIsSubmitting(false);
+
+      // Reset form on success
+      setSubject('');
+      setDescription('');
+      setStepsToReproduce('');
+      setExpectedBehavior('');
+      setActualBehavior('');
+      setSelectedIssue('functionality');
+    },
+    {
+      successTitle: i18n.t('screens.reportIssue.success.title'),
+      successMessage: i18n.t('screens.reportIssue.success.message'),
+      onSuccess: () => back(),
+      validate: validateForm,
     }
-  };
+  );
 
   return (
     <ScreenContainer scrollable>
@@ -124,7 +117,15 @@ export default function ReportIssueScreen() {
         </ThemedText>
         <ThemedView style={styles.issueGrid}>
           {ISSUE_TYPES.map((issue) => (
-            <IssueTypeButton key={issue.id} issue={issue} isSelected={selectedIssue === issue.id} onPress={() => handleIssueSelect(issue.id)} />
+            <SelectableButton
+              key={issue.id}
+              label={issue.label}
+              description={issue.description}
+              icon={issue.icon}
+              isSelected={selectedIssue === issue.id}
+              onPress={() => handleIssueSelect(issue.id)}
+              variant="default"
+            />
           ))}
         </ThemedView>
       </ThemedView>
@@ -142,7 +143,7 @@ export default function ReportIssueScreen() {
           editable={!isSubmitting}
           accessibilityLabel="Issue subject"
         />
-        <ThemedText style={styles.charCount}>{subject.length}/100</ThemedText>
+        <CharacterCounter count={subject.length} maxLength={100} />
       </ThemedView>
 
       {/* Description */}
@@ -161,7 +162,7 @@ export default function ReportIssueScreen() {
           style={styles.textArea}
           accessibilityLabel="Issue description"
         />
-        <ThemedText style={styles.charCount}>{description.length}/1000</ThemedText>
+        <CharacterCounter count={description.length} maxLength={1000} />
       </ThemedView>
 
       {/* Steps to Reproduce */}
@@ -180,7 +181,7 @@ export default function ReportIssueScreen() {
           style={styles.textArea}
           accessibilityLabel="Steps to reproduce"
         />
-        <ThemedText style={styles.charCount}>{stepsToReproduce.length}/500</ThemedText>
+        <CharacterCounter count={stepsToReproduce.length} maxLength={500} />
       </ThemedView>
 
       {/* Expected vs Actual Behavior */}
@@ -219,48 +220,18 @@ export default function ReportIssueScreen() {
       </ThemedView>
 
       {/* Info Box */}
-      <ThemedView style={[styles.infoBox, { backgroundColor: primaryColor + '1A' }]}>
-        <Feather name="info" size={20} color={primaryColor} />
-        <ThemedText style={styles.infoText}>{i18n.t('screens.reportIssue.infoText')}</ThemedText>
-      </ThemedView>
+      <InfoBox message={i18n.t('screens.reportIssue.infoText')} icon="info" variant="info" style={styles.infoBox} />
 
       {/* Submit Button */}
       <ThemedButton
         title={isSubmitting ? i18n.t('screens.reportIssue.submitting') : i18n.t('screens.reportIssue.submitButton')}
-        onPress={handleSubmit}
+        onPress={submit}
         disabled={isSubmitting}
         style={styles.submitButton}
         accessibilityLabel="Submit issue report"
       />
       {AlertComponent}
     </ScreenContainer>
-  );
-}
-
-function IssueTypeButton({ issue, isSelected, onPress }: { issue: IssueOption; isSelected: boolean; onPress: () => void }) {
-  const borderColor = useThemeColor({}, 'border');
-  const primaryColor = useThemeColor({}, 'primary');
-  const surfaceColor = useThemeColor({}, 'surface');
-  const textMutedColor = useThemeColor({}, 'text-muted');
-
-  return (
-    <Pressable
-      onPress={onPress}
-      style={[
-        styles.issueButton,
-        {
-          borderColor: isSelected ? primaryColor : borderColor,
-          backgroundColor: isSelected ? `${primaryColor}15` : surfaceColor,
-        },
-      ]}
-      accessibilityRole="button"
-      accessibilityState={{ selected: isSelected }}
-      accessibilityLabel={issue.label}
-    >
-      <Feather name={issue.icon} size={24} color={isSelected ? primaryColor : borderColor} />
-      <ThemedText style={[styles.issueLabel, { color: isSelected ? primaryColor : undefined }]}>{issue.label}</ThemedText>
-      <ThemedText style={[styles.issueDescription, { color: isSelected ? primaryColor : textMutedColor }]}>{issue.description}</ThemedText>
-    </Pressable>
   );
 }
 
@@ -271,43 +242,13 @@ const styles = StyleSheet.create({
   issueGrid: {
     gap: Spacing.sm,
   },
-  issueButton: {
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.md,
-    borderRadius: BorderRadius.md,
-    borderWidth: BorderWidth.thick,
-    gap: Spacing.xs,
-  },
-  issueLabel: {
-    fontSize: Typography.body.fontSize,
-    fontWeight: FontWeight.semibold,
-  },
-  issueDescription: {
-    fontSize: Typography.caption.fontSize + 1,
-    opacity: 0.8,
-  },
-  charCount: {
-    fontSize: Typography.caption.fontSize,
-    textAlign: 'right',
-    marginTop: Spacing.xs,
-    opacity: 0.6,
-  },
   textArea: {
     minHeight: 100,
     textAlignVertical: 'top',
     paddingTop: Spacing.sm,
   },
   infoBox: {
-    flexDirection: 'row',
-    gap: Spacing.sm,
-    padding: Spacing.md,
-    borderRadius: BorderRadius.sm,
     marginBottom: Spacing.lg,
-  },
-  infoText: {
-    flex: 1,
-    fontSize: Typography.bodySmall.fontSize,
-    lineHeight: Typography.bodySmall.lineHeight,
   },
   submitButton: {
     marginBottom: Spacing.xl,

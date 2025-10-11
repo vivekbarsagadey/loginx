@@ -5,15 +5,15 @@ import { ThemedView } from '@/components/themed-view';
 import { Collapsible } from '@/components/ui/collapsible';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
+import { openMailto } from '@/utils/mailto';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
-import * as Haptics from 'expo-haptics';
-import { useRouter } from 'expo-router';
-import { Linking, Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 export default function SupportScreen() {
-  const router = useRouter();
+  const { push } = useHapticNavigation();
   const appVersion = Constants.expoConfig?.version || '1.0.0';
   const platform = Platform.OS;
   const osVersion = Device.osVersion || 'Unknown';
@@ -23,43 +23,28 @@ export default function SupportScreen() {
     answer: string;
   }[];
 
-  const handleEmailPress = async () => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    const email = i18n.t('screens.support.contact.email');
-    const subject = encodeURIComponent('Support Request - LoginX App');
-    const body = encodeURIComponent(`App Version: ${appVersion}\nPlatform: ${platform}\nOS Version: ${osVersion}\n\n---\nPlease describe your issue below:\n\n`);
-    const url = `mailto:${email}?subject=${subject}&body=${body}`;
-
-    try {
-      const supported = await Linking.canOpenURL(url);
-      if (supported) {
-        await Linking.openURL(url);
-      } else {
-        console.error('Email client not available');
-      }
-    } catch (error) {
-      console.error('Error opening email client:', error);
-    }
+  const handleEmailPress = () => {
+    openMailto(i18n.t('screens.support.contact.email'), 'Support Request - LoginX App', 'Please describe your issue below:\n\n');
   };
 
   const handleNavigateToPrivacy = () => {
-    router.push('/legal/privacy');
+    push('/legal/privacy');
   };
 
   const handleNavigateToTerms = () => {
-    router.push('/legal/terms');
+    push('/legal/terms');
   };
 
   const handleNavigateToLicense = () => {
-    router.push('/legal/license');
+    push('/legal/license');
   };
 
   const handleNavigateToDataRights = () => {
-    router.push('/legal/data-rights');
+    push('/legal/data-rights');
   };
 
   const handleNavigateToCookies = () => {
-    router.push('/legal/cookies');
+    push('/legal/cookies');
   };
 
   return (
