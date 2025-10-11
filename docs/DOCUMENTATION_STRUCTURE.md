@@ -76,16 +76,25 @@ Historical documents moved to `docs/archive/`:
 - **ENHANCED_ONBOARDING_FLOW_COMPLETE.md** - Onboarding completion report
 - **ENVIRONMENT_VARIABLES_INTEGRATION_COMPLETE.md** - Env vars setup
 - **FINAL_SUMMARY.md** - Project completion report (4200 lines)
-
-## 🔍 Analysis Documents (Review Status)
-
-These need review to determine if they should be kept, merged, or archived:
-
-- **COMPONENT_INTEGRATION_OPPORTUNITIES.md** - May be outdated if design system
-  complete
-- **ONBOARDING_ANALYSIS.md** - Large analysis, may overlap with completion docs
-- **LOGIN_FEATURES_LIST.md** - Feature checklist, consider merging with
-  LOGIN_FLOW_DOCUMENTATION.md
+- **MIGRATION_COMPLETION_REPORT.md** - Themed components migration completion
+  (January 2025)
+- **PHASE_4_COMPLETION_SUMMARY.md** - Phase 4 migration completion
+  (October 2025)
+- **THEMED_COMPONENTS_MIGRATION_GUIDE.md** - Migration guide (migration
+  complete)
+- **THEMED_COMPONENTS_PROPOSAL.md** - Implementation proposal (all phases
+  complete)
+- **SECURITY_AUDIT_REPORT.md** - Security audit report (completed)
+- **TYPOGRAPHY_SYSTEM.md** - Typography system (merged into DESIGN_SYSTEM.md)
+- **RESPONSIVE_DESIGN.md** - Responsive design guide (merged into
+  DESIGN_SYSTEM.md)
+- **AUTHENTICATION_REVIEW.md** - Authentication review (consolidated)
+- **EXPO_GO_GUIDE.md** - Expo Go setup guide
+- **FORGOT_PASSWORD_IMPLEMENTATION.md** - Forgot password implementation
+- **NOTIFICATIONS_CENTER_IMPLEMENTATION.md** - Notifications center
+  implementation
+- **OFFLINE_MODE_FIX.md** - Offline mode fix
+- **QUICK_REFERENCE.md** - Quick reference guide
 
 ## 📝 Maintenance Guidelines
 
@@ -122,5 +131,5 @@ These need review to determine if they should be kept, merged, or archived:
 
 ---
 
-**Last Updated**: January 2025  
+**Last Updated**: October 11, 2025  
 **Maintained By**: Development Team
