@@ -4,6 +4,7 @@
  */
 
 import { ListScreen } from '@/components/templates/list-screen';
+import { ThemedPressable } from '@/components/themed-pressable';
 import { ThemedText } from '@/components/themed-text';
 import { NotificationItem } from '@/components/ui/notification-item';
 import { Spacing } from '@/constants/layout';

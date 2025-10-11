@@ -10,7 +10,7 @@ import { useLanguage } from '@/hooks/use-language-provider';
 import { useLoadingState } from '@/hooks/use-loading-state';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { provideLightFeedback } from '@/utils/feedback';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 
 export default function LanguageScreen() {
   const { language, persistLanguage } = useLanguage();

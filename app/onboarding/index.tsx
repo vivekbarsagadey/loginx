@@ -18,6 +18,7 @@ import { PrivacySlide } from '@/components/onboarding/privacy-slide';
 import { ProfileSlide } from '@/components/onboarding/profile-slide';
 import { TutorialSlide } from '@/components/onboarding/tutorial-slide';
 import { WelcomeSlide } from '@/components/onboarding/welcome';
+import { ThemedPressable } from '@/components/themed-pressable';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';

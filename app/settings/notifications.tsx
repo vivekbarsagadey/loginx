@@ -128,7 +128,7 @@ export default function NotificationsScreen() {
                 />
               )
             }
-            showDivider={index < notificationSettings.length - 1}
+            showBorder={index < notificationSettings.length - 1}
           />
         ))}
       </View>

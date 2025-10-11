@@ -170,7 +170,7 @@ export default function DataExamplesScreen() {
           <ThemedPressable style={styles.sectionHeader} onPress={() => toggleSection('tip')}>
             <ThemedText type="h3">💡 Random Tip</ThemedText>
             <Ionicons name={expandedSection === 'tip' ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
-          </Pressable>
+          </ThemedPressable>
           {expandedSection === 'tip' && (
             <View style={styles.card}>
               <View style={styles.row}>

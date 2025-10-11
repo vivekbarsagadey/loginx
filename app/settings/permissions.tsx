@@ -1,6 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedInfoBox } from '@/components/themed-info-box';
 import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
+import { ThemedPressable } from '@/components/themed-pressable';
 import { ThemedText } from '@/components/themed-text';
 import { BorderRadius, IconSize, Spacing, Typography } from '@/constants/layout';
 import { getPermissions } from '@/data';
@@ -195,7 +196,9 @@ export default function PermissionsScreen() {
       </ThemedPressable>
 
       {/* Info Note */}
-      <ThemedInfoBox variant="info" message={i18n.t('settings.permissions.info')} />
+      <ThemedInfoBox variant="info">
+        <ThemedText>{i18n.t('settings.permissions.info')}</ThemedText>
+      </ThemedInfoBox>
       {alert.AlertComponent}
     </ScreenContainer>
   );

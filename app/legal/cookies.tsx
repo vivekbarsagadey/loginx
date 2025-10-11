@@ -6,6 +6,7 @@ import { Collapsible } from '@/components/ui/collapsible';
 import { Spacing, Typography } from '@/constants/layout';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
+import { Ionicons } from '@expo/vector-icons';
 import { useEffect } from 'react';
 import { AccessibilityInfo, StyleSheet } from 'react-native';
 
@@ -132,7 +133,9 @@ export default function CookiesScreen() {
       </ThemedView>
 
       {/* Contact */}
-      <ThemedInfoBox variant="info" message={i18n.t('screens.legal.cookies.contact')} style={{ marginTop: Spacing.lg }} />
+      <ThemedInfoBox variant="info" style={{ marginTop: Spacing.lg }}>
+        <ThemedText>Last updated: January 2025</ThemedText>
+      </ThemedInfoBox>
     </ScreenContainer>
   );
 }

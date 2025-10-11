@@ -8,6 +8,7 @@ import { useAlert } from '@/hooks/use-alert';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
+import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useEffect } from 'react';
 import { AccessibilityInfo, Linking, StyleSheet } from 'react-native';
@@ -163,11 +164,9 @@ export default function DataRightsScreen() {
       </ThemedView>
 
       {/* Response Time */}
-      <ThemedInfoBox 
-        variant="info" 
-        message={i18n.t('screens.legal.dataRights.responseTime')} 
-        style={{ marginTop: Spacing.lg }}
-      />
+      <ThemedInfoBox variant="info" style={{ marginTop: Spacing.lg }}>
+        <ThemedText>{i18n.t('screens.legal.dataRights.responseTime')}</ThemedText>
+      </ThemedInfoBox>
       {alert.AlertComponent}
     </ScreenContainer>
   );
@@ -213,9 +212,7 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     marginBottom: Spacing.md,
-  },
-  paddingHorizontal: Spacing.md,
+    paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
   },
-});
 });

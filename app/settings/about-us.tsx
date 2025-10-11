@@ -1,4 +1,5 @@
 import { ScreenContainer } from '@/components/screen-container';
+import { ThemedListItem } from '@/components/themed-list-item';
 import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
 import { CommonLists, CommonText } from '@/constants/common-styles';
@@ -143,15 +144,7 @@ export default function AboutUsScreen() {
         </ThemedText>
         <Card elevation={1} noPadding>
           {contactItems.map((item, index) => (
-            <ThemedListItem
-              key={item.label}
-              title={item.label}
-              description={item.value}
-              icon={item.icon}
-              rightIcon="external-link"
-              onPress={item.action}
-              showDivider={index < contactItems.length - 1}
-            />
+            <ThemedListItem key={item.label} title={item.label} description={item.value} icon={item.icon} showChevron={true} onPress={item.action} showBorder={index < contactItems.length - 1} />
           ))}
         </Card>
       </View>

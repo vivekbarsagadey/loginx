@@ -98,7 +98,7 @@ export default function ForgotPasswordScreen() {
       />
 
       <ThemedButton title={loading ? i18n.t('forgotPassword.sendingButton') : i18n.t('forgotPassword.sendButton')} onPress={handleSubmit(onSubmit)} disabled={loading} style={styles.submitButton} />
-      {loading && <ThemedLoadingSpinner size="large" overlay style={styles.loading} />}
+      {loading && <ThemedLoadingSpinner size="large" style={styles.loading} />}
 
       <ThemedButton title={i18n.t('forgotPassword.backToLogin')} variant="link" onPress={() => push('/(auth)/login')} />
       {AlertComponent}

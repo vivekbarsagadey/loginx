@@ -1,4 +1,5 @@
 import { ScreenContainer } from '@/components/screen-container';
+import { ThemedPressable } from '@/components/themed-pressable';
 import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
 import { CommonText } from '@/constants/common-styles';
