@@ -4,11 +4,11 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing, Typography } from '@/constants/layout';
 import { useAlert } from '@/hooks/use-alert';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { AccessibilityInfo, Linking, StyleSheet } from 'react-native';
 
@@ -19,7 +19,7 @@ import { AccessibilityInfo, Linking, StyleSheet } from 'react-native';
  * tools to exercise those rights (access, rectification, erasure, portability)
  */
 export default function DataRightsScreen() {
-  const router = useRouter();
+  const { push } = useHapticNavigation();
   const alert = useAlert();
   const primaryColor = useThemeColor({}, 'primary');
   const surfaceColor = useThemeColor({}, 'surface');
@@ -52,7 +52,7 @@ export default function DataRightsScreen() {
         style: 'destructive',
         onPress: () => {
           // TODO: Implement account deletion
-          router.push('/support');
+          push('/support');
         },
       },
     ]);

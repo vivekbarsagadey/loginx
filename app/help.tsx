@@ -4,12 +4,11 @@ import { ThemedView } from '@/components/themed-view';
 import { Collapsible } from '@/components/ui/collapsible';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useLanguage } from '@/hooks/use-language-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Feather } from '@expo/vector-icons';
-import * as Haptics from 'expo-haptics';
-import { useRouter } from 'expo-router';
 import { Linking, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 interface QuickActionProps {
@@ -40,22 +39,19 @@ function QuickAction({ icon, title, description, onPress }: QuickActionProps) {
 }
 
 export default function HelpScreen() {
-  const router = useRouter();
+  const { push } = useHapticNavigation();
   const { language: _language } = useLanguage();
   const primaryColor = useThemeColor({}, 'primary');
 
-  const handleContactSupport = async () => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    router.push('/support');
+  const handleContactSupport = () => {
+    push('/support');
   };
 
-  const handleSendFeedback = async () => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    router.push('/feedback');
+  const handleSendFeedback = () => {
+    push('/feedback');
   };
 
   const handleVisitWebsite = async () => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     const url = 'https://github.com/vivekbarsagadey/loginx';
     try {
       const supported = await Linking.canOpenURL(url);
@@ -67,9 +63,8 @@ export default function HelpScreen() {
     }
   };
 
-  const handleViewPrivacy = async () => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    router.push('/privacy');
+  const handleViewPrivacy = () => {
+    push('/privacy');
   };
 
   const platformNote = Platform.OS === 'ios' ? i18n.t('screens.help.platformNotes.ios') : i18n.t('screens.help.platformNotes.android');

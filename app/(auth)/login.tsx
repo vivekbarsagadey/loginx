@@ -8,6 +8,7 @@ import { ValidationConstants, ValidationMessages } from '@/constants/validation'
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useSecuritySettings } from '@/hooks/use-security-settings';
 import { useSocialAuth } from '@/hooks/use-social-auth';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -18,11 +19,10 @@ import { BiometricStorage } from '@/utils/secure-storage';
 import { showSuccess } from '@/utils/success';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Href } from 'expo-router';
-import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { z } from 'zod';
 
 // SECURITY: Use consolidated validation from constants
@@ -36,8 +36,7 @@ const schema = z.object({
 });
 
 export default function LoginScreen() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { push, replace } = useHapticNavigation();
   const [biometricAttempted, setBiometricAttempted] = useState(false);
   const { show: showAlert, AlertComponent } = useAlert();
   const { signInWithGoogle, signInWithApple, signInWithFacebook, loading: socialLoading } = useSocialAuth();
@@ -75,7 +74,7 @@ export default function LoginScreen() {
             if (email && auth.currentUser) {
               // User is already authenticated via Firebase persistence
               showSuccess('Success', 'Authenticated successfully with ' + biometricTypeName);
-              router.replace('/(tabs)');
+              replace('/(tabs)');
             } else if (email) {
               // SECURITY: Re-authenticate with Firebase using stored email
               // Note: For true biometric login, user must login with password first
@@ -95,7 +94,7 @@ export default function LoginScreen() {
     // Small delay to allow UI to render first
     const timer = setTimeout(attemptBiometricAuth, 100); // Small delay for UI stabilization
     return () => clearTimeout(timer);
-  }, [biometricAvailable, biometricEnabled, biometricAttempted, authenticateWithBiometric, biometricTypeName, router]);
+  }, [biometricAvailable, biometricEnabled, biometricAttempted, authenticateWithBiometric, biometricTypeName, replace]);
 
   const handleBiometricLogin = async () => {
     try {
@@ -108,7 +107,7 @@ export default function LoginScreen() {
         if (email && auth.currentUser) {
           // User is already authenticated via Firebase persistence
           showSuccess('Success', 'Authenticated successfully with ' + biometricTypeName);
-          router.replace('/(tabs)');
+          replace('/(tabs)');
         } else if (email) {
           // SECURITY: For true biometric login, user must have logged in with password first
           showError(new Error('Please login with your password first to enable biometric authentication'));
@@ -121,6 +120,8 @@ export default function LoginScreen() {
       showError(error);
     }
   };
+
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
     // Check if account is locked before attempting login
@@ -156,7 +157,7 @@ export default function LoginScreen() {
 
         if (is2FAEnabled) {
           // Redirect to 2FA verification screen
-          router.push({
+          push({
             pathname: '/(auth)/verify-2fa',
             params: { email: data.email },
           });
@@ -228,16 +229,16 @@ export default function LoginScreen() {
 
       {/* Forgot Password Link - Only show if enabled and email/password auth is available */}
       {isAuthMethodEnabled(AuthMethod.FORGOT_PASSWORD) && isAuthMethodEnabled(AuthMethod.EMAIL_PASSWORD) && (
-        <ThemedButton title={i18n.t('screens.login.forgotPassword')} variant="link" onPress={() => router.push('/(auth)/forgot-password')} style={styles.linkButton} />
+        <ThemedButton title={i18n.t('screens.login.forgotPassword')} variant="link" onPress={() => push('/(auth)/forgot-password')} style={styles.linkButton} />
       )}
 
       <ThemedButton
         title={loading ? i18n.t('screens.login.loggingIn') : i18n.t('screens.login.loginButton')}
         onPress={handleSubmit(onSubmit)}
         disabled={loading || isAccountLocked()}
+        loading={loading}
         style={styles.button}
       />
-      {loading && <ActivityIndicator style={styles.loading} />}
 
       {/* Security Warning */}
       {remainingAttempts < 5 && remainingAttempts > 0 && !isAccountLocked() && (
@@ -280,7 +281,7 @@ export default function LoginScreen() {
             <ThemedButton
               title={i18n.t('screens.login.magicLink', { defaultValue: 'Magic Link (Passwordless)' })}
               variant="secondary"
-              onPress={() => router.push('/(auth)/passwordless-login' as Href)}
+              onPress={() => push('/(auth)/passwordless-login' as Href)}
               style={styles.alternativeButton}
             />
           )}
@@ -289,18 +290,13 @@ export default function LoginScreen() {
             <ThemedButton
               title={i18n.t('screens.login.emailOtp', { defaultValue: 'Email OTP' })}
               variant="secondary"
-              onPress={() => router.push('/(auth)/email-otp-login' as Href)}
+              onPress={() => push('/(auth)/email-otp-login' as Href)}
               style={styles.alternativeButton}
             />
           )}
 
           {isAuthMethodEnabled(AuthMethod.PHONE_OTP) && (
-            <ThemedButton
-              title={i18n.t('screens.login.phoneOtp', { defaultValue: 'Phone OTP' })}
-              variant="secondary"
-              onPress={() => router.push('/(auth)/verify-phone')}
-              style={styles.alternativeButton}
-            />
+            <ThemedButton title={i18n.t('screens.login.phoneOtp', { defaultValue: 'Phone OTP' })} variant="secondary" onPress={() => push('/(auth)/verify-phone')} style={styles.alternativeButton} />
           )}
         </View>
       )}
@@ -328,7 +324,7 @@ export default function LoginScreen() {
         />
       )}
 
-      <ThemedButton title={i18n.t('screens.login.noAccount')} variant="link" onPress={() => router.push('/(auth)/register')} style={styles.linkButton} />
+      <ThemedButton title={i18n.t('screens.login.noAccount')} variant="link" onPress={() => push('/(auth)/register')} style={styles.linkButton} />
       {AlertComponent}
     </ScreenContainer>
   );
@@ -399,10 +395,5 @@ const styles = StyleSheet.create({
   linkButton: {
     marginTop: Spacing.md,
     alignSelf: 'center',
-  },
-  loading: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
   },
 });

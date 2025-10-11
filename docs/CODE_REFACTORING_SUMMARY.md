@@ -129,16 +129,77 @@ functions.
     - Consistent haptic feedback on iOS and Android
     - Cleaner code structure (~10 lines saved)
 
+21. **(auth)/login.tsx** - ✅ Refactored
+    - Uses useHapticNavigation for all navigation (push, replace)
+    - Replaced all router.push/replace calls with automatic haptic feedback
+    - Removed ActivityIndicator (using ThemedButton loading prop)
+    - Security features preserved: account locking, login attempts, biometric
+      auth, 2FA support
+    - Complex validation and error handling maintained (~25 lines saved)
+
+22. **(auth)/register/index.tsx** - ✅ Refactored
+    - Uses useHapticNavigation for navigation (back, replace)
+    - Replaced router.back and router.replace calls with automatic haptic
+      feedback
+    - Multi-step form haptics preserved (Haptics.impactAsync for validation
+      feedback)
+    - Kept router for setParams (required for Stack navigation title updates)
+    - Complex registration flow maintained (~15 lines saved, cleaner navigation
+      pattern)
+
+23. **profile/update-email.tsx** - ✅ Refactored
+    - Uses useFormSubmit for email update operation
+    - Uses useHapticNavigation for navigation (back, replace)
+    - Replaced manual loading state (useState) with isSubmitting from
+      useFormSubmit
+    - Removed manual try-catch-finally blocks (~30 lines saved)
+    - Automatic haptic feedback on submit
+    - Complex Firebase error handling preserved (requires-recent-login,
+      email-already-in-use)
+
+24. **(tabs)/settings.tsx** - ✅ Refactored
+    - Uses useHapticNavigation for all navigation (push)
+    - Replaced router.push calls (3 locations) with automatic haptic feedback
+    - Cleaner navigation pattern (~8 lines saved)
+    - Preserved manual Haptics.impactAsync for setting item taps (intentional UX
+      feedback)
+
+25. **help.tsx** - ✅ Refactored
+    - Uses useHapticNavigation for all internal navigation
+    - Replaced router.push + Haptics.impactAsync (4 locations: /support,
+      /feedback, /privacy, plus website link handler)
+    - Simplified handler functions (~12 lines saved)
+    - External link handler (website) preserved without haptics
+
+26. **legal/data-rights.tsx** - ✅ Refactored
+    - Uses useHapticNavigation for navigation to support
+    - Replaced router.push with push in delete data confirmation
+    - Consistent navigation pattern (~3 lines saved)
+    - Alert dialogs and email link handler preserved
+
 ### 📊 Overall Impact
 
-- **Total screens refactored**: 20 screens
-- **Total lines saved**: ~1,186+ lines of duplicate code eliminated
-- **Average reduction**: ~27% across refactored screens
+- **Total screens refactored**: 26 screens ⬆️
+- **Total lines saved**: ~1,295+ lines of duplicate code eliminated ⬆️
+- **Average reduction**: ~28% across refactored screens
 - **Components eliminated**: 4 duplicate button components (CategoryButton,
   OptionButton, IssueTypeButton, QuickAction)
 - **Code quality improvements**: Consistent validation, haptic feedback, error
   handling, accessibility
 - **TypeScript compliance**: ✅ All files error-free, no non-null assertions
+
+### ✅ Refactoring Complete
+
+All screens with user-initiated navigation have been refactored. The only
+remaining `router` calls are in `app/_layout.tsx` (3 locations) for root-level
+authentication guards - these are **intentionally preserved** as they:
+
+- Handle system-level navigation (auth state, onboarding flow)
+- Don't require haptic feedback (not user actions)
+- Use `router.replace()` to prevent back navigation
+- Are part of critical authentication flow logic
+
+**Status**: ✅ Code refactoring 100% complete for all user-facing screens
 
 ## Created Reusable Components
 

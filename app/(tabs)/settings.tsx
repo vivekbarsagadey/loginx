@@ -9,6 +9,7 @@ import { CommonText } from '@/constants/common-styles';
 import { Spacing, TouchTarget } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useConfirmation } from '@/hooks/use-dialog';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useLanguage } from '@/hooks/use-language-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
@@ -23,7 +24,7 @@ import React, { useMemo } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 export default function SettingsScreen() {
-  const router = useRouter();
+  const { push } = useHapticNavigation();
   const user = auth.currentUser;
   const { language } = useLanguage();
   const borderColor = useThemeColor({}, 'border');
@@ -101,20 +102,9 @@ export default function SettingsScreen() {
     // Add haptic feedback for all interactions
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
-    if (item.type === 'link' && item.href) {
-      router.push(item.href as Href);
-    } else if (item.type === 'action') {
-      if (item.action === 'clearCache') {
-        handleClearCache();
-      }
-    } else if (item.type === 'danger') {
-      if (item.action === 'logout') {
-        handleLogout();
-      } else if (item.action === 'deleteAccount') {
-        handleDeleteAccount();
-      }
-    }
-  };
+    if (item.href) {
+      push(item.href as Href);
+    } else if (item.action) {
 
   const styles = React.useMemo(
     () =>
@@ -185,7 +175,7 @@ export default function SettingsScreen() {
             <View style={styles.userDetails}>
               <ThemedText type="h2">{user?.displayName}</ThemedText>
               <ThemedText style={styles.userInfo}>{user?.email}</ThemedText>
-              <TouchableOpacity onPress={() => router.push('/profile/edit')}>
+              <TouchableOpacity onPress={() => push('/profile/edit')}>
                 <ThemedText style={styles.editProfile}>{i18n.t('settings.editProfile')} ›</ThemedText>
               </TouchableOpacity>
             </View>

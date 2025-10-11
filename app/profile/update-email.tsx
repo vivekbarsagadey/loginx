@@ -7,27 +7,25 @@ import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
+import { useFormSubmit } from '@/hooks/use-form-submit';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
 import { validateEmailField } from '@/utils/form-validation';
 import { sanitizeEmail } from '@/utils/sanitize';
-import { showSuccess } from '@/utils/success';
-import * as Haptics from 'expo-haptics';
-import { useRouter } from 'expo-router';
 import { verifyBeforeUpdateEmail } from 'firebase/auth';
 import { useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 export default function UpdateEmailScreen() {
   const user = auth.currentUser;
-  const router = useRouter();
+  const { back, replace } = useHapticNavigation();
   const alert = useAlert();
   const [newEmail, setNewEmail] = useState('');
   const [confirmEmail, setConfirmEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [confirmError, setConfirmError] = useState('');
-  const [loading, setLoading] = useState(false);
 
   // Theme colors
   const warningColor = useThemeColor({}, 'warning');
@@ -65,30 +63,25 @@ export default function UpdateEmailScreen() {
     [newEmail]
   );
 
-  const handleUpdateEmail = useCallback(async () => {
+  const updateEmailOperation = async () => {
     if (!user) {
-      showError(new Error('No authenticated user'));
-      return;
+      throw new Error('No authenticated user');
     }
 
     const sanitizedEmail = sanitizeEmail(newEmail);
     if (!validateEmail(sanitizedEmail) || !validateConfirmEmail(confirmEmail)) {
-      return;
+      throw new Error('Validation failed');
     }
 
-    setLoading(true);
+    // Use verifyBeforeUpdateEmail for better security
+    await verifyBeforeUpdateEmail(user, sanitizedEmail);
+  };
 
-    try {
-      // Haptic feedback
-      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-
-      // Use verifyBeforeUpdateEmail for better security
-      await verifyBeforeUpdateEmail(user, sanitizedEmail);
-
-      showSuccess(i18n.t('screens.updateEmail.success.title'), i18n.t('screens.updateEmail.success.message'), () => router.back());
-    } catch (error: unknown) {
-      console.error('Error updating email: ', error);
-
+  const { submit: handleUpdateEmail, isSubmitting: loading } = useFormSubmit(updateEmailOperation, {
+    successTitle: i18n.t('screens.updateEmail.success.title'),
+    successMessage: i18n.t('screens.updateEmail.success.message'),
+    onSuccess: () => back(),
+    onError: (error: unknown) => {
       // Handle specific Firebase errors
       if (error && typeof error === 'object' && 'code' in error) {
         const firebaseError = error as { code: string; message: string };
@@ -100,7 +93,7 @@ export default function UpdateEmailScreen() {
                 text: i18n.t('screens.updateEmail.errors.reauthRequired.signOut'),
                 onPress: () => {
                   auth.signOut();
-                  router.replace('/(auth)/login');
+                  replace('/(auth)/login');
                 },
                 style: 'destructive',
               },
@@ -118,10 +111,8 @@ export default function UpdateEmailScreen() {
       } else {
         showError(error);
       }
-    } finally {
-      setLoading(false);
-    }
-  }, [user, newEmail, confirmEmail, validateEmail, validateConfirmEmail, router, alert]);
+    },
+  });
 
   const currentEmail = user?.email || '';
 

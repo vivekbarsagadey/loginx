@@ -6,6 +6,7 @@ import { SocialSignInButtons } from '@/components/ui/social-sign-in-buttons';
 import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useSocialAuth } from '@/hooks/use-social-auth';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { showError } from '@/utils/error';
@@ -88,7 +89,8 @@ const RegisterContext = createContext<{
 export const useRegister = () => useContext(RegisterContext);
 
 export default function RegisterScreen() {
-  const router = useRouter();
+  const { back, replace } = useHapticNavigation();
+  const router = useRouter(); // Keep for setParams
   const alert = useAlert();
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -161,7 +163,7 @@ export default function RegisterScreen() {
           style: 'destructive',
           onPress: () => {
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-            router.back();
+            back();
           },
         },
       ]);
@@ -239,7 +241,7 @@ export default function RegisterScreen() {
       if (sanitizedData.phoneNumber && sanitizedData.phoneNumber.trim()) {
         // Phone verification flow
         try {
-          router.replace({
+          replace({
             pathname: '/(auth)/verify-phone',
             params: { phoneNumber: sanitizedData.phoneNumber },
           });
@@ -247,7 +249,7 @@ export default function RegisterScreen() {
           console.error('[Registration] Navigation to phone verification failed:', navError);
           // Fallback to email verification
           try {
-            router.replace({
+            replace({
               pathname: '/(auth)/verify-email',
               params: { email: sanitizedData.email },
             });
@@ -259,7 +261,7 @@ export default function RegisterScreen() {
       } else {
         // Email verification flow (no phone)
         try {
-          router.replace({
+          replace({
             pathname: '/(auth)/verify-email',
             params: { email: sanitizedData.email },
           });
