@@ -5,16 +5,17 @@
  * Use this as a reference for choosing the right typography for your UI.
  */
 
+import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default function TypographyShowcase() {
   return (
-    <ScrollView style={styles.container}>
+    <ThemedScrollView style={styles.container}>
       <ThemedView style={styles.section}>
         <ThemedText type="h2" style={CommonText.sectionTitle}>
           Typography System - 13 Levels
@@ -219,7 +220,7 @@ export default function TypographyShowcase() {
           Now matches Material Design&apos;s 13 typography levels ✅
         </ThemedText>
       </ThemedView>
-    </ScrollView>
+    </ThemedScrollView>
   );
 }
 

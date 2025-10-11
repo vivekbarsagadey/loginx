@@ -2,6 +2,7 @@ import { createUserProfile } from '@/actions/user.action';
 import { RegistrationNavigation } from '@/components/auth/registration-navigation';
 import { RegistrationProgress } from '@/components/auth/registration-progress';
 import { RegistrationSocialAuth } from '@/components/auth/registration-social-auth';
+import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
@@ -16,7 +17,7 @@ import { Stack } from 'expo-router';
 import { createUserWithEmailAndPassword, deleteUser, sendEmailVerification } from 'firebase/auth';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { z } from 'zod';
 import RegisterStep1 from './step-1';
 import RegisterStep2 from './step-2';
@@ -255,11 +256,11 @@ export default function RegisterScreen() {
 
             <RegistrationProgress currentStep={currentStep} totalSteps={STEPS.length} stepTitle={currentStepTitle} />
 
-            <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+            <ThemedScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
               <RegistrationSocialAuth visible={currentStep === 0} />
 
               <CurrentStepComponent errors={formState.errors} />
-            </ScrollView>
+            </ThemedScrollView>
 
             <RegistrationNavigation isFirstStep={isFirstStep} isLastStep={isLastStep} isSubmitting={isSubmitting} onNext={goNext} onPrevious={goPrev} />
           </ThemedView>
