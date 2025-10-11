@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { Typography } from '@/constants/layout';
 import { gap, rounded } from '@/constants/style-utils';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import * as Haptics from 'expo-haptics';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -22,10 +22,7 @@ export interface CheckboxProps {
 }
 
 export function Checkbox({ checked, onCheckedChange, label, disabled = false, indeterminate = false, accessibilityLabel }: CheckboxProps) {
-  const primaryColor = useThemeColor({}, 'primary');
-  const borderColor = useThemeColor({}, 'border');
-  const backgroundColor = useThemeColor({}, 'background');
-  const textColor = useThemeColor({}, 'text');
+  const colors = useThemeColors();
 
   const handlePress = async () => {
     if (!disabled) {
@@ -51,13 +48,13 @@ export function Checkbox({ checked, onCheckedChange, label, disabled = false, in
         style={[
           styles.box,
           {
-            backgroundColor: checked || indeterminate ? primaryColor : backgroundColor,
-            borderColor: checked || indeterminate ? primaryColor : borderColor,
+            backgroundColor: checked || indeterminate ? colors.primary : colors.background,
+            borderColor: checked || indeterminate ? colors.primary : colors.border,
             opacity: disabled ? 0.4 : 1,
           },
         ]}
       >
-        {(checked || indeterminate) && <ThemedText style={[styles.icon, { color: backgroundColor }]}>{indeterminate ? '−' : '✓'}</ThemedText>}
+        {(checked || indeterminate) && <ThemedText style={[styles.icon, { color: colors.background }]}>{indeterminate ? '−' : '✓'}</ThemedText>}
       </View>
 
       {label && (
@@ -65,7 +62,7 @@ export function Checkbox({ checked, onCheckedChange, label, disabled = false, in
           style={[
             styles.label,
             {
-              color: textColor,
+              color: colors.text,
               opacity: disabled ? 0.4 : 1,
             },
           ]}

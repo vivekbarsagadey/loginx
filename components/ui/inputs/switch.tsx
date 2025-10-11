@@ -1,5 +1,5 @@
 import { rounded } from '@/constants/style-utils';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import * as Haptics from 'expo-haptics';
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
@@ -19,9 +19,7 @@ export interface SwitchProps {
 }
 
 export function Switch({ value, onValueChange, disabled = false, size = 'medium', accessibilityLabel }: SwitchProps) {
-  const primaryColor = useThemeColor({}, 'primary');
-  const borderColor = useThemeColor({}, 'border');
-  const backgroundColor = useThemeColor({}, 'background');
+  const colors = useThemeColors();
 
   const translateX = useSharedValue(value ? 1 : 0);
 
@@ -62,7 +60,7 @@ export function Switch({ value, onValueChange, disabled = false, size = 'medium'
       style={({ pressed }) => [
         styles.container,
         {
-          backgroundColor: value ? primaryColor : borderColor,
+          backgroundColor: value ? colors.primary : colors.border,
           height,
           opacity: disabled ? 0.4 : pressed ? 0.8 : 1,
           width,
@@ -73,7 +71,7 @@ export function Switch({ value, onValueChange, disabled = false, size = 'medium'
         style={[
           styles.thumb,
           {
-            backgroundColor,
+            backgroundColor: colors.background,
             height: thumbSize,
             width: thumbSize,
           },

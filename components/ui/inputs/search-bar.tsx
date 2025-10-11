@@ -1,65 +1,4 @@
-import { ThemedText } from '@/components/themed-text';
-import { BorderRadius, Spacing } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
-
-export interface SearchBarProps {
-  /** Current search value */
-  value: string;
-  /** Called when search value changes */
-  onChangeText: (text: string) => void;
-  /** Called when search is submitted */
-  onSubmit?: (text: string) => void;
-  /** Placeholder text */
-  placeholder?: string;
-  /** Loading state */
-  loading?: boolean;
-  /** Debounce delay in ms */
-  debounce?: number;
-  /** Show recent searches */
-  showRecent?: boolean;
-  /** Recent search items */
-  recentSearches?: string[];
-  /** Called when recent search is selected */
-  onRecentSelect?: (search: string) => void;
-  /** Called when recent search is removed */
-  onRecentRemove?: (search: string) => void;
-  /** Show suggestions */
-  showSuggestions?: boolean;
-  /** Suggestion items */
-  suggestions?: string[];
-  /** Called when suggestion is selected */
-  onSuggestionSelect?: (suggestion: string) => void;
-  /** Auto-focus on mount */
-  autoFocus?: boolean;
-  /** Accessibility label */
-  accessibilityLabel?: string;
-}
-
-export function SearchBar({
-  value,
-  onChangeText,
-  onSubmit,
-  placeholder = 'Search...',
-  loading = false,
-  debounce = 300,
-  showRecent = false,
-  recentSearches = [],
-  onRecentSelect,
-  onRecentRemove,
-  showSuggestions = false,
-  suggestions = [],
-  onSuggestionSelect,
-  autoFocus = false,
-  accessibilityLabel,
-}: SearchBarProps) {
-  const primaryColor = useThemeColor({}, 'primary');
-  const textColor = useThemeColor({}, 'text');
-  const secondaryTextColor = useThemeColor({}, 'text-muted');
-  const borderColor = useThemeColor({}, 'border');
-  const surfaceColor = useThemeColor({}, 'surface');
-  const shadowColor = useThemeColor({}, 'shadow');
+import { ThemedText } from '@/components/themed-text';\nimport { BorderRadius, Spacing } from '@/constants/layout';\nimport { useThemeColors } from '@/hooks/use-theme-colors';\nimport React, { useEffect, useState } from 'react';\nimport { ActivityIndicator, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';\n\nexport interface SearchBarProps {\n  /** Current search value */\n  value: string;\n  /** Called when search value changes */\n  onChangeText: (text: string) => void;\n  /** Called when search is submitted */\n  onSubmit?: (text: string) => void;\n  /** Placeholder text */\n  placeholder?: string;\n  /** Loading state */\n  loading?: boolean;\n  /** Debounce delay in ms */\n  debounce?: number;\n  /** Show recent searches */\n  showRecent?: boolean;\n  /** Recent search items */\n  recentSearches?: string[];\n  /** Called when recent search is selected */\n  onRecentSelect?: (search: string) => void;\n  /** Called when recent search is removed */\n  onRecentRemove?: (search: string) => void;\n  /** Show suggestions */\n  showSuggestions?: boolean;\n  /** Suggestion items */\n  suggestions?: string[];\n  /** Called when suggestion is selected */\n  onSuggestionSelect?: (suggestion: string) => void;\n  /** Auto-focus on mount */\n  autoFocus?: boolean;\n  /** Accessibility label */\n  accessibilityLabel?: string;\n}\n\nexport function SearchBar({\n  value,\n  onChangeText,\n  onSubmit,\n  placeholder = 'Search...',\n  loading = false,\n  debounce = 300,\n  showRecent = false,\n  recentSearches = [],\n  onRecentSelect,\n  onRecentRemove,\n  showSuggestions = false,\n  suggestions = [],\n  onSuggestionSelect,\n  autoFocus = false,\n  accessibilityLabel,\n}: SearchBarProps) {\n  const colors = useThemeColors();
 
   const [isFocused, setIsFocused] = useState(false);
 
@@ -103,24 +42,24 @@ export function SearchBar({
         style={[
           styles.searchContainer,
           {
-            backgroundColor: surfaceColor,
-            borderColor: isFocused ? primaryColor : borderColor,
+            backgroundColor: colors.surface,
+            borderColor: isFocused ? colors.primary : colors.border,
           },
         ]}
       >
         {/* Search Icon */}
-        <ThemedText style={[styles.searchIcon, { color: secondaryTextColor }]}>🔍</ThemedText>
+        <ThemedText style={[styles.searchIcon, { color: colors['text-muted'] }]}>🔍</ThemedText>
 
         {/* Input */}
         <TextInput
-          style={[styles.input, { color: textColor }]}
+          style={[styles.input, { color: colors.text }]}
           value={value}
           onChangeText={onChangeText}
           onSubmitEditing={handleSubmit}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
           placeholder={placeholder}
-          placeholderTextColor={secondaryTextColor}
+          placeholderTextColor={colors['text-muted']}
           returnKeyType="search"
           autoFocus={autoFocus}
           autoCapitalize="none"
@@ -131,12 +70,12 @@ export function SearchBar({
         />
 
         {/* Loading Indicator */}
-        {loading && <ActivityIndicator size="small" color={primaryColor} style={styles.loader} />}
+        {loading && <ActivityIndicator size="small" color={colors.primary} style={styles.loader} />}
 
         {/* Clear Button */}
         {value.length > 0 && !loading && (
           <Pressable onPress={handleClear} style={styles.clearButton} hitSlop={8} accessible={true} accessibilityRole="button" accessibilityLabel="Clear search">
-            <ThemedText style={[styles.clearIcon, { color: secondaryTextColor }]}>✕</ThemedText>
+            <ThemedText style={[styles.clearIcon, { color: colors['text-muted'] }]}>✕</ThemedText>
           </Pressable>
         )}
       </View>
@@ -147,27 +86,27 @@ export function SearchBar({
           style={[
             styles.dropdown,
             {
-              backgroundColor: surfaceColor,
-              borderColor,
-              shadowColor,
+              backgroundColor: colors.surface,
+              borderColor: colors.border,
+              shadowColor: colors.shadow,
             },
           ]}
         >
           <View style={styles.dropdownHeader}>
-            <ThemedText type="label" style={{ color: secondaryTextColor }}>
+            <ThemedText type="label" style={{ color: colors['text-muted'] }}>
               RECENT SEARCHES
             </ThemedText>
           </View>
           <ScrollView style={styles.dropdownScroll} keyboardShouldPersistTaps="handled">
             {recentSearches.map((search, index) => (
-              <View key={index} style={[styles.dropdownItem, { borderBottomColor: borderColor }]}>
+              <View key={index} style={[styles.dropdownItem, { borderBottomColor: colors.border }]}>
                 <Pressable style={styles.dropdownItemContent} onPress={() => handleRecentSelect(search)} accessible={true} accessibilityRole="button" accessibilityLabel={`Recent search: ${search}`}>
-                  <ThemedText style={[styles.dropdownIcon, { color: secondaryTextColor }]}>🕐</ThemedText>
-                  <ThemedText style={[styles.dropdownText, { color: textColor }]}>{search}</ThemedText>
+                  <ThemedText style={[styles.dropdownIcon, { color: colors['text-muted'] }]}>🕐</ThemedText>
+                  <ThemedText style={[styles.dropdownText, { color: colors.text }]}>{search}</ThemedText>
                 </Pressable>
                 {onRecentRemove && (
                   <Pressable onPress={() => onRecentRemove(search)} style={styles.removeButton} hitSlop={8} accessible={true} accessibilityRole="button" accessibilityLabel={`Remove ${search}`}>
-                    <ThemedText style={[styles.removeIcon, { color: secondaryTextColor }]}>✕</ThemedText>
+                    <ThemedText style={[styles.removeIcon, { color: colors['text-muted'] }]}>✕</ThemedText>
                   </Pressable>
                 )}
               </View>
@@ -182,9 +121,9 @@ export function SearchBar({
           style={[
             styles.dropdown,
             {
-              backgroundColor: surfaceColor,
-              borderColor,
-              shadowColor,
+              backgroundColor: colors.surface,
+              borderColor: colors.border,
+              shadowColor: colors.shadow,
             },
           ]}
         >
@@ -192,14 +131,14 @@ export function SearchBar({
             {suggestions.map((suggestion, index) => (
               <Pressable
                 key={index}
-                style={[styles.dropdownItem, { borderBottomColor: borderColor }]}
+                style={[styles.dropdownItem, { borderBottomColor: colors.border }]}
                 onPress={() => handleSuggestionSelect(suggestion)}
                 accessible={true}
                 accessibilityRole="button"
                 accessibilityLabel={`Suggestion: ${suggestion}`}
               >
-                <ThemedText style={[styles.dropdownIcon, { color: secondaryTextColor }]}>🔍</ThemedText>
-                <ThemedText style={[styles.dropdownText, { color: textColor }]}>{suggestion}</ThemedText>
+                <ThemedText style={[styles.dropdownIcon, { color: colors['text-muted'] }]}>🔍</ThemedText>
+                <ThemedText style={[styles.dropdownText, { color: colors.text }]}>{suggestion}</ThemedText>
               </Pressable>
             ))}
           </ScrollView>

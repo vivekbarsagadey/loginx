@@ -1,6 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
 import { Spacing, TouchTarget } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Feather } from '@expo/vector-icons';
 import type React from 'react';
 import { ActivityIndicator, StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
@@ -97,13 +97,11 @@ export function SettingItem({
   accessibilityLabel,
   accessibilityHint,
 }: SettingItemProps) {
-  const textColor = useThemeColor({}, 'text');
-  const textMutedColor = useThemeColor({}, 'text-muted');
-  const errorColor = useThemeColor({}, 'error');
+  const colors = useThemeColors();
 
   const isDanger = variant === 'danger';
-  const iconColor = isDanger ? errorColor : textColor;
-  const titleColor = isDanger ? errorColor : textColor;
+  const iconColor = isDanger ? colors.error : colors.text;
+  const titleColor = isDanger ? colors.error : colors.text;
 
   return (
     <TouchableOpacity
@@ -123,13 +121,19 @@ export function SettingItem({
       <View style={styles.content}>
         <ThemedText style={[styles.title, { color: titleColor }]}>{title}</ThemedText>
         {subtitle && (
-          <ThemedText type="caption" style={[styles.subtitle, { color: textMutedColor }]}>
+          <ThemedText type="caption" style={[styles.subtitle, { color: colors['text-muted'] }]}>
             {subtitle}
           </ThemedText>
         )}
       </View>
       <View style={styles.rightContainer}>
-        {loading ? <ActivityIndicator size="small" color={textMutedColor} /> : rightElement ? rightElement : showChevron ? <Feather name="chevron-right" size={24} color={textMutedColor} /> : null}
+        {loading ? (
+          <ActivityIndicator size="small" color={colors['text-muted']} />
+        ) : rightElement ? (
+          rightElement
+        ) : showChevron ? (
+          <Feather name="chevron-right" size={24} color={colors['text-muted']} />
+        ) : null}
       </View>
     </TouchableOpacity>
   );

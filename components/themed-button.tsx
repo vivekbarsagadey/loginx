@@ -1,6 +1,6 @@
 import { AccessibilityHints, AccessibilityRoles } from '@/constants/accessibility';
 import { Button as ButtonConstants, Spacing, TouchTarget } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import * as Haptics from 'expo-haptics';
 import { memo } from 'react';
 import { ActivityIndicator, type GestureResponderEvent, StyleSheet, type TextStyle, TouchableOpacity, type TouchableOpacityProps, type ViewStyle } from 'react-native';
@@ -20,11 +20,7 @@ export type ThemedButtonProps = TouchableOpacityProps & {
 };
 
 function ThemedButtonComponent({ title, style, variant = 'primary', disabled, loading, accessibilityLabel, accessibilityHint, size = 'comfortable', ...rest }: ThemedButtonProps) {
-  const primaryColor = useThemeColor({}, 'primary');
-  const onPrimaryColor = useThemeColor({}, 'on-primary');
-  const surfaceColor = useThemeColor({}, 'surface');
-  const borderColor = useThemeColor({}, 'border');
-  const errorColor = useThemeColor({}, 'error');
+  const colors = useThemeColors();
 
   const handlePress = (e: GestureResponderEvent) => {
     if (disabled || loading) {
@@ -47,19 +43,19 @@ function ThemedButtonComponent({ title, style, variant = 'primary', disabled, lo
 
   const buttonStyles: { [key: string]: ViewStyle } = {
     primary: {
-      backgroundColor: primaryColor,
+      backgroundColor: colors.primary,
       borderWidth: 1,
       borderColor: 'transparent',
     },
     secondary: {
       backgroundColor: 'transparent',
       borderWidth: 1,
-      borderColor: primaryColor,
+      borderColor: colors.primary,
     },
     tertiary: {
-      backgroundColor: surfaceColor,
+      backgroundColor: colors.surface,
       borderWidth: 1,
-      borderColor: borderColor,
+      borderColor: colors.border,
     },
     link: {
       backgroundColor: 'transparent',
@@ -68,7 +64,7 @@ function ThemedButtonComponent({ title, style, variant = 'primary', disabled, lo
       minHeight: TouchTarget.minimum,
     },
     destructive: {
-      backgroundColor: errorColor,
+      backgroundColor: colors.error,
       borderWidth: 1,
       borderColor: 'transparent',
     },
@@ -76,20 +72,20 @@ function ThemedButtonComponent({ title, style, variant = 'primary', disabled, lo
 
   const textStyles: { [key: string]: TextStyle } = {
     primary: {
-      color: onPrimaryColor,
+      color: colors['on-primary'],
     },
     secondary: {
-      color: primaryColor,
+      color: colors.primary,
     },
     tertiary: {
-      color: primaryColor,
+      color: colors.primary,
     },
     link: {
-      color: primaryColor,
+      color: colors.primary,
       textDecorationLine: 'underline',
     },
     destructive: {
-      color: onPrimaryColor,
+      color: colors['on-primary'],
     },
   };
 
@@ -117,7 +113,7 @@ function ThemedButtonComponent({ title, style, variant = 'primary', disabled, lo
       {...rest}
       onPress={handlePress}
     >
-      {loading ? <ActivityIndicator color={variant === 'primary' ? onPrimaryColor : primaryColor} /> : <ThemedText style={[styles.text, textStyle]}>{title}</ThemedText>}
+      {loading ? <ActivityIndicator color={variant === 'primary' ? colors['on-primary'] : colors.primary} /> : <ThemedText style={[styles.text, textStyle]}>{title}</ThemedText>}
     </TouchableOpacity>
   );
 }

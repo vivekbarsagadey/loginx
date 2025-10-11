@@ -1,4 +1,5 @@
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useThemeContext } from '@/hooks/use-theme-context';
 import { memo, useMemo } from 'react';
 import { ScrollView, type ScrollViewProps } from 'react-native';
 
@@ -9,7 +10,12 @@ export type ThemedScrollViewProps = ScrollViewProps & {
 };
 
 function ThemedScrollViewComponent({ style, lightColor, darkColor, variant = 'bg', ...otherProps }: ThemedScrollViewProps) {
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, variant);
+  const colors = useThemeColors();
+  const { resolvedTheme } = useThemeContext();
+
+  // Use custom colors if provided, otherwise use theme colors
+  const isLightTheme = !resolvedTheme.includes('dark');
+  const backgroundColor = (isLightTheme && lightColor) || (!isLightTheme && darkColor) || colors[variant];
 
   // Memoize style
   const scrollViewStyle = useMemo(() => [{ backgroundColor }, style], [backgroundColor, style]);

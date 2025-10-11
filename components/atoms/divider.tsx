@@ -1,4 +1,4 @@
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { View, type ViewStyle } from 'react-native';
 
 interface DividerProps {
@@ -36,8 +36,8 @@ interface DividerProps {
  * <Divider horizontal={false} style={{ height: 100 }} />
  */
 export function Divider({ thickness = 1, horizontal = true, color, style, accessibilityLabel = 'Divider' }: DividerProps) {
-  const borderColor = useThemeColor({}, 'border');
-  const dividerColor = color || borderColor;
+  const colors = useThemeColors();
+  const dividerColor = color || colors.border;
 
   const dividerStyle: ViewStyle = horizontal
     ? {

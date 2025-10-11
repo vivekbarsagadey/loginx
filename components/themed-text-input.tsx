@@ -1,6 +1,7 @@
 import { AccessibilityHints } from '@/constants/accessibility';
 import { InputField, Spacing } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useThemeContext } from '@/hooks/use-theme-context';
 import { memo, useState } from 'react';
 import { StyleSheet, TextInput, type TextInputProps } from 'react-native';
 
@@ -13,16 +14,18 @@ export type ThemedTextInputProps = TextInputProps & {
 
 function ThemedTextInputComponent({ style, lightColor, darkColor, accessibilityLabel, accessibilityHint, placeholder, placeholderTextColor, ...rest }: ThemedTextInputProps) {
   const [isFocused, setIsFocused] = useState(false);
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'surface');
-  const borderColor = useThemeColor({ light: lightColor, dark: darkColor }, 'border');
-  const primaryColor = useThemeColor({}, 'primary');
-  const defaultPlaceholderColor = useThemeColor({}, 'text-muted');
-  const placeholderColor = placeholderTextColor || defaultPlaceholderColor;
+  const colors = useThemeColors();
+  const { resolvedTheme } = useThemeContext();
+
+  const isLightTheme = !resolvedTheme.includes('dark');
+  const color = (isLightTheme && lightColor) || (!isLightTheme && darkColor) || colors.text;
+  const backgroundColor = (isLightTheme && lightColor) || (!isLightTheme && darkColor) || colors.surface;
+  const borderColor = (isLightTheme && lightColor) || (!isLightTheme && darkColor) || colors.border;
+  const placeholderColor = placeholderTextColor || colors['text-muted'];
 
   return (
     <TextInput
-      style={[{ color, backgroundColor, borderColor: isFocused ? primaryColor : borderColor }, styles.input, isFocused && styles.inputFocused, style]}
+      style={[{ color, backgroundColor, borderColor: isFocused ? colors.primary : borderColor }, styles.input, isFocused && styles.inputFocused, style]}
       placeholder={placeholder}
       placeholderTextColor={placeholderColor}
       accessible={true}

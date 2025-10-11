@@ -1,6 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
 import { gap, rounded } from '@/constants/style-utils';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
@@ -18,9 +18,7 @@ export interface RadioButtonProps {
 }
 
 export function RadioButton({ selected, onSelect, label, disabled = false, accessibilityLabel }: RadioButtonProps) {
-  const primaryColor = useThemeColor({}, 'primary');
-  const borderColor = useThemeColor({}, 'border');
-  const textColor = useThemeColor({}, 'text');
+  const colors = useThemeColors();
 
   return (
     <Pressable
@@ -36,7 +34,7 @@ export function RadioButton({ selected, onSelect, label, disabled = false, acces
         style={[
           styles.radio,
           {
-            borderColor: selected ? primaryColor : borderColor,
+            borderColor: selected ? colors.primary : colors.border,
             opacity: disabled ? 0.4 : 1,
           },
         ]}
@@ -46,7 +44,7 @@ export function RadioButton({ selected, onSelect, label, disabled = false, acces
             style={[
               styles.inner,
               {
-                backgroundColor: primaryColor,
+                backgroundColor: colors.primary,
               },
             ]}
           />
@@ -58,7 +56,7 @@ export function RadioButton({ selected, onSelect, label, disabled = false, acces
           style={[
             styles.label,
             {
-              color: textColor,
+              color: colors.text,
               opacity: disabled ? 0.4 : 1,
             },
           ]}

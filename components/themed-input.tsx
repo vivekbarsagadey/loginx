@@ -1,5 +1,5 @@
 import { BorderRadius, Typography } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import React, { forwardRef, useState } from 'react';
@@ -15,12 +15,7 @@ export type ThemedInputProps = TextInputProps & {
 };
 
 export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(({ label, helperText, errorMessage, style, containerStyle, showPasswordToggle, secureTextEntry, ...rest }, ref) => {
-  const textColor = useThemeColor({}, 'text');
-  const mutedColor = useThemeColor({}, 'text-muted');
-  const errorColor = useThemeColor({}, 'error');
-  const borderColor = useThemeColor({}, 'border');
-  const primaryColor = useThemeColor({}, 'primary');
-  const backgroundColor = useThemeColor({}, 'surface');
+  const colors = useThemeColors();
 
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -33,10 +28,10 @@ export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(({ label, hel
 
   const dynamicStyle: TextStyle = {};
   if (errorMessage) {
-    dynamicStyle.borderColor = errorColor;
+    dynamicStyle.borderColor = colors.error;
     dynamicStyle.borderWidth = 2;
   } else if (isFocused) {
-    dynamicStyle.borderColor = primaryColor;
+    dynamicStyle.borderColor = colors.primary;
     dynamicStyle.borderWidth = 2;
   }
 
@@ -47,12 +42,12 @@ export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(({ label, hel
 
   return (
     <View style={[styles.container, containerStyle]}>
-      {label && <Text style={[styles.label, { color: mutedColor }]}>{label}</Text>}
+      {label && <Text style={[styles.label, { color: colors['text-muted'] }]}>{label}</Text>}
       <View style={styles.inputContainer}>
         <TextInput
           ref={ref}
-          style={[styles.input, { color: textColor, backgroundColor, borderColor }, dynamicStyle, shouldShowToggle && styles.inputWithIcon, style]}
-          placeholderTextColor={mutedColor}
+          style={[styles.input, { color: colors.text, backgroundColor: colors.surface, borderColor: colors.border }, dynamicStyle, shouldShowToggle && styles.inputWithIcon, style]}
+          placeholderTextColor={colors['text-muted']}
           secureTextEntry={actualSecureTextEntry}
           onFocus={(e) => {
             setIsFocused(true);
@@ -73,12 +68,12 @@ export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(({ label, hel
             accessibilityHint="Toggle password visibility"
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <Ionicons name={isPasswordVisible ? 'eye-off-outline' : 'eye-outline'} size={24} color={mutedColor} />
+            <Ionicons name={isPasswordVisible ? 'eye-off-outline' : 'eye-outline'} size={24} color={colors['text-muted']} />
           </Pressable>
         )}
       </View>
-      {errorMessage && <Text style={[styles.helperText, { color: errorColor }]}>{errorMessage}</Text>}
-      {helperText && !errorMessage && <Text style={[styles.helperText, { color: mutedColor }]}>{helperText}</Text>}
+      {errorMessage && <Text style={[styles.helperText, { color: colors.error }]}>{errorMessage}</Text>}
+      {helperText && !errorMessage && <Text style={[styles.helperText, { color: colors['text-muted'] }]}>{helperText}</Text>}
     </View>
   );
 });

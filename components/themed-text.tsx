@@ -1,5 +1,6 @@
 import { Typography } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useThemeContext } from '@/hooks/use-theme-context';
 import { memo } from 'react';
 import { StyleSheet, Text, type TextProps } from 'react-native';
 
@@ -48,9 +49,16 @@ export type ThemedTextProps = TextProps & {
 };
 
 function ThemedTextComponent({ style, lightColor, darkColor, type = 'body', ...rest }: ThemedTextProps) {
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
-  const mutedColor = useThemeColor({ light: lightColor, dark: darkColor }, 'text-muted');
-  const inverseColor = useThemeColor({ light: lightColor, dark: darkColor }, 'inverse-text');
+  const colors = useThemeColors();
+  const { resolvedTheme } = useThemeContext();
+
+  // Determine if we're in a light or dark theme
+  const isLightTheme = !resolvedTheme.includes('dark');
+
+  // Use custom colors if provided, otherwise use theme colors
+  const color = (isLightTheme && lightColor) || (!isLightTheme && darkColor) || colors.text;
+  const mutedColor = (isLightTheme && lightColor) || (!isLightTheme && darkColor) || colors['text-muted'];
+  const inverseColor = (isLightTheme && lightColor) || (!isLightTheme && darkColor) || colors['inverse-text'];
 
   const colorForType = () => {
     switch (type) {
