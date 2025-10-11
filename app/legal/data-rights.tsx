@@ -1,6 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedInfoBox } from '@/components/themed-info-box';
+import { ThemedSurface } from '@/components/themed-surface';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing, Typography } from '@/constants/layout';
@@ -113,12 +114,7 @@ export default function DataRightsScreen() {
         </ThemedText>
 
         {rights.map((right, index) => (
-          <ThemedView
-            key={index}
-            style={[styles.rightItem, { backgroundColor: colors.surface, borderColor: colors.border }]}
-            accessible={true}
-            accessibilityLabel={`${right.title}. ${right.description}`}
-          >
+          <ThemedSurface key={index} elevation={1} style={styles.rightItem} accessible={true} accessibilityLabel={`${right.title}. ${right.description}`}>
             <ThemedView style={[styles.iconContainer, { backgroundColor: `${colors.primary}20` }]}>
               <Ionicons name={right.icon} size={24} color={colors.primary} />
             </ThemedView>
@@ -128,7 +124,7 @@ export default function DataRightsScreen() {
               </ThemedText>
               <ThemedText style={styles.rightDescription}>{right.description}</ThemedText>
             </ThemedView>
-          </ThemedView>
+          </ThemedSurface>
         ))}
       </ThemedView>
 

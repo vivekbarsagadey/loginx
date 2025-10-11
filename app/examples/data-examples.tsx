@@ -5,6 +5,7 @@
 
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedPressable } from '@/components/themed-pressable';
+import { ThemedSurface } from '@/components/themed-surface';
 import { ThemedText } from '@/components/themed-text';
 import { BorderRadius, Spacing } from '@/constants/layout';
 import { appFeatures, faqData, getRandomTip, getSampleNotifications, settingsMenu } from '@/data';
@@ -98,7 +99,7 @@ export default function DataExamplesScreen() {
           {expandedSection === 'notifications' && (
             <View>
               {notifications.slice(0, 3).map((notif) => (
-                <View key={notif.id} style={styles.card}>
+                <ThemedSurface key={notif.id} elevation={1} style={styles.card}>
                   <View style={styles.row}>
                     <View style={styles.badge}>
                       <ThemedText style={styles.badgeText}>{notif.type}</ThemedText>
@@ -111,7 +112,7 @@ export default function DataExamplesScreen() {
                   <ThemedText type="caption" style={{ color: colors['text-muted'] }}>
                     {notif.message}
                   </ThemedText>
-                </View>
+                </ThemedSurface>
               ))}
               <ThemedText type="caption" style={{ color: colors['text-muted'], textAlign: 'center' }}>
                 + {notifications.length - 3} more notifications
@@ -129,7 +130,7 @@ export default function DataExamplesScreen() {
           {expandedSection === 'features' && (
             <View>
               {securityFeatures.map((feature) => (
-                <View key={feature.id} style={styles.card}>
+                <ThemedSurface key={feature.id} elevation={1} style={styles.card}>
                   <View style={styles.row}>
                     <ThemedText type="h3">{feature.icon}</ThemedText>
                     <ThemedText type="subtitle1">{feature.title}</ThemedText>
@@ -137,7 +138,7 @@ export default function DataExamplesScreen() {
                   <ThemedText type="body" style={{ color: colors['text-muted'], marginTop: Spacing.xs }}>
                     {feature.description}
                   </ThemedText>
-                </View>
+                </ThemedSurface>
               ))}
             </View>
           )}

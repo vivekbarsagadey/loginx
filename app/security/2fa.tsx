@@ -1,6 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
+import { ThemedSurface } from '@/components/themed-surface';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
@@ -135,10 +136,10 @@ export default function TwoFactorAuthScreen() {
               {i18n.t('screens.security.twoFactor.biometric.title', { type: biometricTypeName })}
             </ThemedText>
             <ThemedText style={styles.description}>{i18n.t('screens.security.twoFactor.biometric.description', { type: biometricTypeName.toLowerCase() })}</ThemedText>
-            <View style={[styles.switchContainer, { backgroundColor: surfaceVariant }]}>
+            <ThemedSurface elevation={1} style={styles.switchContainer}>
               <ThemedText>{i18n.t('screens.security.twoFactor.biometric.enableLabel', { type: biometricTypeName })}</ThemedText>
               <Switch value={biometricEnabled} onValueChange={handleToggleBiometric} disabled={biometricLoading} />
-            </View>
+            </ThemedSurface>
           </ThemedView>
         )}
 

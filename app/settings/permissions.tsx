@@ -1,4 +1,5 @@
 import { ScreenContainer } from '@/components/screen-container';
+import { ThemedBadge } from '@/components/themed-badge';
 import { ThemedInfoBox } from '@/components/themed-info-box';
 import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
 import { ThemedPressable } from '@/components/themed-pressable';
@@ -91,11 +92,9 @@ function PermissionCard({ icon, title, description, granted, canAskAgain, onRequ
         </View>
       </View>
 
-      <View style={[styles.statusBadge, { backgroundColor: `${statusColor}10` }]}>
-        <ThemedText type="caption" style={[styles.statusText, { color: statusColor }]}>
-          {statusText}
-        </ThemedText>
-      </View>
+      <ThemedBadge variant={granted ? 'success' : canAskAgain ? 'info' : 'error'} size="md">
+        {statusText}
+      </ThemedBadge>
     </ThemedPressable>
   );
 }

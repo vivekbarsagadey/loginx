@@ -1,5 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
+import { ThemedBadge } from '@/components/themed-badge';
 import { ThemedInfoBox } from '@/components/themed-info-box';
+import { ThemedSurface } from '@/components/themed-surface';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Collapsible } from '@/components/ui/collapsible';
@@ -71,9 +73,10 @@ export default function CookiesScreen() {
         </ThemedText>
 
         {cookieTypes.map((cookie, index) => (
-          <ThemedView
+          <ThemedSurface
             key={index}
-            style={[styles.cookieItem, { backgroundColor: colors.surface, borderColor: colors.border }]}
+            elevation={1}
+            style={styles.cookieItem}
             accessible={true}
             accessibilityLabel={`${cookie.title}. ${cookie.required ? 'Required' : 'Optional'}. ${cookie.description}`}
           >
@@ -87,13 +90,13 @@ export default function CookiesScreen() {
                 </ThemedText>
               </ThemedView>
               {cookie.required && (
-                <ThemedView style={[styles.badge, { backgroundColor: colors.primary }]}>
-                  <ThemedText style={[styles.badgeText, { color: colors['on-primary'] }]}>{i18n.t('screens.legal.cookies.required')}</ThemedText>
-                </ThemedView>
+                <ThemedBadge variant="primary" size="sm">
+                  {i18n.t('screens.legal.cookies.required')}
+                </ThemedBadge>
               )}
             </ThemedView>
             <ThemedText style={styles.cookieDescription}>{cookie.description}</ThemedText>
-          </ThemedView>
+          </ThemedSurface>
         ))}
       </ThemedView>
 
