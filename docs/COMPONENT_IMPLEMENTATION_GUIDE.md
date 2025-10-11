@@ -157,6 +157,8 @@
 
 ### Phase 3: Complex Sections (Organisms)
 
+#### Status: ✅ Complete (7 of 7 completed)
+
 #### 1. **UserProfileHeader** - ✅ Completed
 
 - **Location**: `components/organisms/user-profile-header.tsx`
@@ -247,7 +249,171 @@
   />
   ```
 
-### Phase 4: Screen Refactoring
+#### 5. **CategorySelector** - ✅ Completed
+
+- **Location**: `components/organisms/category-selector.tsx`
+- **Purpose**: Grid of selectable categories
+- **Features**:
+  - Displays categories in a flexible grid
+  - Configurable number of columns
+  - Uses SelectableButton molecules
+  - Supports icons and labels
+  - Disabled state support
+- **Usage**:
+  ```tsx
+  <CategorySelector
+    categories={[
+      { id: "bug", labelKey: "Bug Report", icon: "alert-circle" },
+      { id: "feature", labelKey: "Feature Request", icon: "star" }
+    ]}
+    selectedCategory={selectedId}
+    onSelectCategory={(id) => setSelectedId(id)}
+  />
+  ```
+
+#### 6. **FeedbackFormSection** - ✅ Completed
+
+- **Location**: `components/organisms/feedback-form-section.tsx`
+- **Purpose**: Complete feedback form with subject, message, and rating
+- **Features**:
+  - Subject input with character counter
+  - Multi-line message input with character counter
+  - Star rating component
+  - Configurable max lengths
+  - Optional rating section
+  - Disabled state support
+- **Usage**:
+  ```tsx
+  <FeedbackFormSection
+    subject={subject}
+    message={message}
+    rating={rating}
+    onSubjectChange={setSubject}
+    onMessageChange={setMessage}
+    onRatingChange={setRating}
+  />
+  ```
+
+#### 7. **ProfileFormSection** - ✅ Completed
+
+- **Location**: `components/organisms/profile-form-section.tsx`
+- **Purpose**: Wrapper for profile form fields with consistent spacing
+- **Features**:
+  - Optional section title and subtitle
+  - Consistent spacing between form fields
+  - Optional divider
+  - Flexible children support
+- **Usage**:
+  ```tsx
+  <ProfileFormSection title="Personal Information">
+    <ThemedInput
+      label="First Name"
+      value={firstName}
+      onChangeText={setFirstName}
+    />
+    <ThemedInput
+      label="Last Name"
+      value={lastName}
+      onChangeText={setLastName}
+    />
+  </ProfileFormSection>
+  ```
+
+---
+
+### Phase 4: Page Templates
+
+#### Status: ✅ Complete (3 of 3 completed)
+
+#### 1. **ScreenWithHeader** - ✅ Completed
+
+- **Location**: `components/templates/screen-with-header.tsx`
+- **Purpose**: Consistent layout for screens with headers
+- **Features**:
+  - Title and optional subtitle
+  - Optional back button
+  - Optional right header action
+  - Scrollable or fixed content
+  - Safe area handling
+  - Multiple background variants
+- **Usage**:
+  ```tsx
+  <ScreenWithHeader
+    title="Profile"
+    subtitle="Manage your account"
+    showBackButton
+    onBackPress={router.back}
+    rightAction={{
+      icon: "edit",
+      onPress: handleEdit,
+      accessibilityLabel: "Edit profile"
+    }}
+  >
+    <YourContent />
+  </ScreenWithHeader>
+  ```
+
+#### 2. **FormScreen** - ✅ Completed
+
+- **Location**: `components/templates/form-screen.tsx`
+- **Purpose**: Consistent layout for form-based screens
+- **Features**:
+  - Title and description section
+  - Keyboard-avoiding view
+  - Scrollable form content
+  - Primary and secondary action buttons
+  - Loading states
+  - Optional footer content
+  - Safe area handling
+- **Usage**:
+  ```tsx
+  <FormScreen
+    title="Create Account"
+    description="Fill in your details to get started"
+    primaryActionLabel="Sign Up"
+    onPrimaryAction={handleSignUp}
+    primaryActionDisabled={!isValid}
+    secondaryActionLabel="Cancel"
+    onSecondaryAction={handleCancel}
+  >
+    <ThemedInput label="Email" value={email} onChangeText={setEmail} />
+    <ThemedInput label="Password" value={password} onChangeText={setPassword} />
+  </FormScreen>
+  ```
+
+#### 3. **ListScreen** - ✅ Completed
+
+- **Location**: `components/templates/list-screen.tsx`
+- **Purpose**: Consistent layout for list-based screens
+- **Features**:
+  - Loading state
+  - Error state with retry
+  - Empty state with custom content
+  - Pull-to-refresh support
+  - Optional title and header action
+  - Safe area handling
+  - Fully typed with FlatList props
+- **Usage**:
+  ```tsx
+  <ListScreen
+    title="Notifications"
+    data={notifications}
+    renderItem={({ item }) => <NotificationItem item={item} />}
+    keyExtractor={(item) => item.id}
+    loading={loading}
+    refreshing={refreshing}
+    onRefresh={handleRefresh}
+    emptyStateContent={{
+      icon: "bell-off",
+      title: "No notifications",
+      description: "You're all caught up!"
+    }}
+  />
+  ```
+
+---
+
+### Phase 5: Screen Refactoring
 
 #### 1. **Home Screen (index.tsx)** - ✅ Completed
 
