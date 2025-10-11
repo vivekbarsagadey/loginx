@@ -1,129 +1,40 @@
+import { AlternativeAuthMethods } from '@/components/auth/alternative-auth-methods';
+import { BiometricLoginSection } from '@/components/auth/biometric-login-section';
+import { LoginForm, type LoginFormData } from '@/components/auth/login-form';
+import { SecurityWarnings } from '@/components/auth/security-warnings';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
-import { ThemedInput } from '@/components/themed-input';
-import { ThemedText } from '@/components/themed-text';
 import { SocialSignInButtons } from '@/components/ui/social-sign-in-buttons';
-import { BorderRadius, Spacing, Typography } from '@/constants/layout';
-import { ValidationConstants, ValidationMessages } from '@/constants/validation';
+import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useSecuritySettings } from '@/hooks/use-security-settings';
 import { useSocialAuth } from '@/hooks/use-social-auth';
-import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { AuthMethod, isAuthMethodEnabled } from '@/utils/auth-methods';
 import { showError } from '@/utils/error';
 import { BiometricStorage } from '@/utils/secure-storage';
-import { showSuccess } from '@/utils/success';
-import { zodResolver } from '@hookform/resolvers/zod';
-import type { Href } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { StyleSheet, View } from 'react-native';
-import { z } from 'zod';
-
-// SECURITY: Use consolidated validation from constants
-const schema = z.object({
-  email: z.string().email(i18n.t('screens.login.validation.invalidEmail')),
-  password: z
-    .string()
-    .min(ValidationConstants.PASSWORD_MIN_LENGTH, i18n.t('screens.login.validation.passwordTooShort'))
-    .max(ValidationConstants.PASSWORD_MAX_LENGTH, ValidationMessages.PASSWORD_TOO_LONG)
-    .regex(ValidationConstants.PASSWORD_STRONG_REGEX, ValidationMessages.PASSWORD_WEAK),
-});
+import { useState } from 'react';
+import { StyleSheet } from 'react-native';
 
 export default function LoginScreen() {
   const { push, replace } = useHapticNavigation();
-  const [biometricAttempted, setBiometricAttempted] = useState(false);
   const { show: showAlert, AlertComponent } = useAlert();
   const { signInWithGoogle, signInWithApple, signInWithFacebook, loading: socialLoading } = useSocialAuth();
-  const { isAvailable: biometricAvailable, isEnabled: biometricEnabled, authenticateWithBiometric, biometricTypeName } = useBiometricAuth();
+  const { isEnabled: biometricEnabled } = useBiometricAuth();
 
   const { isAccountLocked, remainingAttempts, incrementLoginAttempts, resetLoginAttempts, getTimeUntilUnlock } = useSecuritySettings();
 
-  const warningColor = useThemeColor({}, 'warning');
-  const errorColor = useThemeColor({}, 'error');
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
-
-  // Auto-trigger biometric authentication on screen load
-  useEffect(() => {
-    const attemptBiometricAuth = async () => {
-      if (biometricAvailable && biometricEnabled && !biometricAttempted) {
-        setBiometricAttempted(true);
-        try {
-          // SECURITY: Biometric authentication with Firebase re-authentication
-          const success = await authenticateWithBiometric();
-          if (success) {
-            // Get saved credentials from secure storage
-            const { email } = await BiometricStorage.getBiometricCredentials();
-
-            if (email && auth.currentUser) {
-              // User is already authenticated via Firebase persistence
-              showSuccess('Success', 'Authenticated successfully with ' + biometricTypeName);
-              replace('/(tabs)');
-            } else if (email) {
-              // SECURITY: Re-authenticate with Firebase using stored email
-              // Note: For true biometric login, user must login with password first
-              // to establish Firebase session. Biometric only works for session restoration.
-              showError(new Error('Please login with your password first to enable biometric authentication'));
-            } else {
-              // No credentials saved - biometric enabled but no stored email
-              showError(new Error('Biometric authentication not set up. Please login with password first.'));
-            }
-          }
-        } catch (_error) {
-          // Silently fail to password login if biometric fails
-        }
-      }
-    };
-
-    // Small delay to allow UI to render first
-    const timer = setTimeout(attemptBiometricAuth, 100); // Small delay for UI stabilization
-    return () => clearTimeout(timer);
-  }, [biometricAvailable, biometricEnabled, biometricAttempted, authenticateWithBiometric, biometricTypeName, replace]);
-
-  const handleBiometricLogin = async () => {
-    try {
-      // SECURITY: Biometric authentication with Firebase session check
-      const success = await authenticateWithBiometric();
-      if (success) {
-        // Get saved credentials from secure storage
-        const { email } = await BiometricStorage.getBiometricCredentials();
-
-        if (email && auth.currentUser) {
-          // User is already authenticated via Firebase persistence
-          showSuccess('Success', 'Authenticated successfully with ' + biometricTypeName);
-          replace('/(tabs)');
-        } else if (email) {
-          // SECURITY: For true biometric login, user must have logged in with password first
-          showError(new Error('Please login with your password first to enable biometric authentication'));
-        } else {
-          // No credentials saved
-          showError(new Error('Biometric authentication not set up. Please login with password first.'));
-        }
-      }
-    } catch (error) {
-      showError(error);
-    }
-  };
-
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (data: z.infer<typeof schema>) => {
+  const handleLoginSuccess = () => {
+    replace('/(tabs)');
+  };
+
+  const onSubmit = async (data: LoginFormData) => {
     // Check if account is locked before attempting login
     if (isAccountLocked()) {
       const timeUntilUnlock = getTimeUntilUnlock();
@@ -143,20 +54,16 @@ export default function LoginScreen() {
       await resetLoginAttempts();
 
       // SECURITY: Save email for biometric re-authentication
-      // Only saves email (not password) for Firebase session restoration
       if (biometricEnabled) {
         await BiometricStorage.setBiometricCredentials(sanitizedEmail);
       }
 
       // Check if 2FA is enabled for this user
-      // Note: This is a simplified check. In production, 2FA status should be
-      // checked against the server/Firestore after successful authentication
       try {
         const { TwoFactorStorage } = await import('@/utils/secure-storage');
         const is2FAEnabled = await TwoFactorStorage.getTwoFactorEnabled();
 
         if (is2FAEnabled) {
-          // Redirect to 2FA verification screen
           push({
             pathname: '/(auth)/verify-2fa',
             params: { email: data.email },
@@ -185,136 +92,19 @@ export default function LoginScreen() {
     }
   };
 
+  const hasSocialAuth = isAuthMethodEnabled(AuthMethod.GOOGLE) || isAuthMethodEnabled(AuthMethod.APPLE) || isAuthMethodEnabled(AuthMethod.FACEBOOK);
+
   return (
     <ScreenContainer scrollable centerContent>
-      <ThemedText type="h1" style={styles.title}>
-        {i18n.t('screens.login.title')}
-      </ThemedText>
-      <ThemedText type="body" style={styles.subtitle}>
-        {i18n.t('screens.login.subtitle')}
-      </ThemedText>
+      <LoginForm onSubmit={onSubmit} loading={loading} disabled={isAccountLocked()} />
 
-      <Controller
-        control={control}
-        name="email"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <ThemedInput
-            placeholder={i18n.t('screens.login.emailPlaceholder')}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            errorMessage={errors.email?.message}
-            style={styles.input}
-          />
-        )}
-      />
+      <SecurityWarnings remainingAttempts={remainingAttempts} isAccountLocked={isAccountLocked()} timeUntilUnlock={getTimeUntilUnlock()} />
 
-      <Controller
-        control={control}
-        name="password"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <ThemedInput
-            placeholder={i18n.t('screens.login.passwordPlaceholder')}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            secureTextEntry
-            errorMessage={errors.password?.message}
-            style={styles.input}
-          />
-        )}
-      />
+      <AlternativeAuthMethods />
 
-      {/* Forgot Password Link - Only show if enabled and email/password auth is available */}
-      {isAuthMethodEnabled(AuthMethod.FORGOT_PASSWORD) && isAuthMethodEnabled(AuthMethod.EMAIL_PASSWORD) && (
-        <ThemedButton title={i18n.t('screens.login.forgotPassword')} variant="link" onPress={() => push('/(auth)/forgot-password')} style={styles.linkButton} />
-      )}
+      <BiometricLoginSection onSuccess={handleLoginSuccess} disabled={isAccountLocked()} />
 
-      <ThemedButton
-        title={loading ? i18n.t('screens.login.loggingIn') : i18n.t('screens.login.loginButton')}
-        onPress={handleSubmit(onSubmit)}
-        disabled={loading || isAccountLocked()}
-        loading={loading}
-        style={styles.button}
-      />
-
-      {/* Security Warning */}
-      {remainingAttempts < 5 && remainingAttempts > 0 && !isAccountLocked() && (
-        <View
-          style={[
-            styles.warningContainer,
-            {
-              backgroundColor: warningColor + '1A',
-              borderColor: warningColor + '4D',
-            },
-          ]}
-        >
-          <ThemedText style={[styles.warningText, { color: warningColor }]}>⚠️ {remainingAttempts} login attempts remaining</ThemedText>
-        </View>
-      )}
-
-      {/* Account Locked Warning */}
-      {isAccountLocked() && (
-        <View
-          style={[
-            styles.lockoutContainer,
-            {
-              backgroundColor: errorColor + '1A',
-              borderColor: errorColor + '4D',
-            },
-          ]}
-        >
-          <ThemedText style={[styles.lockoutText, { color: errorColor }]}>🔒 Account temporarily locked. Try again in {getTimeUntilUnlock()} minutes.</ThemedText>
-        </View>
-      )}
-
-      {/* Alternative Login Methods Section */}
-      {(isAuthMethodEnabled(AuthMethod.EMAIL_MAGIC_LINK) || isAuthMethodEnabled(AuthMethod.EMAIL_OTP) || isAuthMethodEnabled(AuthMethod.PHONE_OTP)) && (
-        <View style={styles.alternativeMethodsContainer}>
-          <ThemedText type="caption" style={styles.alternativeMethodsTitle}>
-            {i18n.t('screens.login.alternativeMethods', { defaultValue: 'Or sign in with' })}
-          </ThemedText>
-
-          {isAuthMethodEnabled(AuthMethod.EMAIL_MAGIC_LINK) && (
-            <ThemedButton
-              title={i18n.t('screens.login.magicLink', { defaultValue: 'Magic Link (Passwordless)' })}
-              variant="secondary"
-              onPress={() => push('/(auth)/passwordless-login' as Href)}
-              style={styles.alternativeButton}
-            />
-          )}
-
-          {isAuthMethodEnabled(AuthMethod.EMAIL_OTP) && (
-            <ThemedButton
-              title={i18n.t('screens.login.emailOtp', { defaultValue: 'Email OTP' })}
-              variant="secondary"
-              onPress={() => push('/(auth)/email-otp-login' as Href)}
-              style={styles.alternativeButton}
-            />
-          )}
-
-          {isAuthMethodEnabled(AuthMethod.PHONE_OTP) && (
-            <ThemedButton title={i18n.t('screens.login.phoneOtp', { defaultValue: 'Phone OTP' })} variant="secondary" onPress={() => push('/(auth)/verify-phone')} style={styles.alternativeButton} />
-          )}
-        </View>
-      )}
-
-      {/* Biometric Login Button - Only show if enabled */}
-      {isAuthMethodEnabled(AuthMethod.BIOMETRIC) && biometricAvailable && biometricEnabled && !isAccountLocked() && (
-        <ThemedButton
-          title={`Login with ${biometricTypeName}`}
-          onPress={handleBiometricLogin}
-          variant="secondary"
-          style={styles.biometricButton}
-          accessibilityLabel={`Login with ${biometricTypeName}`}
-          accessibilityHint={`Use your ${biometricTypeName.toLowerCase()} to login quickly`}
-        />
-      )}
-
-      {/* Social Sign-In - Only show if at least one social method is enabled */}
-      {(isAuthMethodEnabled(AuthMethod.GOOGLE) || isAuthMethodEnabled(AuthMethod.APPLE) || isAuthMethodEnabled(AuthMethod.FACEBOOK)) && (
+      {hasSocialAuth && (
         <SocialSignInButtons
           onGoogleSignIn={isAuthMethodEnabled(AuthMethod.GOOGLE) ? signInWithGoogle : undefined}
           onAppleSignIn={isAuthMethodEnabled(AuthMethod.APPLE) ? signInWithApple : undefined}
@@ -325,73 +115,13 @@ export default function LoginScreen() {
       )}
 
       <ThemedButton title={i18n.t('screens.login.noAccount')} variant="link" onPress={() => push('/(auth)/register')} style={styles.linkButton} />
+
       {AlertComponent}
     </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  title: {
-    textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
-  subtitle: {
-    textAlign: 'center',
-    marginBottom: Spacing.xl,
-  },
-  input: {
-    marginVertical: Spacing.sm,
-    width: '100%',
-    maxWidth: 500,
-    alignSelf: 'center',
-  },
-  button: {
-    marginTop: Spacing.xl,
-    width: '100%',
-    maxWidth: 500,
-    alignSelf: 'center',
-  },
-  biometricButton: {
-    marginTop: Spacing.md,
-    width: '100%',
-    maxWidth: 500,
-    alignSelf: 'center',
-  },
-  alternativeMethodsContainer: {
-    marginTop: Spacing.xl,
-    width: '100%',
-    maxWidth: 500,
-    alignSelf: 'center',
-  },
-  alternativeMethodsTitle: {
-    textAlign: 'center',
-    marginBottom: Spacing.md,
-    opacity: 0.7,
-  },
-  alternativeButton: {
-    marginTop: Spacing.sm,
-    width: '100%',
-  },
-  warningContainer: {
-    marginTop: Spacing.md,
-    padding: Spacing.md,
-    borderRadius: BorderRadius.sm,
-    borderWidth: 1,
-  },
-  warningText: {
-    textAlign: 'center',
-    fontSize: Typography.caption.fontSize,
-  },
-  lockoutContainer: {
-    marginTop: Spacing.md,
-    padding: Spacing.md,
-    borderRadius: BorderRadius.sm,
-    borderWidth: 1,
-  },
-  lockoutText: {
-    textAlign: 'center',
-    fontSize: Typography.caption.fontSize,
-  },
   linkButton: {
     marginTop: Spacing.md,
     alignSelf: 'center',
