@@ -58,6 +58,7 @@
     "format:md:prettier": "prettier --write \"**/*.md\"",
     "format:md:remark": "remark . --output",
     "type-check": "tsc --noEmit",
+    "test:dark-mode": "ts-node --project tsconfig.scripts.json scripts/test-dark-mode.ts",
     "validate": "pnpm lint && pnpm lint:md && pnpm lint:md:remark && pnpm format:check && pnpm type-check",
     "validate:fix": "pnpm lint:fix && pnpm lint:md:fix && pnpm lint:md:remark:fix && pnpm format"
   },

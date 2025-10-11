@@ -48,7 +48,25 @@ These files are actively maintained and essential for developers:
   - ESLint, Prettier, EditorConfig
   - VS Code configuration
 
-### 7. Code Quality & Refactoring
+### 7. Testing & Quality Assurance
+
+- **DARK_MODE_TESTING_GUIDE.md** - Comprehensive dark mode testing guide
+  - Manual and automated testing procedures
+  - WCAG contrast standards
+  - Theme system architecture
+  - Troubleshooting and best practices
+- **DARK_MODE_TEST_RESULTS.md** - Latest test results and findings
+  - Automated test output
+  - Known issues and fixes needed
+  - Progress tracking
+- **DARK_MODE_QUICK_REFERENCE.md** - Quick reference for dark mode
+  - Essential commands and patterns
+  - Common issues and solutions
+- **DARK_MODE_VISUAL_CHECKLIST.md** - Printable testing checklist
+  - Screen-by-screen testing guide
+  - Issue tracking template
+
+### 8. Code Quality & Refactoring
 
 - **CODE_CLEANUP_SUMMARY.md** - Code cleanup and organization
   - TODOs resolved
@@ -101,11 +119,12 @@ Historical documents moved to `docs/archive/`:
 ### When to Update Core Docs
 
 - **DESIGN_SYSTEM.md** - When adding new components or design patterns
-- **LOGIN_FLOW_DOCUMENTATION.md** - When adding new auth methods or flows
-- **REGISTRATION_FLOW.md** - When changing registration steps or features
+- **AUTHENTICATION_GUIDE.md** - When adding new auth methods or flows
 - **CONSTANTS_REFERENCE.md** - When adding new constants
 - **IMPLEMENTATION_STATUS.md** - When completing new features or fixing bugs
 - **LOCAL_FIRST_IMPLEMENTATION.md** - When changing data architecture
+- **DARK_MODE_TEST_RESULTS.md** - After running dark mode tests
+- **DARK_MODE_TESTING_GUIDE.md** - When updating testing procedures
 
 ### When to Archive
 
@@ -160,6 +179,10 @@ Historical documents moved to `docs/archive/`:
 | LINTING_FORMATTING.md         | ✅ Current | Oct 7, 2025  | Dev tools configured          |
 | FEATURES.md                   | ✅ Current | Oct 7, 2025  | All features documented       |
 | README.md                     | ✅ Current | Oct 2, 2025  | Comprehensive project guide   |
+| DARK_MODE_TESTING_GUIDE.md    | ✅ Current | Oct 11, 2025 | Complete testing guide        |
+| DARK_MODE_TEST_RESULTS.md     | ✅ Current | Oct 11, 2025 | Latest test results           |
+| DARK_MODE_QUICK_REFERENCE.md  | ✅ Current | Oct 11, 2025 | Quick reference guide         |
+| DARK_MODE_VISUAL_CHECKLIST.md | ✅ Current | Oct 11, 2025 | Printable testing checklist   |
 
 ### Next Review Scheduled
 
