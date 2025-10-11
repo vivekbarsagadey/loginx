@@ -44,6 +44,7 @@ export default function ForgotPasswordScreen() {
   const {
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
@@ -54,7 +55,8 @@ export default function ForgotPasswordScreen() {
 
   // Form submission with hook
   const { submit: handlePasswordReset, isSubmitting: loading } = useFormSubmit(
-    async (data: { email: string }) => {
+    async () => {
+      const data = getValues();
       // SECURITY: Sanitize email input before sending to Firebase
       const { sanitizeEmail } = await import('@/utils/sanitize');
       const sanitizedEmail = sanitizeEmail(data.email);
@@ -67,7 +69,7 @@ export default function ForgotPasswordScreen() {
     }
   );
 
-  const onSubmit = (data: { email: string }) => handlePasswordReset(data);
+  const onSubmit = () => handlePasswordReset();
 
   return (
     <ScreenContainer scrollable>

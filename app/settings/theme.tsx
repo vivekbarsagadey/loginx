@@ -26,18 +26,15 @@ export default function ThemeScreen() {
   const themeOptions = getThemeOptions(textColor);
 
   // Use loading state for theme changes
-  const { execute: handleThemeSelect } = useLoadingState(
-    async (theme: ThemePreference) => {
+  const { execute } = useLoadingState({ enableHaptics: false });
+
+  const handleThemeSelect = async (theme: ThemePreference) => {
+    await execute(async () => {
       await provideLightFeedback();
       await setThemePreference(theme);
       alert.show(i18n.t('success.profileUpdate.title'), i18n.t('screens.settings.theme.applied'));
-    },
-    {
-      errorTitle: 'Error',
-      errorMessage: 'Failed to save theme preference',
-      enableHaptics: false, // Already handled by provideLightFeedback
-    }
-  );
+    });
+  };
 
   return (
     <>

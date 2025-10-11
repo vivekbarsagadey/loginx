@@ -38,14 +38,15 @@ export default function NotificationsCenterScreen() {
   const { refreshCount } = useNotificationCount();
 
   // Use loading state hook for initial load
-  const { execute: loadNotifications, isLoading: loading } = useLoadingState(
-    async () => {
+  const { execute: executeLoad, loading } = useLoadingState({ showErrorAlert: false });
+
+  const loadNotifications = useCallback(async () => {
+    await executeLoad(async () => {
       const history = await getNotificationHistory();
       setNotifications(history);
       setRefreshing(false);
-    },
-    { showErrorAlert: false }
-  );
+    });
+  }, [executeLoad]);
 
   useEffect(() => {
     loadNotifications();

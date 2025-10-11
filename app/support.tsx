@@ -24,7 +24,11 @@ export default function SupportScreen() {
   }[];
 
   const handleEmailPress = () => {
-    openMailto(i18n.t('screens.support.contact.email'), 'Support Request - LoginX App', 'Please describe your issue below:\n\n');
+    openMailto({
+      to: i18n.t('screens.support.contact.email'),
+      subject: 'Support Request - LoginX App',
+      body: 'Please describe your issue below:\n\n',
+    });
   };
 
   const handleNavigateToPrivacy = () => {

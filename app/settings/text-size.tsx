@@ -2,7 +2,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { SelectableButton } from '@/components/ui/selectable-button';
 import { CommonText } from '@/constants/common-styles';
-import { Spacing } from '@/constants/layout';
+import { BorderRadius, Spacing, Typography } from '@/constants/layout';
 import { DEFAULT_TEXT_SIZE, getTextSizeOptions } from '@/data';
 import { useAlert } from '@/hooks/use-alert';
 import i18n from '@/i18n';
@@ -35,7 +35,7 @@ export default function TextSizeScreen() {
 
         <ThemedView style={styles.optionsContainer}>
           {sizeOptions.map((option) => (
-            <SelectableButton key={option.key} title={option.title} selected={selectedSize === option.key} onPress={() => handleSizeSelect(option.key)} variant="large" />
+            <SelectableButton key={option.key} label={option.title} isSelected={selectedSize === option.key} onPress={() => handleSizeSelect(option.key)} variant="large" />
           ))}
         </ThemedView>
 

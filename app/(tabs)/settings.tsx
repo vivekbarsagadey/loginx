@@ -18,7 +18,7 @@ import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { type Href, useRouter } from 'expo-router';
+import { type Href } from 'expo-router';
 import { deleteUser } from 'firebase/auth';
 import React, { useMemo } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -102,9 +102,20 @@ export default function SettingsScreen() {
     // Add haptic feedback for all interactions
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
-    if (item.href) {
+    if (item.type === 'link') {
       push(item.href as Href);
-    } else if (item.action) {
+    } else if (item.type === 'action') {
+      if (item.action === 'clearCache') {
+        handleClearCache();
+      }
+    } else if (item.type === 'danger') {
+      if (item.action === 'logout') {
+        handleLogout();
+      } else if (item.action === 'deleteAccount') {
+        handleDeleteAccount();
+      }
+    }
+  };
 
   const styles = React.useMemo(
     () =>

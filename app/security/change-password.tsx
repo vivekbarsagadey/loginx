@@ -12,8 +12,6 @@ import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
-import * as Haptics from 'expo-haptics';
-import { useRouter } from 'expo-router';
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
 import { useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
@@ -116,7 +114,7 @@ export default function ChangePasswordScreen() {
         throw new Error('No authenticated user found');
       }
 
-            // Step 1: Reauthenticate user with current password
+      // Step 1: Reauthenticate user with current password
       const credential = EmailAuthProvider.credential(user.email, currentPassword);
       await reauthenticateWithCredential(user, credential);
 
@@ -136,25 +134,6 @@ export default function ChangePasswordScreen() {
       errorTitle: i18n.t('screens.security.changePassword.error.title'),
     }
   );
-    } catch (error: unknown) {
-      console.error('[ChangePassword] Error changing password:', error);
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-
-      // Handle specific Firebase errors
-      const firebaseError = error as { code?: string };
-      if (firebaseError.code === 'auth/wrong-password') {
-        setCurrentPasswordError(i18n.t('screens.security.changePassword.errors.wrongPassword'));
-      } else if (firebaseError.code === 'auth/weak-password') {
-        setNewPasswordError(i18n.t('screens.security.changePassword.errors.weakPassword'));
-      } else if (firebaseError.code === 'auth/requires-recent-login') {
-        alert.show(i18n.t('screens.security.changePassword.errors.sessionExpired.title'), i18n.t('screens.security.changePassword.errors.sessionExpired.message'), [{ text: i18n.t('common.ok') }]);
-      } else {
-        showError(error);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [user, currentPassword, newPassword, confirmPassword, validatePassword, router, alert]);
 
   return (
     <>

@@ -23,18 +23,15 @@ export default function LanguageScreen() {
   const onPrimaryColor = useThemeColor({}, 'on-primary');
 
   // Use loading state for language changes
-  const { execute: handleLanguageSelect } = useLoadingState(
-    async (code: string) => {
+  const { execute } = useLoadingState({ enableHaptics: false });
+
+  const handleLanguageSelect = async (code: string) => {
+    await execute(async () => {
       await provideLightFeedback();
       await persistLanguage(code);
       alert.show('Success', `Language changed to ${languages.find((l) => l.code === code)?.name}`);
-    },
-    {
-      errorTitle: 'Error',
-      errorMessage: 'Failed to change language',
-      enableHaptics: false, // Already handled by provideLightFeedback
-    }
-  );
+    });
+  };
 
   return (
     <>
