@@ -1,9 +1,11 @@
 import { updateSetting } from '@/actions/setting.action';
 import { getUserProfile } from '@/actions/user.action';
 import { ScreenContainer } from '@/components/screen-container';
+import { ThemedListItem } from '@/components/themed-list-item';
+import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
 import { ThemedText } from '@/components/themed-text';
 import { CommonText } from '@/constants/common-styles';
-import { BorderRadius, IconSize, Spacing, Typography } from '@/constants/layout';
+import { Spacing } from '@/constants/layout';
 import { DEFAULT_NOTIFICATION_SETTINGS, getNotificationSettings } from '@/data';
 import { auth } from '@/firebase-config';
 import { useLanguage } from '@/hooks/use-language-provider';
@@ -11,18 +13,14 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import type { NotificationSettings } from '@/types/notification-settings';
 import { showError } from '@/utils/error';
-import { Feather } from '@expo/vector-icons';
-import type { ComponentProps } from 'react';
 import React, { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Switch, View } from 'react-native';
+import { StyleSheet, Switch, View } from 'react-native';
 
 export default function NotificationsScreen() {
   const user = auth.currentUser;
   const { language } = useLanguage();
   const borderColor = useThemeColor({}, 'border');
-  const backgroundColor = useThemeColor({}, 'bg');
   const tintColor = useThemeColor({}, 'primary');
-  const textMutedColor = useThemeColor({}, 'text-muted');
 
   const [settings, setSettings] = useState<NotificationSettings>(DEFAULT_NOTIFICATION_SETTINGS);
   const [loading, setLoading] = useState<Record<string, boolean>>({});
@@ -42,53 +40,13 @@ export default function NotificationsScreen() {
           marginBottom: Spacing.lg,
         },
         settingsContainer: {
-          borderRadius: BorderRadius.md,
-          overflow: 'hidden',
           borderWidth: 1,
           borderColor: borderColor,
-        },
-        settingRow: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          padding: Spacing.md,
-          borderBottomWidth: 1,
-          borderBottomColor: borderColor,
-          backgroundColor: backgroundColor,
-        },
-        settingRowLast: {
-          borderBottomWidth: 0,
-        },
-        iconContainer: {
-          width: Spacing.xxl, // 40px
-          height: Spacing.xxl, // 40px
-          borderRadius: Spacing.lg - Spacing.xs, // 20px
-          backgroundColor: tintColor + '20',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginRight: Spacing.md,
-        },
-        settingInfo: {
-          flex: 1,
-          marginRight: Spacing.md,
-        },
-        settingTitle: {
-          fontWeight: Typography.bodyBold.fontWeight,
-          marginBottom: Spacing.xs,
-        },
-        settingDescription: {
-          color: textMutedColor,
-        },
-        loadingContainer: {
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: Spacing.lg,
-        },
-        loadingText: {
-          marginTop: Spacing.md,
+          borderRadius: 12,
+          overflow: 'hidden',
         },
       }),
-    [borderColor, backgroundColor, tintColor, textMutedColor]
+    [borderColor]
   );
 
   useEffect(() => {
@@ -134,8 +92,7 @@ export default function NotificationsScreen() {
   if (initialLoading) {
     return (
       <ScreenContainer centerContent useSafeArea={false}>
-        <ActivityIndicator size="large" color={tintColor} />
-        <ThemedText style={styles.loadingText}>{i18n.t('screens.settings.notifications.loading')}</ThemedText>
+        <ThemedLoadingSpinner size="large" text={i18n.t('screens.settings.notifications.loading')} />
       </ScreenContainer>
     );
   }
@@ -151,29 +108,28 @@ export default function NotificationsScreen() {
 
       <View style={styles.settingsContainer}>
         {notificationSettings.map((setting, index) => (
-          <View key={setting.key} style={[styles.settingRow, index === notificationSettings.length - 1 && styles.settingRowLast]}>
-            <View style={styles.iconContainer}>
-              <Feather name={setting.icon as ComponentProps<typeof Feather>['name']} size={IconSize.md} color={tintColor} />
-            </View>
-            <View style={styles.settingInfo}>
-              <ThemedText style={styles.settingTitle}>{setting.title}</ThemedText>
-              <ThemedText type="caption" style={styles.settingDescription}>
-                {setting.description}
-              </ThemedText>
-            </View>
-            {loading[setting.key] ? (
-              <ActivityIndicator />
-            ) : (
-              <Switch
-                value={settings[setting.key]}
-                onValueChange={(value) => handleToggle(setting.key, value)}
-                trackColor={{
-                  false: borderColor,
-                  true: tintColor,
-                }}
-              />
-            )}
-          </View>
+          <ThemedListItem
+            key={setting.key}
+            icon={setting.icon}
+            title={setting.title}
+            description={setting.description}
+            showChevron={false}
+            rightElement={
+              loading[setting.key] ? (
+                <ThemedLoadingSpinner size="small" />
+              ) : (
+                <Switch
+                  value={settings[setting.key]}
+                  onValueChange={(value) => handleToggle(setting.key, value)}
+                  trackColor={{
+                    false: borderColor,
+                    true: tintColor,
+                  }}
+                />
+              )
+            }
+            showDivider={index < notificationSettings.length - 1}
+          />
         ))}
       </View>
     </ScreenContainer>

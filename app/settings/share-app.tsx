@@ -13,7 +13,7 @@ import * as Haptics from 'expo-haptics';
 import * as Linking from 'expo-linking';
 import { Stack } from 'expo-router';
 import React from 'react';
-import { Platform, Share, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Platform, Share, StyleSheet, View } from 'react-native';
 
 /**
  * Share App / Invite Friends Screen
@@ -310,7 +310,7 @@ export default function ShareAppScreen() {
             <ThemedText style={styles.referralLink} numberOfLines={1} accessibilityLabel="Your referral link">
               {referralLink}
             </ThemedText>
-            <TouchableOpacity
+            <ThemedPressable
               style={styles.copyButton}
               onPress={handleCopyLink}
               accessibilityRole="button"
@@ -318,7 +318,7 @@ export default function ShareAppScreen() {
               accessibilityHint="Copies your referral link to the clipboard"
             >
               <ThemedText style={styles.copyButtonText}>{i18n.t('shareApp.copy', { defaultValue: 'Copy' })}</ThemedText>
-            </TouchableOpacity>
+            </ThemedPressable>
           </View>
         </Card>
 
@@ -329,7 +329,7 @@ export default function ShareAppScreen() {
           </ThemedText>
           <Card elevation={1} noPadding>
             {shareOptions.map((option, index) => (
-              <TouchableOpacity
+              <ThemedPressable
                 key={option.id}
                 style={[styles.shareOption, index === shareOptions.length - 1 && styles.shareOptionLast]}
                 onPress={option.onPress}
@@ -350,7 +350,7 @@ export default function ShareAppScreen() {
                   <ThemedText style={styles.shareOptionSubtitle}>{option.subtitle}</ThemedText>
                 </View>
                 <Feather name="chevron-right" size={IconSize.lg} color={textMutedColor} />
-              </TouchableOpacity>
+              </ThemedPressable>
             ))}
           </Card>
         </View>

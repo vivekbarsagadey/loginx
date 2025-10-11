@@ -1,4 +1,6 @@
 import { ScreenContainer } from '@/components/screen-container';
+import { ThemedInfoBox } from '@/components/themed-info-box';
+import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
 import { ThemedText } from '@/components/themed-text';
 import { BorderRadius, IconSize, Spacing, Typography } from '@/constants/layout';
 import { getPermissions } from '@/data';
@@ -10,7 +12,7 @@ import type { PermissionCardProps } from '@/types/permission';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import React from 'react';
-import { ActivityIndicator, Linking, Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Linking, Platform, StyleSheet, View } from 'react-native';
 
 function PermissionCard({ icon, title, description, granted, canAskAgain, onRequest, loading, alert }: PermissionCardProps) {
   const primaryColor = useThemeColor({}, 'primary');
@@ -54,7 +56,7 @@ function PermissionCard({ icon, title, description, granted, canAskAgain, onRequ
   const statusText = granted ? i18n.t('settings.permissions.status.granted') : canAskAgain ? i18n.t('settings.permissions.status.notGranted') : i18n.t('settings.permissions.status.denied');
 
   return (
-    <Pressable
+    <ThemedPressable
       onPress={handlePress}
       style={[
         styles.card,
@@ -84,11 +86,7 @@ function PermissionCard({ icon, title, description, granted, canAskAgain, onRequ
         </View>
 
         <View style={styles.statusContainer}>
-          {loading ? (
-            <ActivityIndicator size="small" color={primaryColor} />
-          ) : (
-            <Ionicons name={granted ? 'checkmark-circle' : canAskAgain ? 'help-circle' : 'close-circle'} size={IconSize.lg} color={statusColor} />
-          )}
+          {loading ? <ThemedLoadingSpinner size="small" /> : <Ionicons name={granted ? 'checkmark-circle' : canAskAgain ? 'help-circle' : 'close-circle'} size={IconSize.lg} color={statusColor} />}
         </View>
       </View>
 
@@ -97,7 +95,7 @@ function PermissionCard({ icon, title, description, granted, canAskAgain, onRequ
           {statusText}
         </ThemedText>
       </View>
-    </Pressable>
+    </ThemedPressable>
   );
 }
 
@@ -121,8 +119,7 @@ export default function PermissionsScreen() {
     return (
       <ScreenContainer scrollable style={{ backgroundColor: bgColor }}>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color={primaryColor} />
-          <ThemedText style={{ marginTop: Spacing.md }}>Loading permissions...</ThemedText>
+          <ThemedLoadingSpinner size="large" text="Loading permissions..." />
         </View>
       </ScreenContainer>
     );
@@ -185,7 +182,7 @@ export default function PermissionsScreen() {
       </View>
 
       {/* Refresh Button */}
-      <Pressable
+      <ThemedPressable
         onPress={handleRefreshAll}
         style={[styles.refreshButton, { backgroundColor: `${primaryColor}10` }]}
         accessibilityRole="button"
@@ -195,15 +192,10 @@ export default function PermissionsScreen() {
         <ThemedText type="body" style={{ color: primaryColor }}>
           {i18n.t('settings.permissions.refresh')}
         </ThemedText>
-      </Pressable>
+      </ThemedPressable>
 
       {/* Info Note */}
-      <View style={[styles.infoBox, { backgroundColor: `${primaryColor}10`, borderColor: `${primaryColor}30` }]}>
-        <Ionicons name="information-circle" size={20} color={primaryColor} />
-        <ThemedText type="caption" style={[styles.infoText, { color: mutedColor }]}>
-          {i18n.t('settings.permissions.info')}
-        </ThemedText>
-      </View>
+      <ThemedInfoBox variant="info" message={i18n.t('settings.permissions.info')} />
       {alert.AlertComponent}
     </ScreenContainer>
   );
@@ -288,16 +280,5 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     borderRadius: BorderRadius.md,
     marginBottom: Spacing.lg,
-  },
-  infoBox: {
-    flexDirection: 'row',
-    padding: Spacing.md,
-    borderRadius: BorderRadius.md,
-    gap: Spacing.sm,
-    borderWidth: 1,
-  },
-  infoText: {
-    flex: 1,
-    lineHeight: Typography.bodySmall.lineHeight,
   },
 });

@@ -9,7 +9,7 @@ import i18n from '@/i18n';
 import { Feather } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 
 export default function AboutUsScreen() {
   const primaryColor = useThemeColor({}, 'primary');
@@ -70,21 +70,6 @@ export default function AboutUsScreen() {
           color: textMutedColor,
         },
         infoValue: CommonLists.infoValue,
-        contactRow: {
-          ...CommonLists.infoRow,
-          borderBottomColor: borderColor,
-        },
-        contactRowLast: CommonLists.infoRowLast,
-        contactIcon: CommonLists.infoIconContainer,
-        contactContent: CommonLists.infoContent,
-        contactLabel: {
-          ...CommonLists.infoLabel,
-          color: textMutedColor,
-        },
-        contactValue: {
-          ...CommonLists.infoValue,
-          color: primaryColor,
-        },
         description: {
           textAlign: 'center',
           color: textMutedColor,
@@ -158,16 +143,15 @@ export default function AboutUsScreen() {
         </ThemedText>
         <Card elevation={1} noPadding>
           {contactItems.map((item, index) => (
-            <TouchableOpacity key={item.label} style={[styles.contactRow, index === contactItems.length - 1 && styles.contactRowLast]} onPress={item.action}>
-              <View style={styles.contactIcon}>
-                <Feather name={item.icon} size={IconSize.md} color={primaryColor} />
-              </View>
-              <View style={styles.contactContent}>
-                <ThemedText style={styles.contactLabel}>{item.label}</ThemedText>
-                <ThemedText style={styles.contactValue}>{item.value}</ThemedText>
-              </View>
-              <Feather name="external-link" size={IconSize.sm} color={textMutedColor} />
-            </TouchableOpacity>
+            <ThemedListItem
+              key={item.label}
+              title={item.label}
+              description={item.value}
+              icon={item.icon}
+              rightIcon="external-link"
+              onPress={item.action}
+              showDivider={index < contactItems.length - 1}
+            />
           ))}
         </Card>
       </View>

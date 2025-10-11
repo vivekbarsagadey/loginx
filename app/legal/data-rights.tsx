@@ -1,5 +1,6 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
+import { ThemedInfoBox } from '@/components/themed-info-box';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing, Typography } from '@/constants/layout';
@@ -7,7 +8,6 @@ import { useAlert } from '@/hooks/use-alert';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
-import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useEffect } from 'react';
 import { AccessibilityInfo, Linking, StyleSheet } from 'react-native';
@@ -163,10 +163,11 @@ export default function DataRightsScreen() {
       </ThemedView>
 
       {/* Response Time */}
-      <ThemedView style={[styles.infoBox, { backgroundColor: colors.surface, borderColor: colors.border }]} accessible={true} accessibilityLabel={i18n.t('screens.legal.dataRights.responseTime')}>
-        <Ionicons name="time" size={20} color={colors.primary} />
-        <ThemedText style={styles.infoText}>{i18n.t('screens.legal.dataRights.responseTime')}</ThemedText>
-      </ThemedView>
+      <ThemedInfoBox 
+        variant="info" 
+        message={i18n.t('screens.legal.dataRights.responseTime')} 
+        style={{ marginTop: Spacing.lg }}
+      />
       {alert.AlertComponent}
     </ScreenContainer>
   );
@@ -213,17 +214,8 @@ const styles = StyleSheet.create({
   actionButton: {
     marginBottom: Spacing.md,
   },
-  infoBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: Spacing.md,
-    borderRadius: 12,
-    borderWidth: 1,
-    gap: Spacing.sm,
-    marginTop: Spacing.md,
+  paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
   },
-  infoText: {
-    flex: 1,
-    opacity: 0.8,
-  },
+});
 });

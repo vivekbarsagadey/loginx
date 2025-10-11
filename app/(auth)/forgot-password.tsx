@@ -1,6 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
+import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
@@ -13,7 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -97,7 +98,7 @@ export default function ForgotPasswordScreen() {
       />
 
       <ThemedButton title={loading ? i18n.t('forgotPassword.sendingButton') : i18n.t('forgotPassword.sendButton')} onPress={handleSubmit(onSubmit)} disabled={loading} style={styles.submitButton} />
-      {loading && <ActivityIndicator style={styles.loading} />}
+      {loading && <ThemedLoadingSpinner size="large" overlay style={styles.loading} />}
 
       <ThemedButton title={i18n.t('forgotPassword.backToLogin')} variant="link" onPress={() => push('/(auth)/login')} />
       {AlertComponent}

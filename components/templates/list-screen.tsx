@@ -1,10 +1,12 @@
+import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
+import { ThemedPressable } from '@/components/themed-pressable';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Feather } from '@expo/vector-icons';
 import type { ComponentProps, ReactNode } from 'react';
-import { ActivityIndicator, FlatList, type FlatListProps, Platform, Pressable, RefreshControl, StyleSheet, View } from 'react-native';
+import { FlatList, type FlatListProps, Platform, RefreshControl, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface ListScreenProps<T> extends Partial<FlatListProps<T>> {
@@ -114,10 +116,7 @@ export function ListScreen<T>({
     return (
       <ThemedView style={[styles.container, { backgroundColor }]}>
         <View style={styles.centerContent}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <ThemedText type="body" style={{ color: colors['text-muted'], marginTop: Spacing.md }}>
-            Loading...
-          </ThemedText>
+          <ThemedLoadingSpinner size="large" text="Loading..." />
         </View>
       </ThemedView>
     );
@@ -135,9 +134,9 @@ export function ListScreen<T>({
           <ThemedText type="body" style={[styles.stateDescription, { color: colors['text-muted'] }]}>
             {error.message || 'An unexpected error occurred'}
           </ThemedText>
-          <Pressable onPress={onRetry} style={[styles.actionButton, { backgroundColor: colors.primary }]} accessibilityRole="button" accessibilityLabel="Try again">
+          <ThemedPressable onPress={onRetry} style={[styles.actionButton, { backgroundColor: colors.primary }]} accessibilityRole="button" accessibilityLabel="Try again">
             <ThemedText style={styles.actionButtonText}>Try Again</ThemedText>
-          </Pressable>
+          </ThemedPressable>
         </View>
       </ThemedView>
     );
@@ -158,14 +157,14 @@ export function ListScreen<T>({
             </ThemedText>
           )}
           {emptyStateContent.actionLabel && emptyStateContent.onAction && (
-            <Pressable
+            <ThemedPressable
               onPress={emptyStateContent.onAction}
               style={[styles.actionButton, { backgroundColor: colors.primary }]}
               accessibilityRole="button"
               accessibilityLabel={emptyStateContent.actionLabel}
             >
               <ThemedText style={styles.actionButtonText}>{emptyStateContent.actionLabel}</ThemedText>
-            </Pressable>
+            </ThemedPressable>
           )}
         </View>
       </ThemedView>
@@ -188,9 +187,9 @@ export function ListScreen<T>({
         >
           <ThemedText type="title">{title}</ThemedText>
           {headerAction && (
-            <Pressable onPress={headerAction.onPress} style={styles.headerButton} accessibilityRole="button" accessibilityLabel={headerAction.accessibilityLabel}>
+            <ThemedPressable onPress={headerAction.onPress} style={styles.headerButton} accessibilityRole="button" accessibilityLabel={headerAction.accessibilityLabel}>
               <Feather name={headerAction.icon} size={24} color={colors.text} />
-            </Pressable>
+            </ThemedPressable>
           )}
         </View>
       )}

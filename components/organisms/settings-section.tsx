@@ -1,8 +1,8 @@
 import { SectionHeader } from '@/components/molecules/section-header';
 import { SettingItem } from '@/components/molecules/setting-item';
+import { ThemedDivider } from '@/components/themed-divider';
 import { Card } from '@/components/ui/card';
 import { Spacing } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
 import type React from 'react';
 import { StyleSheet, View, type ViewStyle } from 'react-native';
 
@@ -59,8 +59,6 @@ interface SettingsSectionProps {
  * />
  */
 export function SettingsSection({ title, subtitle, items, onItemPress, style, elevation = 1 }: SettingsSectionProps) {
-  const borderColor = useThemeColor({}, 'border');
-
   return (
     <View style={[styles.container, style]}>
       {title && <SectionHeader title={title} subtitle={subtitle} style={styles.header} />}
@@ -76,7 +74,11 @@ export function SettingsSection({ title, subtitle, items, onItemPress, style, el
               showChevron={item.type === 'link' || item.type === 'action' || item.type === 'danger'}
               rightElement={item.rightElement}
             />
-            {index < items.length - 1 && <View style={[styles.divider, { backgroundColor: borderColor }]} />}
+            {index < items.length - 1 && (
+              <View style={{ marginLeft: Spacing.md + 24 + Spacing.md }}>
+                <ThemedDivider spacing="sm" />
+              </View>
+            )}
           </View>
         ))}
       </Card>
@@ -90,9 +92,5 @@ const styles = StyleSheet.create({
   },
   header: {
     marginBottom: Spacing.sm,
-  },
-  divider: {
-    height: 1,
-    marginLeft: Spacing.md + 24 + Spacing.md, // Align with text after icon
   },
 });

@@ -1,3 +1,4 @@
+import { ThemedPressable } from '@/components/themed-pressable';
 import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -5,7 +6,7 @@ import { BorderRadius, Spacing } from '@/constants/layout';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Feather } from '@expo/vector-icons';
 import type { ComponentProps, ReactNode } from 'react';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface ScreenWithHeaderProps {
@@ -104,9 +105,9 @@ export function ScreenWithHeader({
         {/* Left Action (Back Button) */}
         <View style={styles.headerLeft}>
           {showBackButton && onBackPress && (
-            <Pressable onPress={onBackPress} style={styles.headerButton} accessibilityRole="button" accessibilityLabel="Go back">
+            <ThemedPressable onPress={onBackPress} style={styles.headerButton} accessibilityRole="button" accessibilityLabel="Go back">
               <Feather name="arrow-left" size={24} color={colors.text} />
-            </Pressable>
+            </ThemedPressable>
           )}
         </View>
 
@@ -125,9 +126,9 @@ export function ScreenWithHeader({
         {/* Right Action */}
         <View style={styles.headerRight}>
           {rightAction && (
-            <Pressable onPress={rightAction.onPress} style={styles.headerButton} accessibilityRole="button" accessibilityLabel={rightAction.accessibilityLabel}>
+            <ThemedPressable onPress={rightAction.onPress} style={styles.headerButton} accessibilityRole="button" accessibilityLabel={rightAction.accessibilityLabel}>
               <Feather name={rightAction.icon} size={24} color={colors.text} />
-            </Pressable>
+            </ThemedPressable>
           )}
         </View>
       </View>

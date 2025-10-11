@@ -1,4 +1,5 @@
 import { ThemedInput } from '@/components/themed-input';
+import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { PasswordStrengthMeter } from '@/components/ui/password-strength-meter';
@@ -9,7 +10,7 @@ import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from 'react';
 import { Controller, type FieldErrors, useFormContext } from 'react-hook-form';
-import { ActivityIndicator, StyleSheet, type TextInput, View } from 'react-native';
+import { StyleSheet, type TextInput, View } from 'react-native';
 
 interface FormData {
   email: string;
@@ -83,7 +84,7 @@ export default function RegisterStep2({ errors }: { errors: FieldErrors<FormData
               />
               {emailStatus === 'checking' && (
                 <View style={styles.statusIcon}>
-                  <ActivityIndicator size="small" color={mutedColor} />
+                  <ThemedLoadingSpinner size="small" />
                 </View>
               )}
               {emailStatus === 'available' && !errors.email && (

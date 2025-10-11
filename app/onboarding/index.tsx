@@ -4,7 +4,7 @@ import i18n from '@/i18n';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { AccessibilityInfo, type FlatList, Platform, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { AccessibilityInfo, type FlatList, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Animated, { Extrapolation, interpolate, runOnJS, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -261,9 +261,9 @@ export default function Onboarding() {
   return (
     <ThemedView style={styles.container}>
       <Animated.View style={[styles.skipButton, { top: top + Spacing.md }, skipButtonAnimatedStyle]}>
-        <Pressable onPress={skip} style={styles.skipButtonTouchable}>
+        <ThemedPressable onPress={skip} style={styles.skipButtonTouchable}>
           <ThemedText type="muted">{i18n.t('onb.cta.skip')} </ThemedText>
-        </Pressable>
+        </ThemedPressable>
       </Animated.View>
 
       <Animated.View style={[styles.slideContainer, slideContainerStyle]}>
@@ -348,15 +348,15 @@ export default function Onboarding() {
         </View>
         <View style={styles.buttonContainer}>
           {i > 0 && (
-            <Pressable onPress={back} style={[styles.backButton, { backgroundColor: colors.surface }]}>
+            <ThemedPressable onPress={back} style={[styles.backButton, { backgroundColor: colors.surface }]}>
               <ThemedText style={styles.buttonText}>{i18n.t('onb.cta.back')}</ThemedText>
-            </Pressable>
+            </ThemedPressable>
           )}
-          <Pressable onPress={next} style={[styles.nextButton, { backgroundColor: colors.primary, flex: i > 0 ? 2 : 1 }]}>
+          <ThemedPressable onPress={next} style={[styles.nextButton, { backgroundColor: colors.primary, flex: i > 0 ? 2 : 1 }]}>
             <ThemedText type="inverse" style={styles.buttonText}>
               {i < SLIDES.length - 1 ? i18n.t('onb.cta.next') : i18n.t('onb.cta.start')}
             </ThemedText>
-          </Pressable>
+          </ThemedPressable>
         </View>
       </ThemedView>
     </ThemedView>

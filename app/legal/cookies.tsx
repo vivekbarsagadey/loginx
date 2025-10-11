@@ -1,11 +1,11 @@
 import { ScreenContainer } from '@/components/screen-container';
+import { ThemedInfoBox } from '@/components/themed-info-box';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Collapsible } from '@/components/ui/collapsible';
 import { Spacing, Typography } from '@/constants/layout';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
-import { Ionicons } from '@expo/vector-icons';
 import { useEffect } from 'react';
 import { AccessibilityInfo, StyleSheet } from 'react-native';
 
@@ -132,10 +132,7 @@ export default function CookiesScreen() {
       </ThemedView>
 
       {/* Contact */}
-      <ThemedView style={[styles.infoBox, { backgroundColor: colors.surface, borderColor: colors.border }]} accessible={true}>
-        <Ionicons name="help-circle" size={20} color={colors.primary} />
-        <ThemedText style={styles.infoText}>{i18n.t('screens.legal.cookies.contact')}</ThemedText>
-      </ThemedView>
+      <ThemedInfoBox variant="info" message={i18n.t('screens.legal.cookies.contact')} style={{ marginTop: Spacing.lg }} />
     </ScreenContainer>
   );
 }
@@ -203,18 +200,5 @@ const styles = StyleSheet.create({
   answer: {
     lineHeight: Typography.body.lineHeight,
     opacity: 0.9,
-  },
-  infoBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: Spacing.md,
-    borderRadius: 12,
-    borderWidth: 1,
-    gap: Spacing.sm,
-    marginTop: Spacing.md,
-  },
-  infoText: {
-    flex: 1,
-    opacity: 0.8,
   },
 });

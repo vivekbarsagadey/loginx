@@ -1,9 +1,7 @@
-import { ThemedText } from '@/components/themed-text';
-import { Spacing, TouchTarget } from '@/constants/layout';
-import { useThemeColors } from '@/hooks/use-theme-colors';
-import { Feather } from '@expo/vector-icons';
+import { ThemedListItem } from '@/components/themed-list-item';
+import { type Feather } from '@expo/vector-icons';
 import type React from 'react';
-import { ActivityIndicator, StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
+import type { ViewStyle } from 'react-native';
 
 interface SettingItemProps {
   /**
@@ -67,6 +65,7 @@ interface SettingItemProps {
 /**
  * SettingItem component for displaying individual settings in a list.
  * Supports danger variant for destructive actions, loading states, and custom right elements.
+ * Now uses ThemedListItem for consistency and reduced code.
  *
  * @example
  * <SettingItem
@@ -82,91 +81,20 @@ interface SettingItemProps {
  *   onPress={handleDelete}
  * />
  */
-export function SettingItem({
-  icon,
-  title,
-  subtitle,
-  onPress,
-  variant = 'default',
-  showChevron = true,
-  rightElement,
-  disabled = false,
-  loading = false,
-  style,
-  testID,
-  accessibilityLabel,
-  accessibilityHint,
-}: SettingItemProps) {
-  const colors = useThemeColors();
-
-  const isDanger = variant === 'danger';
-  const iconColor = isDanger ? colors.error : colors.text;
-  const titleColor = isDanger ? colors.error : colors.text;
+export function SettingItem({ icon, title, subtitle, onPress, variant = 'default', showChevron = true, rightElement, disabled = false, loading = false }: SettingItemProps) {
+  const iconVariant = variant === 'danger' ? 'error' : 'default';
 
   return (
-    <TouchableOpacity
-      style={[styles.container, disabled && styles.disabled, style]}
+    <ThemedListItem
+      icon={icon}
+      iconVariant={iconVariant}
+      title={title}
+      description={subtitle}
       onPress={onPress}
-      disabled={disabled || loading}
-      testID={testID}
-      accessible
-      accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel || title}
-      accessibilityHint={accessibilityHint}
-      accessibilityState={{ disabled: disabled || loading }}
-    >
-      <View style={styles.iconContainer}>
-        <Feather name={icon} size={24} color={iconColor} />
-      </View>
-      <View style={styles.content}>
-        <ThemedText style={[styles.title, { color: titleColor }]}>{title}</ThemedText>
-        {subtitle && (
-          <ThemedText type="caption" style={[styles.subtitle, { color: colors['text-muted'] }]}>
-            {subtitle}
-          </ThemedText>
-        )}
-      </View>
-      <View style={styles.rightContainer}>
-        {loading ? (
-          <ActivityIndicator size="small" color={colors['text-muted']} />
-        ) : rightElement ? (
-          rightElement
-        ) : showChevron ? (
-          <Feather name="chevron-right" size={24} color={colors['text-muted']} />
-        ) : null}
-      </View>
-    </TouchableOpacity>
+      showChevron={showChevron}
+      rightElement={rightElement}
+      loading={loading}
+      disabled={disabled}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.md,
-    minHeight: TouchTarget.large,
-  },
-  disabled: {
-    opacity: 0.5,
-  },
-  iconContainer: {
-    marginRight: Spacing.md,
-  },
-  content: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  subtitle: {
-    marginTop: Spacing.xs,
-    opacity: 0.7,
-  },
-  rightContainer: {
-    marginLeft: Spacing.md,
-    minWidth: 24,
-    alignItems: 'flex-end',
-  },
-});

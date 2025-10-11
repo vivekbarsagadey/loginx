@@ -4,13 +4,14 @@
  */
 
 import { ScreenContainer } from '@/components/screen-container';
+import { ThemedPressable } from '@/components/themed-pressable';
 import { ThemedText } from '@/components/themed-text';
 import { BorderRadius, Spacing } from '@/constants/layout';
 import { appFeatures, faqData, getRandomTip, getSampleNotifications, settingsMenu } from '@/data';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 export default function DataExamplesScreen() {
   const colors = useThemeColors();
@@ -90,10 +91,10 @@ export default function DataExamplesScreen() {
 
         {/* Section 1: Notifications */}
         <View style={styles.section}>
-          <Pressable style={styles.sectionHeader} onPress={() => toggleSection('notifications')}>
+          <ThemedPressable style={styles.sectionHeader} onPress={() => toggleSection('notifications')}>
             <ThemedText type="h3">📬 Sample Notifications ({notifications.length})</ThemedText>
             <Ionicons name={expandedSection === 'notifications' ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
-          </Pressable>
+          </ThemedPressable>
           {expandedSection === 'notifications' && (
             <View>
               {notifications.slice(0, 3).map((notif) => (
@@ -121,10 +122,10 @@ export default function DataExamplesScreen() {
 
         {/* Section 2: Features */}
         <View style={styles.section}>
-          <Pressable style={styles.sectionHeader} onPress={() => toggleSection('features')}>
+          <ThemedPressable style={styles.sectionHeader} onPress={() => toggleSection('features')}>
             <ThemedText type="h3">⭐ Security Features ({securityFeatures.length})</ThemedText>
             <Ionicons name={expandedSection === 'features' ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
-          </Pressable>
+          </ThemedPressable>
           {expandedSection === 'features' && (
             <View>
               {securityFeatures.map((feature) => (
@@ -144,10 +145,10 @@ export default function DataExamplesScreen() {
 
         {/* Section 3: FAQs */}
         <View style={styles.section}>
-          <Pressable style={styles.sectionHeader} onPress={() => toggleSection('faqs')}>
+          <ThemedPressable style={styles.sectionHeader} onPress={() => toggleSection('faqs')}>
             <ThemedText type="h3">❓ Security FAQs ({securityFAQs.length})</ThemedText>
             <Ionicons name={expandedSection === 'faqs' ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
-          </Pressable>
+          </ThemedPressable>
           {expandedSection === 'faqs' && (
             <View>
               {securityFAQs.map((faq) => (
@@ -166,7 +167,7 @@ export default function DataExamplesScreen() {
 
         {/* Section 4: Random Tip */}
         <View style={styles.section}>
-          <Pressable style={styles.sectionHeader} onPress={() => toggleSection('tip')}>
+          <ThemedPressable style={styles.sectionHeader} onPress={() => toggleSection('tip')}>
             <ThemedText type="h3">💡 Random Tip</ThemedText>
             <Ionicons name={expandedSection === 'tip' ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
           </Pressable>
@@ -194,12 +195,12 @@ export default function DataExamplesScreen() {
 
         {/* Section 5: Menu Items */}
         <View style={styles.section}>
-          <Pressable style={styles.sectionHeader} onPress={() => toggleSection('menu')}>
+          <ThemedPressable style={styles.sectionHeader} onPress={() => toggleSection('menu')}>
             <ThemedText type="h3">
               🗂️ Menu: {firstMenuSection.title} ({firstMenuSection.items.length})
             </ThemedText>
             <Ionicons name={expandedSection === 'menu' ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
-          </Pressable>
+          </ThemedPressable>
           {expandedSection === 'menu' && (
             <View>
               {firstMenuSection.items.map((item) => (

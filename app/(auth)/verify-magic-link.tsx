@@ -1,5 +1,6 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
+import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
@@ -15,7 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Linking from 'expo-linking';
 import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 /**
  * Magic Link Verification Screen
@@ -146,8 +147,7 @@ export default function VerifyMagicLinkScreen() {
     return (
       <ScreenContainer>
         <ThemedView style={styles.centerContent}>
-          <ActivityIndicator size="large" color={colors.primary} />
-          <ThemedText style={styles.checkingText}>{i18n.t('passwordlessLogin.checking')}</ThemedText>
+          <ThemedLoadingSpinner size="large" text={i18n.t('passwordlessLogin.checking')} />
         </ThemedView>
       </ScreenContainer>
     );
@@ -197,9 +197,6 @@ const styles = StyleSheet.create({
   subtitle: {
     textAlign: 'center',
     marginBottom: Spacing.xl,
-  },
-  checkingText: {
-    marginTop: Spacing.md,
   },
   icon: {
     marginBottom: Spacing.lg,

@@ -1,3 +1,4 @@
+import { ThemedPressable } from '@/components/themed-pressable';
 import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -10,7 +11,7 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 import { type ThemePreference, useThemeContext } from '@/hooks/use-theme-context';
 import i18n from '@/i18n';
 import { provideLightFeedback } from '@/utils/feedback';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 export default function ThemeScreen() {
   const { themePreference, setThemePreference } = useThemeContext();
@@ -45,26 +46,7 @@ export default function ThemeScreen() {
           {themeOptions.map((option) => {
             const isSelected = themePreference === option.key;
             return (
-              <Pressable
-                key={option.key}
-                onPress={() => handleThemeSelect(option.key)}
-                style={({ pressed }) => [
-                  styles.optionItem,
-                  {
-                    backgroundColor: surfaceColor,
-                    borderColor: borderColor,
-                    opacity: pressed ? 0.7 : 1,
-                    transform: [{ scale: pressed ? 0.98 : 1 }],
-                  },
-                  isSelected && [
-                    styles.selectedOption,
-                    {
-                      borderColor: primaryColor,
-                      backgroundColor: primaryColor + '10',
-                    },
-                  ],
-                ]}
-              >
+              <ThemedPressable key={option.key} onPress={() => handleThemeSelect(option.key)} style={[styles.optionItem, isSelected && styles.selectedOption]}>
                 <ThemedView style={styles.optionContent}>
                   {/* Icon with color indicator */}
                   <View style={styles.iconContainer}>
@@ -114,7 +96,7 @@ export default function ThemeScreen() {
                     </View>
                   </ThemedView>
                 </ThemedView>
-              </Pressable>
+              </ThemedPressable>
             );
           })}
         </ThemedView>
@@ -137,7 +119,10 @@ const styles = StyleSheet.create({
     ...Shadow.sm,
     minHeight: Spacing.xxl + Spacing.xl, // 72px (40 + 32)
   },
-  selectedOption: Shadow.lg,
+  selectedOption: {
+    ...Shadow.lg,
+    borderWidth: 2,
+  },
   optionContent: CommonSelectionCards.selectionCardContent,
   iconContainer: {
     position: 'relative',

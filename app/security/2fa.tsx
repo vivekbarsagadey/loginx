@@ -1,5 +1,6 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
+import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
@@ -11,7 +12,7 @@ import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
-import { ActivityIndicator, StyleSheet, Switch, View } from 'react-native';
+import { StyleSheet, Switch, View } from 'react-native';
 
 export default function TwoFactorAuthScreen() {
   const alert = useAlert();
@@ -100,8 +101,7 @@ export default function TwoFactorAuthScreen() {
     return (
       <>
         <ScreenContainer>
-          <ActivityIndicator size="large" />
-          <ThemedText style={styles.loadingText}>{i18n.t('screens.security.twoFactor.loading')}</ThemedText>
+          <ThemedLoadingSpinner size="large" text={i18n.t('screens.security.twoFactor.loading')} />
         </ScreenContainer>
         {alert.AlertComponent}
       </>

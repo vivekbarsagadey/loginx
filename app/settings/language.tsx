@@ -1,3 +1,4 @@
+import { ThemedPressable } from '@/components/themed-pressable';
 import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -9,7 +10,7 @@ import { useLanguage } from '@/hooks/use-language-provider';
 import { useLoadingState } from '@/hooks/use-loading-state';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { provideLightFeedback } from '@/utils/feedback';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 export default function LanguageScreen() {
   const { language, persistLanguage } = useLanguage();
@@ -42,38 +43,7 @@ export default function LanguageScreen() {
           {languages.map((languageOption) => {
             const isSelected = language.startsWith(languageOption.code);
             return (
-              <Pressable
-                key={languageOption.code}
-                onPress={() => handleLanguageSelect(languageOption.code)}
-                style={({ pressed }) => [
-                  styles.optionItem,
-                  {
-                    backgroundColor: surfaceColor,
-                    borderColor: borderColor,
-                    opacity: pressed ? 0.7 : 1,
-                    transform: [{ scale: pressed ? 0.98 : 1 }],
-                    ...Platform.select({
-                      ios: {
-                        shadowColor: textColor,
-                      },
-                      android: {},
-                    }),
-                  },
-                  isSelected && [
-                    styles.selectedOption,
-                    {
-                      borderColor: primaryColor,
-                      backgroundColor: primaryColor + '10',
-                      ...Platform.select({
-                        ios: {
-                          shadowColor: textColor,
-                        },
-                        android: {},
-                      }),
-                    },
-                  ],
-                ]}
-              >
+              <ThemedPressable key={languageOption.code} onPress={() => handleLanguageSelect(languageOption.code)} style={[styles.optionItem, isSelected && styles.selectedOption]}>
                 <ThemedView style={styles.optionContent}>
                   {/* Flag indicator */}
                   <View
@@ -117,7 +87,7 @@ export default function LanguageScreen() {
                     </View>
                   )}
                 </ThemedView>
-              </Pressable>
+              </ThemedPressable>
             );
           })}
         </ThemedView>
@@ -136,7 +106,10 @@ const styles = StyleSheet.create({
     ...CommonSelectionCards.selectionCard,
     ...Shadow.md,
   },
-  selectedOption: Shadow.xl,
+  selectedOption: {
+    ...Shadow.xl,
+    borderWidth: 2,
+  },
   optionContent: CommonSelectionCards.selectionCardContent,
   flagContainer: CommonSelectionCards.selectionIconContainer,
   flagEmoji: CommonSelectionCards.selectionIconEmoji,

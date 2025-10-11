@@ -16,7 +16,7 @@ import { clearAllNotifications, deleteNotification, getNotificationHistory, mark
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 export default function NotificationsCenterScreen() {
   const alert = useAlert();
@@ -112,13 +112,13 @@ export default function NotificationsCenterScreen() {
     return (
       <View style={styles.headerActions}>
         {unreadCount > 0 && (
-          <Pressable style={styles.actionButton} onPress={handleMarkAllAsRead}>
+          <ThemedPressable style={styles.actionButton} onPress={handleMarkAllAsRead}>
             <ThemedText style={[styles.actionButtonText, { color: colors.primary }]}>{unreadCount} unread - Mark all read</ThemedText>
-          </Pressable>
+          </ThemedPressable>
         )}
-        <Pressable style={styles.actionButton} onPress={handleClearAll}>
+        <ThemedPressable style={styles.actionButton} onPress={handleClearAll}>
           <ThemedText style={[styles.actionButtonText, { color: colors.error }]}>Clear all</ThemedText>
-        </Pressable>
+        </ThemedPressable>
       </View>
     );
   };
