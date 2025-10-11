@@ -1,25 +1,24 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { SelectableButton } from '@/components/ui/selectable-button';
 import { CommonText } from '@/constants/common-styles';
-import { BorderRadius, Spacing, Typography } from '@/constants/layout';
+import { Spacing } from '@/constants/layout';
 import { DEFAULT_TEXT_SIZE, getTextSizeOptions } from '@/data';
 import { useAlert } from '@/hooks/use-alert';
-import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import type { TextSizeOption } from '@/types/text-size';
+import * as Haptics from 'expo-haptics';
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default function TextSizeScreen() {
   const [selectedSize, setSelectedSize] = useState<TextSizeOption>(DEFAULT_TEXT_SIZE);
   const alert = useAlert();
 
-  const primaryColor = useThemeColor({}, 'primary');
-  const surfaceVariant = useThemeColor({}, 'surface-variant');
-
   const sizeOptions = getTextSizeOptions();
 
-  const handleSizeSelect = (size: TextSizeOption) => {
+  const handleSizeSelect = async (size: TextSizeOption) => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedSize(size);
     alert.show(i18n.t('success.profileUpdate.title'), i18n.t('screens.settings.textSize.applied'));
   };
@@ -36,26 +35,7 @@ export default function TextSizeScreen() {
 
         <ThemedView style={styles.optionsContainer}>
           {sizeOptions.map((option) => (
-            <TouchableOpacity
-              key={option.key}
-              style={[
-                styles.option,
-                { backgroundColor: surfaceVariant },
-                selectedSize === option.key && [
-                  styles.selectedOption,
-                  {
-                    borderColor: primaryColor,
-                    backgroundColor: primaryColor + '1A',
-                  },
-                ],
-              ]}
-              onPress={() => handleSizeSelect(option.key)}
-            >
-              <ThemedView style={styles.optionContent}>
-                <ThemedText style={[styles.optionTitle, getPreviewStyles(option.multiplier)]}>{option.title}</ThemedText>
-                {selectedSize === option.key && <ThemedText style={[styles.checkmark, { color: primaryColor }]}>✓</ThemedText>}
-              </ThemedView>
-            </TouchableOpacity>
+            <SelectableButton key={option.key} title={option.title} selected={selectedSize === option.key} onPress={() => handleSizeSelect(option.key)} variant="large" />
           ))}
         </ThemedView>
 
@@ -82,29 +62,6 @@ const styles = StyleSheet.create({
   },
   optionsContainer: {
     gap: Spacing.md,
-  },
-  option: {
-    padding: Spacing.md,
-    marginBottom: Spacing.md,
-    borderRadius: BorderRadius.sm,
-    borderWidth: 2,
-    borderColor: 'transparent',
-  },
-  selectedOption: {
-    borderWidth: 2,
-  },
-  optionTitle: {
-    fontWeight: Typography.bodyBold.fontWeight,
-    marginBottom: Spacing.sm,
-  },
-  optionContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  checkmark: {
-    fontSize: Typography.h3.fontSize,
-    fontWeight: Typography.bodyBold.fontWeight,
   },
   previewSection: {
     marginTop: Spacing.lg,

@@ -25,9 +25,7 @@ function PermissionCard({ icon, title, description, granted, canAskAgain, onRequ
       return;
     }
 
-    if (Platform.OS === 'ios') {
-      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    }
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
     if (granted) {
       // Show info that permission is already granted
@@ -142,9 +140,7 @@ export default function PermissionsScreen() {
 
   const handleRefreshAll = async () => {
     await checkAllPermissions();
-    if (Platform.OS === 'ios') {
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    }
+    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   };
 
   const permissions = getPermissions({

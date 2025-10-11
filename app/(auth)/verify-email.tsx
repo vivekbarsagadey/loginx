@@ -4,10 +4,12 @@ import { ThemedView } from '@/components/themed-view';
 import { Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
+import { useFormSubmit } from '@/hooks/use-form-submit';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { sendEmailVerification, signOut } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 
 const getFirebaseAuthErrorMessage = (errorCode: string) => {
@@ -20,10 +22,9 @@ const getFirebaseAuthErrorMessage = (errorCode: string) => {
 };
 
 export default function VerifyEmailScreen() {
-  const router = useRouter();
+  const { replace } = useHapticNavigation();
   const { email } = useLocalSearchParams();
   const { show: showAlert, AlertComponent } = useAlert();
-  const [isResending, setIsResending] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -33,7 +34,7 @@ export default function VerifyEmailScreen() {
           if (auth.currentUser.emailVerified) {
             clearInterval(interval);
             try {
-              router.replace('/(tabs)');
+              replace('/(tabs)');
             } catch (navError) {
               console.error('[VerifyEmail] Navigation failed:', navError);
               // User is verified, they can manually navigate
@@ -48,29 +49,37 @@ export default function VerifyEmailScreen() {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [router, showAlert]);
+  }, [replace, showAlert]);
 
-  const handleResend = async () => {
+  const resendEmail = async () => {
     if (!auth.currentUser) {
       showAlert(i18n.t('errors.generic.title'), i18n.t('screens.verifyEmail.errors.noUser'), [{ text: 'OK' }], { variant: 'error' });
-      return;
+      throw new Error(i18n.t('screens.verifyEmail.errors.noUser'));
     }
-    setIsResending(true);
-    try {
-      await sendEmailVerification(auth.currentUser);
+    await sendEmailVerification(auth.currentUser);
+  };
+
+  const { submit: handleResend, isSubmitting: isResending } = useFormSubmit(resendEmail, {
+    successTitle: i18n.t('screens.verifyEmail.success.emailSent'),
+    successMessage: i18n.t('screens.verifyEmail.success.emailSentMessage'),
+    showSuccessAlert: false, // Using showAlert directly in component
+    errorMessage: (error: unknown) => {
+      const errorCode = (error as { code?: string })?.code ?? '';
+      return getFirebaseAuthErrorMessage(errorCode);
+    },
+    onSuccess: () => {
       showAlert(i18n.t('screens.verifyEmail.success.emailSent'), i18n.t('screens.verifyEmail.success.emailSentMessage'), [{ text: 'OK' }], { variant: 'success' });
-    } catch (err: unknown) {
-      const errorCode = (err as { code?: string })?.code ?? '';
+    },
+    onError: (error: unknown) => {
+      const errorCode = (error as { code?: string })?.code ?? '';
       const friendlyMessage = getFirebaseAuthErrorMessage(errorCode);
       showAlert(i18n.t('errors.generic.title'), friendlyMessage, [{ text: 'OK' }], { variant: 'error' });
-    } finally {
-      setIsResending(false);
-    }
-  };
+    },
+  });
 
   const handleLoginRedirect = async () => {
     await signOut(auth);
-    router.replace('/(auth)/login');
+    replace('/(auth)/login');
   };
 
   return (

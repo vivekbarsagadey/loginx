@@ -5,17 +5,14 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
+import { useFormSubmit } from '@/hooks/use-form-submit';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
-import { showError } from '@/utils/error';
-import { showSuccess } from '@/utils/success';
 import { zodResolver } from '@hookform/resolvers/zod';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Haptics from 'expo-haptics';
-import { useRouter } from 'expo-router';
 import { sendSignInLinkToEmail } from 'firebase/auth';
-import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -28,12 +25,12 @@ const schema = z.object({
  * No password required - secure, convenient authentication
  */
 export default function PasswordlessLoginScreen() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { push, back } = useHapticNavigation();
 
   const {
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
@@ -42,43 +39,39 @@ export default function PasswordlessLoginScreen() {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof schema>) => {
-    setLoading(true);
+  const sendMagicLink = async () => {
+    const data = getValues();
+    const actionCodeSettings = {
+      // URL you want to redirect back to after email link is clicked
+      url: 'https://your-app.com/finish-sign-in', // Replace with your actual domain
+      handleCodeInApp: true,
+      // iOS and Android app configuration
+      iOS: {
+        bundleId: 'com.yourcompany.loginx', // Replace with your iOS bundle ID
+      },
+      android: {
+        packageName: 'com.yourcompany.loginx', // Replace with your Android package name
+        installApp: true,
+        minimumVersion: '1.0.0',
+      },
+      // Dynamic link domain for universal links
+      dynamicLinkDomain: 'yourapp.page.link', // Replace with your Firebase Dynamic Link domain
+    };
 
-    try {
-      const actionCodeSettings = {
-        // URL you want to redirect back to after email link is clicked
-        url: 'https://your-app.com/finish-sign-in', // Replace with your actual domain
-        handleCodeInApp: true,
-        // iOS and Android app configuration
-        iOS: {
-          bundleId: 'com.yourcompany.loginx', // Replace with your iOS bundle ID
-        },
-        android: {
-          packageName: 'com.yourcompany.loginx', // Replace with your Android package name
-          installApp: true,
-          minimumVersion: '1.0.0',
-        },
-        // Dynamic link domain for universal links
-        dynamicLinkDomain: 'yourapp.page.link', // Replace with your Firebase Dynamic Link domain
-      };
+    await sendSignInLinkToEmail(auth, data.email, actionCodeSettings);
 
-      await sendSignInLinkToEmail(auth, data.email, actionCodeSettings);
+    // Save email to local storage so we can complete sign-in later
+    await AsyncStorage.setItem('emailForSignIn', data.email);
+  };
 
-      // Save email to local storage so we can complete sign-in later
-      await AsyncStorage.setItem('emailForSignIn', data.email);
+  const { submit, isSubmitting } = useFormSubmit(sendMagicLink, {
+    successTitle: i18n.t('passwordlessLogin.success.title'),
+    successMessage: i18n.t('passwordlessLogin.success.message', { email: getValues().email }),
+    onSuccess: () => push('/(auth)/verify-email'),
+  });
 
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-
-      showSuccess(i18n.t('passwordlessLogin.success.title'), i18n.t('passwordlessLogin.success.message', { email: data.email }), () => {
-        router.push('/(auth)/verify-email');
-      });
-    } catch (error: unknown) {
-      showError(error);
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-    } finally {
-      setLoading(false);
-    }
+  const onSubmit = async () => {
+    await submit();
   };
 
   return (
@@ -123,15 +116,13 @@ export default function PasswordlessLoginScreen() {
         />
 
         <ThemedButton
-          title={loading ? i18n.t('passwordlessLogin.sendingButton') : i18n.t('passwordlessLogin.sendButton')}
+          title={isSubmitting ? i18n.t('passwordlessLogin.sendingButton') : i18n.t('passwordlessLogin.sendButton')}
           onPress={handleSubmit(onSubmit)}
-          disabled={loading}
+          disabled={isSubmitting}
           style={styles.submitButton}
         />
 
-        {loading && <ActivityIndicator style={styles.loading} />}
-
-        <ThemedButton title={i18n.t('passwordlessLogin.backToLogin')} variant="link" onPress={() => router.back()} />
+        <ThemedButton title={i18n.t('passwordlessLogin.backToLogin')} variant="link" onPress={() => back()} />
       </ThemedView>
     </ScreenContainer>
   );

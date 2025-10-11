@@ -5,12 +5,11 @@ import { ThemedView } from '@/components/themed-view';
 import { Spacing, Typography } from '@/constants/layout';
 import { useAlert } from '@/hooks/use-alert';
 import { useAutoFocus } from '@/hooks/use-auto-focus';
+import { useFormSubmit } from '@/hooks/use-form-submit';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
-import { showError } from '@/utils/error';
-import { showSuccess } from '@/utils/success';
-import * as Haptics from 'expo-haptics';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, type TextInput, View } from 'react-native';
 
@@ -19,12 +18,11 @@ import { ActivityIndicator, StyleSheet, type TextInput, View } from 'react-nativ
  * Displays after successful email/password login when 2FA is enabled
  */
 export default function Verify2FAScreen() {
-  const router = useRouter();
+  const { replace } = useHapticNavigation();
   const { email } = useLocalSearchParams<{ email: string }>();
   const alert = useAlert();
 
   const [code, setCode] = useState('');
-  const [loading, setLoading] = useState(false);
   const [showBackupCodes, setShowBackupCodes] = useState(false);
   const [backupCode, setBackupCode] = useState('');
 
@@ -37,84 +35,62 @@ export default function Verify2FAScreen() {
   // Auto-focus appropriate input based on mode
   useAutoFocus(showBackupCodes ? backupCodeRef : codeRef, 100, true);
 
-  const handleVerifyCode = async () => {
+  const verifyCode = async () => {
     if (!code.trim()) {
-      showError('Please enter your 2FA code');
-      return;
+      throw new Error('Please enter your 2FA code');
     }
 
     if (code.length !== 6) {
-      showError('2FA code must be 6 digits');
-      return;
+      throw new Error('2FA code must be 6 digits');
     }
 
-    setLoading(true);
+    // In a real implementation, this would validate the TOTP code
+    // For demo purposes, we'll accept any 6-digit code
+    // TODO: Implement actual TOTP validation when backend is available
 
-    try {
-      // In a real implementation, this would validate the TOTP code
-      // For demo purposes, we'll accept any 6-digit code
-      // TODO: Implement actual TOTP validation when backend is available
+    const isValidCode = /^\d{6}$/.test(code);
 
-      const isValidCode = /^\d{6}$/.test(code);
-
-      if (!isValidCode) {
-        throw new Error('Invalid 2FA code format');
-      }
-
-      // Mock validation - in production, validate against TOTP server
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Keep as is for UX delay
-
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      showSuccess('Success', '2FA code verified successfully!', () => {
-        router.replace('/(tabs)');
-      });
-    } catch (error) {
-      console.error('[2FA] Error verifying code:', error);
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      showError(error);
-    } finally {
-      setLoading(false);
+    if (!isValidCode) {
+      throw new Error('Invalid 2FA code format');
     }
+
+    // Mock validation - in production, validate against TOTP server
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // Keep as is for UX delay
   };
 
-  const handleVerifyBackupCode = async () => {
+  const { submit: handleVerifyCode, isSubmitting: loading } = useFormSubmit(verifyCode, {
+    successTitle: 'Success',
+    successMessage: '2FA code verified successfully!',
+    onSuccess: () => replace('/(tabs)'),
+  });
+
+  const verifyBackupCode = async () => {
     if (!backupCode.trim()) {
-      showError('Please enter your backup code');
-      return;
+      throw new Error('Please enter your backup code');
     }
 
     if (backupCode.length !== 8) {
-      showError('Backup code must be 8 characters');
-      return;
+      throw new Error('Backup code must be 8 characters');
     }
 
-    setLoading(true);
+    const success = await consumeBackupCode(backupCode);
 
-    try {
-      const success = await consumeBackupCode(backupCode);
-
-      if (success) {
-        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-
-        let message = 'Backup code verified successfully!';
-        if (isBackupCodesLow) {
-          message += `\n\nWarning: Only ${backupCodesCount} backup codes remaining.`;
-        }
-
-        showSuccess('Success', message, () => {
-          router.replace('/(tabs)');
-        });
-      } else {
-        throw new Error('Invalid backup code');
-      }
-    } catch (error) {
-      console.error('[2FA] Error verifying backup code:', error);
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      showError(error);
-    } finally {
-      setLoading(false);
+    if (!success) {
+      throw new Error('Invalid backup code');
     }
   };
+
+  const { submit: handleVerifyBackupCode, isSubmitting: loadingBackup } = useFormSubmit(verifyBackupCode, {
+    successTitle: 'Success',
+    successMessage: (() => {
+      let message = 'Backup code verified successfully!';
+      if (isBackupCodesLow) {
+        message += `\n\nWarning: Only ${backupCodesCount} backup codes remaining.`;
+      }
+      return message;
+    })(),
+    onSuccess: () => replace('/(tabs)'),
+  });
 
   const handleUseBackupCode = () => {
     alert.show('Use Backup Code', "Backup codes are one-time use codes that can be used if you don't have access to your authenticator app.", [
@@ -140,7 +116,7 @@ export default function Verify2FAScreen() {
       {
         text: 'Logout',
         style: 'destructive',
-        onPress: () => router.replace('/(auth)/login'),
+        onPress: () => replace('/(auth)/login'),
       },
     ]);
   };
@@ -183,8 +159,8 @@ export default function Verify2FAScreen() {
             )}
           </View>
 
-          <ThemedButton title={loading ? 'Verifying...' : 'Verify Backup Code'} onPress={handleVerifyBackupCode} loading={loading} disabled={loading || backupCode.length !== 8} />
-          {loading && <ActivityIndicator style={styles.loading} />}
+          <ThemedButton title={loadingBackup ? 'Verifying...' : 'Verify Backup Code'} onPress={handleVerifyBackupCode} loading={loadingBackup} disabled={loadingBackup || backupCode.length !== 8} />
+          {loadingBackup && <ActivityIndicator style={styles.loading} />}
 
           <ThemedButton title="Back to Authenticator Code" variant="link" onPress={handleBackToCode} />
 

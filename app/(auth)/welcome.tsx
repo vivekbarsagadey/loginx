@@ -2,12 +2,13 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { StyleSheet } from 'react-native';
 
 export default function WelcomeScreen() {
-  const router = useRouter();
+  const { replace } = useHapticNavigation();
   const { email } = useLocalSearchParams();
 
   return (
@@ -16,7 +17,7 @@ export default function WelcomeScreen() {
         {i18n.t('screens.welcome.title')}
       </ThemedText>
       <ThemedText style={styles.subtitle}>{i18n.t('screens.welcome.subtitle', { email })}</ThemedText>
-      <ThemedButton title={i18n.t('screens.welcome.goToLogin')} onPress={() => router.replace('/(auth)/login')} />
+      <ThemedButton title={i18n.t('screens.welcome.goToLogin')} onPress={() => replace('/(auth)/login')} />
     </ThemedView>
   );
 }

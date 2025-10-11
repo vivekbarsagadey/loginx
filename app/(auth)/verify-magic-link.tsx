@@ -5,15 +5,14 @@ import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
+import { useFormSubmit } from '@/hooks/use-form-submit';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
-import { showSuccess } from '@/utils/success';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Haptics from 'expo-haptics';
 import * as Linking from 'expo-linking';
-import { useRouter } from 'expo-router';
 import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet } from 'react-native';
@@ -23,13 +22,12 @@ import { ActivityIndicator, StyleSheet } from 'react-native';
  * Monitors for magic link click and completes passwordless authentication
  */
 export default function VerifyMagicLinkScreen() {
-  const router = useRouter();
+  const { replace } = useHapticNavigation();
   const primaryColor = useThemeColor({}, 'primary');
   const alert = useAlert();
 
   const [email, setEmail] = useState<string>('');
   const [checking, setChecking] = useState(true);
-  const [resending, setResending] = useState(false);
 
   useEffect(() => {
     checkForMagicLink();
@@ -99,64 +97,61 @@ export default function VerifyMagicLinkScreen() {
   };
 
   const finishSignIn = async (signInEmail: string, emailLink: string) => {
-    try {
-      // Sign in with email link
-      await signInWithEmailLink(auth, signInEmail, emailLink);
+    // Sign in with email link
+    await signInWithEmailLink(auth, signInEmail, emailLink);
 
-      // Clear email from storage
-      await AsyncStorage.removeItem('emailForSignIn');
-
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-
-      showSuccess(i18n.t('passwordlessLogin.success.signInTitle'), i18n.t('passwordlessLogin.success.signInMessage'), () => {
-        router.replace('/(tabs)');
-      });
-    } catch (error) {
-      console.error('[VerifyMagicLink] Sign-in failed:', error);
-      showError(error);
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-    }
+    // Clear email from storage
+    await AsyncStorage.removeItem('emailForSignIn');
   };
 
-  const handleResend = async () => {
+  const { submit: submitSignIn } = useFormSubmit(
+    async () => {
+      // This will be called after completeSignIn prepares the data
+    },
+    {
+      successTitle: i18n.t('passwordlessLogin.success.signInTitle'),
+      successMessage: i18n.t('passwordlessLogin.success.signInMessage'),
+      onSuccess: () => replace('/(tabs)'),
+      showSuccessAlert: false, // showSuccess already called in original
+    }
+  );
+
+  const resendMagicLink = async () => {
     if (!email) {
       alert.show(i18n.t('passwordlessLogin.error.noEmail'), i18n.t('passwordlessLogin.error.noEmailMessage'), [{ text: i18n.t('common.ok') }], { variant: 'error' });
-      return;
+      throw new Error(i18n.t('passwordlessLogin.error.noEmail'));
     }
 
-    setResending(true);
+    const actionCodeSettings = {
+      url: 'https://your-app.com/finish-sign-in',
+      handleCodeInApp: true,
+      iOS: {
+        bundleId: 'com.yourcompany.loginx',
+      },
+      android: {
+        packageName: 'com.yourcompany.loginx',
+        installApp: true,
+        minimumVersion: '1.0.0',
+      },
+      dynamicLinkDomain: 'yourapp.page.link',
+    };
 
-    try {
-      const actionCodeSettings = {
-        url: 'https://your-app.com/finish-sign-in',
-        handleCodeInApp: true,
-        iOS: {
-          bundleId: 'com.yourcompany.loginx',
-        },
-        android: {
-          packageName: 'com.yourcompany.loginx',
-          installApp: true,
-          minimumVersion: '1.0.0',
-        },
-        dynamicLinkDomain: 'yourapp.page.link',
-      };
+    const { sendSignInLinkToEmail } = await import('firebase/auth');
+    await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+  };
 
-      const { sendSignInLinkToEmail } = await import('firebase/auth');
-      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+  const { submit: submitResend, isSubmitting: resending } = useFormSubmit(resendMagicLink, {
+    successTitle: i18n.t('passwordlessLogin.resent.title'),
+    successMessage: i18n.t('passwordlessLogin.resent.message'),
+  });
 
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      showSuccess(i18n.t('passwordlessLogin.resent.title'), i18n.t('passwordlessLogin.resent.message'));
-    } catch (error) {
-      showError(error);
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-    } finally {
-      setResending(false);
-    }
+  const handleResend = async () => {
+    await submitResend();
   };
 
   const handleBackToLogin = () => {
     AsyncStorage.removeItem('emailForSignIn');
-    router.replace('/(auth)/login');
+    replace('/(auth)/login');
   };
 
   if (checking) {

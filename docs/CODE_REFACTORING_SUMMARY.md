@@ -9,9 +9,9 @@ functions.
 
 ## Refactoring Status
 
-### ✅ Completed Screens (11 Total)
+### ✅ Completed Screens (20 Total)
 
-#### Feedback & Support Screens
+#### Feedback & Support Screens (5)
 
 1. **feedback.tsx** - ✅ Refactored
    - Uses: SelectableButton, InfoBox, CharacterCounter, useFormSubmit
@@ -40,7 +40,7 @@ functions.
    - Removed: Manual mailto construction with device info
    - Reduction: ~130 lines → ~95 lines (27% reduction)
 
-#### Settings & Profile Screens
+#### Settings & Profile Screens (5)
 
 6. **notifications/index.tsx** - ✅ Refactored
    - Uses: useLoadingState for async operations
@@ -62,24 +62,79 @@ functions.
    - Removed: Manual form submission, loading states, haptic feedback
    - Reduction: ~60 lines → cleaner validation and submission
 
-#### Authentication & Security Screens
+10. **settings/text-size.tsx** - ✅ Refactored
+    - Uses: SelectableButton (large variant), automatic haptic feedback
+    - Removed: TouchableOpacity with manual selection styling, checkmark logic
+    - Reduction: ~126 lines → ~90 lines (28% reduction, ~36 lines saved)
+    - Pattern consistency: Now matches other selection screens
 
-10. **security/change-password.tsx** - ✅ Refactored
-    - Uses: useFormSubmit, useHapticNavigation
-    - Removed: Manual validation, try-catch blocks, loading states
-    - Reduction: ~80 lines saved (comprehensive validation consolidation)
+### Authentication & Security Screens (10)
 
-11. **(auth)/forgot-password.tsx** - ✅ Refactored
-    - Uses: useFormSubmit, useHapticNavigation
-    - Removed: Manual loading state, error handling
-    - Reduction: ~20 lines saved (cleaner async handling)
+11. **security/change-password.tsx** - ✅ Refactored
+    - Replaced manual form submission with useFormSubmit
+    - Uses useHapticNavigation for all navigation
+    - Consolidated validation into single function
+    - Removed manual loading/error handling (~80 lines saved)
+
+12. **(auth)/forgot-password.tsx** - ✅ Refactored
+    - Replaced manual loading state with useFormSubmit
+    - Uses useHapticNavigation for navigation
+    - Cleaner async operation handling (~20 lines saved)
+
+13. **(auth)/otp-login.tsx** - ✅ Refactored
+    - Replaced manual form submission with useFormSubmit for both email and OTP
+      steps
+    - Uses useHapticNavigation for back navigation
+    - Removed manual try-catch blocks and loading states
+    - Cleaner async operation handling (~30 lines saved)
+
+14. **(auth)/passwordless-login.tsx** - ✅ Refactored
+    - Replaced manual loading state with useFormSubmit
+    - Uses useHapticNavigation for all navigation (push, back)
+    - Removed manual haptic feedback and error handling (~25 lines saved)
+
+15. **(auth)/verify-magic-link.tsx** - ✅ Refactored
+    - Replaced manual resend logic with useFormSubmit
+    - Uses useHapticNavigation for replace navigation
+    - Cleaner async operation handling for sign-in and resend (~20 lines saved)
+
+16. **(auth)/verify-phone.tsx** - ✅ Refactored
+    - Replaced manual loading states with useFormSubmit for verification and
+      resend
+    - Uses useHapticNavigation for navigation (replace, back)
+    - Removed manual haptic feedback calls (~25 lines saved)
+
+17. **(auth)/welcome.tsx** - ✅ Refactored
+    - Uses useHapticNavigation for navigation
+    - Simple screen with minimal changes (~5 lines saved)
+
+18. **(auth)/verify-email.tsx** - ✅ Refactored
+    - Replaced manual loading state (isResending) with useFormSubmit
+    - Uses useHapticNavigation for replace navigation (to tabs, to login)
+    - Removed manual try-catch-finally blocks in handleResend
+    - Cleaner async operation handling (~20 lines saved)
+
+19. **(auth)/verify-2fa.tsx** - ✅ Refactored
+    - Replaced manual loading states with TWO useFormSubmit hooks (TOTP and
+      backup code verification)
+    - Uses useHapticNavigation for replace navigation
+    - Removed manual haptic feedback calls (Haptics.notificationAsync in 4
+      locations)
+    - Separate loading states: `loading` for TOTP, `loadingBackup` for backup
+      codes
+    - Cleaner async operation handling (~40 lines saved)
+
+20. **settings/permissions.tsx** - ✅ Refactored
+    - Removed redundant Platform.OS checks for haptics
+    - Consistent haptic feedback on iOS and Android
+    - Cleaner code structure (~10 lines saved)
 
 ### 📊 Overall Impact
 
-- **Total screens refactored**: 11 screens
-- **Total lines saved**: ~800+ lines of duplicate code eliminated
-- **Average reduction**: ~28% across refactored screens
-- **Components eliminated**: 3 duplicate button components (CategoryButton,
+- **Total screens refactored**: 20 screens
+- **Total lines saved**: ~1,186+ lines of duplicate code eliminated
+- **Average reduction**: ~27% across refactored screens
+- **Components eliminated**: 4 duplicate button components (CategoryButton,
   OptionButton, IssueTypeButton, QuickAction)
 - **Code quality improvements**: Consistent validation, haptic feedback, error
   handling, accessibility

@@ -6,10 +6,10 @@ import { Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
 import { useAutoFocus } from '@/hooks/use-auto-focus';
+import { useFormSubmit } from '@/hooks/use-form-submit';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { showError } from '@/utils/error';
-import { showSuccess } from '@/utils/success';
-import * as Haptics from 'expo-haptics';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, type TextInput, View } from 'react-native';
 
@@ -18,14 +18,12 @@ import { StyleSheet, type TextInput, View } from 'react-native';
  * Handles SMS OTP verification for phone number
  */
 export default function VerifyPhoneScreen() {
-  const router = useRouter();
+  const { replace, back } = useHapticNavigation();
   const { phoneNumber } = useLocalSearchParams<{ phoneNumber: string }>();
   const alert = useAlert();
 
   const [verificationCode, setVerificationCode] = useState('');
   const [_verificationId, setVerificationId] = useState<string>('');
-  const [loading, setLoading] = useState(false);
-  const [resending, setResending] = useState(false);
   const [countdown, setCountdown] = useState(60);
 
   const codeRef = useRef<TextInput>(null);
@@ -54,85 +52,70 @@ export default function VerifyPhoneScreen() {
 
   // Send verification code
   useEffect(() => {
-    sendVerificationCode();
+    submitResend();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const sendVerificationCode = async () => {
     if (!phoneNumber) {
       showError('Phone number is required');
-      router.back();
-      return;
+      back();
+      throw new Error('Phone number is required');
     }
 
-    setResending(true);
+    // Note: Phone verification requires reCAPTCHA verification on web
+    // For React Native, you'd need to use Firebase phone authentication
+    // This is a simplified implementation - in production, use Firebase's RecaptchaVerifier
 
-    try {
-      // Note: Phone verification requires reCAPTCHA verification on web
-      // For React Native, you'd need to use Firebase phone authentication
-      // This is a simplified implementation - in production, use Firebase's RecaptchaVerifier
+    // For now, we'll show a mock implementation
+    // In production, implement proper phone auth flow:
+    // 1. Set up reCAPTCHA verifier (web) or use invisible reCAPTCHA (native)
+    // 2. Call signInWithPhoneNumber or verifyPhoneNumber
+    // 3. Get verificationId
 
-      // For now, we'll show a mock implementation
-      // In production, implement proper phone auth flow:
-      // 1. Set up reCAPTCHA verifier (web) or use invisible reCAPTCHA (native)
-      // 2. Call signInWithPhoneNumber or verifyPhoneNumber
-      // 3. Get verificationId
+    // Mock verification ID for demo purposes
+    setVerificationId('mock-verification-id');
+    setCountdown(60);
 
-      // Mock verification ID for demo purposes
-      setVerificationId('mock-verification-id');
-
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      setCountdown(60);
-
-      alert.show('Demo Mode', `In production, an SMS would be sent to ${phoneNumber}. For demo purposes, use code: 123456`, [{ text: 'OK' }]);
-    } catch (error) {
-      console.error('[PhoneVerification] Error sending code:', error);
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      showError(error);
-    } finally {
-      setResending(false);
-    }
+    alert.show('Demo Mode', `In production, an SMS would be sent to ${phoneNumber}. For demo purposes, use code: 123456`, [{ text: 'OK' }]);
   };
 
-  const handleVerifyCode = async () => {
+  const { submit: submitResend, isSubmitting: resending } = useFormSubmit(sendVerificationCode, {
+    showSuccessAlert: false, // Alert shown manually in function
+  });
+
+  const verifyCode = async () => {
     if (!verificationCode.trim()) {
-      showError('Please enter the verification code');
-      return;
+      throw new Error('Please enter the verification code');
     }
 
     if (verificationCode.length !== 6) {
-      showError('Verification code must be 6 digits');
-      return;
+      throw new Error('Verification code must be 6 digits');
     }
 
-    setLoading(true);
-
-    try {
-      const user = auth.currentUser;
-      if (!user) {
-        throw new Error('No user logged in');
-      }
-
-      // In production, use PhoneAuthProvider credential
-      // const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
-      // await linkWithCredential(user, credential);
-
-      // Mock verification for demo
-      if (verificationCode === '123456') {
-        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        showSuccess('Success', 'Phone number verified successfully!', () => {
-          router.replace('/(tabs)');
-        });
-      } else {
-        throw new Error('Invalid verification code. Use 123456 for demo.');
-      }
-    } catch (error) {
-      console.error('[PhoneVerification] Error verifying code:', error);
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      showError(error);
-    } finally {
-      setLoading(false);
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error('No user logged in');
     }
+
+    // In production, use PhoneAuthProvider credential
+    // const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
+    // await linkWithCredential(user, credential);
+
+    // Mock verification for demo
+    if (verificationCode !== '123456') {
+      throw new Error('Invalid verification code. Use 123456 for demo.');
+    }
+  };
+
+  const { submit: submitVerify, isSubmitting: loading } = useFormSubmit(verifyCode, {
+    successTitle: 'Success',
+    successMessage: 'Phone number verified successfully!',
+    onSuccess: () => replace('/(tabs)'),
+  });
+
+  const handleVerifyCode = async () => {
+    await submitVerify();
   };
 
   const handleSkip = () => {
@@ -144,10 +127,7 @@ export default function VerifyPhoneScreen() {
       {
         text: 'Skip',
         style: 'destructive',
-        onPress: () => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          router.replace('/(tabs)');
-        },
+        onPress: () => replace('/(tabs)'),
       },
     ]);
   };
