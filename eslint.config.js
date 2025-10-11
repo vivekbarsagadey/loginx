@@ -46,7 +46,8 @@ module.exports = defineConfig([
           caughtErrorsIgnorePattern: '^_',
         },
       ],
-      '@typescript-eslint/no-explicit-any': 'error', // Changed from 'warn' to 'error'
+      '@typescript-eslint/no-explicit-any': 'error', // Prevent 'any' type usage - use 'unknown' instead
+      '@typescript-eslint/no-unsafe-argument': 'off', // Requires type information
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-non-null-assertion': 'warn',

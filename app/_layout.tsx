@@ -17,9 +17,12 @@ import { OnboardingProvider, useOnboarding } from '@/hooks/use-onboarding-provid
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { ThemeProvider as CustomThemeProvider, useThemeContext } from '@/hooks/use-theme-context';
 import { initializeAdaptiveCache } from '@/utils/adaptive-cache';
+import { createLogger } from '@/utils/debug';
 import { initializeLocalFirst } from '@/utils/local-first';
 import { initializeNetworkMonitoring } from '@/utils/network';
 import { enableLayoutAnimations, logPerformanceMetrics } from '@/utils/performance';
+
+const logger = createLogger('RootLayout');
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -251,7 +254,7 @@ export default function RootLayout() {
 
       // Initialize adaptive cache manager FIRST (determines cache size)
       initializeAdaptiveCache().catch((error) => {
-        console.error('Failed to initialize adaptive cache:', error);
+        logger.error('Failed to initialize adaptive cache:', error);
       });
 
       // Initialize network monitoring
@@ -259,7 +262,7 @@ export default function RootLayout() {
 
       // Initialize LOCAL-FIRST system
       initializeLocalFirst().catch((error) => {
-        console.error('Failed to initialize LOCAL-FIRST system:', error);
+        logger.error('Failed to initialize LOCAL-FIRST system:', error);
       });
 
       // Cleanup on unmount

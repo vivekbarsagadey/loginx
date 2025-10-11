@@ -135,15 +135,8 @@ export function useAsyncErrorHandler() {
     try {
       const data = await asyncFn();
       return { success: true, data };
-    } catch (error) {
-      const err = error instanceof Error ? error : new Error(String(error));
-
-      // Log error (in development)
-      if (__DEV__) {
-        console.error('[useAsyncErrorHandler:silent]', err);
-      }
-
-      return { success: false, error: err };
+    } catch (err) {
+      throw err;
     }
   }, []);
 

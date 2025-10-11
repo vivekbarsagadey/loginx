@@ -7,10 +7,13 @@ import { useAlert } from '@/hooks/use-alert';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
+import { createLogger } from '@/utils/debug';
 import { useLocalSearchParams } from 'expo-router';
 import { sendEmailVerification, signOut } from 'firebase/auth';
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
+
+const logger = createLogger('VerifyEmail');
 
 const getFirebaseAuthErrorMessage = (errorCode: string) => {
   switch (errorCode) {
@@ -36,13 +39,13 @@ export default function VerifyEmailScreen() {
             try {
               replace('/(tabs)');
             } catch (navError) {
-              console.error('[VerifyEmail] Navigation failed:', navError);
+              logger.error('Navigation failed:', navError);
               // User is verified, they can manually navigate
               showAlert(i18n.t('success.title'), 'Email verified successfully! Please restart the app to continue.', [{ text: 'OK' }], { variant: 'success' });
             }
           }
         } catch (reloadError) {
-          console.error('[VerifyEmail] Failed to reload user:', reloadError);
+          logger.error('Failed to reload user:', reloadError);
           // Continue checking - don't break the interval
         }
       }

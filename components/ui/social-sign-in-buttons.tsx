@@ -1,9 +1,8 @@
 import { ThemedButton } from '@/components/themed-button';
-import { ThemedText } from '@/components/themed-text';
+import { ThemedDivider } from '@/components/themed-divider';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
 import { gap } from '@/constants/style-utils';
-import { useThemeColor } from '@/hooks/use-theme-color';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import Constants from 'expo-constants';
 import { Platform, StyleSheet, View } from 'react-native';
@@ -21,8 +20,6 @@ interface SocialSignInButtonsProps {
  * Displays Google, Apple, and Facebook sign-in buttons with proper platform handling
  */
 export function SocialSignInButtons({ onGoogleSignIn, onAppleSignIn, onFacebookSignIn, loading = false, mode = 'register' }: SocialSignInButtonsProps) {
-  const borderColor = useThemeColor({}, 'border');
-
   const actionText = mode === 'register' ? 'Sign up' : 'Sign in';
 
   // Check if running in Expo Go (Google Sign-In not available)
@@ -31,13 +28,7 @@ export function SocialSignInButtons({ onGoogleSignIn, onAppleSignIn, onFacebookS
   return (
     <ThemedView style={styles.container}>
       {/* Divider with "OR" text */}
-      <View style={styles.dividerContainer}>
-        <View style={[styles.divider, { backgroundColor: borderColor }]} />
-        <ThemedText type="caption" style={styles.dividerText}>
-          OR
-        </ThemedText>
-        <View style={[styles.divider, { backgroundColor: borderColor }]} />
-      </View>
+      <ThemedDivider text="OR" spacing="lg" />
 
       {/* Social Sign-In Buttons */}
       <View style={styles.buttonsContainer}>
@@ -101,21 +92,6 @@ const styles = StyleSheet.create({
     ...gap.lg,
     marginTop: Spacing.xl,
     marginBottom: Spacing.md,
-  },
-  dividerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-  divider: {
-    flex: 1,
-    height: StyleSheet.hairlineWidth,
-  },
-  dividerText: {
-    marginHorizontal: 16,
-    opacity: 0.7,
-    fontSize: 13,
-    fontWeight: '600',
   },
   buttonsContainer: {
     ...gap.md,

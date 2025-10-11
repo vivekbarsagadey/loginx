@@ -65,7 +65,6 @@ export function useEmailAvailability(debounceMs = 800): UseEmailAvailabilityResu
           setMessage('Email is available');
         }
       } catch (error) {
-        console.error('[EmailAvailability] Error checking email:', error);
         // Don't show error to user - fail silently
         // They'll get a proper error on submission if needed
         setStatus('error');

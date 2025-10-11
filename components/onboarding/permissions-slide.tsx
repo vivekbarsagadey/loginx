@@ -158,9 +158,9 @@ export function PermissionsSlide({ width, onNext, onSkip }: PermissionsSlideProp
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
-          <View style={[styles.iconCircle, { backgroundColor: `${primaryColor}15` }]}>
+          <ThemedView style={[styles.iconCircle, { backgroundColor: `${primaryColor}15` }]}>
             <Ionicons name="shield-checkmark" size={64} color={primaryColor} />
-          </View>
+          </ThemedView>
 
           <ThemedText type="h2" style={styles.title}>
             {i18n.t('permissions.title')}
@@ -188,12 +188,12 @@ export function PermissionsSlide({ width, onNext, onSkip }: PermissionsSlideProp
         </View>
 
         {/* Info Box */}
-        <View style={[styles.infoBox, { backgroundColor: `${primaryColor}10`, borderColor: `${primaryColor}30` }]}>
+        <ThemedView style={[styles.infoBox, { backgroundColor: `${primaryColor}10`, borderColor: `${primaryColor}30` }]}>
           <Ionicons name="information-circle" size={20} color={primaryColor} />
           <ThemedText type="caption" style={[styles.infoText, { color: mutedColor }]}>
             {i18n.t('permissions.infoText')}
           </ThemedText>
-        </View>
+        </ThemedView>
       </ScrollView>
 
       {/* Action Buttons */}

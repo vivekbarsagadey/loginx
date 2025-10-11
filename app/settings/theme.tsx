@@ -18,7 +18,6 @@ export default function ThemeScreen() {
   const alert = useAlert();
 
   const primaryColor = useThemeColor({}, 'primary');
-  const surfaceColor = useThemeColor({}, 'surface');
   const textColor = useThemeColor({}, 'text');
   const textMutedColor = useThemeColor({}, 'text-muted');
   const borderColor = useThemeColor({}, 'border');

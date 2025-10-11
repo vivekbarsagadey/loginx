@@ -29,14 +29,15 @@ function ThemedButtonComponent({ title, style, variant = 'primary', disabled, lo
 
     // Fire haptic feedback without blocking the press handler
     // Use heavy haptic for destructive actions to warn users
-    const hapticStyle = variant === 'destructive' ? Haptics.ImpactFeedbackStyle.Heavy : Haptics.ImpactFeedbackStyle.Light;
+    const hapticStrength = variant === 'destructive' ? Haptics.ImpactFeedbackStyle.Heavy : Haptics.ImpactFeedbackStyle.Light;
 
-    Haptics.impactAsync(hapticStyle).catch((hapticError: unknown) => {
-      // Device may not support haptics - log but don't interrupt user experience
-      if (__DEV__ && hapticError instanceof Error) {
-        console.warn('[ThemedButton] Haptic feedback unavailable:', hapticError.message);
+    (async () => {
+      try {
+        await Haptics.impactAsync(hapticStrength);
+      } catch {
+        // Haptic feedback unavailable - continue without it
       }
-    });
+    })();
 
     rest.onPress?.(e);
   };

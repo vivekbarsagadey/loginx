@@ -8,6 +8,7 @@ import { auth } from '@/firebase-config';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
+import { createLogger } from '@/utils/debug';
 import { zodResolver } from '@hookform/resolvers/zod';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchSignInMethodsForEmail, sendSignInLinkToEmail } from 'firebase/auth';
@@ -15,6 +16,8 @@ import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StyleSheet, type TextInput } from 'react-native';
 import { z } from 'zod';
+
+const logger = createLogger('OTPLogin');
 
 const emailSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -69,7 +72,7 @@ export default function OTPLoginScreen() {
     // In production, send OTP via email service (SendGrid, Mailgun, etc.)
     // For now, we'll use Firebase email link as a workaround
     if (__DEV__) {
-      console.warn(`[OTP Login] OTP Code: ${otp}`); // DEV ONLY - Remove in production
+      logger.warn(`OTP Code: ${otp}`); // DEV ONLY - Remove in production
     }
 
     setEmail(emailAddress);

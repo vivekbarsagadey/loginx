@@ -1,9 +1,12 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { createLogger } from '@/utils/debug';
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { GooglePlacesAutocomplete, type GooglePlacesAutocompleteRef } from 'react-native-google-places-autocomplete';
+
+const logger = createLogger('AddressAutocomplete');
 
 interface AddressAutocompleteProps {
   onAddressSelect: (address: AddressComponents) => void;
@@ -72,7 +75,7 @@ export function AddressAutocomplete({ onAddressSelect, initialValue, googleApiKe
         country: getComponent('country', true),
       };
     } catch (error) {
-      console.error('Error parsing address components:', error);
+      logger.error('Error parsing address components:', error);
       // Return a fallback object
       return {
         fullAddress: '',
@@ -103,7 +106,7 @@ export function AddressAutocomplete({ onAddressSelect, initialValue, googleApiKe
               onAddressSelect(addressComponents);
             }
           } catch (error) {
-            console.error('Error parsing address:', error);
+            logger.error('Error parsing address:', error);
             // Fallback - use the basic address text
             onAddressSelect({
               fullAddress: data.description || '',
@@ -116,7 +119,7 @@ export function AddressAutocomplete({ onAddressSelect, initialValue, googleApiKe
           }
         }}
         onFail={(error) => {
-          console.error('GooglePlacesAutocomplete error:', error);
+          logger.error('GooglePlacesAutocomplete error:', error);
         }}
         query={{
           key: isValidApiKey ? googleApiKey : '',

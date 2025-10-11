@@ -84,8 +84,7 @@ async function registerForPushNotificationsAsync() {
     // Get the Expo push token
     const projectId = Constants.expoConfig?.extra?.projectId;
     if (!projectId) {
-      console.error('[Push Notifications] Project ID not found in expo config');
-      return undefined;
+      return null;
     }
 
     const pushToken = await Notifications.getExpoPushTokenAsync({ projectId });
@@ -131,7 +130,9 @@ export const usePushNotifications = (uid?: string) => {
     // Register for push notifications
     registerForPushNotificationsAsync()
       .then((token) => {
-        setExpoPushToken(token);
+        if (token) {
+          setExpoPushToken(token);
+        }
 
         // Update user document with push token
         if (token && uid) {

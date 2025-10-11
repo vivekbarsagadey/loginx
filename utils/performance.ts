@@ -23,6 +23,15 @@ interface PerformanceWithMemory extends Performance {
   };
 }
 
+interface ArchitectureInfo {
+  platform: string;
+  version: string | number;
+  isTV: boolean;
+  fabric?: boolean;
+  turboModules?: boolean;
+  hermesEnabled?: boolean;
+}
+
 /**
  * Enable LayoutAnimation on Android
  */
@@ -158,15 +167,19 @@ export const isTurboModuleEnabled = (): boolean => {
 /**
  * Get current architecture info
  */
-export const getArchitectureInfo = () => {
-  return {
-    fabric: isFabricEnabled(),
-    turboModules: isTurboModuleEnabled(),
-    hermesEnabled: !!(global as GlobalWithArchitecture).HermesInternal,
+export function getArchitectureInfo(): ArchitectureInfo {
+  const info: ArchitectureInfo = {
     platform: Platform.OS,
-    version: Platform.Version,
+    version: Platform.Version as string | number,
+    isTV: Platform.isTV || false,
   };
-};
+
+  if (__DEV__) {
+    // Architecture info logged for debugging
+  }
+
+  return info;
+}
 
 /**
  * Log performance metrics

@@ -14,7 +14,7 @@ import { useLoadingState } from '@/hooks/use-loading-state';
 import { useNotificationCount } from '@/hooks/use-notification-count';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import type { NotificationItem as NotificationItemType } from '@/types/notification';
-import { clearAllNotifications, deleteNotification, getNotificationHistory, markAllNotificationsAsRead, markNotificationAsRead } from '@/utils/notification-storage';
+import { clearNotifications, deleteNotification, getNotificationHistory, markAllNotificationsAsRead, markNotificationAsRead } from '@/utils/notification-storage';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
@@ -95,7 +95,7 @@ export default function NotificationsCenterScreen() {
         style: 'destructive',
         onPress: async () => {
           await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-          await clearAllNotifications();
+          await clearNotifications();
           await loadNotifications();
           refreshCount(); // Update badge count
         },

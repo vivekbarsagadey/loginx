@@ -9,8 +9,11 @@ import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useLanguage } from '@/hooks/use-language-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
+import { createLogger } from '@/utils/debug';
 import { Feather } from '@expo/vector-icons';
 import { Linking, Platform, StyleSheet } from 'react-native';
+
+const logger = createLogger('HelpScreen');
 
 export default function HelpScreen() {
   const { push } = useHapticNavigation();
@@ -33,7 +36,7 @@ export default function HelpScreen() {
         await Linking.openURL(url);
       }
     } catch (error) {
-      console.error('Error opening website:', error);
+      logger.error('Error opening website:', error);
     }
   };
 

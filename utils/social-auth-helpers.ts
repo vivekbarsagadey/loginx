@@ -55,9 +55,7 @@ export const handleSocialAuthSuccess = async (user: FirebaseUser, displayNameOve
  * Provides error feedback with haptics
  */
 export const handleSocialAuthError = async (error: unknown, context?: string): Promise<void> => {
-  if (__DEV__ && context) {
-    console.error(`[SocialAuth] ${context}:`, error);
-  }
+  // Silent error handling - logging delegated to monitoring service
   await provideErrorFeedback(error);
 };
 

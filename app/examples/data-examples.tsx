@@ -4,6 +4,7 @@
  */
 
 import { ScreenContainer } from '@/components/screen-container';
+import { ThemedDot } from '@/components/themed-dot';
 import { ThemedPressable } from '@/components/themed-pressable';
 import { HStack } from '@/components/themed-stack';
 import { ThemedSurface } from '@/components/themed-surface';
@@ -104,7 +105,7 @@ export default function DataExamplesScreen() {
                   <View style={styles.badge}>
                     <ThemedText style={styles.badgeText}>{notif.type}</ThemedText>
                   </View>
-                  {!notif.read && <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: colors.primary }} />}
+                  {!notif.read && <ThemedDot size="sm" variant="primary" accessibilityLabel="Unread notification" />}
                 </HStack>
                 <ThemedText type="subtitle1" style={{ marginBottom: Spacing.xs }}>
                   {notif.title}

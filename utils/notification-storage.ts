@@ -21,8 +21,7 @@ export async function getNotificationHistory(): Promise<NotificationItem[]> {
 
     const history: NotificationHistory = JSON.parse(data);
     return history.notifications || [];
-  } catch (error) {
-    console.error('Error reading notification history:', error);
+  } catch {
     return [];
   }
 }
@@ -54,7 +53,7 @@ export async function addNotification(notification: Omit<NotificationItem, 'id' 
 
     await AsyncStorage.setItem(NOTIFICATION_STORAGE_KEY, JSON.stringify(historyData));
   } catch (error) {
-    console.error('Error adding notification:', error);
+    // Silently fail - not critical
   }
 }
 
@@ -71,9 +70,9 @@ export async function markNotificationAsRead(notificationId: string): Promise<vo
       lastFetch: Date.now(),
     };
 
-    await AsyncStorage.setItem(NOTIFICATION_STORAGE_KEY, JSON.stringify(historyData));
+    await AsyncStorage.setItem(NOTIFICATION_STORAGE_KEY, JSON.stringify(updated));
   } catch (error) {
-    console.error('Error marking notification as read:', error);
+    // Silently fail
   }
 }
 
@@ -90,9 +89,9 @@ export async function markAllNotificationsAsRead(): Promise<void> {
       lastFetch: Date.now(),
     };
 
-    await AsyncStorage.setItem(NOTIFICATION_STORAGE_KEY, JSON.stringify(historyData));
+    await AsyncStorage.setItem(NOTIFICATION_STORAGE_KEY, JSON.stringify(updated));
   } catch (error) {
-    console.error('Error marking all notifications as read:', error);
+    // Silently fail
   }
 }
 
@@ -111,18 +110,18 @@ export async function deleteNotification(notificationId: string): Promise<void> 
 
     await AsyncStorage.setItem(NOTIFICATION_STORAGE_KEY, JSON.stringify(historyData));
   } catch (error) {
-    console.error('Error deleting notification:', error);
+    // Silently fail
   }
 }
 
 /**
  * Clear all notifications
  */
-export async function clearAllNotifications(): Promise<void> {
+export async function clearNotifications(): Promise<void> {
   try {
     await AsyncStorage.removeItem(NOTIFICATION_STORAGE_KEY);
   } catch (error) {
-    console.error('Error clearing notifications:', error);
+    // Silently fail
   }
 }
 
@@ -131,10 +130,9 @@ export async function clearAllNotifications(): Promise<void> {
  */
 export async function getUnreadCount(): Promise<number> {
   try {
-    const history = await getNotificationHistory();
-    return history.filter((n) => !n.read).length;
-  } catch (error) {
-    console.error('Error getting unread count:', error);
+    const notifications = await getNotificationHistory();
+    return notifications.filter((n) => !n.read).length;
+  } catch {
     return 0;
   }
 }

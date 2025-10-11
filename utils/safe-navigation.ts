@@ -29,15 +29,13 @@ export function safeNavigate(options: NavigationOptions): void {
       router.push(pathname as never);
     }
   } catch (error) {
-    console.error('[Navigation] Failed to navigate:', error);
-
     // Try fallback route if provided
     if (fallbackRoute) {
       try {
         router.push(fallbackRoute as never);
         return;
       } catch (fallbackError) {
-        console.error('[Navigation] Fallback route also failed:', fallbackError);
+        // Fallback failed - proceed to error handler
       }
     }
 
@@ -64,15 +62,13 @@ export function safeReplace(options: NavigationOptions): void {
       router.replace(pathname as never);
     }
   } catch (error) {
-    console.error('[Navigation] Failed to replace:', error);
-
     // Try fallback route if provided
     if (fallbackRoute) {
       try {
         router.replace(fallbackRoute as never);
         return;
       } catch (fallbackError) {
-        console.error('[Navigation] Fallback route also failed:', fallbackError);
+        // Fallback failed - proceed to error handler
       }
     }
 
@@ -115,7 +111,6 @@ export function safeBack(options?: {
               router.replace('/(tabs)/' as never);
             }
           } catch (error) {
-            console.error('[Navigation] Failed to go back:', error);
             showError(new Error('Cannot go back. Try closing the app.'));
           }
         },
@@ -130,7 +125,6 @@ export function safeBack(options?: {
       }
     }
   } catch (error) {
-    console.error('[Navigation] Failed to navigate back:', error);
     showError(new Error('Navigation error. Please restart the app.'));
   }
 }
@@ -147,8 +141,7 @@ export function isValidRoute(pathname: string): boolean {
 
     // Additional validation logic can be added here
     return true;
-  } catch (error) {
-    console.error('[Navigation] Error validating route:', error);
+  } catch {
     return false;
   }
 }

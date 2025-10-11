@@ -4,12 +4,15 @@ import { AccessibilityHints, AccessibilityRoles } from '@/constants/accessibilit
 import { Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
+import { createLogger } from '@/utils/debug';
 import { showError } from '@/utils/error';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { useState } from 'react';
 import { ActivityIndicator, Image, StyleSheet, TouchableOpacity } from 'react-native';
+
+const logger = createLogger('ProfilePhotoSection');
 
 interface ProfilePhotoSectionProps {
   photoURL: string;
@@ -67,7 +70,7 @@ export function ProfilePhotoSection({ photoURL, userId, onPhotoChange, disabled 
 
           await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         } catch (error) {
-          console.error('[ProfilePhoto] Error uploading image:', error);
+          logger.error('Error uploading image:', error);
           await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
           showError(error);
         } finally {
@@ -75,7 +78,7 @@ export function ProfilePhotoSection({ photoURL, userId, onPhotoChange, disabled 
         }
       }
     } catch (error) {
-      console.error('[ProfilePhoto] Error picking image:', error);
+      logger.error('Error picking image:', error);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       showError(error);
       setImageLoading(false);

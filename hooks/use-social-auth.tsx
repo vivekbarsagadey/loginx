@@ -85,12 +85,7 @@ const isFacebookSigninAvailable = (): boolean => {
  * Separated for testability and clarity
  */
 interface GoogleSignInModule {
-  configure: (config: {
-    webClientId?: string;
-    iosClientId?: string;
-    offlineAccess?: boolean;
-    profileImageSize?: number;
-  }) => Promise<void>;
+  configure: (config: { webClientId?: string; iosClientId?: string; offlineAccess?: boolean; profileImageSize?: number }) => Promise<void>;
   hasPlayServices: () => Promise<boolean>;
   signIn: () => Promise<{ data?: { idToken?: string } }>;
 }

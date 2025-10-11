@@ -120,3 +120,9 @@ export function createDebugger(namespace: string) {
     assert: (condition: boolean, message: string) => debugAssert(condition, `[${namespace}] ${message}`),
   };
 }
+
+/**
+ * Alias for createDebugger - preferred for minimal logging pattern
+ * Creates a namespaced logger with minimal output (only errors in dev)
+ */
+export const createLogger = createDebugger;

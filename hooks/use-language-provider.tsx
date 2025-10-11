@@ -27,7 +27,7 @@ export function LanguageProvider({ children }: PropsWithChildren) {
           i18n.locale = defaultLocale;
         }
       } catch (error) {
-        console.error('Error loading language:', error);
+        // Fall back to default language
       }
     };
     getLanguage();
@@ -39,7 +39,7 @@ export function LanguageProvider({ children }: PropsWithChildren) {
       i18n.locale = newLanguage;
       await AsyncStorage.setItem('language', newLanguage);
     } catch (error) {
-      console.error('Error saving language:', error);
+      // Silently fail - not critical
     }
   }, []);
 

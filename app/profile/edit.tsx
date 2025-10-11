@@ -12,11 +12,14 @@ import { auth } from '@/firebase-config';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
+import { createLogger } from '@/utils/debug';
 import { validateAgeField, validateDisplayNameField, validateZipCodeField } from '@/utils/form-validation';
 import { sanitizeUserInput } from '@/utils/sanitize';
 import { updateProfile } from 'firebase/auth';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, type TextInput } from 'react-native';
+
+const logger = createLogger('EditProfile');
 
 export default function EditProfileScreen() {
   const user = auth.currentUser;
@@ -68,7 +71,7 @@ export default function EditProfileScreen() {
           setPhotoURL(user.photoURL || '');
         }
       } catch (error) {
-        console.error('[EditProfile] Error loading profile:', error);
+        logger.error('Error loading profile:', error);
         // Fallback to auth data
         setDisplayName(user.displayName || '');
         setPhotoURL(user.photoURL || '');

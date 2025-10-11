@@ -20,7 +20,6 @@ export default function LanguageScreen() {
   const surfaceColor = useThemeColor({}, 'surface');
   const textColor = useThemeColor({}, 'text');
   const textMutedColor = useThemeColor({}, 'text-muted');
-  const borderColor = useThemeColor({}, 'border');
   const onPrimaryColor = useThemeColor({}, 'on-primary');
 
   // Use loading state for language changes

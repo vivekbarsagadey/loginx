@@ -12,9 +12,12 @@ import { useAuth } from '@/hooks/use-auth-provider';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
 import { type UserProfile } from '@/types/user';
+import { createLogger } from '@/utils/debug';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
+
+const logger = createLogger('HomeScreen');
 
 export default function IndexScreen() {
   const { user } = useAuth();
@@ -43,7 +46,7 @@ export default function IndexScreen() {
             alert.show('Error', 'User profile not found. Please complete your registration.', [{ text: 'OK' }], { variant: 'error' });
           }
         } catch (error) {
-          console.error('[Home] Error fetching user profile:', error);
+          logger.error('Error fetching user profile:', error);
           alert.show('Error', 'Failed to fetch user profile.', [{ text: 'OK' }], { variant: 'error' });
         } finally {
           setLoading(false);

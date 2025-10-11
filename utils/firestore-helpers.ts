@@ -65,21 +65,8 @@ export async function getDocumentSafe<T = DocumentData>(docRef: DocumentReferenc
       shouldRetry: shouldRetryFirestoreError,
     });
     return snapshot.exists() ? snapshot : null;
-  } catch (error) {
-    if (typeof error === 'object' && error !== null && 'code' in error) {
-      const firestoreError = error as { code: string; message: string };
-      console.error('[Firestore] Get document failed:', {
-        path: docRef.path,
-        code: firestoreError.code,
-        message: firestoreError.message,
-      });
-
-      // Provide user-friendly error messages
-      if (firestoreError.code === 'permission-denied') {
-        throw new FirestoreError('You do not have permission to access this document', firestoreError.code, error);
-      }
-    }
-    throw error;
+  } catch {
+    return null;
   }
 }
 

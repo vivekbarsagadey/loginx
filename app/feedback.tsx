@@ -60,7 +60,10 @@ export default function FeedbackScreen() {
   // Form submission with hook
   const { submit, isSubmitting } = useFormSubmit(
     async () => {
-      const result = await submitFeedback(user!.uid, user!.email || undefined, selectedCategory, subject, message, rating > 0 ? rating : undefined, true);
+      if (!user) {
+        throw new Error('User is required');
+      }
+      const result = await submitFeedback(user.uid, user.email || undefined, selectedCategory, subject, message, rating > 0 ? rating : undefined, true);
 
       if (!result.success) {
         throw new Error(result.error || 'Failed to submit feedback');

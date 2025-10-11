@@ -3,11 +3,14 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { createLogger } from '@/utils/debug';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import { memo, useCallback, useState } from 'react';
 import { FlatList, Image, Platform, Pressable, StyleSheet, View } from 'react-native';
+
+const logger = createLogger('MultiPhotoPicker');
 
 interface MultiPhotoPickerProps {
   value?: string[];
@@ -116,7 +119,7 @@ export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10
         }
       }
     } catch (error) {
-      console.error('[MultiPhotoPicker] Error picking images:', error);
+      logger.error('Error picking images:', error);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       onError?.(error instanceof Error ? error : new Error('Failed to pick images'));
       alert.show('Error', 'Failed to pick images. Please try again.', [{ text: 'OK' }], { variant: 'error' });

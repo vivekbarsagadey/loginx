@@ -1,6 +1,6 @@
 import { deleteUserAccount } from '@/actions/user.action';
 import { TabHeader } from '@/components/navigation/TabHeader';
-import { SettingsSection, type SettingsItemConfig } from '@/components/organisms/settings-section';
+import { type SettingsItemConfig, SettingsSection } from '@/components/organisms/settings-section';
 import { UserProfileHeader } from '@/components/organisms/user-profile-header';
 import { ScreenContainer } from '@/components/screen-container';
 import { ConfirmationDialog } from '@/components/ui/dialog';

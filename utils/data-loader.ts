@@ -5,6 +5,7 @@
 
 import { getSampleNotifications } from '@/data/notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { logger } from './logger';
 
 const SAMPLE_DATA_LOADED_KEY = '@sample_data_loaded';
 
@@ -16,7 +17,7 @@ export async function isSampleDataLoaded(): Promise<boolean> {
     const loaded = await AsyncStorage.getItem(SAMPLE_DATA_LOADED_KEY);
     return loaded === 'true';
   } catch (error) {
-    console.error('Error checking sample data status:', error);
+    logger.error('Error checking sample data status:', error);
     return false;
   }
 }
@@ -28,7 +29,7 @@ export async function markSampleDataAsLoaded(): Promise<void> {
   try {
     await AsyncStorage.setItem(SAMPLE_DATA_LOADED_KEY, 'true');
   } catch (error) {
-    console.error('Error marking sample data as loaded:', error);
+    logger.error('Error marking sample data as loaded:', error);
   }
 }
 
@@ -47,11 +48,10 @@ export async function loadSampleNotifications(): Promise<void> {
       })
     );
     if (__DEV__) {
-      // eslint-disable-next-line no-console
-      console.log(`✅ Loaded ${notifications.length} sample notifications`);
+      logger.info(`Loaded ${notifications.length} sample notifications`);
     }
   } catch (error) {
-    console.error('Error loading sample notifications:', error);
+    logger.error('Error loading sample notifications:', error);
   }
 }
 
@@ -65,15 +65,13 @@ export async function initializeSampleData(force = false): Promise<void> {
 
     if (alreadyLoaded && !force) {
       if (__DEV__) {
-        // eslint-disable-next-line no-console
-        console.log('Sample data already loaded, skipping...');
+        logger.debug('Sample data already loaded, skipping...');
       }
       return;
     }
 
     if (__DEV__) {
-      // eslint-disable-next-line no-console
-      console.log('Initializing sample data...');
+      logger.info('Initializing sample data...');
     }
 
     // Load sample notifications
@@ -83,11 +81,10 @@ export async function initializeSampleData(force = false): Promise<void> {
     await markSampleDataAsLoaded();
 
     if (__DEV__) {
-      // eslint-disable-next-line no-console
-      console.log('✅ Sample data initialization complete');
+      logger.info('Sample data initialization complete');
     }
   } catch (error) {
-    console.error('Error initializing sample data:', error);
+    logger.error('Error initializing sample data:', error);
   }
 }
 
@@ -100,11 +97,10 @@ export async function clearSampleData(): Promise<void> {
     await AsyncStorage.removeItem('@notification_history');
     await AsyncStorage.removeItem(SAMPLE_DATA_LOADED_KEY);
     if (__DEV__) {
-      // eslint-disable-next-line no-console
-      console.log('✅ Sample data cleared');
+      logger.info('Sample data cleared');
     }
   } catch (error) {
-    console.error('Error clearing sample data:', error);
+    logger.error('Error clearing sample data:', error);
   }
 }
 
@@ -129,7 +125,7 @@ export async function getSampleNotificationCount(): Promise<number> {
     const parsed = JSON.parse(data);
     return parsed.notifications?.length || 0;
   } catch (error) {
-    console.error('Error getting notification count:', error);
+    logger.error('Error getting notification count:', error);
     return 0;
   }
 }

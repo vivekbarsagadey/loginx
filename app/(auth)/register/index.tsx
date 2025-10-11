@@ -8,6 +8,7 @@ import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useRegistrationFlow } from '@/hooks/use-registration-flow';
+import { createLogger } from '@/utils/debug';
 import { showError } from '@/utils/error';
 import { runRegistrationDiagnostics } from '@/utils/registration-diagnostics';
 import { sanitizeEmail, sanitizeUserInput } from '@/utils/sanitize';
@@ -23,6 +24,8 @@ import RegisterStep1 from './step-1';
 import RegisterStep2 from './step-2';
 import RegisterStep3 from './step-3';
 import RegisterStep4 from './step-4';
+
+const logger = createLogger('Registration');
 
 const STEPS = [
   { id: 'step-1', title: 'Personal Information', component: RegisterStep1, fields: ['firstName', 'lastName', 'photoURL', 'termsAccepted', 'referralCode'] },
@@ -171,13 +174,13 @@ export default function RegisterScreen() {
           termsAcceptedAt: sanitizedData.termsAcceptedAt,
         });
       } catch (profileError) {
-        console.error('[Registration] Failed to create user profile:', profileError);
+        logger.error('Failed to create user profile:', profileError);
         // Rollback: Delete the Firebase user if profile creation fails
         try {
           await deleteUser(user);
           throw new Error('Failed to create user profile. Please try again.');
         } catch (deleteError) {
-          console.error('[Registration] Failed to rollback user creation:', deleteError);
+          logger.error('Failed to rollback user creation:', deleteError);
           throw new Error('Registration failed. Please contact support if you cannot log in.');
         }
       }
@@ -193,14 +196,14 @@ export default function RegisterScreen() {
             params: { phoneNumber: sanitizedData.phoneNumber },
           });
         } catch (navError) {
-          console.error('[Registration] Navigation to phone verification failed:', navError);
+          logger.error('Navigation to phone verification failed:', navError);
           try {
             replace({
               pathname: '/(auth)/verify-email',
               params: { email: sanitizedData.email },
             });
           } catch (fallbackError) {
-            console.error('[Registration] Fallback navigation also failed:', fallbackError);
+            logger.error('Fallback navigation also failed:', fallbackError);
             showError(new Error('Registration complete! Please check your email for verification link.'));
           }
         }
@@ -211,7 +214,7 @@ export default function RegisterScreen() {
             params: { email: sanitizedData.email },
           });
         } catch (navError) {
-          console.error('[Registration] Navigation to email verification failed:', navError);
+          logger.error('Navigation to email verification failed:', navError);
           showError(new Error('Registration complete! Please check your email for verification link and then log in.'));
         }
       }

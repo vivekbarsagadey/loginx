@@ -83,7 +83,6 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions =
 
       // Don't retry if we've exhausted all attempts
       if (attempt === opts.maxRetries) {
-        console.error(`[Retry] All ${opts.maxRetries + 1} attempts failed`);
         break;
       }
 

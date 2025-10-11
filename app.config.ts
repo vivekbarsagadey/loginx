@@ -112,7 +112,8 @@ export default {
       googleIosClientId: process.env.GOOGLE_IOS_CLIENT_ID,
       googleAndroidClientId: process.env.GOOGLE_ANDROID_CLIENT_ID,
       appleTeamId: process.env.APPLE_TEAM_ID,
-      appleBundleId: process.env.APPLE_BUNDLE_ID,
+      appleBundleId: process.env.APPLE_BUNDLE_ID || 'com.whizit.loginx',
+      androidPackageName: 'com.whizit.loginx',
 
       // Firebase Functions
       functionsUrl: process.env.FUNCTIONS_URL,

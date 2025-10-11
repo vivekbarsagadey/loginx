@@ -41,15 +41,13 @@ export async function openMailto(options: MailtoOptions): Promise<boolean> {
 
   try {
     const supported = await Linking.canOpenURL(url);
-    if (supported) {
-      await Linking.openURL(url);
-      return true;
-    } else {
-      console.error('Email client not available');
-      return false;
+    if (!supported) {
+      throw new Error('Email client not available');
     }
-  } catch (error) {
-    console.error('Error opening email client:', error);
+
+    await Linking.openURL(url);
+    return true;
+  } catch {
     return false;
   }
 }

@@ -5,7 +5,7 @@
 import Constants from 'expo-constants';
 
 // Get the extra config from Expo Constants
-const extra = (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ?? (Constants.manifest?.extra as Record<string, unknown> | undefined) ?? {};
+const extra = (Constants.expoConfig?.extra as Record<string, unknown> | undefined) ?? {};
 
 /**
  * Configuration object with typed access to all environment variables
@@ -35,7 +35,8 @@ export const Config = {
     googleIosClientId: extra.googleIosClientId as string,
     googleAndroidClientId: extra.googleAndroidClientId as string,
     appleTeamId: extra.appleTeamId as string,
-    appleBundleId: extra.appleBundleId as string,
+    appleBundleId: (extra.appleBundleId as string) || 'com.whizit.loginx',
+    androidPackageName: (extra.androidPackageName as string) || 'com.whizit.loginx',
   },
 
   // Firebase Functions
@@ -149,7 +150,6 @@ export const validateRequiredConfig = (): void => {
 
   if (missingFields.length > 0) {
     const missingList = missingFields.map((field) => field.key).join(', ');
-    console.error(`[Config] Missing required configuration: ${missingList}`);
 
     if (!__DEV__) {
       throw new Error('Application configuration is incomplete. Please contact support.');

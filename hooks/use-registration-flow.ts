@@ -36,6 +36,7 @@ export function useRegistrationFlow<T extends Record<string, unknown>>({ steps, 
 
   const goNext = async () => {
     const fields = steps[currentStep].fields;
+    // Validate current step fields - cast to proper trigger parameter type
     const isValid = await trigger(fields as Parameters<UseFormTrigger<T>>[0]);
 
     if (isValid) {

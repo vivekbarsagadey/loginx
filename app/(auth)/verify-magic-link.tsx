@@ -10,6 +10,8 @@ import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
+import { Config } from '@/utils/config';
+import { createLogger } from '@/utils/debug';
 import { showError } from '@/utils/error';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,6 +19,8 @@ import * as Linking from 'expo-linking';
 import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
+
+const logger = createLogger('VerifyMagicLink');
 
 /**
  * Magic Link Verification Screen
@@ -50,7 +54,7 @@ export default function VerifyMagicLinkScreen() {
         setEmail(storedEmail);
       }
     } catch (error) {
-      console.error('[VerifyMagicLink] Failed to load stored email:', error);
+      logger.error('Failed to load stored email:', error);
     } finally {
       setChecking(false);
     }
@@ -70,7 +74,7 @@ export default function VerifyMagicLinkScreen() {
         await completeSignIn(initialUrl);
       }
     } catch (error) {
-      console.error('[VerifyMagicLink] Error checking initial URL:', error);
+      logger.error('Error checking initial URL:', error);
     }
   };
 
@@ -92,7 +96,7 @@ export default function VerifyMagicLinkScreen() {
 
       await finishSignIn(signInEmail, emailLink);
     } catch (error) {
-      console.error('[VerifyMagicLink] Error completing sign-in:', error);
+      logger.error('Error completing sign-in:', error);
       showError(error);
     }
   };
@@ -115,10 +119,10 @@ export default function VerifyMagicLinkScreen() {
       url: 'https://your-app.com/finish-sign-in',
       handleCodeInApp: true,
       iOS: {
-        bundleId: 'com.yourcompany.loginx',
+        bundleId: Config.social.appleBundleId,
       },
       android: {
-        packageName: 'com.yourcompany.loginx',
+        packageName: Config.social.androidPackageName,
         installApp: true,
         minimumVersion: '1.0.0',
       },

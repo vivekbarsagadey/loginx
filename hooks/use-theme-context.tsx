@@ -77,7 +77,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
           setThemePreferenceState(saved as ThemePreference);
         }
       } catch (error) {
-        console.error('Failed to load theme preference:', error);
+        // Fall back to default theme if loading fails
       } finally {
         setIsLoading(false);
       }

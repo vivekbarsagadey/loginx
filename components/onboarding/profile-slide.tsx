@@ -3,6 +3,7 @@ import { useAlert } from '@/hooks/use-alert';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
+import { logger } from '@/utils/logger';
 import { savePendingProfileData } from '@/utils/pending-profile';
 import { Ionicons } from '@expo/vector-icons';
 import { useCallback, useState } from 'react';
@@ -48,8 +49,7 @@ export const ProfileSlide = ({ width, onNext, onSkip }: ProfileSlideProps) => {
       await trackSlideCompletion('profile');
       onNext?.();
     } catch (error) {
-      console.error('Failed to save profile data:', error);
-      showAlert('Error', 'Failed to save profile information. You can set this up later in Settings.', [{ text: 'OK', onPress: onNext }], { variant: 'error' });
+      // Continue anyway - profile can be updated later
     } finally {
       setIsCompleting(false);
     }
@@ -99,7 +99,7 @@ export const ProfileSlide = ({ width, onNext, onSkip }: ProfileSlideProps) => {
                 handleInteraction();
               }}
               onError={(error) => {
-                console.error('Photo upload error:', error);
+                logger.error('Photo upload error:', error);
                 showAlert('Upload Error', 'Failed to upload photo. You can add one later.', [{ text: 'OK' }], { variant: 'error' });
               }}
             />

@@ -1,3 +1,4 @@
+import { ThemedDivider } from '@/components/themed-divider';
 import { Spacing } from '@/constants/layout';
 import { StyleSheet, View, type ViewStyle } from 'react-native';
 import { SectionHeader } from '../molecules/section-header';
@@ -41,7 +42,7 @@ export function ProfileFormSection({ title, subtitle, children, style, showDivid
     <View style={[styles.container, style]}>
       {(title || subtitle) && <SectionHeader title={title || ''} subtitle={subtitle} />}
       <View style={styles.content}>{children}</View>
-      {showDivider && <View style={styles.divider} />}
+      {showDivider && <ThemedDivider spacing="lg" />}
     </View>
   );
 }
@@ -52,10 +53,5 @@ const styles = StyleSheet.create({
   },
   content: {
     gap: Spacing.md,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: 'rgba(128, 128, 128, 0.2)',
-    marginTop: Spacing.lg,
   },
 });

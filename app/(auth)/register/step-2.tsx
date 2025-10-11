@@ -32,7 +32,6 @@ export default function RegisterStep2({ errors }: { errors: FieldErrors<FormData
 
   const successColor = useThemeColor({}, 'success');
   const errorColor = useThemeColor({}, 'error');
-  const mutedColor = useThemeColor({}, 'text-muted');
 
   // Auto-focus email input on mount
   useEffect(() => {

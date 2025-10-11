@@ -1,7 +1,7 @@
 import { clearAuthState, saveAuthState } from '@/utils/auth-persistence';
 import { debugError, debugLog } from '@/utils/debug';
 import { showError } from '@/utils/error';
-import { applyPendingProfileData, clearPendingProfileData } from '@/utils/pending-profile';
+import { applyPendingProfileData, clearPendingProfile } from '@/utils/pending-profile';
 import { clearSecureStorage } from '@/utils/secure-storage';
 import { signOut as firebaseSignOut, onAuthStateChanged, type User } from 'firebase/auth';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -47,13 +47,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (user) {
           // Apply any pending profile data from onboarding
           try {
-            const applied = await applyPendingProfileData(user);
-            if (applied) {
-              debugLog('[Auth] Applied pending profile data from onboarding');
-            }
+            await applyPendingProfileData(user);
           } catch (error) {
-            console.error('[Auth] Failed to apply pending profile data:', error);
-            // Don't fail authentication for profile data issues
+            // Silently fail - profile can be updated later
           }
 
           // Save authentication state for persistence
@@ -114,7 +110,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       // Clear any pending profile data on logout
       try {
-        await clearPendingProfileData();
+        await clearPendingProfile();
         debugLog('[Auth] Cleared pending profile data on logout');
       } catch (profileError) {
         debugError('[Auth] Failed to clear pending profile data on logout', profileError);

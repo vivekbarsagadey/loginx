@@ -18,7 +18,6 @@ export async function savePendingProfileData(data: PendingProfileData): Promise<
   try {
     await AsyncStorage.setItem(PENDING_PROFILE_KEY, JSON.stringify(data));
   } catch (error) {
-    console.error('Failed to save pending profile data:', error);
     throw error;
   }
 }
@@ -29,9 +28,11 @@ export async function savePendingProfileData(data: PendingProfileData): Promise<
 export async function getPendingProfileData(): Promise<PendingProfileData | null> {
   try {
     const data = await AsyncStorage.getItem(PENDING_PROFILE_KEY);
-    return data ? JSON.parse(data) : null;
-  } catch (error) {
-    console.error('Failed to retrieve pending profile data:', error);
+    if (data) {
+      return JSON.parse(data) as PendingProfileData;
+    }
+    return null;
+  } catch {
     return null;
   }
 }
@@ -51,7 +52,7 @@ export async function applyPendingProfileData(user: User): Promise<boolean> {
     const isDataFresh = Date.now() - pendingData.completedAt < CacheConstants.PERSISTENT_DURATION;
 
     if (!isDataFresh) {
-      await clearPendingProfileData();
+      await clearPendingProfile();
       return false;
     }
 
@@ -77,7 +78,7 @@ export async function applyPendingProfileData(user: User): Promise<boolean> {
     }
 
     // Clear pending data after successful application
-    await clearPendingProfileData();
+    await clearPendingProfile();
 
     return true;
   } catch (error) {
@@ -90,11 +91,11 @@ export async function applyPendingProfileData(user: User): Promise<boolean> {
 /**
  * Clear pending profile data from storage
  */
-export async function clearPendingProfileData(): Promise<void> {
+export async function clearPendingProfile(): Promise<void> {
   try {
     await AsyncStorage.removeItem(PENDING_PROFILE_KEY);
   } catch (error) {
-    console.error('Failed to clear pending profile data:', error);
+    // Silently fail - not critical
   }
 }
 

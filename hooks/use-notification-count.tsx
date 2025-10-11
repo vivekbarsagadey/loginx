@@ -21,7 +21,7 @@ export function useNotificationCount(refreshInterval = 30000) {
       const count = await getUnreadCount();
       setUnreadCount(count);
     } catch (error) {
-      console.error('[useNotificationCount] Error fetching unread count:', error);
+      return 0;
     }
   }, []);
 

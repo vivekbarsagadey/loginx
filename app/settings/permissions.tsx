@@ -5,6 +5,7 @@ import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
 import { ThemedPressable } from '@/components/themed-pressable';
 import { HStack, VStack } from '@/components/themed-stack';
 import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
 import { BorderRadius, IconSize, Spacing, Typography } from '@/constants/layout';
 import { getPermissions } from '@/data';
 import { useAlert } from '@/hooks/use-alert';
@@ -75,9 +76,9 @@ function PermissionCard({ icon, title, description, granted, canAskAgain, onRequ
       accessibilityState={{ disabled: loading }}
     >
       <HStack spacing="md" align="center" style={styles.cardHeader}>
-        <View style={[styles.iconContainer, { backgroundColor: `${statusColor}15` }]}>
+        <ThemedView style={[styles.iconContainer, { backgroundColor: `${statusColor}15` }]}>
           <Ionicons name={icon} size={IconSize.xl} color={statusColor} />
-        </View>
+        </ThemedView>
 
         <VStack spacing="xs" style={styles.cardContent}>
           <ThemedText type="subtitle1" style={styles.cardTitle}>
@@ -152,9 +153,9 @@ export default function PermissionsScreen() {
     <ScreenContainer scrollable style={{ backgroundColor: bgColor }} contentContainerStyle={styles.content}>
       {/* Header */}
       <View style={styles.header}>
-        <View style={[styles.headerIcon, { backgroundColor: `${primaryColor}15` }]}>
+        <ThemedView style={[styles.headerIcon, { backgroundColor: `${primaryColor}15` }]}>
           <Ionicons name="shield-checkmark" size={IconSize.xxxl} color={primaryColor} />
-        </View>
+        </ThemedView>
 
         <ThemedText type="h3" style={styles.headerTitle}>
           {i18n.t('settings.permissions.header.title')}

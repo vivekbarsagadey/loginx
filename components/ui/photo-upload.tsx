@@ -2,11 +2,14 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { createLogger } from '@/utils/debug';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import { ActivityIndicator, Image, Platform, Pressable, StyleSheet, View } from 'react-native';
+
+const logger = createLogger('PhotoUpload');
 
 interface PhotoUploadProps {
   value?: string;
@@ -80,7 +83,7 @@ export function PhotoUpload({ value, onChange, onError }: PhotoUploadProps) {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       }
     } catch (error) {
-      console.error('[PhotoUpload] Error picking image:', error);
+      logger.error('Error picking image:', error);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       onError?.(error instanceof Error ? error : new Error('Failed to pick image'));
       showAlert('Error', 'Failed to pick image. Please try again.', [{ text: 'OK' }], { variant: 'error' });

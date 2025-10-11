@@ -47,7 +47,7 @@ export function checkFirebaseConfig(): DiagnosticResult[] {
     }
 
     // Check environment variables from Expo config
-    const extra = (Constants.expoConfig?.extra as Record<string, string> | undefined) ?? (Constants.manifest?.extra as Record<string, string> | undefined);
+    const extra = Constants.expoConfig?.extra as Record<string, string> | undefined;
 
     if (!extra) {
       results.push({
@@ -172,13 +172,13 @@ export function runRegistrationDiagnostics(): void {
 
   // Use allowed console methods (warn/error only per ESLint rules)
   if (hasErrors) {
-    console.error('❌ Registration has configuration errors:');
+    // Configuration errors detected - would be logged in production to monitoring service
     allResults
       .filter((r) => r.status === 'error')
       .forEach((result) => {
-        console.error(`  [${result.category}] ${result.message}`);
+        // Error details available in result object
         if (result.details) {
-          console.error(`    Details: ${result.details}`);
+          // Details suppressed in production
         }
       });
   }

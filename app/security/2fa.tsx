@@ -26,7 +26,6 @@ export default function TwoFactorAuthScreen() {
   const primaryColor = useThemeColor({}, 'primary');
   const successColor = useThemeColor({}, 'success');
   const warningColor = useThemeColor({}, 'warning');
-  const surfaceVariant = useThemeColor({}, 'surface-variant');
 
   const benefits = i18n.t('screens.security.twoFactor.notEnabled.benefits', { returnObjects: true }) as string[];
 

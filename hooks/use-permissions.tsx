@@ -94,7 +94,7 @@ export function usePermissions(): UsePermissionsReturn {
         },
       });
     } catch (error) {
-      console.error('Error checking permissions:', error);
+      // Silently fail - permissions will be checked again when needed
     }
   }, []);
 
@@ -118,7 +118,6 @@ export function usePermissions(): UsePermissionsReturn {
 
       return granted;
     } catch (error) {
-      console.error('Error requesting camera permission:', error);
       return false;
     } finally {
       setLoading(false);
@@ -145,7 +144,6 @@ export function usePermissions(): UsePermissionsReturn {
 
       return granted;
     } catch (error) {
-      console.error('Error requesting media library permission:', error);
       return false;
     } finally {
       setLoading(false);
@@ -172,7 +170,6 @@ export function usePermissions(): UsePermissionsReturn {
 
       return granted;
     } catch (error) {
-      console.error('Error requesting location permission:', error);
       return false;
     } finally {
       setLoading(false);
@@ -199,7 +196,6 @@ export function usePermissions(): UsePermissionsReturn {
 
       return granted;
     } catch (error) {
-      console.error('Error requesting notification permission:', error);
       return false;
     } finally {
       setLoading(false);

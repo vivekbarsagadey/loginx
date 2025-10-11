@@ -8,6 +8,7 @@ import { auth } from '@/firebase-config';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
+import { Config } from '@/utils/config';
 import { zodResolver } from '@hookform/resolvers/zod';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { sendSignInLinkToEmail } from 'firebase/auth';
@@ -47,10 +48,10 @@ export default function PasswordlessLoginScreen() {
       handleCodeInApp: true,
       // iOS and Android app configuration
       iOS: {
-        bundleId: 'com.yourcompany.loginx', // Replace with your iOS bundle ID
+        bundleId: Config.social.appleBundleId,
       },
       android: {
-        packageName: 'com.yourcompany.loginx', // Replace with your Android package name
+        packageName: Config.social.androidPackageName,
         installApp: true,
         minimumVersion: '1.0.0',
       },

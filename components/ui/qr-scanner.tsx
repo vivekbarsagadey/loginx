@@ -3,11 +3,14 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useAlert } from '@/hooks/use-alert';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { createLogger } from '@/utils/debug';
 import { Ionicons } from '@expo/vector-icons';
 import { Camera, CameraView } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Platform, Pressable, StyleSheet, View } from 'react-native';
+
+const logger = createLogger('QRScanner');
 
 interface QRScannerProps {
   onScan: (data: string) => void;
@@ -56,7 +59,7 @@ export function QRScanner({ onScan, onClose, title = 'Scan QR Code', description
         ]);
       }
     } catch (error) {
-      console.error('[QRScanner] Error requesting camera permission:', error);
+      logger.error('Error requesting camera permission:', error);
       alert.show('Error', 'Failed to request camera permission. Please try again.', [{ text: 'OK' }], { variant: 'error' });
       onClose();
     }
