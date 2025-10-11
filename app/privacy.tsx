@@ -4,17 +4,17 @@ import { ThemedView } from '@/components/themed-view';
 import { Collapsible } from '@/components/ui/collapsible';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
 import { Feather } from '@expo/vector-icons';
 import { StyleSheet } from 'react-native';
 
 export default function PrivacyScreen() {
-  const textMuted = useThemeColor({}, 'text-muted');
+  const colors = useThemeColors();
 
   return (
     <ScreenContainer scrollable>
-      <ThemedText style={[styles.lastUpdated, { color: textMuted }]}>{i18n.t('screens.privacy.lastUpdated')}</ThemedText>
+      <ThemedText style={[styles.lastUpdated, { color: colors['text-muted'] }]}>{i18n.t('screens.privacy.lastUpdated')}</ThemedText>
 
       {/* Introduction */}
       <ThemedView style={styles.section}>
@@ -123,7 +123,7 @@ export default function PrivacyScreen() {
 
       {/* Contact */}
       <ThemedView style={[styles.section, styles.contactSection]}>
-        <Feather name="mail" size={32} color={textMuted} style={styles.contactIcon} />
+        <Feather name="mail" size={32} color={colors['text-muted']} style={styles.contactIcon} />
         <ThemedText type="h3" style={styles.contactTitle}>
           {i18n.t('screens.privacy.contact.title')}
         </ThemedText>

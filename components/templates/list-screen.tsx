@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Feather } from '@expo/vector-icons';
 import type { ComponentProps, ReactNode } from 'react';
 import { ActivityIndicator, FlatList, type FlatListProps, Platform, Pressable, RefreshControl, StyleSheet, View } from 'react-native';
@@ -106,20 +106,16 @@ export function ListScreen<T>({
   ...flatListProps
 }: ListScreenProps<T>) {
   const insets = useSafeAreaInsets();
-  const backgroundColor = useThemeColor({}, backgroundVariant);
-  const surfaceColor = useThemeColor({}, 'surface');
-  const textColor = useThemeColor({}, 'text');
-  const textMutedColor = useThemeColor({}, 'text-muted');
-  const borderColor = useThemeColor({}, 'border');
-  const primaryColor = useThemeColor({}, 'primary');
+  const colors = useThemeColors();
+  const backgroundColor = colors[backgroundVariant];
 
   // Loading State
   if (loading && !refreshing) {
     return (
       <ThemedView style={[styles.container, { backgroundColor }]}>
         <View style={styles.centerContent}>
-          <ActivityIndicator size="large" color={primaryColor} />
-          <ThemedText type="body" style={{ color: textMutedColor, marginTop: Spacing.md }}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <ThemedText type="body" style={{ color: colors['text-muted'], marginTop: Spacing.md }}>
             Loading...
           </ThemedText>
         </View>
@@ -132,14 +128,14 @@ export function ListScreen<T>({
     return (
       <ThemedView style={[styles.container, { backgroundColor }]}>
         <View style={styles.centerContent}>
-          <Feather name="alert-circle" size={48} color={textMutedColor} />
+          <Feather name="alert-circle" size={48} color={colors['text-muted']} />
           <ThemedText type="title" style={styles.stateTitle}>
             Something went wrong
           </ThemedText>
-          <ThemedText type="body" style={[styles.stateDescription, { color: textMutedColor }]}>
+          <ThemedText type="body" style={[styles.stateDescription, { color: colors['text-muted'] }]}>
             {error.message || 'An unexpected error occurred'}
           </ThemedText>
-          <Pressable onPress={onRetry} style={[styles.actionButton, { backgroundColor: primaryColor }]} accessibilityRole="button" accessibilityLabel="Try again">
+          <Pressable onPress={onRetry} style={[styles.actionButton, { backgroundColor: colors.primary }]} accessibilityRole="button" accessibilityLabel="Try again">
             <ThemedText style={styles.actionButtonText}>Try Again</ThemedText>
           </Pressable>
         </View>
@@ -152,19 +148,19 @@ export function ListScreen<T>({
     return (
       <ThemedView style={[styles.container, { backgroundColor }]}>
         <View style={styles.centerContent}>
-          {emptyStateContent.icon && <Feather name={emptyStateContent.icon} size={48} color={textMutedColor} />}
+          {emptyStateContent.icon && <Feather name={emptyStateContent.icon} size={48} color={colors['text-muted']} />}
           <ThemedText type="title" style={styles.stateTitle}>
             {emptyStateContent.title}
           </ThemedText>
           {emptyStateContent.description && (
-            <ThemedText type="body" style={[styles.stateDescription, { color: textMutedColor }]}>
+            <ThemedText type="body" style={[styles.stateDescription, { color: colors['text-muted'] }]}>
               {emptyStateContent.description}
             </ThemedText>
           )}
           {emptyStateContent.actionLabel && emptyStateContent.onAction && (
             <Pressable
               onPress={emptyStateContent.onAction}
-              style={[styles.actionButton, { backgroundColor: primaryColor }]}
+              style={[styles.actionButton, { backgroundColor: colors.primary }]}
               accessibilityRole="button"
               accessibilityLabel={emptyStateContent.actionLabel}
             >
@@ -185,15 +181,15 @@ export function ListScreen<T>({
             styles.header,
             {
               paddingTop: useSafeArea ? insets.top + Spacing.sm : Spacing.md,
-              backgroundColor: surfaceColor,
-              borderBottomColor: borderColor,
+              backgroundColor: colors.surface,
+              borderBottomColor: colors.border,
             },
           ]}
         >
           <ThemedText type="title">{title}</ThemedText>
           {headerAction && (
             <Pressable onPress={headerAction.onPress} style={styles.headerButton} accessibilityRole="button" accessibilityLabel={headerAction.accessibilityLabel}>
-              <Feather name={headerAction.icon} size={24} color={textColor} />
+              <Feather name={headerAction.icon} size={24} color={colors.text} />
             </Pressable>
           )}
         </View>
@@ -213,7 +209,7 @@ export function ListScreen<T>({
         contentContainerStyle={{
           paddingBottom: useSafeArea ? insets.bottom : Spacing.md,
         }}
-        refreshControl={onRefresh ? <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={primaryColor} colors={[primaryColor]} /> : undefined}
+        refreshControl={onRefresh ? <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} colors={[colors.primary]} /> : undefined}
         showsVerticalScrollIndicator={false}
         {...flatListProps}
       />

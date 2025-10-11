@@ -2,7 +2,7 @@ import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { BorderRadius, Spacing } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Feather } from '@expo/vector-icons';
 import type { ComponentProps, ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
@@ -86,11 +86,8 @@ export function ScreenWithHeader({
   backgroundVariant = 'bg',
 }: ScreenWithHeaderProps) {
   const insets = useSafeAreaInsets();
-  const backgroundColor = useThemeColor({}, backgroundVariant);
-  const surfaceColor = useThemeColor({}, 'surface');
-  const textColor = useThemeColor({}, 'text');
-  const textMutedColor = useThemeColor({}, 'text-muted');
-  const borderColor = useThemeColor({}, 'border');
+  const colors = useThemeColors();
+  const backgroundColor = colors[backgroundVariant];
 
   const header = (
     <View
@@ -98,8 +95,8 @@ export function ScreenWithHeader({
         styles.header,
         {
           paddingTop: useSafeArea ? insets.top + Spacing.sm : Spacing.md,
-          backgroundColor: surfaceColor,
-          borderBottomColor: borderColor,
+          backgroundColor: colors.surface,
+          borderBottomColor: colors.border,
         },
       ]}
     >
@@ -108,7 +105,7 @@ export function ScreenWithHeader({
         <View style={styles.headerLeft}>
           {showBackButton && onBackPress && (
             <Pressable onPress={onBackPress} style={styles.headerButton} accessibilityRole="button" accessibilityLabel="Go back">
-              <Feather name="arrow-left" size={24} color={textColor} />
+              <Feather name="arrow-left" size={24} color={colors.text} />
             </Pressable>
           )}
         </View>
@@ -119,7 +116,7 @@ export function ScreenWithHeader({
             {title}
           </ThemedText>
           {subtitle && (
-            <ThemedText type="caption" style={[styles.headerSubtitle, { color: textMutedColor }]}>
+            <ThemedText type="caption" style={[styles.headerSubtitle, { color: colors['text-muted'] }]}>
               {subtitle}
             </ThemedText>
           )}
@@ -129,7 +126,7 @@ export function ScreenWithHeader({
         <View style={styles.headerRight}>
           {rightAction && (
             <Pressable onPress={rightAction.onPress} style={styles.headerButton} accessibilityRole="button" accessibilityLabel={rightAction.accessibilityLabel}>
-              <Feather name={rightAction.icon} size={24} color={textColor} />
+              <Feather name={rightAction.icon} size={24} color={colors.text} />
             </Pressable>
           )}
         </View>

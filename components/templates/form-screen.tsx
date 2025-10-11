@@ -3,7 +3,7 @@ import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import type { ReactNode } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -96,8 +96,8 @@ export function FormScreen({
   footer,
 }: FormScreenProps) {
   const insets = useSafeAreaInsets();
-  const backgroundColor = useThemeColor({}, backgroundVariant);
-  const textMutedColor = useThemeColor({}, 'text-muted');
+  const colors = useThemeColors();
+  const backgroundColor = colors[backgroundVariant];
 
   return (
     <ThemedView style={[styles.container, { backgroundColor }]}>
@@ -122,7 +122,7 @@ export function FormScreen({
                 </ThemedText>
               )}
               {description && (
-                <ThemedText type="body" style={[styles.description, { color: textMutedColor }]}>
+                <ThemedText type="body" style={[styles.description, { color: colors['text-muted'] }]}>
                   {description}
                 </ThemedText>
               )}

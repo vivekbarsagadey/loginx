@@ -1,5 +1,5 @@
 import { ThemedText } from '@/components/themed-text';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { StyleSheet, View, type ViewStyle } from 'react-native';
 
 interface BadgeProps {
@@ -37,22 +37,15 @@ interface BadgeProps {
  * <Badge label="Premium" variant="primary" size="lg" />
  */
 export function Badge({ label, variant = 'primary', size = 'md', style, accessibilityLabel }: BadgeProps) {
-  const primaryColor = useThemeColor({}, 'primary');
-  const successColor = useThemeColor({}, 'success');
-  const warningColor = useThemeColor({}, 'warning');
-  const errorColor = useThemeColor({}, 'error');
-  const infoColor = useThemeColor({}, 'info');
-  const surfaceColor = useThemeColor({}, 'surface');
-  const textColor = useThemeColor({}, 'text');
-  const onPrimaryColor = useThemeColor({}, 'on-primary');
+  const themeColors = useThemeColors();
 
   const variantColors = {
-    primary: { bg: primaryColor, text: onPrimaryColor },
-    success: { bg: successColor, text: onPrimaryColor },
-    warning: { bg: warningColor, text: onPrimaryColor },
-    error: { bg: errorColor, text: onPrimaryColor },
-    info: { bg: infoColor, text: onPrimaryColor },
-    neutral: { bg: surfaceColor, text: textColor },
+    primary: { bg: themeColors.primary, text: themeColors['on-primary'] },
+    success: { bg: themeColors.success, text: themeColors['on-primary'] },
+    warning: { bg: themeColors.warning, text: themeColors['on-primary'] },
+    error: { bg: themeColors.error, text: themeColors['on-primary'] },
+    info: { bg: themeColors.info, text: themeColors['on-primary'] },
+    neutral: { bg: themeColors.surface, text: themeColors.text },
   };
 
   const sizeStyles = {

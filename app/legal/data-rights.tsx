@@ -5,7 +5,7 @@ import { ThemedView } from '@/components/themed-view';
 import { Spacing, Typography } from '@/constants/layout';
 import { useAlert } from '@/hooks/use-alert';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -21,9 +21,7 @@ import { AccessibilityInfo, Linking, StyleSheet } from 'react-native';
 export default function DataRightsScreen() {
   const { push } = useHapticNavigation();
   const alert = useAlert();
-  const primaryColor = useThemeColor({}, 'primary');
-  const surfaceColor = useThemeColor({}, 'surface');
-  const borderColor = useThemeColor({}, 'border');
+  const colors = useThemeColors();
 
   useEffect(() => {
     AccessibilityInfo.announceForAccessibility('Your Data Rights. GDPR compliance information and actions.');
@@ -114,9 +112,14 @@ export default function DataRightsScreen() {
         </ThemedText>
 
         {rights.map((right, index) => (
-          <ThemedView key={index} style={[styles.rightItem, { backgroundColor: surfaceColor, borderColor }]} accessible={true} accessibilityLabel={`${right.title}. ${right.description}`}>
-            <ThemedView style={[styles.iconContainer, { backgroundColor: `${primaryColor}20` }]}>
-              <Ionicons name={right.icon} size={24} color={primaryColor} />
+          <ThemedView
+            key={index}
+            style={[styles.rightItem, { backgroundColor: colors.surface, borderColor: colors.border }]}
+            accessible={true}
+            accessibilityLabel={`${right.title}. ${right.description}`}
+          >
+            <ThemedView style={[styles.iconContainer, { backgroundColor: `${colors.primary}20` }]}>
+              <Ionicons name={right.icon} size={24} color={colors.primary} />
             </ThemedView>
             <ThemedView style={styles.rightContent}>
               <ThemedText type="bodyBold" style={styles.rightTitle}>
@@ -160,8 +163,8 @@ export default function DataRightsScreen() {
       </ThemedView>
 
       {/* Response Time */}
-      <ThemedView style={[styles.infoBox, { backgroundColor: surfaceColor, borderColor }]} accessible={true} accessibilityLabel={i18n.t('screens.legal.dataRights.responseTime')}>
-        <Ionicons name="time" size={20} color={primaryColor} />
+      <ThemedView style={[styles.infoBox, { backgroundColor: colors.surface, borderColor: colors.border }]} accessible={true} accessibilityLabel={i18n.t('screens.legal.dataRights.responseTime')}>
+        <Ionicons name="time" size={20} color={colors.primary} />
         <ThemedText style={styles.infoText}>{i18n.t('screens.legal.dataRights.responseTime')}</ThemedText>
       </ThemedView>
       {alert.AlertComponent}

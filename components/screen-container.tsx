@@ -6,7 +6,7 @@
 
 import { KeyboardOffset, Spacing } from '@/constants/layout';
 import { useResponsive } from '@/hooks/use-responsive';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { memo, type PropsWithChildren, type ReactNode, useMemo } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, type ScrollViewProps, StyleSheet, View, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -110,7 +110,7 @@ function ScreenContainerComponent({
   footer,
   testID,
 }: ScreenContainerProps) {
-  const backgroundColor = useThemeColor({}, variant);
+  const colors = useThemeColors();
   const { padding: responsivePadding, maxContentWidth } = useResponsive();
 
   // Memoize padding calculation
@@ -120,9 +120,9 @@ function ScreenContainerComponent({
   const containerStyle: ViewStyle = useMemo(
     () => ({
       flex: 1,
-      backgroundColor,
+      backgroundColor: colors[variant],
     }),
-    [backgroundColor]
+    [colors, variant]
   );
 
   const contentStyle: ViewStyle = useMemo(

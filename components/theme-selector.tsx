@@ -1,7 +1,7 @@
 import { Spacing, Typography } from '@/constants/layout';
 import { gap, padding, rounded } from '@/constants/style-utils';
 import { getAllThemes } from '@/constants/theme';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { type ThemePreference, useThemeContext } from '@/hooks/use-theme-context';
 import i18n from '@/i18n';
 import * as Haptics from 'expo-haptics';
@@ -12,11 +12,7 @@ import { ThemedView } from './themed-view';
 
 export const ThemeSelector = () => {
   const { themePreference, setThemePreference } = useThemeContext();
-  const primaryColor = useThemeColor({}, 'primary');
-  const onPrimaryColor = useThemeColor({}, 'on-primary');
-  const surfaceColor = useThemeColor({}, 'surface');
-  const textColor = useThemeColor({}, 'text');
-  const borderColor = useThemeColor({}, 'border');
+  const colors = useThemeColors();
 
   // Get all available themes
   const themes = [{ name: 'system', displayName: 'System', icon: '📱' }, ...getAllThemes()];
@@ -25,24 +21,24 @@ export const ThemeSelector = () => {
     () =>
       StyleSheet.create({
         containerBorder: {
-          borderColor: borderColor,
+          borderColor: colors.border,
         },
         chipActive: {
-          backgroundColor: primaryColor,
+          backgroundColor: colors.primary,
         },
         chipInactive: {
-          backgroundColor: surfaceColor,
+          backgroundColor: colors.surface,
         },
         textActive: {
-          color: onPrimaryColor,
+          color: colors['on-primary'],
           fontWeight: '600',
         },
         textInactive: {
-          color: textColor,
+          color: colors.text,
           fontWeight: '600',
         },
       }),
-    [borderColor, primaryColor, surfaceColor, onPrimaryColor, textColor]
+    [colors]
   );
 
   const handleThemeSelect = async (themeName: string) => {

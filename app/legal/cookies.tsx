@@ -3,7 +3,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Collapsible } from '@/components/ui/collapsible';
 import { Spacing, Typography } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect } from 'react';
@@ -16,10 +16,7 @@ import { AccessibilityInfo, StyleSheet } from 'react-native';
  * GDPR and ePrivacy Directive compliance.
  */
 export default function CookiesScreen() {
-  const primaryColor = useThemeColor({}, 'primary');
-  const surfaceColor = useThemeColor({}, 'surface');
-  const borderColor = useThemeColor({}, 'border');
-  const onPrimaryColor = useThemeColor({}, 'on-primary');
+  const colors = useThemeColors();
 
   useEffect(() => {
     AccessibilityInfo.announceForAccessibility('Cookie Policy. Information about cookies and tracking technologies.');
@@ -75,22 +72,22 @@ export default function CookiesScreen() {
         {cookieTypes.map((cookie, index) => (
           <ThemedView
             key={index}
-            style={[styles.cookieItem, { backgroundColor: surfaceColor, borderColor }]}
+            style={[styles.cookieItem, { backgroundColor: colors.surface, borderColor: colors.border }]}
             accessible={true}
             accessibilityLabel={`${cookie.title}. ${cookie.required ? 'Required' : 'Optional'}. ${cookie.description}`}
           >
             <ThemedView style={styles.cookieHeader}>
               <ThemedView style={styles.cookieHeaderLeft}>
-                <ThemedView style={[styles.iconContainer, { backgroundColor: `${primaryColor}20` }]}>
-                  <Ionicons name={cookie.icon} size={24} color={primaryColor} />
+                <ThemedView style={[styles.iconContainer, { backgroundColor: `${colors.primary}20` }]}>
+                  <Ionicons name={cookie.icon} size={24} color={colors.primary} />
                 </ThemedView>
                 <ThemedText type="bodyBold" style={styles.cookieTitle}>
                   {cookie.title}
                 </ThemedText>
               </ThemedView>
               {cookie.required && (
-                <ThemedView style={[styles.badge, { backgroundColor: primaryColor }]}>
-                  <ThemedText style={[styles.badgeText, { color: onPrimaryColor }]}>{i18n.t('screens.legal.cookies.required')}</ThemedText>
+                <ThemedView style={[styles.badge, { backgroundColor: colors.primary }]}>
+                  <ThemedText style={[styles.badgeText, { color: colors['on-primary'] }]}>{i18n.t('screens.legal.cookies.required')}</ThemedText>
                 </ThemedView>
               )}
             </ThemedView>
@@ -135,8 +132,8 @@ export default function CookiesScreen() {
       </ThemedView>
 
       {/* Contact */}
-      <ThemedView style={[styles.infoBox, { backgroundColor: surfaceColor, borderColor }]} accessible={true}>
-        <Ionicons name="help-circle" size={20} color={primaryColor} />
+      <ThemedView style={[styles.infoBox, { backgroundColor: colors.surface, borderColor: colors.border }]} accessible={true}>
+        <Ionicons name="help-circle" size={20} color={colors.primary} />
         <ThemedText style={styles.infoText}>{i18n.t('screens.legal.cookies.contact')}</ThemedText>
       </ThemedView>
     </ScreenContainer>

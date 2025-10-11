@@ -19,7 +19,7 @@ import { ResponsiveAvatar, ResponsiveImage } from '@/components/ui/layout/respon
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, Spacing } from '@/constants/layout';
 import { useBreakpoint, useOrientation, useResponsive } from '@/hooks/use-responsive';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -28,7 +28,7 @@ export default function ResponsiveDesignDemo() {
 
   const { isLandscape, isPortrait } = useOrientation();
   const { isPhone, isTablet, isDesktop } = useBreakpoint();
-  const primaryColor = useThemeColor({}, 'primary');
+  const colors = useThemeColors();
 
   // Sample data for grid demo
   const gridItems = [
@@ -58,14 +58,14 @@ export default function ResponsiveDesignDemo() {
 
         <View style={styles.infoRow}>
           <ThemedText type="bodyBold">Device Category:</ThemedText>
-          <ThemedText type="body" style={{ color: primaryColor }}>
+          <ThemedText type="body" style={{ color: colors.primary }}>
             {deviceCategory.toUpperCase()}
           </ThemedText>
         </View>
 
         <View style={styles.infoRow}>
           <ThemedText type="bodyBold">Orientation:</ThemedText>
-          <ThemedText type="body" style={{ color: primaryColor }}>
+          <ThemedText type="body" style={{ color: colors.primary }}>
             {isLandscape ? 'LANDSCAPE' : 'PORTRAIT'}
           </ThemedText>
         </View>

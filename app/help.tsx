@@ -1,7 +1,8 @@
-import { ScreenContainer } from '@/components/screen-container';
+import { ScreenWithHeader } from '@/components/templates/screen-with-header';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Collapsible } from '@/components/ui/collapsible';
+import { QuickAction } from '@/components/ui/molecules/quick-action';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
@@ -9,34 +10,7 @@ import { useLanguage } from '@/hooks/use-language-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { Feather } from '@expo/vector-icons';
-import { Linking, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
-
-interface QuickActionProps {
-  icon: React.ComponentProps<typeof Feather>['name'];
-  title: string;
-  description: string;
-  onPress: () => void;
-}
-
-function QuickAction({ icon, title, description, onPress }: QuickActionProps) {
-  const borderColor = useThemeColor({}, 'border');
-  const iconColor = useThemeColor({}, 'primary');
-
-  return (
-    <TouchableOpacity style={[styles.quickAction, { borderColor }]} onPress={onPress} activeOpacity={0.7} accessibilityRole="button" accessibilityLabel={title} accessibilityHint={description}>
-      <View style={styles.quickActionIcon}>
-        <Feather name={icon} size={24} color={iconColor} />
-      </View>
-      <View style={styles.quickActionContent}>
-        <ThemedText type="h3" style={styles.quickActionTitle}>
-          {title}
-        </ThemedText>
-        <ThemedText style={styles.quickActionDescription}>{description}</ThemedText>
-      </View>
-      <Feather name="chevron-right" size={20} color={iconColor} />
-    </TouchableOpacity>
-  );
-}
+import { Linking, Platform, StyleSheet } from 'react-native';
 
 export default function HelpScreen() {
   const { push } = useHapticNavigation();
@@ -70,7 +44,7 @@ export default function HelpScreen() {
   const platformNote = Platform.OS === 'ios' ? i18n.t('screens.help.platformNotes.ios') : i18n.t('screens.help.platformNotes.android');
 
   return (
-    <ScreenContainer scrollable>
+    <ScreenWithHeader title="Help & Support" showBackButton>
       {/* Quick Actions */}
       <ThemedView style={styles.section}>
         <ThemedText type="h3" style={CommonText.sectionTitle}>
@@ -216,40 +190,13 @@ export default function HelpScreen() {
         </ThemedText>
         <ThemedText style={styles.helpDescription}>{i18n.t('screens.help.needMoreHelp.description')}</ThemedText>
       </ThemedView>
-    </ScreenContainer>
+    </ScreenWithHeader>
   );
 }
 
 const styles = StyleSheet.create({
   section: {
     marginBottom: Spacing.xl,
-  },
-  quickAction: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: Spacing.md,
-    borderRadius: 12,
-    borderWidth: 1,
-    marginBottom: Spacing.sm,
-    gap: Spacing.md,
-  },
-  quickActionIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  quickActionContent: {
-    flex: 1,
-  },
-  quickActionTitle: {
-    marginBottom: 2,
-    fontWeight: '600',
-  },
-  quickActionDescription: {
-    fontSize: 13,
-    opacity: 0.7,
   },
   answer: {
     lineHeight: 22,
@@ -271,8 +218,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: Spacing.lg,
     opacity: 0.8,
-  },
-  supportButton: {
-    minWidth: 200,
   },
 });

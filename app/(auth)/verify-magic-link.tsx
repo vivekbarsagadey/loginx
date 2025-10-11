@@ -7,7 +7,7 @@ import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
 import { Ionicons } from '@expo/vector-icons';
@@ -23,7 +23,7 @@ import { ActivityIndicator, StyleSheet } from 'react-native';
  */
 export default function VerifyMagicLinkScreen() {
   const { replace } = useHapticNavigation();
-  const primaryColor = useThemeColor({}, 'primary');
+  const colors = useThemeColors();
   const alert = useAlert();
 
   const [email, setEmail] = useState<string>('');
@@ -158,7 +158,7 @@ export default function VerifyMagicLinkScreen() {
     return (
       <ScreenContainer>
         <ThemedView style={styles.centerContent}>
-          <ActivityIndicator size="large" color={primaryColor} />
+          <ActivityIndicator size="large" color={colors.primary} />
           <ThemedText style={styles.checkingText}>{i18n.t('passwordlessLogin.checking')}</ThemedText>
         </ThemedView>
       </ScreenContainer>
@@ -168,7 +168,7 @@ export default function VerifyMagicLinkScreen() {
   return (
     <ScreenContainer>
       <ThemedView style={styles.centerContent}>
-        <Ionicons name="mail-outline" size={64} color={primaryColor} style={styles.icon} />
+        <Ionicons name="mail-outline" size={64} color={colors.primary} style={styles.icon} />
 
         <ThemedText type="h1" style={styles.title}>
           {i18n.t('passwordlessLogin.verify.title')}

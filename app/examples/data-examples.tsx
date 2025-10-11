@@ -7,17 +7,13 @@ import { ScreenContainer } from '@/components/screen-container';
 import { ThemedText } from '@/components/themed-text';
 import { BorderRadius, Spacing } from '@/constants/layout';
 import { appFeatures, faqData, getRandomTip, getSampleNotifications, settingsMenu } from '@/data';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 export default function DataExamplesScreen() {
-  const surfaceColor = useThemeColor({}, 'surface');
-  const borderColor = useThemeColor({}, 'border');
-  const textColor = useThemeColor({}, 'text');
-  const textMutedColor = useThemeColor({}, 'text-muted');
-  const primaryColor = useThemeColor({}, 'primary');
+  const colors = useThemeColors();
 
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
@@ -33,18 +29,18 @@ export default function DataExamplesScreen() {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      backgroundColor: surfaceColor,
+      backgroundColor: colors.surface,
       borderRadius: BorderRadius.md,
       borderWidth: 1,
-      borderColor: borderColor,
+      borderColor: colors.border,
       padding: Spacing.md,
       marginBottom: Spacing.sm,
     },
     card: {
-      backgroundColor: surfaceColor,
+      backgroundColor: colors.surface,
       borderRadius: BorderRadius.md,
       borderWidth: 1,
-      borderColor: borderColor,
+      borderColor: colors.border,
       padding: Spacing.md,
       marginBottom: Spacing.sm,
     },
@@ -55,13 +51,13 @@ export default function DataExamplesScreen() {
       marginBottom: Spacing.xs,
     },
     badge: {
-      backgroundColor: primaryColor + '20',
+      backgroundColor: colors.primary + '20',
       paddingHorizontal: Spacing.sm,
       paddingVertical: 2,
       borderRadius: BorderRadius.sm,
     },
     badgeText: {
-      color: primaryColor,
+      color: colors.primary,
       fontSize: 12,
       fontWeight: '600',
     },
@@ -88,7 +84,7 @@ export default function DataExamplesScreen() {
         <ThemedText type="h2" style={{ marginBottom: Spacing.md }}>
           Data Examples
         </ThemedText>
-        <ThemedText type="body" style={{ color: textMutedColor, marginBottom: Spacing.lg }}>
+        <ThemedText type="body" style={{ color: colors['text-muted'], marginBottom: Spacing.lg }}>
           Demonstrating how to use data from the /data folder
         </ThemedText>
 
@@ -96,7 +92,7 @@ export default function DataExamplesScreen() {
         <View style={styles.section}>
           <Pressable style={styles.sectionHeader} onPress={() => toggleSection('notifications')}>
             <ThemedText type="h3">📬 Sample Notifications ({notifications.length})</ThemedText>
-            <Ionicons name={expandedSection === 'notifications' ? 'chevron-up' : 'chevron-down'} size={20} color={textColor} />
+            <Ionicons name={expandedSection === 'notifications' ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
           </Pressable>
           {expandedSection === 'notifications' && (
             <View>
@@ -106,17 +102,17 @@ export default function DataExamplesScreen() {
                     <View style={styles.badge}>
                       <ThemedText style={styles.badgeText}>{notif.type}</ThemedText>
                     </View>
-                    {!notif.read && <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: primaryColor }} />}
+                    {!notif.read && <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: colors.primary }} />}
                   </View>
                   <ThemedText type="subtitle1" style={{ marginBottom: Spacing.xs }}>
                     {notif.title}
                   </ThemedText>
-                  <ThemedText type="caption" style={{ color: textMutedColor }}>
+                  <ThemedText type="caption" style={{ color: colors['text-muted'] }}>
                     {notif.message}
                   </ThemedText>
                 </View>
               ))}
-              <ThemedText type="caption" style={{ color: textMutedColor, textAlign: 'center' }}>
+              <ThemedText type="caption" style={{ color: colors['text-muted'], textAlign: 'center' }}>
                 + {notifications.length - 3} more notifications
               </ThemedText>
             </View>
@@ -127,7 +123,7 @@ export default function DataExamplesScreen() {
         <View style={styles.section}>
           <Pressable style={styles.sectionHeader} onPress={() => toggleSection('features')}>
             <ThemedText type="h3">⭐ Security Features ({securityFeatures.length})</ThemedText>
-            <Ionicons name={expandedSection === 'features' ? 'chevron-up' : 'chevron-down'} size={20} color={textColor} />
+            <Ionicons name={expandedSection === 'features' ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
           </Pressable>
           {expandedSection === 'features' && (
             <View>
@@ -137,7 +133,7 @@ export default function DataExamplesScreen() {
                     <ThemedText type="h3">{feature.icon}</ThemedText>
                     <ThemedText type="subtitle1">{feature.title}</ThemedText>
                   </View>
-                  <ThemedText type="body" style={{ color: textMutedColor, marginTop: Spacing.xs }}>
+                  <ThemedText type="body" style={{ color: colors['text-muted'], marginTop: Spacing.xs }}>
                     {feature.description}
                   </ThemedText>
                 </View>
@@ -150,7 +146,7 @@ export default function DataExamplesScreen() {
         <View style={styles.section}>
           <Pressable style={styles.sectionHeader} onPress={() => toggleSection('faqs')}>
             <ThemedText type="h3">❓ Security FAQs ({securityFAQs.length})</ThemedText>
-            <Ionicons name={expandedSection === 'faqs' ? 'chevron-up' : 'chevron-down'} size={20} color={textColor} />
+            <Ionicons name={expandedSection === 'faqs' ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
           </Pressable>
           {expandedSection === 'faqs' && (
             <View>
@@ -159,7 +155,7 @@ export default function DataExamplesScreen() {
                   <ThemedText type="subtitle1" style={{ marginBottom: Spacing.sm }}>
                     Q: {faq.question}
                   </ThemedText>
-                  <ThemedText type="body" style={{ color: textMutedColor }}>
+                  <ThemedText type="body" style={{ color: colors['text-muted'] }}>
                     A: {faq.answer}
                   </ThemedText>
                 </View>
@@ -172,7 +168,7 @@ export default function DataExamplesScreen() {
         <View style={styles.section}>
           <Pressable style={styles.sectionHeader} onPress={() => toggleSection('tip')}>
             <ThemedText type="h3">💡 Random Tip</ThemedText>
-            <Ionicons name={expandedSection === 'tip' ? 'chevron-up' : 'chevron-down'} size={20} color={textColor} />
+            <Ionicons name={expandedSection === 'tip' ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
           </Pressable>
           {expandedSection === 'tip' && (
             <View style={styles.card}>
@@ -189,7 +185,7 @@ export default function DataExamplesScreen() {
               <ThemedText type="subtitle1" style={{ marginTop: Spacing.xs, marginBottom: Spacing.sm }}>
                 {randomTip.title}
               </ThemedText>
-              <ThemedText type="body" style={{ color: textMutedColor }}>
+              <ThemedText type="body" style={{ color: colors['text-muted'] }}>
                 {randomTip.description}
               </ThemedText>
             </View>
@@ -202,18 +198,18 @@ export default function DataExamplesScreen() {
             <ThemedText type="h3">
               🗂️ Menu: {firstMenuSection.title} ({firstMenuSection.items.length})
             </ThemedText>
-            <Ionicons name={expandedSection === 'menu' ? 'chevron-up' : 'chevron-down'} size={20} color={textColor} />
+            <Ionicons name={expandedSection === 'menu' ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
           </Pressable>
           {expandedSection === 'menu' && (
             <View>
               {firstMenuSection.items.map((item) => (
                 <View key={item.id} style={styles.card}>
                   <View style={styles.row}>
-                    <Ionicons name={item.icon as keyof typeof Ionicons.glyphMap} size={20} color={primaryColor} />
+                    <Ionicons name={item.icon as keyof typeof Ionicons.glyphMap} size={20} color={colors.primary} />
                     <ThemedText type="subtitle1">{item.title}</ThemedText>
                   </View>
                   {item.subtitle && (
-                    <ThemedText type="caption" style={{ color: textMutedColor, marginTop: Spacing.xs }}>
+                    <ThemedText type="caption" style={{ color: colors['text-muted'], marginTop: Spacing.xs }}>
                       {item.subtitle}
                     </ThemedText>
                   )}
@@ -228,7 +224,7 @@ export default function DataExamplesScreen() {
           <ThemedText type="h3" style={{ marginBottom: Spacing.md }}>
             📚 How to Use
           </ThemedText>
-          <ThemedText type="body" style={{ color: textMutedColor, marginBottom: Spacing.sm }}>
+          <ThemedText type="body" style={{ color: colors['text-muted'], marginBottom: Spacing.sm }}>
             Import data from the /data folder:
           </ThemedText>
           <View style={{ padding: Spacing.md, borderRadius: BorderRadius.sm, opacity: 0.95 }}>

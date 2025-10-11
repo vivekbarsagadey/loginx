@@ -8,15 +8,13 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Badge } from '@/components/ui/data-display/badge';
 import { BorderRadius, Spacing } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 export default function BadgeExamplesScreen() {
-  const surfaceColor = useThemeColor({}, 'surface');
-  const borderColor = useThemeColor({}, 'border');
-  const iconColor = useThemeColor({}, 'text');
+  const colors = useThemeColors();
 
   const styles = StyleSheet.create({
     section: {
@@ -45,15 +43,15 @@ export default function BadgeExamplesScreen() {
       textAlign: 'center',
     },
     card: {
-      backgroundColor: surfaceColor,
+      backgroundColor: colors.surface,
       borderRadius: BorderRadius.md,
       padding: Spacing.lg,
       borderWidth: 1,
-      borderColor: borderColor,
+      borderColor: colors.border,
       marginBottom: Spacing.md,
     },
     codeBlock: {
-      backgroundColor: surfaceColor,
+      backgroundColor: colors.surface,
       borderRadius: BorderRadius.sm,
       padding: Spacing.sm,
       marginTop: Spacing.sm,
@@ -83,28 +81,28 @@ export default function BadgeExamplesScreen() {
             <View style={styles.examplesGrid}>
               <View style={styles.exampleItem}>
                 <Badge content={5}>
-                  <Feather name="bell" size={24} color={iconColor} />
+                  <Feather name="bell" size={24} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>5 unread</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge content={25}>
-                  <Ionicons name="mail-outline" size={24} color={iconColor} />
+                  <Ionicons name="mail-outline" size={24} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>25 messages</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge content={100} max={99}>
-                  <Feather name="message-circle" size={24} color={iconColor} />
+                  <Feather name="message-circle" size={24} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>99+ chats</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge content={0} invisible={true}>
-                  <Feather name="bell" size={24} color={iconColor} />
+                  <Feather name="bell" size={24} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>No unread</ThemedText>
               </View>
@@ -123,35 +121,35 @@ export default function BadgeExamplesScreen() {
             <View style={styles.examplesGrid}>
               <View style={styles.exampleItem}>
                 <Badge content={3} variant="default">
-                  <Feather name="bell" size={24} color={iconColor} />
+                  <Feather name="bell" size={24} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Default</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge content={5} variant="primary">
-                  <Feather name="star" size={24} color={iconColor} />
+                  <Feather name="star" size={24} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Primary</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge content={8} variant="success">
-                  <Feather name="check-circle" size={24} color={iconColor} />
+                  <Feather name="check-circle" size={24} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Success</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge content={2} variant="error">
-                  <Feather name="alert-circle" size={24} color={iconColor} />
+                  <Feather name="alert-circle" size={24} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Error</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge content={7} variant="warning">
-                  <Feather name="alert-triangle" size={24} color={iconColor} />
+                  <Feather name="alert-triangle" size={24} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Warning</ThemedText>
               </View>
@@ -170,21 +168,21 @@ export default function BadgeExamplesScreen() {
             <View style={styles.examplesGrid}>
               <View style={styles.exampleItem}>
                 <Badge content={9} size="small">
-                  <Feather name="bell" size={20} color={iconColor} />
+                  <Feather name="bell" size={20} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Small</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge content={9} size="medium">
-                  <Feather name="bell" size={24} color={iconColor} />
+                  <Feather name="bell" size={24} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Medium</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge content={9} size="large">
-                  <Feather name="bell" size={28} color={iconColor} />
+                  <Feather name="bell" size={28} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Large</ThemedText>
               </View>
@@ -203,28 +201,28 @@ export default function BadgeExamplesScreen() {
             <View style={styles.examplesGrid}>
               <View style={styles.exampleItem}>
                 <Badge dot variant="success">
-                  <Ionicons name="person-circle-outline" size={32} color={iconColor} />
+                  <Ionicons name="person-circle-outline" size={32} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Online</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge dot variant="error">
-                  <Ionicons name="person-circle-outline" size={32} color={iconColor} />
+                  <Ionicons name="person-circle-outline" size={32} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Busy</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge dot variant="warning">
-                  <Ionicons name="person-circle-outline" size={32} color={iconColor} />
+                  <Ionicons name="person-circle-outline" size={32} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Away</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge dot variant="default">
-                  <Ionicons name="person-circle-outline" size={32} color={iconColor} />
+                  <Ionicons name="person-circle-outline" size={32} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Offline</ThemedText>
               </View>
@@ -247,10 +245,10 @@ export default function BadgeExamplesScreen() {
                     style={{
                       width: 48,
                       height: 48,
-                      backgroundColor: surfaceColor,
+                      backgroundColor: colors.surface,
                       borderRadius: BorderRadius.sm,
                       borderWidth: 1,
-                      borderColor: borderColor,
+                      borderColor: colors.border,
                     }}
                   />
                 </Badge>
@@ -263,10 +261,10 @@ export default function BadgeExamplesScreen() {
                     style={{
                       width: 48,
                       height: 48,
-                      backgroundColor: surfaceColor,
+                      backgroundColor: colors.surface,
                       borderRadius: BorderRadius.sm,
                       borderWidth: 1,
-                      borderColor: borderColor,
+                      borderColor: colors.border,
                     }}
                   />
                 </Badge>
@@ -279,10 +277,10 @@ export default function BadgeExamplesScreen() {
                     style={{
                       width: 48,
                       height: 48,
-                      backgroundColor: surfaceColor,
+                      backgroundColor: colors.surface,
                       borderRadius: BorderRadius.sm,
                       borderWidth: 1,
-                      borderColor: borderColor,
+                      borderColor: colors.border,
                     }}
                   />
                 </Badge>
@@ -295,10 +293,10 @@ export default function BadgeExamplesScreen() {
                     style={{
                       width: 48,
                       height: 48,
-                      backgroundColor: surfaceColor,
+                      backgroundColor: colors.surface,
                       borderRadius: BorderRadius.sm,
                       borderWidth: 1,
-                      borderColor: borderColor,
+                      borderColor: colors.border,
                     }}
                   />
                 </Badge>
@@ -345,21 +343,21 @@ export default function BadgeExamplesScreen() {
             <View style={styles.examplesGrid}>
               <View style={styles.exampleItem}>
                 <Badge content={12} variant="error" size="small">
-                  <Feather name="bell" size={24} color={iconColor} />
+                  <Feather name="bell" size={24} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Notifications</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge content={3} variant="primary" size="small">
-                  <Feather name="message-square" size={24} color={iconColor} />
+                  <Feather name="message-square" size={24} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Messages</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge content={7} variant="success" size="small">
-                  <Feather name="shopping-cart" size={24} color={iconColor} />
+                  <Feather name="shopping-cart" size={24} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Cart</ThemedText>
               </View>
@@ -373,21 +371,21 @@ export default function BadgeExamplesScreen() {
             <View style={styles.examplesGrid}>
               <View style={styles.exampleItem}>
                 <Badge dot variant="success" anchorPosition="bottom-right">
-                  <Ionicons name="person-circle" size={48} color={iconColor} />
+                  <Ionicons name="person-circle" size={48} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Online</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge dot variant="warning" anchorPosition="bottom-right">
-                  <Ionicons name="person-circle" size={48} color={iconColor} />
+                  <Ionicons name="person-circle" size={48} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Away</ThemedText>
               </View>
 
               <View style={styles.exampleItem}>
                 <Badge dot variant="error" anchorPosition="bottom-right">
-                  <Ionicons name="person-circle" size={48} color={iconColor} />
+                  <Ionicons name="person-circle" size={48} color={colors.text} />
                 </Badge>
                 <ThemedText style={styles.exampleLabel}>Do Not Disturb</ThemedText>
               </View>

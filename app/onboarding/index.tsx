@@ -21,7 +21,7 @@ import { WelcomeSlide } from '@/components/onboarding/welcome';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 
 const SLIDES = [
   { key: 'welcome' },
@@ -44,9 +44,7 @@ export default function Onboarding() {
   const [accessibilityEnabled, setAccessibilityEnabled] = useState(false);
   const [isRecoveredSession, setIsRecoveredSession] = useState(false);
   const ref = useRef<FlatList>(null);
-  const primaryColor = useThemeColor({}, 'primary');
-  const surfaceColor = useThemeColor({}, 'surface');
-  const borderStrongColor = useThemeColor({}, 'border-strong');
+  const colors = useThemeColors();
   const { width } = useWindowDimensions();
   const { top, bottom } = useSafeAreaInsets();
 
@@ -304,7 +302,7 @@ export default function Onboarding() {
         {/* Enhanced Progress Indicator with Accessibility */}
         <View style={styles.progressWrapper}>
           <View
-            style={[styles.progressBar, { backgroundColor: borderStrongColor }]}
+            style={[styles.progressBar, { backgroundColor: colors['border-strong'] }]}
             accessible={true}
             accessibilityRole="progressbar"
             accessibilityLabel={i18n.t('onb.accessibility.progress', {
@@ -317,7 +315,7 @@ export default function Onboarding() {
               now: i + 1,
             }}
           >
-            <Animated.View style={[styles.progressFill, { backgroundColor: primaryColor }, progressBarAnimatedStyle]} />
+            <Animated.View style={[styles.progressFill, { backgroundColor: colors.primary }, progressBarAnimatedStyle]} />
           </View>
 
           <View style={styles.indicatorsContainer} accessible={true} accessibilityRole="tablist" accessibilityLabel={i18n.t('onb.accessibility.slideIndicators')}>
@@ -333,7 +331,7 @@ export default function Onboarding() {
                     height: isActive ? 12 : 8,
                     borderRadius: isActive ? 6 : 4,
                     marginHorizontal: Spacing.xs,
-                    backgroundColor: isCompleted || isActive ? primaryColor : borderStrongColor,
+                    backgroundColor: isCompleted || isActive ? colors.primary : colors['border-strong'],
                     transform: [{ scale: isActive ? 1.2 : 1 }],
                   }}
                   accessible={true}
@@ -350,11 +348,11 @@ export default function Onboarding() {
         </View>
         <View style={styles.buttonContainer}>
           {i > 0 && (
-            <Pressable onPress={back} style={[styles.backButton, { backgroundColor: surfaceColor }]}>
+            <Pressable onPress={back} style={[styles.backButton, { backgroundColor: colors.surface }]}>
               <ThemedText style={styles.buttonText}>{i18n.t('onb.cta.back')}</ThemedText>
             </Pressable>
           )}
-          <Pressable onPress={next} style={[styles.nextButton, { backgroundColor: primaryColor, flex: i > 0 ? 2 : 1 }]}>
+          <Pressable onPress={next} style={[styles.nextButton, { backgroundColor: colors.primary, flex: i > 0 ? 2 : 1 }]}>
             <ThemedText type="inverse" style={styles.buttonText}>
               {i < SLIDES.length - 1 ? i18n.t('onb.cta.next') : i18n.t('onb.cta.start')}
             </ThemedText>

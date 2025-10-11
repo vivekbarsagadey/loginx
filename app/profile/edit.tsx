@@ -2,9 +2,9 @@ import { getUserProfile, updateUser } from '@/actions/user.action';
 import { ProfileAddressFields } from '@/components/profile/profile-address-fields';
 import { ProfileBasicFields } from '@/components/profile/profile-basic-fields';
 import { ProfilePhotoSection } from '@/components/profile/profile-photo-section';
+import { ScreenWithHeader } from '@/components/templates/screen-with-header';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
-import { ThemedScrollView } from '@/components/themed-scroll-view';
 import { ThemedView } from '@/components/themed-view';
 import { SkeletonAvatar, SkeletonForm, SkeletonLoader } from '@/components/ui/skeleton-loader';
 import { Spacing } from '@/constants/layout';
@@ -174,26 +174,22 @@ export default function EditProfileScreen() {
   // Show loading state while fetching profile
   if (initialLoading) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedScrollView contentContainerStyle={styles.scrollContent}>
-          {/* Avatar Skeleton */}
-          <ThemedView style={styles.avatarSection}>
-            <SkeletonAvatar size={128} shimmer />
-            <SkeletonLoader height={16} width={120} style={{ marginTop: Spacing.md }} shimmer />
-          </ThemedView>
+      <ScreenWithHeader title="Edit Profile" showBackButton>
+        <ThemedView style={styles.avatarSection}>
+          <SkeletonAvatar size={128} shimmer />
+          <SkeletonLoader height={16} width={120} style={{ marginTop: Spacing.md }} shimmer />
+        </ThemedView>
 
-          {/* Form Skeleton */}
-          <ThemedView style={styles.formSection}>
-            <SkeletonLoader height={16} width={150} style={{ marginBottom: Spacing.md }} shimmer />
-            <SkeletonForm shimmer />
-          </ThemedView>
-        </ThemedScrollView>
-      </ThemedView>
+        <ThemedView style={styles.formSection}>
+          <SkeletonLoader height={16} width={150} style={{ marginBottom: Spacing.md }} shimmer />
+          <SkeletonForm shimmer />
+        </ThemedView>
+      </ScreenWithHeader>
     );
   }
 
   return (
-    <ThemedScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScreenWithHeader title="Edit Profile" showBackButton>
       <ProfilePhotoSection photoURL={photoURL || ''} userId={user?.uid || ''} onPhotoChange={handlePhotoChange} disabled={loading} />
 
       <ThemedView style={styles.formSection}>
@@ -255,22 +251,11 @@ export default function EditProfileScreen() {
       </ThemedView>
 
       <ThemedButton title={loading ? i18n.t('profile.edit.savingButton') : i18n.t('profile.edit.saveButton')} onPress={handleUpdate} disabled={loading || !hasChanges} loading={loading} />
-    </ThemedScrollView>
+    </ScreenWithHeader>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: Spacing.lg,
-    paddingBottom: Spacing.xxl,
-  },
-  content: {
-    padding: Spacing.md,
-    gap: Spacing.lg,
-  },
   avatarSection: {
     alignItems: 'center',
     marginBottom: Spacing.xl,

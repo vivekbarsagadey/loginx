@@ -1,14 +1,14 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
 import { Link, Stack } from 'expo-router';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
 export default function NotFoundScreen() {
-  const primaryColor = useThemeColor({}, 'primary');
+  const colors = useThemeColors();
 
   const styles = React.useMemo(
     () =>
@@ -25,10 +25,10 @@ export default function NotFoundScreen() {
         },
         linkText: {
           fontSize: 14,
-          color: primaryColor,
+          color: colors.primary,
         },
       }),
-    [primaryColor]
+    [colors]
   );
 
   return (

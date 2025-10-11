@@ -1,5 +1,5 @@
 import { ThemedText } from '@/components/themed-text';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Image, StyleSheet, View, type ViewStyle } from 'react-native';
 
 interface AvatarProps {
@@ -55,9 +55,7 @@ const BORDER_RADIUS_MAP = {
  * <Avatar uri="https://example.com/avatar.jpg" initials="AB" />
  */
 export function Avatar({ uri, initials, size = 'md', shape = 'circle', style, accessibilityLabel = 'User avatar' }: AvatarProps) {
-  const surfaceColor = useThemeColor({}, 'surface');
-  const primaryColor = useThemeColor({}, 'primary');
-  const textColor = useThemeColor({}, 'on-primary');
+  const colors = useThemeColors();
 
   const avatarSize = typeof size === 'number' ? size : SIZE_MAP[size];
   const borderRadius = BORDER_RADIUS_MAP[shape];
@@ -66,7 +64,7 @@ export function Avatar({ uri, initials, size = 'md', shape = 'circle', style, ac
     width: avatarSize,
     height: avatarSize,
     borderRadius: shape === 'circle' ? avatarSize / 2 : borderRadius,
-    backgroundColor: uri ? surfaceColor : primaryColor,
+    backgroundColor: uri ? colors.surface : colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
@@ -84,7 +82,7 @@ export function Avatar({ uri, initials, size = 'md', shape = 'circle', style, ac
             styles.initials,
             {
               fontSize,
-              color: textColor,
+              color: colors['on-primary'],
             },
           ]}
         >

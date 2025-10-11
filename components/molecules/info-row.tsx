@@ -1,6 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
 import { Spacing, TouchTarget } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { Feather } from '@expo/vector-icons';
 import type React from 'react';
 import { StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
@@ -62,9 +62,8 @@ interface InfoRowProps {
  * />
  */
 export function InfoRow({ icon, label, value, iconColor, onPress, rightElement, style, accessibilityLabel, accessibilityHint }: InfoRowProps) {
-  const textColor = useThemeColor({}, 'text');
-  const textMutedColor = useThemeColor({}, 'text-muted');
-  const finalIconColor = iconColor || textColor;
+  const colors = useThemeColors();
+  const finalIconColor = iconColor || colors.text;
 
   const content = (
     <View style={[styles.container, style]}>
@@ -78,14 +77,14 @@ export function InfoRow({ icon, label, value, iconColor, onPress, rightElement, 
           {label}
         </ThemedText>
         {rightElement || (
-          <ThemedText type="body" style={[styles.value, { color: textMutedColor }]}>
+          <ThemedText type="body" style={[styles.value, { color: colors['text-muted'] }]}>
             {value}
           </ThemedText>
         )}
       </View>
       {onPress && (
         <View style={styles.chevronContainer}>
-          <Feather name="chevron-right" size={20} color={textMutedColor} />
+          <Feather name="chevron-right" size={20} color={colors['text-muted']} />
         </View>
       )}
     </View>

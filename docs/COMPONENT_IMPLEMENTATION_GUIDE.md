@@ -13,6 +13,7 @@
   - Supports both horizontal and vertical spacing
   - Can use preset sizes or custom values
 - **Usage**:
+
   ```tsx
   <Spacer size="lg" />
   <Spacer size={24} horizontal />
@@ -27,6 +28,7 @@
   - Supports horizontal and vertical orientations
   - Customizable thickness and color
 - **Usage**:
+
   ```tsx
   <Divider />
   <Divider thickness={2} />
@@ -42,6 +44,7 @@
   - Three sizes (sm, md, lg)
   - Automatic theme color adaptation
 - **Usage**:
+
   ```tsx
   <Badge label="New" variant="success" />
   <Badge label="3" variant="error" size="sm" />
@@ -57,6 +60,7 @@
   - Automatic fallback to initials
   - Image loading with default placeholder
 - **Usage**:
+
   ```tsx
   <Avatar uri={user.photoURL} size="lg" />
   <Avatar initials="JD" size="md" shape="rounded" />
@@ -74,6 +78,7 @@
   - Custom right element support
   - Automatic chevron for pressable items
 - **Usage**:
+
   ```tsx
   <InfoRow icon="mail" label="Email" value="user@example.com" />
   <InfoRow
@@ -94,6 +99,7 @@
   - Optional icon
   - Consistent typography and spacing
 - **Usage**:
+
   ```tsx
   <SectionHeader title="Account Settings" />
   <SectionHeader
@@ -115,17 +121,14 @@
   - Can be made pressable for navigation
   - Consistent styling with theme colors
 - **Usage**:
+
   ```tsx
   <PreferenceRow
     icon="bell"
     label="Push Notifications"
     value="Enabled"
   />
-  <PreferenceRow
-    icon="mail"
-    label="Email Updates"
-    value="Disabled"
-    onPress={() => navigate('/settings/email')}
+      onPress={() => navigate('/settings/email')}
   />
   ```
 
@@ -140,6 +143,7 @@
   - Custom right element support
   - Disabled state handling
 - **Usage**:
+
   ```tsx
   <SettingItem
     icon="user"
@@ -147,11 +151,7 @@
     subtitle="Update your information"
     onPress={() => navigate('/profile/edit')}
   />
-  <SettingItem
-    icon="trash-2"
-    title="Delete Account"
-    variant="danger"
-    onPress={handleDelete}
+      onPress={handleDelete}
   />
   ```
 
@@ -171,6 +171,7 @@
   - Loading state support
   - Configurable avatar size and card elevation
 - **Usage**:
+
   ```tsx
   <UserProfileHeader
     avatarUrl={user.photoURL}
@@ -189,6 +190,7 @@
   - Uses i18n for localized welcome message
   - Consistent styling with theme
 - **Usage**:
+
   ```tsx
   <UserWelcomeSection
     displayName="John Doe"
@@ -208,6 +210,7 @@
   - Uses PreferenceRow molecules internally
   - Configurable card elevation
 - **Usage**:
+
   ```tsx
   <NotificationPreferencesCard
     pushEnabled={true}
@@ -228,6 +231,7 @@
   - Supports danger variants
   - Custom right elements
 - **Usage**:
+
   ```tsx
   <SettingsSection
     title="Account Settings"
@@ -260,6 +264,7 @@
   - Supports icons and labels
   - Disabled state support
 - **Usage**:
+
   ```tsx
   <CategorySelector
     categories={[
@@ -283,6 +288,7 @@
   - Optional rating section
   - Disabled state support
 - **Usage**:
+
   ```tsx
   <FeedbackFormSection
     subject={subject}
@@ -304,6 +310,7 @@
   - Optional divider
   - Flexible children support
 - **Usage**:
+
   ```tsx
   <ProfileFormSection title="Personal Information">
     <ThemedInput
@@ -337,6 +344,7 @@
   - Safe area handling
   - Multiple background variants
 - **Usage**:
+
   ```tsx
   <ScreenWithHeader
     title="Profile"
@@ -366,6 +374,7 @@
   - Optional footer content
   - Safe area handling
 - **Usage**:
+
   ```tsx
   <FormScreen
     title="Create Account"
@@ -394,6 +403,7 @@
   - Safe area handling
   - Fully typed with FlatList props
 - **Usage**:
+
   ```tsx
   <ListScreen
     title="Notifications"

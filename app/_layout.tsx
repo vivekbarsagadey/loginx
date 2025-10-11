@@ -14,7 +14,7 @@ import { Routes } from '@/constants/routes';
 import { AuthProvider, useAuth } from '@/hooks/use-auth-provider';
 import { LanguageProvider } from '@/hooks/use-language-provider';
 import { OnboardingProvider, useOnboarding } from '@/hooks/use-onboarding-provider';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import { ThemeProvider as CustomThemeProvider, useThemeContext } from '@/hooks/use-theme-context';
 import { initializeAdaptiveCache } from '@/utils/adaptive-cache';
 import { initializeLocalFirst } from '@/utils/local-first';
@@ -29,8 +29,7 @@ function RootLayoutNav() {
   const { onboardingCompleted, checkingOnboarding } = useOnboarding();
   const segments = useSegments();
   const router = useRouter();
-  const backgroundColor = useThemeColor({}, 'bg-elevated');
-  const textColor = useThemeColor({}, 'text');
+  const colors = useThemeColors();
 
   // Memoize navigation logic for performance
   const handleNavigation = useCallback(() => {
@@ -68,9 +67,9 @@ function RootLayoutNav() {
       <Stack
         screenOptions={{
           headerStyle: {
-            backgroundColor,
+            backgroundColor: colors['bg-elevated'],
           },
-          headerTintColor: textColor,
+          headerTintColor: colors.text,
           animation: ScreenTransitions.DEFAULT,
           animationDuration: AnimationDurations.SCREEN_TRANSITION,
         }}

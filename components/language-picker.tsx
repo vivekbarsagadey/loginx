@@ -1,7 +1,7 @@
 import { Spacing, Typography } from '@/constants/layout';
 import { rounded } from '@/constants/style-utils';
 import { useLanguage } from '@/hooks/use-language';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
 import * as Haptics from 'expo-haptics';
 import React from 'react';
@@ -13,31 +13,27 @@ const LANGUAGE_OPTIONS = ['en', 'es', 'hi'];
 
 export const LanguagePicker = () => {
   const { language, persistLanguage } = useLanguage();
-  const primaryColor = useThemeColor({}, 'primary');
-  const onPrimaryColor = useThemeColor({}, 'on-primary');
-  const surfaceColor = useThemeColor({}, 'surface');
-  const textColor = useThemeColor({}, 'text');
-  const _borderColor = useThemeColor({}, 'border');
+  const colors = useThemeColors();
 
   const dynamicStyles = React.useMemo(
     () =>
       StyleSheet.create({
         chipActive: {
-          backgroundColor: primaryColor,
+          backgroundColor: colors.primary,
         },
         chipInactive: {
-          backgroundColor: surfaceColor,
+          backgroundColor: colors.surface,
         },
         textActive: {
-          color: onPrimaryColor,
+          color: colors['on-primary'],
           fontWeight: Typography.bodyBold.fontWeight,
         },
         textInactive: {
-          color: textColor,
+          color: colors.text,
           fontWeight: Typography.bodyBold.fontWeight,
         },
       }),
-    [primaryColor, surfaceColor, onPrimaryColor, textColor]
+    [colors]
   );
 
   const handleLanguageSelect = async (option: string) => {

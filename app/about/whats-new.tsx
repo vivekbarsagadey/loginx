@@ -1,4 +1,4 @@
-import { ScreenContainer } from '@/components/screen-container';
+import { ScreenWithHeader } from '@/components/templates/screen-with-header';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
@@ -11,7 +11,7 @@ export default function WhatsNewScreen() {
   const bugFixes = i18n.t('screens.whatsNew.bugFixesList', { returnObjects: true }) as string[];
 
   return (
-    <ScreenContainer scrollable>
+    <ScreenWithHeader title="What's New" showBackButton>
       <ThemedText type="h2" style={styles.version}>
         {i18n.t('screens.whatsNew.version')}
       </ThemedText>
@@ -45,7 +45,7 @@ export default function WhatsNewScreen() {
       <ThemedView style={styles.section}>
         <ThemedText style={styles.thankYou}>{i18n.t('screens.whatsNew.thankYou')}</ThemedText>
       </ThemedView>
-    </ScreenContainer>
+    </ScreenWithHeader>
   );
 }
 
