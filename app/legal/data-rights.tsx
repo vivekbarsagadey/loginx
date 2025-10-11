@@ -1,6 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedInfoBox } from '@/components/themed-info-box';
+import { HStack } from '@/components/themed-stack';
 import { ThemedSurface } from '@/components/themed-surface';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -115,15 +116,17 @@ export default function DataRightsScreen() {
 
         {rights.map((right, index) => (
           <ThemedSurface key={index} elevation={1} style={styles.rightItem} accessible={true} accessibilityLabel={`${right.title}. ${right.description}`}>
-            <ThemedView style={[styles.iconContainer, { backgroundColor: `${colors.primary}20` }]}>
-              <Ionicons name={right.icon} size={24} color={colors.primary} />
-            </ThemedView>
-            <ThemedView style={styles.rightContent}>
-              <ThemedText type="bodyBold" style={styles.rightTitle}>
-                {right.title}
-              </ThemedText>
-              <ThemedText style={styles.rightDescription}>{right.description}</ThemedText>
-            </ThemedView>
+            <HStack spacing="md" align="flex-start">
+              <ThemedView style={[styles.iconContainer, { backgroundColor: `${colors.primary}20` }]}>
+                <Ionicons name={right.icon} size={24} color={colors.primary} />
+              </ThemedView>
+              <ThemedView style={styles.rightContent}>
+                <ThemedText type="bodyBold" style={styles.rightTitle}>
+                  {right.title}
+                </ThemedText>
+                <ThemedText style={styles.rightDescription}>{right.description}</ThemedText>
+              </ThemedView>
+            </HStack>
           </ThemedSurface>
         ))}
       </ThemedView>

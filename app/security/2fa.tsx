@@ -1,6 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
+import { HStack } from '@/components/themed-stack';
 import { ThemedSurface } from '@/components/themed-surface';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -153,10 +154,10 @@ export default function TwoFactorAuthScreen() {
 
             <ThemedView style={styles.benefitsContainer}>
               {benefits.map((benefit, index) => (
-                <ThemedView key={index} style={styles.benefitItem}>
+                <HStack key={index} spacing="md" align="flex-start" style={styles.benefitItem}>
                   <ThemedText style={[styles.bulletPoint, { color: successColor }]}>✓</ThemedText>
                   <ThemedText style={styles.benefitText}>{benefit}</ThemedText>
-                </ThemedView>
+                </HStack>
               ))}
             </ThemedView>
 

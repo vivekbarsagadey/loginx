@@ -1,6 +1,7 @@
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedBadge } from '@/components/themed-badge';
 import { ThemedInfoBox } from '@/components/themed-info-box';
+import { HStack } from '@/components/themed-stack';
 import { ThemedSurface } from '@/components/themed-surface';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -80,21 +81,21 @@ export default function CookiesScreen() {
             accessible={true}
             accessibilityLabel={`${cookie.title}. ${cookie.required ? 'Required' : 'Optional'}. ${cookie.description}`}
           >
-            <ThemedView style={styles.cookieHeader}>
-              <ThemedView style={styles.cookieHeaderLeft}>
+            <HStack spacing="sm" align="center" justify="space-between" style={styles.cookieHeader}>
+              <HStack spacing="sm" align="center" style={styles.cookieHeaderLeft}>
                 <ThemedView style={[styles.iconContainer, { backgroundColor: `${colors.primary}20` }]}>
                   <Ionicons name={cookie.icon} size={24} color={colors.primary} />
                 </ThemedView>
                 <ThemedText type="bodyBold" style={styles.cookieTitle}>
                   {cookie.title}
                 </ThemedText>
-              </ThemedView>
+              </HStack>
               {cookie.required && (
                 <ThemedBadge variant="primary" size="sm">
                   {i18n.t('screens.legal.cookies.required')}
                 </ThemedBadge>
               )}
-            </ThemedView>
+            </HStack>
             <ThemedText style={styles.cookieDescription}>{cookie.description}</ThemedText>
           </ThemedSurface>
         ))}

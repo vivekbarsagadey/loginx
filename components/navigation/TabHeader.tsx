@@ -32,8 +32,7 @@ export function TabHeader({ title, showBackButton = false }: TabHeaderProps) {
 
   const handleNotifications = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    router.push('/notifications' as any);
+    router.push('/notifications');
   };
 
   const handleSettings = async () => {

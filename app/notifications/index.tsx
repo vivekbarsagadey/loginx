@@ -5,6 +5,7 @@
 
 import { ListScreen } from '@/components/templates/list-screen';
 import { ThemedPressable } from '@/components/themed-pressable';
+import { HStack } from '@/components/themed-stack';
 import { ThemedText } from '@/components/themed-text';
 import { NotificationItem } from '@/components/ui/notification-item';
 import { Spacing } from '@/constants/layout';
@@ -17,7 +18,7 @@ import { clearAllNotifications, deleteNotification, getNotificationHistory, mark
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default function NotificationsCenterScreen() {
   const alert = useAlert();
@@ -111,7 +112,7 @@ export default function NotificationsCenterScreen() {
     }
 
     return (
-      <View style={styles.headerActions}>
+      <HStack spacing="sm" wrap style={styles.headerActions}>
         {unreadCount > 0 && (
           <ThemedPressable style={styles.actionButton} onPress={handleMarkAllAsRead}>
             <ThemedText style={[styles.actionButtonText, { color: colors.primary }]}>{unreadCount} unread - Mark all read</ThemedText>
@@ -120,7 +121,7 @@ export default function NotificationsCenterScreen() {
         <ThemedPressable style={styles.actionButton} onPress={handleClearAll}>
           <ThemedText style={[styles.actionButtonText, { color: colors.error }]}>Clear all</ThemedText>
         </ThemedPressable>
-      </View>
+      </HStack>
     );
   };
 

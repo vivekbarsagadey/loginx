@@ -84,8 +84,18 @@ const isFacebookSigninAvailable = (): boolean => {
  * Configure Google Sign-In SDK
  * Separated for testability and clarity
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const configureGoogleSignIn = async (GoogleSigninInstance: any) => {
+interface GoogleSignInModule {
+  configure: (config: {
+    webClientId?: string;
+    iosClientId?: string;
+    offlineAccess?: boolean;
+    profileImageSize?: number;
+  }) => Promise<void>;
+  hasPlayServices: () => Promise<boolean>;
+  signIn: () => Promise<{ data?: { idToken?: string } }>;
+}
+
+const configureGoogleSignIn = async (GoogleSigninInstance: GoogleSignInModule) => {
   await GoogleSigninInstance.configure({
     webClientId: Config.social.googleWebClientId || '',
     iosClientId: Config.social.googleIosClientId,

@@ -1,6 +1,7 @@
 import { submitRating } from '@/actions/feedback.action';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
+import { HStack } from '@/components/themed-stack';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
@@ -122,11 +123,11 @@ export default function RateAppScreen() {
           <ThemedText type="h3" style={CommonText.sectionTitle}>
             {i18n.t('screens.rateApp.likesLabel')}
           </ThemedText>
-          <ThemedView style={styles.optionsGrid}>
+          <HStack spacing="sm" wrap style={styles.optionsGrid}>
             {LIKE_OPTIONS.map((option) => (
               <SelectableButton key={option.id} label={option.label} icon={option.icon} isSelected={selectedLikes.includes(option.id)} onPress={() => handleLikeToggle(option.id)} variant="compact" />
             ))}
-          </ThemedView>
+          </HStack>
         </ThemedView>
       )}
 
@@ -136,7 +137,7 @@ export default function RateAppScreen() {
           <ThemedText type="h3" style={CommonText.sectionTitle}>
             {i18n.t('screens.rateApp.improvementsLabel')}
           </ThemedText>
-          <ThemedView style={styles.optionsGrid}>
+          <HStack spacing="sm" wrap style={styles.optionsGrid}>
             {IMPROVEMENT_OPTIONS.map((option) => (
               <SelectableButton
                 key={option.id}
@@ -147,7 +148,7 @@ export default function RateAppScreen() {
                 variant="compact"
               />
             ))}
-          </ThemedView>
+          </HStack>
         </ThemedView>
       )}
 

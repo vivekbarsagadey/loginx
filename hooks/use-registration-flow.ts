@@ -36,8 +36,7 @@ export function useRegistrationFlow<T extends Record<string, unknown>>({ steps, 
 
   const goNext = async () => {
     const fields = steps[currentStep].fields;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const isValid = await trigger(fields as any);
+    const isValid = await trigger(fields as Parameters<UseFormTrigger<T>>[0]);
 
     if (isValid) {
       // Haptic feedback for successful validation

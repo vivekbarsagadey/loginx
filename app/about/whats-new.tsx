@@ -1,4 +1,5 @@
 import { ScreenWithHeader } from '@/components/templates/screen-with-header';
+import { HStack } from '@/components/themed-stack';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
@@ -35,10 +36,10 @@ export default function WhatsNewScreen() {
           🐛 {i18n.t('screens.whatsNew.bugFixes')}
         </ThemedText>
         {bugFixes.map((fix, index) => (
-          <ThemedView key={index} style={styles.bugFixItem}>
+          <HStack key={index} spacing="sm" align="flex-start" style={styles.bugFixItem}>
             <ThemedText style={styles.bulletPoint}>•</ThemedText>
             <ThemedText style={styles.bugFixText}>{fix}</ThemedText>
-          </ThemedView>
+          </HStack>
         ))}
       </ThemedView>
 

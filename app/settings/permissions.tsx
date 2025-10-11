@@ -3,6 +3,7 @@ import { ThemedBadge } from '@/components/themed-badge';
 import { ThemedInfoBox } from '@/components/themed-info-box';
 import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
 import { ThemedPressable } from '@/components/themed-pressable';
+import { HStack, VStack } from '@/components/themed-stack';
 import { ThemedText } from '@/components/themed-text';
 import { BorderRadius, IconSize, Spacing, Typography } from '@/constants/layout';
 import { getPermissions } from '@/data';
@@ -73,24 +74,24 @@ function PermissionCard({ icon, title, description, granted, canAskAgain, onRequ
       accessibilityHint={granted ? 'Permission granted' : 'Tap to manage permission'}
       accessibilityState={{ disabled: loading }}
     >
-      <View style={styles.cardHeader}>
+      <HStack spacing="md" align="center" style={styles.cardHeader}>
         <View style={[styles.iconContainer, { backgroundColor: `${statusColor}15` }]}>
           <Ionicons name={icon} size={IconSize.xl} color={statusColor} />
         </View>
 
-        <View style={styles.cardContent}>
+        <VStack spacing="xs" style={styles.cardContent}>
           <ThemedText type="subtitle1" style={styles.cardTitle}>
             {title}
           </ThemedText>
           <ThemedText type="caption" style={[styles.cardDescription, { color: mutedColor }]}>
             {description}
           </ThemedText>
-        </View>
+        </VStack>
 
         <View style={styles.statusContainer}>
           {loading ? <ThemedLoadingSpinner size="small" /> : <Ionicons name={granted ? 'checkmark-circle' : canAskAgain ? 'help-circle' : 'close-circle'} size={IconSize.lg} color={statusColor} />}
         </View>
-      </View>
+      </HStack>
 
       <ThemedBadge variant={granted ? 'success' : canAskAgain ? 'info' : 'error'} size="md">
         {statusText}
