@@ -1,24 +1,22 @@
 import { createUserProfile } from '@/actions/user.action';
-import { ThemedButton } from '@/components/themed-button';
-import { ThemedText } from '@/components/themed-text';
+import { RegistrationNavigation } from '@/components/auth/registration-navigation';
+import { RegistrationProgress } from '@/components/auth/registration-progress';
+import { RegistrationSocialAuth } from '@/components/auth/registration-social-auth';
 import { ThemedView } from '@/components/themed-view';
-import { SocialSignInButtons } from '@/components/ui/social-sign-in-buttons';
-import { BorderRadius, Spacing, Typography } from '@/constants/layout';
+import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
-import { useAlert } from '@/hooks/use-alert';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
-import { useSocialAuth } from '@/hooks/use-social-auth';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useRegistrationFlow } from '@/hooks/use-registration-flow';
 import { showError } from '@/utils/error';
-import { logStateChange, runRegistrationDiagnostics } from '@/utils/registration-diagnostics';
+import { runRegistrationDiagnostics } from '@/utils/registration-diagnostics';
 import { sanitizeEmail, sanitizeUserInput } from '@/utils/sanitize';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Haptics from 'expo-haptics';
-import { Stack, useRouter } from 'expo-router';
+import { Stack } from 'expo-router';
 import { createUserWithEmailAndPassword, deleteUser, sendEmailVerification } from 'firebase/auth';
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
 import { z } from 'zod';
 import RegisterStep1 from './step-1';
 import RegisterStep2 from './step-2';
@@ -89,22 +87,13 @@ const RegisterContext = createContext<{
 export const useRegister = () => useContext(RegisterContext);
 
 export default function RegisterScreen() {
-  const { back, replace } = useHapticNavigation();
-  const router = useRouter(); // Keep for setParams
-  const alert = useAlert();
-  const [currentStep, setCurrentStep] = useState(0);
+  const { replace } = useHapticNavigation();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { signInWithGoogle, signInWithApple, loading: socialLoading } = useSocialAuth();
 
   // Run diagnostics on mount (development only)
   useEffect(() => {
     runRegistrationDiagnostics();
   }, []);
-
-  // Log step changes for debugging
-  useEffect(() => {
-    logStateChange('RegisterScreen', 'currentStep', currentStep - 1, currentStep);
-  }, [currentStep]);
 
   const methods = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -128,48 +117,6 @@ export default function RegisterScreen() {
 
   const { handleSubmit, trigger, formState } = methods;
 
-  const goNext = async () => {
-    const fields = STEPS[currentStep].fields;
-    const isValid = await trigger(fields as (keyof FormData)[]);
-
-    if (isValid) {
-      // Haptic feedback for successful validation
-      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-
-      if (currentStep < STEPS.length - 1) {
-        setCurrentStep(currentStep + 1);
-      } else {
-        handleSubmit(onSubmit)();
-      }
-    } else {
-      // Haptic feedback for validation error
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-    }
-  };
-
-  const goPrev = () => {
-    if (currentStep > 0) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      setCurrentStep(currentStep - 1);
-    } else {
-      // Confirm before leaving registration
-      alert.show('Cancel Registration?', 'Are you sure you want to cancel? Your progress will be lost.', [
-        {
-          text: 'Continue Registering',
-          style: 'cancel',
-        },
-        {
-          text: 'Cancel Registration',
-          style: 'destructive',
-          onPress: () => {
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-            back();
-          },
-        },
-      ]);
-    }
-  };
-
   const onSubmit = async (data: FormData) => {
     if (isSubmitting) {
       return;
@@ -187,7 +134,7 @@ export default function RegisterScreen() {
         termsAcceptedAt: new Date().toISOString(),
         referralCode: data.referralCode ? sanitizeUserInput(data.referralCode, 12) : '',
         email: sanitizeEmail(data.email),
-        password: data.password, // Don't sanitize password (Firebase handles it)
+        password: data.password,
         address: data.address ? sanitizeUserInput(data.address, 200) : '',
         city: data.city ? sanitizeUserInput(data.city, 100) : '',
         state: data.state ? sanitizeUserInput(data.state, 100) : '',
@@ -202,7 +149,7 @@ export default function RegisterScreen() {
       try {
         await sendEmailVerification(user);
       } catch (_verificationError) {
-        // Continue even if email verification fails - user can resend later
+        // Continue even if email verification fails
       }
 
       // Step 3: Create user profile in Firestore
@@ -239,7 +186,6 @@ export default function RegisterScreen() {
 
       // Navigate based on whether phone number was provided
       if (sanitizedData.phoneNumber && sanitizedData.phoneNumber.trim()) {
-        // Phone verification flow
         try {
           replace({
             pathname: '/(auth)/verify-phone',
@@ -247,7 +193,6 @@ export default function RegisterScreen() {
           });
         } catch (navError) {
           console.error('[Registration] Navigation to phone verification failed:', navError);
-          // Fallback to email verification
           try {
             replace({
               pathname: '/(auth)/verify-email',
@@ -259,7 +204,6 @@ export default function RegisterScreen() {
           }
         }
       } else {
-        // Email verification flow (no phone)
         try {
           replace({
             pathname: '/(auth)/verify-email',
@@ -279,42 +223,13 @@ export default function RegisterScreen() {
     }
   };
 
-  const isFirstStep = useMemo(() => currentStep === 0, [currentStep]);
-  const isLastStep = useMemo(() => currentStep === STEPS.length - 1, [currentStep]);
+  const { currentStep, setCurrentStep, goNext, goPrev, isFirstStep, isLastStep, currentStepTitle } = useRegistrationFlow({
+    steps: STEPS,
+    trigger,
+    onSubmit: () => handleSubmit(onSubmit)(),
+  });
+
   const CurrentStepComponent = STEPS[currentStep].component;
-
-  const progressColor = useThemeColor({}, 'primary');
-  const progressBgColor = useThemeColor({}, 'border');
-  const textColor = useThemeColor({}, 'text');
-
-  useEffect(() => {
-    router.setParams({ title: STEPS[currentStep].title });
-  }, [currentStep, router]);
-
-  // Progress Indicator Component
-  const ProgressIndicator = () => (
-    <ThemedView style={styles.progressContainer}>
-      <ThemedText type="caption" style={styles.progressText}>
-        Step {currentStep + 1} of {STEPS.length}
-      </ThemedText>
-      <View style={styles.progressBarContainer}>
-        {STEPS.map((_, index) => (
-          <View
-            key={index}
-            style={[
-              styles.progressBar,
-              {
-                backgroundColor: index <= currentStep ? progressColor : progressBgColor,
-              },
-            ]}
-          />
-        ))}
-      </View>
-      <ThemedText type="body" style={[{ color: textColor }, styles.stepTitle]}>
-        {STEPS[currentStep].title}
-      </ThemedText>
-    </ThemedView>
-  );
 
   return (
     <FormProvider {...methods}>
@@ -338,38 +253,15 @@ export default function RegisterScreen() {
               }}
             />
 
-            {/* Progress Indicator */}
-            <ProgressIndicator />
+            <RegistrationProgress currentStep={currentStep} totalSteps={STEPS.length} stepTitle={currentStepTitle} />
 
-            {/* Form Content */}
             <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-              {/* Social Sign-In - Show only on first step */}
-              {currentStep === 0 && <SocialSignInButtons onGoogleSignIn={signInWithGoogle} onAppleSignIn={signInWithApple} loading={socialLoading} mode="register" />}
+              <RegistrationSocialAuth visible={currentStep === 0} />
 
               <CurrentStepComponent errors={formState.errors} />
             </ScrollView>
 
-            {/* Navigation Buttons */}
-            <ThemedView style={styles.buttonContainer}>
-              <ThemedButton
-                title={isFirstStep ? 'Cancel' : 'Previous'}
-                onPress={goPrev}
-                style={styles.button}
-                variant="secondary"
-                disabled={isSubmitting}
-                accessibilityLabel={isFirstStep ? 'Cancel registration' : 'Go to previous step'}
-                accessibilityHint={isFirstStep ? 'Returns to previous screen' : 'Returns to the previous registration step'}
-              />
-              <ThemedButton
-                title={isLastStep ? 'Create Account' : 'Next'}
-                onPress={goNext}
-                style={styles.button}
-                loading={isSubmitting}
-                disabled={isSubmitting}
-                accessibilityLabel={isLastStep ? 'Create account' : 'Go to next step'}
-                accessibilityHint={isLastStep ? 'Creates your account with the provided information' : 'Proceeds to the next registration step'}
-              />
-            </ThemedView>
+            <RegistrationNavigation isFirstStep={isFirstStep} isLastStep={isLastStep} isSubmitting={isSubmitting} onNext={goNext} onPrevious={goPrev} />
           </ThemedView>
         </KeyboardAvoidingView>
       </RegisterContext.Provider>
@@ -388,27 +280,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
-  progressContainer: {
-    paddingVertical: Spacing.md,
-    gap: Spacing.sm,
-  },
-  progressText: {
-    // Color will be set by ThemedText's 'caption' type
-  },
-  progressBarContainer: {
-    flexDirection: 'row',
-    gap: Spacing.sm,
-    marginVertical: Spacing.sm,
-  },
-  progressBar: {
-    flex: 1,
-    height: 4,
-    borderRadius: BorderRadius.xs,
-  },
-  stepTitle: {
-    marginBottom: Spacing.md,
-    fontWeight: Typography.bodyBold.fontWeight as 'bold',
-  },
   scrollView: {
     flex: 1,
     marginBottom: Spacing.md,
@@ -416,15 +287,5 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     flexGrow: 1,
     paddingBottom: 20,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    gap: Spacing.md,
-    paddingTop: Spacing.md,
-    paddingBottom: Platform.OS === 'ios' ? Spacing.sm : Spacing.md,
-    backgroundColor: 'transparent',
-  },
-  button: {
-    flex: 1,
   },
 });

@@ -1,28 +1,22 @@
 import { getUserProfile, updateUser } from '@/actions/user.action';
+import { ProfileAddressFields } from '@/components/profile/profile-address-fields';
+import { ProfileBasicFields } from '@/components/profile/profile-basic-fields';
+import { ProfilePhotoSection } from '@/components/profile/profile-photo-section';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedScrollView } from '@/components/themed-scroll-view';
-import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { SkeletonAvatar, SkeletonForm, SkeletonLoader } from '@/components/ui/skeleton-loader';
-import { AccessibilityHints, AccessibilityRoles } from '@/constants/accessibility';
-import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
-import { ValidationConstants } from '@/constants/validation';
 import { auth } from '@/firebase-config';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
-import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
-import { showError } from '@/utils/error';
 import { validateAgeField, validateDisplayNameField, validateZipCodeField } from '@/utils/form-validation';
 import { sanitizeUserInput } from '@/utils/sanitize';
-import * as Haptics from 'expo-haptics';
-import * as ImagePicker from 'expo-image-picker';
 import { updateProfile } from 'firebase/auth';
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Image, Platform, StyleSheet, type TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, type TextInput } from 'react-native';
 
 export default function EditProfileScreen() {
   const user = auth.currentUser;
@@ -41,7 +35,6 @@ export default function EditProfileScreen() {
   const [zipCodeError, setZipCodeError] = useState('');
 
   // Loading states
-  const [imageLoading, setImageLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -51,11 +44,6 @@ export default function EditProfileScreen() {
   const cityInputRef = useRef<TextInput>(null);
   const stateInputRef = useRef<TextInput>(null);
   const zipCodeInputRef = useRef<TextInput>(null);
-
-  // Theme colors
-  const tintColor = useThemeColor({}, 'primary');
-  const overlayColor = useThemeColor({}, 'text');
-  const borderColor = useThemeColor({}, 'border');
 
   // Load user profile data
   useEffect(() => {
@@ -177,65 +165,11 @@ export default function EditProfileScreen() {
     }
   );
 
-  const handleImagePick = useCallback(async () => {
-    try {
-      // Haptic feedback
-      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        showError(new Error(i18n.t('errors.profile.permission.message')));
-        return;
-      }
-
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.7,
-        base64: false,
-      });
-
-      if (!result.canceled && result.assets && result.assets.length > 0) {
-        setImageLoading(true);
-        try {
-          const asset = result.assets[0];
-
-          // Validate file size (max 5MB)
-          if (asset.fileSize && asset.fileSize > 5 * 1024 * 1024) {
-            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-            showError(new Error('Image must be smaller than 5MB. Please select a smaller image.'));
-            return;
-          }
-
-          const response = await fetch(asset.uri);
-          const blob = await response.blob();
-          const storage = getStorage();
-          const storageRef = ref(storage, `avatars/${user?.uid}_${Date.now()}`);
-
-          await uploadBytes(storageRef, blob);
-          const downloadURL = await getDownloadURL(storageRef);
-          setPhotoURL(downloadURL);
-          setHasChanges(true);
-
-          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        } catch (error) {
-          console.error('[EditProfile] Error uploading image:', error);
-          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-          showError(error);
-        } finally {
-          setImageLoading(false);
-        }
-      }
-    } catch (error) {
-      console.error('[EditProfile] Error picking image:', error);
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      showError(error);
-      setImageLoading(false);
-    }
-  }, [user?.uid]);
-
-  const defaultAvatarUri = 'https://www.gravatar.com/avatar/?d=mp&s=256';
+  // Handler for photo changes from ProfilePhotoSection
+  const handlePhotoChange = useCallback((newPhotoURL: string) => {
+    setPhotoURL(newPhotoURL);
+    setHasChanges(true);
+  }, []);
 
   // Show loading state while fetching profile
   if (initialLoading) {
@@ -259,191 +193,69 @@ export default function EditProfileScreen() {
   }
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-        {/* Avatar Section */}
-        <ThemedView style={styles.avatarSection}>
-          <TouchableOpacity
-            onPress={handleImagePick}
-            style={[styles.avatarContainer, { borderColor }]}
-            disabled={imageLoading || loading}
-            accessible={true}
-            accessibilityRole={AccessibilityRoles.BUTTON}
-            accessibilityLabel="Change profile photo"
-            accessibilityHint={AccessibilityHints.BUTTON_TAP}
-          >
-            <Image source={{ uri: photoURL || defaultAvatarUri }} style={[styles.avatar, { borderColor }]} accessibilityIgnoresInvertColors={true} />
-            {imageLoading && (
-              <ThemedView style={[styles.imageLoadingOverlay, { backgroundColor: overlayColor + '80' }]}>
-                <ActivityIndicator size="large" color={tintColor} />
-                <ThemedText style={[styles.uploadingText, { color: tintColor }]}>Uploading...</ThemedText>
-              </ThemedView>
-            )}
-          </TouchableOpacity>
+    <ThemedScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <ProfilePhotoSection photoURL={photoURL || ''} userId={user?.uid || ''} onPhotoChange={handlePhotoChange} disabled={loading} />
 
-          <TouchableOpacity onPress={handleImagePick} disabled={imageLoading || loading} accessible={true} accessibilityRole={AccessibilityRoles.BUTTON} accessibilityLabel="Change profile photo">
-            <ThemedText style={[styles.changePhotoText, { color: tintColor }]}>{imageLoading ? 'Uploading...' : i18n.t('profile.edit.changePhoto')}</ThemedText>
-          </TouchableOpacity>
-        </ThemedView>
+      <ThemedView style={styles.formSection}>
+        <ProfileBasicFields
+          displayName={displayName}
+          displayNameError={displayNameError || ''}
+          age={age}
+          ageError={ageError || ''}
+          onDisplayNameChange={(text) => {
+            setDisplayName(text);
+            if (displayNameError) {
+              setDisplayNameError('');
+            }
+          }}
+          onAgeChange={(text) => {
+            const numericText = text.replace(/[^0-9]/g, '');
+            setAge(numericText);
+            if (ageError) {
+              setAgeError('');
+            }
+          }}
+          onDisplayNameBlur={() => validateDisplayName(displayName)}
+          onAgeBlur={() => validateAge(age)}
+          ageInputRef={ageInputRef}
+          disabled={loading}
+        />
 
-        {/* Form Section */}
-        <ThemedView style={styles.formSection}>
-          <ThemedText style={CommonText.sectionTitle}>Basic Information</ThemedText>
+        <ThemedInput
+          label="Email Address"
+          value={user?.email || ''}
+          editable={false}
+          selectTextOnFocus={false}
+          style={styles.disabledInput}
+          helperText="To change your email, use the Update Email option in Settings"
+        />
 
-          <ThemedInput
-            label={i18n.t('profile.edit.nameLabel')}
-            value={displayName}
-            onChangeText={(text) => {
-              setDisplayName(text);
-              if (displayNameError) {
-                setDisplayNameError('');
-              }
-            }}
-            onBlur={() => validateDisplayName(displayName)}
-            errorMessage={displayNameError}
-            maxLength={ValidationConstants.NAME_MAX_LENGTH}
-            autoCapitalize="words"
-            autoCorrect={false}
-            returnKeyType="next"
-            onSubmitEditing={() => ageInputRef.current?.focus()}
-            accessible={true}
-            accessibilityLabel="Display name input"
-            accessibilityHint="Enter your display name"
-          />
-
-          <ThemedInput
-            label="Email Address"
-            value={user?.email || ''}
-            editable={false}
-            selectTextOnFocus={false}
-            style={styles.disabledInput}
-            helperText="To change your email, use the Update Email option in Settings"
-            accessible={true}
-            accessibilityLabel="Email address (read-only)"
-            accessibilityHint="Email address cannot be changed here"
-          />
-
-          <ThemedInput
-            ref={ageInputRef}
-            label="Age"
-            value={age}
-            onChangeText={(text) => {
-              const numericText = text.replace(/[^0-9]/g, '');
-              setAge(numericText);
-              if (ageError) {
-                setAgeError('');
-              }
-            }}
-            onBlur={() => validateAge(age)}
-            errorMessage={ageError}
-            keyboardType="number-pad"
-            maxLength={3}
-            placeholder="Enter your age"
-            returnKeyType="next"
-            onSubmitEditing={() => addressInputRef.current?.focus()}
-            accessible={true}
-            accessibilityLabel="Age input"
-            accessibilityHint="Enter your age (optional)"
-          />
-
-          <ThemedText style={[CommonText.sectionTitle, styles.sectionTitleSpacing]}>Address (Optional)</ThemedText>
-
-          <ThemedInput
-            ref={addressInputRef}
-            label="Street Address"
-            value={address}
-            onChangeText={setAddress}
-            placeholder="123 Main St"
-            maxLength={200}
-            autoCapitalize="words"
-            autoCorrect={false}
-            returnKeyType="next"
-            onSubmitEditing={() => cityInputRef.current?.focus()}
-            accessible={true}
-            accessibilityLabel="Street address input"
-            accessibilityHint="Enter your street address (optional)"
-          />
-
-          <ThemedInput
-            ref={cityInputRef}
-            label="City"
-            value={city}
-            onChangeText={setCity}
-            placeholder="City"
-            maxLength={100}
-            autoCapitalize="words"
-            autoCorrect={false}
-            returnKeyType="next"
-            onSubmitEditing={() => stateInputRef.current?.focus()}
-            accessible={true}
-            accessibilityLabel="City input"
-            accessibilityHint="Enter your city (optional)"
-          />
-
-          <ThemedView style={styles.inlineInputs}>
-            <ThemedInput
-              ref={stateInputRef}
-              label="State"
-              value={state}
-              onChangeText={(text) => setState(text.toUpperCase())}
-              placeholder="CA"
-              maxLength={2}
-              autoCapitalize="characters"
-              autoCorrect={false}
-              returnKeyType="next"
-              onSubmitEditing={() => zipCodeInputRef.current?.focus()}
-              containerStyle={styles.stateInput}
-              accessible={true}
-              accessibilityLabel="State code input"
-              accessibilityHint="Enter your state code (optional)"
-            />
-
-            <ThemedInput
-              ref={zipCodeInputRef}
-              label="Zip Code"
-              value={zipCode}
-              onChangeText={(text) => {
-                setZipCode(text);
-                if (zipCodeError) {
-                  setZipCodeError('');
-                }
-              }}
-              onBlur={() => validateZipCode(zipCode)}
-              errorMessage={zipCodeError}
-              placeholder="12345"
-              keyboardType={Platform.OS === 'ios' ? 'numbers-and-punctuation' : 'default'}
-              maxLength={10}
-              returnKeyType="done"
-              onSubmitEditing={handleUpdate}
-              containerStyle={styles.zipCodeInput}
-              accessible={true}
-              accessibilityLabel="Zip code input"
-              accessibilityHint="Enter your zip code (optional)"
-            />
-          </ThemedView>
-        </ThemedView>
-
-        {/* Helper text */}
-        {hasChanges && (
-          <ThemedView style={styles.helperSection}>
-            <ThemedText style={[styles.helperText, { color: tintColor }]}>You have unsaved changes</ThemedText>
-          </ThemedView>
-        )}
-      </ThemedScrollView>
-
-      {/* Actions Section - Fixed at bottom */}
-      <ThemedView style={styles.actionsSection}>
-        <ThemedButton
-          title={loading ? i18n.t('profile.edit.savingButton') : i18n.t('profile.edit.saveButton')}
-          onPress={handleUpdate}
-          disabled={loading || imageLoading || !hasChanges}
-          loading={loading}
-          variant="primary"
-          accessibilityLabel={loading ? 'Saving profile changes' : 'Save profile changes'}
-          accessibilityHint={loading ? 'Please wait while changes are being saved' : hasChanges ? 'Tap to save your profile changes' : 'No changes to save'}
+        <ProfileAddressFields
+          address={address}
+          city={city}
+          state={state}
+          zipCode={zipCode}
+          zipCodeError={zipCodeError || ''}
+          onAddressChange={setAddress}
+          onCityChange={setCity}
+          onStateChange={(text) => setState(text.toUpperCase())}
+          onZipCodeChange={(text) => {
+            setZipCode(text);
+            if (zipCodeError) {
+              setZipCodeError('');
+            }
+          }}
+          onZipCodeBlur={() => validateZipCode(zipCode)}
+          addressInputRef={addressInputRef}
+          cityInputRef={cityInputRef}
+          stateInputRef={stateInputRef}
+          zipCodeInputRef={zipCodeInputRef}
+          disabled={loading}
         />
       </ThemedView>
-    </ThemedView>
+
+      <ThemedButton title={loading ? i18n.t('profile.edit.savingButton') : i18n.t('profile.edit.saveButton')} onPress={handleUpdate} disabled={loading || !hasChanges} loading={loading} />
+    </ThemedScrollView>
   );
 }
 
@@ -451,93 +263,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: Spacing.md,
-  },
-  loadingText: {
-    fontSize: 16,
-    opacity: 0.7,
-  },
   scrollContent: {
     padding: Spacing.lg,
-    paddingBottom: Spacing.xxl * 2,
+    paddingBottom: Spacing.xxl,
+  },
+  content: {
+    padding: Spacing.md,
+    gap: Spacing.lg,
   },
   avatarSection: {
     alignItems: 'center',
     marginBottom: Spacing.xl,
   },
-  avatarContainer: {
-    position: 'relative',
-    alignItems: 'center',
-    marginBottom: Spacing.md,
-    borderRadius: 80,
-    borderWidth: 2,
-    padding: Spacing.xs,
-  },
-  avatar: {
-    width: 128,
-    height: 128,
-    borderRadius: 64,
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-  },
-  imageLoadingOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 64,
-    gap: Spacing.sm,
-  },
-  uploadingText: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  changePhotoText: {
-    fontSize: 16,
-    fontWeight: '500',
-    textAlign: 'center',
-  },
   formSection: {
-    marginBottom: Spacing.xl,
-  },
-  sectionTitleSpacing: {
-    marginTop: Spacing.lg,
+    gap: Spacing.md,
   },
   disabledInput: {
     opacity: 0.6,
-  },
-  inlineInputs: {
-    flexDirection: 'row',
-    gap: Spacing.md,
-  },
-  stateInput: {
-    flex: 1,
-  },
-  zipCodeInput: {
-    flex: 1.5,
-  },
-  helperSection: {
-    marginTop: Spacing.md,
-    paddingHorizontal: Spacing.xs,
-  },
-  helperText: {
-    fontSize: 14,
-    fontWeight: '500',
-    textAlign: 'center',
-  },
-  actionsSection: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: Spacing.lg,
-    paddingBottom: Platform.OS === 'ios' ? Spacing.xl : Spacing.lg,
   },
 });

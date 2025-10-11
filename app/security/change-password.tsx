@@ -1,10 +1,12 @@
 import { ScreenContainer } from '@/components/screen-container';
+import { PasswordChangeForm } from '@/components/security/password-change-form';
+import { PasswordRequirements } from '@/components/security/password-requirements';
+import { PasswordStrengthIndicator } from '@/components/security/password-strength-indicator';
 import { ThemedButton } from '@/components/themed-button';
-import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
-import { FontWeight, Spacing } from '@/constants/layout';
+import { Spacing } from '@/constants/layout';
 import { ValidationConstants } from '@/constants/validation';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
@@ -27,8 +29,6 @@ export default function ChangePasswordScreen() {
   const [newPasswordError, setNewPasswordError] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
-
-  const requirements = i18n.t('screens.security.changePassword.requirements', { returnObjects: true }) as Record<string, string>;
 
   const validatePassword = useCallback((password: string): boolean => {
     if (!password) {
@@ -141,64 +141,37 @@ export default function ChangePasswordScreen() {
         <ThemedText style={CommonText.subtitle}>{i18n.t('screens.security.changePassword.subtitle')}</ThemedText>
 
         <ThemedView style={styles.form}>
-          <ThemedInput
-            label={i18n.t('screens.security.changePassword.currentPassword')}
-            value={currentPassword}
-            onChangeText={(text) => {
+          <PasswordChangeForm
+            currentPassword={currentPassword}
+            currentPasswordError={currentPasswordError}
+            newPassword={newPassword}
+            newPasswordError={newPasswordError}
+            confirmPassword={confirmPassword}
+            confirmPasswordError={confirmPasswordError}
+            onCurrentPasswordChange={(text) => {
               setCurrentPassword(text);
               if (currentPasswordError) {
                 setCurrentPasswordError('');
               }
             }}
-            errorMessage={currentPasswordError}
-            secureTextEntry
-            style={styles.input}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
-
-          <ThemedInput
-            label={i18n.t('screens.security.changePassword.newPassword')}
-            value={newPassword}
-            onChangeText={(text) => {
+            onNewPasswordChange={(text) => {
               setNewPassword(text);
               if (newPasswordError) {
                 setNewPasswordError('');
               }
             }}
-            errorMessage={newPasswordError}
-            secureTextEntry
-            style={styles.input}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
-
-          <ThemedInput
-            label={i18n.t('screens.security.changePassword.confirmPassword')}
-            value={confirmPassword}
-            onChangeText={(text) => {
+            onConfirmPasswordChange={(text) => {
               setConfirmPassword(text);
               if (confirmPasswordError) {
                 setConfirmPasswordError('');
               }
             }}
-            errorMessage={confirmPasswordError}
-            secureTextEntry
-            style={styles.input}
-            autoCapitalize="none"
-            autoCorrect={false}
+            disabled={loading}
           />
 
-          <ThemedView style={styles.requirementsContainer}>
-            <ThemedText type="h3" style={styles.requirementsTitle}>
-              {requirements.title}
-            </ThemedText>
-            <ThemedText style={styles.requirement}>• {requirements.minLength}</ThemedText>
-            <ThemedText style={styles.requirement}>• {requirements.uppercase}</ThemedText>
-            <ThemedText style={styles.requirement}>• {requirements.lowercase}</ThemedText>
-            <ThemedText style={styles.requirement}>• {requirements.numbers}</ThemedText>
-            <ThemedText style={styles.requirement}>• {requirements.symbols}</ThemedText>
-          </ThemedView>
+          <PasswordStrengthIndicator password={newPassword} visible={newPassword.length > 0} />
+
+          <PasswordRequirements password={newPassword} showIndicators={newPassword.length > 0} />
 
           <ThemedButton
             title={loading ? i18n.t('screens.security.changePassword.changingButton') : i18n.t('screens.security.changePassword.changeButton')}
@@ -218,30 +191,7 @@ const styles = StyleSheet.create({
   form: {
     flex: 1,
   },
-  input: {
-    marginBottom: Spacing.md,
-  },
-  requirementsContainer: {
-    marginVertical: Spacing.lg,
-    padding: Spacing.md,
-    borderRadius: Spacing.sm,
-    // Background handled by theme
-  },
-  requirementsTitle: {
-    marginBottom: Spacing.md,
-    fontWeight: FontWeight.bold,
-  },
-  requirement: {
-    marginBottom: Spacing.xs,
-    opacity: 0.8,
-  },
   changeButton: {
-    marginTop: Spacing.md,
-  },
-  lastChanged: {
-    textAlign: 'center',
     marginTop: Spacing.lg,
-    opacity: 0.6,
-    fontStyle: 'italic',
   },
 });
