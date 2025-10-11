@@ -2,6 +2,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Overlay, Spacing, TouchTarget } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
+import { hexToRgba } from '@/utils/color';
 import * as Haptics from 'expo-haptics';
 import React, { useEffect } from 'react';
 import { Modal, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
@@ -62,7 +63,8 @@ export interface AlertDialogProps extends DialogProps {
 export function Dialog({ visible, onClose, title, message, children, dismissable = true, variant = 'default' }: DialogProps) {
   const { width } = useWindowDimensions();
   const backgroundColor = useThemeColor({}, 'surface');
-  const overlayColor = `rgba(0, 0, 0, ${Overlay.medium})`;
+  const inverseTextColor = useThemeColor({}, 'inverse-text');
+  const overlayColor = hexToRgba(inverseTextColor, Overlay.medium);
   const borderColor = useThemeColor({}, 'border');
   const textColor = useThemeColor({}, 'text');
   const textMutedColor = useThemeColor({}, 'text-muted');
@@ -343,7 +345,8 @@ export interface BottomSheetProps {
 
 export function BottomSheet({ visible, onClose, title, children, dismissable = true }: BottomSheetProps) {
   const backgroundColor = useThemeColor({}, 'surface');
-  const overlayColor = `rgba(0, 0, 0, ${Overlay.medium})`;
+  const inverseTextColor = useThemeColor({}, 'inverse-text');
+  const overlayColor = hexToRgba(inverseTextColor, Overlay.medium);
   const borderColor = useThemeColor({}, 'border');
   const textColor = useThemeColor({}, 'text');
   const textMutedColor = useThemeColor({}, 'text-muted');

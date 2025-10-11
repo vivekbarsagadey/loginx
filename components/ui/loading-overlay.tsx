@@ -1,6 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { Overlay, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { hexToRgba } from '@/utils/color';
 import React from 'react';
 import { ActivityIndicator, Modal, StyleSheet, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
@@ -20,7 +21,8 @@ export interface LoadingOverlayProps {
  */
 export function LoadingOverlay({ visible, message, transparent = false }: LoadingOverlayProps) {
   const backgroundColor = useThemeColor({}, 'surface');
-  const overlayColor = `rgba(0, 0, 0, ${Overlay.dark})`;
+  const inverseTextColor = useThemeColor({}, 'inverse-text');
+  const overlayColor = hexToRgba(inverseTextColor, Overlay.dark);
   const textColor = useThemeColor({}, 'text');
   const primaryColor = useThemeColor({}, 'primary');
 

@@ -1,6 +1,7 @@
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/layout';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
 import { useRouter } from 'expo-router';
 import React, { Component, type ErrorInfo, type ReactNode } from 'react';
@@ -77,6 +78,7 @@ export class ErrorBoundary extends Component<Props, State> {
  */
 function ErrorFallback({ error, resetError }: { error: Error | null; resetError?: () => void }) {
   const router = useRouter();
+  const colors = useThemeColors();
 
   const handleGoHome = () => {
     resetError?.();
@@ -102,7 +104,7 @@ function ErrorFallback({ error, resetError }: { error: Error | null; resetError?
       </View>
 
       {__DEV__ && error?.stack && (
-        <ScrollView style={styles.stackTrace}>
+        <ScrollView style={[styles.stackTrace, { backgroundColor: colors['bg-elevated'] }]}>
           <ThemedText type="caption" style={styles.stackText}>
             {error.stack}
           </ThemedText>
@@ -140,7 +142,6 @@ const styles = StyleSheet.create({
     maxHeight: 200,
     marginTop: Spacing.lg,
     padding: Spacing.md,
-    backgroundColor: '#f5f5f5',
     borderRadius: 8,
     width: '100%',
   },

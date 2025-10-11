@@ -3,6 +3,7 @@ import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
 import { ValidationConstants } from '@/constants/validation';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { hexToRgba } from '@/utils/color';
 import { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -31,6 +32,7 @@ export function PasswordStrengthIndicator({ password, visible = true }: Password
   const successColor = useThemeColor({}, 'success');
   const primaryColor = useThemeColor({}, 'primary');
   const textColor = useThemeColor({}, 'text');
+  const borderColor = useThemeColor({}, 'border');
 
   const strength = useMemo((): StrengthResult => {
     if (!password) {
@@ -81,7 +83,7 @@ export function PasswordStrengthIndicator({ password, visible = true }: Password
   return (
     <ThemedView style={styles.container}>
       <View style={styles.meterContainer}>
-        <View style={styles.meterBackground}>
+        <View style={[styles.meterBackground, { backgroundColor: hexToRgba(borderColor, 0.2) }]}>
           <View style={[styles.meterFill, { width: `${strength.widthPercentage}%`, backgroundColor: strength.color }]} />
         </View>
       </View>
@@ -99,7 +101,6 @@ const styles = StyleSheet.create({
   },
   meterBackground: {
     height: 8,
-    backgroundColor: 'rgba(128, 128, 128, 0.2)',
     borderRadius: 4,
     overflow: 'hidden',
   },

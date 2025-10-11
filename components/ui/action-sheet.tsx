@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { Overlay, Spacing, TouchTarget } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
-import i18n from '@/i18n';
+import { hexToRgba } from '@/utils/color';
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import React from 'react';
@@ -42,12 +42,14 @@ export interface ActionSheetProps {
  * Action Sheet Component
  * iOS-style action sheet for selecting from multiple options
  */
-export function ActionSheet({ visible, onClose, title, message, options, showCancel = true, cancelText = i18n.t('dialogs.buttons.cancel') }: ActionSheetProps) {
+export function ActionSheet({ visible, onClose, title, message, options, showCancel = true, cancelText = 'Cancel' }: ActionSheetProps) {
   const backgroundColor = useThemeColor({}, 'surface');
-  const overlayColor = `rgba(0, 0, 0, ${Overlay.medium})`;
+  const inverseTextColor = useThemeColor({}, 'inverse-text');
+  const overlayColor = hexToRgba(inverseTextColor, Overlay.medium);
   const borderColor = useThemeColor({}, 'border');
   const textColor = useThemeColor({}, 'text');
   const textMutedColor = useThemeColor({}, 'text-muted');
+  const primaryColor = useThemeColor({}, 'primary');
   const errorColor = useThemeColor({}, 'error');
 
   const handleBackdropPress = async () => {

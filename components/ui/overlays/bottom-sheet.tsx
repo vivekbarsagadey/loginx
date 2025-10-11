@@ -1,6 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { BorderRadius, Overlay, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { hexToRgba } from '@/utils/color';
 import React from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
@@ -40,10 +41,12 @@ export function BottomSheet({
   const textColor = useThemeColor({}, 'text');
   const borderColor = useThemeColor({}, 'border');
   const shadowColor = useThemeColor({}, 'shadow');
+  const inverseTextColor = useThemeColor({}, 'inverse-text');
+  const overlayColor = hexToRgba(inverseTextColor, Overlay.medium);
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose} accessible={true} accessibilityLabel={accessibilityLabel || title || 'Bottom sheet'}>
-      {showBackdrop && <Pressable style={styles.backdrop} onPress={closeOnBackdrop ? onClose : undefined} />}
+      {showBackdrop && <Pressable style={[styles.backdrop, { backgroundColor: overlayColor }]} onPress={closeOnBackdrop ? onClose : undefined} />}
       <View style={styles.container}>
         <View
           style={[
@@ -81,7 +84,6 @@ export function BottomSheet({
 
 const styles = StyleSheet.create({
   backdrop: {
-    backgroundColor: `rgba(0, 0, 0, ${Overlay.medium})`,
     bottom: 0,
     left: 0,
     position: 'absolute',

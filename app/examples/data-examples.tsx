@@ -180,8 +180,8 @@ export default function DataExamplesScreen() {
                 <ThemedText style={styles.badgeText}>{randomTip.category}</ThemedText>
               </View>
               {randomTip.priority === 'high' && (
-                <View style={[styles.badge, { backgroundColor: '#FF6B6B20' }]}>
-                  <ThemedText style={[styles.badgeText, { color: '#FF6B6B' }]}>Priority</ThemedText>
+                <View style={[styles.badge, { backgroundColor: colors.error + '20' }]}>
+                  <ThemedText style={[styles.badgeText, { color: colors.error }]}>Priority</ThemedText>
                 </View>
               )}
             </View>

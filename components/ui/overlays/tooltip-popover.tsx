@@ -1,6 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { BorderRadius, Overlay, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { hexToRgba } from '@/utils/color';
 import React, { useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
@@ -75,12 +76,14 @@ export function Popover({ children, trigger, visible, onClose, position = 'botto
   const surfaceColor = useThemeColor({}, 'surface');
   const borderColor = useThemeColor({}, 'border');
   const shadowColor = useThemeColor({}, 'shadow');
+  const inverseTextColor = useThemeColor({}, 'inverse-text');
+  const overlayColor = hexToRgba(inverseTextColor, Overlay.light);
 
   return (
     <View>
       {trigger}
       <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose} accessible={true} accessibilityLabel={accessibilityLabel || 'Popover'}>
-        <Pressable style={styles.backdrop} onPress={onClose}>
+        <Pressable style={[styles.backdrop, { backgroundColor: overlayColor }]} onPress={onClose}>
           <View
             style={[
               styles.popover,
@@ -103,7 +106,6 @@ export function Popover({ children, trigger, visible, onClose, position = 'botto
 
 const styles = StyleSheet.create({
   backdrop: {
-    backgroundColor: `rgba(0, 0, 0, ${Overlay.light})`,
     flex: 1,
     justifyContent: 'center',
     padding: Spacing.lg,

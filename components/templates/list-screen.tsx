@@ -135,7 +135,7 @@ export function ListScreen<T>({
             {error.message || 'An unexpected error occurred'}
           </ThemedText>
           <ThemedPressable onPress={onRetry} style={[styles.actionButton, { backgroundColor: colors.primary }]} accessibilityRole="button" accessibilityLabel="Try again">
-            <ThemedText style={styles.actionButtonText}>Try Again</ThemedText>
+            <ThemedText style={[styles.actionButtonText, { color: colors['on-primary'] }]}>Try Again</ThemedText>
           </ThemedPressable>
         </View>
       </ThemedView>
@@ -163,7 +163,7 @@ export function ListScreen<T>({
               accessibilityRole="button"
               accessibilityLabel={emptyStateContent.actionLabel}
             >
-              <ThemedText style={styles.actionButtonText}>{emptyStateContent.actionLabel}</ThemedText>
+              <ThemedText style={[styles.actionButtonText, { color: colors['on-primary'] }]}>{emptyStateContent.actionLabel}</ThemedText>
             </ThemedPressable>
           )}
         </View>
@@ -258,7 +258,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   actionButtonText: {
-    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
   },

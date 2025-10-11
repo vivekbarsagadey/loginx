@@ -1,6 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { BorderRadius, Overlay, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { hexToRgba } from '@/utils/color';
 import React from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
@@ -30,6 +31,8 @@ export function ModalEnhanced({ visible, onClose, title, children, size = 'mediu
   const textColor = useThemeColor({}, 'text');
   const borderColor = useThemeColor({}, 'border');
   const shadowColor = useThemeColor({}, 'shadow');
+  const inverseTextColor = useThemeColor({}, 'inverse-text');
+  const overlayColor = hexToRgba(inverseTextColor, Overlay.medium);
 
   const sizes = {
     fullscreen: '100%' as const,
@@ -40,7 +43,7 @@ export function ModalEnhanced({ visible, onClose, title, children, size = 'mediu
 
   return (
     <Modal visible={visible} transparent={size !== 'fullscreen'} animationType="slide" onRequestClose={onClose} accessible={true} accessibilityLabel={accessibilityLabel || title || 'Modal'}>
-      <View style={[styles.backdrop, size === 'fullscreen' && { backgroundColor: surfaceColor }]}>
+      <View style={[styles.backdrop, { backgroundColor: size === 'fullscreen' ? surfaceColor : overlayColor }]}>
         <Pressable style={styles.backdropPress} onPress={closeOnBackdrop ? onClose : undefined}>
           <View
             style={[
@@ -83,7 +86,6 @@ export function ModalEnhanced({ visible, onClose, title, children, size = 'mediu
 const styles = StyleSheet.create({
   backdrop: {
     alignItems: 'center',
-    backgroundColor: `rgba(0, 0, 0, ${Overlay.medium})`,
     flex: 1,
     justifyContent: 'center',
     padding: Spacing.lg,

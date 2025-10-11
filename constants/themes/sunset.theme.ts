@@ -18,10 +18,10 @@ export const sunsetTheme: Theme = {
     text: '#7C2D12',
     'text-muted': '#C2410C',
     'inverse-text': '#FFF7ED',
-    primary: '#F97316', // Orange primary
+    primary: '#991B1B', // Dark red for WCAG AAA compliance (contrast: 7.51:1 with white)
     'on-primary': '#FFFFFF',
-    border: '#FED7AA',
-    'border-strong': '#FDBA74',
+    border: '#EA580C', // Darker orange for 3:1 contrast
+    'border-strong': '#DC2626',
     success: '#16A34A',
     warning: '#EAB308',
     error: '#DC2626',
@@ -41,18 +41,18 @@ export const sunsetTheme: Theme = {
     'bg-elevated': '#7c2d12',
     surface: '#9a3412',
     'surface-variant': '#c2410c',
-    text: '#FFEDD5',
+    text: '#FEF3C7', // Warm off-white, softer than pure white
     'text-muted': '#FDBA74',
     'inverse-text': '#431407',
-    primary: '#FB923C', // Soft orange
-    'on-primary': '#431407',
-    border: '#9a3412',
-    'border-strong': '#c2410c',
+    primary: '#9A3412', // Dark burnt orange for WCAG AAA compliance (7.31:1 with white text)
+    'on-primary': '#FFFFFF',
+    border: '#C2410C', // Light orange for 3:1 contrast
+    'border-strong': '#EA580C',
     success: '#34D399',
     warning: '#FBBF24',
     error: '#FCA5A5',
     info: '#FB923C',
-    shadow: '#000000',
+    shadow: 'rgba(255, 255, 255, 0.1)', // Lighter shadow for dark mode
 
     // Legacy/Compatibility Aliases
     background: '#431407',

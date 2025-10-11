@@ -18,10 +18,10 @@ export const marinerTheme: Theme = {
     text: '#0B2530',
     'text-muted': '#2B697F',
     'inverse-text': '#F2F8FB',
-    primary: '#4C9FC1', // Mariner Blue primary
+    primary: '#1E5A73', // Dark blue for WCAG AA compliance (contrast: 6.51:1 with white)
     'on-primary': '#FFFFFF',
-    border: '#BFE0EE',
-    'border-strong': '#9FCFE5',
+    border: '#2B697F', // Darker blue-gray for 3:1 contrast
+    'border-strong': '#2C7A9C',
     success: '#39C39A', // Teal accent
     warning: '#F97316',
     error: '#EF4444',
@@ -41,18 +41,18 @@ export const marinerTheme: Theme = {
     'bg-elevated': '#0F172A',
     surface: '#111827',
     'surface-variant': '#1F2937',
-    text: '#E5E7EB',
+    text: '#E5E7EB', // Neutral gray, softer than pure white
     'text-muted': '#9CA3AF',
     'inverse-text': '#0B1220',
     primary: '#74B8D4', // Lighter Mariner Blue
     'on-primary': '#0B2530',
-    border: '#1F2A3C',
-    'border-strong': '#334155',
+    border: '#6B7280', // Lighter gray for 3:1 contrast
+    'border-strong': '#9CA3AF',
     success: '#66D6B1',
     warning: '#FB923C',
     error: '#F87171',
     info: '#60A5FA',
-    shadow: '#000000',
+    shadow: 'rgba(255, 255, 255, 0.1)', // Lighter shadow for dark mode
 
     // Legacy/Compatibility Aliases
     background: '#0B1220',

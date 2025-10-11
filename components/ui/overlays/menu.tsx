@@ -1,6 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { BorderRadius, Overlay, Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { hexToRgba } from '@/utils/color';
 import React from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
@@ -38,12 +39,14 @@ export function Menu({ items, visible, onSelect, onClose, trigger, accessibility
   const borderColor = useThemeColor({}, 'border');
   const primaryColor = useThemeColor({}, 'primary');
   const shadowColor = useThemeColor({}, 'shadow');
+  const inverseTextColor = useThemeColor({}, 'inverse-text');
+  const overlayColor = hexToRgba(inverseTextColor, Overlay.medium);
 
   return (
     <View>
       {trigger}
       <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose} accessible={true} accessibilityLabel={accessibilityLabel || 'Menu'}>
-        <Pressable style={styles.backdrop} onPress={onClose}>
+        <Pressable style={[styles.backdrop, { backgroundColor: overlayColor }]} onPress={onClose}>
           <View style={styles.menuContainer} onStartShouldSetResponder={() => true}>
             <View
               style={[
@@ -99,7 +102,6 @@ export function Menu({ items, visible, onSelect, onClose, trigger, accessibility
 
 const styles = StyleSheet.create({
   backdrop: {
-    backgroundColor: `rgba(0, 0, 0, ${Overlay.medium})`,
     flex: 1,
     justifyContent: 'center',
     padding: Spacing.lg,

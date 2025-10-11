@@ -18,10 +18,10 @@ export const defaultTheme: Theme = {
     text: '#111827',
     'text-muted': '#6B7280',
     'inverse-text': '#F9FAFB',
-    primary: '#2563EB',
+    primary: '#1E40AF', // Dark blue for WCAG AAA compliance (contrast: 7.14:1 with white)
     'on-primary': '#FFFFFF',
-    border: '#E5E7EB',
-    'border-strong': '#9CA3AF', // A slightly darker border
+    border: '#6B7280', // Dark gray for 3:1 contrast
+    'border-strong': '#4B5563', // Darker for emphasis
     success: '#16A34A',
     warning: '#D97706',
     error: '#DC2626',
@@ -41,18 +41,18 @@ export const defaultTheme: Theme = {
     'bg-elevated': '#111827', // Elevated background (slightly lighter)
     surface: '#1F2937', // Card surfaces (more elevated, lighter)
     'surface-variant': '#374151', // Alternative surface (highest, lightest)
-    text: '#F9FAFB',
+    text: '#E5E7EB', // Softer than pure white, easier on eyes
     'text-muted': '#94A3B8',
     'inverse-text': '#111827',
     primary: '#60A5FA',
     'on-primary': '#0B1220',
-    border: '#1F2937',
-    'border-strong': '#4B5563', // A slightly darker border
+    border: '#6B7280', // Light gray for 3:1 contrast
+    'border-strong': '#9CA3AF', // Lighter for emphasis
     success: '#34D399',
     warning: '#FBBF24',
     error: '#F87171',
     info: '#60A5FA', // Using primary for info
-    shadow: '#000000', // Black shadow for dark mode
+    shadow: 'rgba(255, 255, 255, 0.1)', // Lighter shadow for dark mode
 
     // Legacy/Compatibility Aliases
     background: '#0B1220',

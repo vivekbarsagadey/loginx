@@ -2,7 +2,9 @@ import { PreferenceRow } from '@/components/molecules/preference-row';
 import { SectionHeader } from '@/components/molecules/section-header';
 import { Card } from '@/components/ui/card';
 import { Spacing } from '@/constants/layout';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
+import { hexToRgba } from '@/utils/color';
 import { StyleSheet, View, type ViewStyle } from 'react-native';
 
 interface NotificationPreferencesCardProps {
@@ -51,6 +53,7 @@ interface NotificationPreferencesCardProps {
  * />
  */
 export function NotificationPreferencesCard({ pushEnabled, emailUpdates, marketingTips, onPress, style, elevation = 1, showHeader = true }: NotificationPreferencesCardProps) {
+  const borderColor = useThemeColor({}, 'border');
   const getStatusText = (enabled: boolean) => (enabled ? i18n.t('screens.home.enabled') : i18n.t('screens.home.disabled'));
 
   return (
@@ -59,9 +62,9 @@ export function NotificationPreferencesCard({ pushEnabled, emailUpdates, marketi
       <Card elevation={elevation} noPadding>
         <View style={styles.content}>
           <PreferenceRow icon="bell" label={i18n.t('screens.home.pushNotifications')} value={getStatusText(pushEnabled)} onPress={onPress} />
-          <View style={styles.divider} />
+          <View style={[styles.divider, { backgroundColor: hexToRgba(borderColor, 0.2) }]} />
           <PreferenceRow icon="mail" label={i18n.t('screens.home.emailUpdates')} value={getStatusText(emailUpdates)} onPress={onPress} />
-          <View style={styles.divider} />
+          <View style={[styles.divider, { backgroundColor: hexToRgba(borderColor, 0.2) }]} />
           <PreferenceRow icon="message-circle" label={i18n.t('screens.home.marketingTips')} value={getStatusText(marketingTips)} onPress={onPress} />
         </View>
       </Card>
@@ -78,7 +81,6 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: 'rgba(128, 128, 128, 0.2)',
     marginVertical: Spacing.xs,
   },
 });

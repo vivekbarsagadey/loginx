@@ -1,6 +1,6 @@
 import { AnimationDurations } from '@/constants';
 import { useThemeColor } from '@/hooks/use-theme-color';
-import { Opacity } from '@/utils/color';
+import { hexToRgba, Opacity } from '@/utils/color';
 import { useEffect } from 'react';
 import { type DimensionValue, StyleSheet, View, type ViewStyle } from 'react-native';
 import Animated, { Easing, interpolate, useAnimatedStyle, useReducedMotion, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
@@ -36,6 +36,7 @@ interface SkeletonLoaderProps {
 
 export const SkeletonLoader = ({ width = '100%', height = 20, borderRadius = 4, style, shimmer = false }: SkeletonLoaderProps) => {
   const borderStrongColor = useThemeColor({}, 'border-strong');
+  const textColor = useThemeColor({}, 'text');
   const reducedMotion = useReducedMotion();
   const opacity = useSharedValue(0.3);
   const shimmerValue = useSharedValue(0);
@@ -90,11 +91,9 @@ export const SkeletonLoader = ({ width = '100%', height = 20, borderRadius = 4, 
   };
 
   if (shimmer) {
-    const shimmerColor = `rgba(255, 255, 255, ${Opacity.subtle})`;
-
     return (
       <View style={[styles.skeleton, baseStyle, style]} accessibilityRole="none" accessibilityLabel="Loading content" accessible={true}>
-        <Animated.View style={[styles.shimmerOverlay, shimmerStyle, { backgroundColor: shimmerColor }]} />
+        <Animated.View style={[styles.shimmerOverlay, shimmerStyle, { backgroundColor: hexToRgba(textColor, Opacity.subtle) }]} />
       </View>
     );
   }

@@ -30,14 +30,14 @@ export default function ResponsiveDesignDemo() {
   const { isPhone, isTablet, isDesktop } = useBreakpoint();
   const colors = useThemeColors();
 
-  // Sample data for grid demo
+  // Sample data for grid demo - using theme colors for consistency
   const gridItems = [
-    { id: 1, title: 'Item 1', color: '#FF6B6B' },
-    { id: 2, title: 'Item 2', color: '#4ECDC4' },
-    { id: 3, title: 'Item 3', color: '#45B7D1' },
-    { id: 4, title: 'Item 4', color: '#96CEB4' },
-    { id: 5, title: 'Item 5', color: '#FFEAA7' },
-    { id: 6, title: 'Item 6', color: '#DFE6E9' },
+    { id: 1, title: 'Item 1', color: colors.error },
+    { id: 2, title: 'Item 2', color: colors.success },
+    { id: 3, title: 'Item 3', color: colors.info },
+    { id: 4, title: 'Item 4', color: colors.primary },
+    { id: 5, title: 'Item 5', color: colors.warning },
+    { id: 6, title: 'Item 6', color: colors['text-muted'] },
   ];
 
   return (
