@@ -265,11 +265,15 @@ export default function RootLayout() {
         logger.error('Failed to initialize LOCAL-FIRST system:', error);
       });
 
-      // Cleanup on unmount
+      // TASK-033: Cleanup on unmount - properly return cleanup function
       return () => {
+        logger.log('Cleaning up app resources...');
         networkUnsubscribe();
       };
     }
+
+    // TASK-033: Return undefined when not loaded (no cleanup needed yet)
+    return undefined;
   }, [loaded]);
 
   if (!loaded) {

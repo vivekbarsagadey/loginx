@@ -37,12 +37,7 @@ export interface ConflictResolutionResult<T = unknown> {
  * @param remoteTimestamp - Remote modification timestamp
  * @returns True if conflict detected
  */
-export function detectConflict(
-  localVersion: number,
-  remoteVersion: number,
-  localTimestamp: number,
-  remoteTimestamp: number
-): boolean {
+export function detectConflict(localVersion: number, remoteVersion: number, localTimestamp: number, remoteTimestamp: number): boolean {
   // Conflict exists if:
   // 1. Versions differ AND
   // 2. Both have been modified (timestamps differ from sync time)
@@ -70,10 +65,7 @@ export function detectConflict(
  * @param strategy - Resolution strategy
  * @returns Resolution result
  */
-export function resolveConflictAutomatically<T>(
-  conflict: ConflictData<T>,
-  strategy: ConflictResolutionStrategy
-): ConflictResolutionResult<T> {
+export function resolveConflictAutomatically<T>(conflict: ConflictData<T>, strategy: ConflictResolutionStrategy): ConflictResolutionResult<T> {
   logger.info(`[ConflictResolver] Resolving conflict for ${conflict.key} using strategy: ${strategy}`);
 
   switch (strategy) {
@@ -172,10 +164,7 @@ function attemptAutoMerge<T>(local: T, remote: T): T | null {
  * @param remoteTimestamp - Remote modification timestamp
  * @returns Recommended strategy
  */
-export function getDefaultStrategy(
-  localTimestamp: number,
-  remoteTimestamp: number
-): ConflictResolutionStrategy {
+export function getDefaultStrategy(localTimestamp: number, remoteTimestamp: number): ConflictResolutionStrategy {
   // Last-write-wins: use the most recently modified version
   if (localTimestamp > remoteTimestamp) {
     return 'use-local';
@@ -240,9 +229,7 @@ export function registerConflictResolver(handler: (prompt: ConflictResolutionPro
  * @param conflict - Conflict data
  * @returns Promise that resolves with the chosen strategy
  */
-export async function requestManualResolution<T>(
-  conflict: ConflictData<T>
-): Promise<ConflictResolutionStrategy> {
+export async function requestManualResolution<T>(conflict: ConflictData<T>): Promise<ConflictResolutionStrategy> {
   return new Promise((resolve, reject) => {
     const prompt: ConflictResolutionPrompt<T> = {
       conflict,

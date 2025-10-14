@@ -5,7 +5,7 @@
  */
 
 import { firestore } from '@/firebase-config';
-import { deleteDoc, doc, getDoc, runTransaction, serverTimestamp, setDoc } from 'firebase/firestore';
+import { deleteDoc, doc, getDoc, runTransaction, serverTimestamp } from 'firebase/firestore';
 import { logger } from './logger-production';
 
 interface LockInfo {
@@ -27,11 +27,7 @@ const ACQUIRE_RETRY_DELAY = 1000; // 1 second
  * @param timeoutMs - Lock timeout in milliseconds
  * @returns Lock ID if successful, null if lock acquisition failed
  */
-export async function acquireLock(
-  lockKey: string,
-  ownerId: string,
-  timeoutMs: number = DEFAULT_LOCK_TIMEOUT
-): Promise<string | null> {
+export async function acquireLock(lockKey: string, ownerId: string, timeoutMs: number = DEFAULT_LOCK_TIMEOUT): Promise<string | null> {
   if (!firestore) {
     logger.warn('[DistributedLock] Firestore not initialized, lock acquisition skipped');
     return null;
@@ -149,12 +145,7 @@ export async function releaseLock(lockKey: string, lockId: string): Promise<void
  * @param timeoutMs - Lock timeout in milliseconds
  * @returns Result of the function
  */
-export async function withLock<T>(
-  lockKey: string,
-  ownerId: string,
-  fn: () => Promise<T>,
-  timeoutMs: number = DEFAULT_LOCK_TIMEOUT
-): Promise<T | null> {
+export async function withLock<T>(lockKey: string, ownerId: string, fn: () => Promise<T>, timeoutMs: number = DEFAULT_LOCK_TIMEOUT): Promise<T | null> {
   const lockId = await acquireLock(lockKey, ownerId, timeoutMs);
 
   if (!lockId) {

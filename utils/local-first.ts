@@ -9,11 +9,10 @@
 
 import { firestore } from '@/firebase-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { disableNetwork, doc, enableNetwork, getDoc, runTransaction, setDoc } from 'firebase/firestore';
+import { disableNetwork, doc, enableNetwork, getDoc, runTransaction } from 'firebase/firestore';
 import * as cache from './cache';
 import { detectConflict, getDefaultStrategy, resolveConflictAutomatically, type ConflictData } from './conflict-resolver';
 import { debugError, debugLog, debugWarn } from './debug';
-import { withLock } from './distributed-lock';
 import { isOnline as checkIsOnline, initializeNetworkMonitoring, subscribeToNetworkChanges } from './network';
 
 interface LocalFirstOptions {
@@ -254,12 +253,7 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
         const remoteData = remoteDoc.data() as DataEntry;
 
         // Detect conflict using version and timestamp
-        const hasConflict = detectConflict(
-          queueEntry.version,
-          remoteData.version || 0,
-          queueEntry.lastModified,
-          remoteData.lastModified || 0
-        );
+        const hasConflict = detectConflict(queueEntry.version, remoteData.version || 0, queueEntry.lastModified, remoteData.lastModified || 0);
 
         if (hasConflict) {
           debugWarn(`[LocalFirst] ⚠️ Conflict detected for ${cacheKey}`);
@@ -276,10 +270,7 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
           };
 
           // Use default strategy (last-write-wins)
-          const strategy = getDefaultStrategy(
-            queueEntry.lastModified,
-            remoteData.lastModified || 0
-          );
+          const strategy = getDefaultStrategy(queueEntry.lastModified, remoteData.lastModified || 0);
 
           // Resolve conflict automatically
           const resolution = resolveConflictAutomatically(conflictData, strategy);
@@ -352,14 +343,9 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
         debugWarn(`[LocalFirst] Max retries (${maxRetries}) reached for ${cacheKey}, removed from queue`);
       } else {
         // Calculate exponential backoff delay
-        const delay = Math.min(
-          INITIAL_RETRY_DELAY * Math.pow(BACKOFF_MULTIPLIER, queueEntry.retryCount - 1),
-          MAX_RETRY_DELAY
-        );
+        const delay = Math.min(INITIAL_RETRY_DELAY * Math.pow(BACKOFF_MULTIPLIER, queueEntry.retryCount - 1), MAX_RETRY_DELAY);
 
-        debugLog(
-          `[LocalFirst] Will retry sync for ${cacheKey} in ${delay}ms (attempt ${queueEntry.retryCount}/${maxRetries})`
-        );
+        debugLog(`[LocalFirst] Will retry sync for ${cacheKey} in ${delay}ms (attempt ${queueEntry.retryCount}/${maxRetries})`);
 
         // Schedule retry with exponential backoff
         setTimeout(() => {
@@ -583,22 +569,29 @@ export const batchSetData = async <T>(operations: (LocalFirstOptions & { data: T
 /**
  * REAL-TIME SUBSCRIPTIONS: Subscribe to data changes
  * Uses Firestore onSnapshot for real-time updates
+ * TASK-036: Properly returns unsubscribe function for cleanup
  */
 export const subscribeToData = <T>(collection: string, id: string, callback: (data: T | null) => void, onError?: (error: Error) => void): (() => void) => {
   if (!firestore) {
     debugWarn('[LocalFirst] Cannot subscribe - Firestore not initialized');
-    return () => {};
+    // TASK-036: Return no-op unsubscribe function
+    return () => {
+      debugLog('[LocalFirst] No-op unsubscribe (Firestore not initialized)');
+    };
   }
 
   const cacheKey = `${collection}:${id}`;
   debugLog(`[LocalFirst] 🔔 Subscribing to real-time updates: ${cacheKey}`);
+
+  // TASK-036: Store unsubscribe function in closure
+  let unsubscribeRef: (() => void) | null = null;
 
   // Import onSnapshot dynamically to avoid issues if not available
   import('firebase/firestore')
     .then(({ onSnapshot }) => {
       const docRef = doc(firestore, collection, id);
 
-      const unsubscribe = onSnapshot(
+      const firestoreUnsubscribe = onSnapshot(
         docRef,
         async (snapshot) => {
           if (snapshot.exists()) {
@@ -623,15 +616,19 @@ export const subscribeToData = <T>(collection: string, id: string, callback: (da
         }
       );
 
-      return unsubscribe;
+      // TASK-036: Store the actual unsubscribe function
+      unsubscribeRef = firestoreUnsubscribe;
     })
     .catch((error) => {
       debugError('[LocalFirst] Failed to set up real-time subscription:', error);
     });
 
-  // Return empty unsubscribe function as fallback
+  // TASK-036: Return wrapper that calls stored unsubscribe function
   return () => {
-    debugLog(`[LocalFirst] 🔕 Unsubscribed from: ${cacheKey}`);
+    debugLog(`[LocalFirst] 🔕 Unsubscribing from: ${cacheKey}`);
+    if (unsubscribeRef) {
+      unsubscribeRef();
+    }
   };
 };
 

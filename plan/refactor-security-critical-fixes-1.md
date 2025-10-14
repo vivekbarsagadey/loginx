@@ -136,8 +136,8 @@ This implementation plan addresses 18 critical security vulnerabilities and arch
 
 **GOAL-004**: Eliminate race conditions in local-first sync and ensure data consistency
 
-| Task     | Description                                                                                        | Completed | Date |
-| -------- | -------------------------------------------------------------------------------------------------- | --------- | ---- |
+| Task     | Description                                                                                        | Completed | Date       |
+| -------- | -------------------------------------------------------------------------------------------------- | --------- | ---------- |
 | TASK-025 | Add version field to all DataEntry types in `utils/local-first.ts` for optimistic locking          | ✅        | 2025-10-14 |
 | TASK-026 | Implement distributed locking mechanism using Firestore transaction in `utils/distributed-lock.ts` | ✅        | 2025-10-14 |
 | TASK-027 | Update `backgroundSync` function to use Firestore transactions for atomic updates                  | ✅        | 2025-10-14 |
@@ -151,16 +151,16 @@ This implementation plan addresses 18 critical security vulnerabilities and arch
 
 **GOAL-005**: Fix memory leaks and ensure proper resource cleanup across the application
 
-| Task     | Description                                                                                     | Completed | Date |
-| -------- | ----------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-033 | Fix network listener cleanup in `app/_layout.tsx` by returning cleanup function from useEffect  |           |      |
-| TASK-034 | Audit all useEffect hooks for missing cleanup functions (return statement)                      |           |      |
-| TASK-035 | Fix cache eviction logic in `utils/cache.ts` to properly clean up persistent storage references |           |      |
-| TASK-036 | Add unsubscribe pattern to `utils/local-first.ts` subscribeToData function                      |           |      |
-| TASK-037 | Create `utils/cleanup-manager.ts` registry for tracking active subscriptions and timers         |           |      |
-| TASK-038 | Implement weak references for cached data in memory-sensitive scenarios                         |           |      |
-| TASK-039 | Add memory pressure monitoring using React Native's AppState events                             |           |      |
-| TASK-040 | Create automated leak detection test suite using React DevTools Profiler API                    |           |      |
+| Task     | Description                                                                                     | Completed | Date       |
+| -------- | ----------------------------------------------------------------------------------------------- | --------- | ---------- |
+| TASK-033 | Fix network listener cleanup in `app/_layout.tsx` by returning cleanup function from useEffect  | ✅        | 2025-10-14 |
+| TASK-034 | Audit all useEffect hooks for missing cleanup functions (return statement)                      | ✅        | 2025-10-14 |
+| TASK-035 | Fix cache eviction logic in `utils/cache.ts` to properly clean up persistent storage references | ✅        | 2025-10-14 |
+| TASK-036 | Add unsubscribe pattern to `utils/local-first.ts` subscribeToData function                      | ✅        | 2025-10-14 |
+| TASK-037 | Create `utils/cleanup-manager.ts` registry for tracking active subscriptions and timers         | ✅        | 2025-10-14 |
+| TASK-038 | Implement weak references for cached data in memory-sensitive scenarios                         | ✅        | 2025-10-14 |
+| TASK-039 | Add memory pressure monitoring using React Native's AppState events                             | ✅        | 2025-10-14 |
+| TASK-040 | Create automated leak detection test suite using React DevTools Profiler API                    | ✅        | 2025-10-14 |
 
 ### Phase 6: Error Handling & User Feedback (Priority 2 - Week 2-3)
 

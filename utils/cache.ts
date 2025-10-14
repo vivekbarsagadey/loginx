@@ -65,6 +65,7 @@ const findOldestEntry = (): string | null => {
 
 /**
  * Evict old entries from memory cache using LRU strategy
+ * TASK-035: Also clean up persistent storage references to prevent orphaned data
  */
 const evictOldEntries = async (): Promise<void> => {
   try {
@@ -80,9 +81,31 @@ const evictOldEntries = async (): Promise<void> => {
       }
     }
 
+    // TASK-035: Clean up both memory and persistent storage for expired entries
     for (const key of entriesToRemove) {
       memoryCache.delete(key);
-      debugLog(`[Cache] 🗑️ Evicted expired entry: ${key}`);
+
+      // Also remove from AsyncStorage to prevent orphaned data
+      try {
+        await AsyncStorage.removeItem(`${CACHE_PREFIX}${key}`);
+        debugLog(`[Cache] 🗑️ Evicted expired entry from memory and storage: ${key}`);
+      } catch (storageError) {
+        debugWarn(`[Cache] Failed to remove from storage during eviction: ${key}`, storageError);
+      }
+    }
+
+    // Update cache index to reflect removals
+    if (entriesToRemove.length > 0) {
+      try {
+        const cacheIndexStr = await AsyncStorage.getItem(CACHE_INDEX_KEY);
+        if (cacheIndexStr) {
+          const cacheIndex: string[] = JSON.parse(cacheIndexStr);
+          const updatedIndex = cacheIndex.filter((k) => !entriesToRemove.includes(k));
+          await AsyncStorage.setItem(CACHE_INDEX_KEY, JSON.stringify(updatedIndex));
+        }
+      } catch (indexError) {
+        debugWarn('[Cache] Failed to update cache index during eviction', indexError);
+      }
     }
 
     // If still over limit, use LRU to remove oldest
@@ -90,7 +113,14 @@ const evictOldEntries = async (): Promise<void> => {
       const oldestKey = findOldestEntry();
       if (oldestKey) {
         memoryCache.delete(oldestKey);
-        debugLog(`[Cache] 🗑️ LRU evicted: ${oldestKey}`);
+
+        // TASK-035: Also remove from persistent storage
+        try {
+          await AsyncStorage.removeItem(`${CACHE_PREFIX}${oldestKey}`);
+          debugLog(`[Cache] 🗑️ LRU evicted from memory and storage: ${oldestKey}`);
+        } catch (storageError) {
+          debugWarn(`[Cache] Failed to remove from storage during LRU eviction: ${oldestKey}`, storageError);
+        }
       } else {
         break;
       }
@@ -184,14 +214,14 @@ export const set = async (key: string, data: unknown, source: 'local' | 'remote'
       // Update cache index atomically
       const cacheIndexStr = await AsyncStorage.getItem(CACHE_INDEX_KEY);
       const cacheIndex: string[] = cacheIndexStr ? JSON.parse(cacheIndexStr) : [];
-      
+
       if (!cacheIndex.includes(key)) {
         cacheIndex.push(key);
-        
+
         // Use multiSet for atomic write of both entry and index
         await AsyncStorage.multiSet([
           [cacheKey, cacheValue],
-          [CACHE_INDEX_KEY, JSON.stringify(cacheIndex)]
+          [CACHE_INDEX_KEY, JSON.stringify(cacheIndex)],
         ]);
       } else {
         // Only update entry if already in index
