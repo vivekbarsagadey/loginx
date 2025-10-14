@@ -60,15 +60,25 @@ const hasErrorCode = (error: unknown): error is { code: string } => {
 
 /**
  * Get detailed error information from any error type
+ * TASK-046: Enhanced with recovery suggestions from error classifier
  * @param error - Error object (unknown type for safety)
  * @returns Structured error information
  */
 export const getErrorInfo = (error: unknown): ErrorInfo => {
+  // Import error classifier dynamically to avoid circular dependencies
+  let classified: { userMessage: string; recoverySuggestions: string[] } | null = null;
+  try {
+    const { classifyError } = require('./error-classifier');
+    classified = classifyError(error);
+  } catch {
+    // Fallback if classifier not available
+  }
+
   // Handle network/Axios errors
   if (isAxiosError(error) && !error.response) {
     return {
       title: i18n.t('errors.network.title'),
-      message: i18n.t('errors.network.message'),
+      message: classified?.userMessage || i18n.t('errors.network.message'),
     };
   }
 
@@ -76,7 +86,7 @@ export const getErrorInfo = (error: unknown): ErrorInfo => {
   if (hasErrorCode(error) && error.code.startsWith(FIREBASE_AUTH_PREFIX)) {
     return {
       title: i18n.t('errors.firebase.title'),
-      message: getFirebaseError(error.code),
+      message: classified?.userMessage || getFirebaseError(error.code),
     };
   }
 
@@ -84,14 +94,14 @@ export const getErrorInfo = (error: unknown): ErrorInfo => {
   if (error instanceof Error) {
     return {
       title: i18n.t('errors.generic.title'),
-      message: error.message || i18n.t('errors.generic.message'),
+      message: classified?.userMessage || error.message || i18n.t('errors.generic.message'),
     };
   }
 
   // Fallback for unknown error types
   return {
     title: i18n.t('errors.generic.title'),
-    message: i18n.t('errors.generic.message'),
+    message: classified?.userMessage || i18n.t('errors.generic.message'),
   };
 };
 

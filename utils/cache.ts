@@ -10,6 +10,7 @@ interface CacheEntry {
   source: 'local' | 'remote';
   syncStatus: 'synced' | 'pending' | 'conflict';
   lastAccessed: number; // For LRU tracking
+  accessCount: number; // TASK-053: For LFU (Least Frequently Used) tracking
 }
 
 // In-memory cache for immediate access (LOCAL-FIRST)
@@ -24,9 +25,12 @@ const CACHE_DURATION = CacheConstants.DEFAULT_DURATION;
 // Cache eviction constants
 const MAX_CACHE_AGE = 24 * 60 * 60 * 1000; // 24 hours
 
-// Cache statistics for monitoring
+// TASK-056: Cache statistics for monitoring and adaptive strategy
 let cacheHits = 0;
 let cacheMisses = 0;
+let totalAccessTime = 0;
+let accessCount = 0;
+let revalidationCount = 0;
 
 /**
  * Get maximum cache size (adaptive or fallback)
@@ -46,21 +50,26 @@ const getMaxCacheSize = (): number => {
 };
 
 /**
- * Find the oldest (least recently used) cache entry
- * @returns Key of the oldest entry or null if cache is empty
+ * TASK-053: Find the least frequently used cache entry
+ * Uses LFU (Least Frequently Used) strategy instead of LRU for better performance
+ * @returns Key of the least frequently used entry or null if cache is empty
  */
-const findOldestEntry = (): string | null => {
-  let oldestKey: string | null = null;
+const findLeastFrequentEntry = (): string | null => {
+  let lfuKey: string | null = null;
+  let lowestCount = Infinity;
   let oldestTime = Date.now();
 
   for (const [key, entry] of memoryCache.entries()) {
-    if (entry.lastAccessed < oldestTime) {
+    // Primary: choose entry with lowest access count (LFU)
+    // Secondary: if tied, choose oldest (LRU as tiebreaker)
+    if (entry.accessCount < lowestCount || (entry.accessCount === lowestCount && entry.lastAccessed < oldestTime)) {
+      lowestCount = entry.accessCount;
       oldestTime = entry.lastAccessed;
-      oldestKey = key;
+      lfuKey = key;
     }
   }
 
-  return oldestKey;
+  return lfuKey;
 };
 
 /**
@@ -108,18 +117,18 @@ const evictOldEntries = async (): Promise<void> => {
       }
     }
 
-    // If still over limit, use LRU to remove oldest
+    // TASK-053: If still over limit, use LFU to remove least frequently used
     while (memoryCache.size >= maxSize) {
-      const oldestKey = findOldestEntry();
-      if (oldestKey) {
-        memoryCache.delete(oldestKey);
+      const lfuKey = findLeastFrequentEntry();
+      if (lfuKey) {
+        memoryCache.delete(lfuKey);
 
-        // TASK-035: Also remove from persistent storage
+        // Also remove from persistent storage
         try {
-          await AsyncStorage.removeItem(`${CACHE_PREFIX}${oldestKey}`);
-          debugLog(`[Cache] 🗑️ LRU evicted from memory and storage: ${oldestKey}`);
+          await AsyncStorage.removeItem(`${CACHE_PREFIX}${lfuKey}`);
+          debugLog(`[Cache] 🗑️ LFU evicted from memory and storage: ${lfuKey}`);
         } catch (storageError) {
-          debugWarn(`[Cache] Failed to remove from storage during LRU eviction: ${oldestKey}`, storageError);
+          debugWarn(`[Cache] Failed to remove from storage during LFU eviction: ${lfuKey}`, storageError);
         }
       } else {
         break;
@@ -195,6 +204,7 @@ export const set = async (key: string, data: unknown, source: 'local' | 'remote'
       source,
       syncStatus,
       lastAccessed: Date.now(),
+      accessCount: 0, // TASK-053: Initialize access count for LFU tracking
     };
 
     // Check if eviction is needed before adding new entry
@@ -240,13 +250,28 @@ export const set = async (key: string, data: unknown, source: 'local' | 'remote'
 
 /**
  * LOCAL-FIRST: Get a value from cache (memory first, then persistent storage)
+ * TASK-051: Now supports stale-while-revalidate pattern
+ * TASK-053: Tracks access count for LFU eviction
  * @param key - Cache key
+ * @param options - Optional SWR configuration
  * @returns Cached data or null if not found/expired
  */
-export const get = async (key: string): Promise<unknown> => {
+export const get = async (
+  key: string,
+  options?: {
+    /** TASK-051: Maximum age to consider cache fresh (for SWR) */
+    maxAge?: number;
+    /** TASK-051: Callback when stale data is returned and revalidation needed */
+    onStale?: (staleData: unknown) => void;
+  }
+): Promise<unknown> => {
+  const startTime = Date.now(); // TASK-056: Track access time
+
   try {
     if (!key) {
       debugWarn('[Cache] Attempted to get cache with empty key');
+      accessCount++;
+      totalAccessTime += Date.now() - startTime;
       return null;
     }
 
@@ -254,9 +279,28 @@ export const get = async (key: string): Promise<unknown> => {
     let entry = memoryCache.get(key);
 
     if (entry) {
-      // Update last accessed time for LRU
+      // TASK-053: Update access count for LFU tracking
+      entry.accessCount = (entry.accessCount || 0) + 1;
       entry.lastAccessed = Date.now();
       cacheHits++;
+
+      // TASK-051: Check if data is stale (for SWR)
+      const age = Date.now() - entry.timestamp;
+      const isStale = options?.maxAge ? age > options.maxAge : age > CACHE_DURATION;
+
+      if (isStale && options?.onStale) {
+        debugLog(`[Cache] 📊 SWR: Returning stale data, revalidation needed: ${key}`);
+        options.onStale(entry.data);
+        revalidationCount++; // TASK-056: Track revalidations
+      } else if (!isStale) {
+        debugLog(`[Cache] 🏠 LOCAL-FIRST: Cache hit for: ${key} (source: ${entry.source})`);
+      }
+
+      // TASK-056: Track access time
+      accessCount++;
+      totalAccessTime += Date.now() - startTime;
+
+      return entry.data;
     }
 
     if (!entry) {
@@ -268,8 +312,20 @@ export const get = async (key: string): Promise<unknown> => {
           entry = JSON.parse(entryStr);
           // Load back into memory for faster future access
           if (entry) {
+            // TASK-053: Initialize access count if missing
+            entry.accessCount = (entry.accessCount || 0) + 1;
+            entry.lastAccessed = Date.now();
             memoryCache.set(key, entry);
             debugLog(`[Cache] 📂 LOCAL-FIRST: Loaded from storage to memory: ${key}`);
+
+            // TASK-051: Check if stale
+            const age = Date.now() - entry.timestamp;
+            const isStale = options?.maxAge ? age > options.maxAge : false;
+            if (isStale && options?.onStale) {
+              debugLog(`[Cache] 📊 SWR: Returning stale persistent data: ${key}`);
+              options.onStale(entry.data);
+              revalidationCount++;
+            }
           }
         }
       } catch (storageError) {
@@ -278,19 +334,31 @@ export const get = async (key: string): Promise<unknown> => {
     }
 
     if (!entry) {
+      // TASK-056: Track access time even on miss
+      accessCount++;
+      totalAccessTime += Date.now() - startTime;
       return null;
     }
 
     const isExpired = Date.now() - entry.timestamp > CACHE_DURATION;
     if (isExpired) {
       await invalidate(key);
+      // TASK-056: Track access time
+      accessCount++;
+      totalAccessTime += Date.now() - startTime;
       return null;
     }
 
-    debugLog(`[Cache] 🏠 LOCAL-FIRST: Cache hit for: ${key} (source: ${entry.source})`);
+    // TASK-056: Track access time
+    accessCount++;
+    totalAccessTime += Date.now() - startTime;
+
     return entry.data;
   } catch (error) {
     debugError('[Cache] Error getting cache:', error);
+    // TASK-056: Track access time even on error
+    accessCount++;
+    totalAccessTime += Date.now() - startTime;
     return null;
   }
 };
@@ -356,6 +424,7 @@ export const clear = async (): Promise<void> => {
 
 /**
  * LOCAL-FIRST: Get cache statistics and health info
+ * TASK-056: Enhanced with monitoring metrics for adaptive strategy
  */
 export const getCacheStats = async () => {
   try {
@@ -365,6 +434,8 @@ export const getCacheStats = async () => {
     const persistentSize = cacheIndexStr ? JSON.parse(cacheIndexStr).length : 0;
     const totalRequests = cacheHits + cacheMisses;
     const hitRate = totalRequests > 0 ? (cacheHits / totalRequests) * 100 : 0;
+    const avgAccessTime = accessCount > 0 ? totalAccessTime / accessCount : 0;
+    const utilization = maxSize > 0 ? (memorySize / maxSize) * 100 : 0;
 
     // Update adaptive cache manager with current hit rate
     try {
@@ -380,6 +451,11 @@ export const getCacheStats = async () => {
       cacheHits,
       cacheMisses,
       hitRate: hitRate.toFixed(2) + '%',
+      // TASK-056: Additional monitoring metrics
+      avgAccessTime: avgAccessTime.toFixed(2) + 'ms',
+      totalAccess: totalRequests,
+      revalidations: revalidationCount,
+      utilization: utilization.toFixed(1) + '%',
       syncStatus: 'healthy',
       lastUpdate: Date.now(),
     };
@@ -392,10 +468,170 @@ export const getCacheStats = async () => {
       cacheHits: 0,
       cacheMisses: 0,
       hitRate: '0%',
+      avgAccessTime: '0ms',
+      totalAccess: 0,
+      revalidations: 0,
+      utilization: '0%',
       syncStatus: 'error',
       lastUpdate: Date.now(),
     };
   }
+};
+
+/**
+ * TASK-056: Get recommended cache strategy based on current performance
+ * Analyzes hit rate and utilization to suggest optimal caching approach
+ */
+export const getRecommendedCacheStrategy = async (): Promise<{
+  strategy: 'aggressive' | 'balanced' | 'conservative';
+  reason: string;
+}> => {
+  const stats = await getCacheStats();
+  const hitRate = parseFloat(stats.hitRate);
+  const utilization = parseFloat(stats.utilization);
+
+  // High hit rate (>80%) and low utilization (<50%): aggressive caching
+  if (hitRate > 80 && utilization < 50) {
+    return {
+      strategy: 'aggressive',
+      reason: 'High hit rate with available capacity - can increase cache size',
+    };
+  }
+
+  // Low hit rate (<50%): conservative caching
+  if (hitRate < 50 && stats.totalAccess > 100) {
+    return {
+      strategy: 'conservative',
+      reason: 'Low hit rate detected - reduce cache size or improve cache key strategy',
+    };
+  }
+
+  // Otherwise: balanced
+  return {
+    strategy: 'balanced',
+    reason: 'Good hit rate and utilization - maintain current strategy',
+  };
+};
+
+/**
+ * TASK-054: Warm cache with critical data on app launch
+ * Preloads frequently accessed data for better initial performance
+ * @param keys - Array of cache keys to warm
+ */
+export const warmCache = async (keys: string[]): Promise<void> => {
+  if (keys.length === 0) {
+    return;
+  }
+
+  debugLog(`[Cache] 🔥 Warming cache with ${keys.length} critical keys...`);
+
+  const warmStart = Date.now();
+  let warmedCount = 0;
+
+  try {
+    // Load all keys in parallel
+    const warmPromises = keys.map(async (key) => {
+      try {
+        const data = await get(key);
+        if (data !== null) {
+          warmedCount++;
+          debugLog(`[Cache] 🔥 Warmed: ${key}`);
+        }
+      } catch (error) {
+        debugWarn(`[Cache] Failed to warm key: ${key}`, error);
+      }
+    });
+
+    await Promise.all(warmPromises);
+
+    const warmDuration = Date.now() - warmStart;
+    debugLog(`[Cache] 🔥 Cache warming complete: ${warmedCount}/${keys.length} keys in ${warmDuration}ms`);
+  } catch (error) {
+    debugError('[Cache] Error during cache warming:', error);
+  }
+};
+
+/**
+ * TASK-055: Intelligent preloading based on navigation patterns
+ * Tracks which data is accessed after current data and preloads likely next data
+ */
+const navigationPatterns = new Map<string, Map<string, number>>(); // key -> {nextKey: count}
+
+/**
+ * TASK-055: Track navigation pattern for intelligent preloading
+ * @param currentKey - Current cache key being accessed
+ * @param nextKey - Next cache key accessed after current
+ */
+export const trackNavigationPattern = (currentKey: string, nextKey: string): void => {
+  if (!navigationPatterns.has(currentKey)) {
+    navigationPatterns.set(currentKey, new Map());
+  }
+
+  const patterns = navigationPatterns.get(currentKey);
+  if (!patterns) {
+    return;
+  }
+
+  patterns.set(nextKey, (patterns.get(nextKey) || 0) + 1);
+
+  debugLog(`[Cache] 📊 Navigation pattern tracked: ${currentKey} -> ${nextKey}`);
+};
+
+/**
+ * TASK-055: Preload likely next data based on navigation patterns
+ * @param currentKey - Current cache key
+ */
+export const preloadLikelyNext = async (currentKey: string): Promise<void> => {
+  const patterns = navigationPatterns.get(currentKey);
+  if (!patterns || patterns.size === 0) {
+    return;
+  }
+
+  // Find most likely next key (highest count)
+  let likelyNextKey: string | null = null;
+  let maxCount = 0;
+
+  for (const [nextKey, count] of patterns.entries()) {
+    if (count > maxCount) {
+      maxCount = count;
+      likelyNextKey = nextKey;
+    }
+  }
+
+  if (likelyNextKey && maxCount >= 2) {
+    // Only preload if pattern seen at least twice
+    debugLog(`[Cache] 🎯 Preloading likely next: ${likelyNextKey} (confidence: ${maxCount} observations)`);
+
+    // Preload in background (don't await)
+    get(likelyNextKey).catch((error) => {
+      debugWarn(`[Cache] Preload failed for ${likelyNextKey}`, error);
+    });
+  }
+};
+
+/**
+ * TASK-055: Get navigation pattern statistics
+ * @returns Object with pattern counts and predictions
+ */
+export const getNavigationPatternStats = (): {
+  totalPatterns: number;
+  patterns: { from: string; to: string; count: number }[];
+} => {
+  const patterns: { from: string; to: string; count: number }[] = [];
+
+  for (const [from, toMap] of navigationPatterns.entries()) {
+    for (const [to, count] of toMap.entries()) {
+      patterns.push({ from, to, count });
+    }
+  }
+
+  // Sort by count descending
+  patterns.sort((a, b) => b.count - a.count);
+
+  return {
+    totalPatterns: navigationPatterns.size,
+    patterns: patterns.slice(0, 10), // Top 10 patterns
+  };
 };
 
 /**

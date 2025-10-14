@@ -11,7 +11,7 @@ import { firestore } from '@/firebase-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { disableNetwork, doc, enableNetwork, getDoc, runTransaction } from 'firebase/firestore';
 import * as cache from './cache';
-import { detectConflict, getDefaultStrategy, resolveConflictAutomatically, type ConflictData } from './conflict-resolver';
+import { type ConflictData, detectConflict, getDefaultStrategy, resolveConflictAutomatically } from './conflict-resolver';
 import { debugError, debugLog, debugWarn } from './debug';
 import { isOnline as checkIsOnline, initializeNetworkMonitoring, subscribeToNetworkChanges } from './network';
 
@@ -35,13 +35,43 @@ interface DataEntry<T = unknown> {
   modifiedBy?: string; // User ID who made the change
 }
 
+// Storage keys
+const PENDING_OPERATIONS_KEY = '@LoginX:pendingOperations';
+// TASK-065: Queue persistence storage key
+const SYNC_QUEUE_STORAGE_KEY = '@LoginX:syncQueue';
+
+// TASK-071: Priority levels for queue operations
+type OperationPriority = 'HIGH' | 'NORMAL' | 'LOW';
+
+// TASK-071: Enhanced QueuedOperation with priority and all sync fields
+interface QueuedOperation {
+  id: string;
+  collection: string;
+  docId: string;
+  operation: 'set' | 'update' | 'delete';
+  data?: Record<string, unknown>;
+  timestamp: number;
+  retries: number;
+  priority: OperationPriority; // TASK-071: Priority level
+  // Additional fields for sync compatibility
+  version?: number;
+  source?: 'local' | 'remote';
+  syncStatus?: 'synced' | 'pending' | 'conflict' | 'error';
+  lastModified?: number;
+  lastSyncAttempt?: number;
+  modifiedBy?: string;
+}
+
 // Network status tracking
 let isOnline = true;
 let networkListenersSetup = false;
 let networkUnsubscribe: (() => void) | null = null;
 
-// Pending sync queue
-const syncQueue = new Map<string, DataEntry>();
+// TASK-043: Fallback mode flag (memory-only cache when Firestore unavailable)
+let fallbackMode = false;
+
+// Pending sync queue - now typed as QueuedOperation
+const syncQueue = new Map<string, QueuedOperation>();
 
 // Active sync operations (TASK-031: Prevent race conditions with mutex)
 const activeSyncs = new Set<string>();
@@ -57,6 +87,217 @@ let failedSyncCount = 0;
 let totalSyncTime = 0;
 const syncStartTimes = new Map<string, number>();
 
+// TASK-068: Debounced queue persistence
+let queueSaveTimeout: ReturnType<typeof setTimeout> | null = null;
+const QUEUE_SAVE_DEBOUNCE_MS = 2000; // 2 seconds
+
+// TASK-070: Queue size monitoring
+let queueSizeWarnings = 0;
+let queueSizeCritical = 0;
+const QUEUE_SIZE_WARNING_THRESHOLD = 100;
+const QUEUE_SIZE_CRITICAL_THRESHOLD = 500;
+
+/**
+ * TASK-066: Save sync queue to AsyncStorage for persistence
+ * Serializes the current sync queue to JSON and saves to storage
+ */
+const saveSyncQueue = async (): Promise<void> => {
+  try {
+    // Convert Map to array for JSON serialization
+    const queueArray = Array.from(syncQueue.entries()).map(([key, operation]) => ({
+      key,
+      operation,
+    }));
+
+    await AsyncStorage.setItem(SYNC_QUEUE_STORAGE_KEY, JSON.stringify(queueArray));
+    debugLog(`[LocalFirst] 💾 Saved sync queue: ${queueArray.length} operations`);
+  } catch (error) {
+    debugError('[LocalFirst] Failed to save sync queue:', error);
+  }
+};
+
+/**
+ * TASK-068: Debounced sync queue persistence
+ * Debounces saveSyncQueue() calls to prevent excessive AsyncStorage writes
+ */
+const debouncedSaveQueue = (): void => {
+  if (queueSaveTimeout) {
+    clearTimeout(queueSaveTimeout);
+  }
+
+  queueSaveTimeout = setTimeout(() => {
+    saveSyncQueue().catch((error) => {
+      debugError('[LocalFirst] Debounced queue save failed:', error);
+    });
+  }, QUEUE_SAVE_DEBOUNCE_MS);
+};
+
+/**
+ * TASK-067: Load sync queue from AsyncStorage on app init
+ * Deserializes the persisted queue and restores it to memory
+ */
+const loadSyncQueue = async (): Promise<void> => {
+  try {
+    const queueData = await AsyncStorage.getItem(SYNC_QUEUE_STORAGE_KEY);
+    if (!queueData) {
+      debugLog('[LocalFirst] No persisted sync queue found');
+      return;
+    }
+
+    const queueArray: { key: string; operation: QueuedOperation }[] = JSON.parse(queueData);
+
+    // Validate and restore queue items
+    let loadedCount = 0;
+    let invalidCount = 0;
+
+    for (const { key, operation } of queueArray) {
+      // Validate operation structure
+      if (typeof operation === 'object' && operation.id && operation.collection && operation.docId && operation.operation && typeof operation.timestamp === 'number') {
+        // Ensure priority exists (for backward compatibility)
+        if (!operation.priority) {
+          operation.priority = 'NORMAL';
+        }
+        syncQueue.set(key, operation);
+        loadedCount++;
+      } else {
+        invalidCount++;
+        debugWarn('[LocalFirst] Invalid queue operation skipped:', operation);
+      }
+    }
+
+    debugLog(`[LocalFirst] 📂 Loaded sync queue: ${loadedCount} operations (${invalidCount} invalid)`);
+
+    // Clear corrupted data if too many invalid entries
+    if (invalidCount > loadedCount) {
+      debugWarn('[LocalFirst] Too many invalid entries, clearing corrupted queue');
+      await AsyncStorage.removeItem(SYNC_QUEUE_STORAGE_KEY);
+      syncQueue.clear();
+    }
+  } catch (error) {
+    debugError('[LocalFirst] Failed to load sync queue:', error);
+    // Clear corrupted data
+    try {
+      await AsyncStorage.removeItem(SYNC_QUEUE_STORAGE_KEY);
+    } catch (clearError) {
+      debugError('[LocalFirst] Failed to clear corrupted queue:', clearError);
+    }
+  }
+};
+
+/**
+ * TASK-069: Queue cleanup after sync
+ * Removes synced items from queue and persists the updated queue
+ */
+const cleanupSyncedOperations = async (syncedKeys: string[]): Promise<void> => {
+  try {
+    let removedCount = 0;
+
+    for (const key of syncedKeys) {
+      if (syncQueue.delete(key)) {
+        removedCount++;
+      }
+    }
+
+    if (removedCount > 0) {
+      debugLog(`[LocalFirst] 🧹 Cleaned up ${removedCount} synced operations`);
+      // Save updated queue immediately (don't debounce cleanup)
+      await saveSyncQueue();
+    }
+  } catch (error) {
+    debugError('[LocalFirst] Failed to cleanup synced operations:', error);
+  }
+};
+
+/**
+ * TASK-070: Monitor queue size and log warnings
+ * Tracks queue size and alerts if thresholds are exceeded
+ */
+const monitorQueueSize = (): void => {
+  const size = syncQueue.size;
+
+  if (size >= QUEUE_SIZE_CRITICAL_THRESHOLD) {
+    queueSizeCritical++;
+    debugError(`[LocalFirst] 🚨 CRITICAL: Queue size is ${size} (threshold: ${QUEUE_SIZE_CRITICAL_THRESHOLD})`);
+  } else if (size >= QUEUE_SIZE_WARNING_THRESHOLD) {
+    queueSizeWarnings++;
+    debugWarn(`[LocalFirst] ⚠️ WARNING: Queue size is ${size} (threshold: ${QUEUE_SIZE_WARNING_THRESHOLD})`);
+  }
+};
+
+/**
+ * TASK-070: Get queue statistics
+ * Returns current queue size and monitoring metrics
+ */
+export const getQueueStats = () => {
+  return {
+    queueSize: syncQueue.size,
+    warningCount: queueSizeWarnings,
+    criticalCount: queueSizeCritical,
+    warningThreshold: QUEUE_SIZE_WARNING_THRESHOLD,
+    criticalThreshold: QUEUE_SIZE_CRITICAL_THRESHOLD,
+    isHealthy: syncQueue.size < QUEUE_SIZE_WARNING_THRESHOLD,
+  };
+};
+
+/**
+ * TASK-072: Clear all pending operations from sync queue
+ * Used for manual queue management and recovery
+ */
+export const clearSyncQueue = async (): Promise<void> => {
+  try {
+    syncQueue.clear();
+    await saveSyncQueue();
+    debugWarn('[LocalFirst] Sync queue cleared manually');
+  } catch (error) {
+    debugError('[LocalFirst] Failed to clear sync queue:', error);
+    throw error;
+  }
+};
+
+/**
+ * TASK-071: Sort queue by priority before sync
+ * Returns array of queue entries sorted by priority (HIGH > NORMAL > LOW)
+ * Within same priority, sorts by timestamp (oldest first)
+ *
+ * TASK-072: Export for use in SyncQueuePanel component
+ */
+export const getSortedQueueOperations = (): [string, QueuedOperation][] => {
+  const priorityOrder = { HIGH: 0, NORMAL: 1, LOW: 2 };
+
+  return Array.from(syncQueue.entries()).sort((a, b) => {
+    const [, opA] = a;
+    const [, opB] = b;
+
+    // Primary sort: by priority
+    const priorityDiff = priorityOrder[opA.priority] - priorityOrder[opB.priority];
+    if (priorityDiff !== 0) {
+      return priorityDiff;
+    }
+
+    // Secondary sort: by timestamp (oldest first)
+    return opA.timestamp - opB.timestamp;
+  });
+};
+
+/**
+ * TASK-071: Determine operation priority based on collection type
+ * HIGH: auth, payment, security
+ * NORMAL: user data, settings
+ * LOW: analytics, logs
+ */
+const determineOperationPriority = (collection: string): OperationPriority => {
+  const highPriorityCollections = ['auth', 'users', 'accounts', 'payments', 'security', 'sessions'];
+  const lowPriorityCollections = ['analytics', 'logs', 'events', 'metrics'];
+
+  if (highPriorityCollections.includes(collection.toLowerCase())) {
+    return 'HIGH';
+  }
+  if (lowPriorityCollections.includes(collection.toLowerCase())) {
+    return 'LOW';
+  }
+  return 'NORMAL';
+};
+
 /**
  * Initialize LOCAL-FIRST system
  */
@@ -67,23 +308,47 @@ export const initializeLocalFirst = async (): Promise<void> => {
     // Initialize cache system
     await cache.initializeCache();
 
+    // TASK-067: Load persisted sync queue from AsyncStorage
+    await loadSyncQueue();
+
+    // TASK-043: Check if Firestore is available
+    try {
+      if (firestore) {
+        // Test Firestore connection
+        await enableNetwork(firestore);
+        fallbackMode = false;
+        debugLog('[LocalFirst] ✅ Firestore available, full sync enabled');
+      } else {
+        throw new Error('Firestore not initialized');
+      }
+    } catch (firestoreError) {
+      // TASK-043: Enable fallback mode (memory-only cache)
+      fallbackMode = true;
+      debugWarn('[LocalFirst] ⚠️ Firestore unavailable, using fallback mode (memory-only cache)', firestoreError);
+    }
+
     // Setup network monitoring using NetInfo
     if (!networkListenersSetup) {
       setupNetworkMonitoring();
       networkListenersSetup = true;
     }
 
-    // Start background sync
-    startBackgroundSync();
+    // Start background sync only if not in fallback mode
+    if (!fallbackMode) {
+      startBackgroundSync();
+    }
 
-    debugLog('[LocalFirst] ✅ LOCAL-FIRST system initialized');
+    debugLog('[LocalFirst] ✅ LOCAL-FIRST system initialized', fallbackMode ? '(FALLBACK MODE)' : '(FULL MODE)');
   } catch (error) {
     debugError('[LocalFirst] Failed to initialize LOCAL-FIRST system', error);
+    // Even on error, enable fallback mode to keep app functional
+    fallbackMode = true;
   }
 };
 
 /**
  * LOCAL-FIRST: Get data (local first, remote fallback)
+ * TASK-050: Request coalescing using request deduplicator
  */
 export const getData = async <T>(options: LocalFirstOptions): Promise<T | null> => {
   const { collection, id, fallbackData } = options;
@@ -97,8 +362,8 @@ export const getData = async <T>(options: LocalFirstOptions): Promise<T | null> 
     if (cachedData) {
       debugLog(`[LocalFirst] ✅ LOCAL-FIRST cache hit: ${cacheKey}`);
 
-      // Background sync if online (don't wait)
-      if (isOnline && options.syncEnabled !== false) {
+      // TASK-043: Skip background sync if in fallback mode
+      if (!fallbackMode && isOnline && options.syncEnabled !== false) {
         backgroundSync(options).catch((error) => {
           debugWarn(`[LocalFirst] Background sync failed for ${cacheKey}:`, error);
         });
@@ -115,8 +380,8 @@ export const getData = async <T>(options: LocalFirstOptions): Promise<T | null> 
       // Load into memory cache for faster future access
       await cache.set(cacheKey, persistentData, 'local');
 
-      // Background sync if online
-      if (isOnline && options.syncEnabled !== false) {
+      // TASK-043: Skip background sync if in fallback mode
+      if (!fallbackMode && isOnline && options.syncEnabled !== false) {
         backgroundSync(options).catch((error) => {
           debugWarn(`[LocalFirst] Background sync failed for ${cacheKey}:`, error);
         });
@@ -125,29 +390,55 @@ export const getData = async <T>(options: LocalFirstOptions): Promise<T | null> 
       return persistentData;
     }
 
-    // 3. If online, try remote (but don't block for long)
-    if (isOnline && firestore) {
-      try {
-        debugLog(`[LocalFirst] 🌐 No local data, trying remote: ${cacheKey}`);
-
-        const docRef = doc(firestore, collection, id);
-        const docSnap = await Promise.race([getDoc(docRef), new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Remote fetch timeout')), 5000))]);
-
-        if (docSnap.exists()) {
-          const remoteData = docSnap.data() as T;
-          debugLog(`[LocalFirst] 🌐 Remote data fetched: ${cacheKey}`);
-
-          // Store locally for future LOCAL-FIRST access
-          await cache.set(cacheKey, remoteData, 'remote', 'synced');
-          await saveToPersistentStorage(cacheKey, remoteData);
-
-          return remoteData;
-        }
-      } catch (remoteError) {
-        debugWarn(`[LocalFirst] Remote fetch failed for ${cacheKey}:`, remoteError);
-        // Continue to fallback
-      }
+    // TASK-043: If in fallback mode, return fallback data (no remote fetch)
+    if (fallbackMode) {
+      debugWarn(`[LocalFirst] ⚠️ Fallback mode active, returning fallback data for ${cacheKey}`);
+      return (fallbackData as T) || null;
     }
+
+    // TASK-050: Use request deduplicator to prevent duplicate in-flight requests
+    const { requestDeduplicator } = await import('./request-deduplicator');
+
+    const result = await requestDeduplicator.deduplicate(
+      cacheKey,
+      async (): Promise<T | null> => {
+        // 3. If online, try remote (but don't block for long)
+        if (isOnline && firestore) {
+          try {
+            debugLog(`[LocalFirst] 🌐 No local data, trying remote: ${cacheKey}`);
+
+            const docRef = doc(firestore, collection, id);
+            const docSnap = await Promise.race([getDoc(docRef), new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Remote fetch timeout')), 5000))]);
+
+            if (docSnap.exists()) {
+              const remoteData = docSnap.data() as T;
+              debugLog(`[LocalFirst] 🌐 Remote data fetched: ${cacheKey}`);
+
+              // Store locally for future LOCAL-FIRST access
+              await cache.set(cacheKey, remoteData, 'remote', 'synced');
+              await saveToPersistentStorage(cacheKey, remoteData);
+
+              return remoteData;
+            }
+          } catch (remoteError) {
+            debugWarn(`[LocalFirst] Remote fetch failed for ${cacheKey}:`, remoteError);
+            // Continue to fallback
+          }
+        }
+
+        // 4. Return fallback data if provided
+        if (fallbackData !== undefined) {
+          debugLog(`[LocalFirst] 📋 Using fallback data for ${cacheKey}`);
+          return fallbackData as T;
+        }
+
+        debugWarn(`[LocalFirst] ⚠️ No data available for ${cacheKey}`);
+        return null;
+      },
+      { timeout: 6000 } // 6 second timeout for entire operation
+    );
+
+    return result as T | null;
 
     // 4. Use fallback data if provided
     if (fallbackData !== undefined) {
@@ -185,19 +476,32 @@ export const setData = async <T>(options: LocalFirstOptions & { data: T }): Prom
 
     // 2. Add to sync queue for background sync
     if (options.syncEnabled !== false) {
-      const entry: DataEntry<T> = {
-        data,
+      // TASK-071: Determine operation priority
+      const priority = determineOperationPriority(collection);
+
+      const operation: QueuedOperation = {
+        id: `${cacheKey}-${Date.now()}`,
+        collection,
+        docId: id,
+        operation: 'set',
+        data: data as Record<string, unknown>,
         timestamp: Date.now(),
+        retries: 0,
+        priority,
         version: 1,
         source: 'local',
         syncStatus: 'pending',
-        retryCount: 0,
         lastModified: Date.now(),
-        modifiedBy: undefined, // Could be set from auth context
       };
 
-      syncQueue.set(cacheKey, entry);
-      debugLog(`[LocalFirst] 📋 Added to sync queue: ${cacheKey}`);
+      syncQueue.set(cacheKey, operation);
+      debugLog(`[LocalFirst] 📋 Added to sync queue [${priority}]: ${cacheKey}`);
+
+      // TASK-068: Debounced queue persistence
+      debouncedSaveQueue();
+
+      // TASK-070: Monitor queue size
+      monitorQueueSize();
 
       // Try immediate sync if online (don't wait)
       if (isOnline) {
@@ -253,7 +557,7 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
         const remoteData = remoteDoc.data() as DataEntry;
 
         // Detect conflict using version and timestamp
-        const hasConflict = detectConflict(queueEntry.version, remoteData.version || 0, queueEntry.lastModified, remoteData.lastModified || 0);
+        const hasConflict = detectConflict(queueEntry.version ?? 1, remoteData.version || 0, queueEntry.lastModified ?? Date.now(), remoteData.lastModified || 0);
 
         if (hasConflict) {
           debugWarn(`[LocalFirst] ⚠️ Conflict detected for ${cacheKey}`);
@@ -262,15 +566,15 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
           const conflictData: ConflictData = {
             local: queueEntry.data,
             remote: remoteData.data,
-            localTimestamp: queueEntry.lastModified,
+            localTimestamp: queueEntry.lastModified ?? Date.now(),
             remoteTimestamp: remoteData.lastModified || 0,
-            localVersion: queueEntry.version,
+            localVersion: queueEntry.version ?? 1,
             remoteVersion: remoteData.version || 0,
             key: cacheKey,
           };
 
           // Use default strategy (last-write-wins)
-          const strategy = getDefaultStrategy(queueEntry.lastModified, remoteData.lastModified || 0);
+          const strategy = getDefaultStrategy(queueEntry.lastModified ?? Date.now(), remoteData.lastModified || 0);
 
           // Resolve conflict automatically
           const resolution = resolveConflictAutomatically(conflictData, strategy);
@@ -278,7 +582,7 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
           if (resolution.resolved && resolution.data) {
             debugLog(`[LocalFirst] ✅ Conflict resolved using strategy: ${resolution.strategy}`);
             // Update queue entry with resolved data
-            queueEntry.data = resolution.data;
+            queueEntry.data = resolution.data as Record<string, unknown>;
             queueEntry.syncStatus = 'synced';
           } else {
             debugWarn(`[LocalFirst] ❌ Conflict resolution failed: ${resolution.error}`);
@@ -309,13 +613,16 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
     // Mark as synced
     queueEntry.syncStatus = 'synced';
     queueEntry.lastSyncAttempt = Date.now();
-    queueEntry.retryCount = 0; // Reset retry count on success
+    queueEntry.retries = 0; // Reset retry count on success
 
     // Update cache
     await cache.set(cacheKey, queueEntry.data, 'remote', 'synced');
 
     // Remove from sync queue
     syncQueue.delete(cacheKey);
+
+    // TASK-069: Cleanup synced operations and save queue
+    await cleanupSyncedOperations([cacheKey]);
 
     // Track metrics
     const syncDuration = Date.now() - syncStartTime;
@@ -332,20 +639,20 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
     // TASK-030: Implement exponential backoff retry logic
     const queueEntry = syncQueue.get(cacheKey);
     if (queueEntry) {
-      queueEntry.retryCount = (queueEntry.retryCount || 0) + 1;
+      queueEntry.retries = (queueEntry.retries || 0) + 1;
       queueEntry.lastSyncAttempt = Date.now();
       queueEntry.syncStatus = 'error';
 
       const maxRetries = options.maxRetries || 5;
 
-      if (queueEntry.retryCount >= maxRetries) {
+      if (queueEntry.retries >= maxRetries) {
         syncQueue.delete(cacheKey);
         debugWarn(`[LocalFirst] Max retries (${maxRetries}) reached for ${cacheKey}, removed from queue`);
       } else {
         // Calculate exponential backoff delay
-        const delay = Math.min(INITIAL_RETRY_DELAY * Math.pow(BACKOFF_MULTIPLIER, queueEntry.retryCount - 1), MAX_RETRY_DELAY);
+        const delay = Math.min(INITIAL_RETRY_DELAY * Math.pow(BACKOFF_MULTIPLIER, queueEntry.retries - 1), MAX_RETRY_DELAY);
 
-        debugLog(`[LocalFirst] Will retry sync for ${cacheKey} in ${delay}ms (attempt ${queueEntry.retryCount}/${maxRetries})`);
+        debugLog(`[LocalFirst] Will retry sync for ${cacheKey} in ${delay}ms (attempt ${queueEntry.retries}/${maxRetries})`);
 
         // Schedule retry with exponential backoff
         setTimeout(() => {
@@ -427,6 +734,10 @@ const setupNetworkMonitoring = (): void => {
 /**
  * Process sync queue when coming back online
  */
+/**
+ * Process sync queue with priority-based ordering
+ * TASK-071: Uses getSortedQueueOperations to prioritize HIGH operations
+ */
 const processSyncQueue = async (): Promise<void> => {
   if (syncQueue.size === 0) {
     return;
@@ -434,12 +745,14 @@ const processSyncQueue = async (): Promise<void> => {
 
   debugLog(`[LocalFirst] 🔄 Processing sync queue: ${syncQueue.size} items`);
 
-  const syncPromises = Array.from(syncQueue.entries()).map(async ([key, _entry]) => {
+  // TASK-071: Get sorted operations by priority (HIGH > NORMAL > LOW)
+  const sortedOperations = getSortedQueueOperations();
+
+  const syncPromises = sortedOperations.map(async ([key, operation]) => {
     try {
-      const [collection, id] = key.split(':');
-      await backgroundSync({ collection, id });
+      await backgroundSync({ collection: operation.collection, id: operation.docId });
     } catch (error) {
-      debugWarn(`[LocalFirst] Failed to sync ${key}:`, error);
+      debugWarn(`[LocalFirst] Failed to sync ${key} [${operation.priority}]:`, error);
     }
   });
 
@@ -538,16 +851,20 @@ export const batchSetData = async <T>(operations: (LocalFirstOptions & { data: T
 
       // Add to sync queue
       if (op.syncEnabled !== false) {
-        const entry: DataEntry<T> = {
-          data: op.data,
+        const priority = determineOperationPriority(op.collection);
+        const operation: QueuedOperation = {
+          id: `${cacheKey}-${Date.now()}`,
+          collection: op.collection,
+          docId: op.id,
+          operation: 'set',
+          data: op.data as Record<string, unknown>,
           timestamp: Date.now(),
-          version: 1,
-          source: 'local',
-          syncStatus: 'pending',
-          retryCount: 0,
-          lastModified: Date.now(),
+          retries: 0,
+          priority,
         };
-        syncQueue.set(cacheKey, entry);
+        syncQueue.set(cacheKey, operation);
+        // Debounced save
+        debouncedSaveQueue();
       }
     });
 
@@ -663,3 +980,19 @@ export const resetSyncMetrics = (): void => {
   activeSyncs.clear(); // TASK-012: Clear active syncs
   debugLog('[LocalFirst] 📊 Sync metrics reset');
 };
+
+/**
+ * Get LOCAL-FIRST system status
+ * TASK-043: Includes fallbackMode status
+ */
+export const getLocalFirstStatus = () => ({
+  isOnline,
+  fallbackMode, // TASK-043: Memory-only cache mode
+  syncQueueSize: syncQueue.size,
+  activeSyncsCount: activeSyncs.size,
+  metrics: {
+    totalSyncs: totalSyncCount,
+    failedSyncs: failedSyncCount,
+    avgSyncTime: totalSyncCount > 0 ? totalSyncTime / totalSyncCount : 0,
+  },
+});

@@ -63,6 +63,7 @@
     "laggy",
     "loginx",
     "logomark",
+    "Millis",
     "Mult",
     "myapp",
     "myappdb",
@@ -108,5 +109,12 @@
     "हिन्दी"
   ],
   "flagWords": [],
-  "enabledLanguageIds": ["typescript", "typescriptreact", "javascript", "javascriptreact", "json", "jsonc"]
+  "enabledLanguageIds": [
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact",
+    "json",
+    "jsonc"
+  ]
 }

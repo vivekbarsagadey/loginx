@@ -3,7 +3,7 @@
  * Provides error handling and retry logic for Firestore operations
  */
 
-import { firestore, isFirestoreReady } from '@/firebase-config';
+import { firestore, initializeFirestore, isFirestoreReady } from '@/firebase-config';
 import {
   type CollectionReference,
   deleteDoc,
@@ -176,12 +176,18 @@ function shouldRetryFirestoreError(error: unknown): boolean {
 
 /**
  * Get a document with error handling and retry logic
+ * TASK-062: Waits for Firestore initialization before attempting operation
  * @param docRef - Document reference
  * @returns Document snapshot or null if not found
  */
 export async function getDocumentSafe<T = DocumentData>(docRef: DocumentReference<T>): Promise<DocumentSnapshot<T> | null> {
+  // TASK-062: Wait for Firestore initialization with timeout
   if (!isFirestoreReady()) {
-    throw new FirestoreError('Firestore is not initialized', 'firestore/not-initialized');
+    try {
+      await initializeFirestore();
+    } catch (initError) {
+      throw new FirestoreError('Firestore initialization failed', 'firestore/initialization-failed', initError);
+    }
   }
 
   try {
@@ -198,13 +204,19 @@ export async function getDocumentSafe<T = DocumentData>(docRef: DocumentReferenc
 
 /**
  * Set a document with error handling and retry logic
+ * TASK-062: Waits for Firestore initialization before attempting operation
  * @param docRef - Document reference
  * @param data - Document data
  * @param merge - Whether to merge with existing data
  */
 export async function setDocumentSafe<T = DocumentData>(docRef: DocumentReference<T>, data: Partial<T>, merge = false): Promise<void> {
+  // TASK-062: Wait for Firestore initialization with timeout
   if (!isFirestoreReady()) {
-    throw new FirestoreError('Firestore is not initialized', 'firestore/not-initialized');
+    try {
+      await initializeFirestore();
+    } catch (initError) {
+      throw new FirestoreError('Firestore initialization failed', 'firestore/initialization-failed', initError);
+    }
   }
 
   try {
@@ -234,12 +246,18 @@ export async function setDocumentSafe<T = DocumentData>(docRef: DocumentReferenc
 
 /**
  * Update a document with error handling and retry logic
+ * TASK-062: Waits for Firestore initialization before attempting operation
  * @param docRef - Document reference
  * @param data - Partial document data to update
  */
 export async function updateDocumentSafe<T = DocumentData>(docRef: DocumentReference<T>, data: Partial<T>): Promise<void> {
+  // TASK-062: Wait for Firestore initialization with timeout
   if (!isFirestoreReady()) {
-    throw new FirestoreError('Firestore is not initialized', 'firestore/not-initialized');
+    try {
+      await initializeFirestore();
+    } catch (initError) {
+      throw new FirestoreError('Firestore initialization failed', 'firestore/initialization-failed', initError);
+    }
   }
 
   try {
@@ -271,11 +289,17 @@ export async function updateDocumentSafe<T = DocumentData>(docRef: DocumentRefer
 
 /**
  * Delete a document with error handling and retry logic
+ * TASK-062: Waits for Firestore initialization before attempting operation
  * @param docRef - Document reference
  */
 export async function deleteDocumentSafe<T = DocumentData>(docRef: DocumentReference<T>): Promise<void> {
+  // TASK-062: Wait for Firestore initialization with timeout
   if (!isFirestoreReady()) {
-    throw new FirestoreError('Firestore is not initialized', 'firestore/not-initialized');
+    try {
+      await initializeFirestore();
+    } catch (initError) {
+      throw new FirestoreError('Firestore initialization failed', 'firestore/initialization-failed', initError);
+    }
   }
 
   try {
@@ -304,13 +328,19 @@ export async function deleteDocumentSafe<T = DocumentData>(docRef: DocumentRefer
 
 /**
  * Query documents with error handling and retry logic
+ * TASK-062: Waits for Firestore initialization before attempting operation
  * @param collectionRef - Collection reference or query
  * @param constraints - Query constraints
  * @returns Query snapshot
  */
 export async function queryDocumentsSafe<T = DocumentData>(collectionRef: CollectionReference<T> | Query<T>, ...constraints: QueryConstraint[]): Promise<QuerySnapshot<T>> {
+  // TASK-062: Wait for Firestore initialization with timeout
   if (!isFirestoreReady()) {
-    throw new FirestoreError('Firestore is not initialized', 'firestore/not-initialized');
+    try {
+      await initializeFirestore();
+    } catch (initError) {
+      throw new FirestoreError('Firestore initialization failed', 'firestore/initialization-failed', initError);
+    }
   }
 
   try {

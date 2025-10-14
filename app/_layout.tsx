@@ -1,3 +1,4 @@
+import { FirestoreStatusIndicator } from '@/components/dev/firestore-status-indicator';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter, useSegments } from 'expo-router';
@@ -66,6 +67,9 @@ function RootLayoutNav() {
     <>
       {/* Offline Indicator - shown at top of all screens */}
       <OfflineIndicator />
+
+      {/* TASK-063: Dev mode Firestore status indicator */}
+      <FirestoreStatusIndicator />
 
       <Stack
         screenOptions={{
@@ -255,6 +259,15 @@ export default function RootLayout() {
       // Initialize adaptive cache manager FIRST (determines cache size)
       initializeAdaptiveCache().catch((error) => {
         logger.error('Failed to initialize adaptive cache:', error);
+        // TASK-041: Show user-facing error dialog
+        const { getErrorInfo } = require('@/utils/error');
+        const errorInfo = getErrorInfo(error);
+        const { globalDialog } = require('@/components/global-dialog-provider');
+        globalDialog?.showDialog({
+          title: errorInfo.title,
+          message: errorInfo.message,
+          confirmText: 'OK',
+        });
       });
 
       // Initialize network monitoring
@@ -263,7 +276,51 @@ export default function RootLayout() {
       // Initialize LOCAL-FIRST system
       initializeLocalFirst().catch((error) => {
         logger.error('Failed to initialize LOCAL-FIRST system:', error);
+        // TASK-041: Show user-facing error dialog with retry option
+        const { classifyError } = require('@/utils/error-classifier');
+        const classified = classifyError(error);
+        const { globalDialog } = require('@/components/global-dialog-provider');
+        globalDialog?.showDialog({
+          title: 'Initialization Error',
+          message: classified.userMessage,
+          confirmText: classified.retryable ? 'Retry' : 'OK',
+          cancelText: classified.retryable ? 'Cancel' : undefined,
+          onConfirm: classified.retryable
+            ? () => {
+                initializeLocalFirst().catch(console.error);
+              }
+            : undefined,
+        });
       });
+
+      // TASK-054: Warm cache with critical data on app launch
+      // Fire-and-forget - don't block app initialization
+      (async () => {
+        try {
+          const { warmCache } = await import('@/utils/cache');
+          await warmCache([
+            'settings:app', // App-level settings
+            'settings:user', // User preferences
+            'theme:current', // Current theme selection
+            'language:current', // Current language
+          ]);
+        } catch (error) {
+          logger.warn('Cache warming failed:', error);
+        }
+      })();
+
+      // TASK-063: Initialize Firestore asynchronously (non-blocking)
+      // Fire-and-forget - app can continue without Firestore
+      (async () => {
+        try {
+          const { initializeFirestore } = await import('@/firebase-config');
+          await initializeFirestore();
+          logger.log('Firestore initialized successfully');
+        } catch (error) {
+          logger.warn('Firestore initialization failed:', error);
+          // App continues - local-first architecture handles offline
+        }
+      })();
 
       // TASK-033: Cleanup on unmount - properly return cleanup function
       return () => {

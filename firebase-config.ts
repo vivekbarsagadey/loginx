@@ -98,90 +98,161 @@ try {
 
 export const functions = functionsInstance;
 
-// ---- Firestore with error handling and emulator support ----
+// ---- Firestore with ASYNC initialization (TASK-057, TASK-058, TASK-059, TASK-060) ----
 let firestoreInstance: ReturnType<typeof getFirestore> | undefined;
 let firestoreInitialized = false;
+let firestoreInitializing = false;
 let firestoreError: Error | null = null;
+let initializationPromise: Promise<void> | null = null;
 
-try {
-  if (Config.firebase.projectId && Config.firebase.projectId !== 'missing-project-id') {
-    firestoreInstance = getFirestore(app);
+// TASK-058: Initialization timeout (10 seconds)
+const FIRESTORE_INIT_TIMEOUT = 10000;
 
-    // Connect to Firestore emulator if enabled (development only)
-    if (__DEV__ && Config.development.useFirebaseEmulator) {
-      try {
-        connectFirestoreEmulator(firestoreInstance, 'localhost', 8080);
-      } catch (_emulatorError) {
-        // Failed to connect to emulator
+/**
+ * TASK-057: Initialize Firestore asynchronously with timeout handling
+ * Returns a promise that resolves when Firestore is ready or times out
+ */
+export const initializeFirestore = async (): Promise<void> => {
+  // If already initialized or initializing, return existing promise
+  if (firestoreInitialized) {
+    return Promise.resolve();
+  }
+  if (firestoreInitializing && initializationPromise) {
+    return initializationPromise;
+  }
+
+  firestoreInitializing = true;
+
+  initializationPromise = new Promise<void>((resolve, reject) => {
+    // TASK-058: Set timeout for initialization
+    const timeoutId = setTimeout(() => {
+      if (!firestoreInitialized) {
+        const timeoutError = new Error(`Firestore initialization timed out after ${FIRESTORE_INIT_TIMEOUT}ms`);
+        firestoreError = timeoutError;
+        firestoreInitializing = false;
+        logger.error('[Firebase] Firestore initialization timeout', timeoutError);
+        reject(timeoutError);
+      }
+    }, FIRESTORE_INIT_TIMEOUT);
+
+    try {
+      if (!Config.firebase.projectId || Config.firebase.projectId === 'missing-project-id') {
+        clearTimeout(timeoutId);
+        const configError = new Error('Firebase configuration is incomplete. Please check your .env file.');
+        firestoreError = configError;
+        firestoreInitializing = false;
+        logger.error('[Firebase] Skipping Firestore initialization due to missing configuration', { projectId: Config.firebase.projectId });
+        reject(configError);
+        return;
+      }
+
+      // Initialize Firestore instance
+      firestoreInstance = getFirestore(app);
+
+      // Connect to Firestore emulator if enabled (development only)
+      if (__DEV__ && Config.development.useFirebaseEmulator) {
+        try {
+          connectFirestoreEmulator(firestoreInstance, 'localhost', 8080);
+          logger.info('[Firebase] Connected to Firestore emulator');
+        } catch (emulatorError) {
+          logger.warn('[Firebase] Failed to connect to Firestore emulator', {
+            error: emulatorError instanceof Error ? emulatorError.message : String(emulatorError),
+          });
+        }
+      }
+
+      // Enable AGGRESSIVE offline persistence for LOCAL-FIRST behavior
+      if (Platform.OS === 'web') {
+        // Try multi-tab persistence first, fall back to single-tab
+        enableMultiTabIndexedDbPersistence(firestoreInstance)
+          .then(() => {
+            clearTimeout(timeoutId);
+            firestoreInitialized = true;
+            firestoreInitializing = false;
+            logger.info('[Firebase] Firestore initialized with multi-tab persistence');
+            resolve();
+          })
+          .catch((err) => {
+            if (err.code === 'failed-precondition') {
+              // Multiple tabs open, persistence can only be enabled in one tab at a time
+              if (firestoreInstance) {
+                return enableIndexedDbPersistence(firestoreInstance).then(() => {
+                  clearTimeout(timeoutId);
+                  firestoreInitialized = true;
+                  firestoreInitializing = false;
+                  logger.info('[Firebase] Firestore initialized with single-tab persistence');
+                  resolve();
+                });
+              }
+            } else if (err.code === 'unimplemented') {
+              // The current browser doesn't support persistence
+              clearTimeout(timeoutId);
+              firestoreInitialized = true;
+              firestoreInitializing = false;
+              logger.warn('[Firebase] Persistence not supported, continuing without offline cache');
+              resolve();
+            } else {
+              logger.warn('[Firebase] LOCAL-FIRST: Persistence error', { error: err });
+              clearTimeout(timeoutId);
+              firestoreInitialized = true;
+              firestoreInitializing = false;
+              resolve();
+            }
+            return undefined;
+          })
+          .catch((fallbackErr) => {
+            logger.warn('[Firebase] Failed to enable persistence', fallbackErr);
+            clearTimeout(timeoutId);
+            firestoreInitialized = true;
+            firestoreInitializing = false;
+            resolve();
+          });
+      } else {
+        // Native platforms have built-in offline support - PERFECT for local-first
+        clearTimeout(timeoutId);
+        firestoreInitialized = true;
+        firestoreInitializing = false;
+        logger.info('[Firebase] Firestore initialized with native offline support');
+        resolve();
+      }
+    } catch (error) {
+      clearTimeout(timeoutId);
+      firestoreError = error instanceof Error ? error : new Error('Unknown Firestore initialization error');
+      firestoreInitializing = false;
+      logger.error('[Firebase] Failed to initialize Firestore', error instanceof Error ? error : new Error(String(error)));
+      if (error instanceof Error) {
+        logger.error('[Firebase] Error details', {
+          message: error.message,
+          stack: __DEV__ ? error.stack : '[REDACTED]',
+        });
+      }
+
+      // TASK-059: In development, don't crash - graceful degradation
+      if (__DEV__) {
+        logger.warn('[Firebase] Continuing without Firestore in development mode');
+        resolve(); // Resolve anyway in dev mode
+      } else {
+        reject(firestoreError);
       }
     }
+  });
 
-    // Enable AGGRESSIVE offline persistence for LOCAL-FIRST behavior
-    if (Platform.OS === 'web') {
-      // Try multi-tab persistence first, fall back to single-tab
-      enableMultiTabIndexedDbPersistence(firestoreInstance)
-        .then(() => {
-          firestoreInitialized = true;
-        })
-        .catch((err) => {
-          if (err.code === 'failed-precondition') {
-            // Multiple tabs open, persistence can only be enabled in one tab at a time
-            // firestoreInstance is guaranteed to be defined here since we're in its initialization block
-            if (firestoreInstance) {
-              return enableIndexedDbPersistence(firestoreInstance);
-            }
-          } else if (err.code === 'unimplemented') {
-            // The current browser doesn't support persistence
-          } else {
-            logger.warn('[Firebase] LOCAL-FIRST: Persistence error', { error: err });
-          }
-          firestoreInitialized = true;
-        })
-        .then(() => {
-          if (!firestoreInitialized) {
-            firestoreInitialized = true;
-          }
-        })
-        .catch((_err) => {
-          firestoreInitialized = true;
-        });
-    } else {
-      // Native platforms have built-in offline support - PERFECT for local-first
-      firestoreInitialized = true;
-    }
+  return initializationPromise;
+};
 
-    // Monitor connection state for LOCAL-FIRST behavior
-    if (__DEV__) {
-      // Connection monitoring disabled
-    }
-
-    // Set up LOCAL-FIRST data loading preferences
-    if (firestoreInstance) {
-      // Configure Firestore for local-first behavior
-      // This ensures all reads attempt local cache first
-    }
-  } else {
-    // Configuration missing - don't initialize Firestore
-    firestoreError = new Error('Firebase configuration is incomplete. Please check your .env file.');
-    logger.error('[Firebase] Skipping Firestore initialization due to missing configuration', { projectId: Config.firebase.projectId });
-  }
-} catch (error) {
-  firestoreError = error instanceof Error ? error : new Error('Unknown Firestore initialization error');
-  logger.error('[Firebase] Failed to initialize Firestore', error instanceof Error ? error : new Error(String(error)));
-  if (error instanceof Error) {
-    logger.error('[Firebase] Error details', {
-      message: error.message,
-      stack: __DEV__ ? error.stack : '[REDACTED]',
+// TASK-060: Export firestore instance with lazy initialization
+// Access will trigger initialization if not already started
+export const getFirestoreInstance = (): ReturnType<typeof getFirestore> | undefined => {
+  // Start initialization if not already started
+  if (!firestoreInitialized && !firestoreInitializing) {
+    initializeFirestore().catch((error) => {
+      logger.error('[Firebase] Auto-initialization failed', error);
     });
   }
+  return firestoreInstance;
+};
 
-  // In development, don't crash - let the app show a proper error screen
-  if (!__DEV__) {
-    throw new Error('Firebase Firestore initialization failed. Please check your configuration.');
-  }
-}
-
-// Export firestore instance - will be undefined if initialization failed
+// Export firestore instance - will be undefined if initialization hasn't completed
 export const firestore = firestoreInstance as ReturnType<typeof getFirestore>;
 
 /**
