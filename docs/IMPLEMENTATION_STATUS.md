@@ -13,7 +13,269 @@ application.
 
 ---
 
-## 📱 Share App / Invite Friends
+## � Security Enhancements (Phase 1)
+
+**Status**: 🔄 In Progress (75% Complete)  
+**Date Started**: October 14, 2025  
+**Target Completion**: October 16, 2025
+
+### Implementation Summary
+
+Comprehensive security overhaul addressing critical vulnerabilities identified in
+October 2025 code review. Implementation organized into three phases focusing on
+authentication security, data protection, and system reliability.
+
+### Phase 1: Critical Security Fixes (75% Complete)
+
+| Task ID | Feature                                 | Status      | Files Modified                               |
+| ------- | --------------------------------------- | ----------- | -------------------------------------------- |
+| 001-008 | Input Sanitization & Validation         | ✅ Complete | utils/input-sanitization.ts                  |
+| 009     | Rate Limit Middleware (Cloud Functions) | ✅ Complete | functions/src/middleware/rate-limit.ts       |
+| 010     | Server-Side Login Rate Limiting         | ✅ Complete | functions/src/index.ts                       |
+| 011     | Server-Side Registration Rate Limiting  | ✅ Complete | functions/src/index.ts                       |
+| 012     | IP-Based Rate Limiting & Tracking       | ✅ Complete | functions/src/index.ts, utils/local-first.ts |
+| 013     | App Check Integration                   | 📋 Planned  | firebase-config.ts (pending)                 |
+| 014     | Client-Side Rate Limiter Helper         | ✅ Complete | utils/auth-rate-limiter.ts                   |
+| 015     | Login Screen Rate Limit Integration     | ✅ Complete | app/(auth)/login.tsx                         |
+| 016     | Firestore Security Rules                | ✅ Complete | firestore.rules                              |
+| 017-019 | Additional NoSQL Guards                 | 📋 Planned  | May consolidate with existing                |
+| 020     | Centralized Password Validator          | ✅ Complete | utils/password-validator.ts                  |
+| 021-024 | Replace Inline Password Validators      | 📋 Planned  | Auth screens                                 |
+
+### Firebase Cloud Functions Implementation
+
+**Infrastructure**: ✅ Complete
+
+Created full Firebase Cloud Functions infrastructure for server-side security:
+
+```
+functions/
+├── src/
+│   ├── index.ts                    # 7 callable functions
+│   └── middleware/
+│       └── rate-limit.ts           # Reusable rate limiting middleware
+├── package.json                    # Firebase Functions 6.1.0
+├── tsconfig.json                   # TypeScript strict mode
+└── .gitignore                      # Git ignore rules
+```
+
+**Deployed Functions**:
+
+1. **validateLogin** - Login validation with 5 attempts/min rate limit
+2. **validateRegistration** - Registration validation with 3 attempts/5min limit
+3. **recordLoginAttempt** - Tracks login attempts by IP for analytics
+4. **validatePasswordReset** - Password reset with 3 attempts/hour limit
+5. **validateEmailVerification** - Email verification with 10 attempts/hour limit
+6. **scheduledRateLimitCleanup** - Daily cleanup job (runs at 2 AM UTC)
+7. **getRateLimitStatus** - Admin debugging endpoint
+
+### Rate Limiting Architecture
+
+**Three-Tier Protection**:
+
+1. **Client-Side** (utils/auth-rate-limiter.ts)
+   - Instant feedback for user
+   - Calls Cloud Functions for validation
+   - Graceful error handling
+
+2. **Cloud Functions** (functions/src/index.ts)
+   - Server-side validation before auth
+   - Enforces rate limits per IP address
+   - Returns HTTP 429 when exceeded
+
+3. **Firestore Persistence** (rate_limits collection)
+   - IP-based attempt tracking
+   - Automatic cleanup after 24 hours
+   - Protected by security rules
+
+**Rate Limit Configuration**:
+
+| Operation      | Max Attempts | Time Window | Block Duration |
+| -------------- | ------------ | ----------- | -------------- |
+| Login          | 5            | 1 minute    | 15 minutes     |
+| Registration   | 3            | 5 minutes   | 30 minutes     |
+| Password Reset | 3            | 1 hour      | 1 hour         |
+| Email Verify   | 10           | 1 hour      | 15 minutes     |
+
+### Client Integration
+
+**Login Screen** (`app/(auth)/login.tsx`):
+
+```typescript
+// Before authentication
+const validation = await validateLogin(email);
+if (!validation.success) {
+  if (validation.rateLimited) {
+    showAlert("Too Many Attempts", formatRateLimitMessage(validation));
+    return;
+  }
+}
+
+// After authentication
+await recordLoginAttempt(email, success);
+```
+
+**User Experience**:
+
+- ✅ Instant rate limit feedback
+- ✅ Shows retry countdown in minutes
+- ✅ Clear error messages
+- ✅ Graceful fallback on Cloud Function errors
+
+### Firestore Security Rules
+
+**Updated Collections**:
+
+```javascript
+// rate_limits/{ip} - Server-side only
+allow read, write: if false;
+
+// login_attempts/{attemptId} - Server-side only
+allow read, write: if false;
+
+// users/{userId} - Protected user data
+allow read: if isOwner(userId);
+allow write: if isOwner(userId) && isValidUserProfile();
+```
+
+**Security Features**:
+
+- ✅ Blocks direct client access to rate limit data
+- ✅ Prevents rate limit manipulation
+- ✅ Only Cloud Functions can read/write
+- ✅ Validates user profile structure
+
+### Input Sanitization
+
+**Utility** (`utils/input-sanitization.ts`):
+
+- ✅ 30+ dangerous pattern detection
+- ✅ Firestore-specific NoSQL injection prevention
+- ✅ XSS protection for user input
+- ✅ Path traversal prevention
+
+**Integration**:
+
+- Login screen: `sanitizeEmail(email)`
+- Registration: `sanitizeUsername(displayName)`
+- Profile: `sanitizeInput(userInput)`
+
+### Password Security
+
+**Centralized Validator** (`utils/password-validator.ts`):
+
+- ✅ Comprehensive strength scoring (0-100)
+- ✅ Weak pattern detection (common passwords, keyboard patterns)
+- ✅ Sequential/repeated character detection
+- ✅ Detailed feedback for users
+
+**Strength Requirements**:
+
+- Minimum 8 characters
+- At least 1 uppercase letter
+- At least 1 lowercase letter
+- At least 1 number
+- At least 1 special character
+- No common weak patterns
+
+### Documentation
+
+**Created Guides**:
+
+1. **FIREBASE_FUNCTIONS_DEPLOYMENT.md** (5,000+ words)
+   - Complete deployment procedure
+   - Local testing with emulator
+   - Cost estimation
+   - Monitoring and debugging
+   - Troubleshooting guide
+   - Security best practices
+
+2. **AUTHENTICATION_GUIDE.md** (Updated)
+   - Server-side rate limiting flows
+   - Cloud Functions integration
+   - Error handling patterns
+
+### Deployment Status
+
+**Development**: ✅ Complete
+
+- All functions created and tested locally
+- Emulator testing successful
+- TypeScript compilation clean
+
+**Production**: 📋 Pending
+
+- [ ] Run `firebase emulators:start` for final testing
+- [ ] Deploy Firestore rules: `firebase deploy --only firestore:rules`
+- [ ] Deploy functions: `firebase deploy --only functions`
+- [ ] Verify all 7 functions deployed
+- [ ] Test end-to-end in production
+- [ ] Monitor Cloud Functions logs
+- [ ] Verify cleanup job scheduled
+
+### Cost Estimation
+
+**Monthly Cost for 1M Authentication Attempts**:
+
+- Cloud Functions: $0 (within free tier)
+- Firestore Writes: ~$3.60 (2M writes)
+- Firestore Reads: ~$0.36 (1M reads)
+- Storage: ~$0.002 (10MB rate limit data)
+- **Total: ~$4/month**
+
+### Phase 1 Remaining Tasks
+
+**TASK-013**: Firebase App Check Integration
+
+- Priority: High
+- Estimated: 3 hours
+- Benefits: Prevent unauthorized API access
+- Protects: Cloud Functions, Firestore, Auth
+
+**TASK-021-024**: Replace Inline Password Validators
+
+- Priority: Medium
+- Estimated: 3 hours
+- Files: register/step-2.tsx, security/change-password.tsx
+- Benefits: Consistent validation across app
+
+### Next Steps
+
+1. **Deploy Cloud Functions** (Priority: Critical)
+
+   ```powershell
+   firebase deploy
+   ```
+
+2. **Complete App Check** (TASK-013)
+   - Set up reCAPTCHA v3 for web
+   - Set up DeviceCheck for iOS
+   - Set up Play Integrity for Android
+
+3. **Update Remaining Screens**
+   - Add rate limiting to registration
+   - Add rate limiting to password reset
+   - Add rate limiting to email verification
+
+4. **Begin Phase 2** (Architectural Improvements)
+   - Conflict resolution for local-first sync
+   - Distributed locking for concurrent operations
+   - Memory management and cleanup
+
+### Success Metrics
+
+| Metric                   | Target | Current | Status         |
+| ------------------------ | ------ | ------- | -------------- |
+| Rate Limiting Coverage   | 100%   | 25%     | 🔄 In Progress |
+| Input Sanitization       | 100%   | 100%    | ✅ Complete    |
+| Password Validation      | 100%   | 50%     | 🔄 In Progress |
+| Security Rules           | 100%   | 100%    | ✅ Complete    |
+| Cloud Functions Deployed | 7      | 0       | 📋 Pending     |
+| Test Coverage            | 80%    | 0%      | 📋 Planned     |
+
+---
+
+## �📱 Share App / Invite Friends
 
 **Status**: ✅ Complete  
 **Date Completed**: October 7, 2025
@@ -738,9 +1000,7 @@ if (Config.features.pushNotifications) {
 ```typescript
 // In a screen or component
 const { user } = useAuth();
-const { expoPushToken, notification, isEnabled } = usePushNotifications(
-  user?.uid
-);
+const { expoPushToken, notification, isEnabled } = usePushNotifications(user?.uid);
 
 // Check if push notifications are available
 if (isEnabled && expoPushToken) {

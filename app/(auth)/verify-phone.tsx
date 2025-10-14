@@ -1,3 +1,4 @@
+import { AuthErrorBoundary } from '@/components/auth/auth-error-boundary';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedText } from '@/components/themed-text';
@@ -133,41 +134,43 @@ export default function VerifyPhoneScreen() {
   };
 
   return (
-    <ThemedView style={styles.screenContainer}>
-      <View style={styles.content}>
-        <ThemedText type="h1" style={styles.title}>
-          Verify Your Phone
-        </ThemedText>
-        <ThemedText style={styles.subtitle}>We&apos;ve sent a 6-digit verification code to:</ThemedText>
-        <ThemedText style={styles.phoneNumber}>{phoneNumber}</ThemedText>
-
-        <ThemedInput
-          ref={codeRef}
-          placeholder="Enter 6-digit code"
-          value={verificationCode}
-          onChangeText={setVerificationCode}
-          keyboardType="number-pad"
-          maxLength={6}
-          style={styles.input}
-          autoFocus
-          textContentType="oneTimeCode"
-          accessibilityLabel="Verification code input"
-          accessibilityHint="Enter the 6-digit code sent to your phone"
-        />
-
-        <View style={styles.resendContainer}>
-          <ThemedText type="caption" style={styles.resendText}>
-            Didn&apos;t receive the code?
+    <AuthErrorBoundary fallbackMessage="We're having trouble loading the phone verification screen">
+      <ThemedView style={styles.screenContainer}>
+        <View style={styles.content}>
+          <ThemedText type="h1" style={styles.title}>
+            Verify Your Phone
           </ThemedText>
-          <ThemedButton title={countdown > 0 ? `Resend in ${countdown}s` : 'Resend Code'} variant="link" onPress={sendVerificationCode} disabled={countdown > 0 || resending} loading={resending} />
+          <ThemedText style={styles.subtitle}>We&apos;ve sent a 6-digit verification code to:</ThemedText>
+          <ThemedText style={styles.phoneNumber}>{phoneNumber}</ThemedText>
+
+          <ThemedInput
+            ref={codeRef}
+            placeholder="Enter 6-digit code"
+            value={verificationCode}
+            onChangeText={setVerificationCode}
+            keyboardType="number-pad"
+            maxLength={6}
+            style={styles.input}
+            autoFocus
+            textContentType="oneTimeCode"
+            accessibilityLabel="Verification code input"
+            accessibilityHint="Enter the 6-digit code sent to your phone"
+          />
+
+          <View style={styles.resendContainer}>
+            <ThemedText type="caption" style={styles.resendText}>
+              Didn&apos;t receive the code?
+            </ThemedText>
+            <ThemedButton title={countdown > 0 ? `Resend in ${countdown}s` : 'Resend Code'} variant="link" onPress={sendVerificationCode} disabled={countdown > 0 || resending} loading={resending} />
+          </View>
+
+          <ThemedButton title="Verify" onPress={handleVerifyCode} loading={loading} disabled={loading || verificationCode.length !== 6} />
+
+          <ThemedButton title="Skip for Now" variant="link" onPress={handleSkip} />
         </View>
-
-        <ThemedButton title="Verify" onPress={handleVerifyCode} loading={loading} disabled={loading || verificationCode.length !== 6} />
-
-        <ThemedButton title="Skip for Now" variant="link" onPress={handleSkip} />
-      </View>
-      {alert.AlertComponent}
-    </ThemedView>
+        {alert.AlertComponent}
+      </ThemedView>
+    </AuthErrorBoundary>
   );
 }
 

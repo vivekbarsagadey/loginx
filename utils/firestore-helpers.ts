@@ -19,6 +19,8 @@ import {
   setDoc,
   updateDoc,
 } from 'firebase/firestore';
+import { sanitizeDocumentId, sanitizeFieldName, sanitizeFirestoreValue } from './input-sanitization';
+import { logger } from './logger-production';
 import { withRetry } from './retry';
 
 /**
@@ -33,6 +35,130 @@ export class FirestoreError extends Error {
     super(message);
     this.name = 'FirestoreError';
   }
+}
+
+/**
+ * TASK-013: Validate and sanitize document ID before Firestore operations
+ * Prevents NoSQL injection attacks via document IDs
+ * @param docId - Document ID to validate
+ * @returns Sanitized document ID
+ * @throws FirestoreError if document ID is invalid
+ */
+export function validateDocumentId(docId: string): string {
+  const sanitized = sanitizeDocumentId(docId);
+  if (sanitized !== docId) {
+    logger.warn('[Firestore] Document ID was sanitized', {
+      original: docId.substring(0, 20) + '...',
+      sanitized: sanitized.substring(0, 20) + '...',
+    });
+  }
+  if (!sanitized || sanitized.length === 0) {
+    throw new FirestoreError('Invalid document ID: ID cannot be empty after sanitization', 'firestore/invalid-document-id');
+  }
+  return sanitized;
+}
+
+/**
+ * TASK-013: Validate and sanitize field name before Firestore operations
+ * Prevents NoSQL injection attacks via field names
+ * @param fieldName - Field name to validate
+ * @returns Sanitized field name
+ * @throws FirestoreError if field name is invalid
+ */
+export function validateFieldName(fieldName: string): string {
+  const sanitized = sanitizeFieldName(fieldName);
+  if (sanitized !== fieldName) {
+    logger.warn('[Firestore] Field name was sanitized', {
+      original: fieldName,
+      sanitized: sanitized,
+    });
+  }
+  if (!sanitized || sanitized.length === 0) {
+    throw new FirestoreError('Invalid field name: Field name cannot be empty after sanitization', 'firestore/invalid-field-name');
+  }
+  return sanitized;
+}
+
+/**
+ * TASK-013: Whitelist of allowed field names for Firestore queries
+ * This prevents injection attacks by restricting queries to known fields
+ */
+const ALLOWED_QUERY_FIELDS = new Set([
+  // User fields
+  'uid',
+  'email',
+  'displayName',
+  'phoneNumber',
+  'photoURL',
+  'createdAt',
+  'updatedAt',
+  'lastLogin',
+  'emailVerified',
+  'phoneVerified',
+  'isActive',
+  'role',
+  // Timestamps
+  'timestamp',
+  'date',
+  'startDate',
+  'endDate',
+  // Status fields
+  'status',
+  'type',
+  'category',
+  'priority',
+  // Common fields
+  'id',
+  'name',
+  'title',
+  'description',
+  'tags',
+  'owner',
+  'author',
+  // Add more allowed fields as needed
+]);
+
+/**
+ * TASK-013: Validate field name against whitelist
+ * @param fieldName - Field name to check
+ * @returns True if field name is allowed
+ * @throws FirestoreError if field name is not in whitelist
+ */
+export function validateFieldNameWhitelist(fieldName: string): boolean {
+  const sanitized = validateFieldName(fieldName);
+  if (!ALLOWED_QUERY_FIELDS.has(sanitized)) {
+    logger.error('[Firestore] Query attempted on non-whitelisted field', {
+      fieldName: sanitized,
+    });
+    throw new FirestoreError(`Invalid field name for query: ${sanitized}`, 'firestore/invalid-query-field');
+  }
+  return true;
+}
+
+/**
+ * TASK-013: Sanitize query value to prevent injection attacks
+ * @param value - Query value to sanitize
+ * @returns Sanitized value
+ */
+export function sanitizeQueryValue(value: unknown): unknown {
+  if (typeof value === 'string') {
+    return sanitizeFirestoreValue(value);
+  }
+  if (typeof value === 'number' || typeof value === 'boolean' || value === null) {
+    return value;
+  }
+  if (Array.isArray(value)) {
+    return value.map(sanitizeQueryValue);
+  }
+  if (typeof value === 'object' && value !== null) {
+    const sanitized: Record<string, unknown> = {};
+    for (const [key, val] of Object.entries(value)) {
+      const sanitizedKey = validateFieldName(key);
+      sanitized[sanitizedKey] = sanitizeQueryValue(val);
+    }
+    return sanitized;
+  }
+  return value;
 }
 
 /**
@@ -90,10 +216,12 @@ export async function setDocumentSafe<T = DocumentData>(docRef: DocumentReferenc
   } catch (error) {
     if (typeof error === 'object' && error !== null && 'code' in error) {
       const firestoreError = error as { code: string; message: string };
-      console.error('[Firestore] Set document failed:', {
+      // SECURITY FIX (TASK-007): Log only metadata, not actual document data
+      logger.error('[Firestore] Set document failed', {
         path: docRef.path,
         code: firestoreError.code,
         message: firestoreError.message,
+        merge: merge,
       });
 
       if (firestoreError.code === 'permission-denied') {
@@ -123,7 +251,8 @@ export async function updateDocumentSafe<T = DocumentData>(docRef: DocumentRefer
   } catch (error) {
     if (typeof error === 'object' && error !== null && 'code' in error) {
       const firestoreError = error as { code: string; message: string };
-      console.error('[Firestore] Update document failed:', {
+      // SECURITY FIX (TASK-007): Log only metadata, not actual document data
+      logger.error('[Firestore] Update document failed', {
         path: docRef.path,
         code: firestoreError.code,
         message: firestoreError.message,
@@ -158,7 +287,8 @@ export async function deleteDocumentSafe<T = DocumentData>(docRef: DocumentRefer
   } catch (error) {
     if (typeof error === 'object' && error !== null && 'code' in error) {
       const firestoreError = error as { code: string; message: string };
-      console.error('[Firestore] Delete document failed:', {
+      // SECURITY FIX (TASK-007): Log only metadata
+      logger.error('[Firestore] Delete document failed', {
         path: docRef.path,
         code: firestoreError.code,
         message: firestoreError.message,
@@ -193,7 +323,8 @@ export async function queryDocumentsSafe<T = DocumentData>(collectionRef: Collec
   } catch (error) {
     if (typeof error === 'object' && error !== null && 'code' in error) {
       const firestoreError = error as { code: string; message: string };
-      console.error('[Firestore] Query documents failed:', {
+      // SECURITY FIX (TASK-007): Log only metadata, not query details
+      logger.error('[Firestore] Query documents failed', {
         code: firestoreError.code,
         message: firestoreError.message,
       });

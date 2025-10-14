@@ -13,6 +13,11 @@ export const SecurityConstants = {
   MAX_LOGIN_ATTEMPTS: 5,
   LOGIN_LOCKOUT_DURATION: 15 * 60 * 1000, // 15 minutes
 
+  // Rate limiting (TASK-008 - SEC-003)
+  MAX_ATTEMPTS_PER_MINUTE: 5, // Maximum authentication attempts per minute
+  RATE_LIMIT_WINDOW: 60 * 1000, // 1 minute in milliseconds
+  RATE_LIMIT_CLEANUP_INTERVAL: 5 * 60 * 1000, // Clean up old rate limit entries every 5 minutes
+
   // Password requirements
   PASSWORD_HISTORY_COUNT: 5, // Remember last 5 passwords
 

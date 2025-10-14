@@ -2,19 +2,41 @@
 import { getApp, getApps, initializeApp } from 'firebase/app';
 import { type Auth, browserLocalPersistence, getAuth, initializeAuth, setPersistence } from 'firebase/auth';
 import { connectFirestoreEmulator, enableIndexedDbPersistence, enableMultiTabIndexedDbPersistence, getFirestore } from 'firebase/firestore';
+import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
 import { Platform } from 'react-native';
 import { Config, validateRequiredConfig } from './utils/config';
+import { logger } from './utils/logger-production';
 
-// Validate Firebase configuration
+// Validate Firebase configuration - FAIL FAST if missing
 validateRequiredConfig();
 
+// SECURITY: No fallback values - fail immediately if config is missing
+if (!Config.firebase.apiKey) {
+  throw new Error('CRITICAL: Firebase API Key is missing. Check your .env file.');
+}
+if (!Config.firebase.authDomain) {
+  throw new Error('CRITICAL: Firebase Auth Domain is missing. Check your .env file.');
+}
+if (!Config.firebase.projectId) {
+  throw new Error('CRITICAL: Firebase Project ID is missing. Check your .env file.');
+}
+if (!Config.firebase.storageBucket) {
+  throw new Error('CRITICAL: Firebase Storage Bucket is missing. Check your .env file.');
+}
+if (!Config.firebase.messagingSenderId) {
+  throw new Error('CRITICAL: Firebase Messaging Sender ID is missing. Check your .env file.');
+}
+if (!Config.firebase.appId) {
+  throw new Error('CRITICAL: Firebase App ID is missing. Check your .env file.');
+}
+
 const firebaseConfig = {
-  apiKey: Config.firebase.apiKey || 'missing-api-key',
-  authDomain: Config.firebase.authDomain || 'missing-auth-domain',
-  projectId: Config.firebase.projectId || 'missing-project-id',
-  storageBucket: Config.firebase.storageBucket || 'missing-storage-bucket',
-  messagingSenderId: Config.firebase.messagingSenderId || 'missing-sender-id',
-  appId: Config.firebase.appId || 'missing-app-id',
+  apiKey: Config.firebase.apiKey,
+  authDomain: Config.firebase.authDomain,
+  projectId: Config.firebase.projectId,
+  storageBucket: Config.firebase.storageBucket,
+  messagingSenderId: Config.firebase.messagingSenderId,
+  appId: Config.firebase.appId,
   measurementId: Config.firebase.measurementId,
 };
 
@@ -23,7 +45,7 @@ let app: ReturnType<typeof initializeApp>;
 try {
   app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 } catch (error) {
-  console.error('[Firebase] Failed to initialize app:', error);
+  logger.error('[Firebase] Failed to initialize app', error instanceof Error ? error : new Error(String(error)));
   throw new Error('Firebase initialization failed. Please check your configuration.');
 }
 
@@ -52,6 +74,29 @@ if (Platform.OS === 'web') {
 }
 
 export { auth };
+
+// ---- Firebase Functions (TASK-014) ----
+let functionsInstance: ReturnType<typeof getFunctions> | undefined;
+
+try {
+  functionsInstance = getFunctions(app);
+
+  // Connect to Functions emulator if enabled (development only)
+  if (__DEV__ && Config.development.useFirebaseEmulator) {
+    try {
+      connectFunctionsEmulator(functionsInstance, 'localhost', 5001);
+      logger.info('[Firebase] Connected to Functions emulator');
+    } catch (emulatorError) {
+      logger.warn('[Firebase] Failed to connect to Functions emulator', {
+        error: emulatorError instanceof Error ? emulatorError.message : String(emulatorError),
+      });
+    }
+  }
+} catch (error) {
+  logger.error('[Firebase] Failed to initialize Functions', error instanceof Error ? error : new Error(String(error)));
+}
+
+export const functions = functionsInstance;
 
 // ---- Firestore with error handling and emulator support ----
 let firestoreInstance: ReturnType<typeof getFirestore> | undefined;
@@ -88,7 +133,7 @@ try {
           } else if (err.code === 'unimplemented') {
             // The current browser doesn't support persistence
           } else {
-            console.error('[Firebase] LOCAL-FIRST: Persistence error:', err);
+            logger.warn('[Firebase] LOCAL-FIRST: Persistence error', { error: err });
           }
           firestoreInitialized = true;
         })
@@ -118,15 +163,15 @@ try {
   } else {
     // Configuration missing - don't initialize Firestore
     firestoreError = new Error('Firebase configuration is incomplete. Please check your .env file.');
-    console.error('[Firebase] Skipping Firestore initialization due to missing configuration');
+    logger.error('[Firebase] Skipping Firestore initialization due to missing configuration', { projectId: Config.firebase.projectId });
   }
 } catch (error) {
   firestoreError = error instanceof Error ? error : new Error('Unknown Firestore initialization error');
-  console.error('[Firebase] Failed to initialize Firestore:', error);
+  logger.error('[Firebase] Failed to initialize Firestore', error instanceof Error ? error : new Error(String(error)));
   if (error instanceof Error) {
-    console.error('[Firebase] Error details:', {
+    logger.error('[Firebase] Error details', {
       message: error.message,
-      stack: error.stack,
+      stack: __DEV__ ? error.stack : '[REDACTED]',
     });
   }
 

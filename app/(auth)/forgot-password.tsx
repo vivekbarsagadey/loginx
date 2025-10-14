@@ -1,3 +1,4 @@
+import { AuthErrorBoundary } from '@/components/auth/auth-error-boundary';
 import { ScreenContainer } from '@/components/screen-container';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
@@ -73,36 +74,38 @@ export default function ForgotPasswordScreen() {
   const onSubmit = () => handlePasswordReset();
 
   return (
-    <ScreenContainer scrollable>
-      <ThemedText type="h1" style={styles.title}>
-        {i18n.t('forgotPassword.title')}
-      </ThemedText>
-      <ThemedText type="body" style={styles.subtitle}>
-        {i18n.t('forgotPassword.subtitle')}
-      </ThemedText>
+    <AuthErrorBoundary fallbackMessage="We're having trouble loading the password reset form">
+      <ScreenContainer scrollable>
+        <ThemedText type="h1" style={styles.title}>
+          {i18n.t('forgotPassword.title')}
+        </ThemedText>
+        <ThemedText type="body" style={styles.subtitle}>
+          {i18n.t('forgotPassword.subtitle')}
+        </ThemedText>
 
-      <Controller
-        control={control}
-        name="email"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <ThemedInput
-            placeholder={i18n.t('forgotPassword.emailPlaceholder')}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            errorMessage={errors.email?.message}
-          />
-        )}
-      />
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <ThemedInput
+              placeholder={i18n.t('forgotPassword.emailPlaceholder')}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              errorMessage={errors.email?.message}
+            />
+          )}
+        />
 
-      <ThemedButton title={loading ? i18n.t('forgotPassword.sendingButton') : i18n.t('forgotPassword.sendButton')} onPress={handleSubmit(onSubmit)} disabled={loading} style={styles.submitButton} />
-      {loading && <ThemedLoadingSpinner size="large" style={styles.loading} />}
+        <ThemedButton title={loading ? i18n.t('forgotPassword.sendingButton') : i18n.t('forgotPassword.sendButton')} onPress={handleSubmit(onSubmit)} disabled={loading} style={styles.submitButton} />
+        {loading && <ThemedLoadingSpinner size="large" style={styles.loading} />}
 
-      <ThemedButton title={i18n.t('forgotPassword.backToLogin')} variant="link" onPress={() => push('/(auth)/login')} />
-      {AlertComponent}
-    </ScreenContainer>
+        <ThemedButton title={i18n.t('forgotPassword.backToLogin')} variant="link" onPress={() => push('/(auth)/login')} />
+        {AlertComponent}
+      </ScreenContainer>
+    </AuthErrorBoundary>
   );
 }
 

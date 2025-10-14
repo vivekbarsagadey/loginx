@@ -375,4 +375,22 @@ export const SecurityStorage = {
   clearLoginAttempts: async (): Promise<void> => {
     await securelyDeleteItem(SecureStorageKeys.LOGIN_ATTEMPTS);
   },
+
+  /**
+   * Generic secure item storage (TASK-009: Rate limiting support)
+   * @param key - Storage key
+   * @param value - Value to store (will be stringified)
+   */
+  setItem: async (key: string, value: string): Promise<void> => {
+    await SecureStore.setItemAsync(key, value);
+  },
+
+  /**
+   * Generic secure item retrieval (TASK-009: Rate limiting support)
+   * @param key - Storage key
+   * @returns Promise that resolves to the stored value or null
+   */
+  getItem: async (key: string): Promise<string | null> => {
+    return await SecureStore.getItemAsync(key);
+  },
 };

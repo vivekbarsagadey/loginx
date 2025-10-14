@@ -1,3 +1,4 @@
+import { AuthErrorBoundary } from '@/components/auth/auth-error-boundary';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -82,20 +83,22 @@ export default function VerifyEmailScreen() {
   };
 
   return (
-    <ThemedView style={styles.centeredContainer}>
-      <ThemedText type="h1" style={styles.title}>
-        {i18n.t('screens.verifyEmail.title')}
-      </ThemedText>
-      <ThemedText style={styles.subtitle}>{i18n.t('screens.verifyEmail.subtitle')}</ThemedText>
-      <ThemedText type="h2" style={styles.email}>
-        {email}
-      </ThemedText>
-      <ThemedText style={styles.subtitle}>{i18n.t('screens.verifyEmail.instructions')}</ThemedText>
+    <AuthErrorBoundary fallbackMessage="We're having trouble loading the email verification screen">
+      <ThemedView style={styles.centeredContainer}>
+        <ThemedText type="h1" style={styles.title}>
+          {i18n.t('screens.verifyEmail.title')}
+        </ThemedText>
+        <ThemedText style={styles.subtitle}>{i18n.t('screens.verifyEmail.subtitle')}</ThemedText>
+        <ThemedText type="h2" style={styles.email}>
+          {email}
+        </ThemedText>
+        <ThemedText style={styles.subtitle}>{i18n.t('screens.verifyEmail.instructions')}</ThemedText>
 
-      <ThemedButton title={isResending ? i18n.t('screens.verifyEmail.sending') : i18n.t('screens.verifyEmail.resendButton')} onPress={handleResend} disabled={isResending} variant="secondary" />
-      <ThemedButton title={i18n.t('screens.verifyEmail.goToLogin')} onPress={handleLoginRedirect} variant="link" />
-      {AlertComponent}
-    </ThemedView>
+        <ThemedButton title={isResending ? i18n.t('screens.verifyEmail.sending') : i18n.t('screens.verifyEmail.resendButton')} onPress={handleResend} disabled={isResending} variant="secondary" />
+        <ThemedButton title={i18n.t('screens.verifyEmail.goToLogin')} onPress={handleLoginRedirect} variant="link" />
+        {AlertComponent}
+      </ThemedView>
+    </AuthErrorBoundary>
   );
 }
 

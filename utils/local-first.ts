@@ -42,6 +42,9 @@ let networkUnsubscribe: (() => void) | null = null;
 // Pending sync queue
 const syncQueue = new Map<string, DataEntry>();
 
+// Active sync operations (TASK-012: Prevent race conditions)
+const activeSyncs = new Set<string>();
+
 // Sync metrics tracking
 let totalSyncCount = 0;
 let failedSyncCount = 0;
@@ -205,10 +208,20 @@ export const setData = async <T>(options: LocalFirstOptions & { data: T }): Prom
 
 /**
  * Background sync without blocking UI
+ * TASK-012: Added semaphore-based locking to prevent race conditions
  */
 const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
   const { collection, id } = options;
   const cacheKey = `${collection}:${id}`;
+
+  // TASK-012: Check if sync is already in progress for this key
+  if (activeSyncs.has(cacheKey)) {
+    debugLog(`[LocalFirst] ⏭️ Sync already in progress for: ${cacheKey}, skipping`);
+    return;
+  }
+
+  // TASK-012: Acquire sync lock
+  activeSyncs.add(cacheKey);
   const syncStartTime = Date.now();
   syncStartTimes.set(cacheKey, syncStartTime);
 
@@ -280,6 +293,9 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
         debugWarn(`[LocalFirst] Max retries reached for ${cacheKey}, removed from queue`);
       }
     }
+  } finally {
+    // TASK-012: Always release sync lock, even on error
+    activeSyncs.delete(cacheKey);
   }
 };
 
@@ -545,6 +561,7 @@ export const subscribeToData = <T>(collection: string, id: string, callback: (da
 
 /**
  * ANALYTICS & MONITORING: Get sync performance metrics
+ * TASK-012: Added activeSyncs.size for monitoring concurrent sync operations
  */
 export const trackSyncMetrics = () => {
   const avgSyncTime = totalSyncCount > 0 ? totalSyncTime / totalSyncCount : 0;
@@ -556,18 +573,20 @@ export const trackSyncMetrics = () => {
     failedSyncs: failedSyncCount,
     successRate: successRate.toFixed(2) + '%',
     averageSyncTime: Math.round(avgSyncTime) + 'ms',
-    activeSyncs: syncStartTimes.size,
+    activeSyncs: activeSyncs.size, // TASK-012: Track active sync operations
     isOnline,
   };
 };
 
 /**
  * Reset sync metrics (useful for testing or monitoring reset)
+ * TASK-012: Also clear activeSyncs set
  */
 export const resetSyncMetrics = (): void => {
   totalSyncCount = 0;
   failedSyncCount = 0;
   totalSyncTime = 0;
   syncStartTimes.clear();
+  activeSyncs.clear(); // TASK-012: Clear active syncs
   debugLog('[LocalFirst] 📊 Sync metrics reset');
 };

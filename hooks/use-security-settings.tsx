@@ -1,8 +1,11 @@
 /**
  * Security Settings Hook
  * Manages security preferences using secure storage
+ * TASK-009: Added client-side rate limiting for authentication attempts
  */
+import { SecurityConstants } from '@/constants/security';
 import { debugError, debugLog } from '@/utils/debug';
+import { logger } from '@/utils/logger-production';
 import { SecurityStorage } from '@/utils/secure-storage';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -13,9 +16,21 @@ interface SecuritySettings {
   loginAttempts: number;
 }
 
+interface RateLimitInfo {
+  /** Number of attempts in current window */
+  attemptsInWindow: number;
+  /** Timestamp of window start */
+  windowStart: number;
+  /** Whether rate limit is active */
+  isRateLimited: boolean;
+  /** Time until rate limit resets (in seconds) */
+  resetIn: number;
+}
+
 interface SecurityState extends SecuritySettings {
   isLoading: boolean;
   error: string | null;
+  rateLimitInfo: RateLimitInfo;
 }
 
 interface SecurityActions {
@@ -26,6 +41,8 @@ interface SecurityActions {
   refreshSettings: () => Promise<void>;
   isAccountLocked: () => boolean;
   getTimeUntilUnlock: () => number;
+  checkRateLimit: () => Promise<RateLimitInfo>;
+  recordAttempt: () => Promise<boolean>;
   maxLoginAttempts: number;
   lockoutDuration: number;
   remainingAttempts: number;
@@ -34,9 +51,12 @@ interface SecurityActions {
   formatTimeout: (minutes: number) => string;
 }
 
-const MAX_LOGIN_ATTEMPTS = 5;
-const LOCKOUT_DURATION = 15; // minutes
+const MAX_LOGIN_ATTEMPTS = SecurityConstants.MAX_LOGIN_ATTEMPTS;
+const LOCKOUT_DURATION = Math.floor(SecurityConstants.LOGIN_LOCKOUT_DURATION / 60000); // Convert to minutes
 const DEFAULT_AUTO_LOCK_TIMEOUT = 5; // minutes
+
+// Rate limiting storage key
+const RATE_LIMIT_KEY = 'auth_rate_limit_data';
 
 export function useSecuritySettings(): SecurityState & SecurityActions {
   const [state, setState] = useState<SecurityState>({
@@ -46,7 +66,114 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
     loginAttempts: 0,
     isLoading: true,
     error: null,
+    rateLimitInfo: {
+      attemptsInWindow: 0,
+      windowStart: Date.now(),
+      isRateLimited: false,
+      resetIn: 0,
+    },
   });
+
+  /**
+   * TASK-009: Get rate limit data from storage
+   */
+  const getRateLimitData = async (): Promise<RateLimitInfo> => {
+    try {
+      const stored = await SecurityStorage.getItem(RATE_LIMIT_KEY);
+      if (!stored) {
+        return {
+          attemptsInWindow: 0,
+          windowStart: Date.now(),
+          isRateLimited: false,
+          resetIn: 0,
+        };
+      }
+
+      const data = JSON.parse(stored);
+      const now = Date.now();
+      const windowAge = now - data.windowStart;
+
+      // Reset window if it's older than RATE_LIMIT_WINDOW
+      if (windowAge > SecurityConstants.RATE_LIMIT_WINDOW) {
+        return {
+          attemptsInWindow: 0,
+          windowStart: now,
+          isRateLimited: false,
+          resetIn: 0,
+        };
+      }
+
+      const resetIn = Math.ceil((SecurityConstants.RATE_LIMIT_WINDOW - windowAge) / 1000);
+      const isRateLimited = data.attemptsInWindow >= SecurityConstants.MAX_ATTEMPTS_PER_MINUTE;
+
+      return {
+        attemptsInWindow: data.attemptsInWindow,
+        windowStart: data.windowStart,
+        isRateLimited,
+        resetIn: isRateLimited ? resetIn : 0,
+      };
+    } catch (error) {
+      debugError('[SecuritySettings] Failed to get rate limit data', error);
+      return {
+        attemptsInWindow: 0,
+        windowStart: Date.now(),
+        isRateLimited: false,
+        resetIn: 0,
+      };
+    }
+  };
+
+  /**
+   * TASK-009: Save rate limit data to storage
+   */
+  const saveRateLimitData = async (data: Omit<RateLimitInfo, 'isRateLimited' | 'resetIn'>): Promise<void> => {
+    try {
+      await SecurityStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
+    } catch (error) {
+      debugError('[SecuritySettings] Failed to save rate limit data', error);
+    }
+  };
+
+  /**
+   * TASK-009: Check if rate limited
+   */
+  const checkRateLimit = async (): Promise<RateLimitInfo> => {
+    const rateLimitInfo = await getRateLimitData();
+    setState((prev) => ({ ...prev, rateLimitInfo }));
+    return rateLimitInfo;
+  };
+
+  /**
+   * TASK-009: Record an authentication attempt
+   * Returns true if attempt is allowed, false if rate limited
+   */
+  const recordAttempt = async (): Promise<boolean> => {
+    const rateLimitInfo = await getRateLimitData();
+
+    if (rateLimitInfo.isRateLimited) {
+      logger.warn('[SecuritySettings] Authentication attempt blocked by rate limit', {
+        attemptsInWindow: rateLimitInfo.attemptsInWindow,
+        resetIn: rateLimitInfo.resetIn,
+      });
+      setState((prev) => ({ ...prev, rateLimitInfo }));
+      return false;
+    }
+
+    // Increment attempts in current window
+    const newData = {
+      attemptsInWindow: rateLimitInfo.attemptsInWindow + 1,
+      windowStart: rateLimitInfo.windowStart,
+    };
+
+    await saveRateLimitData(newData);
+
+    const newRateLimitInfo = await getRateLimitData();
+    setState((prev) => ({ ...prev, rateLimitInfo: newRateLimitInfo }));
+
+    debugLog(`[SecuritySettings] Recorded attempt ${newData.attemptsInWindow}/${SecurityConstants.MAX_ATTEMPTS_PER_MINUTE}`);
+
+    return true;
+  };
 
   /**
    * Load security settings from secure storage
@@ -246,6 +373,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
   // Load settings on mount
   useEffect(() => {
     loadSecuritySettings();
+    checkRateLimit(); // TASK-009: Load rate limit info
   }, [loadSecuritySettings]);
 
   return {
@@ -260,6 +388,8 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
     refreshSettings,
     isAccountLocked,
     getTimeUntilUnlock,
+    checkRateLimit, // TASK-009: Export rate limit check
+    recordAttempt, // TASK-009: Export attempt recording
     maxLoginAttempts: MAX_LOGIN_ATTEMPTS,
     lockoutDuration: LOCKOUT_DURATION,
     remainingAttempts: getRemainingAttempts(),

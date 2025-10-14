@@ -1,4 +1,5 @@
 import { AlternativeAuthMethods } from '@/components/auth/alternative-auth-methods';
+import { AuthErrorBoundary } from '@/components/auth/auth-error-boundary';
 import { BiometricLoginSection } from '@/components/auth/biometric-login-section';
 import { LoginForm, type LoginFormData } from '@/components/auth/login-form';
 import { SecurityWarnings } from '@/components/auth/security-warnings';
@@ -14,6 +15,7 @@ import { useSecuritySettings } from '@/hooks/use-security-settings';
 import { useSocialAuth } from '@/hooks/use-social-auth';
 import i18n from '@/i18n';
 import { AuthMethod, isAuthMethodEnabled } from '@/utils/auth-methods';
+import { formatRateLimitMessage, isRateLimitError, recordLoginAttempt, validateLogin } from '@/utils/auth-rate-limiter';
 import { showError } from '@/utils/error';
 import { BiometricStorage } from '@/utils/secure-storage';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -48,10 +50,26 @@ export default function LoginScreen() {
       const { sanitizeEmail } = await import('@/utils/sanitize');
       const sanitizedEmail = sanitizeEmail(data.email);
 
+      // TASK-015: Server-side rate limiting validation
+      const validation = await validateLogin(sanitizedEmail);
+      if (!validation.success) {
+        if (validation.rateLimited) {
+          // Show rate limit error with retry time
+          showAlert('Too Many Attempts', formatRateLimitMessage(validation), [{ text: 'OK' }], { variant: 'error' });
+          return;
+        }
+        // Show other validation errors
+        showAlert('Login Failed', validation.message, [{ text: 'OK' }], { variant: 'error' });
+        return;
+      }
+
       await signInWithEmailAndPassword(auth, sanitizedEmail, data.password);
 
       // Reset login attempts on successful authentication
       await resetLoginAttempts();
+
+      // TASK-012: Record successful login attempt
+      await recordLoginAttempt(sanitizedEmail, true);
 
       // SECURITY: Save email for biometric re-authentication
       if (biometricEnabled) {
@@ -76,8 +94,19 @@ export default function LoginScreen() {
 
       // If 2FA is not enabled, user will be redirected to main app by root layout observer
     } catch (error: unknown) {
+      // TASK-012: Record failed login attempt
+      const { sanitizeEmail } = await import('@/utils/sanitize');
+      const sanitizedEmail = sanitizeEmail(data.email);
+      await recordLoginAttempt(sanitizedEmail, false);
+
       // Increment failed login attempts
       await incrementLoginAttempts();
+
+      // TASK-015: Check for rate limit errors
+      if (isRateLimitError(error)) {
+        showAlert('Too Many Attempts', 'You have exceeded the maximum number of login attempts. Please try again later.', [{ text: 'OK' }], { variant: 'error' });
+        return;
+      }
 
       // Check if account will be locked after this attempt
       if (remainingAttempts <= 1) {
@@ -95,29 +124,31 @@ export default function LoginScreen() {
   const hasSocialAuth = isAuthMethodEnabled(AuthMethod.GOOGLE) || isAuthMethodEnabled(AuthMethod.APPLE) || isAuthMethodEnabled(AuthMethod.FACEBOOK);
 
   return (
-    <ScreenContainer scrollable centerContent>
-      <LoginForm onSubmit={onSubmit} loading={loading} disabled={isAccountLocked()} />
+    <AuthErrorBoundary fallbackMessage="We're having trouble loading the login screen">
+      <ScreenContainer scrollable centerContent>
+        <LoginForm onSubmit={onSubmit} loading={loading} disabled={isAccountLocked()} />
 
-      <SecurityWarnings remainingAttempts={remainingAttempts} isAccountLocked={isAccountLocked()} timeUntilUnlock={getTimeUntilUnlock()} />
+        <SecurityWarnings remainingAttempts={remainingAttempts} isAccountLocked={isAccountLocked()} timeUntilUnlock={getTimeUntilUnlock()} />
 
-      <AlternativeAuthMethods />
+        <AlternativeAuthMethods />
 
-      <BiometricLoginSection onSuccess={handleLoginSuccess} disabled={isAccountLocked()} />
+        <BiometricLoginSection onSuccess={handleLoginSuccess} disabled={isAccountLocked()} />
 
-      {hasSocialAuth && (
-        <SocialSignInButtons
-          onGoogleSignIn={isAuthMethodEnabled(AuthMethod.GOOGLE) ? signInWithGoogle : undefined}
-          onAppleSignIn={isAuthMethodEnabled(AuthMethod.APPLE) ? signInWithApple : undefined}
-          onFacebookSignIn={isAuthMethodEnabled(AuthMethod.FACEBOOK) ? signInWithFacebook : undefined}
-          loading={socialLoading}
-          mode="login"
-        />
-      )}
+        {hasSocialAuth && (
+          <SocialSignInButtons
+            onGoogleSignIn={isAuthMethodEnabled(AuthMethod.GOOGLE) ? signInWithGoogle : undefined}
+            onAppleSignIn={isAuthMethodEnabled(AuthMethod.APPLE) ? signInWithApple : undefined}
+            onFacebookSignIn={isAuthMethodEnabled(AuthMethod.FACEBOOK) ? signInWithFacebook : undefined}
+            loading={socialLoading}
+            mode="login"
+          />
+        )}
 
-      <ThemedButton title={i18n.t('screens.login.noAccount')} variant="link" onPress={() => push('/(auth)/register')} style={styles.linkButton} />
+        <ThemedButton title={i18n.t('screens.login.noAccount')} variant="link" onPress={() => push('/(auth)/register')} style={styles.linkButton} />
 
-      {AlertComponent}
-    </ScreenContainer>
+        {AlertComponent}
+      </ScreenContainer>
+    </AuthErrorBoundary>
   );
 }
 

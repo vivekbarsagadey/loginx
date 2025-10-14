@@ -150,10 +150,10 @@ export const validateRequiredConfig = (): void => {
 
   if (missingFields.length > 0) {
     const missingList = missingFields.map((field) => field.key).join(', ');
+    const errorMessage = `CRITICAL: Missing required Firebase configuration: ${missingList}. Please check your .env file and ensure all Firebase credentials are properly configured.`;
 
-    if (!__DEV__) {
-      throw new Error('Application configuration is incomplete. Please contact support.');
-    }
+    // SECURITY: Fail fast in all environments (development and production)
+    throw new Error(errorMessage);
   }
 };
 

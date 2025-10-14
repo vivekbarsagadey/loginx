@@ -4,6 +4,7 @@
  */
 
 import { isDevelopment } from './env';
+import { logger } from './logger-production';
 
 /**
  * ANSI color codes for terminal output
@@ -54,13 +55,9 @@ export function debugWarn(_message: string, ..._args: readonly unknown[]): void 
 export function debugError(message: string, error?: Error | unknown): void {
   if (isDevelopment()) {
     if (error instanceof Error) {
-      console.error(`${Colors.red}[ERROR]${Colors.reset} ${message}`, {
-        name: error.name,
-        message: error.message,
-        stack: error.stack,
-      });
+      logger.error(`${Colors.red}[ERROR]${Colors.reset} ${message}`, error);
     } else {
-      console.error(`${Colors.red}[ERROR]${Colors.reset} ${message}`, error);
+      logger.error(`${Colors.red}[ERROR]${Colors.reset} ${message}`, { error });
     }
   }
 }
@@ -100,7 +97,7 @@ export function debugObject(_label: string, _obj: unknown): void {
  */
 export function debugAssert(condition: boolean, message: string): void {
   if (isDevelopment() && !condition) {
-    console.error(`${Colors.red}[ASSERT FAILED]${Colors.reset} ${message}`);
+    logger.error(`${Colors.red}[ASSERT FAILED]${Colors.reset} ${message}`);
     throw new Error(`Assertion failed: ${message}`);
   }
 }

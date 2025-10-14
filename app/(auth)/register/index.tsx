@@ -1,4 +1,5 @@
 import { createUserProfile } from '@/actions/user.action';
+import { AuthErrorBoundary } from '@/components/auth/auth-error-boundary';
 import { RegistrationNavigation } from '@/components/auth/registration-navigation';
 import { RegistrationProgress } from '@/components/auth/registration-progress';
 import { RegistrationSocialAuth } from '@/components/auth/registration-social-auth';
@@ -236,40 +237,42 @@ export default function RegisterScreen() {
   const CurrentStepComponent = STEPS[currentStep].component;
 
   return (
-    <FormProvider {...methods}>
-      <RegisterContext.Provider
-        value={{
-          currentStep,
-          setCurrentStep,
-          goNext,
-          goPrev,
-          isFirstStep,
-          isLastStep,
-          isSubmitting,
-        }}
-      >
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardAvoidingView} keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 20} enabled={true}>
-          <ThemedView style={styles.container}>
-            <Stack.Screen
-              options={{
-                title: 'Register',
-                headerBackTitle: 'Cancel',
-              }}
-            />
+    <AuthErrorBoundary fallbackMessage="We're having trouble loading the registration form">
+      <FormProvider {...methods}>
+        <RegisterContext.Provider
+          value={{
+            currentStep,
+            setCurrentStep,
+            goNext,
+            goPrev,
+            isFirstStep,
+            isLastStep,
+            isSubmitting,
+          }}
+        >
+          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardAvoidingView} keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 20} enabled={true}>
+            <ThemedView style={styles.container}>
+              <Stack.Screen
+                options={{
+                  title: 'Register',
+                  headerBackTitle: 'Cancel',
+                }}
+              />
 
-            <RegistrationProgress currentStep={currentStep} totalSteps={STEPS.length} stepTitle={currentStepTitle} />
+              <RegistrationProgress currentStep={currentStep} totalSteps={STEPS.length} stepTitle={currentStepTitle} />
 
-            <ThemedScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-              <RegistrationSocialAuth visible={currentStep === 0} />
+              <ThemedScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+                <RegistrationSocialAuth visible={currentStep === 0} />
 
-              <CurrentStepComponent errors={formState.errors} />
-            </ThemedScrollView>
+                <CurrentStepComponent errors={formState.errors} />
+              </ThemedScrollView>
 
-            <RegistrationNavigation isFirstStep={isFirstStep} isLastStep={isLastStep} isSubmitting={isSubmitting} onNext={goNext} onPrevious={goPrev} />
-          </ThemedView>
-        </KeyboardAvoidingView>
-      </RegisterContext.Provider>
-    </FormProvider>
+              <RegistrationNavigation isFirstStep={isFirstStep} isLastStep={isLastStep} isSubmitting={isSubmitting} onNext={goNext} onPrevious={goPrev} />
+            </ThemedView>
+          </KeyboardAvoidingView>
+        </RegisterContext.Provider>
+      </FormProvider>
+    </AuthErrorBoundary>
   );
 }
 

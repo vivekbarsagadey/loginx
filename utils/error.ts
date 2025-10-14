@@ -1,4 +1,5 @@
 import i18n from '@/i18n';
+import { logger } from './logger-production';
 
 // Global error handler callback (set by root component)
 let globalErrorHandler: ((title: string, message: string) => void) | null = null;
@@ -106,25 +107,25 @@ export const showError = (error: unknown): void => {
     if (globalErrorHandler) {
       globalErrorHandler(title, message);
     } else {
-      // Fallback to console if no handler is set (shouldn't happen in production)
-      console.error(`[${title}] ${message}`);
+      // Fallback to logger if no handler is set (shouldn't happen in production)
+      logger.error(`[${title}] ${message}`, { error });
     }
   } catch (displayError: unknown) {
     // Fallback if error display fails - this is the last resort
     const fallbackTitle = i18n.t('errors.generic.title');
     const fallbackMessage = i18n.t('errors.generic.message');
 
-    console.error('[Error Display] Failed to show error:', displayError);
+    logger.error('[Error Display] Failed to show error', displayError instanceof Error ? displayError : new Error(String(displayError)));
 
     if (globalErrorHandler) {
       try {
         globalErrorHandler(fallbackTitle, fallbackMessage);
       } catch (finalError: unknown) {
         // Ultimate fallback - just log
-        console.error('[Error] Critical error in error handling:', finalError);
+        logger.error('[Error] Critical error in error handling', finalError instanceof Error ? finalError : new Error(String(finalError)));
       }
     } else {
-      console.error(`[${fallbackTitle}] ${fallbackMessage}`);
+      logger.error(`[${fallbackTitle}] ${fallbackMessage}`);
     }
   }
 };

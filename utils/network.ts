@@ -111,13 +111,19 @@ export const isOffline = (): boolean => {
  * Subscribe to network status changes
  * @param listener - Callback function that receives online status
  * @returns Unsubscribe function
+ *
+ * SECURITY FIX (TASK-004): Ensure proper cleanup to prevent memory leaks.
+ * The returned unsubscribe function properly removes the listener from the Set.
  */
 export const subscribeToNetworkChanges = (listener: (isOnline: boolean) => void): (() => void) => {
   networkListeners.add(listener);
 
-  // Return unsubscribe function
+  // Return unsubscribe function that properly removes listener
   return () => {
-    networkListeners.delete(listener);
+    const removed = networkListeners.delete(listener);
+    if (__DEV__ && !removed) {
+      debugWarn('[Network] Attempted to remove non-existent listener');
+    }
   };
 };
 
