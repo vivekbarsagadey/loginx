@@ -176,6 +176,9 @@ importers:
       '@testing-library/react-native':
         specifier: ^13.3.3
         version: 13.3.3(jest@30.2.0(@types/node@24.7.1)(ts-node@10.9.2(@types/node@24.7.1)(typescript@5.9.3)))(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.16)(react@19.1.0))(react-test-renderer@19.2.0(react@19.1.0))(react@19.1.0)
+      '@types/jest':
+        specifier: ^30.0.0
+        version: 30.0.0
       '@types/node':
         specifier: ^24.7.1
         version: 24.7.1
@@ -2138,6 +2141,9 @@ packages:
 
   '@types/istanbul-reports@3.0.4':
     resolution: {integrity: sha512-pk2B1NWalF9toCRu6gjBzR69syFjP4Od8WRAX+0mmf9lAjCRicLOWc+ZrxZHx/0XRjotgkF9t6iaMJ+aXcOdZQ==}
+
+  '@types/jest@30.0.0':
+    resolution: {integrity: sha512-XTYugzhuwqWjws0CVz8QpM36+T+Dz5mTEBKhNs/esGLnCIlGdRy+Dq78NRjd7ls7r8BC8ZRMOrKlkO1hU0JOwA==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -9470,6 +9476,11 @@ snapshots:
   '@types/istanbul-reports@3.0.4':
     dependencies:
       '@types/istanbul-lib-report': 3.0.3
+
+  '@types/jest@30.0.0':
+    dependencies:
+      expect: 30.2.0
+      pretty-format: 30.2.0
 
   '@types/json-schema@7.0.15': {}
 

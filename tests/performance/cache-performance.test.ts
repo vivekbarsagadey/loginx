@@ -4,7 +4,7 @@
  * TASK-124: Test app performance with 10,000+ cached items in AsyncStorage
  */
 
-import { clearCache, getCachedData, setCachedData } from '@/utils/cache';
+import { clear as clearCache, get as getCachedData, set as setCachedData } from '../../utils/cache';
 
 describe('Cache Performance', () => {
   beforeEach(async () => {
@@ -62,7 +62,7 @@ describe('Cache Performance', () => {
 
     // 100 cache hits should take less than 1 second
     expect(duration).toBeLessThan(1000);
-    expect(results.every((r) => r !== null)).toBe(true);
+    expect(results.every((r: unknown) => r !== null)).toBe(true);
   });
 
   it('should handle cache misses without performance degradation', async () => {
@@ -75,7 +75,7 @@ describe('Cache Performance', () => {
 
     // 100 cache misses should still be fast (<500ms)
     expect(duration).toBeLessThan(500);
-    expect(results.every((r) => r === null)).toBe(true);
+    expect(results.every((r: unknown) => r === null)).toBe(true);
   });
 
   it('should evict old entries efficiently', async () => {

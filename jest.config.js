@@ -22,4 +22,13 @@ module.exports = {
   },
   testEnvironment: 'node',
   testTimeout: 30000,
+  globals: {
+    'ts-jest': {
+      tsconfig: {
+        jsx: 'react-native',
+        esModuleInterop: true,
+        allowSyntheticDefaultImports: true,
+      },
+    },
+  },
 };
