@@ -1,6 +1,6 @@
 ---
 description: "Validate user understanding of code, design patterns, and implementation details through guided questioning."
-tools: ["codebase", "fetch", "githubRepo", "search", "usages"]
+tools: ["search/codebase", "fetch", "githubRepo", "search", "usages"]
 model: "GPT-5-Codex (Preview) (copilot)"
 ---
 
