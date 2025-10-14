@@ -534,6 +534,7 @@
     "licenseInformation": "License information",
     "deleteAccount": "Delete Account",
     "deleteAccountSubtitle": "Permanently delete your account and data",
+    "deleteAccount.reauth.reason": "Please authenticate to delete your account",
     "logOut": "Log out",
     "permissions": {
       "title": "App Permissions",
@@ -1184,6 +1185,9 @@
       "twoFactor": {
         "title": "Two-Factor Authentication",
         "subtitle": "Add an extra layer of security to your account",
+        "reauth": {
+          "reason": "Please authenticate to change 2FA settings"
+        },
         "notEnabled": {
           "title": "2FA Not Enabled",
           "description": "Two-factor authentication is currently disabled for your account. Enable it to add an extra layer of security.",
@@ -1271,6 +1275,9 @@
         "currentPassword": "Current Password",
         "newPassword": "New Password",
         "confirmPassword": "Confirm New Password",
+        "reauth": {
+          "reason": "Please authenticate to change your password"
+        },
         "requirements": {
           "title": "Password Requirements:",
           "minLength": "At least 8 characters long",
@@ -1289,6 +1296,9 @@
           "requirementsNotMet": "Password does not meet security requirements",
           "mismatch": "Passwords do not match",
           "sameAsOld": "New password must be different from current password"
+        },
+        "error": {
+          "title": "Password Change Failed"
         },
         "errors": {
           "wrongPassword": "Current password is incorrect",

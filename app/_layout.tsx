@@ -20,10 +20,14 @@ import { ThemeProvider as CustomThemeProvider, useThemeContext } from '@/hooks/u
 import { initializeAdaptiveCache } from '@/utils/adaptive-cache';
 import { createLogger } from '@/utils/debug';
 import { initializeLocalFirst } from '@/utils/local-first';
+import { initializeSentry } from '@/utils/monitoring';
 import { initializeNetworkMonitoring } from '@/utils/network';
 import { enableLayoutAnimations, logPerformanceMetrics } from '@/utils/performance';
 
 const logger = createLogger('RootLayout');
+
+// TASK-105: Initialize Sentry monitoring early
+initializeSentry();
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

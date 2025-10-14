@@ -1,0 +1,40 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": [
+        "./app",
+        "./components",
+        "./hooks",
+        "./utils",
+        "./constants"
+    ],
+    "out": "docs/api",
+    "exclude": [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/node_modules/**",
+        "**/.expo/**"
+    ],
+    "readme": "README.md",
+    "name": "LoginX API Documentation",
+    "includeVersion": true,
+    "categorizeByGroup": true,
+    "defaultCategory": "Other",
+    "categoryOrder": [
+        "Authentication",
+        "Components",
+        "Hooks",
+        "Utilities",
+        "Constants",
+        "*"
+    ],
+    "plugin": [],
+    "sort": [
+        "source-order"
+    ],
+    "excludePrivate": true,
+    "excludeProtected": false,
+    "excludeExternals": true,
+    "hideGenerator": false,
+    "searchInComments": true,
+    "theme": "default"
+}

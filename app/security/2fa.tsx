@@ -1,4 +1,5 @@
 import { ScreenContainer } from '@/components/screen-container';
+import { ReAuthPrompt } from '@/components/security/re-auth-prompt'; // TASK-076: Import re-auth prompt
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
 import { HStack } from '@/components/themed-stack';
@@ -7,6 +8,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, FontWeight, Spacing, Typography } from '@/constants/layout';
+import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
 import { useBiometricAuth } from '@/hooks/use-biometric-auth';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -14,13 +16,19 @@ import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
 import { showSuccess } from '@/utils/success';
+import { useState } from 'react'; // TASK-076: Import useState
 import { StyleSheet, Switch, View } from 'react-native';
 
 export default function TwoFactorAuthScreen() {
   const alert = useAlert();
+  const user = auth.currentUser; // TASK-076: Get current user
   const { isEnabled, backupCodes, isLoading, error, enableTwoFactor, disableTwoFactor, generateBackupCodes, backupCodesCount, isBackupCodesLow, formatBackupCode } = useTwoFactorAuth();
 
   const { isAvailable: biometricAvailable, isEnabled: biometricEnabled, biometricTypeName, enableBiometric, disableBiometric, isLoading: biometricLoading } = useBiometricAuth();
+
+  // TASK-076: Re-authentication state
+  const [showReAuthForTwoFactor, setShowReAuthForTwoFactor] = useState(false);
+  const [pendingTwoFactorAction, setPendingTwoFactorAction] = useState<'enable' | 'disable' | null>(null);
 
   const errorColor = useThemeColor({}, 'error');
   const primaryColor = useThemeColor({}, 'primary');
@@ -30,14 +38,9 @@ export default function TwoFactorAuthScreen() {
   const benefits = i18n.t('screens.security.twoFactor.notEnabled.benefits', { returnObjects: true }) as string[];
 
   const handleEnable2FA = async () => {
-    try {
-      const success = await enableTwoFactor();
-      if (success) {
-        showSuccess(i18n.t('screens.security.twoFactor.success.enabled.title'), i18n.t('screens.security.twoFactor.success.enabled.message'));
-      }
-    } catch (err) {
-      showError(err);
-    }
+    // TASK-076: Trigger re-authentication before enabling 2FA
+    setPendingTwoFactorAction('enable');
+    setShowReAuthForTwoFactor(true);
   };
 
   const handleDisable2FA = async () => {
@@ -47,15 +50,39 @@ export default function TwoFactorAuthScreen() {
         text: i18n.t('screens.security.twoFactor.alerts.disable.confirm'),
         style: 'destructive',
         onPress: async () => {
-          try {
-            await disableTwoFactor();
-            showSuccess(i18n.t('screens.security.twoFactor.success.disabled.title'), i18n.t('screens.security.twoFactor.success.disabled.message'));
-          } catch (err) {
-            showError(err);
-          }
+          // TASK-076: Trigger re-authentication before disabling 2FA
+          setPendingTwoFactorAction('disable');
+          setShowReAuthForTwoFactor(true);
         },
       },
     ]);
+  };
+
+  // TASK-076: Proceed with 2FA action after successful re-authentication
+  const handleReAuthSuccessForTwoFactor = async () => {
+    setShowReAuthForTwoFactor(false);
+
+    try {
+      if (pendingTwoFactorAction === 'enable') {
+        const success = await enableTwoFactor();
+        if (success) {
+          showSuccess(i18n.t('screens.security.twoFactor.success.enabled.title'), i18n.t('screens.security.twoFactor.success.enabled.message'));
+        }
+      } else if (pendingTwoFactorAction === 'disable') {
+        await disableTwoFactor();
+        showSuccess(i18n.t('screens.security.twoFactor.success.disabled.title'), i18n.t('screens.security.twoFactor.success.disabled.message'));
+      }
+    } catch (err) {
+      showError(err);
+    } finally {
+      setPendingTwoFactorAction(null);
+    }
+  };
+
+  // TASK-076: Handle re-auth cancellation
+  const handleReAuthCancelForTwoFactor = () => {
+    setShowReAuthForTwoFactor(false);
+    setPendingTwoFactorAction(null);
   };
 
   const handleShowBackupCodes = () => {
@@ -203,6 +230,17 @@ export default function TwoFactorAuthScreen() {
         )}
       </ScreenContainer>
       {alert.AlertComponent}
+
+      {/* TASK-076: Re-authentication prompt for 2FA changes */}
+      <ReAuthPrompt
+        visible={showReAuthForTwoFactor}
+        onSuccess={handleReAuthSuccessForTwoFactor}
+        onCancel={handleReAuthCancelForTwoFactor}
+        reason={i18n.t('screens.security.twoFactor.reauth.reason')}
+        allowPasswordFallback={true}
+        userEmail={user?.email || undefined}
+        checkSessionTimeout={true}
+      />
     </>
   );
 }

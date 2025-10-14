@@ -3,6 +3,7 @@ import { TabHeader } from '@/components/navigation/TabHeader';
 import { type SettingsItemConfig, SettingsSection } from '@/components/organisms/settings-section';
 import { UserProfileHeader } from '@/components/organisms/user-profile-header';
 import { ScreenContainer } from '@/components/screen-container';
+import { ReAuthPrompt } from '@/components/security/re-auth-prompt'; // TASK-075: Import re-auth prompt
 import { ConfirmationDialog } from '@/components/ui/dialog';
 import { getSettingsSections } from '@/config/settings';
 import { auth } from '@/firebase-config';
@@ -32,6 +33,9 @@ export default function SettingsScreen() {
   const clearCacheDialog = useConfirmation();
   const deleteAccountDialog = useConfirmation();
   const [isDeleting, setIsDeleting] = React.useState(false);
+
+  // TASK-075: Re-authentication state for account deletion
+  const [showReAuthForDeletion, setShowReAuthForDeletion] = React.useState(false);
 
   const handleLogout = async () => {
     logoutDialog.show({
@@ -72,20 +76,33 @@ export default function SettingsScreen() {
       message: i18n.t('dialogs.settings.deleteAccount.message'),
       destructive: true,
       onConfirm: async () => {
-        if (user) {
-          try {
-            setIsDeleting(true);
-            await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-            await deleteUserAccount(user.uid);
-            await deleteUser(user);
-          } catch (error: unknown) {
-            showError(error);
-          } finally {
-            setIsDeleting(false);
-          }
-        }
+        // TASK-075: Trigger re-authentication before account deletion
+        setShowReAuthForDeletion(true);
       },
     });
+  };
+
+  // TASK-075: Proceed with account deletion after successful re-authentication
+  const handleReAuthSuccessForDeletion = async () => {
+    setShowReAuthForDeletion(false);
+
+    if (user) {
+      try {
+        setIsDeleting(true);
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        await deleteUserAccount(user.uid);
+        await deleteUser(user);
+      } catch (error: unknown) {
+        showError(error);
+      } finally {
+        setIsDeleting(false);
+      }
+    }
+  };
+
+  // TASK-075: Handle re-auth cancellation
+  const handleReAuthCancelForDeletion = () => {
+    setShowReAuthForDeletion(false);
   };
 
   const handlePress = async (item: SettingsItemConfig) => {
@@ -157,6 +174,17 @@ export default function SettingsScreen() {
             loading={isDeleting}
           />
         )}
+
+        {/* TASK-075: Re-authentication prompt for account deletion */}
+        <ReAuthPrompt
+          visible={showReAuthForDeletion}
+          onSuccess={handleReAuthSuccessForDeletion}
+          onCancel={handleReAuthCancelForDeletion}
+          reason={i18n.t('screens.settings.deleteAccount.reauth.reason')}
+          allowPasswordFallback={true}
+          userEmail={user?.email || undefined}
+          checkSessionTimeout={true}
+        />
       </ScreenContainer>
     </>
   );

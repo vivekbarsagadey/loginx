@@ -2,6 +2,7 @@ import { clearAuthState, saveAuthState } from '@/utils/auth-persistence';
 import { debugError, debugLog } from '@/utils/debug';
 import { showError } from '@/utils/error';
 import { applyPendingProfileData, clearPendingProfile } from '@/utils/pending-profile';
+import { clearAuthTimestamp, saveAuthTimestamp } from '@/utils/re-authentication'; // TASK-079/080: Import session timeout functions
 import { clearSecureStorage } from '@/utils/secure-storage';
 import { signOut as firebaseSignOut, onAuthStateChanged, type User } from 'firebase/auth';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -61,6 +62,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             // Don't fail authentication for persistence issues
           }
 
+          // TASK-079/080: Save authentication timestamp for session tracking
+          try {
+            await saveAuthTimestamp();
+            debugLog('[Auth] ✅ SESSION: Auth timestamp saved');
+          } catch (timestampError) {
+            debugError('[Auth] Failed to save auth timestamp', timestampError);
+            // Don't fail authentication for timestamp issues
+          }
+
           debugLog('[Auth] User authenticated successfully');
         } else {
           debugLog('[Auth] User signed out or not authenticated');
@@ -71,6 +81,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             debugLog('[Auth] ✅ PERSISTENCE: Auth state cleared');
           } catch (persistError) {
             debugError('[Auth] Failed to clear auth state', persistError);
+          }
+
+          // TASK-079/080: Clear authentication timestamp on logout
+          try {
+            await clearAuthTimestamp();
+            debugLog('[Auth] ✅ SESSION: Auth timestamp cleared');
+          } catch (timestampError) {
+            debugError('[Auth] Failed to clear auth timestamp', timestampError);
           }
         }
 
@@ -124,6 +142,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch (persistError) {
         debugError('[Auth] Failed to clear auth persistence on logout', persistError);
         // Don't fail logout if persistence clearing fails
+      }
+
+      // TASK-079/080: Clear authentication timestamp on logout
+      try {
+        await clearAuthTimestamp();
+        debugLog('[Auth] ✅ SESSION: Cleared auth timestamp on logout');
+      } catch (timestampError) {
+        debugError('[Auth] Failed to clear auth timestamp on logout', timestampError);
+        // Don't fail logout if timestamp clearing fails
       }
 
       debugLog('[Auth] Logout completed successfully');

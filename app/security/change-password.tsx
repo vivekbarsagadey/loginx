@@ -2,6 +2,7 @@ import { ScreenContainer } from '@/components/screen-container';
 import { PasswordChangeForm } from '@/components/security/password-change-form';
 import { PasswordRequirements } from '@/components/security/password-requirements';
 import { PasswordStrengthIndicator } from '@/components/security/password-strength-indicator';
+import { ReAuthPrompt } from '@/components/security/re-auth-prompt'; // TASK-074: Import re-auth prompt
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -22,6 +23,9 @@ export default function ChangePasswordScreen() {
   const { back } = useHapticNavigation();
   const alert = useAlert();
   const user = auth.currentUser;
+
+  // TASK-074: Re-authentication state
+  const [showReAuthPrompt, setShowReAuthPrompt] = useState(false);
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [currentPasswordError, setCurrentPasswordError] = useState('');
@@ -82,6 +86,28 @@ export default function ChangePasswordScreen() {
         throw new Error('No authenticated user found');
       }
 
+      // TASK-074: Trigger re-authentication prompt before password change
+      setShowReAuthPrompt(true);
+      return; // Just return, don't throw
+    },
+    {
+      successTitle: i18n.t('success.passwordChanged.title'),
+      successMessage: i18n.t('success.passwordChanged.message'),
+      onSuccess: () => back(),
+      validate: validateForm,
+      errorTitle: i18n.t('screens.security.changePassword.error.title'),
+    }
+  );
+
+  // TASK-074: Proceed with password change after successful re-authentication
+  const handleReAuthSuccess = async () => {
+    setShowReAuthPrompt(false);
+
+    try {
+      if (!user || !user.email) {
+        throw new Error('No authenticated user found');
+      }
+
       // Step 1: Reauthenticate user with current password
       const credential = EmailAuthProvider.credential(user.email, currentPassword);
       await reauthenticateWithCredential(user, credential);
@@ -93,15 +119,20 @@ export default function ChangePasswordScreen() {
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-    },
-    {
-      successTitle: i18n.t('success.passwordChanged.title'),
-      successMessage: i18n.t('success.passwordChanged.message'),
-      onSuccess: () => back(),
-      validate: validateForm,
-      errorTitle: i18n.t('screens.security.changePassword.error.title'),
+
+      // Show success message
+      alert.show(i18n.t('success.passwordChanged.title'), i18n.t('success.passwordChanged.message'), [{ text: i18n.t('common.ok') }]);
+
+      back();
+    } catch (error) {
+      showError(error);
     }
-  );
+  };
+
+  // TASK-074: Handle re-auth cancellation
+  const handleReAuthCancel = () => {
+    setShowReAuthPrompt(false);
+  };
 
   return (
     <>
@@ -150,6 +181,18 @@ export default function ChangePasswordScreen() {
           />
         </ThemedView>
       </ScreenContainer>
+
+      {/* TASK-074: Re-authentication prompt modal */}
+      <ReAuthPrompt
+        visible={showReAuthPrompt}
+        onSuccess={handleReAuthSuccess}
+        onCancel={handleReAuthCancel}
+        reason={i18n.t('screens.security.changePassword.reauth.reason')}
+        allowPasswordFallback={true}
+        userEmail={user?.email || undefined}
+        checkSessionTimeout={true}
+      />
+
       {alert.AlertComponent}
     </>
   );
