@@ -11,6 +11,7 @@ import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useRegistrationFlow } from '@/hooks/use-registration-flow';
 import { createLogger } from '@/utils/debug';
 import { showError } from '@/utils/error';
+import { validatePassword } from '@/utils/password-validator';
 import { runRegistrationDiagnostics } from '@/utils/registration-diagnostics';
 import { sanitizeEmail, sanitizeUserInput } from '@/utils/sanitize';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -53,9 +54,15 @@ const schema = z
       .string()
       .min(8, 'Password must be at least 8 characters long.')
       .max(128, 'Password is too long')
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.'
+      .refine(
+        (password) => {
+          const result = validatePassword(password);
+          return result.isValid;
+        },
+        (password) => {
+          const result = validatePassword(password);
+          return { message: result.errors[0] || 'Password does not meet requirements.' };
+        }
       ),
     confirmPassword: z.string(),
     address: z.string().max(200, 'Address is too long').optional().or(z.literal('')),

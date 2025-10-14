@@ -6,11 +6,9 @@
 
 export const ValidationConstants = {
   // Password rules - SECURITY: Strong password policy
+  // Note: Password strength validation is handled by utils/password-validator.ts
   PASSWORD_MIN_LENGTH: 8,
   PASSWORD_MAX_LENGTH: 128,
-  // Require: 1 uppercase, 1 lowercase, 1 number, 1 special char (@$!%*?&)
-  PASSWORD_STRONG_REGEX: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-  PASSWORD_ALLOWED_CHARS_REGEX: /^[a-zA-Z0-9@$!%*?&]*$/,
 
   // Name rules
   NAME_MIN_LENGTH: 2,

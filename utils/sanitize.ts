@@ -1,4 +1,5 @@
 import { type UserProfile } from '@/types/user';
+import { validatePassword as validatePasswordStrength } from './password-validator';
 
 // Input sanitization constants
 const MAX_INPUT_LENGTH = 500;
@@ -139,14 +140,13 @@ export const validatePassword = (password: string): { isValid: boolean; message?
     return { isValid: false, message: 'Password is too long' };
   }
 
-  // Import from constants for consistency
-  // Password validation regex is defined in constants/validation.ts
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  // Use centralized password validator for consistency
+  const validation = validatePasswordStrength(password);
 
-  if (!passwordRegex.test(password)) {
+  if (!validation.isValid) {
     return {
       isValid: false,
-      message: 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&)',
+      message: validation.errors[0] || 'Password does not meet requirements',
     };
   }
 

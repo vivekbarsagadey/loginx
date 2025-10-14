@@ -7,13 +7,13 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
-import { ValidationConstants } from '@/constants/validation';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
+import { validatePassword } from '@/utils/password-validator';
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
 import { useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
@@ -29,39 +29,6 @@ export default function ChangePasswordScreen() {
   const [newPasswordError, setNewPasswordError] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
-
-  const validatePassword = useCallback((password: string): boolean => {
-    if (!password) {
-      return false;
-    }
-
-    // Check minimum length
-    if (password.length < ValidationConstants.PASSWORD_MIN_LENGTH) {
-      return false;
-    }
-
-    // Check for uppercase letter
-    if (!/[A-Z]/.test(password)) {
-      return false;
-    }
-
-    // Check for lowercase letter
-    if (!/[a-z]/.test(password)) {
-      return false;
-    }
-
-    // Check for number
-    if (!/[0-9]/.test(password)) {
-      return false;
-    }
-
-    // Check for special character
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      return false;
-    }
-
-    return true;
-  }, []);
 
   // Validation function
   const validateForm = useCallback(() => {
@@ -87,8 +54,9 @@ export default function ChangePasswordScreen() {
       return false;
     }
 
-    if (!validatePassword(newPassword)) {
-      setNewPasswordError(i18n.t('screens.security.changePassword.validation.requirementsNotMet'));
+    const validation = validatePassword(newPassword);
+    if (!validation.isValid) {
+      setNewPasswordError(validation.errors[0] || i18n.t('screens.security.changePassword.validation.requirementsNotMet'));
       return false;
     }
 
@@ -105,7 +73,7 @@ export default function ChangePasswordScreen() {
     }
 
     return true;
-  }, [user, currentPassword, newPassword, confirmPassword, validatePassword]);
+  }, [user, currentPassword, newPassword, confirmPassword]);
 
   // Form submission with hook
   const { submit: handleChangePassword, isSubmitting: loading } = useFormSubmit(

@@ -127,10 +127,10 @@ This implementation plan addresses 18 critical security vulnerabilities and arch
 | TASK-018 | Add NoSQL injection checks to `utils/sanitize.ts` sanitizeUserInput function                                  | ✅        | 2025-10-14 |
 | TASK-019 | Audit all Firestore query operations in `utils/firestore-helpers.ts` for injection vulnerabilities            | ✅        | 2025-10-14 |
 | TASK-020 | Create centralized password validation service in `utils/password-validator.ts` consolidating scattered regex | ✅        | 2025-10-14 |
-| TASK-021 | Replace inline password validation in `app/(auth)/register/step-2.tsx` with centralized validator             | 📋        |            |
-| TASK-022 | Replace inline password validation in `app/security/change-password.tsx` with centralized validator           | 📋        |            |
-| TASK-023 | Replace inline password validation in `components/auth/login-form.tsx` with centralized validator             | 📋        |            |
-| TASK-024 | Update `constants/validation.ts` to remove duplicated password patterns, reference central validator          | 📋        |            |
+| TASK-021 | Replace inline password validation in `app/(auth)/register/step-2.tsx` with centralized validator             | ✅        | 2025-10-14 |
+| TASK-022 | Replace inline password validation in `app/security/change-password.tsx` with centralized validator           | ✅        | 2025-10-14 |
+| TASK-023 | Replace inline password validation in `components/auth/login-form.tsx` with centralized validator             | ✅        | 2025-10-14 |
+| TASK-024 | Update `constants/validation.ts` to remove duplicated password patterns, reference central validator          | ✅        | 2025-10-14 |
 
 ### Phase 4: Architectural Fixes - Race Conditions (Priority 2 - Week 2)
 

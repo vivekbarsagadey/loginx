@@ -16,8 +16,7 @@ const schema = z.object({
   password: z
     .string()
     .min(ValidationConstants.PASSWORD_MIN_LENGTH, i18n.t('screens.login.validation.passwordTooShort'))
-    .max(ValidationConstants.PASSWORD_MAX_LENGTH, ValidationMessages.PASSWORD_TOO_LONG)
-    .regex(ValidationConstants.PASSWORD_STRONG_REGEX, ValidationMessages.PASSWORD_WEAK),
+    .max(ValidationConstants.PASSWORD_MAX_LENGTH, ValidationMessages.PASSWORD_TOO_LONG),
 });
 
 export type LoginFormData = z.infer<typeof schema>;
