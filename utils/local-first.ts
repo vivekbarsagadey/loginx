@@ -9,9 +9,11 @@
 
 import { firestore } from '@/firebase-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { disableNetwork, doc, enableNetwork, getDoc, setDoc } from 'firebase/firestore';
+import { disableNetwork, doc, enableNetwork, getDoc, runTransaction, setDoc } from 'firebase/firestore';
 import * as cache from './cache';
+import { detectConflict, getDefaultStrategy, resolveConflictAutomatically, type ConflictData } from './conflict-resolver';
 import { debugError, debugLog, debugWarn } from './debug';
+import { withLock } from './distributed-lock';
 import { isOnline as checkIsOnline, initializeNetworkMonitoring, subscribeToNetworkChanges } from './network';
 
 interface LocalFirstOptions {
@@ -42,8 +44,13 @@ let networkUnsubscribe: (() => void) | null = null;
 // Pending sync queue
 const syncQueue = new Map<string, DataEntry>();
 
-// Active sync operations (TASK-012: Prevent race conditions)
+// Active sync operations (TASK-031: Prevent race conditions with mutex)
 const activeSyncs = new Set<string>();
+
+// TASK-030: Retry configuration for exponential backoff
+const INITIAL_RETRY_DELAY = 1000; // 1 second
+const MAX_RETRY_DELAY = 30000; // 30 seconds
+const BACKOFF_MULTIPLIER = 2;
 
 // Sync metrics tracking
 let totalSyncCount = 0;
@@ -208,19 +215,22 @@ export const setData = async <T>(options: LocalFirstOptions & { data: T }): Prom
 
 /**
  * Background sync without blocking UI
- * TASK-012: Added semaphore-based locking to prevent race conditions
+ * TASK-027: Uses Firestore transactions for atomic updates
+ * TASK-028: Implements proper conflict detection with version comparison
+ * TASK-030: Implements retry logic with exponential backoff
+ * TASK-031: Uses sync mutex to prevent concurrent syncs
  */
 const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
   const { collection, id } = options;
   const cacheKey = `${collection}:${id}`;
 
-  // TASK-012: Check if sync is already in progress for this key
+  // TASK-031: Check if sync is already in progress for this key (mutex)
   if (activeSyncs.has(cacheKey)) {
     debugLog(`[LocalFirst] ⏭️ Sync already in progress for: ${cacheKey}, skipping`);
     return;
   }
 
-  // TASK-012: Acquire sync lock
+  // TASK-031: Acquire sync lock (local mutex)
   activeSyncs.add(cacheKey);
   const syncStartTime = Date.now();
   syncStartTimes.set(cacheKey, syncStartTime);
@@ -235,32 +245,80 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
 
     const docRef = doc(firestore, collection, id);
 
-    // Check for conflicts before writing
-    try {
-      const remoteDoc = await getDoc(docRef);
+    // TASK-027: Use Firestore transaction for atomic update
+    await runTransaction(firestore, async (transaction) => {
+      const remoteDoc = await transaction.get(docRef);
+
+      // TASK-028: Conflict detection with version comparison
       if (remoteDoc.exists()) {
         const remoteData = remoteDoc.data() as DataEntry;
 
-        // Simple conflict detection based on lastModified timestamp
-        if (remoteData.lastModified && queueEntry.lastModified) {
-          if (remoteData.lastModified > queueEntry.lastModified) {
-            debugWarn(`[LocalFirst] ⚠️ Conflict detected for ${cacheKey} - remote is newer`);
+        // Detect conflict using version and timestamp
+        const hasConflict = detectConflict(
+          queueEntry.version,
+          remoteData.version || 0,
+          queueEntry.lastModified,
+          remoteData.lastModified || 0
+        );
+
+        if (hasConflict) {
+          debugWarn(`[LocalFirst] ⚠️ Conflict detected for ${cacheKey}`);
+
+          // Create conflict data
+          const conflictData: ConflictData = {
+            local: queueEntry.data,
+            remote: remoteData.data,
+            localTimestamp: queueEntry.lastModified,
+            remoteTimestamp: remoteData.lastModified || 0,
+            localVersion: queueEntry.version,
+            remoteVersion: remoteData.version || 0,
+            key: cacheKey,
+          };
+
+          // Use default strategy (last-write-wins)
+          const strategy = getDefaultStrategy(
+            queueEntry.lastModified,
+            remoteData.lastModified || 0
+          );
+
+          // Resolve conflict automatically
+          const resolution = resolveConflictAutomatically(conflictData, strategy);
+
+          if (resolution.resolved && resolution.data) {
+            debugLog(`[LocalFirst] ✅ Conflict resolved using strategy: ${resolution.strategy}`);
+            // Update queue entry with resolved data
+            queueEntry.data = resolution.data;
+            queueEntry.syncStatus = 'synced';
+          } else {
+            debugWarn(`[LocalFirst] ❌ Conflict resolution failed: ${resolution.error}`);
             queueEntry.syncStatus = 'conflict';
-            // In a real app, you'd show a conflict resolution UI here
-            // For now, we'll use last-write-wins (local wins)
+            throw new Error(`Conflict resolution failed: ${resolution.error}`);
           }
         }
-      }
-    } catch (conflictCheckError) {
-      // If conflict check fails, proceed with sync anyway
-      debugWarn(`[LocalFirst] Could not check for conflicts: ${cacheKey}`, conflictCheckError);
-    }
 
-    await setDoc(docRef, queueEntry.data);
+        // Increment version for optimistic locking
+        queueEntry.version = (remoteData.version || 0) + 1;
+      } else {
+        // New document, start at version 1
+        queueEntry.version = 1;
+      }
+
+      // Write the data with updated version
+      transaction.set(docRef, {
+        data: queueEntry.data,
+        version: queueEntry.version,
+        lastModified: queueEntry.lastModified,
+        timestamp: queueEntry.timestamp,
+        source: queueEntry.source,
+        syncStatus: 'synced',
+        modifiedBy: queueEntry.modifiedBy,
+      });
+    });
 
     // Mark as synced
     queueEntry.syncStatus = 'synced';
     queueEntry.lastSyncAttempt = Date.now();
+    queueEntry.retryCount = 0; // Reset retry count on success
 
     // Update cache
     await cache.set(cacheKey, queueEntry.data, 'remote', 'synced');
@@ -280,21 +338,39 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
     syncStartTimes.delete(cacheKey);
     debugWarn(`[LocalFirst] Background sync failed for ${cacheKey}:`, error);
 
-    // Update retry count
+    // TASK-030: Implement exponential backoff retry logic
     const queueEntry = syncQueue.get(cacheKey);
     if (queueEntry) {
       queueEntry.retryCount = (queueEntry.retryCount || 0) + 1;
       queueEntry.lastSyncAttempt = Date.now();
       queueEntry.syncStatus = 'error';
 
-      // Remove from queue if too many retries
-      if (queueEntry.retryCount >= (options.maxRetries || 3)) {
+      const maxRetries = options.maxRetries || 5;
+
+      if (queueEntry.retryCount >= maxRetries) {
         syncQueue.delete(cacheKey);
-        debugWarn(`[LocalFirst] Max retries reached for ${cacheKey}, removed from queue`);
+        debugWarn(`[LocalFirst] Max retries (${maxRetries}) reached for ${cacheKey}, removed from queue`);
+      } else {
+        // Calculate exponential backoff delay
+        const delay = Math.min(
+          INITIAL_RETRY_DELAY * Math.pow(BACKOFF_MULTIPLIER, queueEntry.retryCount - 1),
+          MAX_RETRY_DELAY
+        );
+
+        debugLog(
+          `[LocalFirst] Will retry sync for ${cacheKey} in ${delay}ms (attempt ${queueEntry.retryCount}/${maxRetries})`
+        );
+
+        // Schedule retry with exponential backoff
+        setTimeout(() => {
+          backgroundSync(options).catch((retryError) => {
+            debugWarn(`[LocalFirst] Retry failed for ${cacheKey}:`, retryError);
+          });
+        }, delay);
       }
     }
   } finally {
-    // TASK-012: Always release sync lock, even on error
+    // TASK-031: Always release sync lock (mutex), even on error
     activeSyncs.delete(cacheKey);
   }
 };

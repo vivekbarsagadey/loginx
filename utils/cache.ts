@@ -143,6 +143,14 @@ export const initializeCache = async (): Promise<void> => {
  * @param source - Whether data came from local or remote
  * @param syncStatus - Sync status of the data
  */
+/**
+ * LOCAL-FIRST: Set a value in cache (memory and persistent storage)
+ * TASK-032: Uses atomic AsyncStorage operations for data consistency
+ * @param key - Cache key
+ * @param data - Data to cache
+ * @param source - Data source
+ * @param syncStatus - Sync status
+ */
 export const set = async (key: string, data: unknown, source: 'local' | 'remote' = 'local', syncStatus: 'synced' | 'pending' | 'conflict' = 'synced'): Promise<void> => {
   try {
     if (!key) {
@@ -168,16 +176,26 @@ export const set = async (key: string, data: unknown, source: 'local' | 'remote'
     memoryCache.set(key, entry);
     debugLog(`[Cache] 🏠 LOCAL-FIRST: Set in memory cache: ${key}`);
 
-    // Persist to AsyncStorage for long-term storage
+    // TASK-032: Persist to AsyncStorage using atomic multiSet operation
     try {
-      await AsyncStorage.setItem(`${CACHE_PREFIX}${key}`, JSON.stringify(entry));
+      const cacheKey = `${CACHE_PREFIX}${key}`;
+      const cacheValue = JSON.stringify(entry);
 
-      // Update cache index
+      // Update cache index atomically
       const cacheIndexStr = await AsyncStorage.getItem(CACHE_INDEX_KEY);
       const cacheIndex: string[] = cacheIndexStr ? JSON.parse(cacheIndexStr) : [];
+      
       if (!cacheIndex.includes(key)) {
         cacheIndex.push(key);
-        await AsyncStorage.setItem(CACHE_INDEX_KEY, JSON.stringify(cacheIndex));
+        
+        // Use multiSet for atomic write of both entry and index
+        await AsyncStorage.multiSet([
+          [cacheKey, cacheValue],
+          [CACHE_INDEX_KEY, JSON.stringify(cacheIndex)]
+        ]);
+      } else {
+        // Only update entry if already in index
+        await AsyncStorage.setItem(cacheKey, cacheValue);
       }
 
       debugLog(`[Cache] 💾 LOCAL-FIRST: Persisted to storage: ${key}`);
