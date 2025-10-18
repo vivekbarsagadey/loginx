@@ -6,6 +6,7 @@ import { HStack } from '@/components/themed-stack';
 import { ThemedSurface } from '@/components/themed-surface';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { SuccessAnimation } from '@/components/ui/success-animation';
 import { CommonText } from '@/constants/common-styles';
 import { BorderRadius, FontWeight, Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
@@ -29,6 +30,16 @@ export default function TwoFactorAuthScreen() {
   // TASK-076: Re-authentication state
   const [showReAuthForTwoFactor, setShowReAuthForTwoFactor] = useState(false);
   const [pendingTwoFactorAction, setPendingTwoFactorAction] = useState<'enable' | 'disable' | null>(null);
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
+  const [successAnimationConfig, setSuccessAnimationConfig] = useState<{
+    title: string;
+    message: string;
+    icon: 'shield-checkmark' | 'shield';
+  }>({
+    title: '',
+    message: '',
+    icon: 'shield-checkmark',
+  });
 
   const errorColor = useThemeColor({}, 'error');
   const primaryColor = useThemeColor({}, 'primary');
@@ -66,11 +77,21 @@ export default function TwoFactorAuthScreen() {
       if (pendingTwoFactorAction === 'enable') {
         const success = await enableTwoFactor();
         if (success) {
-          showSuccess(i18n.t('screens.security.twoFactor.success.enabled.title'), i18n.t('screens.security.twoFactor.success.enabled.message'));
+          setSuccessAnimationConfig({
+            title: i18n.t('screens.security.twoFactor.success.enabled.title'),
+            message: i18n.t('screens.security.twoFactor.success.enabled.message'),
+            icon: 'shield-checkmark',
+          });
+          setShowSuccessAnimation(true);
         }
       } else if (pendingTwoFactorAction === 'disable') {
         await disableTwoFactor();
-        showSuccess(i18n.t('screens.security.twoFactor.success.disabled.title'), i18n.t('screens.security.twoFactor.success.disabled.message'));
+        setSuccessAnimationConfig({
+          title: i18n.t('screens.security.twoFactor.success.disabled.title'),
+          message: i18n.t('screens.security.twoFactor.success.disabled.message'),
+          icon: 'shield',
+        });
+        setShowSuccessAnimation(true);
       }
     } catch (err) {
       showError(err);
@@ -240,6 +261,19 @@ export default function TwoFactorAuthScreen() {
         allowPasswordFallback={true}
         userEmail={user?.email || undefined}
         checkSessionTimeout={true}
+      />
+
+      {/* Success animation for 2FA enable/disable */}
+      <SuccessAnimation
+        visible={showSuccessAnimation}
+        title={successAnimationConfig.title}
+        message={successAnimationConfig.message}
+        icon={successAnimationConfig.icon}
+        showConfetti={pendingTwoFactorAction === 'enable'}
+        duration={3000}
+        onComplete={() => {
+          setShowSuccessAnimation(false);
+        }}
       />
     </>
   );

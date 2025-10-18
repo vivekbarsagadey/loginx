@@ -2,6 +2,7 @@ import { AuthErrorBoundary } from '@/components/auth/auth-error-boundary';
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { SuccessAnimation } from '@/components/ui/success-animation';
 import { Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
@@ -11,7 +12,7 @@ import i18n from '@/i18n';
 import { createLogger } from '@/utils/debug';
 import { useLocalSearchParams } from 'expo-router';
 import { sendEmailVerification, signOut } from 'firebase/auth';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 const logger = createLogger('VerifyEmail');
@@ -29,6 +30,7 @@ export default function VerifyEmailScreen() {
   const { replace } = useHapticNavigation();
   const { email } = useLocalSearchParams();
   const { show: showAlert, AlertComponent } = useAlert();
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -37,13 +39,8 @@ export default function VerifyEmailScreen() {
           await auth.currentUser.reload();
           if (auth.currentUser.emailVerified) {
             clearInterval(interval);
-            try {
-              replace('/(tabs)');
-            } catch (navError) {
-              logger.error('Navigation failed:', navError);
-              // User is verified, they can manually navigate
-              showAlert(i18n.t('success.title'), 'Email verified successfully! Please restart the app to continue.', [{ text: 'OK' }], { variant: 'success' });
-            }
+            // Show success animation instead of navigating immediately
+            setShowSuccessAnimation(true);
           }
         } catch (reloadError) {
           logger.error('Failed to reload user:', reloadError);
@@ -53,7 +50,7 @@ export default function VerifyEmailScreen() {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [replace, showAlert]);
+  }, []);
 
   const resendEmail = async () => {
     if (!auth.currentUser) {
@@ -96,6 +93,26 @@ export default function VerifyEmailScreen() {
 
         <ThemedButton title={isResending ? i18n.t('screens.verifyEmail.sending') : i18n.t('screens.verifyEmail.resendButton')} onPress={handleResend} disabled={isResending} variant="secondary" />
         <ThemedButton title={i18n.t('screens.verifyEmail.goToLogin')} onPress={handleLoginRedirect} variant="link" />
+
+        {/* Success animation for email verification */}
+        <SuccessAnimation
+          visible={showSuccessAnimation}
+          title={i18n.t('success.emailVerified.title')}
+          message={i18n.t('success.emailVerified.message')}
+          icon="mail-open"
+          showConfetti={true}
+          duration={3000}
+          onComplete={() => {
+            setShowSuccessAnimation(false);
+            try {
+              replace('/(tabs)');
+            } catch (navError) {
+              logger.error('Navigation failed:', navError);
+              showAlert(i18n.t('success.title'), 'Email verified successfully! Please restart the app to continue.', [{ text: 'OK' }], { variant: 'success' });
+            }
+          }}
+        />
+
         {AlertComponent}
       </ThemedView>
     </AuthErrorBoundary>

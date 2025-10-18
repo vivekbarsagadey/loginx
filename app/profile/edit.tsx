@@ -7,6 +7,7 @@ import { ThemedButton } from '@/components/themed-button';
 import { ThemedInput } from '@/components/themed-input';
 import { ThemedView } from '@/components/themed-view';
 import { SkeletonAvatar, SkeletonForm, SkeletonLoader } from '@/components/ui/skeleton-loader';
+import { SuccessAnimation } from '@/components/ui/success-animation';
 import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useFormSubmit } from '@/hooks/use-form-submit';
@@ -40,6 +41,7 @@ export default function EditProfileScreen() {
   // Loading states
   const [initialLoading, setInitialLoading] = useState(true);
   const [hasChanges, setHasChanges] = useState(false);
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
 
   // Refs for input focus management
   const ageInputRef = useRef<TextInput>(null);
@@ -163,7 +165,10 @@ export default function EditProfileScreen() {
     {
       successTitle: i18n.t('success.profileUpdate.title'),
       successMessage: i18n.t('success.profileUpdate.message'),
-      onSuccess: () => back(),
+      onSuccess: () => {
+        setShowSuccessAnimation(true);
+        // Navigate back after animation completes
+      },
       validate: validateForm,
     }
   );
@@ -254,6 +259,17 @@ export default function EditProfileScreen() {
       </ThemedView>
 
       <ThemedButton title={loading ? i18n.t('profile.edit.savingButton') : i18n.t('profile.edit.saveButton')} onPress={handleUpdate} disabled={loading || !hasChanges} loading={loading} />
+
+      {/* Success animation */}
+      <SuccessAnimation
+        visible={showSuccessAnimation}
+        title={i18n.t('success.profileUpdate.title')}
+        message={i18n.t('success.profileUpdate.message')}
+        onComplete={() => {
+          setShowSuccessAnimation(false);
+          back();
+        }}
+      />
     </ScreenWithHeader>
   );
 }

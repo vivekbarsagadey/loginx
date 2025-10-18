@@ -6,6 +6,7 @@ import { ReAuthPrompt } from '@/components/security/re-auth-prompt'; // TASK-074
 import { ThemedButton } from '@/components/themed-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { SuccessAnimation } from '@/components/ui/success-animation';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
@@ -26,6 +27,7 @@ export default function ChangePasswordScreen() {
 
   // TASK-074: Re-authentication state
   const [showReAuthPrompt, setShowReAuthPrompt] = useState(false);
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [currentPasswordError, setCurrentPasswordError] = useState('');
@@ -120,10 +122,8 @@ export default function ChangePasswordScreen() {
       setNewPassword('');
       setConfirmPassword('');
 
-      // Show success message
-      alert.show(i18n.t('success.passwordChanged.title'), i18n.t('success.passwordChanged.message'), [{ text: i18n.t('common.ok') }]);
-
-      back();
+      // Show success animation
+      setShowSuccessAnimation(true);
     } catch (error) {
       showError(error);
     }
@@ -191,6 +191,18 @@ export default function ChangePasswordScreen() {
         allowPasswordFallback={true}
         userEmail={user?.email || undefined}
         checkSessionTimeout={true}
+      />
+
+      {/* Success animation */}
+      <SuccessAnimation
+        visible={showSuccessAnimation}
+        title={i18n.t('success.passwordChanged.title')}
+        message={i18n.t('success.passwordChanged.message')}
+        icon="shield-checkmark"
+        onComplete={() => {
+          setShowSuccessAnimation(false);
+          back();
+        }}
       />
 
       {alert.AlertComponent}
