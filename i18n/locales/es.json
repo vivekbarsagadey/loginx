@@ -323,7 +323,53 @@
       "email-already-in-use": "Esta dirección de correo electrónico ya está en uso por otra cuenta.",
       "invalid-email": "La dirección de correo electrónico no es válida.",
       "operation-not-allowed": "Las cuentas de correo electrónico/contraseña no están habilitadas.",
-      "weak-password": "La contraseña es demasiado débil."
+      "weak-password": "La contraseña es demasiado débil.",
+      "too-many-requests": "Demasiados intentos fallidos de inicio de sesión. Espera unos minutos antes de volver a intentarlo.",
+      "network-request-failed": "Error de red. Por favor, comprueba tu conexión a internet e inténtalo de nuevo.",
+      "invalid-verification-code": "El código de verificación es incorrecto. Inténtalo de nuevo.",
+      "expired-action-code": "Este enlace de verificación ha caducado. Por favor, solicita uno nuevo.",
+      "invalid-action-code": "Este enlace de verificación no es válido o ya ha sido utilizado.",
+      "credential-already-in-use": "Esta credencial ya está asociada con una cuenta diferente.",
+      "popup-closed-by-user": "La ventana emergente de inicio de sesión se cerró antes de completar el proceso.",
+      "account-exists-with-different-credential": "Ya existe una cuenta con el mismo correo electrónico pero con credenciales de inicio de sesión diferentes.",
+      "invalid-phone-number": "Formato de número de teléfono no válido. Por favor, compruébalo e inténtalo de nuevo.",
+      "missing-phone-number": "Por favor, proporciona un número de teléfono.",
+      "quota-exceeded": "Se ha superado la cuota de SMS. Inténtalo de nuevo más tarde.",
+      "app-not-authorized": "Esta aplicación no está autorizada para utilizar la autenticación de Firebase.",
+      "captcha-check-failed": "Error en la verificación de reCAPTCHA. Inténtalo de nuevo.",
+      "missing-verification-code": "Por favor, introduce el código de verificación.",
+      "invalid-verification-id": "ID de verificación no válido. Por favor, solicita un nuevo código.",
+      "permission-denied": "No tienes permiso para realizar esta acción.",
+      "unavailable": "El servicio no está disponible temporalmente. Inténtalo de nuevo más tarde.",
+      "not-found": "No se encontró el recurso solicitado.",
+      "already-exists": "Este recurso ya existe.",
+      "resource-exhausted": "Se ha superado el límite de recursos. Inténtalo de nuevo más tarde.",
+      "failed-precondition": "La operación fue rechazada. Por favor, comprueba tu solicitud.",
+      "aborted": "La operación fue cancelada. Inténtalo de nuevo.",
+      "out-of-range": "El valor está fuera del rango válido.",
+      "unimplemented": "Esta operación no está implementada.",
+      "internal": "Se ha producido un error interno. Inténtalo de nuevo más tarde.",
+      "data-loss": "Se ha detectado pérdida de datos. Ponte en contacto con el soporte.",
+      "unauthenticated": "Por favor, inicia sesión para continuar.",
+      "deadline-exceeded": "La operación tardó demasiado. Inténtalo de nuevo.",
+      "cancelled": "La operación fue cancelada.",
+      "invalid-argument": "Solicitud no válida. Por favor, comprueba tu entrada.",
+      "unknown": "Se ha producido un error desconocido. Inténtalo de nuevo.",
+      "object-not-found": "No se encontró el archivo.",
+      "bucket-not-found": "No se encontró el bucket de almacenamiento.",
+      "project-not-found": "No se encontró el proyecto.",
+      "quota-exceeded-storage": "Se ha superado la cuota de almacenamiento. Por favor, libera espacio.",
+      "unauthenticated-storage": "Por favor, inicia sesión para acceder a este archivo.",
+      "unauthorized": "No tienes permiso para acceder a este archivo.",
+      "retry-limit-exceeded": "Se ha superado el límite máximo de reintentos. Inténtalo de nuevo más tarde.",
+      "invalid-checksum": "Error al subir el archivo. Inténtalo de nuevo.",
+      "canceled-storage": "Se canceló la subida del archivo.",
+      "invalid-event-name": "Nombre de evento no válido.",
+      "invalid-url": "URL de descarga no válida.",
+      "invalid-default-bucket": "Bucket de almacenamiento predeterminado no válido.",
+      "no-default-bucket": "No se ha configurado ningún bucket de almacenamiento predeterminado.",
+      "cannot-slice-blob": "Error al subir el archivo. Inténtalo de nuevo.",
+      "server-file-wrong-size": "Discrepancia en el tamaño del archivo. Inténtalo de nuevo."
     },
     "profile": {
       "update": {
@@ -1667,6 +1713,33 @@
         "title": "Error al Enviar",
         "message": "No pudimos enviar tus comentarios. Por favor verifica tu conexión a internet e intenta nuevamente."
       }
+    }
+  },
+  "emptyStates": {
+    "items": {
+      "title": "No hay elementos aún",
+      "description": "Cuando agregues elementos, aparecerán aquí.",
+      "action": "Agregar Tu Primer Elemento"
+    },
+    "notifications": {
+      "title": "No hay notificaciones",
+      "description": "Te notificaremos cuando algo importante suceda.",
+      "action": "Verificar Configuración"
+    },
+    "search": {
+      "title": "No se encontraron resultados",
+      "description": "Intenta ajustar tus términos de búsqueda o filtros.",
+      "action": "Limpiar Búsqueda"
+    },
+    "history": {
+      "title": "No hay historial aún",
+      "description": "Tu historial de actividad aparecerá aquí.",
+      "action": "Comenzar"
+    },
+    "favorites": {
+      "title": "No hay favoritos aún",
+      "description": "Los elementos que marques como favoritos se guardarán aquí para acceso rápido.",
+      "action": "Explorar Elementos"
     }
   }
 }

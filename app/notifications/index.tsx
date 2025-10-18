@@ -7,12 +7,15 @@ import { ListScreen } from '@/components/templates/list-screen';
 import { ThemedPressable } from '@/components/themed-pressable';
 import { HStack } from '@/components/themed-stack';
 import { ThemedText } from '@/components/themed-text';
+import { EmptyState } from '@/components/ui/empty-state';
+import { EmptyNotificationsIllustration } from '@/components/ui/illustrations';
 import { NotificationItem } from '@/components/ui/notification-item';
 import { Spacing } from '@/constants/layout';
 import { useAlert } from '@/hooks/use-alert';
 import { useLoadingState } from '@/hooks/use-loading-state';
 import { useNotificationCount } from '@/hooks/use-notification-count';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import i18n from '@/i18n';
 import type { NotificationItem as NotificationItemType } from '@/types/notification';
 import { clearNotifications, deleteNotification, getNotificationHistory, markAllNotificationsAsRead, markNotificationAsRead } from '@/utils/notification-storage';
 import * as Haptics from 'expo-haptics';
@@ -127,28 +130,33 @@ export default function NotificationsCenterScreen() {
 
   return (
     <>
-      <ListScreen
-        title="Notifications"
-        data={notifications}
-        renderItem={({ item }) => <NotificationItem item={item} onMarkAsRead={() => handleMarkAsRead(item.id)} onDelete={() => handleDelete(item.id)} />}
-        keyExtractor={(item) => item.id}
-        loading={loading}
-        refreshing={refreshing}
-        onRefresh={handleRefresh}
-        isEmpty={notifications.length === 0}
-        emptyStateContent={{
-          icon: 'bell-off',
-          title: 'No Notifications',
-          description: "When you receive notifications, they'll appear here",
-        }}
-        headerAction={{
-          icon: 'settings',
-          onPress: () => router.push('/settings/notifications'),
-          accessibilityLabel: 'Notification settings',
-        }}
-        listHeaderContent={<ListHeader />}
-        contentContainerStyle={styles.listContent}
-      />
+      {notifications.length === 0 && !loading ? (
+        <EmptyState
+          illustration={<EmptyNotificationsIllustration />}
+          title={i18n.t('emptyStates.notifications.title')}
+          description={i18n.t('emptyStates.notifications.description')}
+          actionLabel={i18n.t('emptyStates.notifications.action')}
+          onActionPress={() => router.push('/settings/notifications')}
+        />
+      ) : (
+        <ListScreen
+          title="Notifications"
+          data={notifications}
+          renderItem={({ item }) => <NotificationItem item={item} onMarkAsRead={() => handleMarkAsRead(item.id)} onDelete={() => handleDelete(item.id)} />}
+          keyExtractor={(item) => item.id}
+          loading={loading}
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          isEmpty={notifications.length === 0}
+          headerAction={{
+            icon: 'settings',
+            onPress: () => router.push('/settings/notifications'),
+            accessibilityLabel: 'Notification settings',
+          }}
+          listHeaderContent={<ListHeader />}
+          contentContainerStyle={styles.listContent}
+        />
+      )}
       {alert.AlertComponent}
     </>
   );

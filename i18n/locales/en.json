@@ -334,7 +334,53 @@
       "email-already-in-use": "This email address is already in use by another account.",
       "invalid-email": "The email address is not valid.",
       "operation-not-allowed": "Email/password accounts are not enabled.",
-      "weak-password": "The password is too weak."
+      "weak-password": "The password is too weak.",
+      "too-many-requests": "Too many failed login attempts. Please wait a few minutes before trying again.",
+      "network-request-failed": "Network error. Please check your internet connection and try again.",
+      "invalid-verification-code": "The verification code is incorrect. Please try again.",
+      "expired-action-code": "This verification link has expired. Please request a new one.",
+      "invalid-action-code": "This verification link is invalid or has already been used.",
+      "credential-already-in-use": "This credential is already associated with a different account.",
+      "popup-closed-by-user": "The sign-in popup was closed before completing the process.",
+      "account-exists-with-different-credential": "An account already exists with the same email but different sign-in credentials.",
+      "invalid-phone-number": "Invalid phone number format. Please check and try again.",
+      "missing-phone-number": "Please provide a phone number.",
+      "quota-exceeded": "SMS quota exceeded. Please try again later.",
+      "app-not-authorized": "This app is not authorized to use Firebase Authentication.",
+      "captcha-check-failed": "reCAPTCHA verification failed. Please try again.",
+      "missing-verification-code": "Please enter the verification code.",
+      "invalid-verification-id": "Invalid verification ID. Please request a new code.",
+      "permission-denied": "You don't have permission to perform this action.",
+      "unavailable": "The service is temporarily unavailable. Please try again later.",
+      "not-found": "The requested resource was not found.",
+      "already-exists": "This resource already exists.",
+      "resource-exhausted": "Resource limit exceeded. Please try again later.",
+      "failed-precondition": "The operation was rejected. Please check your request.",
+      "aborted": "The operation was aborted. Please try again.",
+      "out-of-range": "The value is out of the valid range.",
+      "unimplemented": "This operation is not implemented.",
+      "internal": "An internal error occurred. Please try again later.",
+      "data-loss": "Data loss detected. Please contact support.",
+      "unauthenticated": "Please sign in to continue.",
+      "deadline-exceeded": "The operation took too long. Please try again.",
+      "cancelled": "The operation was cancelled.",
+      "invalid-argument": "Invalid request. Please check your input.",
+      "unknown": "An unknown error occurred. Please try again.",
+      "object-not-found": "The file was not found.",
+      "bucket-not-found": "Storage bucket not found.",
+      "project-not-found": "Project not found.",
+      "quota-exceeded-storage": "Storage quota exceeded. Please free up space.",
+      "unauthenticated-storage": "Please sign in to access this file.",
+      "unauthorized": "You don't have permission to access this file.",
+      "retry-limit-exceeded": "Maximum retry limit exceeded. Please try again later.",
+      "invalid-checksum": "File upload failed. Please try again.",
+      "canceled-storage": "File upload was cancelled.",
+      "invalid-event-name": "Invalid event name.",
+      "invalid-url": "Invalid download URL.",
+      "invalid-default-bucket": "Invalid default storage bucket.",
+      "no-default-bucket": "No default storage bucket configured.",
+      "cannot-slice-blob": "File upload failed. Please try again.",
+      "server-file-wrong-size": "File size mismatch. Please try again."
     },
     "profile": {
       "update": {
@@ -1835,6 +1881,33 @@
     "modal": {
       "title": "This is a modal",
       "goHome": "Go to home screen"
+    }
+  },
+  "emptyStates": {
+    "items": {
+      "title": "No items yet",
+      "description": "When you add items, they'll appear here.",
+      "action": "Add Your First Item"
+    },
+    "notifications": {
+      "title": "No notifications",
+      "description": "We'll notify you when something important happens.",
+      "action": "Check Settings"
+    },
+    "search": {
+      "title": "No results found",
+      "description": "Try adjusting your search terms or filters.",
+      "action": "Clear Search"
+    },
+    "history": {
+      "title": "No history yet",
+      "description": "Your activity history will appear here.",
+      "action": "Get Started"
+    },
+    "favorites": {
+      "title": "No favorites yet",
+      "description": "Items you favorite will be saved here for quick access.",
+      "action": "Browse Items"
     }
   }
 }
