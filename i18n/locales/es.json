@@ -394,6 +394,29 @@
       "passwordMismatch": "Las contraseñas no coinciden.",
       "passwordInvalid": "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.",
       "zipCodeTooShort": "El código postal debe tener al menos 5 caracteres."
+    },
+    "recovery": {
+      "checkConnection": "Comprueba tu conexión a internet",
+      "tryAgain": "Inténtalo de nuevo",
+      "waitAndRetry": "Espera un momento e inténtalo de nuevo",
+      "checkCredentials": "Verifica tu correo electrónico y contraseña",
+      "resetPassword": "Restablecer tu contraseña",
+      "contactSupport": "Contacta con el soporte para obtener ayuda",
+      "waitBeforeRetry": "Espera unos minutos antes de volver a intentarlo",
+      "loginAgain": "Inicia sesión de nuevo para continuar",
+      "clearCache": "Borrar caché de la aplicación",
+      "freeSpace": "Liberar espacio de almacenamiento",
+      "restartApp": "Reiniciar la aplicación",
+      "reinstallApp": "Reinstalar la aplicación",
+      "checkInput": "Verifica tu entrada e inténtalo de nuevo"
+    },
+    "support": {
+      "contactButton": "Contactar con Soporte",
+      "emailNotConfigured": "El correo electrónico no está configurado en este dispositivo. Ponte en contacto con el soporte en support@loginx.app",
+      "emailCancelled": "El correo fue cancelado",
+      "emailFailed": "Error al enviar el correo. Inténtalo de nuevo o contacta directamente con el soporte.",
+      "helpCenter": "Centro de Ayuda",
+      "viewFAQ": "Ver Preguntas Frecuentes"
     }
   },
   "success": {

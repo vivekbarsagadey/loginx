@@ -101,7 +101,7 @@ This implementation plan addresses 23 identified UI/UX improvement opportunities
 | TASK-011 | Implement ErrorBanner component with recovery actions                | ✅        | 2025-10-19 |
 | TASK-012 | Audit all alert.show() calls and replace with user-friendly messages |           |            |
 | TASK-013 | Add i18n translations for all error messages                         | ✅        | 2025-10-19 |
-| TASK-014 | Add "Contact Support" option for fatal errors                        |           |            |
+| TASK-014 | Add "Contact Support" option for fatal errors                        | ✅        | 2025-10-19 |
 
 **GOAL-003:** Fix loading state inconsistencies
 
@@ -192,13 +192,21 @@ This implementation plan addresses 23 identified UI/UX improvement opportunities
 
 **GOAL-010:** Pull-to-refresh on key screens
 
-| Task     | Description                                 | Completed | Date |
-| -------- | ------------------------------------------- | --------- | ---- |
-| TASK-061 | Add pull-to-refresh to Home screen          |           |      |
-| TASK-062 | Add pull-to-refresh to Items screen         |           |      |
-| TASK-063 | Add pull-to-refresh to Notifications screen |           |      |
-| TASK-064 | Add custom refresh animation matching brand |           |      |
-| TASK-065 | Add haptic feedback on refresh trigger      |           |      |
+| Task     | Description                                 | Completed | Date       |
+| -------- | ------------------------------------------- | --------- | ---------- |
+| TASK-061 | Add pull-to-refresh to Home screen          | ✅        | 2025-01-23 |
+| TASK-062 | Add pull-to-refresh to Items screen         | ✅        | 2025-01-23 |
+| TASK-063 | Add pull-to-refresh to Notifications screen | ✅        | 2025-01-23 |
+| TASK-064 | Add custom refresh animation matching brand | ✅        | 2025-01-23 |
+| TASK-065 | Add haptic feedback on refresh trigger      | ✅        | 2025-01-23 |
+
+**Notes:**
+
+- All three screens (Home, Items, Notifications) now support pull-to-refresh
+- RefreshControl uses theme's primary color (`tintColor` for iOS, `colors` for Android)
+- Haptic feedback (Medium impact) triggers on pull start across all screens
+- Items screen includes placeholder for future data fetching logic
+- Future enhancement: Custom animated logo spinner could replace default spinner
 
 ---
 

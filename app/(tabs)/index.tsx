@@ -10,12 +10,14 @@ import { Routes } from '@/constants/routes';
 import { useAlert } from '@/hooks/use-alert';
 import { useAuth } from '@/hooks/use-auth-provider';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
 import { type UserProfile } from '@/types/user';
 import { createLogger } from '@/utils/debug';
 import { useFocusEffect } from '@react-navigation/native';
+import * as Haptics from 'expo-haptics';
 import { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 
 const logger = createLogger('HomeScreen');
 
@@ -23,8 +25,10 @@ export default function IndexScreen() {
   const { user } = useAuth();
   const alert = useAlert();
   const { push } = useHapticNavigation();
+  const colors = useThemeColors();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [, forceUpdate] = useState(0);
 
   // Force re-render when screen comes into focus (handles language changes)
@@ -34,30 +38,38 @@ export default function IndexScreen() {
     }, [])
   );
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      if (user) {
-        try {
-          const profile = await getUserProfile(user.uid);
+  const fetchUserProfile = useCallback(async () => {
+    if (user) {
+      try {
+        const profile = await getUserProfile(user.uid);
 
-          if (profile) {
-            setUserProfile(profile);
-          } else {
-            alert.show('Error', 'User profile not found. Please complete your registration.', [{ text: 'OK' }], { variant: 'error' });
-          }
-        } catch (error) {
-          logger.error('Error fetching user profile:', error);
-          alert.show('Error', 'Failed to fetch user profile.', [{ text: 'OK' }], { variant: 'error' });
-        } finally {
-          setLoading(false);
+        if (profile) {
+          setUserProfile(profile);
+        } else {
+          alert.show('Error', 'User profile not found. Please complete your registration.', [{ text: 'OK' }], { variant: 'error' });
         }
-      } else {
+      } catch (error) {
+        logger.error('Error fetching user profile:', error);
+        alert.show('Error', 'Failed to fetch user profile.', [{ text: 'OK' }], { variant: 'error' });
+      } finally {
         setLoading(false);
+        setRefreshing(false);
       }
-    };
-
-    fetchUserProfile();
+    } else {
+      setLoading(false);
+      setRefreshing(false);
+    }
   }, [user, alert]);
+
+  const onRefresh = useCallback(async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setRefreshing(true);
+    await fetchUserProfile();
+  }, [fetchUserProfile]);
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, [fetchUserProfile]);
 
   if (loading) {
     return (
@@ -79,7 +91,13 @@ export default function IndexScreen() {
   return (
     <>
       <TabHeader title={i18n.t('screens.home.title')} showBackButton={false} />
-      <ScreenContainer scrollable useSafeArea={false}>
+      <ScreenContainer
+        scrollable
+        useSafeArea={false}
+        scrollViewProps={{
+          refreshControl: <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} colors={[colors.primary]} />,
+        }}
+      >
         {userProfile ? (
           <>
             <UserWelcomeSection displayName={userProfile.displayName || user?.email?.split('@')[0] || 'User'} email={userProfile.email} age={userProfile.age} style={CommonSpacing.marginBottomLarge} />

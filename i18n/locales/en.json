@@ -421,6 +421,14 @@
       "reinstallApp": "Reinstall the app",
       "checkInput": "Check your input and try again"
     },
+    "support": {
+      "contactButton": "Contact Support",
+      "emailNotConfigured": "Email is not configured on this device. Please contact support at support@loginx.app",
+      "emailCancelled": "Email was cancelled",
+      "emailFailed": "Failed to send email. Please try again or contact support directly.",
+      "helpCenter": "Help Center",
+      "viewFAQ": "View FAQ"
+    },
     "initialization": {
       "message": "Unable to initialize the app. Please restart or reinstall."
     },

@@ -12,6 +12,22 @@ const FIRESTORE_PREFIX = 'firestore/';
 const STORAGE_PREFIX = 'storage/';
 
 /**
+ * Fatal error codes that require support contact
+ * These are unrecoverable errors that users cannot fix themselves
+ */
+const FATAL_ERROR_CODES = [
+  'auth/user-disabled',
+  'auth/operation-not-allowed',
+  'auth/app-not-authorized',
+  'firestore/permission-denied',
+  'firestore/data-loss',
+  'firestore/internal',
+  'storage/unauthorized',
+  'storage/project-not-found',
+  'storage/quota-exceeded',
+] as const;
+
+/**
  * Set the global error handler (called from root component)
  */
 export const setGlobalErrorHandler = (handler: (title: string, message: string) => void) => {
@@ -21,6 +37,19 @@ export const setGlobalErrorHandler = (handler: (title: string, message: string) 
 interface ErrorInfo {
   title: string;
   message: string;
+  isFatal?: boolean;
+  requiresReauth?: boolean;
+}
+
+/**
+ * Check if an error is fatal (requires support contact)
+ */
+export function isFatalError(error: unknown): boolean {
+  if (!hasErrorCode(error)) {
+    return false;
+  }
+
+  return FATAL_ERROR_CODES.includes(error.code as (typeof FATAL_ERROR_CODES)[number]);
 }
 
 /**
@@ -51,16 +80,19 @@ const isFirebaseError = (error: unknown): boolean => {
  * Get detailed error information from any error type
  * Enhanced with Firebase error message mapping and error classification
  * @param error - Error object (unknown type for safety)
- * @returns Structured error information
+ * @returns Structured error information with fatal flag
  */
 export const getErrorInfo = (error: unknown): ErrorInfo => {
   // Use Firebase error message utility for all Firebase errors
   if (isFirebaseError(error) && hasErrorCode(error)) {
     const message = getFirebaseErrorMessage(error.code);
+    const fatal = isFatalError(error);
 
     return {
       title: i18n.t('errors.firebase.title'),
       message,
+      isFatal: fatal,
+      requiresReauth: false, // Will be implemented when needed
     };
   }
 
@@ -77,6 +109,7 @@ export const getErrorInfo = (error: unknown): ErrorInfo => {
     return {
       title: i18n.t('errors.network.title'),
       message: classified?.userMessage || i18n.t('errors.network.message'),
+      isFatal: false,
     };
   }
 
@@ -85,6 +118,7 @@ export const getErrorInfo = (error: unknown): ErrorInfo => {
     return {
       title: i18n.t('errors.generic.title'),
       message: classified?.userMessage || error.message || i18n.t('errors.generic.message'),
+      isFatal: false,
     };
   }
 
@@ -92,6 +126,7 @@ export const getErrorInfo = (error: unknown): ErrorInfo => {
   return {
     title: i18n.t('errors.generic.title'),
     message: classified?.userMessage || i18n.t('errors.generic.message'),
+    isFatal: false,
   };
 };
 

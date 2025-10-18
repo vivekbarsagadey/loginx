@@ -2,8 +2,11 @@ import { TabHeader } from '@/components/navigation/TabHeader';
 import { ScreenContainer } from '@/components/screen-container';
 import { EmptyState } from '@/components/ui/empty-state';
 import { EmptyItemsIllustration } from '@/components/ui/illustrations';
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
-import { useState } from 'react';
+import * as Haptics from 'expo-haptics';
+import { useCallback, useState } from 'react';
+import { RefreshControl } from 'react-native';
 
 type Item = {
   id: string;
@@ -11,7 +14,23 @@ type Item = {
 };
 
 export default function ItemsScreen() {
-  const [items] = useState<Item[]>([]); // Placeholder for items data
+  const colors = useThemeColors();
+  const [items] = useState<Item[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Fetch items function - currently empty, will be implemented when items feature is added
+  const fetchItems = useCallback(async () => {
+    // TODO: Implement actual items fetching logic
+    // Example: const fetchedItems = await getItems();
+    // setItems(fetchedItems);
+    setRefreshing(false);
+  }, []);
+
+  const onRefresh = useCallback(async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setRefreshing(true);
+    await fetchItems();
+  }, [fetchItems]); // Placeholder for items data
 
   const handleAddItem = () => {
     // Navigate to add item screen or show add item modal
@@ -21,7 +40,13 @@ export default function ItemsScreen() {
   return (
     <>
       <TabHeader title={i18n.t('screens.items.title')} showBackButton={false} />
-      <ScreenContainer scrollable useSafeArea={false}>
+      <ScreenContainer
+        scrollable
+        useSafeArea={false}
+        scrollViewProps={{
+          refreshControl: <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} colors={[colors.primary]} />,
+        }}
+      >
         {items.length === 0 ? (
           <EmptyState
             illustration={<EmptyItemsIllustration />}

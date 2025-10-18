@@ -50,6 +50,7 @@ export default function NotificationsCenterScreen() {
   }, [loadNotifications]);
 
   const handleRefresh = useCallback(async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setRefreshing(true);
     await loadNotifications();
   }, [loadNotifications]);
