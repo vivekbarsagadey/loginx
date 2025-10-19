@@ -13,73 +13,69 @@ import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
+import { useForm } from '@/hooks/utility/use-form';
+import { useToggle } from '@/hooks/utility/use-toggle';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
 import { validatePassword } from '@/utils/password-validator';
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
-import { useCallback, useState } from 'react';
 import { StyleSheet } from 'react-native';
+
+interface PasswordFormValues {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
 
 export default function ChangePasswordScreen() {
   const { back } = useHapticNavigation();
   const alert = useAlert();
   const user = auth.currentUser;
 
-  // TASK-074: Re-authentication state
-  const [showReAuthPrompt, setShowReAuthPrompt] = useState(false);
-  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
+  // TASK-074: Re-authentication state - using useToggle for boolean states
+  const [showReAuthPrompt, toggleReAuthPrompt] = useToggle(false);
+  const [showSuccessAnimation, toggleSuccessAnimation] = useToggle(false);
 
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [currentPasswordError, setCurrentPasswordError] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [newPasswordError, setNewPasswordError] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  // Form state management with useForm hook
+  const form = useForm<PasswordFormValues>({
+    initialValues: {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    },
+    validations: {
+      currentPassword: {
+        required: true,
+        requiredMessage: i18n.t('screens.security.changePassword.validation.currentRequired'),
+      },
+      newPassword: {
+        required: true,
+        requiredMessage: i18n.t('screens.security.changePassword.validation.newRequired'),
+        validate: (value, values) => {
+          const validation = validatePassword(value);
+          if (!validation.isValid) {
+            return validation.errors[0] || i18n.t('screens.security.changePassword.validation.requirementsNotMet');
+          }
 
-  // Validation function
-  const validateForm = useCallback(() => {
-    // Reset errors
-    setCurrentPasswordError('');
-    setNewPasswordError('');
-    setConfirmPasswordError('');
+          // Check if new password is different from current
+          if (values.currentPassword === value) {
+            return i18n.t('screens.security.changePassword.validation.sameAsOld');
+          }
 
-    if (!user || !user.email) {
-      showError(new Error('No authenticated user found'));
-      return false;
-    }
-
-    // Validate current password
-    if (!currentPassword) {
-      setCurrentPasswordError(i18n.t('screens.security.changePassword.validation.currentRequired'));
-      return false;
-    }
-
-    // Validate new password
-    if (!newPassword) {
-      setNewPasswordError(i18n.t('screens.security.changePassword.validation.newRequired'));
-      return false;
-    }
-
-    const validation = validatePassword(newPassword);
-    if (!validation.isValid) {
-      setNewPasswordError(validation.errors[0] || i18n.t('screens.security.changePassword.validation.requirementsNotMet'));
-      return false;
-    }
-
-    // Validate confirm password
-    if (newPassword !== confirmPassword) {
-      setConfirmPasswordError(i18n.t('screens.security.changePassword.validation.mismatch'));
-      return false;
-    }
-
-    // Check if new password is different from current
-    if (currentPassword === newPassword) {
-      setNewPasswordError(i18n.t('screens.security.changePassword.validation.sameAsOld'));
-      return false;
-    }
-
-    return true;
-  }, [user, currentPassword, newPassword, confirmPassword]);
+          return null;
+        },
+      },
+      confirmPassword: {
+        required: true,
+        validate: (value, values) => {
+          if (value !== values.newPassword) {
+            return i18n.t('screens.security.changePassword.validation.mismatch');
+          }
+          return null;
+        },
+      },
+    },
+  });
 
   // Form submission with hook
   const { submit: handleChangePassword, isSubmitting: loading } = useFormSubmit(
@@ -89,21 +85,21 @@ export default function ChangePasswordScreen() {
       }
 
       // TASK-074: Trigger re-authentication prompt before password change
-      setShowReAuthPrompt(true);
+      toggleReAuthPrompt();
       return; // Just return, don't throw
     },
     {
       successTitle: i18n.t('success.passwordChanged.title'),
       successMessage: i18n.t('success.passwordChanged.message'),
       onSuccess: () => back(),
-      validate: validateForm,
+      validate: async () => form.validateForm(),
       errorTitle: i18n.t('screens.security.changePassword.error.title'),
     }
   );
 
   // TASK-074: Proceed with password change after successful re-authentication
   const handleReAuthSuccess = async () => {
-    setShowReAuthPrompt(false);
+    toggleReAuthPrompt();
 
     try {
       if (!user || !user.email) {
@@ -111,19 +107,17 @@ export default function ChangePasswordScreen() {
       }
 
       // Step 1: Reauthenticate user with current password
-      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+      const credential = EmailAuthProvider.credential(user.email, form.values.currentPassword);
       await reauthenticateWithCredential(user, credential);
 
       // Step 2: Update password
-      await updatePassword(user, newPassword);
+      await updatePassword(user, form.values.newPassword);
 
       // Reset form
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
+      form.reset();
 
       // Show success animation
-      setShowSuccessAnimation(true);
+      toggleSuccessAnimation();
     } catch (error) {
       showError(error);
     }
@@ -131,7 +125,7 @@ export default function ChangePasswordScreen() {
 
   // TASK-074: Handle re-auth cancellation
   const handleReAuthCancel = () => {
-    setShowReAuthPrompt(false);
+    toggleReAuthPrompt();
   };
 
   return (
@@ -141,41 +135,41 @@ export default function ChangePasswordScreen() {
 
         <ThemedView style={styles.form}>
           <PasswordChangeForm
-            currentPassword={currentPassword}
-            currentPasswordError={currentPasswordError}
-            newPassword={newPassword}
-            newPasswordError={newPasswordError}
-            confirmPassword={confirmPassword}
-            confirmPasswordError={confirmPasswordError}
+            currentPassword={form.values.currentPassword}
+            currentPasswordError={(form.touched.currentPassword && form.errors.currentPassword) || ''}
+            newPassword={form.values.newPassword}
+            newPasswordError={(form.touched.newPassword && form.errors.newPassword) || ''}
+            confirmPassword={form.values.confirmPassword}
+            confirmPasswordError={(form.touched.confirmPassword && form.errors.confirmPassword) || ''}
             onCurrentPasswordChange={(text) => {
-              setCurrentPassword(text);
-              if (currentPasswordError) {
-                setCurrentPasswordError('');
+              form.setValue('currentPassword', text);
+              if (form.errors.currentPassword) {
+                form.setError('currentPassword', '');
               }
             }}
             onNewPasswordChange={(text) => {
-              setNewPassword(text);
-              if (newPasswordError) {
-                setNewPasswordError('');
+              form.setValue('newPassword', text);
+              if (form.errors.newPassword) {
+                form.setError('newPassword', '');
               }
             }}
             onConfirmPasswordChange={(text) => {
-              setConfirmPassword(text);
-              if (confirmPasswordError) {
-                setConfirmPasswordError('');
+              form.setValue('confirmPassword', text);
+              if (form.errors.confirmPassword) {
+                form.setError('confirmPassword', '');
               }
             }}
             disabled={loading}
           />
 
-          <PasswordStrengthIndicator password={newPassword} visible={newPassword.length > 0} />
+          <PasswordStrengthIndicator password={form.values.newPassword} visible={form.values.newPassword.length > 0} />
 
-          <PasswordRequirements password={newPassword} showIndicators={newPassword.length > 0} />
+          <PasswordRequirements password={form.values.newPassword} showIndicators={form.values.newPassword.length > 0} />
 
           <ThemedButton
             title={loading ? i18n.t('screens.security.changePassword.changingButton') : i18n.t('screens.security.changePassword.changeButton')}
             onPress={handleChangePassword}
-            disabled={loading || !currentPassword || !newPassword || !confirmPassword}
+            disabled={loading || !form.values.currentPassword || !form.values.newPassword || !form.values.confirmPassword}
             loading={loading}
             style={styles.changeButton}
           />
@@ -200,7 +194,7 @@ export default function ChangePasswordScreen() {
         message={i18n.t('success.passwordChanged.message')}
         icon="shield-checkmark"
         onComplete={() => {
-          setShowSuccessAnimation(false);
+          toggleSuccessAnimation();
           back();
         }}
       />
