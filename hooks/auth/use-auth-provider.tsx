@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           // Apply any pending profile data from onboarding
           try {
             await applyPendingProfileData(user);
-          } catch (error) {
+          } catch (_error) {
             // Silently fail - profile can be updated later
           }
 

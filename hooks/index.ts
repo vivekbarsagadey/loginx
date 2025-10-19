@@ -33,8 +33,8 @@ export * from './theme';
 export * from './ui';
 export * from './utility';
 
-// Future categories (placeholders)
-export * from './adapters';
-export * from './storage';
-export * from './timing';
+// Future categories will be exported here when implemented:
+// export * from './adapters';  // Phase 8: LoginX-Specific Integrations
+// export * from './storage';   // Phase 3: Storage & Persistence
+// export * from './timing';    // Phase 4: Timing & Scheduling
 
