@@ -12,6 +12,8 @@ import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
+import { useForm } from '@/hooks/utility/use-form';
+import { useToggle } from '@/hooks/utility/use-toggle';
 import i18n from '@/i18n';
 import { createLogger } from '@/utils/debug';
 import { validateAgeField, validateDisplayNameField, validateZipCodeField } from '@/utils/form-validation';
@@ -22,26 +24,59 @@ import { StyleSheet, type TextInput } from 'react-native';
 
 const logger = createLogger('EditProfile');
 
+interface ProfileFormValues {
+  displayName: string;
+  photoURL: string;
+  age: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+}
+
 export default function EditProfileScreen() {
   const user = auth.currentUser;
   const { back } = useHapticNavigation();
 
-  // Form state
-  const [displayName, setDisplayName] = useState('');
-  const [displayNameError, setDisplayNameError] = useState('');
-  const [photoURL, setPhotoURL] = useState('');
-  const [age, setAge] = useState('');
-  const [ageError, setAgeError] = useState('');
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [zipCode, setZipCode] = useState('');
-  const [zipCodeError, setZipCodeError] = useState('');
-
-  // Loading states
+  // Loading states - using useToggle for boolean states
   const [initialLoading, setInitialLoading] = useState(true);
-  const [hasChanges, setHasChanges] = useState(false);
-  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
+  const [showSuccessAnimation, toggleSuccessAnimation] = useToggle(false);
+
+  // Form state management with useForm hook
+  const form = useForm<ProfileFormValues>({
+    initialValues: {
+      displayName: '',
+      photoURL: '',
+      age: '',
+      address: '',
+      city: '',
+      state: '',
+      zipCode: '',
+    },
+    validations: {
+      displayName: {
+        required: true,
+        validate: (value) => {
+          const result = validateDisplayNameField(value);
+          return result.error || null;
+        },
+      },
+      age: {
+        validate: (value) => {
+          if (!value) return null; // Age is optional
+          const result = validateAgeField(value);
+          return result.error || null;
+        },
+      },
+      zipCode: {
+        validate: (value) => {
+          if (!value) return null; // Zip code is optional
+          const result = validateZipCodeField(value);
+          return result.error || null;
+        },
+      },
+    },
+  });
 
   // Refs for input focus management
   const ageInputRef = useRef<TextInput>(null);
@@ -59,69 +94,47 @@ export default function EditProfileScreen() {
 
       try {
         const profile = await getUserProfile(user.uid);
-        if (profile) {
-          setDisplayName(profile.displayName || user.displayName || '');
-          setPhotoURL(profile.photoURL || user.photoURL || '');
-          setAge(profile.age ? String(profile.age) : '');
-          setAddress(profile.address || '');
-          setCity(profile.city || '');
-          setState(profile.state || '');
-          setZipCode(profile.zipCode || '');
-        } else {
-          // Fallback to auth data
-          setDisplayName(user.displayName || '');
-          setPhotoURL(user.photoURL || '');
-        }
+        const newValues: ProfileFormValues = profile
+          ? {
+              displayName: profile.displayName || user.displayName || '',
+              photoURL: profile.photoURL || user.photoURL || '',
+              age: profile.age ? String(profile.age) : '',
+              address: profile.address || '',
+              city: profile.city || '',
+              state: profile.state || '',
+              zipCode: profile.zipCode || '',
+            }
+          : {
+              displayName: user.displayName || '',
+              photoURL: user.photoURL || '',
+              age: '',
+              address: '',
+              city: '',
+              state: '',
+              zipCode: '',
+            };
+
+        form.setValues(newValues);
       } catch (error) {
         logger.error('Error loading profile:', error);
         // Fallback to auth data
-        setDisplayName(user.displayName || '');
-        setPhotoURL(user.photoURL || '');
+        form.setValues({
+          displayName: user.displayName || '',
+          photoURL: user.photoURL || '',
+          age: '',
+          address: '',
+          city: '',
+          state: '',
+          zipCode: '',
+        });
       } finally {
         setInitialLoading(false);
       }
     };
 
     loadProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
-
-  // Track changes
-  useEffect(() => {
-    if (!user || initialLoading) {
-      return;
-    }
-
-    const hasAnyChanges = displayName !== (user.displayName || '') || photoURL !== (user.photoURL || '') || age !== '' || address !== '' || city !== '' || state !== '' || zipCode !== '';
-
-    setHasChanges(hasAnyChanges);
-  }, [user, displayName, photoURL, age, address, city, state, zipCode, initialLoading]);
-
-  // Validation functions using centralized utilities
-  const validateDisplayName = useCallback((value: string): boolean => {
-    const result = validateDisplayNameField(value);
-    setDisplayNameError(result.error || '');
-    return result.isValid;
-  }, []);
-
-  const validateAge = useCallback((value: string): boolean => {
-    const result = validateAgeField(value);
-    setAgeError(result.error || '');
-    return result.isValid;
-  }, []);
-
-  const validateZipCode = useCallback((value: string): boolean => {
-    const result = validateZipCodeField(value);
-    setZipCodeError(result.error || '');
-    return result.isValid;
-  }, []);
-
-  // Validation function for useFormSubmit
-  const validateForm = useCallback(() => {
-    const isDisplayNameValid = validateDisplayName(displayName);
-    const isAgeValid = validateAge(age);
-    const isZipCodeValid = validateZipCode(zipCode);
-    return isDisplayNameValid && isAgeValid && isZipCodeValid;
-  }, [displayName, age, zipCode, validateDisplayName, validateAge, validateZipCode]);
 
   // Form submission with hook
   const { submit: handleUpdate, isSubmitting: loading } = useFormSubmit(
@@ -130,34 +143,34 @@ export default function EditProfileScreen() {
         throw new Error('User not authenticated');
       }
 
-      const sanitizedDisplayName = sanitizeUserInput(displayName.trim());
+      const sanitizedDisplayName = sanitizeUserInput(form.values.displayName.trim());
 
       // Update Firebase Auth profile (displayName and photoURL only)
       await updateProfile(user, {
         displayName: sanitizedDisplayName,
-        photoURL,
+        photoURL: form.values.photoURL,
       });
 
       // Update Firestore with all fields
       const updateData: Record<string, string | number> = {
         displayName: sanitizedDisplayName,
-        photoURL,
+        photoURL: form.values.photoURL,
       };
 
-      if (age) {
-        updateData.age = parseInt(age, 10);
+      if (form.values.age) {
+        updateData.age = parseInt(form.values.age, 10);
       }
-      if (address) {
-        updateData.address = sanitizeUserInput(address.trim());
+      if (form.values.address) {
+        updateData.address = sanitizeUserInput(form.values.address.trim());
       }
-      if (city) {
-        updateData.city = sanitizeUserInput(city.trim());
+      if (form.values.city) {
+        updateData.city = sanitizeUserInput(form.values.city.trim());
       }
-      if (state) {
-        updateData.state = sanitizeUserInput(state.trim());
+      if (form.values.state) {
+        updateData.state = sanitizeUserInput(form.values.state.trim());
       }
-      if (zipCode) {
-        updateData.zipCode = sanitizeUserInput(zipCode.trim());
+      if (form.values.zipCode) {
+        updateData.zipCode = sanitizeUserInput(form.values.zipCode.trim());
       }
 
       await updateUser(user.uid, updateData);
@@ -166,18 +179,20 @@ export default function EditProfileScreen() {
       successTitle: i18n.t('success.profileUpdate.title'),
       successMessage: i18n.t('success.profileUpdate.message'),
       onSuccess: () => {
-        setShowSuccessAnimation(true);
+        toggleSuccessAnimation();
         // Navigate back after animation completes
       },
-      validate: validateForm,
+      validate: async () => form.validateForm(),
     }
   );
 
   // Handler for photo changes from ProfilePhotoSection
-  const handlePhotoChange = useCallback((newPhotoURL: string) => {
-    setPhotoURL(newPhotoURL);
-    setHasChanges(true);
-  }, []);
+  const handlePhotoChange = useCallback(
+    (newPhotoURL: string) => {
+      form.setValue('photoURL', newPhotoURL);
+    },
+    [form]
+  );
 
   // Show loading state while fetching profile
   if (initialLoading) {
@@ -198,29 +213,29 @@ export default function EditProfileScreen() {
 
   return (
     <ScreenWithHeader title="Edit Profile" showBackButton>
-      <ProfilePhotoSection photoURL={photoURL || ''} userId={user?.uid || ''} onPhotoChange={handlePhotoChange} disabled={loading} />
+      <ProfilePhotoSection photoURL={form.values.photoURL || ''} userId={user?.uid || ''} onPhotoChange={handlePhotoChange} disabled={loading} />
 
       <ThemedView style={styles.formSection}>
         <ProfileBasicFields
-          displayName={displayName}
-          displayNameError={displayNameError || ''}
-          age={age}
-          ageError={ageError || ''}
+          displayName={form.values.displayName}
+          displayNameError={(form.touched.displayName && form.errors.displayName) || ''}
+          age={form.values.age}
+          ageError={(form.touched.age && form.errors.age) || ''}
           onDisplayNameChange={(text) => {
-            setDisplayName(text);
-            if (displayNameError) {
-              setDisplayNameError('');
+            form.setValue('displayName', text);
+            if (form.errors.displayName) {
+              form.setError('displayName', '');
             }
           }}
           onAgeChange={(text) => {
             const numericText = text.replace(/[^0-9]/g, '');
-            setAge(numericText);
-            if (ageError) {
-              setAgeError('');
+            form.setValue('age', numericText);
+            if (form.errors.age) {
+              form.setError('age', '');
             }
           }}
-          onDisplayNameBlur={() => validateDisplayName(displayName)}
-          onAgeBlur={() => validateAge(age)}
+          onDisplayNameBlur={form.handleBlur('displayName')}
+          onAgeBlur={form.handleBlur('age')}
           ageInputRef={ageInputRef}
           disabled={loading}
         />
@@ -235,21 +250,21 @@ export default function EditProfileScreen() {
         />
 
         <ProfileAddressFields
-          address={address}
-          city={city}
-          state={state}
-          zipCode={zipCode}
-          zipCodeError={zipCodeError || ''}
-          onAddressChange={setAddress}
-          onCityChange={setCity}
-          onStateChange={(text) => setState(text.toUpperCase())}
+          address={form.values.address}
+          city={form.values.city}
+          state={form.values.state}
+          zipCode={form.values.zipCode}
+          zipCodeError={(form.touched.zipCode && form.errors.zipCode) || ''}
+          onAddressChange={(text) => form.setValue('address', text)}
+          onCityChange={(text) => form.setValue('city', text)}
+          onStateChange={(text) => form.setValue('state', text.toUpperCase())}
           onZipCodeChange={(text) => {
-            setZipCode(text);
-            if (zipCodeError) {
-              setZipCodeError('');
+            form.setValue('zipCode', text);
+            if (form.errors.zipCode) {
+              form.setError('zipCode', '');
             }
           }}
-          onZipCodeBlur={() => validateZipCode(zipCode)}
+          onZipCodeBlur={form.handleBlur('zipCode')}
           addressInputRef={addressInputRef}
           cityInputRef={cityInputRef}
           stateInputRef={stateInputRef}
@@ -258,7 +273,7 @@ export default function EditProfileScreen() {
         />
       </ThemedView>
 
-      <ThemedButton title={loading ? i18n.t('profile.edit.savingButton') : i18n.t('profile.edit.saveButton')} onPress={handleUpdate} disabled={loading || !hasChanges} loading={loading} />
+      <ThemedButton title={loading ? i18n.t('profile.edit.savingButton') : i18n.t('profile.edit.saveButton')} onPress={handleUpdate} disabled={loading || !form.isDirty} loading={loading} />
 
       {/* Success animation */}
       <SuccessAnimation
@@ -266,7 +281,7 @@ export default function EditProfileScreen() {
         title={i18n.t('success.profileUpdate.title')}
         message={i18n.t('success.profileUpdate.message')}
         onComplete={() => {
-          setShowSuccessAnimation(false);
+          toggleSuccessAnimation();
           back();
         }}
       />
