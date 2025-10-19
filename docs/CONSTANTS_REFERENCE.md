@@ -31,6 +31,7 @@ All constants files have been implemented and are ready for use:
 8. [Storage Constants ✅](#storage-constants-)
 9. [Theme Constants ✅](#theme-constants-)
 10. [Validation Constants ✅](#validation-constants-)
+11. [**Hooks Reference** 🆕](#hooks-reference-)
 
 ---
 
@@ -652,5 +653,107 @@ for easy importing throughout the application.
 
 ---
 
-Last updated: October 3, 2025  
-Implementation status verified: October 3, 2025
+## Hooks Reference 🆕
+
+**Location:** `hooks/` directory (10 categories)
+
+LoginX now includes a comprehensive custom hooks library with 40+ production-ready hooks organized into logical categories. For detailed documentation, see **[HOOKS_REFERENCE.md](./HOOKS_REFERENCE.md)**.
+
+### Hook Categories
+
+| Category           | Location           | Hooks Count | Purpose                                              |
+| ------------------ | ------------------ | ----------- | ---------------------------------------------------- |
+| **Authentication** | `hooks/auth/`      | 9           | User authentication, verification, 2FA, biometric    |
+| **Async**          | `hooks/async/`     | 3           | Async operations, fetch, infinite scroll             |
+| **UI**             | `hooks/ui/`        | 9           | UI interactions, modals, gestures, keyboard          |
+| **Layout**         | `hooks/layout/`    | 1           | Responsive design utilities                          |
+| **Device**         | `hooks/device/`    | 5           | App state, battery, location, network, accessibility |
+| **Theme**          | `hooks/theme/`     | 6           | Theme management and styling                         |
+| **Lifecycle**      | `hooks/lifecycle/` | 6           | Component lifecycle utilities                        |
+| **Utility**        | `hooks/utility/`   | 8           | State management, error handling, notifications      |
+| **Storage**        | `hooks/storage/`   | 3           | Local, secure, and async storage wrappers            |
+| **Timing**         | `hooks/timing/`    | 4           | Debounce, throttle, interval, timeout                |
+
+### Quick Import Examples
+
+```typescript
+// Category-based import (recommended)
+import { useToggle, useCounter, useList } from "@/hooks/utility";
+import { useTheme, useThemeProvider } from "@/hooks/theme";
+import { useAppState, useBattery, useGeolocation } from "@/hooks/device";
+
+// Individual hook import
+import { useAsync } from "@/hooks/async/use-async";
+import { useKeyboard } from "@/hooks/ui/use-keyboard";
+
+// Barrel import (backward compatible)
+import { useTheme, useAsync, useToggle } from "@/hooks";
+```
+
+### Featured Hooks
+
+#### State Management
+
+- `useToggle` - Boolean toggle with setValue
+- `useCounter` - Counter with min/max bounds
+- `useList` - Array manipulation utilities (16 methods)
+- `useMap` - Map data structure management
+
+#### UI Interactions
+
+- `useClickOutside` - Detect taps outside component
+- `useLongPress` - Long press with haptic feedback
+- `useKeyboard` - Keyboard visibility tracking
+- `useModal` - Modal state management
+
+#### Device APIs
+
+- `useAppState` - Foreground/background tracking
+- `useBattery` - Battery level and charging state
+- `useGeolocation` - Location tracking with permissions
+- `useNetworkStatus` - Network connectivity monitoring
+
+#### Storage
+
+- `useLocalStorage` - AsyncStorage with React state
+- `useSecureStorage` - Encrypted SecureStore wrapper
+- `useAsyncStorage` - Enhanced storage with TTL caching
+
+#### Timing
+
+- `useDebouncedCallback` - Delay execution until idle
+- `useThrottledCallback` - Limit execution frequency
+- `useInterval` - Declarative setInterval
+- `useTimeout` - Declarative setTimeout
+
+### TypeScript Support
+
+All hooks are fully typed with comprehensive interfaces:
+
+```typescript
+import { useCounter } from "@/hooks/utility";
+import type { UseCounterOptions, UseCounterReturn } from "@/hooks/utility";
+
+import { useGeolocation } from "@/hooks/device";
+import type { LocationCoordinates, GeolocationState, UseGeolocationOptions } from "@/hooks/device";
+```
+
+### Documentation
+
+For complete hook documentation including:
+
+- Detailed API references
+- Usage examples for each hook
+- TypeScript type definitions
+- Best practices and patterns
+- Performance tips
+- Troubleshooting guide
+- Migration examples
+
+**See:** [HOOKS_REFERENCE.md](./HOOKS_REFERENCE.md)
+
+---
+
+Last updated: October 19, 2025  
+Implementation status verified: October 19, 2025  
+Hooks library added: October 19, 2025

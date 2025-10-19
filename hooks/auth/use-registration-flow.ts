@@ -1,4 +1,12 @@
-import { logStateChange } from '@/utils/registration-diagnostics';
+/**
+ * useRegistrationFlow Hook
+ * Manages multi-step registration navigation with validation
+ *
+ * This hook supports two modes:
+ * 1. **Default mode**: Uses project's diagnostic logger (LoginX)
+ * 2. **Independent mode**: Pass custom logger via options (portable)
+ */
+
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
@@ -16,18 +24,73 @@ interface UseRegistrationFlowProps<T extends Record<string, unknown>> {
   steps: Step[];
   trigger: UseFormTrigger<T>;
   onSubmit: () => void;
+  /**
+   * Optional logger for debugging state changes
+   * If not provided, uses project's registration diagnostics (LoginX mode)
+   */
+  logger?: {
+    logStateChange: (component: string, field: string, oldValue: any, newValue: any) => void;
+  };
 }
 
-export function useRegistrationFlow<T extends Record<string, unknown>>({ steps, trigger, onSubmit }: UseRegistrationFlowProps<T>) {
+/**
+ * Hook for managing registration flow navigation and validation
+ * @param props Configuration including steps, validation trigger, and submission handler
+ * @returns Registration flow state and navigation functions
+ *
+ * @example
+ * ```tsx
+ * // Default mode (uses project diagnostics)
+ * const flow = useRegistrationFlow({
+ *   steps: registrationSteps,
+ *   trigger: form.trigger,
+ *   onSubmit: handleSubmit,
+ * });
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Independent mode (custom logger)
+ * const flow = useRegistrationFlow({
+ *   steps: registrationSteps,
+ *   trigger: form.trigger,
+ *   onSubmit: handleSubmit,
+ *   logger: {
+ *     logStateChange: (component, field, oldVal, newVal) => {
+ *       console.log(`[${component}] ${field}: ${oldVal} -> ${newVal}`);
+ *     }
+ *   }
+ * });
+ * ```
+ */
+export function useRegistrationFlow<T extends Record<string, unknown>>({ steps, trigger, onSubmit, logger }: UseRegistrationFlowProps<T>) {
   const { back } = useHapticNavigation();
   const router = useRouter();
   const alert = useAlert();
   const [currentStep, setCurrentStep] = useState(0);
 
+  // Get logger function (dependency injection or default)
+  const getLogger = () => {
+    if (logger) {
+      return logger.logStateChange;
+    }
+
+    // Default: Try to use project's diagnostics (LoginX mode)
+    try {
+      const { logStateChange } = require('@/utils/registration-diagnostics');
+      return logStateChange;
+    } catch {
+      // If diagnostics not available, use no-op logger
+      return () => {};
+    }
+  };
+
+  const logStateChange = getLogger();
+
   // Log step changes for debugging
   useEffect(() => {
     logStateChange('RegistrationFlow', 'currentStep', currentStep - 1, currentStep);
-  }, [currentStep]);
+  }, [currentStep, logStateChange]);
 
   // Update title in navigation
   useEffect(() => {

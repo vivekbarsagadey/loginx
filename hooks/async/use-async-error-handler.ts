@@ -5,8 +5,13 @@
  * Provides standard error handling, user feedback, and logging
  * Reduces boilerplate try-catch blocks across the app
  *
+ * This hook supports two modes:
+ * 1. **Default mode**: Uses project's haptic feedback utility (LoginX)
+ * 2. **Independent mode**: Pass custom haptic function via options
+ *
  * @example
  * ```tsx
+ * // Default mode (uses project feedback)
  * function MyComponent() {
  *   const { handleAsync } = useAsyncErrorHandler();
  *
@@ -24,9 +29,23 @@
  *   return <Button onPress={handleSave}>Save</Button>;
  * }
  * ```
+ *
+ * @example
+ * ```tsx
+ * // Independent mode (custom haptic function)
+ * function MyComponent() {
+ *   const { handleAsync } = useAsyncErrorHandler({
+ *     hapticFeedback: async () => {
+ *       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+ *     }
+ *   });
+ *
+ *   const handleSave = () => handleAsync(async () => await saveData());
+ *   return <Button onPress={handleSave}>Save</Button>;
+ * }
+ * ```
  */
 
-import { provideMediumFeedback } from '@/utils/feedback';
 import { useCallback } from 'react';
 import { useAlert } from '../ui/use-alert';
 
@@ -72,8 +91,40 @@ interface AsyncErrorHandlerOptions {
   onSuccess?: () => void;
 }
 
-export function useAsyncErrorHandler() {
+/**
+ * Configuration for useAsyncErrorHandler hook
+ */
+export interface UseAsyncErrorHandlerConfig {
+  /**
+   * Custom haptic feedback function for error states
+   * If not provided, uses project's default haptic feedback (LoginX mode)
+   */
+  hapticFeedback?: () => Promise<void>;
+}
+
+/**
+ * Hook for centralized async error handling
+ * @param config Optional configuration for custom behavior
+ */
+export function useAsyncErrorHandler(config?: UseAsyncErrorHandlerConfig) {
   const alert = useAlert();
+
+  // Get haptic feedback function (dependency injection or default)
+  const getHapticFeedback = useCallback(async () => {
+    if (config?.hapticFeedback) {
+      // Custom haptic function provided (independent mode)
+      return config.hapticFeedback();
+    }
+
+    // Default: Use project's feedback utility (LoginX mode)
+    try {
+      const { provideMediumFeedback } = require('@/utils/feedback');
+      return provideMediumFeedback();
+    } catch {
+      // If feedback utility not available, silently skip haptics
+      return Promise.resolve();
+    }
+  }, [config]);
 
   /**
    * Wrap an async function with standard error handling
@@ -104,7 +155,7 @@ export function useAsyncErrorHandler() {
 
         // Provide haptic feedback on error
         if (errorHaptics) {
-          await provideMediumFeedback();
+          await getHapticFeedback();
         }
 
         // Show error alert
@@ -124,7 +175,7 @@ export function useAsyncErrorHandler() {
         return { success: false, error: err };
       }
     },
-    [alert]
+    [alert, getHapticFeedback]
   );
 
   /**
@@ -135,8 +186,9 @@ export function useAsyncErrorHandler() {
     try {
       const data = await asyncFn();
       return { success: true, data };
-    } catch (err) {
-      throw err;
+    } catch (error) {
+      const err = error instanceof Error ? error : new Error(String(error));
+      return { success: false, error: err };
     }
   }, []);
 
