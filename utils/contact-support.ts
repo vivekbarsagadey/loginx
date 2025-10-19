@@ -1,7 +1,7 @@
-import { Linking, Platform } from 'react-native';
-import * as MailComposer from 'expo-mail-composer';
-import { logger } from './logger-production';
 import i18n from '@/i18n';
+import * as MailComposer from 'expo-mail-composer';
+import { Linking, Platform } from 'react-native';
+import { logger } from './logger-production';
 
 /**
  * Support contact configuration
@@ -32,7 +32,7 @@ export async function canSendEmail(): Promise<boolean> {
   try {
     return await MailComposer.isAvailableAsync();
   } catch (error) {
-    logger.error('Error checking email availability', error);
+    logger.error('Error checking email availability', error as Error);
     return false;
   }
 }
@@ -73,7 +73,7 @@ function formatErrorContext(context?: ErrorContext): string {
 
 /**
  * Compose and send support email with error context
- * 
+ *
  * @param subject - Email subject (defaults to generic support request)
  * @param errorContext - Optional error details to include
  * @returns Success status
@@ -131,7 +131,7 @@ export async function contactSupport(
       error: i18n.t('errors.support.emailFailed'),
     };
   } catch (error) {
-    logger.error('Error contacting support', error);
+    logger.error('Error contacting support', error as Error);
     return {
       success: false,
       error:
@@ -154,7 +154,7 @@ export async function openHelpCenter(): Promise<void> {
       logger.error('Cannot open help center URL');
     }
   } catch (error) {
-    logger.error('Error opening help center', error);
+    logger.error('Error opening help center', error as Error);
   }
 }
 
@@ -170,7 +170,7 @@ export async function openFAQ(): Promise<void> {
       logger.error('Cannot open FAQ URL');
     }
   } catch (error) {
-    logger.error('Error opening FAQ', error);
+    logger.error('Error opening FAQ', error as Error);
   }
 }
 

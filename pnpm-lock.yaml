@@ -97,6 +97,9 @@ importers:
       expo-location:
         specifier: ^19.0.7
         version: 19.0.7(expo@54.0.13)
+      expo-mail-composer:
+        specifier: ^15.0.7
+        version: 15.0.7(expo@54.0.13)
       expo-notifications:
         specifier: ~0.32.12
         version: 0.32.12(expo@54.0.13)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.16)(react@19.1.0))(react@19.1.0)
@@ -3559,6 +3562,11 @@ packages:
 
   expo-location@19.0.7:
     resolution: {integrity: sha512-YNkh4r9E6ECbPkBCAMG5A5yHDgS0pw+Rzyd0l2ZQlCtjkhlODB55nMCKr5CZnUI0mXTkaSm8CwfoCO8n2MpYfg==}
+    peerDependencies:
+      expo: '*'
+
+  expo-mail-composer@15.0.7:
+    resolution: {integrity: sha512-QEytis4Vrinff2WKcNaQJtR5wDdOyfuP72ezvaSJ81mV/J9yFntiQeynSS/svaU0N9m4inDWJ9WD5eRUGL55oQ==}
     peerDependencies:
       expo: '*'
 
@@ -11167,6 +11175,10 @@ snapshots:
       rtl-detect: 1.1.2
 
   expo-location@19.0.7(expo@54.0.13):
+    dependencies:
+      expo: 54.0.13(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.11)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.16)(react@19.1.0))(react@19.1.0)
+
+  expo-mail-composer@15.0.7(expo@54.0.13):
     dependencies:
       expo: 54.0.13(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.11)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.16)(react@19.1.0))(react@19.1.0)
 

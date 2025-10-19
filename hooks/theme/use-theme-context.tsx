@@ -43,6 +43,12 @@ interface ThemeContextType {
   resolvedTheme: ResolvedTheme;
 
   /**
+   * Alias for resolvedTheme - for backward compatibility with code expecting `theme`
+   * @deprecated Use resolvedTheme instead
+   */
+  theme: ResolvedTheme;
+
+  /**
    * Whether the theme is currently loading from AsyncStorage
    */
   isLoading: boolean;
@@ -76,7 +82,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
         if (saved && validThemes.includes(saved)) {
           setThemePreferenceState(saved as ThemePreference);
         }
-      } catch (error) {
+      } catch (_error) {
         // Fall back to default theme if loading fails
       } finally {
         setIsLoading(false);
@@ -103,6 +109,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
         themePreference,
         setThemePreference,
         resolvedTheme,
+        theme: resolvedTheme, // Alias for backward compatibility
         isLoading,
       }}
     >

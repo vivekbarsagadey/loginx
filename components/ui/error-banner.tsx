@@ -1,13 +1,12 @@
+import { Spacing } from '@/constants/layout';
+import { Colors } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme-context';
 import { Ionicons } from '@expo/vector-icons';
 import React, { memo, type ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ThemedButton } from '../themed-button';
 import { ThemedText } from '../themed-text';
 import { ThemedView } from '../themed-view';
-import { Colors } from '@/constants/theme';
-import { Spacing } from '@/constants/layout';
-import { useTheme } from '@/hooks/use-theme-context';
-import { useColorScheme } from 'react-native';
 
 export type ErrorSeverity = 'error' | 'warning' | 'info';
 
@@ -43,10 +42,10 @@ export interface ErrorBannerProps {
 
 /**
  * ErrorBanner component
- * 
+ *
  * Reusable component for displaying errors, warnings, and informational messages
  * with optional illustrations, actions, and recovery steps.
- * 
+ *
  * @example
  * ```tsx
  * <ErrorBanner
@@ -79,9 +78,8 @@ export const ErrorBanner = memo(function ErrorBanner({
   onDismiss,
   showIcon = true,
 }: ErrorBannerProps) {
-  const { theme } = useTheme();
-  const systemTheme = useColorScheme();
-  const colors = Colors[theme === 'system' ? systemTheme || 'light' : theme];
+  const { resolvedTheme } = useTheme();
+  const colors = Colors[resolvedTheme];
 
   const getSeverityColor = (): string => {
     switch (severity) {
@@ -121,19 +119,10 @@ export const ErrorBanner = memo(function ErrorBanner({
         },
       ]}
       accessibilityRole="alert"
-      accessibilityLive="polite"
     >
       {/* Dismiss button */}
       {dismissible && onDismiss && (
-        <Ionicons
-          name="close"
-          size={20}
-          color={colors['text-muted']}
-          style={styles.dismissButton}
-          onPress={onDismiss}
-          accessibilityRole="button"
-          accessibilityLabel="Dismiss error"
-        />
+        <Ionicons name="close" size={20} color={colors['text-muted']} style={styles.dismissButton} onPress={onDismiss} accessibilityRole="button" accessibilityLabel="Dismiss error" />
       )}
 
       {/* Illustration or Icon */}
@@ -149,18 +138,10 @@ export const ErrorBanner = memo(function ErrorBanner({
 
       {/* Content */}
       <View style={styles.content}>
-        <ThemedText
-          type="subtitle"
-          style={[styles.title, { color: severityColor }]}
-          accessibilityRole="header"
-        >
+        <ThemedText type="subtitle1" style={[styles.title, { color: severityColor }]} accessibilityRole="header">
           {title}
         </ThemedText>
-        <ThemedText
-          type="body"
-          style={styles.message}
-          accessibilityLabel={`Error message: ${message}`}
-        >
+        <ThemedText type="body" style={styles.message} accessibilityLabel={`Error message: ${message}`}>
           {message}
         </ThemedText>
 
