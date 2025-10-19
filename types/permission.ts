@@ -40,3 +40,33 @@ export interface PermissionCardProps {
     ) => void;
   };
 }
+
+/**
+ * Permissions Context State
+ * Centralized state for all app permissions
+ */
+export interface PermissionsContextState {
+  /** All permission statuses */
+  permissions: PermissionsStatusMap;
+  /** Whether permissions are currently being checked */
+  isLoading: boolean;
+  /** Error message if permission check failed */
+  error: string | null;
+  /** Last time permissions were checked */
+  lastCheckedAt: number | null;
+}
+
+/**
+ * Default permissions state
+ */
+export const DEFAULT_PERMISSIONS_STATE: PermissionsContextState = {
+  permissions: {
+    camera: { granted: false, canAskAgain: true },
+    mediaLibrary: { granted: false, canAskAgain: true },
+    location: { granted: false, canAskAgain: true },
+    notifications: { granted: false, canAskAgain: true },
+  },
+  isLoading: false,
+  error: null,
+  lastCheckedAt: null,
+};

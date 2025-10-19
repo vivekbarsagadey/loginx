@@ -14,6 +14,9 @@ import { AnimationDurations, ScreenTransitions } from '@/constants/animation';
 import { Routes } from '@/constants/routes';
 import { AuthProvider, useAuth } from '@/hooks/use-auth-provider';
 import { LanguageProvider } from '@/hooks/use-language-provider';
+import { NetworkProvider } from '@/hooks/network/use-network-context';
+import { PermissionsProvider } from '@/hooks/permissions/use-permissions-context';
+import { SettingsProvider } from '@/hooks/settings/use-settings-context';
 import { OnboardingProvider, useOnboarding } from '@/hooks/use-onboarding-provider';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { ThemeProvider as CustomThemeProvider, useThemeContext } from '@/hooks/use-theme-context';
@@ -346,13 +349,19 @@ export default function RootLayout() {
       <CustomThemeProvider>
         <LanguageProvider>
           <GlobalDialogProvider>
-            <AuthProvider>
-              <OnboardingProvider>
-                <NavigationThemeProvider>
-                  <RootLayoutNav />
-                </NavigationThemeProvider>
-              </OnboardingProvider>
-            </AuthProvider>
+            <NetworkProvider>
+              <PermissionsProvider>
+                <SettingsProvider>
+                  <AuthProvider>
+                    <OnboardingProvider>
+                      <NavigationThemeProvider>
+                        <RootLayoutNav />
+                      </NavigationThemeProvider>
+                    </OnboardingProvider>
+                  </AuthProvider>
+                </SettingsProvider>
+              </PermissionsProvider>
+            </NetworkProvider>
           </GlobalDialogProvider>
         </LanguageProvider>
       </CustomThemeProvider>
