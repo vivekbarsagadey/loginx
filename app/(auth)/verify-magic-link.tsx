@@ -8,13 +8,13 @@ import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
+import { useAsyncStorage } from '@/hooks/storage/use-async-storage';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
 import { Config } from '@/utils/config';
 import { createLogger } from '@/utils/debug';
 import { showError } from '@/utils/error';
 import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Linking from 'expo-linking';
 import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { useEffect, useState } from 'react';
@@ -31,12 +31,16 @@ export default function VerifyMagicLinkScreen() {
   const colors = useThemeColors();
   const alert = useAlert();
 
-  const [email, setEmail] = useState<string>('');
   const [checking, setChecking] = useState(true);
+  
+  // Use storage hook for email persistence
+  const emailForSignInStorage = useAsyncStorage<string>('emailForSignIn', '');
+  const email = emailForSignInStorage.value;
 
   useEffect(() => {
     checkForMagicLink();
-    loadStoredEmail();
+    // Email is automatically loaded by useAsyncStorage hook
+    setChecking(emailForSignInStorage.loading);
 
     // Listen for deep links (when magic link is clicked)
     const subscription = Linking.addEventListener('url', handleDeepLink);
@@ -45,19 +49,32 @@ export default function VerifyMagicLinkScreen() {
       subscription.remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [emailForSignInStorage.loading]);
 
-  const loadStoredEmail = async () => {
+  const completeSignIn = async (emailLink: string) => {
     try {
-      const storedEmail = await AsyncStorage.getItem('emailForSignIn');
-      if (storedEmail) {
-        setEmail(storedEmail);
+      let signInEmail = email;
+
+      // If email not found in state, it should have been loaded by useAsyncStorage
+      if (!signInEmail) {
+        // Alert.prompt not available on all platforms, show simple error
+        alert.show(i18n.t('passwordlessLogin.enterEmail.title'), i18n.t('passwordlessLogin.enterEmail.message'), [{ text: i18n.t('common.ok') }], { variant: 'error' });
+        return;
       }
+
+      await finishSignIn(signInEmail, emailLink);
     } catch (error) {
-      logger.error('Failed to load stored email:', error);
-    } finally {
-      setChecking(false);
+      logger.error('Error completing sign-in:', error);
+      showError(error);
     }
+  };
+
+  const finishSignIn = async (signInEmail: string, emailLink: string) => {
+    // Sign in with email link
+    await signInWithEmailLink(auth, signInEmail, emailLink);
+
+    // Clear email from storage
+    await emailForSignInStorage.remove();
   };
 
   const handleDeepLink = async ({ url }: { url: string }) => {
@@ -77,39 +94,6 @@ export default function VerifyMagicLinkScreen() {
       logger.error('Error checking initial URL:', error);
     }
   };
-
-  const completeSignIn = async (emailLink: string) => {
-    try {
-      let signInEmail = email;
-
-      // If email not found in state, try loading from storage
-      if (!signInEmail) {
-        const storedEmail = await AsyncStorage.getItem('emailForSignIn');
-        if (storedEmail) {
-          signInEmail = storedEmail;
-        } else {
-          // Alert.prompt not available on all platforms, show simple error
-          alert.show(i18n.t('passwordlessLogin.enterEmail.title'), i18n.t('passwordlessLogin.enterEmail.message'), [{ text: i18n.t('common.ok') }], { variant: 'error' });
-          return;
-        }
-      }
-
-      await finishSignIn(signInEmail, emailLink);
-    } catch (error) {
-      logger.error('Error completing sign-in:', error);
-      showError(error);
-    }
-  };
-
-  const finishSignIn = async (signInEmail: string, emailLink: string) => {
-    // Sign in with email link
-    await signInWithEmailLink(auth, signInEmail, emailLink);
-
-    // Clear email from storage
-    await AsyncStorage.removeItem('emailForSignIn');
-  };
-
-  const resendMagicLink = async () => {
     if (!email) {
       alert.show(i18n.t('passwordlessLogin.error.noEmail'), i18n.t('passwordlessLogin.error.noEmailMessage'), [{ text: i18n.t('common.ok') }], { variant: 'error' });
       throw new Error(i18n.t('passwordlessLogin.error.noEmail'));
@@ -143,7 +127,7 @@ export default function VerifyMagicLinkScreen() {
   };
 
   const handleBackToLogin = () => {
-    AsyncStorage.removeItem('emailForSignIn');
+    emailForSignInStorage.remove();
     replace('/(auth)/login');
   };
 
