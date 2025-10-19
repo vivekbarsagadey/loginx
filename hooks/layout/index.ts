@@ -7,9 +7,11 @@
  * - useDeviceCategory - Device category detection (phone, tablet, desktop)
  * - useOrientation - Screen orientation tracking
  * - useBreakpoint - Breakpoint-based responsive design
+ * - useMediaQuery - Advanced responsive design with custom breakpoints
  */
 
 export * from './use-responsive';
 export * from './use-breakpoint';
 export * from './use-orientation';
 export * from './use-device-category';
+export * from './use-media-query';

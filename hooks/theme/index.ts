@@ -7,6 +7,7 @@
  * - Color scheme detection (light/dark)
  * - Language selection and provider
  * - Internationalization support
+ * - Localized date formatting
  */
 
 export * from './use-color-scheme';
@@ -16,4 +17,5 @@ export * from './use-theme-context';
 // Note: Both use-language and use-language-provider export useLanguage
 // use-language-provider is the main provider, use-language is standalone
 export { LanguageProvider, useLanguage } from './use-language-provider';
+export * from './use-localized-date';
 
