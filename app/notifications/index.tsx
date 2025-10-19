@@ -15,6 +15,7 @@ import { useAlert } from '@/hooks/use-alert';
 import { useLoadingState } from '@/hooks/use-loading-state';
 import { useNotificationCount } from '@/hooks/use-notification-count';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useToggle } from '@/hooks/utility/use-toggle';
 import i18n from '@/i18n';
 import type { NotificationItem as NotificationItemType } from '@/types/notification';
 import { clearNotifications, deleteNotification, getNotificationHistory, markAllNotificationsAsRead, markNotificationAsRead } from '@/utils/notification-storage';
@@ -29,7 +30,7 @@ export default function NotificationsCenterScreen() {
   const colors = useThemeColors();
 
   const [notifications, setNotifications] = useState<NotificationItemType[]>([]);
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, toggleRefreshing, setRefreshing] = useToggle(false);
 
   // Hook to track and refresh badge count
   const { refreshCount } = useNotificationCount();

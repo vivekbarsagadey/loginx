@@ -6,6 +6,7 @@ import { PasswordStrengthMeter } from '@/components/ui/password-strength-meter';
 import { Spacing, Typography } from '@/constants/layout';
 import { useEmailAvailability } from '@/hooks/use-email-availability';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { useTimeout } from '@/hooks/timing/use-timeout';
 import i18n from '@/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from 'react';
@@ -33,13 +34,10 @@ export default function RegisterStep2({ errors }: { errors: FieldErrors<FormData
   const successColor = useThemeColor({}, 'success');
   const errorColor = useThemeColor({}, 'error');
 
-  // Auto-focus email input on mount
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      emailRef.current?.focus();
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
+  // Auto-focus email input on mount using useTimeout
+  useTimeout(() => {
+    emailRef.current?.focus();
+  }, 100);
 
   // Check email availability when email changes
   useEffect(() => {

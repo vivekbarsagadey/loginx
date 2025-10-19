@@ -3,9 +3,10 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { AddressAutocomplete, type AddressComponents } from '@/components/ui/address-autocomplete';
 import { Spacing, Typography } from '@/constants/layout';
+import { useTimeout } from '@/hooks/timing/use-timeout';
 import i18n from '@/i18n';
 import { GOOGLE_PLACES_API_KEY } from '@/utils/env';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Controller, type FieldErrors, useFormContext } from 'react-hook-form';
 import { StyleSheet, type TextInput } from 'react-native';
 
@@ -28,15 +29,12 @@ export default function RegisterStep3({ errors }: { errors: FieldErrors<FormData
 
   const [useAutocomplete, setUseAutocomplete] = useState(isValidApiKey);
 
-  // Auto-focus address input on mount
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!useAutocomplete) {
-        addressRef.current?.focus();
-      }
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [useAutocomplete]);
+  // Auto-focus address input on mount using useTimeout
+  useTimeout(() => {
+    if (!useAutocomplete) {
+      addressRef.current?.focus();
+    }
+  }, 100);
 
   const handleAddressSelect = (addressComponents: AddressComponents) => {
     setValue('address', addressComponents.street);
