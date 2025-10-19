@@ -1,14 +1,17 @@
 /**
  * Timing & Scheduling Hooks
- * 
- * This module will export hooks for timing operations:
- * - useDebouncedCallback - Debounced callback execution
- * - useThrottledCallback - Throttled callback execution
- * - useInterval - setInterval wrapper
- * - useTimeout - setTimeout wrapper
- * 
- * To be implemented in Phase 4.
+ *
+ * This module exports hooks for time-based operations:
+ * - Debounced callbacks - Delay execution until after inactivity period
+ * - Throttled callbacks - Limit execution frequency
+ * - Intervals - Periodic callback execution with controls
+ * - Timeouts - Delayed one-time callback execution with controls
+ *
+ * These hooks provide declarative, React-friendly wrappers around
+ * JavaScript timing functions with automatic cleanup and control methods.
  */
 
-// Timing hooks will be added in Phase 4
-export {};
+export * from './use-debounced-callback';
+export * from './use-throttled-callback';
+export * from './use-interval';
+export * from './use-timeout';

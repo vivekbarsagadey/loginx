@@ -1,13 +1,16 @@
 /**
  * Storage & Persistence Hooks
- * 
- * This module will export hooks for data persistence:
+ *
+ * This module exports hooks for data persistence:
  * - Local storage (AsyncStorage wrapper)
- * - Secure storage (SecureStore wrapper)
- * - Enhanced async storage with caching
- * 
- * To be implemented in Phase 3.
+ * - Secure storage (SecureStore wrapper for sensitive data)
+ * - Enhanced async storage with in-memory caching and TTL
+ *
+ * All hooks provide a React state-like interface with automatic
+ * persistence and loading of initial values.
  */
 
-// Storage hooks will be added in Phase 3
-export {};
+export * from './use-async-storage';
+export * from './use-local-storage';
+export * from './use-secure-storage';
+
