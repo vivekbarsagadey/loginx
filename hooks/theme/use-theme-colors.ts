@@ -48,15 +48,16 @@
  */
 
 import { Colors } from '@/constants/theme';
-import { useThemeContext } from './use-theme-context';
 import type { ThemeColors } from './use-theme-color';
+import type { ResolvedTheme } from './use-theme-context';
+import { useThemeContext } from './use-theme-context';
 
 /**
  * Configuration for theme colors
  */
 export interface UseThemeColorsConfig {
-  /** Theme colors mapped by theme name (light/dark) */
-  themeColors?: Record<'light' | 'dark', ThemeColors>;
+  /** Theme colors mapped by theme name (supports all resolved theme variants) */
+  themeColors?: Partial<Record<ResolvedTheme, ThemeColors>>;
 }
 
 /**
@@ -71,7 +72,11 @@ export function useThemeColors(config?: UseThemeColorsConfig): ThemeColors {
 
   // If config provided, use injected colors (independent mode)
   if (config?.themeColors) {
-    return config.themeColors[resolvedTheme];
+    const colors = config.themeColors[resolvedTheme];
+    if (colors) {
+      return colors;
+    }
+    // Fallback to default theme colors if specific theme not provided
   }
 
   // Default: Use project constants (backward compatible)

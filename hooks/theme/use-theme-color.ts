@@ -13,8 +13,8 @@ export type ThemeColors = ProjectThemeColors;
  * Pass this to make the hook work independently of project constants
  */
 export interface UseThemeColorConfig {
-  /** Theme colors mapped by theme name (light/dark) */
-  themeColors: Record<'light' | 'dark', ThemeColors>;
+  /** Theme colors mapped by theme name */
+  themeColors: Record<string, ThemeColors>;
 }
 
 /**
