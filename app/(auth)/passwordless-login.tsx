@@ -7,10 +7,10 @@ import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
+import { useAsyncStorage } from '@/hooks/storage/use-async-storage';
 import i18n from '@/i18n';
 import { Config } from '@/utils/config';
 import { zodResolver } from '@hookform/resolvers/zod';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { sendSignInLinkToEmail } from 'firebase/auth';
 import { Controller, useForm } from 'react-hook-form';
 import { StyleSheet } from 'react-native';
@@ -27,6 +27,9 @@ const schema = z.object({
  */
 export default function PasswordlessLoginScreen() {
   const { push, back } = useHapticNavigation();
+  
+  // Use storage hook for email persistence
+  const emailForSignInStorage = useAsyncStorage<string>('emailForSignIn', '');
 
   const {
     control,
@@ -62,7 +65,7 @@ export default function PasswordlessLoginScreen() {
     await sendSignInLinkToEmail(auth, data.email, actionCodeSettings);
 
     // Save email to local storage so we can complete sign-in later
-    await AsyncStorage.setItem('emailForSignIn', data.email);
+    await emailForSignInStorage.setValue(data.email);
   };
 
   const { submit, isSubmitting } = useFormSubmit(sendMagicLink, {

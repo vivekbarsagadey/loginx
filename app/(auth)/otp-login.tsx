@@ -7,12 +7,13 @@ import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
+import { useAsyncStorage } from '@/hooks/storage/use-async-storage';
+import { useInterval } from '@/hooks/timing/use-interval';
 import i18n from '@/i18n';
 import { createLogger } from '@/utils/debug';
 import { zodResolver } from '@hookform/resolvers/zod';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchSignInMethodsForEmail, sendSignInLinkToEmail } from 'firebase/auth';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StyleSheet, type TextInput } from 'react-native';
 import { z } from 'zod';
@@ -39,6 +40,38 @@ export default function OTPLoginScreen() {
   const [resending, setResending] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const otpRefs = useRef<TextInput[]>([]);
+  
+  // Use storage hooks for persistent data
+  const otpStorage = useAsyncStorage<{
+    code: string;
+    email: string;
+    timestamp: number;
+    expiresAt: number;
+  } | null>('emailOTP', null);
+  
+  const emailForSignInStorage = useAsyncStorage<string>('emailForSignIn', '');
+
+  // Use useInterval for countdown timer
+  const countdownInterval = useInterval(
+    () => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          return 0;
+        }
+        return prev - 1;
+      });
+    },
+    1000,
+    { immediate: false, enabled: countdown > 0 }
+  );
+
+  // Start countdown when entering OTP step
+  useEffect(() => {
+    if (step === 'otp' && countdown > 0) {
+      countdownInterval.start();
+    }
+    return () => countdownInterval.stop();
+  }, [step, countdown]);
 
   const emailForm = useForm({
     resolver: zodResolver(emailSchema),
@@ -67,7 +100,7 @@ export default function OTPLoginScreen() {
       timestamp: Date.now(),
       expiresAt: Date.now() + 10 * 60 * 1000, // 10 minutes
     };
-    await AsyncStorage.setItem('emailOTP', JSON.stringify(otpData));
+    await otpStorage.setValue(otpData);
 
     // In production, send OTP via email service (SendGrid, Mailgun, etc.)
     // For now, we'll use Firebase email link as a workaround
@@ -78,17 +111,6 @@ export default function OTPLoginScreen() {
     setEmail(emailAddress);
     setStep('otp');
     setCountdown(60);
-
-    // Start countdown
-    const interval = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
   };
 
   const { submit: submitEmail, isSubmitting: loadingEmail } = useFormSubmit(
@@ -104,26 +126,24 @@ export default function OTPLoginScreen() {
 
   const verifyOTP = async (code: string) => {
     // Retrieve stored OTP
-    const storedData = await AsyncStorage.getItem('emailOTP');
+    const storedData = otpStorage.value;
     if (!storedData) {
       throw new Error(i18n.t('otpLogin.error.otpExpired'));
     }
 
-    const otpData = JSON.parse(storedData);
-
     // Check expiration
-    if (Date.now() > otpData.expiresAt) {
-      await AsyncStorage.removeItem('emailOTP');
+    if (Date.now() > storedData.expiresAt) {
+      await otpStorage.remove();
       throw new Error(i18n.t('otpLogin.error.otpExpired'));
     }
 
     // Verify code
-    if (code !== otpData.code) {
+    if (code !== storedData.code) {
       throw new Error(i18n.t('otpLogin.error.invalidOtp'));
     }
 
     // Clear OTP
-    await AsyncStorage.removeItem('emailOTP');
+    await otpStorage.remove();
 
     // In production, complete authentication with your backend
     // For now, we'll use Firebase email link as fallback
@@ -133,7 +153,7 @@ export default function OTPLoginScreen() {
     };
 
     await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-    await AsyncStorage.setItem('emailForSignIn', email);
+    await emailForSignInStorage.setValue(email);
   };
 
   const { submit: submitOTP, isSubmitting: loadingOTP } = useFormSubmit(

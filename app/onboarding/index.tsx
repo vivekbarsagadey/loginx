@@ -23,6 +23,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { useTimeout } from '@/hooks/timing/use-timeout';
 
 const SLIDES = [
   { key: 'welcome' },
@@ -48,6 +49,19 @@ export default function Onboarding() {
   const colors = useThemeColors();
   const { width } = useWindowDimensions();
   const { top, bottom } = useSafeAreaInsets();
+  
+  // Timeout hooks for slide transition animations
+  const forwardTransitionTimeout = useTimeout(
+    () => setSlideTransitioning(false),
+    400,
+    { immediate: false }
+  );
+  
+  const backwardTransitionTimeout = useTimeout(
+    () => setSlideTransitioning(false),
+    350,
+    { immediate: false }
+  );
 
   // Enhanced Animation values
   const slideProgress = useSharedValue(0);
@@ -205,7 +219,7 @@ export default function Onboarding() {
     }
 
     // Reset transition state after animation
-    setTimeout(() => setSlideTransitioning(false), 400);
+    forwardTransitionTimeout.start();
   };
   const back = async () => {
     if (slideTransitioning || i <= 0) {
@@ -216,7 +230,7 @@ export default function Onboarding() {
     ref.current?.scrollToIndex({ index: i - 1, animated: true });
     setI(i - 1);
 
-    setTimeout(() => setSlideTransitioning(false), 350);
+    backwardTransitionTimeout.start();
   };
 
   const skip = async () => {

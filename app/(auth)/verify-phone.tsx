@@ -9,6 +9,7 @@ import { useAlert } from '@/hooks/use-alert';
 import { useAutoFocus } from '@/hooks/use-auto-focus';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
+import { useInterval } from '@/hooks/timing/use-interval';
 import { showError } from '@/utils/error';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
@@ -32,23 +33,26 @@ export default function VerifyPhoneScreen() {
   // Auto-focus code input
   useAutoFocus(codeRef);
 
-  // Countdown timer for resend button
-  useEffect(() => {
-    if (countdown === 0) {
-      return;
-    }
-
-    const timer = setInterval(() => {
+  // Use useInterval for countdown timer
+  const countdownInterval = useInterval(
+    () => {
       setCountdown((prev) => {
         if (prev <= 1) {
-          clearInterval(timer);
           return 0;
         }
         return prev - 1;
       });
-    }, 1000);
+    },
+    1000,
+    { immediate: false, enabled: countdown > 0 }
+  );
 
-    return () => clearInterval(timer);
+  // Start countdown when it's set
+  useEffect(() => {
+    if (countdown > 0) {
+      countdownInterval.start();
+    }
+    return () => countdownInterval.stop();
   }, [countdown]);
 
   // Send verification code

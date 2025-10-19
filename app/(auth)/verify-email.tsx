@@ -8,11 +8,12 @@ import { auth } from '@/firebase-config';
 import { useAlert } from '@/hooks/use-alert';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
+import { useInterval } from '@/hooks/timing/use-interval';
 import i18n from '@/i18n';
 import { createLogger } from '@/utils/debug';
 import { useLocalSearchParams } from 'expo-router';
 import { sendEmailVerification, signOut } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 const logger = createLogger('VerifyEmail');
@@ -32,25 +33,21 @@ export default function VerifyEmailScreen() {
   const { show: showAlert, AlertComponent } = useAlert();
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
 
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      if (auth.currentUser) {
-        try {
-          await auth.currentUser.reload();
-          if (auth.currentUser.emailVerified) {
-            clearInterval(interval);
-            // Show success animation instead of navigating immediately
-            setShowSuccessAnimation(true);
-          }
-        } catch (reloadError) {
-          logger.error('Failed to reload user:', reloadError);
-          // Continue checking - don't break the interval
+  // Use useInterval to check email verification status
+  useInterval(async () => {
+    if (auth.currentUser) {
+      try {
+        await auth.currentUser.reload();
+        if (auth.currentUser.emailVerified) {
+          // Show success animation instead of navigating immediately
+          setShowSuccessAnimation(true);
         }
+      } catch (reloadError) {
+        logger.error('Failed to reload user:', reloadError);
+        // Continue checking - don't break the interval
       }
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
+    }
+  }, 3000);
 
   const resendEmail = async () => {
     if (!auth.currentUser) {

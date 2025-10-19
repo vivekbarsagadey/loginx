@@ -10,6 +10,7 @@ import { auth } from '@/firebase-config';
 import { useConfirmation } from '@/hooks/use-dialog';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useLanguage } from '@/hooks/use-language-provider';
+import { useToggle } from '@/hooks/utility/use-toggle';
 import i18n from '@/i18n';
 import { clear as clearCache } from '@/utils/cache';
 import { showError } from '@/utils/error';
@@ -32,10 +33,10 @@ export default function SettingsScreen() {
   const logoutDialog = useConfirmation();
   const clearCacheDialog = useConfirmation();
   const deleteAccountDialog = useConfirmation();
-  const [isDeleting, setIsDeleting] = React.useState(false);
+  const [isDeleting, toggleIsDeleting, setIsDeleting] = useToggle(false);
 
   // TASK-075: Re-authentication state for account deletion
-  const [showReAuthForDeletion, setShowReAuthForDeletion] = React.useState(false);
+  const [showReAuthForDeletion, toggleShowReAuthForDeletion, setShowReAuthForDeletion] = useToggle(false);
 
   const handleLogout = async () => {
     logoutDialog.show({
