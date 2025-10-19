@@ -9,7 +9,7 @@ import { ThemedView } from '@/components/themed-view';
 import { BorderRadius, IconSize, Spacing, Typography } from '@/constants/layout';
 import { getPermissions } from '@/data';
 import { useAlert } from '@/hooks/use-alert';
-import { usePermissions } from '@/hooks/use-permissions';
+import { usePermissions } from '@/hooks/permissions/use-permissions-context';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import type { PermissionCardProps } from '@/types/permission';
@@ -102,22 +102,16 @@ function PermissionCard({ icon, title, description, granted, canAskAgain, onRequ
 }
 
 export default function PermissionsScreen() {
-  const { permissionsStatus, requestCameraPermission, requestMediaLibraryPermission, requestLocationPermission, requestNotificationPermission, checkAllPermissions } = usePermissions();
+  // Use PermissionsContext for centralized permission management
+  const { permissions: permissionsStatus, requestPermission, checkAllPermissions, isLoading } = usePermissions();
   const alert = useAlert();
-
-  const [loading, setLoading] = React.useState<Record<string, boolean>>({
-    camera: false,
-    mediaLibrary: false,
-    location: false,
-    notifications: false,
-  });
 
   const bgColor = useThemeColor({}, 'bg');
   const primaryColor = useThemeColor({}, 'primary');
   const mutedColor = useThemeColor({}, 'text-muted');
 
   // Add loading state check
-  if (!permissionsStatus) {
+  if (isLoading) {
     return (
       <ScreenContainer scrollable style={{ backgroundColor: bgColor }}>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -127,13 +121,11 @@ export default function PermissionsScreen() {
     );
   }
 
-  const handleRequestPermission = async (type: 'camera' | 'mediaLibrary' | 'location' | 'notifications', requestFn: () => Promise<boolean>) => {
-    setLoading((prev) => ({ ...prev, [type]: true }));
+  const handleRequestPermission = async (type: 'camera' | 'mediaLibrary' | 'location' | 'notifications') => {
     try {
-      await requestFn();
-      await checkAllPermissions();
-    } finally {
-      setLoading((prev) => ({ ...prev, [type]: false }));
+      await requestPermission(type);
+    } catch (error) {
+      console.error('Failed to request permission:', error);
     }
   };
 
@@ -143,10 +135,10 @@ export default function PermissionsScreen() {
   };
 
   const permissions = getPermissions({
-    requestNotificationPermission,
-    requestCameraPermission,
-    requestMediaLibraryPermission,
-    requestLocationPermission,
+    requestNotificationPermission: () => requestPermission('notifications'),
+    requestCameraPermission: () => requestPermission('camera'),
+    requestMediaLibraryPermission: () => requestPermission('mediaLibrary'),
+    requestLocationPermission: () => requestPermission('location'),
   });
 
   return (
@@ -176,8 +168,8 @@ export default function PermissionsScreen() {
             description={permission.description}
             granted={permissionsStatus[permission.type].granted}
             canAskAgain={permissionsStatus[permission.type].canAskAgain}
-            onRequest={() => handleRequestPermission(permission.type, permission.requestFn)}
-            loading={loading[permission.type]}
+            onRequest={() => handleRequestPermission(permission.type)}
+            loading={isLoading}
             alert={alert}
           />
         ))}

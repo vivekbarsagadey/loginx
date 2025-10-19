@@ -5,7 +5,7 @@
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { useIsOnline } from '@/hooks/use-network-status';
+import { useNetwork } from '@/hooks/network/use-network-context';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet } from 'react-native';
@@ -34,9 +34,13 @@ interface OfflineIndicatorProps {
  * ```
  */
 export function OfflineIndicator({ message, visible }: OfflineIndicatorProps) {
-  const isOnline = useIsOnline();
+  // Use NetworkContext for centralized network status
+  const { isConnected, isInternetReachable } = useNetwork();
   const warningColor = useThemeColor({}, 'warning');
   const onPrimaryColor = useThemeColor({}, 'on-primary');
+
+  // Determine online status: both connected and internet reachable
+  const isOnline = isConnected && (isInternetReachable !== false);
 
   // Don't show if online (unless manually overridden)
   const shouldShow = visible !== undefined ? visible : !isOnline;
