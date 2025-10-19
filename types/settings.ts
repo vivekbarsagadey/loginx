@@ -5,16 +5,15 @@
 
 /**
  * Notification settings for the application
+ * Compatible with existing NotificationSettings type
  */
 export interface NotificationSettings {
   /** Enable push notifications */
   pushEnabled: boolean;
-  /** Enable email notifications */
-  emailEnabled: boolean;
-  /** Enable SMS notifications */
-  smsEnabled: boolean;
-  /** Enable in-app notifications */
-  inAppEnabled: boolean;
+  /** Enable email updates */
+  emailUpdates: boolean;
+  /** Enable marketing tips and promotions */
+  marketingTips: boolean;
   /** Enable notification sounds */
   soundEnabled: boolean;
   /** Enable notification vibration */
@@ -95,10 +94,9 @@ export interface SettingsState {
  * Default notification settings
  */
 export const DEFAULT_NOTIFICATION_SETTINGS: NotificationSettings = {
-  pushEnabled: true,
-  emailEnabled: true,
-  smsEnabled: false,
-  inAppEnabled: true,
+  pushEnabled: false,
+  emailUpdates: false,
+  marketingTips: false,
   soundEnabled: true,
   vibrationEnabled: true,
 };
