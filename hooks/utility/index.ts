@@ -7,6 +7,9 @@
  * - Notification count tracking
  * - Error handling utilities
  * - State management utilities (toggle, counter, list, map)
+ * - Form management (useForm)
+ * - Search functionality (useSearch)
+ * - Infinite scrolling (useInfiniteScroll)
  */
 
 export * from './use-error-handler';
@@ -19,4 +22,9 @@ export * from './use-counter';
 export * from './use-list';
 export * from './use-map';
 export * from './use-toggle';
+
+// Advanced utilities
+export * from './use-form';
+export * from './use-search';
+export * from './use-infinite-scroll';
 

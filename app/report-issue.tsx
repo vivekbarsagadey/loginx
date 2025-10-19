@@ -14,6 +14,7 @@ import { useAlert } from '@/hooks/use-alert';
 import { useAuth } from '@/hooks/use-auth-provider';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
+import { useForm } from '@/hooks/utility/use-form';
 import i18n from '@/i18n';
 import type { IssueType } from '@/types/feedback';
 import * as Haptics from 'expo-haptics';
@@ -22,52 +23,73 @@ import { StyleSheet } from 'react-native';
 
 const ISSUE_TYPES = getIssueTypes();
 
+interface IssueFormValues {
+  subject: string;
+  description: string;
+  stepsToReproduce: string;
+  expectedBehavior: string;
+  actualBehavior: string;
+}
+
 export default function ReportIssueScreen() {
   const { user } = useAuth();
   const { show: showAlert, AlertComponent } = useAlert();
   const { back } = useHapticNavigation();
 
   const [selectedIssue, setSelectedIssue] = useState<IssueType>('functionality');
-  const [subject, setSubject] = useState('');
-  const [description, setDescription] = useState('');
-  const [stepsToReproduce, setStepsToReproduce] = useState('');
-  const [expectedBehavior, setExpectedBehavior] = useState('');
-  const [actualBehavior, setActualBehavior] = useState('');
+
+  // Form state management with useForm hook
+  const form = useForm<IssueFormValues>({
+    initialValues: {
+      subject: '',
+      description: '',
+      stepsToReproduce: '',
+      expectedBehavior: '',
+      actualBehavior: '',
+    },
+    validations: {
+      subject: {
+        required: true,
+        validate: (value) => {
+          if (!value.trim()) {
+            return i18n.t('screens.reportIssue.validation.subjectRequired.message');
+          }
+          return null;
+        },
+      },
+      description: {
+        required: true,
+        validate: (value) => {
+          if (!value.trim()) {
+            return i18n.t('screens.reportIssue.validation.descriptionRequired.message');
+          }
+          if (value.trim().length < 20) {
+            return i18n.t('screens.reportIssue.validation.descriptionTooShort.message');
+          }
+          return null;
+        },
+      },
+    },
+  });
 
   const handleIssueSelect = async (issueType: IssueType) => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedIssue(issueType);
   };
 
-  // Validation function
-  const validateForm = () => {
-    if (!subject.trim()) {
-      showAlert(i18n.t('screens.reportIssue.validation.subjectRequired.title'), i18n.t('screens.reportIssue.validation.subjectRequired.message'), [{ text: i18n.t('common.ok') }], {
-        variant: 'warning',
-      });
-      return false;
-    }
-
-    if (!description.trim()) {
-      showAlert(i18n.t('screens.reportIssue.validation.descriptionRequired.title'), i18n.t('screens.reportIssue.validation.descriptionRequired.message'), [{ text: i18n.t('common.ok') }], {
-        variant: 'warning',
-      });
-      return false;
-    }
-
-    if (description.trim().length < 20) {
-      showAlert(i18n.t('screens.reportIssue.validation.descriptionTooShort.title'), i18n.t('screens.reportIssue.validation.descriptionTooShort.message'), [{ text: i18n.t('common.ok') }], {
-        variant: 'warning',
-      });
-      return false;
-    }
-
+  // Validation function for useFormSubmit
+  const validateFormWithAuth = async () => {
     if (!user) {
-      showAlert(i18n.t('common.error'), 'You must be logged in to report an issue', [{ text: i18n.t('common.ok') }], { variant: 'error' });
+      showAlert(
+        i18n.t('common.error'),
+        'You must be logged in to report an issue',
+        [{ text: i18n.t('common.ok') }],
+        { variant: 'error' }
+      );
       return false;
     }
 
-    return true;
+    return await form.validateForm();
   };
 
   // Form submission with hook
@@ -81,11 +103,11 @@ export default function ReportIssueScreen() {
         user.uid,
         user.email || undefined,
         selectedIssue,
-        subject,
-        description,
-        stepsToReproduce.trim() || undefined,
-        expectedBehavior.trim() || undefined,
-        actualBehavior.trim() || undefined
+        form.values.subject,
+        form.values.description,
+        form.values.stepsToReproduce.trim() || undefined,
+        form.values.expectedBehavior.trim() || undefined,
+        form.values.actualBehavior.trim() || undefined
       );
 
       if (!result.success) {
@@ -93,18 +115,14 @@ export default function ReportIssueScreen() {
       }
 
       // Reset form on success
-      setSubject('');
-      setDescription('');
-      setStepsToReproduce('');
-      setExpectedBehavior('');
-      setActualBehavior('');
+      form.reset();
       setSelectedIssue('functionality');
     },
     {
       successTitle: i18n.t('screens.reportIssue.success.title'),
       successMessage: i18n.t('screens.reportIssue.success.message'),
       onSuccess: () => back(),
-      validate: validateForm,
+      validate: validateFormWithAuth,
     }
   );
 
@@ -136,14 +154,18 @@ export default function ReportIssueScreen() {
           {i18n.t('screens.reportIssue.subject')}
         </ThemedText>
         <ThemedTextInput
-          value={subject}
-          onChangeText={setSubject}
+          value={form.values.subject}
+          onChangeText={form.handleChange('subject')}
+          onBlur={form.handleBlur('subject')}
           placeholder={i18n.t('screens.reportIssue.subjectPlaceholder')}
           maxLength={100}
           editable={!isSubmitting}
           accessibilityLabel="Issue subject"
         />
-        <CharacterCounter count={subject.length} maxLength={100} />
+        <CharacterCounter count={form.values.subject.length} maxLength={100} />
+        {form.touched.subject && form.errors.subject && (
+          <ThemedText style={styles.errorText}>{form.errors.subject}</ThemedText>
+        )}
       </ThemedView>
 
       {/* Description */}
@@ -152,8 +174,9 @@ export default function ReportIssueScreen() {
           {i18n.t('screens.reportIssue.description')}
         </ThemedText>
         <ThemedTextInput
-          value={description}
-          onChangeText={setDescription}
+          value={form.values.description}
+          onChangeText={form.handleChange('description')}
+          onBlur={form.handleBlur('description')}
           placeholder={i18n.t('screens.reportIssue.descriptionPlaceholder')}
           multiline
           numberOfLines={6}
@@ -162,7 +185,10 @@ export default function ReportIssueScreen() {
           style={styles.textArea}
           accessibilityLabel="Issue description"
         />
-        <CharacterCounter count={description.length} maxLength={1000} />
+        <CharacterCounter count={form.values.description.length} maxLength={1000} />
+        {form.touched.description && form.errors.description && (
+          <ThemedText style={styles.errorText}>{form.errors.description}</ThemedText>
+        )}
       </ThemedView>
 
       {/* Steps to Reproduce */}
@@ -171,8 +197,8 @@ export default function ReportIssueScreen() {
           {i18n.t('screens.reportIssue.stepsToReproduce')}
         </ThemedText>
         <ThemedTextInput
-          value={stepsToReproduce}
-          onChangeText={setStepsToReproduce}
+          value={form.values.stepsToReproduce}
+          onChangeText={form.handleChange('stepsToReproduce')}
           placeholder={i18n.t('screens.reportIssue.stepsPlaceholder')}
           multiline
           numberOfLines={5}
@@ -181,7 +207,7 @@ export default function ReportIssueScreen() {
           style={styles.textArea}
           accessibilityLabel="Steps to reproduce"
         />
-        <CharacterCounter count={stepsToReproduce.length} maxLength={500} />
+        <CharacterCounter count={form.values.stepsToReproduce.length} maxLength={500} />
       </ThemedView>
 
       {/* Expected vs Actual Behavior */}
@@ -190,8 +216,8 @@ export default function ReportIssueScreen() {
           {i18n.t('screens.reportIssue.expectedBehavior')}
         </ThemedText>
         <ThemedTextInput
-          value={expectedBehavior}
-          onChangeText={setExpectedBehavior}
+          value={form.values.expectedBehavior}
+          onChangeText={form.handleChange('expectedBehavior')}
           placeholder={i18n.t('screens.reportIssue.expectedPlaceholder')}
           multiline
           numberOfLines={3}
@@ -207,8 +233,8 @@ export default function ReportIssueScreen() {
           {i18n.t('screens.reportIssue.actualBehavior')}
         </ThemedText>
         <ThemedTextInput
-          value={actualBehavior}
-          onChangeText={setActualBehavior}
+          value={form.values.actualBehavior}
+          onChangeText={form.handleChange('actualBehavior')}
           placeholder={i18n.t('screens.reportIssue.actualPlaceholder')}
           multiline
           numberOfLines={3}
@@ -246,6 +272,10 @@ const styles = StyleSheet.create({
     minHeight: 100,
     textAlignVertical: 'top',
     paddingTop: Spacing.sm,
+  },
+  errorText: {
+    fontSize: 12,
+    marginTop: 4,
   },
   infoBox: {
     marginBottom: Spacing.lg,
