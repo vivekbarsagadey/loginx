@@ -10,3 +10,6 @@
  */
 
 export * from './use-responsive';
+export * from './use-breakpoint';
+export * from './use-orientation';
+export * from './use-device-category';
