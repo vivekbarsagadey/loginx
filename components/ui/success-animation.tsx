@@ -155,7 +155,7 @@ export function SuccessAnimation({
       iconOpacity.value = 0;
       confettiScale.value = 0;
     }
-  }, [visible, duration, onComplete, showConfetti]);
+  }, [visible, duration, onComplete, showConfetti, scale, rotation, iconOpacity, confettiScale]);
 
   const iconAnimatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -251,7 +251,7 @@ function ConfettiParticle({ index, color }: { index: number; color: string }) {
       800,
       withTiming(0, { duration: 500 })
     );
-  }, [index]);
+  }, [index, translateX, translateY, rotate, opacity]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [

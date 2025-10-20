@@ -154,14 +154,14 @@ export const batchUpdates = (callback: () => void) => {
  * Check if device supports React Native's new architecture (Fabric/TurboModules)
  */
 export const isFabricEnabled = (): boolean => {
-  return (global as GlobalWithArchitecture).nativeFabricUIManager != null;
+  return (globalThis as unknown as GlobalWithArchitecture).nativeFabricUIManager != null;
 };
 
 /**
  * Check if TurboModules are enabled
  */
 export const isTurboModuleEnabled = (): boolean => {
-  return (global as GlobalWithArchitecture).__turboModuleProxy != null;
+  return (globalThis as unknown as GlobalWithArchitecture).__turboModuleProxy != null;
 };
 
 /**

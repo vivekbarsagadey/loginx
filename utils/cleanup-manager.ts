@@ -11,8 +11,8 @@ import { debugLog, debugWarn } from './debug';
  */
 type CleanupResource =
   | { type: 'subscription'; unsubscribe: () => void; id: string }
-  | { type: 'timer'; timerId: NodeJS.Timeout | number; id: string }
-  | { type: 'interval'; intervalId: NodeJS.Timeout | number; id: string }
+  | { type: 'timer'; timerId: ReturnType<typeof setTimeout>; id: string }
+  | { type: 'interval'; intervalId: ReturnType<typeof setInterval>; id: string }
   | { type: 'listener'; remove: () => void; id: string }
   | { type: 'custom'; cleanup: () => void | Promise<void>; id: string };
 
@@ -45,7 +45,7 @@ class CleanupScope {
   /**
    * Register a timer (setTimeout) for cleanup
    */
-  registerTimer(id: string, timerId: NodeJS.Timeout | number): void {
+  registerTimer(id: string, timerId: ReturnType<typeof setTimeout>): void {
     if (this.isDestroyed) {
       debugWarn(`[CleanupManager] Cannot register to destroyed scope: ${this.scopeName}`);
       return;
@@ -58,7 +58,7 @@ class CleanupScope {
   /**
    * Register an interval (setInterval) for cleanup
    */
-  registerInterval(id: string, intervalId: NodeJS.Timeout | number): void {
+  registerInterval(id: string, intervalId: ReturnType<typeof setInterval>): void {
     if (this.isDestroyed) {
       debugWarn(`[CleanupManager] Cannot register to destroyed scope: ${this.scopeName}`);
       return;

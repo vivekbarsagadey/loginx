@@ -104,7 +104,7 @@ export function useFetch<T = any>(
   });
 
   const abortControllerRef = useRef<AbortController | null>(null);
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const mountedRef = useRef(true);
 
   /**
@@ -243,7 +243,7 @@ export function useFetch<T = any>(
         }
         debounceTimerRef.current = setTimeout(() => {
           performFetch(isRefetch);
-        }, debounce) as unknown as NodeJS.Timeout;
+        }, debounce);
       } else {
         performFetch(isRefetch);
       }

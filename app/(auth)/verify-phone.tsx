@@ -53,7 +53,7 @@ export default function VerifyPhoneScreen() {
       countdownInterval.start();
     }
     return () => countdownInterval.stop();
-  }, [countdown]);
+  }, [countdown, countdownInterval]);
 
   // Send verification code
   useEffect(() => {
