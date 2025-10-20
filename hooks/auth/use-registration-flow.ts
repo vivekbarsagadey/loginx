@@ -57,7 +57,7 @@ interface UseRegistrationFlowProps<T extends Record<string, unknown>> {
  *   onSubmit: handleSubmit,
  *   logger: {
  *     logStateChange: (component, field, oldVal, newVal) => {
- *       console.log(`[${component}] ${field}: ${oldVal} -> ${newVal}`);
+ *       console.error(`[${component}] ${field}: ${oldVal} -> ${newVal}`);
  *     }
  *   }
  * });

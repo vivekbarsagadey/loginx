@@ -30,7 +30,7 @@ export default function NotificationsCenterScreen() {
   const colors = useThemeColors();
 
   const [notifications, setNotifications] = useState<NotificationItemType[]>([]);
-  const [refreshing, toggleRefreshing, setRefreshing] = useToggle(false);
+  const [refreshing, _toggleRefreshing, setRefreshing] = useToggle(false);
 
   // Hook to track and refresh badge count
   const { refreshCount } = useNotificationCount();
@@ -44,7 +44,7 @@ export default function NotificationsCenterScreen() {
       setNotifications(history);
       setRefreshing(false);
     });
-  }, [executeLoad]);
+  }, [executeLoad, setRefreshing]);
 
   useEffect(() => {
     loadNotifications();
@@ -54,7 +54,7 @@ export default function NotificationsCenterScreen() {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setRefreshing(true);
     await loadNotifications();
-  }, [loadNotifications]);
+  }, [loadNotifications, setRefreshing]);
 
   const handleMarkAsRead = useCallback(
     async (id: string) => {

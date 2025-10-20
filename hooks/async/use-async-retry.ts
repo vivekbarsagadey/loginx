@@ -55,7 +55,7 @@ export interface UseAsyncRetryReturn<T> {
  *     maxAttempts: 3,
  *     backoffMs: 1000,
  *     backoffStrategy: 'exponential',
- *     onRetry: (attempt) => console.log(`Retry attempt ${attempt}`),
+ *     onRetry: (attempt) => console.error(`Retry attempt ${attempt}`),
  *   }
  * );
  *

@@ -27,7 +27,7 @@ export interface UseAsyncOperationResult<T extends AsyncFunction> {
  * @example
  * const { loading, error, execute } = useAsyncOperation(async (data) => {
  *   await someAsyncFunction(data);
- * }, { onSuccess: () => console.log('Success!') });
+ * }, { onSuccess: () => console.error('Success!') });
  *
  * // Use it
  * await execute(myData);

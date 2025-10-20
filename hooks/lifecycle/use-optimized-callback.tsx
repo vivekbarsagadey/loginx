@@ -135,7 +135,7 @@ export function usePrevious<T>(value: T): T | undefined {
  *
  * @example
  * useUpdateEffect(() => {
- *   console.log('User changed:', user);
+ *   console.error('User changed:', user);
  * }, [user]);
  */
 export function useUpdateEffect(effect: React.EffectCallback, deps: React.DependencyList): void {
@@ -243,7 +243,7 @@ export function useBatchedState<T extends Record<string, unknown>>(initialState:
  * @example
  * const handlePress = useCallbackRef((item) => {
  *   // Can use latest props/state without re-creating callback
- *   console.log(item, currentFilter);
+ *   console.error(item, currentFilter);
  * });
  */
 export function useCallbackRef<T extends (...args: never[]) => unknown>(callback: T): T {

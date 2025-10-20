@@ -99,7 +99,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       }));
 
       if (__DEV__) {
-        console.log('[PermissionsContext] Permissions checked:', newPermissions);
+        console.error('[PermissionsContext] Permissions checked:', newPermissions);
       }
     } catch (error) {
       console.error('[PermissionsContext] Failed to check permissions:', error);
@@ -132,7 +132,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       }));
 
       if (__DEV__) {
-        console.log('[PermissionsContext] Camera permission:', granted ? 'GRANTED' : 'DENIED');
+        console.error('[PermissionsContext] Camera permission:', granted ? 'GRANTED' : 'DENIED');
       }
 
       return granted;
@@ -168,7 +168,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       }));
 
       if (__DEV__) {
-        console.log('[PermissionsContext] Media library permission:', granted ? 'GRANTED' : 'DENIED');
+        console.error('[PermissionsContext] Media library permission:', granted ? 'GRANTED' : 'DENIED');
       }
 
       return granted;
@@ -204,7 +204,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       }));
 
       if (__DEV__) {
-        console.log('[PermissionsContext] Location permission:', granted ? 'GRANTED' : 'DENIED');
+        console.error('[PermissionsContext] Location permission:', granted ? 'GRANTED' : 'DENIED');
       }
 
       return granted;
@@ -240,7 +240,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       }));
 
       if (__DEV__) {
-        console.log('[PermissionsContext] Notification permission:', granted ? 'GRANTED' : 'DENIED');
+        console.error('[PermissionsContext] Notification permission:', granted ? 'GRANTED' : 'DENIED');
       }
 
       return granted;
@@ -333,7 +333,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
    */
   useEffect(() => {
     if (__DEV__) {
-      console.log('[PermissionsContext] Initializing permissions check');
+      console.error('[PermissionsContext] Initializing permissions check');
     }
     checkAllPermissions();
   }, [checkAllPermissions]);

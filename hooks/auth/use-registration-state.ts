@@ -183,7 +183,7 @@ export interface UseRegistrationStateOptions {
  *     showError: myErrorHandler,
  *     logger: myLogger,
  *   },
- *   onSuccess: (userId) => console.log('Success!', userId),
+ *   onSuccess: (userId) => console.error('Success!', userId),
  * });
  * ```
  */

@@ -33,10 +33,10 @@ export default function SettingsScreen() {
   const logoutDialog = useConfirmation();
   const clearCacheDialog = useConfirmation();
   const deleteAccountDialog = useConfirmation();
-  const [isDeleting, toggleIsDeleting, setIsDeleting] = useToggle(false);
+  const [isDeleting, _toggleIsDeleting, setIsDeleting] = useToggle(false);
 
   // TASK-075: Re-authentication state for account deletion
-  const [showReAuthForDeletion, toggleShowReAuthForDeletion, setShowReAuthForDeletion] = useToggle(false);
+  const [showReAuthForDeletion, _toggleShowReAuthForDeletion, setShowReAuthForDeletion] = useToggle(false);
 
   const handleLogout = async () => {
     logoutDialog.show({

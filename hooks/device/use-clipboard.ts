@@ -46,7 +46,7 @@ export interface UseClipboardReturn {
  * const handleCopy = async () => {
  *   const success = await copy('Hello, World!', {
  *     successMessage: 'Copied to clipboard!',
- *     onSuccess: (text) => console.log('Copied:', text),
+ *     onSuccess: (text) => console.error('Copied:', text),
  *   });
  * };
  *
@@ -54,7 +54,7 @@ export interface UseClipboardReturn {
  * const handlePaste = async () => {
  *   const text = await paste();
  *   if (text) {
- *     console.log('Pasted:', text);
+ *     console.error('Pasted:', text);
  *   }
  * };
  *

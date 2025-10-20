@@ -15,7 +15,7 @@ export const showSuccess = (title: string, message: string, onOk?: () => void) =
     // Fallback to console if no handler is set (development only)
     if (__DEV__) {
       // eslint-disable-next-line no-console
-      console.log(`[${title}] ${message}`);
+      console.error(`[${title}] ${message}`);
     }
     if (onOk) {
       onOk();

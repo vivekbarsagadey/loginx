@@ -216,7 +216,7 @@ export async function cleanupExpiredRateLimits(): Promise<void> {
 
     if (deleteCount > 0) {
       await batch.commit();
-      console.log(`Cleaned up ${deleteCount} expired rate limit records from ${collectionName}`);
+      console.error(`Cleaned up ${deleteCount} expired rate limit records from ${collectionName}`);
     }
   }
 }

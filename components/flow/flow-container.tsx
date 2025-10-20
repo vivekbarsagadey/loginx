@@ -1,24 +1,24 @@
 /**
  * Flow Container Component
- * 
+ *
  * Main container component that orchestrates the entire flow experience.
  * Manages state, navigation, rendering, and provides context to child components.
  */
 
-import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, View } from 'react-native';
-import { useFlowEngine } from '@/hooks/use-flow-engine';
-import { FlowContext } from '@/hooks/use-flow-context';
-import type { FlowContainerProps } from '@/types/flow';
 import { ThemedView } from '@/components/themed-view';
+import { FlowContext } from '@/hooks/use-flow-context';
+import { useFlowEngine } from '@/hooks/use-flow-engine';
+import type { FlowContainerProps } from '@/types/flow';
+import React, { useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet } from 'react-native';
 import { FlowHeader } from './flow-header';
+import { FlowNavigation } from './flow-navigation';
 import { FlowProgress } from './flow-progress';
 import { FlowStepWrapper } from './flow-step-wrapper';
-import { FlowNavigation } from './flow-navigation';
 
 /**
  * FlowContainer - Main component for rendering multi-step flows
- * 
+ *
  * @example
  * ```tsx
  * <FlowContainer
@@ -35,7 +35,7 @@ export function FlowContainer({
   theme,
   userPreferences = {},
   brandId,
-  onExperimentView,
+  onExperimentView: _onExperimentView,
   initialData,
   resumeState,
   containerStyle,
@@ -83,11 +83,7 @@ export function FlowContainer({
   return (
     <FlowContext.Provider value={context}>
       <SafeAreaView style={styles.safeArea}>
-        <KeyboardAvoidingView
-          style={styles.container}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
-        >
+        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
           <ThemedView style={[styles.content, containerStyle]}>
             {/* Header (optional) */}
             {flow.showHeader !== false && (
@@ -116,14 +112,7 @@ export function FlowContainer({
             )}
 
             {/* Current Step */}
-            <FlowStepWrapper
-              step={context.currentStep}
-              data={context.state.data}
-              onUpdate={context.updateData}
-              theme={theme}
-              userPreferences={userPreferences}
-              brandId={brandId}
-            />
+            <FlowStepWrapper step={context.currentStep} data={context.state.data} onUpdate={context.updateData} theme={theme} userPreferences={userPreferences} brandId={brandId} />
 
             {/* Navigation Controls */}
             <FlowNavigation

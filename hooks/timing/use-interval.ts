@@ -75,7 +75,7 @@ export interface UseIntervalReturn {
  * // Conditional interval (only when enabled)
  * const [enabled, setEnabled] = useState(false);
  * useInterval(
- *   () => console.log('Tick'),
+ *   () => console.error('Tick'),
  *   1000,
  *   { enabled }
  * );

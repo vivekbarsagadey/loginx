@@ -282,8 +282,8 @@ function checkAAACompliance(): AAAResult[] {
 // =============================================================================
 
 function runTests() {
-  console.log('\n🧪 COMPLETE DARK MODE TESTING\n');
-  console.log('================================================================================\n');
+  console.error('\n🧪 COMPLETE DARK MODE TESTING\n');
+  console.error('================================================================================\n');
 
   const allResults: TestResult[] = [];
 
@@ -309,77 +309,77 @@ function runTests() {
 
   // Print errors first
   if (errors > 0) {
-    console.log('❌ ERRORS:\n');
-    allResults.filter((r) => !r.passed && r.severity === 'error').forEach((r) => console.log(`   ${r.message}`));
-    console.log('');
+    console.error('❌ ERRORS:\n');
+    allResults.filter((r) => !r.passed && r.severity === 'error').forEach((r) => console.error(`   ${r.message}`));
+    console.error('');
   }
 
   // Print warnings
   if (warnings > 0) {
-    console.log('⚠️  WARNINGS:\n');
-    allResults.filter((r) => !r.passed && r.severity === 'warning').forEach((r) => console.log(`   ${r.message}`));
-    console.log('');
+    console.error('⚠️  WARNINGS:\n');
+    allResults.filter((r) => !r.passed && r.severity === 'warning').forEach((r) => console.error(`   ${r.message}`));
+    console.error('');
   }
 
   // Print summary
-  console.log('📊 TEST RESULTS');
-  console.log('================================================================================\n');
-  console.log(`✅ Passed: ${passed}`);
-  console.log(`⚠️  Warnings: ${warnings}`);
-  console.log(`❌ Errors: ${errors}`);
-  console.log(`📝 Total Tests: ${allResults.length}\n`);
+  console.error('📊 TEST RESULTS');
+  console.error('================================================================================\n');
+  console.error(`✅ Passed: ${passed}`);
+  console.error(`⚠️  Warnings: ${warnings}`);
+  console.error(`❌ Errors: ${errors}`);
+  console.error(`📝 Total Tests: ${allResults.length}\n`);
 
   if (errors === 0 && warnings === 0) {
-    console.log('✅ All dark mode tests PASSED!\n');
+    console.error('✅ All dark mode tests PASSED!\n');
   }
 
   // Run AAA compliance check
-  console.log('================================================================================\n');
-  console.log('🎯 WCAG AAA COMPLIANCE CHECK\n');
-  console.log('================================================================================\n');
+  console.error('================================================================================\n');
+  console.error('🎯 WCAG AAA COMPLIANCE CHECK\n');
+  console.error('================================================================================\n');
 
   const aaaResults = checkAAACompliance();
 
   aaaResults.forEach((result) => {
     if (result.meetsAAA) {
-      console.log(`✅ ${result.theme} ${result.mode}`);
-      console.log(`   Button: ${result.primary} on ${result.onPrimary}`);
-      console.log(`   Contrast: ${result.contrast.toFixed(2)}:1 - AAA ⭐\n`);
+      console.error(`✅ ${result.theme} ${result.mode}`);
+      console.error(`   Button: ${result.primary} on ${result.onPrimary}`);
+      console.error(`   Contrast: ${result.contrast.toFixed(2)}:1 - AAA ⭐\n`);
     } else if (result.meetsAA) {
-      console.log(`⚠️  ${result.theme} ${result.mode}`);
-      console.log(`   Button: ${result.primary} on ${result.onPrimary}`);
-      console.log(`   Contrast: ${result.contrast.toFixed(2)}:1 - AA only (needs ${(7.0 - result.contrast).toFixed(2)} more)\n`);
+      console.error(`⚠️  ${result.theme} ${result.mode}`);
+      console.error(`   Button: ${result.primary} on ${result.onPrimary}`);
+      console.error(`   Contrast: ${result.contrast.toFixed(2)}:1 - AA only (needs ${(7.0 - result.contrast).toFixed(2)} more)\n`);
     } else {
-      console.log(`❌ ${result.theme} ${result.mode}`);
-      console.log(`   Button: ${result.primary} on ${result.onPrimary}`);
-      console.log(`   Contrast: ${result.contrast.toFixed(2)}:1 - FAILS AA\n`);
+      console.error(`❌ ${result.theme} ${result.mode}`);
+      console.error(`   Button: ${result.primary} on ${result.onPrimary}`);
+      console.error(`   Contrast: ${result.contrast.toFixed(2)}:1 - FAILS AA\n`);
     }
   });
 
   // AAA Summary
-  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-  console.log('📊 AAA COMPLIANCE SUMMARY\n');
+  console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+  console.error('📊 AAA COMPLIANCE SUMMARY\n');
 
   const aaaCount = aaaResults.filter((r) => r.meetsAAA).length;
   const aaCount = aaaResults.filter((r) => r.meetsAA && !r.meetsAAA).length;
   const failCount = aaaResults.filter((r) => !r.meetsAA).length;
   const total = aaaResults.length;
 
-  console.log(`Total Tested: ${total} (6 themes × 2 modes)`);
-  console.log(`AAA Compliant (7.0:1+): ${aaaCount}/${total} (${Math.round((aaaCount / total) * 100)}%)`);
-  console.log(`AA Only (4.5-7.0:1): ${aaCount}/${total} (${Math.round((aaCount / total) * 100)}%)`);
-  console.log(`Failing (<4.5:1): ${failCount}/${total} (${Math.round((failCount / total) * 100)}%)\n`);
+  console.error(`Total Tested: ${total} (6 themes × 2 modes)`);
+  console.error(`AAA Compliant (7.0:1+): ${aaaCount}/${total} (${Math.round((aaaCount / total) * 100)}%)`);
+  console.error(`AA Only (4.5-7.0:1): ${aaCount}/${total} (${Math.round((aaCount / total) * 100)}%)`);
+  console.error(`Failing (<4.5:1): ${failCount}/${total} (${Math.round((failCount / total) * 100)}%)\n`);
 
   if (aaaCount === total) {
-    console.log('🌟 ✅ ALL THEMES ACHIEVE WCAG AAA COMPLIANCE! 🌟\n');
+    console.error('🌟 ✅ ALL THEMES ACHIEVE WCAG AAA COMPLIANCE! 🌟\n');
   } else if (aaaCount + aaCount === total) {
-    console.log('✅ All themes meet minimum WCAG AA standards\n');
-    console.log(`💡 ${aaCount} theme(s) can be improved to AAA by darkening primary colors\n`);
+    console.error('✅ All themes meet minimum WCAG AA standards\n');
+    console.error(`💡 ${aaCount} theme(s) can be improved to AAA by darkening primary colors\n`);
   } else {
-    console.log('❌ Some themes need improvement to meet WCAG standards\n');
+    console.error('❌ Some themes need improvement to meet WCAG standards\n');
   }
 
-  console.log('================================================================================\n');
+  console.error('================================================================================\n');
 
   // Exit with error code if there are errors
   if (errors > 0) {

@@ -124,7 +124,7 @@ export const measureRenderTime = (componentName: string, callback: () => void) =
     callback();
     const end = performance.now();
     // eslint-disable-next-line no-console
-    console.log(`[Performance] ${componentName} render time: ${(end - start).toFixed(2)}ms`);
+    console.error(`[Performance] ${componentName} render time: ${(end - start).toFixed(2)}ms`);
   } else {
     callback();
   }
@@ -188,7 +188,7 @@ export const logPerformanceMetrics = () => {
   if (__DEV__) {
     const info = getArchitectureInfo();
     // eslint-disable-next-line no-console
-    console.log('[Performance] Architecture Info:', {
+    console.error('[Performance] Architecture Info:', {
       'New Architecture (Fabric)': info.fabric ? '✅ Enabled' : '❌ Disabled',
       TurboModules: info.turboModules ? '✅ Enabled' : '❌ Disabled',
       'Hermes Engine': info.hermesEnabled ? '✅ Enabled' : '❌ Disabled',

@@ -68,7 +68,7 @@ export function NetworkProvider({ children }: PropsWithChildren) {
       }));
 
       if (__DEV__) {
-        console.log('[NetworkContext] Status refreshed:', status);
+        console.error('[NetworkContext] Status refreshed:', status);
       }
     } catch (error) {
       console.error('[NetworkContext] Failed to refresh status:', error);
@@ -97,7 +97,7 @@ export function NetworkProvider({ children }: PropsWithChildren) {
    */
   const handleNetworkChange = useCallback((isOnline: boolean) => {
     if (__DEV__) {
-      console.log('[NetworkContext] Network status changed:', isOnline ? 'ONLINE' : 'OFFLINE');
+      console.error('[NetworkContext] Network status changed:', isOnline ? 'ONLINE' : 'OFFLINE');
     }
 
     setState((prev) => ({
@@ -112,7 +112,7 @@ export function NetworkProvider({ children }: PropsWithChildren) {
    */
   useEffect(() => {
     if (__DEV__) {
-      console.log('[NetworkContext] Initializing network monitoring');
+      console.error('[NetworkContext] Initializing network monitoring');
     }
 
     // Initialize monitoring
@@ -128,7 +128,7 @@ export function NetworkProvider({ children }: PropsWithChildren) {
 
     return () => {
       if (__DEV__) {
-        console.log('[NetworkContext] Cleaning up network monitoring');
+        console.error('[NetworkContext] Cleaning up network monitoring');
       }
       unsubscribeMonitoring();
       unsubscribeChanges();

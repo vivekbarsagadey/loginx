@@ -210,7 +210,7 @@ export const scheduledRateLimitCleanup = onSchedule('0 2 * * *', async () => {
   try {
     await cleanupExpiredRateLimits();
     // eslint-disable-next-line no-console
-    console.log('Rate limit cleanup completed successfully');
+    console.error('Rate limit cleanup completed successfully');
   } catch (error) {
     console.error('Rate limit cleanup failed:', error);
   }

@@ -76,7 +76,7 @@ export interface UseShareReturn {
  *     message: 'Check out this amazing app!',
  *   });
  *   if (result.success) {
- *     console.log('Shared successfully');
+ *     console.error('Shared successfully');
  *   }
  * };
  *
@@ -106,9 +106,9 @@ export interface UseShareReturn {
  *   await share(
  *     { message: 'Hello!' },
  *     {
- *       onSuccess: (action) => console.log('Shared:', action),
+ *       onSuccess: (action) => console.error('Shared:', action),
  *       onError: (error) => console.error('Error:', error),
- *       onDismiss: () => console.log('Dismissed'),
+ *       onDismiss: () => console.error('Dismissed'),
  *     }
  *   );
  * };

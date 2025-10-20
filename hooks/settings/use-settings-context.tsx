@@ -93,7 +93,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
       }));
 
       if (__DEV__) {
-        console.log('[SettingsContext] Settings loaded from local storage');
+        console.error('[SettingsContext] Settings loaded from local storage');
       }
     } catch (error) {
       console.error('[SettingsContext] Failed to load settings:', error);
@@ -126,7 +126,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
         setState((prev) => ({ ...prev, lastSyncedAt: Date.now() }));
 
         if (__DEV__) {
-          console.log(`[SettingsContext] ${key} saved and synced`);
+          console.error(`[SettingsContext] ${key} saved and synced`);
         }
       } catch (error) {
         console.error(`[SettingsContext] Failed to save ${key}:`, error);
@@ -282,7 +282,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
       });
 
       if (__DEV__) {
-        console.log('[SettingsContext] All settings reset to defaults');
+        console.error('[SettingsContext] All settings reset to defaults');
       }
     } catch (error) {
       console.error('[SettingsContext] Failed to reset settings:', error);
@@ -311,7 +311,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
     if (!user || !firestore) {return;}
 
     if (__DEV__) {
-      console.log('[SettingsContext] Setting up Firestore real-time sync');
+      console.error('[SettingsContext] Setting up Firestore real-time sync');
     }
 
     // Create snapshot listeners for each settings section
@@ -399,7 +399,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
 
     return () => {
       if (__DEV__) {
-        console.log('[SettingsContext] Cleaning up Firestore sync');
+        console.error('[SettingsContext] Cleaning up Firestore sync');
       }
       unsubscribers.forEach((unsubscribe) => unsubscribe());
     };

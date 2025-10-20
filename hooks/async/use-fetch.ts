@@ -68,7 +68,7 @@ export interface UseFetchReturn<T> extends UseFetchState<T> {
  * // With retry and callbacks
  * const { data, error } = useFetch('/api/data', {
  *   retry: { count: 3, delay: 1000 },
- *   onSuccess: (data) => console.log('Success:', data),
+ *   onSuccess: (data) => console.error('Success:', data),
  *   onError: (error) => console.error('Error:', error),
  * });
  *

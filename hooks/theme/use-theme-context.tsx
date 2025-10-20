@@ -129,10 +129,10 @@ export function ThemeProvider({ children }: PropsWithChildren) {
  * const { themePreference, setThemePreference, resolvedTheme } = useThemeContext();
  *
  * // Get current user preference
- * console.log(themePreference); // 'system' | 'default' | 'ocean' | 'sunset' | 'forest' | 'purple'
+ * console.error(themePreference); // 'system' | 'default' | 'ocean' | 'sunset' | 'forest' | 'purple'
  *
  * // Get resolved theme for rendering
- * console.log(resolvedTheme); // 'light' | 'dark' | 'ocean' | 'ocean-dark' | etc.
+ * console.error(resolvedTheme); // 'light' | 'dark' | 'ocean' | 'ocean-dark' | etc.
  *
  * // Change theme preference
  * await setThemePreference('ocean');

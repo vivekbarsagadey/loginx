@@ -99,7 +99,7 @@ function scanDir(dir: string): void {
 
 // Run scan
 const rootDir = process.argv[2] || process.cwd();
-console.log(`\n🔍 Scanning ${rootDir} for useEffect cleanup issues...\n`);
+console.error(`\n🔍 Scanning ${rootDir} for useEffect cleanup issues...\n`);
 
 scanDir(rootDir);
 
@@ -108,27 +108,27 @@ const high = issues.filter((i) => i.severity === 'high');
 const medium = issues.filter((i) => i.severity === 'medium');
 const low = issues.filter((i) => i.severity === 'low');
 
-console.log(`📊 Results: ${issues.length} issues found\n`);
-console.log(`🚨 High:   ${high.length}`);
-console.log(`⚠️  Medium: ${medium.length}`);
-console.log(`ℹ️  Low:    ${low.length}\n`);
+console.error(`📊 Results: ${issues.length} issues found\n`);
+console.error(`🚨 High:   ${high.length}`);
+console.error(`⚠️  Medium: ${medium.length}`);
+console.error(`ℹ️  Low:    ${low.length}\n`);
 
 if (high.length > 0) {
-  console.log('🚨 HIGH PRIORITY ISSUES:\n');
+  console.error('🚨 HIGH PRIORITY ISSUES:\n');
   high.forEach((issue, idx) => {
-    console.log(`${idx + 1}. ${issue.file}:${issue.line}`);
-    console.log(`   ${issue.reason}\n`);
+    console.error(`${idx + 1}. ${issue.file}:${issue.line}`);
+    console.error(`   ${issue.reason}\n`);
   });
 }
 
 if (medium.length > 0 && high.length < 10) {
-  console.log('\n⚠️  MEDIUM PRIORITY ISSUES:\n');
+  console.error('\n⚠️  MEDIUM PRIORITY ISSUES:\n');
   medium.slice(0, 10).forEach((issue, idx) => {
-    console.log(`${idx + 1}. ${issue.file}:${issue.line}`);
-    console.log(`   ${issue.reason}\n`);
+    console.error(`${idx + 1}. ${issue.file}:${issue.line}`);
+    console.error(`   ${issue.reason}\n`);
   });
 }
 
-console.log('\n✅ Audit complete. Fix high priority issues first.\n');
+console.error('\n✅ Audit complete. Fix high priority issues first.\n');
 
 process.exit(high.length > 0 ? 1 : 0);
