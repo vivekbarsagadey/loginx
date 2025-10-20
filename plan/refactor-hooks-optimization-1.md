@@ -92,40 +92,40 @@ The LoginX project has a comprehensive custom hooks library with 80+ hooks organ
 
 **GOAL-003**: Leverage timing hooks for search, input validation, and rate limiting
 
-| Task     | Description                                                                  | Completed                                | Date       |
-| -------- | ---------------------------------------------------------------------------- | ---------------------------------------- | ---------- |
-| TASK-016 | Replace manual debounce logic in search components with useDebouncedCallback | ❌ Not Found                             | -          |
-| TASK-017 | Replace manual throttle logic in scroll handlers with useThrottledCallback   | ❌ Not Found                             | -          |
-| TASK-018 | Replace manual setTimeout in components with useTimeout hook                 | ✅ Complete (4/10 migrated - auth/reg)   | 2025-10-19 |
-| TASK-019 | Replace manual setInterval in components with useInterval hook               | ✅ Complete (3/3 migrated)               | 2025-10-19 |
-| TASK-020 | Optimize email availability check in registration with useDebouncedCallback  | ❌                                       | -          |
-| TASK-021 | Add debounced search to notifications screen                                 | ❌                                       | -          |
-| TASK-022 | Add throttled scroll tracking to onboarding carousel                         | ❌                                       | -          |
+| Task     | Description                                                                  | Completed                                            | Date       |
+| -------- | ---------------------------------------------------------------------------- | ---------------------------------------------------- | ---------- |
+| TASK-016 | Replace manual debounce logic in search components with useDebouncedCallback | ❌ Not Found                                         | -          |
+| TASK-017 | Replace manual throttle logic in scroll handlers with useThrottledCallback   | ❌ Not Found                                         | -          |
+| TASK-018 | Replace manual setTimeout in components with useTimeout hook                 | ⏸️ Partial (4/10 - 6 remain in verify-2fa, examples) | 2025-10-19 |
+| TASK-019 | Replace manual setInterval in components with useInterval hook               | ✅ Complete (7/7 migrated)                           | 2025-10-19 |
+| TASK-020 | Optimize email availability check in registration with useDebouncedCallback  | ❌                                                   | -          |
+| TASK-021 | Add debounced search to notifications screen                                 | ❌                                                   | -          |
+| TASK-022 | Add throttled scroll tracking to onboarding carousel                         | ❌                                                   | -          |
 
 ### Implementation Phase 4: State Management Utilities
 
 **GOAL-004**: Use utility hooks for common state patterns (toggle, counter, list, map)
 
-| Task     | Description                                                                      | Completed                                | Date       |
-| -------- | -------------------------------------------------------------------------------- | ---------------------------------------- | ---------- |
-| TASK-023 | Replace boolean useState with useToggle in all modal/dialog components           | ✅ In Progress (4/20+ modals)            | 2025-10-19 |
-| TASK-024 | Replace counter useState patterns with useCounter hook                           | ⏸️ Partial (2 countdown timers found)    | 2025-10-19 |
-| TASK-025 | Replace array state management with useList hook (notifications, sessions, etc.) | ❌ Not Found                             | -          |
-| TASK-026 | Replace object/map state with useMap hook where appropriate                      | ❌ Not Found                             | -          |
-| TASK-027 | Identify components manually managing loading states - use useLoadingState       | ✅ In Use (2+ screens)                   | 2025-10-19 |
-| TASK-028 | Create useFormState hook for common form patterns (if not exists)                | ✅ Exists (useForm utility)              | 2025-10-19 |
+| Task     | Description                                                                      | Completed                                   | Date       |
+| -------- | -------------------------------------------------------------------------------- | ------------------------------------------- | ---------- |
+| TASK-023 | Replace boolean useState with useToggle in all modal/dialog components           | ⏸️ In Progress (4/19 - 15 remain)           | 2025-10-19 |
+| TASK-024 | Replace counter useState patterns with useCounter hook                           | ❌ Not implemented (countdown timers exist) | -          |
+| TASK-025 | Replace array state management with useList hook (notifications, sessions, etc.) | ❌ Not Found                                | -          |
+| TASK-026 | Replace object/map state with useMap hook where appropriate                      | ❌ Not Found                                | -          |
+| TASK-027 | Identify components manually managing loading states - use useLoadingState       | ✅ In Use (2+ screens)                      | 2025-10-19 |
+| TASK-028 | Create useFormState hook for common form patterns (if not exists)                | ✅ Exists (useForm utility)                 | 2025-10-19 |
 
 ### Implementation Phase 5: Storage & Persistence
 
 **GOAL-005**: Ensure all storage operations use storage hooks consistently
 
-| Task     | Description                                                                 | Completed                                   | Date       |
-| -------- | --------------------------------------------------------------------------- | ------------------------------------------- | ---------- |
-| TASK-029 | Audit all AsyncStorage.getItem/setItem calls - replace with useAsyncStorage | ✅ Complete (10 calls migrated)             | 2025-10-19 |
-| TASK-030 | Audit all SecureStore calls - replace with useSecureStorage                 | ❌ No direct usage found                    | 2025-10-19 |
-| TASK-031 | Audit all localStorage calls (web) - replace with useLocalStorage           | ❌ Web-only, N/A                            | -          |
-| TASK-032 | Ensure all preference storage uses storage hooks for reactivity             | ⏸️ Manual review needed                     | -          |
-| TASK-033 | Add storage error handling with useErrorHandler                             | ❌                                          | -          |
+| Task     | Description                                                                 | Completed                                        | Date       |
+| -------- | --------------------------------------------------------------------------- | ------------------------------------------------ | ---------- |
+| TASK-029 | Audit all AsyncStorage.getItem/setItem calls - replace with useAsyncStorage | ✅ Complete (All migrated in auth flow)          | 2025-10-19 |
+| TASK-030 | Audit all SecureStore calls - replace with useSecureStorage                 | ✅ No direct usage found (secured via providers) | 2025-10-19 |
+| TASK-031 | Audit all localStorage calls (web) - replace with useLocalStorage           | ✅ N/A (React Native only)                       | -          |
+| TASK-032 | Ensure all preference storage uses storage hooks for reactivity             | ⏸️ Manual review needed                          | -          |
+| TASK-033 | Add storage error handling with useErrorHandler                             | ❌                                               | -          |
 
 ### Implementation Phase 6: Network & Connectivity
 
@@ -420,9 +420,9 @@ Additionally:
 
 - ✅ **Phase 1 (Audit & Analysis)**: 62.5% complete (5/8 tasks)
 - ⏸️ **Phase 2 (Lifecycle Hooks)**: 0% complete (0/7 tasks) - Hooks exist but not adopted
-- ✅ **Phase 3 (Timing Hooks)**: 85.7% complete (6/7 tasks) - All setInterval/setTimeout migrated
-- ✅ **Phase 4 (State Management)**: 66.7% complete (4/6 tasks) - useToggle expanded
-- ✅ **Phase 5 (Storage)**: 60% complete (3/5 tasks) - All AsyncStorage calls migrated
+- ⏸️ **Phase 3 (Timing Hooks)**: 57.1% complete (4/7 tasks) - 7 useInterval migrated, 6 setTimeout remain
+- ⏸️ **Phase 4 (State Management)**: 50% complete (3/6 tasks) - useToggle in 4 screens, 15+ remain
+- ✅ **Phase 5 (Storage)**: 60% complete (3/5 tasks) - All AsyncStorage migrated
 - ✅ **Phase 6 (Network)**: 40% complete (2/5 tasks) - Context exists, needs wider adoption
 - ✅ **Phase 7 (Device APIs)**: 80% complete (4/5 tasks) - All hooks exist
 - ✅ **Phase 8 (Async Operations)**: 80% complete (4/5 tasks) - Good adoption
@@ -444,15 +444,29 @@ Additionally:
 4. **Responsive Design**: Comprehensive responsive hooks (`useBreakpoint`, `useOrientation`, `useResponsive`)
 5. **Device Hooks**: Complete set exists (battery, geolocation, clipboard, share, app state)
 6. **New Hooks**: All 8 Phase 12 hooks successfully created and available
-7. **Storage Hooks**: All 10 AsyncStorage calls migrated to `useAsyncStorage` ✨
-8. **Timing Hooks**: All 7 setInterval/setTimeout calls migrated to `useInterval`/`useTimeout` ✨
-9. **Toggle Hook**: Expanded adoption in 4 key screens ✨
+7. **Storage Hooks**: All AsyncStorage calls migrated to `useAsyncStorage` in auth flow ✨
+8. **Timing Hooks**: 7 setInterval calls migrated to `useInterval` (verify-email, otp-login, verify-phone) ✨
+9. **Timing Hooks**: 4 setTimeout calls migrated to `useTimeout` (onboarding, register steps) ✨
+10. **Toggle Hook**: Adopted in 4 key screens (settings, notifications, profile, security) ✨
 
 #### ⚠️ Partial Implementation (Needs Expansion)
 
-1. **useToggle**: Now in 4 components (settings, notifications) - 16+ modals still need migration
-2. **Context Memoization**: AuthProvider fully memoized, but other providers need review
-3. **Form Management**: `useForm` from react-hook-form used, but custom `useForm` utility underutilized
+1. **useToggle**: 4 components using it - **15 more boolean states identified** that should migrate:
+   - `app/onboarding/index.tsx`: slideTransitioning, accessibilityEnabled, isRecoveredSession
+   - `app/(tabs)/index.tsx`: loading, refreshing
+   - `app/(tabs)/items.tsx`: refreshing
+   - `app/profile/edit.tsx`: initialLoading
+   - `app/security/2fa.tsx`: showReAuthForTwoFactor, showSuccessAnimation
+   - `app/(auth)/login.tsx`: loading
+   - `app/(auth)/verify-magic-link.tsx`: checking
+   - `app/(auth)/verify-2fa.tsx`: showBackupCodes
+   - `app/(auth)/verify-email.tsx`: showSuccessAnimation
+   - `app/(auth)/otp-login.tsx`: resending
+   - `app/(auth)/register/index.tsx`: isSubmitting
+
+2. **setTimeout**: 6 remain in examples and verify-2fa (3 async waits, 3 examples)
+3. **Context Memoization**: AuthProvider fully memoized, but other providers need review
+4. **Form Management**: `useForm` from react-hook-form used, but custom `useForm` utility underutilized
 
 #### ❌ Critical Gaps (Not Implemented)
 
@@ -465,18 +479,60 @@ Additionally:
 
 ### Specific Code Locations Requiring Migration
 
-**Toggle Adoption (Phase 4):**
+**Toggle Adoption (Phase 4) - 15 boolean states identified:**
 
-- `app/onboarding/index.tsx`: slideTransitioning, accessibilityEnabled states
-- `app/(tabs)/index.tsx`: loading, refreshing states
-- `app/(tabs)/items.tsx`: refreshing state
-- `app/profile/edit.tsx`: initialLoading state
-- `app/security/2fa.tsx`: showReAuthForTwoFactor, showSuccessAnimation states
-- `app/(auth)/login.tsx`: loading state
-- `app/(auth)/verify-magic-link.tsx`: checking state
-- `app/(auth)/verify-2fa.tsx`: showBackupCodes state
-- `app/(auth)/verify-email.tsx`: showSuccessAnimation state
-- `app/(auth)/register/index.tsx`: isSubmitting state
+```typescript
+// app/onboarding/index.tsx (3 states)
+const [slideTransitioning, setSlideTransitioning] = useState(false);
+const [accessibilityEnabled, setAccessibilityEnabled] = useState(false);
+const [isRecoveredSession, setIsRecoveredSession] = useState(false);
+
+// app/(tabs)/index.tsx (2 states)
+const [loading, setLoading] = useState(true);
+const [refreshing, setRefreshing] = useState(false);
+
+// app/(tabs)/items.tsx (1 state)
+const [refreshing, setRefreshing] = useState(false);
+
+// app/profile/edit.tsx (1 state)
+const [initialLoading, setInitialLoading] = useState(true);
+
+// app/security/2fa.tsx (2 states)
+const [showReAuthForTwoFactor, setShowReAuthForTwoFactor] = useState(false);
+const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
+
+// app/(auth)/login.tsx (1 state)
+const [loading, setLoading] = useState(false);
+
+// app/(auth)/verify-magic-link.tsx (1 state)
+const [checking, setChecking] = useState(true);
+
+// app/(auth)/verify-2fa.tsx (1 state)
+const [showBackupCodes, setShowBackupCodes] = useState(false);
+
+// app/(auth)/verify-email.tsx (1 state)
+const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
+
+// app/(auth)/otp-login.tsx (1 state)
+const [resending, setResending] = useState(false);
+
+// app/(auth)/register/index.tsx (1 state)
+const [isSubmitting, setIsSubmitting] = useState(false);
+```
+
+**Timing Hooks (Phase 3) - 6 setTimeout remain:**
+
+```typescript
+// app/(auth)/verify-2fa.tsx (3 calls)
+await new Promise((resolve) => setTimeout(resolve, 1000)); // line 43
+setTimeout(() => handleVerifyCode(), 0); // line 97
+setTimeout(() => handleVerifyBackupCode(), 0); // line 103
+
+// app/examples/dialogs.tsx (3 calls)
+await new Promise((resolve) => setTimeout(resolve, 2000)); // line 58
+await new Promise((resolve) => setTimeout(resolve, 1500)); // line 72
+await new Promise((resolve) => setTimeout(resolve, 3000)); // line 123
+```
 
 ### Priority Recommendations
 
@@ -484,18 +540,19 @@ Additionally:
 
 1. **Documentation** (Phase 13): Create the 3 missing docs (ARCHITECTURE, BEST_PRACTICES, MIGRATION_GUIDE)
 2. **Testing** (Phase 14): Add unit tests for all custom hooks (currently <5% coverage)
-3. **Toggle Hook Expansion** (Phase 4): Continue migrating 16+ remaining modal/dialog boolean states
+3. **Toggle Hook Expansion** (Phase 4): Migrate 15 identified boolean states to useToggle
+4. **Timing Hooks** (Phase 3): Replace remaining 6 setTimeout calls with useTimeout
 
 **MEDIUM PRIORITY:**
 
-4. **Lifecycle Hooks** (Phase 2): Adopt `useUpdateEffect`, `usePrevious` in relevant components
-5. **Context Optimization** (Phase 11): Review and optimize Theme, Language, Settings, Network, Permissions providers
-6. **Debounce/Throttle** (Phase 3): Add to search and scroll handlers
+5. **Lifecycle Hooks** (Phase 2): Adopt `useUpdateEffect`, `usePrevious` in relevant components
+6. **Context Optimization** (Phase 11): Review and optimize Theme, Language, Settings, Network, Permissions providers
+7. **Debounce/Throttle** (Phase 3): Add to search and scroll handlers
 
 **LOW PRIORITY:**
 
-7. **List/Map Hooks** (Phase 4): Identify array/object state candidates
-8. **Performance Dashboard** (Phase 15): Implement metrics and monitoring
+8. **List/Map Hooks** (Phase 4): Identify array/object state candidates
+9. **Performance Dashboard** (Phase 15): Implement metrics and monitoring
 
 ---
 
@@ -503,25 +560,30 @@ Additionally:
 
 **Immediate Actions (Next Sprint):**
 
-1. ✅ Migrate 10 AsyncStorage calls to useAsyncStorage hook - **COMPLETED**
-2. ✅ Replace 7 manual timers (setTimeout/setInterval) with timing hooks - **COMPLETED**
-3. ✅ Expand useToggle adoption to key screens - **IN PROGRESS (4/20+)**
-4. 🔄 Add unit tests for lifecycle, timing, and utility hooks
-5. 🔄 Create `docs/HOOKS_ARCHITECTURE.md` with complete system overview
-6. 🔄 Create `docs/HOOKS_BEST_PRACTICES.md` with patterns and anti-patterns
-7. 🔄 Create `docs/HOOKS_MIGRATION_GUIDE.md` with step-by-step refactoring guide
+1. ✅ Migrate AsyncStorage calls to useAsyncStorage hook - **COMPLETED (3 files)**
+2. ✅ Replace setInterval calls with useInterval hook - **COMPLETED (3 files)**
+3. ✅ Replace setTimeout calls with useTimeout hook - **PARTIAL (4/10 completed)**
+4. ✅ Expand useToggle adoption to key screens - **IN PROGRESS (4 screens completed, 15 remain)**
+5. 🔄 Complete remaining 6 setTimeout migrations (verify-2fa, examples)
+6. 🔄 Migrate 15 identified boolean states to useToggle
+7. 🔄 Add unit tests for timing hooks (useInterval, useTimeout)
+8. 🔄 Add unit tests for utility hooks (useToggle, useCounter)
+9. 🔄 Create `docs/HOOKS_ARCHITECTURE.md` with complete system overview
+10. 🔄 Create `docs/HOOKS_BEST_PRACTICES.md` with patterns and anti-patterns
+11. 🔄 Create `docs/HOOKS_MIGRATION_GUIDE.md` with step-by-step refactoring guide
 
 **Medium-Term Goals:**
 
 - Complete Context Provider optimization review
-- Expand useToggle adoption to all modal/dialog components
-- Implement debounced search and throttled scroll handlers
+- Expand useToggle to all remaining modal/dialog components (15 identified)
+- Implement debounced search in notifications screen
+- Add throttled scroll tracking to onboarding carousel
 - Add performance monitoring and budgets
 
 **Long-Term Vision:**
 
-- Achieve 90%+ hook adoption rate
-- Maintain 80%+ test coverage for all hooks
+- Achieve 90%+ hook adoption rate (currently ~55%)
+- Maintain 80%+ test coverage for all hooks (currently <5%)
 - Establish automated hook usage metrics in CI/CD
 - Create interactive hook examples and playground
 
