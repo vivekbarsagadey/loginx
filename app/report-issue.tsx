@@ -29,6 +29,7 @@ interface IssueFormValues {
   stepsToReproduce: string;
   expectedBehavior: string;
   actualBehavior: string;
+  [key: string]: unknown;
 }
 
 export default function ReportIssueScreen() {
@@ -51,7 +52,7 @@ export default function ReportIssueScreen() {
       subject: {
         required: true,
         validate: (value) => {
-          if (!value.trim()) {
+          if (!(value as string).trim()) {
             return i18n.t('screens.reportIssue.validation.subjectRequired.message');
           }
           return null;
@@ -60,10 +61,11 @@ export default function ReportIssueScreen() {
       description: {
         required: true,
         validate: (value) => {
-          if (!value.trim()) {
+          const strValue = value as string;
+          if (!strValue.trim()) {
             return i18n.t('screens.reportIssue.validation.descriptionRequired.message');
           }
-          if (value.trim().length < 20) {
+          if (strValue.trim().length < 20) {
             return i18n.t('screens.reportIssue.validation.descriptionTooShort.message');
           }
           return null;
@@ -80,12 +82,7 @@ export default function ReportIssueScreen() {
   // Validation function for useFormSubmit
   const validateFormWithAuth = async () => {
     if (!user) {
-      showAlert(
-        i18n.t('common.error'),
-        'You must be logged in to report an issue',
-        [{ text: i18n.t('common.ok') }],
-        { variant: 'error' }
-      );
+      showAlert(i18n.t('common.error'), 'You must be logged in to report an issue', [{ text: i18n.t('common.ok') }], { variant: 'error' });
       return false;
     }
 
@@ -163,9 +160,7 @@ export default function ReportIssueScreen() {
           accessibilityLabel="Issue subject"
         />
         <CharacterCounter count={form.values.subject.length} maxLength={100} />
-        {form.touched.subject && form.errors.subject && (
-          <ThemedText style={styles.errorText}>{form.errors.subject}</ThemedText>
-        )}
+        {form.touched.subject && form.errors.subject && <ThemedText style={styles.errorText}>{form.errors.subject}</ThemedText>}
       </ThemedView>
 
       {/* Description */}
@@ -186,9 +181,7 @@ export default function ReportIssueScreen() {
           accessibilityLabel="Issue description"
         />
         <CharacterCounter count={form.values.description.length} maxLength={1000} />
-        {form.touched.description && form.errors.description && (
-          <ThemedText style={styles.errorText}>{form.errors.description}</ThemedText>
-        )}
+        {form.touched.description && form.errors.description && <ThemedText style={styles.errorText}>{form.errors.description}</ThemedText>}
       </ThemedView>
 
       {/* Steps to Reproduce */}

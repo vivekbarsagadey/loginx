@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Platform, Share as RNShare, ShareAction } from 'react-native';
+import { Platform, Share as RNShare, type ShareAction } from 'react-native';
 
 /**
  * Content to share
@@ -172,11 +172,11 @@ export function useShare(): UseShareReturn {
           shareResult = {
             success: true,
             action: result.action,
-            activityType: result.activityType,
+            activityType: result.activityType ?? undefined,
           };
 
           if (onSuccess) {
-            onSuccess(result.action);
+            onSuccess(result.action as unknown as ShareAction);
           }
         } else if (result.action === RNShare.dismissedAction) {
           // User dismissed the share dialog

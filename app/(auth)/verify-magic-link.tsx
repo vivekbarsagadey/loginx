@@ -5,10 +5,10 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
+import { useAsyncStorage } from '@/hooks/storage/use-async-storage';
 import { useAlert } from '@/hooks/use-alert';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
-import { useAsyncStorage } from '@/hooks/storage/use-async-storage';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import i18n from '@/i18n';
 import { Config } from '@/utils/config';
@@ -32,7 +32,7 @@ export default function VerifyMagicLinkScreen() {
   const alert = useAlert();
 
   const [checking, setChecking] = useState(true);
-  
+
   // Use storage hook for email persistence
   const emailForSignInStorage = useAsyncStorage<string>('emailForSignIn', '');
   const email = emailForSignInStorage.value;
@@ -53,7 +53,7 @@ export default function VerifyMagicLinkScreen() {
 
   const completeSignIn = async (emailLink: string) => {
     try {
-      let signInEmail = email;
+      const signInEmail = email;
 
       // If email not found in state, it should have been loaded by useAsyncStorage
       if (!signInEmail) {
@@ -94,6 +94,8 @@ export default function VerifyMagicLinkScreen() {
       logger.error('Error checking initial URL:', error);
     }
   };
+
+  const resendMagicLink = async () => {
     if (!email) {
       alert.show(i18n.t('passwordlessLogin.error.noEmail'), i18n.t('passwordlessLogin.error.noEmailMessage'), [{ text: i18n.t('common.ok') }], { variant: 'error' });
       throw new Error(i18n.t('passwordlessLogin.error.noEmail'));

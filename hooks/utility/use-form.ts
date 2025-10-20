@@ -134,7 +134,7 @@ export function useForm<T extends Record<string, unknown>>(options: UseFormOptio
   const validateField = useCallback(
     async <K extends keyof T>(field: K): Promise<boolean> => {
       const value = values[field];
-      const fieldValidation = validations[field as keyof typeof validations];
+      const fieldValidation = (validations as Partial<Record<keyof T, FieldValidation<T>>>)?.[field];
 
       // Check required
       if (fieldValidation?.required && (!value || (typeof value === 'string' && !value.trim()))) {
@@ -248,6 +248,17 @@ export function useForm<T extends Record<string, unknown>>(options: UseFormOptio
   );
 
   /**
+   * Reset form to initial values
+   */
+  const reset = useCallback(() => {
+    setValuesState(initialValues);
+    setErrorsState({});
+    setTouchedState({});
+    setIsSubmitted(false);
+    setIsSubmitting(false);
+  }, [initialValues]);
+
+  /**
    * Submit the form
    */
   const handleSubmit = useCallback(async () => {
@@ -278,18 +289,7 @@ export function useForm<T extends Record<string, unknown>>(options: UseFormOptio
     } finally {
       setIsSubmitting(false);
     }
-  }, [values, validateForm, onSubmit, resetOnSubmit]);
-
-  /**
-   * Reset form to initial values
-   */
-  const reset = useCallback(() => {
-    setValuesState(initialValues);
-    setErrorsState({});
-    setTouchedState({});
-    setIsSubmitted(false);
-    setIsSubmitting(false);
-  }, [initialValues]);
+  }, [values, validateForm, onSubmit, resetOnSubmit, reset]);
 
   /**
    * Clear all errors

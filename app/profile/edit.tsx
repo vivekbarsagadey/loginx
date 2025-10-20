@@ -32,6 +32,7 @@ interface ProfileFormValues {
   city: string;
   state: string;
   zipCode: string;
+  [key: string]: unknown;
 }
 
 export default function EditProfileScreen() {
@@ -57,21 +58,25 @@ export default function EditProfileScreen() {
       displayName: {
         required: true,
         validate: (value) => {
-          const result = validateDisplayNameField(value);
+          const result = validateDisplayNameField(value as string);
           return result.error || null;
         },
       },
       age: {
         validate: (value) => {
-          if (!value) return null; // Age is optional
-          const result = validateAgeField(value);
+          if (!value) {
+            return null;
+          } // Age is optional
+          const result = validateAgeField(value as string);
           return result.error || null;
         },
       },
       zipCode: {
         validate: (value) => {
-          if (!value) return null; // Zip code is optional
-          const result = validateZipCodeField(value);
+          if (!value) {
+            return null;
+          } // Zip code is optional
+          const result = validateZipCodeField(value as string);
           return result.error || null;
         },
       },

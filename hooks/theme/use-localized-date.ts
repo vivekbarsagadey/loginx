@@ -89,7 +89,7 @@ export function useLocalizedDate() {
       ja: 'ja-JP',
       zh: 'zh-CN',
     };
-    return localeMap[language] || language;
+    return language ? localeMap[language] || language : 'en-US';
   }, [language]);
 
   /**
@@ -99,7 +99,7 @@ export function useLocalizedDate() {
     (date: Date | string | number, options: DateFormatOptions = {}): string => {
       try {
         const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
-        
+
         if (isNaN(dateObj.getTime())) {
           return 'Invalid Date';
         }
@@ -125,7 +125,7 @@ export function useLocalizedDate() {
     (date: Date | string | number, options: DateFormatOptions = {}): string => {
       try {
         const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
-        
+
         if (isNaN(dateObj.getTime())) {
           return 'Invalid Time';
         }
@@ -151,7 +151,7 @@ export function useLocalizedDate() {
     (date: Date | string | number, options: DateFormatOptions = {}): string => {
       try {
         const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
-        
+
         if (isNaN(dateObj.getTime())) {
           return 'Invalid Date/Time';
         }
@@ -178,7 +178,7 @@ export function useLocalizedDate() {
     (date: Date | string | number): string => {
       try {
         const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
-        
+
         if (isNaN(dateObj.getTime())) {
           return 'Invalid Date';
         }

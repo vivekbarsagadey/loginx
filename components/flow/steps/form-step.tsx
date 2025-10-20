@@ -3,12 +3,12 @@
  * Collects user input with validation
  */
 
-import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedTextInput } from '@/components/themed-text-input';
-import { FormStepConfig } from '@/types/flow';
+import { ThemedView } from '@/components/themed-view';
+import { type FormStepConfig } from '@/types/flow';
+import React from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
 
 interface FormStepProps {
   step: FormStepConfig;
@@ -22,30 +22,21 @@ export function FormStep({ step, data, onUpdate }: FormStepProps) {
       <ThemedText type="title" style={styles.title}>
         {step.title}
       </ThemedText>
-      
+
       {step.subtitle && (
         <ThemedText type="subtitle1" style={styles.subtitle}>
           {step.subtitle}
         </ThemedText>
       )}
-      
+
       {step.fields.map((field) => (
         <ThemedView key={field.name} style={styles.fieldContainer}>
           <ThemedTextInput
-            label={field.label}
             value={data[field.name] || ''}
             onChangeText={(value) => onUpdate({ [field.name]: value })}
-            placeholder={field.placeholder}
+            placeholder={field.placeholder || field.label}
             secureTextEntry={field.type === 'password' || field.secure}
-            keyboardType={
-              field.type === 'email'
-                ? 'email-address'
-                : field.type === 'phone'
-                ? 'phone-pad'
-                : field.type === 'number'
-                ? 'numeric'
-                : 'default'
-            }
+            keyboardType={field.type === 'email' ? 'email-address' : field.type === 'phone' ? 'phone-pad' : field.type === 'number' ? 'numeric' : 'default'}
             autoCapitalize={field.autoCapitalize}
             autoComplete={field.autoComplete as any}
           />

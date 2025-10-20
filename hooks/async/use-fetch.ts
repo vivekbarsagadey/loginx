@@ -144,7 +144,7 @@ export function useFetch<T = any>(
    */
   const performFetch = useCallback(
     async (isRefetch = false) => {
-      if (!mountedRef.current) return;
+      if (!mountedRef.current) {return;}
 
       // Cancel any existing request
       cancel();
@@ -183,7 +183,7 @@ export function useFetch<T = any>(
             data = transform(data);
           }
 
-          if (!mountedRef.current) return;
+          if (!mountedRef.current) {return;}
 
           setState({
             data,
@@ -243,7 +243,7 @@ export function useFetch<T = any>(
         }
         debounceTimerRef.current = setTimeout(() => {
           performFetch(isRefetch);
-        }, debounce);
+        }, debounce) as unknown as NodeJS.Timeout;
       } else {
         performFetch(isRefetch);
       }

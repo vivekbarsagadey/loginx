@@ -109,7 +109,7 @@ export function useAsyncRetry<T>(
    */
   const sleep = useCallback((ms: number): Promise<void> => {
     return new Promise((resolve) => {
-      timeoutRef.current = setTimeout(resolve, ms);
+      timeoutRef.current = setTimeout(resolve, ms) as unknown as NodeJS.Timeout;
     });
   }, []);
 
@@ -167,7 +167,7 @@ export function useAsyncRetry<T>(
         return result;
       } catch (err) {
         lastError = err instanceof Error ? err : new Error(String(err));
-        
+
         // Check if we should retry this error
         if (!shouldRetry(lastError)) {
           setError(lastError);
@@ -182,11 +182,11 @@ export function useAsyncRetry<T>(
           setIsLoading(false);
           setIsRetrying(false);
           setRetryCount(attempt);
-          
+
           if (onMaxRetriesReached) {
             onMaxRetriesReached(lastError);
           }
-          
+
           return null;
         }
 

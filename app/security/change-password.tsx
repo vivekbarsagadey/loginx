@@ -25,6 +25,7 @@ interface PasswordFormValues {
   currentPassword: string;
   newPassword: string;
   confirmPassword: string;
+  [key: string]: unknown;
 }
 
 export default function ChangePasswordScreen() {
@@ -52,7 +53,7 @@ export default function ChangePasswordScreen() {
         required: true,
         requiredMessage: i18n.t('screens.security.changePassword.validation.newRequired'),
         validate: (value, values) => {
-          const validation = validatePassword(value);
+          const validation = validatePassword(value as string);
           if (!validation.isValid) {
             return validation.errors[0] || i18n.t('screens.security.changePassword.validation.requirementsNotMet');
           }
