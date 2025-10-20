@@ -1,13 +1,13 @@
 /**
  * Flow Navigation Component
- * 
+ *
  * Handles flow navigation buttons (back, next, skip)
  */
 
-import React from 'react';
-import { StyleSheet, View, type ViewStyle } from 'react-native';
 import { ThemedButton } from '@/components/themed-button';
 import { type BaseStepConfig } from '@/types/flow';
+import React from 'react';
+import { StyleSheet, View, type ViewStyle } from 'react-native';
 
 interface FlowNavigationProps {
   canGoBack: boolean;
@@ -27,7 +27,7 @@ interface FlowNavigationProps {
 
 export function FlowNavigation({
   canGoBack,
-  canGoNext,
+  canGoNext: _canGoNext,
   canSkip,
   showSkip,
   isFirstStep,
@@ -71,26 +71,10 @@ export function FlowNavigation({
     <View style={[styles.container, style]}>
       <View style={styles.buttonContainer}>
         {/* Back/Secondary Button */}
-        {!isFirstStep && canGoBack && (
-          <ThemedButton
-            onPress={handleSecondaryAction}
-            title={secondaryLabel}
-            variant="secondary"
-            style={styles.button}
-            disabled={loading}
-          />
-        )}
+        {!isFirstStep && canGoBack && <ThemedButton onPress={handleSecondaryAction} title={secondaryLabel} variant="secondary" style={styles.button} disabled={loading} />}
 
         {/* Skip Button */}
-        {showSkip && canSkip && (
-          <ThemedButton
-            onPress={onSkip}
-            title="Skip"
-            variant="tertiary"
-            style={styles.button}
-            disabled={loading}
-          />
-        )}
+        {showSkip && canSkip && <ThemedButton onPress={onSkip} title="Skip" variant="tertiary" style={styles.button} disabled={loading} />}
 
         {/* Next/Primary Button */}
         <ThemedButton

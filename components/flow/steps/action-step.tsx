@@ -2,19 +2,20 @@
  * Action Step Component
  */
 
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { type ActionStepConfig } from '@/types/flow';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { ThemedView } from '@/components/themed-view';
-import { ThemedText } from '@/components/themed-text';
-import { type ActionStepConfig } from '@/types/flow';
+import type { FlowData } from '../flow-step-wrapper';
 
 interface ActionStepProps {
   step: ActionStepConfig;
-  data: Record<string, any>;
-  onUpdate: (data: Partial<Record<string, any>>) => void;
+  data: FlowData;
+  onUpdate: (data: Partial<FlowData>) => void;
 }
 
-export function ActionStep({ step, data, onUpdate }: ActionStepProps) {
+export function ActionStep({ step, data: _data, onUpdate: _onUpdate }: ActionStepProps) {
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="title">{step.title}</ThemedText>

@@ -49,7 +49,7 @@ export function ActionSheet({ visible, onClose, title, message, options, showCan
   const borderColor = useThemeColor({}, 'border');
   const textColor = useThemeColor({}, 'text');
   const textMutedColor = useThemeColor({}, 'text-muted');
-  const primaryColor = useThemeColor({}, 'primary');
+  const _primaryColor = useThemeColor({}, 'primary');
   const errorColor = useThemeColor({}, 'error');
 
   const handleBackdropPress = async () => {

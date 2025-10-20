@@ -2,10 +2,10 @@
  * Stepper Progress Indicator
  */
 
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { type StepConfig } from '@/types/flow';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 
 interface StepperProgressProps {
   currentStep: number;
@@ -13,7 +13,7 @@ interface StepperProgressProps {
   steps: StepConfig[];
 }
 
-export function StepperProgress({ currentStep, totalSteps, steps }: StepperProgressProps) {
+export function StepperProgress({ currentStep, totalSteps, steps: _steps }: StepperProgressProps) {
   return (
     <View style={styles.container}>
       <ThemedText type="caption">

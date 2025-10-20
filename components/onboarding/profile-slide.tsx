@@ -48,12 +48,12 @@ export const ProfileSlide = ({ width, onNext, onSkip }: ProfileSlideProps) => {
 
       await trackSlideCompletion('profile');
       onNext?.();
-    } catch (error) {
+    } catch (_error) {
       // Continue anyway - profile can be updated later
     } finally {
       setIsCompleting(false);
     }
-  }, [displayName, photoURL, trackSlideCompletion, onNext, showAlert]);
+  }, [displayName, photoURL, trackSlideCompletion, onNext]);
 
   const handleSkip = useCallback(async () => {
     await trackSlideCompletion('profile');

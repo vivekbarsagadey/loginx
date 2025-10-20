@@ -2,19 +2,20 @@
  * Permission Step Component
  */
 
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { type PermissionStepConfig } from '@/types/flow';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { ThemedView } from '@/components/themed-view';
-import { ThemedText } from '@/components/themed-text';
-import { type PermissionStepConfig } from '@/types/flow';
+import type { FlowData } from '../flow-step-wrapper';
 
 interface PermissionStepProps {
   step: PermissionStepConfig;
-  data: Record<string, any>;
-  onUpdate: (data: Partial<Record<string, any>>) => void;
+  data: FlowData;
+  onUpdate: (data: Partial<FlowData>) => void;
 }
 
-export function PermissionStep({ step, data, onUpdate }: PermissionStepProps) {
+export function PermissionStep({ step, data: _data, onUpdate: _onUpdate }: PermissionStepProps) {
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="title">{step.title}</ThemedText>

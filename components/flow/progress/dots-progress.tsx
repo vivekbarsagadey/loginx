@@ -3,9 +3,9 @@
  * Shows progress as a series of dots
  */
 
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useThemeColors } from '@/hooks/use-theme-colors';
 
 interface DotsProgressProps {
   currentStep: number;
@@ -13,7 +13,7 @@ interface DotsProgressProps {
   completedSteps: string[];
 }
 
-export function DotsProgress({ currentStep, totalSteps, completedSteps }: DotsProgressProps) {
+export function DotsProgress({ currentStep, totalSteps, completedSteps: _completedSteps }: DotsProgressProps) {
   const colors = useThemeColors();
 
   return (
@@ -24,8 +24,7 @@ export function DotsProgress({ currentStep, totalSteps, completedSteps }: DotsPr
           style={[
             styles.dot,
             {
-              backgroundColor:
-                index <= currentStep ? colors.primary : colors['text-muted'],
+              backgroundColor: index <= currentStep ? colors.primary : colors['text-muted'],
             },
           ]}
         />

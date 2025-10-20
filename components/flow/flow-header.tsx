@@ -1,15 +1,15 @@
 /**
  * Flow Header Component
- * 
+ *
  * Optional header for flows with title and close button
  */
 
-import React from 'react';
-import { StyleSheet, TouchableOpacity, View, type ViewStyle } from 'react-native';
-import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
-import { Ionicons } from '@expo/vector-icons';
+import { ThemedView } from '@/components/themed-view';
 import { useThemeColors } from '@/hooks/use-theme-colors';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { StyleSheet, TouchableOpacity, type ViewStyle } from 'react-native';
 
 interface FlowHeaderProps {
   title: string;
