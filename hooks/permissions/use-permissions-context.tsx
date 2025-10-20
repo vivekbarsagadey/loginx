@@ -10,12 +10,12 @@
  * - Permission change notifications
  */
 
-import type { DEFAULT_PERMISSIONS_STATE, PermissionsContextState, PermissionStatus, PermissionsStatusMap } from '@/types/permission';
+import type { DEFAULT_PERMISSIONS_STATE, PermissionsContextState, PermissionsStatusMap, PermissionStatus } from '@/types/permission';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import * as Notifications from 'expo-notifications';
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
+import React, { createContext, type PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Linking, Platform } from 'react-native';
 
 export type PermissionType = 'camera' | 'mediaLibrary' | 'location' | 'notifications';

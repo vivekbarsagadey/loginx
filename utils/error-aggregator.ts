@@ -6,7 +6,7 @@
 
 import i18n from '@/i18n';
 import { debugLog, debugWarn } from './debug';
-import { classifyError, type ClassifiedError } from './error-classifier';
+import { type ClassifiedError, classifyError } from './error-classifier';
 
 interface AggregatedError {
   errors: ClassifiedError[];

@@ -7,7 +7,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
-import { VerificationStepConfig } from '@/types/flow';
+import { type VerificationStepConfig } from '@/types/flow';
 
 interface VerificationStepProps {
   step: VerificationStepConfig;

@@ -5,7 +5,7 @@
  */
 
 import { useCallback } from 'react';
-import { FlowConfig, FlowState, StepConfig, FormStepConfig } from '@/types/flow';
+import { type FlowConfig, type FlowState, type FormStepConfig, StepConfig } from '@/types/flow';
 
 /**
  * Validate a single form field

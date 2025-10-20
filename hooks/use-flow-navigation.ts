@@ -5,13 +5,13 @@
  */
 
 import { useCallback } from 'react';
-import { FlowConfig, FlowState, StepConfig } from '@/types/flow';
+import { type FlowConfig, type FlowState, type StepConfig } from '@/types/flow';
 
 /**
  * Check if a step should be shown based on its condition
  */
 function shouldShowStep(step: StepConfig, data: Record<string, any>): boolean {
-  if (!step.condition) return true;
+  if (!step.condition) {return true;}
   try {
     return step.condition(data);
   } catch (error) {

@@ -1,7 +1,7 @@
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { useThemeContext } from '@/hooks/use-theme-context';
 import { memo, useMemo } from 'react';
-import { ScrollView, StyleSheet, type ScrollViewProps } from 'react-native';
+import { ScrollView, type ScrollViewProps, StyleSheet } from 'react-native';
 import { ErrorBoundary } from './error-boundary';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
@@ -21,7 +21,7 @@ export type ThemedScrollViewProps = ScrollViewProps & {
  * TASK-048: Fallback component shown when list rendering fails
  */
 function ScrollViewErrorFallback(error: Error | null) {
-  if (!error) return null;
+  if (!error) {return null;}
 
   return (
     <ThemedView style={styles.errorContainer}>

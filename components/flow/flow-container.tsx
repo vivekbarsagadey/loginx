@@ -6,7 +6,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform } from 'react-native';
+import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, View } from 'react-native';
 import { useFlowEngine } from '@/hooks/use-flow-engine';
 import { FlowContext } from '@/hooks/use-flow-context';
 import type { FlowContainerProps } from '@/types/flow';

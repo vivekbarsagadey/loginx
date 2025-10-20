@@ -5,9 +5,9 @@
  */
 
 import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
+import { StyleSheet, View, type ViewStyle } from 'react-native';
 import { ThemedButton } from '@/components/themed-button';
-import { BaseStepConfig } from '@/types/flow';
+import { type BaseStepConfig } from '@/types/flow';
 
 interface FlowNavigationProps {
   canGoBack: boolean;

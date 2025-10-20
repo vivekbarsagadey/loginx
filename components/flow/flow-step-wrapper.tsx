@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { StepConfig } from '@/types/flow';
+import { StyleSheet, View } from 'react-native';
+import { type StepConfig } from '@/types/flow';
 import { ThemedView } from '@/components/themed-view';
 import { DisplayStep } from './steps/display-step';
 import { FormStep } from './steps/form-step';
@@ -15,6 +15,9 @@ import { VerificationStep } from './steps/verification-step';
 import { ActionStep } from './steps/action-step';
 import { PermissionStep } from './steps/permission-step';
 import { CustomStep } from './steps/custom-step';
+
+// Import ThemedText for error message
+import { ThemedText } from '@/components/themed-text';
 
 interface FlowStepWrapperProps {
   step: StepConfig;
@@ -85,6 +88,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-// Import ThemedText for error message
-import { ThemedText } from '@/components/themed-text';

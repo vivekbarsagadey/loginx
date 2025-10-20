@@ -3,7 +3,7 @@
  * Determines device category (phone, tablet, desktop) based on screen dimensions
  */
 
-import { useWindowDimensions, Platform } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 import { useMemo } from 'react';
 
 export type DeviceCategory = 'phone' | 'tablet' | 'desktop';

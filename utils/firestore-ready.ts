@@ -142,7 +142,7 @@ export function useFirestoreReady(): FirestoreReadyState {
  * Wait for Firestore to be ready
  * Returns a promise that resolves when Firestore is ready or rejects on timeout
  */
-export function waitForFirestore(timeout: number = 10000): Promise<void> {
+export function waitForFirestore(timeout = 10000): Promise<void> {
   return new Promise((resolve, reject) => {
     // Check if already ready
     if (firestoreReadyState.ready) {

@@ -4,7 +4,7 @@
  * Integrates with AppState to detect background/foreground transitions
  */
 
-import { AppState, AppStateStatus, Platform } from 'react-native';
+import { AppState, type AppStateStatus, Platform } from 'react-native';
 import * as cache from './cache';
 import { cleanupManager } from './cleanup-manager';
 import { debugError, debugLog, debugWarn } from './debug';

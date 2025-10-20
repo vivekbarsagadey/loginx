@@ -257,11 +257,11 @@ class ProductionLogger {
         console.info(formattedMessage);
         break;
       case LogLevel.WARN:
-        // eslint-disable-next-line no-console
+         
         console.warn(formattedMessage);
         break;
       case LogLevel.ERROR:
-        // eslint-disable-next-line no-console
+         
         console.error(formattedMessage);
         break;
     }

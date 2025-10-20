@@ -8,12 +8,12 @@
  * @see plan/feature-unified-flow-system-1.md for specification
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { 
-  FlowConfig, 
-  FlowState, 
-  FlowContextValue, 
-  StepConfig 
+  type FlowConfig, 
+  type FlowContextValue, 
+  type FlowState, 
+  type StepConfig 
 } from '@/types/flow';
 import { useFlowState } from './use-flow-state';
 import { useFlowNavigation } from './use-flow-navigation';
@@ -138,7 +138,7 @@ export function useFlowEngine(
 
   // Auto-save state periodically
   useEffect(() => {
-    if (!enablePersistence || !config.autoSave) return;
+    if (!enablePersistence || !config.autoSave) {return;}
 
     const interval = setInterval(() => {
       saveState().catch((error) => {

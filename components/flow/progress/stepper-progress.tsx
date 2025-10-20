@@ -3,9 +3,9 @@
  */
 
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
-import { StepConfig } from '@/types/flow';
+import { type StepConfig } from '@/types/flow';
 
 interface StepperProgressProps {
   currentStep: number;

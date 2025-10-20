@@ -7,7 +7,7 @@
  * @see plan/feature-unified-flow-system-1.md for complete specification
  */
 
-import { ImageSourcePropType, ViewStyle, TextStyle } from 'react-native';
+import { type ImageSourcePropType, type TextStyle, type ViewStyle } from 'react-native';
 import { z } from 'zod';
 
 // ============================================================================
@@ -235,14 +235,14 @@ export interface DisplayStepConfig extends BaseStepConfig {
   variant?: DisplayVariant;
   
   // Content items (features, benefits, etc.)
-  content?: Array<{
+  content?: {
     icon?: string;
     iconColor?: string;
     image?: ImageSourcePropType;
     title: string;
     description?: string;
     animation?: AnimationConfig;
-  }>;
+  }[];
   
   // Image carousel
   carousel?: {
@@ -298,7 +298,7 @@ export interface FormFieldConfig {
   pattern?: RegExp;
   
   // Options for select/radio/checkbox
-  options?: Array<{ id: string; label: string; value?: any; disabled?: boolean }> | string[];
+  options?: { id: string; label: string; value?: any; disabled?: boolean }[] | string[];
   
   // File upload configuration
   acceptedFormats?: string[];
@@ -333,11 +333,11 @@ export interface FormFieldConfig {
   };
   
   // Links for checkboxes (e.g., terms & conditions)
-  links?: Array<{
+  links?: {
     text: string;
     href: string;
     modal?: boolean;
-  }>;
+  }[];
   
   // Country code picker for phone inputs
   countryCodePicker?: boolean;
@@ -491,18 +491,18 @@ export interface ActionStepConfig extends BaseStepConfig {
  */
 export interface PermissionStepConfig extends BaseStepConfig {
   type: 'permission';
-  permissions: Array<'camera' | 'location' | 'notifications' | 'photos' | 'microphone' | 'contacts' | string>;
+  permissions: ('camera' | 'location' | 'notifications' | 'photos' | 'microphone' | 'contacts' | string)[];
   
   // Permission handlers
   onGrant?: (permissions: string[]) => Promise<void>;
   onDeny?: (permissions: string[]) => Promise<void>;
   
   // Display
-  benefits?: Array<{
+  benefits?: {
     icon: string;
     title: string;
     description: string;
-  }>;
+  }[];
 }
 
 /**

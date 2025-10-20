@@ -139,7 +139,7 @@ export function useLongPress(
   const isLongPressRef = useRef(false);
 
   const triggerHaptic = useCallback(async () => {
-    if (!hapticFeedback) return;
+    if (!hapticFeedback) {return;}
 
     try {
       switch (hapticType) {
@@ -160,7 +160,7 @@ export function useLongPress(
   }, [hapticFeedback, hapticType]);
 
   const handlePressIn = useCallback(() => {
-    if (!enabled) return;
+    if (!enabled) {return;}
 
     isLongPressRef.current = false;
     onPressInCallback?.();
@@ -179,7 +179,7 @@ export function useLongPress(
   }, [enabled, delay, onLongPress, onPressInCallback, triggerHaptic]);
 
   const handlePressOut = useCallback(() => {
-    if (!enabled) return;
+    if (!enabled) {return;}
 
     // Clear timer if press is released before long press completes
     if (timerRef.current) {

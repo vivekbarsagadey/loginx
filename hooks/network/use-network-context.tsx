@@ -17,7 +17,7 @@ import type {
   SyncQueueInfo,
 } from '@/types/network';
 import { getNetworkStatus, initializeNetworkMonitoring, subscribeToNetworkChanges } from '@/utils/network';
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
+import React, { createContext, type PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 /**
  * Network context type

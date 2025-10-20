@@ -25,7 +25,7 @@ import {
 import { getData, setData } from '@/utils/local-first';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { doc, onSnapshot } from 'firebase/firestore';
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
+import React, { createContext, type PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 // Storage keys
 const SETTINGS_STORAGE_KEY = '@LoginX:settings';
@@ -308,7 +308,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
    */
   useEffect(() => {
     const user = auth.currentUser;
-    if (!user || !firestore) return;
+    if (!user || !firestore) {return;}
 
     if (__DEV__) {
       console.log('[SettingsContext] Setting up Firestore real-time sync');

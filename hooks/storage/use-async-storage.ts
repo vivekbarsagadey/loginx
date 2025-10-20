@@ -44,10 +44,10 @@ export function useAsyncStorage<T>(
   const [isCached, setIsCached] = useState<boolean>(false);
 
   const getCachedValue = useCallback((): T | null => {
-    if (!useCache) return null;
+    if (!useCache) {return null;}
 
     const cached = cache.get(key);
-    if (!cached) return null;
+    if (!cached) {return null;}
 
     const isExpired = Date.now() - cached.timestamp > cached.ttl;
     if (isExpired) {
@@ -60,7 +60,7 @@ export function useAsyncStorage<T>(
 
   const setCachedValue = useCallback(
     (value: T) => {
-      if (!useCache) return;
+      if (!useCache) {return;}
       cache.set(key, { value, timestamp: Date.now(), ttl });
     },
     [key, useCache, ttl]

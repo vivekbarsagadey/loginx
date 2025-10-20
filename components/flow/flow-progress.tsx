@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { ProgressIndicatorType, StepConfig } from '@/types/flow';
+import { type ProgressIndicatorType, type StepConfig } from '@/types/flow';
 import { DotsProgress } from './progress/dots-progress';
 import { StepperProgress } from './progress/stepper-progress';
 import { BarProgress } from './progress/bar-progress';

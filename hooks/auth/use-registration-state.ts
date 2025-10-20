@@ -8,7 +8,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Haptics from 'expo-haptics';
-import { createUserWithEmailAndPassword, deleteUser, sendEmailVerification, type Auth, type User } from 'firebase/auth';
+import { type Auth, createUserWithEmailAndPassword, deleteUser, sendEmailVerification, type User } from 'firebase/auth';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';

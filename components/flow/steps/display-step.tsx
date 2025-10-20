@@ -4,10 +4,10 @@
  */
 
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
-import { DisplayStepConfig } from '@/types/flow';
+import { type DisplayStepConfig } from '@/types/flow';
 
 interface DisplayStepProps {
   step: DisplayStepConfig;

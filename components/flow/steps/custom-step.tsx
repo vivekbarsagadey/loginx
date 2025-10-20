@@ -5,7 +5,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
-import { CustomStepConfig } from '@/types/flow';
+import { type CustomStepConfig } from '@/types/flow';
 
 interface CustomStepProps {
   step: CustomStepConfig;

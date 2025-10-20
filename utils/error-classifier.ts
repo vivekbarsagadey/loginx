@@ -1,10 +1,10 @@
-﻿/**
+/**
  * TASK-045: Error Classification System
  * Categorizes errors as recoverable or fatal to determine appropriate handling strategy
  */
 
 import i18n from '@/i18n';
-import { FirebaseError } from 'firebase/app';
+import { type FirebaseError } from 'firebase/app';
 
 /**
  * Error severity levels

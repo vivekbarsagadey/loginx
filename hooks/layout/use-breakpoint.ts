@@ -72,10 +72,7 @@ export function useBreakpoint(): Breakpoint {
     const xl = width >= BREAKPOINTS.lg;
 
     let current: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 'xs';
-    if (xl) current = 'xl';
-    else if (lg) current = 'lg';
-    else if (md) current = 'md';
-    else if (sm) current = 'sm';
+    if (xl) {current = 'xl';} else if (lg) {current = 'lg';} else if (md) {current = 'md';} else if (sm) {current = 'sm';}
 
     return {
       xs,

@@ -4,7 +4,7 @@
  */
 
 import { SettingsProvider, useSettings } from '@/hooks/settings/use-settings-context';
-import { DEFAULT_NOTIFICATION_SETTINGS, DEFAULT_SECURITY_SETTINGS, DEFAULT_APP_PREFERENCES, DEFAULT_PRIVACY_SETTINGS } from '@/types/settings';
+import { DEFAULT_APP_PREFERENCES, DEFAULT_NOTIFICATION_SETTINGS, DEFAULT_PRIVACY_SETTINGS, DEFAULT_SECURITY_SETTINGS } from '@/types/settings';
 import { renderHook, waitFor } from '@testing-library/react-native';
 import React from 'react';
 

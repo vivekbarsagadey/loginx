@@ -6,7 +6,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
-import { PermissionStepConfig } from '@/types/flow';
+import { type PermissionStepConfig } from '@/types/flow';
 
 interface PermissionStepProps {
   step: PermissionStepConfig;

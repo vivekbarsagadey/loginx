@@ -83,7 +83,7 @@ class RequestDeduplicator {
       throw error;
     } finally {
       // Clean up
-      if (timeoutId) clearTimeout(timeoutId);
+      if (timeoutId) {clearTimeout(timeoutId);}
       this.pendingRequests.delete(key);
       debugLog(`[RequestDeduplicator] 🧹 Cleaned up: ${key}`);
     }
@@ -119,7 +119,7 @@ class RequestDeduplicator {
    */
   getStats(key: string): { hits: number; misses: number; hitRate: number } | null {
     const stats = this.requestStats.get(key);
-    if (!stats) return null;
+    if (!stats) {return null;}
 
     const total = stats.hits + stats.misses;
     const hitRate = total > 0 ? stats.hits / total : 0;
@@ -188,7 +188,7 @@ class RequestDeduplicator {
    * Clean up old pending requests (safety mechanism)
    * Removes requests that have been pending for more than maxAge
    */
-  cleanupStale(maxAge: number = 60000): void {
+  cleanupStale(maxAge = 60000): void {
     const now = Date.now();
     let cleaned = 0;
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Dimensions, Platform, ScaledSize } from 'react-native';
+import { Dimensions, Platform, type ScaledSize } from 'react-native';
 
 /**
  * Media query condition type

@@ -8,7 +8,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import { Keyboard, KeyboardEvent, Platform } from 'react-native';
+import { Keyboard, type KeyboardEvent, Platform } from 'react-native';
 
 /**
  * Keyboard state and metrics

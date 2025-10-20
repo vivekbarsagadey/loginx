@@ -4,10 +4,10 @@
  */
 
 import React from 'react';
-import { ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
-import { SelectionStepConfig, SelectionOption } from '@/types/flow';
+import { type SelectionOption, type SelectionStepConfig } from '@/types/flow';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 
 interface SelectionStepProps {

@@ -231,7 +231,7 @@ describe('Memory Leak Detection', () => {
   describe('Integration: Component Lifecycle', () => {
     it('should not leak when component unmounts', async () => {
       const mockSubscribe = () => {
-        let listeners: Array<() => void> = [];
+        let listeners: (() => void)[] = [];
 
         return {
           subscribe: (fn: () => void) => {

@@ -5,7 +5,7 @@
  */
 
 import { createContext, useContext } from 'react';
-import { FlowContextValue } from '@/types/flow';
+import { type FlowContextValue } from '@/types/flow';
 
 /**
  * Flow context

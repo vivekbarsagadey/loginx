@@ -121,7 +121,7 @@ export function useTimeout(
 
   // Start timeout
   const start = useCallback(() => {
-    if (delay === null) return;
+    if (delay === null) {return;}
 
     // Cancel existing timeout
     cancel();
