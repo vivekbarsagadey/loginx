@@ -1,21 +1,17 @@
 /**
  * Flow State Management Hook
- * 
+ *
  * Manages the runtime state of a flow including current step, data, history,
  * and validation errors.
  */
 
-import { useCallback, useState } from 'react';
 import { type FlowConfig, type FlowState } from '@/types/flow';
+import { useCallback, useState } from 'react';
 
 /**
  * Create initial flow state
  */
-function createInitialState(
-  config: FlowConfig,
-  initialData: Record<string, any> = {},
-  resumeState?: FlowState
-): FlowState {
+function createInitialState(config: FlowConfig, initialData: Record<string, any> = {}, resumeState?: FlowState): FlowState {
   if (resumeState) {
     return {
       ...resumeState,
@@ -46,21 +42,17 @@ function createInitialState(
  * Calculate progress percentage
  */
 function calculateProgress(currentStepIndex: number, totalSteps: number): number {
-  if (totalSteps === 0) {return 0;}
+  if (totalSteps === 0) {
+    return 0;
+  }
   return Math.round(((currentStepIndex + 1) / totalSteps) * 100);
 }
 
 /**
  * Hook for managing flow state
  */
-export function useFlowState(
-  config: FlowConfig,
-  initialData: Record<string, any> = {},
-  resumeState?: FlowState
-) {
-  const [state, setState] = useState<FlowState>(() =>
-    createInitialState(config, initialData, resumeState)
-  );
+export function useFlowState(config: FlowConfig, initialData: Record<string, any> = {}, resumeState?: FlowState) {
+  const [state, setState] = useState<FlowState>(() => createInitialState(config, initialData, resumeState));
 
   /**
    * Update the entire state
@@ -70,9 +62,7 @@ export function useFlowState(
       ...prevState,
       ...updates,
       lastUpdatedAt: new Date(),
-      progress: updates.currentStepIndex !== undefined
-        ? calculateProgress(updates.currentStepIndex, prevState.totalSteps)
-        : prevState.progress,
+      progress: updates.currentStepIndex !== undefined ? calculateProgress(updates.currentStepIndex, prevState.totalSteps) : prevState.progress,
     }));
   }, []);
 
@@ -138,7 +128,7 @@ export function useFlowState(
   /**
    * Set errors
    */
-  const setErrors = useCallback((errors: Record<string, string>) => {
+  const setErrors = useCallback((_errors: Record<string, string>) => {
     setState((prevState) => ({
       ...prevState,
       errors,

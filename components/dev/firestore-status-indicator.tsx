@@ -41,17 +41,17 @@ export function FirestoreStatusIndicator() {
           setStatusInfo(`${icon} | ${info.platform}`);
         } else {
           const error = getFirestoreError();
-          if (error?.message.includes('timeout')) {
+          if (_error?.message.includes('timeout')) {
             setStatus('timeout');
             setStatusInfo('Init timeout');
           } else {
             setStatus('error');
-            setStatusInfo(error?.message.slice(0, 30) || 'Unknown error');
+            setStatusInfo(_error?.message.slice(0, 30) || 'Unknown error');
           }
         }
       } catch (_error: unknown) {
         setStatus('error');
-        setStatusInfo(error instanceof Error ? error.message.slice(0, 30) : 'Init failed');
+        setStatusInfo(_error instanceof Error ? error.message.slice(0, 30) : 'Init failed');
         debugLog('[FirestoreStatus] Error checking status:', error);
       }
     };

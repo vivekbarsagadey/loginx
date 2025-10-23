@@ -1,16 +1,16 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useCallback, useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useCallback, useEffect, useState } from 'react';
 
 /**
  * A hook for managing data in AsyncStorage (React Native's local storage).
- * 
+ *
  * This hook provides a React state-like interface for AsyncStorage,
  * automatically persisting state changes and loading initial values.
- * 
+ *
  * @param key - The storage key
  * @param initialValue - Initial value if key doesn't exist
- * @returns Tuple of [value, setValue, remove, loading, error]
- * 
+ * @returns Tuple of [value, setValue, remove, loading, _error]
+ *
  * @example
  * ```typescript
  * // Basic usage
@@ -19,7 +19,7 @@ import { useCallback, useEffect, useState } from "react";
  *     'user-theme',
  *     'light'
  *   );
- * 
+ *
  *   return (
  *     <View>
  *       <Text>Current Theme: {theme}</Text>
@@ -30,7 +30,7 @@ import { useCallback, useEffect, useState } from "react";
  *   );
  * }
  * ```
- * 
+ *
  * @example
  * ```typescript
  * // Complex object storage
@@ -39,15 +39,15 @@ import { useCallback, useEffect, useState } from "react";
  *     'shopping-cart',
  *     []
  *   );
- * 
+ *
  *   const addItem = (item: CartItem) => {
  *     setCart([...cart, item]);
  *   };
- * 
+ *
  *   if (loading) {
  *     return <LoadingSpinner />;
  *   }
- * 
+ *
  *   return (
  *     <View>
  *       <FlatList data={cart} renderItem={({ item }) => <CartItem item={item} />} />
@@ -56,7 +56,7 @@ import { useCallback, useEffect, useState } from "react";
  *   );
  * }
  * ```
- * 
+ *
  * @example
  * ```typescript
  * // Form draft auto-save
@@ -65,12 +65,12 @@ import { useCallback, useEffect, useState } from "react";
  *     'draft-content',
  *     ''
  *   );
- * 
+ *
  *   // Auto-save on change
  *   const handleTextChange = (text: string) => {
  *     setDraft(text);
  *   };
- * 
+ *
  *   return (
  *     <TextInput
  *       value={draft}
@@ -81,16 +81,7 @@ import { useCallback, useEffect, useState } from "react";
  * }
  * ```
  */
-export function useLocalStorage<T>(
-  key: string,
-  initialValue: T
-): [
-  T,
-  (value: T | ((prev: T) => T)) => Promise<void>,
-  () => Promise<void>,
-  boolean,
-  Error | null
-] {
+export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((prev: T) => T)) => Promise<void>, () => Promise<void>, boolean, Error | null] {
   const [storedValue, setStoredValue] = useState<T>(initialValue);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
@@ -105,9 +96,7 @@ export function useLocalStorage<T>(
           setStoredValue(JSON.parse(item) as T);
         }
       } catch (_error) {
-        setError(
-          _error instanceof Error ? _error : new Error("Failed to load from storage")
-        );
+        setError(_error instanceof Error ? _error : new Error('Failed to load from storage'));
       } finally {
         setLoading(false);
       }
@@ -125,9 +114,7 @@ export function useLocalStorage<T>(
         setStoredValue(valueToStore);
         await AsyncStorage.setItem(key, JSON.stringify(valueToStore));
       } catch (_error) {
-        setError(
-          _error instanceof Error ? _error : new Error("Failed to save to storage")
-        );
+        setError(_error instanceof Error ? _error : new Error('Failed to save to storage'));
       }
     },
     [key, storedValue]
@@ -140,11 +127,9 @@ export function useLocalStorage<T>(
       setStoredValue(initialValue);
       await AsyncStorage.removeItem(key);
     } catch (_error) {
-      setError(
-        _error instanceof Error ? _error : new Error("Failed to remove from storage")
-      );
+      setError(_error instanceof Error ? _error : new Error('Failed to remove from storage'));
     }
   }, [key, initialValue]);
 
-  return [storedValue, setValue, remove, loading, error];
+  return [storedValue, setValue, remove, loading, _error];
 }

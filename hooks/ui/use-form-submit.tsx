@@ -80,8 +80,8 @@ export function useFormSubmit<T = void>(submitFn: () => Promise<T>, options: Use
 
       // Show error alert
       if (showErrorAlert) {
-        if (errorMessage) {
-          showAlert(errorTitle, errorMessage, [{ text: 'OK' }], { variant: 'error' });
+        if (_errorMessage) {
+          showAlert(_errorTitle, errorMessage, [{ text: 'OK' }], { variant: 'error' });
         } else {
           showError(_error);
         }

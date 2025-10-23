@@ -33,7 +33,9 @@ const calculateNextDelay = (retryCount: number, initialDelay: number, maxDelay: 
  * Format milliseconds to human-readable string
  */
 const formatDelay = (ms: number): string => {
-  if (ms < 1000) {return `${ms}ms`;}
+  if (ms < 1000) {
+    return `${ms}ms`;
+  }
   const seconds = Math.ceil(ms / 1000);
   return `${seconds}s`;
 };
@@ -49,7 +51,7 @@ export function RetryButton({ onRetry, error, maxRetries = 3, initialDelay = 100
   const [nextRetryIn, setNextRetryIn] = useState(0);
 
   // Check if error is retryable
-  const canRetry = !error || isRetryable(error);
+  const canRetry = !error || isRetryable(_error);
   const retriesExhausted = retryCount >= maxRetries;
   const isDisabled = disabled || !canRetry || retriesExhausted;
 
@@ -65,7 +67,9 @@ export function RetryButton({ onRetry, error, maxRetries = 3, initialDelay = 100
 
   // Handle retry
   const handleRetry = useCallback(async () => {
-    if (isDisabled || retrying) {return;}
+    if (isDisabled || retrying) {
+      return;
+    }
 
     setRetrying(true);
     try {
@@ -103,9 +107,15 @@ export function RetryButton({ onRetry, error, maxRetries = 3, initialDelay = 100
 
   // Get button title
   const getButtonTitle = (): string => {
-    if (retrying) {return i18n.t('common.retrying') || 'Retrying...';}
-    if (countdown > 0) {return `${i18n.t('common.retry')} (${formatDelay(countdown)})`;}
-    if (retriesExhausted) {return i18n.t('common.retriesExhausted') || 'Max Retries Reached';}
+    if (retrying) {
+      return i18n.t('common.retrying') || 'Retrying...';
+    }
+    if (countdown > 0) {
+      return `${i18n.t('common.retry')} (${formatDelay(countdown)})`;
+    }
+    if (retriesExhausted) {
+      return i18n.t('common.retriesExhausted') || 'Max Retries Reached';
+    }
     return i18n.t('common.retry');
   };
 

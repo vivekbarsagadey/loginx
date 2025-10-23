@@ -80,49 +80,42 @@ export function useClipboard(): UseClipboardReturn {
   /**
    * Copy text to clipboard
    */
-  const copy = useCallback(
-    async (text: string, options: ClipboardOptions = {}): Promise<boolean> => {
-      const {
-        onSuccess,
-        onError,
-        clearAfter,
-      } = options;
+  const copy = useCallback(async (text: string, options: ClipboardOptions = {}): Promise<boolean> => {
+    const { onSuccess, onError, clearAfter } = options;
 
-      setIsCopying(true);
-      setError(null);
+    setIsCopying(true);
+    setError(null);
 
-      try {
-        await Clipboard.setStringAsync(text);
-        
-        setCopiedText(text);
+    try {
+      await Clipboard.setStringAsync(text);
 
-        if (onSuccess) {
-          onSuccess(text);
-        }
+      setCopiedText(text);
 
-        // Auto-clear copied state after specified duration
-        if (clearAfter && clearAfter > 0) {
-          setTimeout(() => {
-            setCopiedText(null);
-          }, clearAfter);
-        }
-
-        setIsCopying(false);
-        return true;
-      } catch (_error) {
-        const errorObj = _error instanceof Error ? _error : new Error('Failed to copy to clipboard');
-        setError(errorObj);
-
-        if (onError) {
-          onError(errorObj);
-        }
-
-        setIsCopying(false);
-        return false;
+      if (onSuccess) {
+        onSuccess(text);
       }
-    },
-    []
-  );
+
+      // Auto-clear copied state after specified duration
+      if (clearAfter && clearAfter > 0) {
+        setTimeout(() => {
+          setCopiedText(null);
+        }, clearAfter);
+      }
+
+      setIsCopying(false);
+      return true;
+    } catch (_error) {
+      const errorObj = _error instanceof Error ? _error : new Error('Failed to copy to clipboard');
+      setError(_errorObj);
+
+      if (onError) {
+        onError(_errorObj);
+      }
+
+      setIsCopying(false);
+      return false;
+    }
+  }, []);
 
   /**
    * Get current clipboard content
@@ -132,7 +125,7 @@ export function useClipboard(): UseClipboardReturn {
 
     try {
       const hasString = await Clipboard.hasStringAsync();
-      
+
       if (!hasString) {
         return null;
       }
@@ -141,7 +134,7 @@ export function useClipboard(): UseClipboardReturn {
       return text || null;
     } catch (_error) {
       const errorObj = _error instanceof Error ? _error : new Error('Failed to read from clipboard');
-      setError(errorObj);
+      setError(_errorObj);
       return null;
     }
   }, []);

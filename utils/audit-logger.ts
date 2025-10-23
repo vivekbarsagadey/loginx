@@ -46,7 +46,7 @@ export async function logAuditEvent(entry: Omit<AuditLogEntry, 'timestamp'>): Pr
 
     logger.log('Audit event logged:', entry.eventType);
   } catch (_error: unknown) {
-    logger.error('Failed to log audit event:', error);
+    logger.error('Failed to log audit event:', _error);
     // Don't throw - audit logging should not block user actions
   }
 }

@@ -1,7 +1,7 @@
 /**
  * Settings Context
  * Centralized settings management with local-first architecture
- * 
+ *
  * Features:
  * - Local storage first (AsyncStorage)
  * - Firestore sync for authenticated users
@@ -108,33 +108,30 @@ export function SettingsProvider({ children }: PropsWithChildren) {
   /**
    * Save settings section to storage and sync
    */
-  const saveSettingsSection = useCallback(
-    async <T extends object>(key: string, collection: string, data: T) => {
-      try {
-        // Optimistic update - save locally first and sync to Firestore
-        const user = auth.currentUser;
-        const firestoreCollection = user ? 'userSettings' : 'settings';
-        const firestoreId = user ? `${user.uid}_${key}` : key;
+  const saveSettingsSection = useCallback(async <T extends object>(key: string, collection: string, data: T) => {
+    try {
+      // Optimistic update - save locally first and sync to Firestore
+      const user = auth.currentUser;
+      const firestoreCollection = user ? 'userSettings' : 'settings';
+      const firestoreId = user ? `${user.uid}_${key}` : key;
 
-        await setData<T>({
-          collection: firestoreCollection,
-          id: firestoreId,
-          data,
-          syncEnabled: !!user, // Only sync if user is authenticated
-        });
+      await setData<T>({
+        collection: firestoreCollection,
+        id: firestoreId,
+        data,
+        syncEnabled: !!user, // Only sync if user is authenticated
+      });
 
-        setState((prev) => ({ ...prev, lastSyncedAt: Date.now() }));
+      setState((prev) => ({ ...prev, lastSyncedAt: Date.now() }));
 
-        if (__DEV__) {
-          console.error(`[SettingsContext] ${key} saved and synced`);
-        }
-      } catch (_error: unknown) {
-        console.error(`[SettingsContext] Failed to save ${key}:`, error);
-        throw error;
+      if (__DEV__) {
+        console.error(`[SettingsContext] ${key} saved and synced`);
       }
-    },
-    []
-  );
+    } catch (_error: unknown) {
+      console.error(`[SettingsContext] Failed to save ${key}:`, error);
+      throw _error;
+    }
+  }, []);
 
   /**
    * Update notification settings
@@ -158,7 +155,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
           notifications: state.notifications,
           error: 'Failed to update notification settings',
         }));
-        throw error;
+        throw _error;
       }
     },
     [state.notifications, saveSettingsSection]
@@ -186,7 +183,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
           security: state.security,
           error: 'Failed to update security settings',
         }));
-        throw error;
+        throw _error;
       }
     },
     [state.security, saveSettingsSection]
@@ -214,7 +211,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
           app: state.app,
           error: 'Failed to update app preferences',
         }));
-        throw error;
+        throw _error;
       }
     },
     [state.app, saveSettingsSection]
@@ -242,7 +239,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
           privacy: state.privacy,
           error: 'Failed to update privacy settings',
         }));
-        throw error;
+        throw _error;
       }
     },
     [state.privacy, saveSettingsSection]
@@ -308,7 +305,9 @@ export function SettingsProvider({ children }: PropsWithChildren) {
    */
   useEffect(() => {
     const user = auth.currentUser;
-    if (!user || !firestore) {return;}
+    if (!user || !firestore) {
+      return;
+    }
 
     if (__DEV__) {
       console.error('[SettingsContext] Setting up Firestore real-time sync');
@@ -331,7 +330,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
             }));
           }
         },
-        (error) => {
+        (_error) => {
           console.error('[SettingsContext] Notifications sync error:', error);
         }
       )
@@ -351,7 +350,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
             }));
           }
         },
-        (error) => {
+        (_error) => {
           console.error('[SettingsContext] Security sync error:', error);
         }
       )
@@ -371,7 +370,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
             }));
           }
         },
-        (error) => {
+        (_error) => {
           console.error('[SettingsContext] App sync error:', error);
         }
       )
@@ -391,7 +390,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
             }));
           }
         },
-        (error) => {
+        (_error) => {
           console.error('[SettingsContext] Privacy sync error:', error);
         }
       )

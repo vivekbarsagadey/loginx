@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
 
 /**
  * Return type for the useMap hook.
@@ -32,19 +32,19 @@ export interface UseMapReturn<K, V> {
 
 /**
  * A hook for managing Map state with helpful methods.
- * 
+ *
  * This hook provides a reactive way to work with JavaScript Map data structure,
  * useful for key-value storage, caching, and lookup tables.
- * 
+ *
  * @param initialMap - Initial entries as array of [key, value] tuples
  * @returns Map state and manipulation functions
- * 
+ *
  * @example
  * ```typescript
  * // Basic Map usage
  * function UserCache() {
  *   const { map, set, get, has, remove } = useMap<string, User>([]);
- * 
+ *
  *   const fetchUser = async (userId: string) => {
  *     if (has(userId)) {
  *       return get(userId);
@@ -53,7 +53,7 @@ export interface UseMapReturn<K, V> {
  *     set(userId, user);
  *     return user;
  *   };
- * 
+ *
  *   return (
  *     <View>
  *       <Text>Cached Users: {map.size}</Text>
@@ -62,35 +62,35 @@ export interface UseMapReturn<K, V> {
  *   );
  * }
  * ```
- * 
+ *
  * @example
  * ```typescript
  * // Form field validation
  * function FormValidator() {
  *   const { map, set, has, entries } = useMap<string, string>([]);
- * 
- *   const setError = (field: string, error: string) => {
- *     set(field, error);
+ *
+ *   const setError = (field: string, _error: string) => {
+ *     set(field, _error);
  *   };
- * 
+ *
  *   const hasErrors = entries().length > 0;
- * 
+ *
  *   return (
  *     <View>
- *       {entries().map(([field, error]) => (
+ *       {entries().map(([field, _error]) => (
  *         <Text key={field}>{field}: {error}</Text>
  *       ))}
  *     </View>
  *   );
  * }
  * ```
- * 
+ *
  * @example
  * ```typescript
  * // Selection state
  * function MultiSelect() {
  *   const { has, set, remove, clear, size } = useMap<string, boolean>([]);
- * 
+ *
  *   const toggleSelection = (id: string) => {
  *     if (has(id)) {
  *       remove(id);
@@ -98,7 +98,7 @@ export interface UseMapReturn<K, V> {
  *       set(id, true);
  *     }
  *   };
- * 
+ *
  *   return (
  *     <View>
  *       <Text>Selected: {size}</Text>
@@ -108,9 +108,7 @@ export interface UseMapReturn<K, V> {
  * }
  * ```
  */
-export function useMap<K, V>(
-  initialMap: [K, V][] = []
-): UseMapReturn<K, V> {
+export function useMap<K, V>(initialMap: [K, V][] = []): UseMapReturn<K, V> {
   const [map, setMap] = useState<Map<K, V>>(new Map(initialMap));
 
   const set = useCallback((key: K, value: V) => {

@@ -1,20 +1,16 @@
 /**
  * Flow Validation Hook
- * 
+ *
  * Handles validation of steps and fields using Zod schemas and custom validators
  */
 
+import { type FlowConfig, type FlowState, type FormStepConfig } from '@/types/flow';
 import { useCallback } from 'react';
-import { type FlowConfig, type FlowState, type FormStepConfig, StepConfig } from '@/types/flow';
 
 /**
  * Validate a single form field
  */
-async function validateFormField(
-  fieldName: string,
-  value: any,
-  step: FormStepConfig
-): Promise<{ valid: boolean; error?: string }> {
+async function validateFormField(fieldName: string, value: any, step: FormStepConfig): Promise<{ valid: boolean; error?: string }> {
   // Find field configuration
   const field = step.fields.find((f) => f.name === fieldName);
   if (!field) {
@@ -23,7 +19,7 @@ async function validateFormField(
 
   // Check required
   if (field.required && (value === undefined || value === null || value === '')) {
-    return { valid: false, error: `${field.label} is required` };
+    return { valid: false, _error: `${field.label} is required` };
   }
 
   // Run field-level validation schema
@@ -31,7 +27,7 @@ async function validateFormField(
     try {
       await field.validation.parseAsync(value);
     } catch (_error: any) {
-      return { valid: false, error: _error.errors?.[0]?.message || 'Validation error' };
+      return { valid: false, _error: _error.errors?.[0]?.message || 'Validation error' };
     }
   }
 
@@ -40,7 +36,7 @@ async function validateFormField(
     try {
       await field.asyncValidation(value);
     } catch (_error: any) {
-      return { valid: false, error: _error.message || 'Validation error' };
+      return { valid: false, _error: _error.message || 'Validation error' };
     }
   }
 
@@ -50,10 +46,7 @@ async function validateFormField(
 /**
  * Validate all fields in a form step
  */
-async function validateFormStep(
-  step: FormStepConfig,
-  data: Record<string, any>
-): Promise<{ valid: boolean; errors: Record<string, string> }> {
+async function validateFormStep(step: FormStepConfig, data: Record<string, any>): Promise<{ valid: boolean; errors: Record<string, string> }> {
   const errors: Record<string, string> = {};
 
   // Validate each field
@@ -65,14 +58,14 @@ async function validateFormStep(
 
     const value = data[field.name];
     const result = await validateFormField(field.name, value, step);
-    
+
     if (!result.valid && result.error) {
       errors[field.name] = result.error;
     }
   }
 
   // Run step-level validation schema
-  if (step.validationSchema && Object.keys(errors).length === 0) {
+  if (step.validationSchema && Object.keys(_errors).length === 0) {
     try {
       // Extract field values
       const fieldValues: Record<string, any> = {};
@@ -81,7 +74,7 @@ async function validateFormStep(
           fieldValues[field.name] = data[field.name];
         }
       }
-      
+
       await step.validationSchema.parseAsync(fieldValues);
     } catch (_error: any) {
       // Add schema validation errors
@@ -95,7 +88,7 @@ async function validateFormStep(
   }
 
   return {
-    valid: Object.keys(errors).length === 0,
+    valid: Object.keys(_errors).length === 0,
     errors,
   };
 }
@@ -103,19 +96,13 @@ async function validateFormStep(
 /**
  * Hook for flow validation
  */
-export function useFlowValidation(
-  config: FlowConfig,
-  state: FlowState,
-  updateState: (updates: Partial<FlowState>) => void
-) {
+export function useFlowValidation(config: FlowConfig, state: FlowState, updateState: (updates: Partial<FlowState>) => void) {
   /**
    * Validate current or specific step
    */
   const validateStep = useCallback(
     async (stepId?: string): Promise<boolean> => {
-      const stepToValidate = stepId
-        ? config.steps.find((s) => s.id === stepId)
-        : config.steps[state.currentStepIndex];
+      const stepToValidate = stepId ? config.steps.find((s) => s.id === stepId) : config.steps[state.currentStepIndex];
 
       if (!stepToValidate) {
         return true;
@@ -124,7 +111,7 @@ export function useFlowValidation(
       // For form steps, validate all fields
       if (stepToValidate.type === 'form') {
         const result = await validateFormStep(stepToValidate as FormStepConfig, state.data);
-        
+
         if (!result.valid) {
           updateState({
             validationErrors: result.errors,
@@ -207,13 +194,13 @@ export function useFlowValidation(
   const validateField = useCallback(
     async (fieldName: string, value: any): Promise<boolean> => {
       const currentStep = config.steps[state.currentStepIndex];
-      
+
       if (currentStep.type !== 'form') {
         return true;
       }
 
       const result = await validateFormField(fieldName, value, currentStep as FormStepConfig);
-      
+
       if (!result.valid && result.error) {
         updateState({
           validationErrors: {
@@ -227,7 +214,7 @@ export function useFlowValidation(
       // Clear field error if valid
       const newErrors = { ...state.validationErrors };
       delete newErrors[fieldName];
-      
+
       updateState({
         validationErrors: newErrors,
       });

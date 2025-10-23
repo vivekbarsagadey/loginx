@@ -47,9 +47,9 @@ export interface UseFormReturn<T> {
   /** Set multiple field values at once */
   setValues: (values: Partial<T>) => void;
   /** Set error for a specific field */
-  setError: <K extends keyof T>(field: K, error: string) => void;
+  setError: <K extends keyof T>(field: K, _error: string) => void;
   /** Set multiple errors at once */
-  setErrors: (errors: Partial<Record<keyof T, string>>) => void;
+  setErrors: (_errors: Partial<Record<keyof T, string>>) => void;
   /** Mark a field as touched */
   setTouched: <K extends keyof T>(field: K, isTouched?: boolean) => void;
   /** Handle field change (combines setValue and setTouched) */
@@ -126,7 +126,7 @@ export function useForm<T extends Record<string, unknown>>(options: UseFormOptio
   });
 
   // Check if form is valid (no errors)
-  const isValid = Object.keys(errors).length === 0;
+  const isValid = Object.keys(_errors).length === 0;
 
   /**
    * Validate a single field
@@ -146,7 +146,7 @@ export function useForm<T extends Record<string, unknown>>(options: UseFormOptio
       // Run custom validation
       if (fieldValidation?.validate) {
         const error = await fieldValidation.validate(value, values);
-        if (error) {
+        if (_error) {
           setErrorsState((prev) => ({ ...prev, [field]: error }));
           return false;
         }
@@ -168,9 +168,7 @@ export function useForm<T extends Record<string, unknown>>(options: UseFormOptio
    * Validate all form fields
    */
   const validateForm = useCallback(async (): Promise<boolean> => {
-    const fieldValidations = await Promise.all(
-      Object.keys(values).map((key) => validateField(key as keyof T))
-    );
+    const fieldValidations = await Promise.all(Object.keys(values).map((key) => validateField(key as keyof T)));
 
     const allFieldsValid = fieldValidations.every((valid) => valid);
 
@@ -203,7 +201,7 @@ export function useForm<T extends Record<string, unknown>>(options: UseFormOptio
   /**
    * Set error for a specific field
    */
-  const setError = useCallback(<K extends keyof T>(field: K, error: string) => {
+  const setError = useCallback(<K extends keyof T>(field: K, _error: string) => {
     setErrorsState((prev) => ({ ...prev, [field]: error }));
   }, []);
 
@@ -225,14 +223,15 @@ export function useForm<T extends Record<string, unknown>>(options: UseFormOptio
    * Handle field change - combines setValue and validation
    */
   const handleChange = useCallback(
-    <K extends keyof T>(field: K) => (value: T[K]) => {
-      setValue(field, value);
-      // Validate on change if field was already touched or form was submitted
-      if (touched[field] || isSubmitted) {
-        // Use setTimeout to validate after state update
-        setTimeout(() => validateField(field), 0);
-      }
-    },
+    <K extends keyof T>(field: K) =>
+      (value: T[K]) => {
+        setValue(field, value);
+        // Validate on change if field was already touched or form was submitted
+        if (touched[field] || isSubmitted) {
+          // Use setTimeout to validate after state update
+          setTimeout(() => validateField(field), 0);
+        }
+      },
     [setValue, validateField, touched, isSubmitted]
   );
 
@@ -240,10 +239,11 @@ export function useForm<T extends Record<string, unknown>>(options: UseFormOptio
    * Handle field blur - marks as touched and validates
    */
   const handleBlur = useCallback(
-    <K extends keyof T>(field: K) => () => {
-      setTouched(field, true);
-      validateField(field);
-    },
+    <K extends keyof T>(field: K) =>
+      () => {
+        setTouched(field, true);
+        validateField(field);
+      },
     [setTouched, validateField]
   );
 
@@ -266,10 +266,13 @@ export function useForm<T extends Record<string, unknown>>(options: UseFormOptio
     setIsSubmitting(true);
 
     // Mark all fields as touched
-    const allTouched = Object.keys(values).reduce((acc, key) => {
-      acc[key as keyof T] = true;
-      return acc;
-    }, {} as Partial<Record<keyof T, boolean>>);
+    const allTouched = Object.keys(values).reduce(
+      (acc, key) => {
+        acc[key as keyof T] = true;
+        return acc;
+      },
+      {} as Partial<Record<keyof T, boolean>>
+    );
     setTouchedState(allTouched);
 
     try {

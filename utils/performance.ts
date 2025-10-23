@@ -123,7 +123,7 @@ export const measureRenderTime = (componentName: string, callback: () => void) =
     const start = performance.now();
     callback();
     const end = performance.now();
-     
+
     console.error(`[Performance] ${componentName} render time: ${(end - start).toFixed(2)}ms`);
   } else {
     callback();
@@ -187,7 +187,7 @@ export function getArchitectureInfo(): ArchitectureInfo {
 export const logPerformanceMetrics = () => {
   if (__DEV__) {
     const info = getArchitectureInfo();
-     
+
     console.error('[Performance] Architecture Info:', {
       'New Architecture (Fabric)': info.fabric ? '✅ Enabled' : '❌ Disabled',
       TurboModules: info.turboModules ? '✅ Enabled' : '❌ Disabled',
@@ -284,7 +284,7 @@ export const preloadImages = async (uris: string[]): Promise<void> => {
     );
   } catch (_error: unknown) {
     if (__DEV__) {
-      console.warn('[Performance] Failed to preload some images:', error);
+      console.warn('[Performance] Failed to preload some images:', _error);
     }
   }
 };

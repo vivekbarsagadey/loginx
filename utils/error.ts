@@ -44,36 +44,36 @@ interface ErrorInfo {
 /**
  * Check if an error is fatal (requires support contact)
  */
-export function isFatalError(error: unknown): boolean {
-  if (!hasErrorCode(error)) {
+export function isFatalError(_error: unknown): boolean {
+  if (!hasErrorCode(_error)) {
     return false;
   }
 
-  return FATAL_ERROR_CODES.includes((error as any).code as (typeof FATAL_ERROR_CODES)[number]);
+  return FATAL_ERROR_CODES.includes((_error as any).code as (typeof FATAL_ERROR_CODES)[number]);
 }
 
 /**
  * Type guard: Check if error is an Axios-like error
  */
-const isAxiosError = (error: unknown): error is { isAxiosError: boolean; response?: unknown } => {
+const isAxiosError = (_error: unknown): error is { isAxiosError: boolean; response?: unknown } => {
   return typeof error === 'object' && error !== null && 'isAxiosError' in error;
 };
 
 /**
  * Type guard: Check if error has a code property (Firebase errors)
  */
-const hasErrorCode = (error: unknown): error is { code: string } => {
-  return typeof error === 'object' && error !== null && 'code' in error && typeof (error as { code: unknown }).code === 'string';
+const hasErrorCode = (_error: unknown): error is { code: string } => {
+  return typeof error === 'object' && error !== null && 'code' in error && typeof (_error as { code: unknown }).code === 'string';
 };
 
 /**
  * Check if error is a Firebase error (auth, firestore, or storage)
  */
-const isFirebaseError = (error: unknown): boolean => {
-  if (!hasErrorCode(error)) {
+const isFirebaseError = (_error: unknown): boolean => {
+  if (!hasErrorCode(_error)) {
     return false;
   }
-  return (error as any).code.startsWith(FIREBASE_AUTH_PREFIX) || (error as any).code.startsWith(FIRESTORE_PREFIX) || (error as any).code.startsWith(STORAGE_PREFIX);
+  return (_error as any).code.startsWith(FIREBASE_AUTH_PREFIX) || (_error as any).code.startsWith(FIRESTORE_PREFIX) || (_error as any).code.startsWith(STORAGE_PREFIX);
 };
 
 /**
@@ -82,11 +82,11 @@ const isFirebaseError = (error: unknown): boolean => {
  * @param error - Error object (unknown type for safety)
  * @returns Structured error information with fatal flag
  */
-export const getErrorInfo = (error: unknown): ErrorInfo => {
+export const getErrorInfo = (_error: unknown): ErrorInfo => {
   // Use Firebase error message utility for all Firebase errors
-  if (isFirebaseError(error) && hasErrorCode(error)) {
-    const message = getFirebaseErrorMessage(error.code);
-    const fatal = isFatalError(error);
+  if (isFirebaseError(_error) && hasErrorCode(_error)) {
+    const message = getFirebaseErrorMessage(_error.code);
+    const fatal = isFatalError(_error);
 
     return {
       title: i18n.t('errors.firebase.title'),
@@ -99,13 +99,13 @@ export const getErrorInfo = (error: unknown): ErrorInfo => {
   // Use error classifier for non-Firebase errors
   let classified: { userMessage: string; recoverySuggestions: string[] } | null = null;
   try {
-    classified = classifyError(error);
+    classified = classifyError(_error);
   } catch (_error: unknown) {
     // Fallback if classifier fails
   }
 
   // Handle network/Axios errors
-  if (isAxiosError(error) && !error.response) {
+  if (isAxiosError(_error) && !error.response) {
     return {
       title: i18n.t('errors.network.title'),
       message: classified?.userMessage || i18n.t('errors.network.message'),
@@ -114,7 +114,7 @@ export const getErrorInfo = (error: unknown): ErrorInfo => {
   }
 
   // Handle standard Error objects
-  if (error instanceof Error) {
+  if (_error instanceof Error) {
     return {
       title: i18n.t('errors.generic.title'),
       message: classified?.userMessage || error.message || i18n.t('errors.generic.message'),
@@ -135,9 +135,9 @@ export const getErrorInfo = (error: unknown): ErrorInfo => {
  * Safely handles all error types and provides fallback behavior
  * @param error - Error object (unknown type for safety)
  */
-export const showError = (error: unknown): void => {
+export const showError = (_error: unknown): void => {
   try {
-    const { title, message } = getErrorInfo(error);
+    const { title, message } = getErrorInfo(_error);
 
     if (globalErrorHandler) {
       globalErrorHandler(title, message);

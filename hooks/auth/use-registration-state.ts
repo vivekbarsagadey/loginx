@@ -8,7 +8,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Haptics from 'expo-haptics';
-import { type _User, type Auth, createUserWithEmailAndPassword, deleteUser, sendEmailVerification } from 'firebase/auth';
+import { type Auth, createUserWithEmailAndPassword, deleteUser, sendEmailVerification } from 'firebase/auth';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -216,7 +216,7 @@ export function useRegistrationState(options: UseRegistrationStateOptions = {}) 
   };
 
   const deps = getDependencies();
-  const logger = deps.logger || { log: () => {}, warn: () => {}, error: () => {} };
+  const logger = deps.logger || { log: () => {}, warn: () => {}, _error: () => {} };
 
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -369,13 +369,13 @@ export function useRegistrationState(options: UseRegistrationStateOptions = {}) 
       const hasPhoneNumber = Boolean(sanitizedData.phoneNumber && sanitizedData.phoneNumber.trim());
       onSuccess?.(user.uid, hasPhoneNumber);
     } catch (_error: unknown) {
-      logger.error('Registration error:', error);
+      logger.error('Registration error:', _error);
 
-      if (error instanceof Error) {
-        onError?.(error);
+      if (_error instanceof Error) {
+        onError?.(_error);
       }
 
-      deps.showError(error);
+      deps.showError(_error);
     } finally {
       setIsSubmitting(false);
     }

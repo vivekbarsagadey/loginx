@@ -103,7 +103,7 @@ export default function LoginScreen() {
       await incrementLoginAttempts();
 
       // TASK-015: Check for rate limit errors
-      if (isRateLimitError(error)) {
+      if (isRateLimitError(_error)) {
         showAlert('Too Many Attempts', 'You have exceeded the maximum number of login attempts. Please try again later.', [{ text: 'OK' }], { variant: 'error' });
         return;
       }
@@ -115,7 +115,7 @@ export default function LoginScreen() {
         showAlert('Login Attempts Warning', `You have ${remainingAttempts - 1} login attempts remaining before your account is temporarily locked.`, [{ text: 'OK' }], { variant: 'warning' });
       }
 
-      showError(error);
+      showError(_error);
     } finally {
       setLoading(false);
     }

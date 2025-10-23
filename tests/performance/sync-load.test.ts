@@ -106,7 +106,7 @@ describe('Sync Queue Performance', () => {
       // Attempt sync with network error
       await backgroundSync();
     } catch (_error: unknown) {
-      expect(error).toBeDefined();
+      expect(_error).toBeDefined();
     }
 
     // Queue should be preserved for retry

@@ -41,7 +41,7 @@ export function initializeFirestoreMonitoring(): void {
 
   // Check current state
   const ready = isFirestoreReady();
-  updateReadyState({ ready, loading: !ready, error: null });
+  updateReadyState({ ready, loading: !ready, _error: null });
 
   if (ready) {
     debugLog('[FirestoreReady] ✅ Firestore is ready');
@@ -60,14 +60,14 @@ export function initializeFirestoreMonitoring(): void {
 
     if (ready) {
       debugLog('[FirestoreReady] ✅ Firestore became ready');
-      updateReadyState({ ready: true, loading: false, error: null });
+      updateReadyState({ ready: true, loading: false, _error: null });
       return;
     }
 
     if (attempt >= maxAttempts) {
       const error = new Error('Firestore initialization timeout');
-      debugWarn('[FirestoreReady] ❌ Firestore initialization timed out', error);
-      updateReadyState({ ready: false, loading: false, error });
+      debugWarn('[FirestoreReady] ❌ Firestore initialization timed out', _error);
+      updateReadyState({ ready: false, loading: false, _error });
       return;
     }
 
@@ -95,7 +95,7 @@ function updateReadyState(newState: Partial<FirestoreReadyState>): void {
       try {
         listener(firestoreReadyState.ready);
       } catch (_error: unknown) {
-        debugWarn('[FirestoreReady] Listener error', error);
+        debugWarn('[FirestoreReady] Listener error', _error);
       }
     });
   }
@@ -184,7 +184,7 @@ export async function whenFirestoreReady<T>(fn: () => Promise<T> | T, options: {
     await waitForFirestore(timeout);
     return await fn();
   } catch (_error: unknown) {
-    debugWarn('[FirestoreReady] Operation failed, Firestore not ready', error);
+    debugWarn('[FirestoreReady] Operation failed, Firestore not ready', _error);
 
     // Use fallback if provided
     if (fallback) {
@@ -192,6 +192,6 @@ export async function whenFirestoreReady<T>(fn: () => Promise<T> | T, options: {
       return fallback();
     }
 
-    throw error;
+    throw _error;
   }
 }

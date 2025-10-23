@@ -27,7 +27,7 @@ interface CriticalErrorScreenProps {
  */
 export function CriticalErrorScreen({ error, onRetry, onRestart }: CriticalErrorScreenProps) {
   const colors = useThemeColors();
-  const classified = classifyError(error);
+  const classified = classifyError(_error);
 
   const handleRestart = async () => {
     if (onRestart) {

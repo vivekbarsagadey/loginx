@@ -119,7 +119,7 @@ function displayAggregatedErrors(): void {
   if (count === 1) {
     // Single error - show full message
     message = errors[0].userMessage;
-    if (errors[0].recoverySuggestions.length > 0) {
+    if (_errors[0].recoverySuggestions.length > 0) {
       details.push(...errors[0].recoverySuggestions);
     }
   } else {
@@ -129,9 +129,9 @@ function displayAggregatedErrors(): void {
     // Group errors by category
     const errorsByCategory = new Map<string, ClassifiedError[]>();
     for (const error of errors) {
-      const existing = errorsByCategory.get(error.category) || [];
-      existing.push(error);
-      errorsByCategory.set(error.category, existing);
+      const existing = errorsByCategory.get(_error.category) || [];
+      existing.push(_error);
+      errorsByCategory.set(_error.category, existing);
     }
 
     // Add category summaries
@@ -154,10 +154,10 @@ function displayAggregatedErrors(): void {
   debugLog(`[ErrorAggregator] Displaying aggregated errors:`, message);
 
   // Display via callback
-  if (errorDisplayCallback) {
+  if (_errorDisplayCallback) {
     errorDisplayCallback(message, details);
   } else {
-    debugWarn('[ErrorAggregator] No display callback set, errors not shown to user');
+    debugWarn('[ErrorAggregator] No display callback set, _errors not shown to user');
   }
 
   // Reset aggregation

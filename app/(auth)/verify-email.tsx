@@ -18,8 +18,8 @@ import { StyleSheet } from 'react-native';
 
 const logger = createLogger('VerifyEmail');
 
-const getFirebaseAuthErrorMessage = (errorCode: string) => {
-  switch (errorCode) {
+const getFirebaseAuthErrorMessage = (_errorCode: string) => {
+  switch (_errorCode) {
     case 'auth/too-many-requests':
       return i18n.t('screens.verifyEmail.errors.tooManyRequests');
     default:
@@ -64,9 +64,9 @@ export default function VerifyEmailScreen() {
     onSuccess: () => {
       showAlert(i18n.t('screens.verifyEmail.success.emailSent'), i18n.t('screens.verifyEmail.success.emailSentMessage'), [{ text: 'OK' }], { variant: 'success' });
     },
-    onError: (error: unknown) => {
-      const errorCode = (error as { code?: string })?.code ?? '';
-      const friendlyMessage = getFirebaseAuthErrorMessage(errorCode);
+    onError: (_error: unknown) => {
+      const errorCode = (_error as { code?: string })?.code ?? '';
+      const friendlyMessage = getFirebaseAuthErrorMessage(_errorCode);
       showAlert(i18n.t('errors.generic.title'), friendlyMessage, [{ text: 'OK' }], { variant: 'error' });
     },
   });

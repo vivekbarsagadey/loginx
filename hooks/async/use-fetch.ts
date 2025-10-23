@@ -55,7 +55,7 @@ export interface UseFetchReturn<T> extends UseFetchState<T> {
  * @example
  * ```typescript
  * // Basic usage
- * const { data, isLoading, error } = useFetch('/api/users');
+ * const { data, isLoading, _error } = useFetch('/api/users');
  *
  * // Manual fetch with POST
  * const { data, refetch, isLoading } = useFetch('/api/users', {
@@ -66,10 +66,10 @@ export interface UseFetchReturn<T> extends UseFetchState<T> {
  * });
  *
  * // With retry and callbacks
- * const { data, error } = useFetch('/api/data', {
+ * const { data, _error } = useFetch('/api/data', {
  *   retry: { count: 3, delay: 1000 },
  *   onSuccess: (data) => console.error('Success:', data),
- *   onError: (error) => console.error('Error:', error),
+ *   onError: (_error) => console.error('Error:', _error),
  * });
  *
  * // With data transformation

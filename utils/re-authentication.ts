@@ -65,7 +65,7 @@ export const isBiometricAvailable = async (): Promise<boolean> => {
 
     return true;
   } catch (_error: unknown) {
-    debugError('[ReAuth] Error checking biometric availability:', error);
+    debugError('[ReAuth] Error checking biometric availability:', _error);
     return false;
   }
 };
@@ -90,7 +90,7 @@ export const getBiometricType = async (): Promise<string> => {
 
     return 'Biometric Authentication';
   } catch (_error: unknown) {
-    debugError('[ReAuth] Error getting biometric type:', error);
+    debugError('[ReAuth] Error getting biometric type:', _error);
     return 'Biometric Authentication';
   }
 };
@@ -104,7 +104,7 @@ export const getLastAuthTimestamp = async (): Promise<number> => {
     const timestamp = await securelyGetItem(LAST_AUTH_TIMESTAMP_KEY);
     return timestamp ? parseInt(timestamp, 10) : 0;
   } catch (_error: unknown) {
-    debugError('[ReAuth] Error getting last auth timestamp:', error);
+    debugError('[ReAuth] Error getting last auth timestamp:', _error);
     return 0;
   }
 };
@@ -118,7 +118,7 @@ export const saveAuthTimestamp = async (timestamp: number = Date.now()): Promise
     await securelySetItem(LAST_AUTH_TIMESTAMP_KEY, timestamp.toString());
     debugLog('[ReAuth] Saved auth timestamp:', new Date(timestamp).toISOString());
   } catch (_error: unknown) {
-    debugError('[ReAuth] Error saving auth timestamp:', error);
+    debugError('[ReAuth] Error saving auth timestamp:', _error);
   }
 };
 
@@ -163,7 +163,7 @@ export const isSessionExpired = async (customTimeout?: number): Promise<boolean>
 
     return expired;
   } catch (_error: unknown) {
-    debugError('[ReAuth] Error checking session expiration:', error);
+    debugError('[ReAuth] Error checking session expiration:', _error);
     return true; // Fail safe - require re-auth on error
   }
 };
@@ -221,7 +221,7 @@ export const promptBiometric = async (options: ReAuthOptions = {}): Promise<ReAu
       error: result.error || 'Biometric authentication failed',
     };
   } catch (_error: unknown) {
-    debugError('[ReAuth] Biometric authentication error:', error);
+    debugError('[ReAuth] Biometric authentication error:', _error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Authentication failed',
@@ -276,7 +276,7 @@ export const requireAuth = async (options: ReAuthOptions = {}): Promise<ReAuthRe
 
     return biometricResult;
   } catch (_error: unknown) {
-    debugError('[ReAuth] Re-authentication error:', error);
+    debugError('[ReAuth] Re-authentication error:', _error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Authentication failed',
@@ -316,7 +316,7 @@ export const verifyPasswordFallback = async (password: string, userEmail: string
 
     return { success: true, method: 'password' };
   } catch (_error: unknown) {
-    debugError('[ReAuth] Password fallback failed:', error);
+    debugError('[ReAuth] Password fallback failed:', _error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Password verification failed',
@@ -332,7 +332,7 @@ export const clearAuthTimestamp = async (): Promise<void> => {
     await securelySetItem(LAST_AUTH_TIMESTAMP_KEY, '');
     debugLog('[ReAuth] Cleared auth timestamp');
   } catch (_error: unknown) {
-    debugError('[ReAuth] Error clearing auth timestamp:', error);
+    debugError('[ReAuth] Error clearing auth timestamp:', _error);
   }
 };
 
@@ -352,7 +352,7 @@ export const getTimeUntilSessionExpires = async (): Promise<number> => {
 
     return remaining;
   } catch (_error: unknown) {
-    debugError('[ReAuth] Error calculating session expiry:', error);
+    debugError('[ReAuth] Error calculating session expiry:', _error);
     return 0;
   }
 };

@@ -123,7 +123,7 @@ export function ListScreen<T>({
   }
 
   // Error State
-  if (error && onRetry) {
+  if (_error && onRetry) {
     return (
       <ThemedView style={[styles.container, { backgroundColor }]}>
         <View style={styles.centerContent}>

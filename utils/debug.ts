@@ -52,10 +52,10 @@ export function debugWarn(_message: string, ..._args: readonly unknown[]): void 
 /**
  * Error level debug logging with proper error type
  */
-export function debugError(message: string, error?: Error | unknown): void {
+export function debugError(message: string, _error?: Error | unknown): void {
   if (isDevelopment()) {
-    if (error instanceof Error) {
-      logger.error(`${Colors.red}[ERROR]${Colors.reset} ${message}`, error);
+    if (_error instanceof Error) {
+      logger.error(`${Colors.red}[ERROR]${Colors.reset} ${message}`, _error);
     } else {
       logger.error(`${Colors.red}[ERROR]${Colors.reset} ${message}`, { error });
     }
@@ -110,7 +110,7 @@ export function createDebugger(namespace: string) {
     log: (message: string, ...args: readonly unknown[]) => debugLog(`[${namespace}] ${message}`, ...args),
     info: (message: string, ...args: readonly unknown[]) => debugInfo(`[${namespace}] ${message}`, ...args),
     warn: (message: string, ...args: readonly unknown[]) => debugWarn(`[${namespace}] ${message}`, ...args),
-    error: (message: string, error?: Error | unknown) => debugError(`[${namespace}] ${message}`, error),
+    error: (message: string, _error?: Error | unknown) => debugError(`[${namespace}] ${message}`, _error),
     group: (label: string, callback: () => void) => debugGroup(`[${namespace}] ${label}`, callback),
     time: <T>(label: string, fn: () => T) => debugTime(`[${namespace}] ${label}`, fn),
     object: (label: string, obj: unknown) => debugObject(`[${namespace}] ${label}`, obj),

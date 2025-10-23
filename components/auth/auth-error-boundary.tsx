@@ -70,7 +70,7 @@ export class AuthErrorBoundary extends Component<Props, State> {
   /**
    * Update state when an error is caught
    */
-  static getDerivedStateFromError(error: Error): Partial<State> {
+  static getDerivedStateFromError(_error: Error): Partial<State> {
     return {
       hasError: true,
       error,
@@ -80,7 +80,7 @@ export class AuthErrorBoundary extends Component<Props, State> {
   /**
    * Log error details
    */
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  componentDidCatch(_error: Error, errorInfo: ErrorInfo): void {
     // Log error with production-safe logger
     logger.error('[AuthErrorBoundary] React component error caught', {
       error: {
@@ -100,7 +100,7 @@ export class AuthErrorBoundary extends Component<Props, State> {
 
     // TODO: Send error to external monitoring service (Sentry, etc.)
     // if (Config.errorReporting.enabled) {
-    //   Sentry.captureException(error, { contexts: { react: errorInfo } });
+    //   Sentry.captureException(_error, { contexts: { react: errorInfo } });
     // }
   }
 

@@ -17,7 +17,7 @@ export const securelySetItem = async (key: string, value: string): Promise<void>
     await SecureStore.setItemAsync(key, value);
     debugLog(`[SecureStore] Successfully saved item: ${key}`);
   } catch (_error: unknown) {
-    debugError(`[SecureStore] Failed to save item: ${key}`, error);
+    debugError(`[SecureStore] Failed to save item: ${key}`, _error);
     throw new Error(`Failed to save secure item: ${key}`);
   }
 };
@@ -33,7 +33,7 @@ export const securelyGetItem = async (key: string): Promise<string | null> => {
     debugLog(`[SecureStore] Successfully retrieved item: ${key}`);
     return value;
   } catch (_error: unknown) {
-    debugError(`[SecureStore] Failed to retrieve item: ${key}`, error);
+    debugError(`[SecureStore] Failed to retrieve item: ${key}`, _error);
     return null;
   }
 };
@@ -48,7 +48,7 @@ export const securelyDeleteItem = async (key: string): Promise<void> => {
     await SecureStore.deleteItemAsync(key);
     debugLog(`[SecureStore] Successfully deleted item: ${key}`);
   } catch (_error: unknown) {
-    debugError(`[SecureStore] Failed to delete item: ${key}`, error);
+    debugError(`[SecureStore] Failed to delete item: ${key}`, _error);
     throw new Error(`Failed to delete secure item: ${key}`);
   }
 };
@@ -124,7 +124,7 @@ export const securelyGetObject = async <T>(key: string, defaultValue: T | null =
   try {
     return JSON.parse(value) as T;
   } catch (_error: unknown) {
-    debugError("[SecureStore] Error:", error);
+    debugError('[SecureStore] Error:', _error);
     return defaultValue;
   }
 };
@@ -155,7 +155,7 @@ export const clearSecureStorage = async (keys?: string[]): Promise<void> => {
     await Promise.all(keysToDelete.map((key) => securelyDeleteItem(key)));
     debugLog('[SecureStore] Successfully cleared secure storage');
   } catch (_error: unknown) {
-    debugError('[SecureStore] Failed to clear some secure storage items', error);
+    debugError('[SecureStore] Failed to clear some secure storage items', _error);
     throw new Error('Failed to clear secure storage');
   }
 };

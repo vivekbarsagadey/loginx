@@ -53,7 +53,7 @@ interface ExternalLogger {
   debug?: (message: string, context?: Record<string, any>) => void;
   info?: (message: string, context?: Record<string, any>) => void;
   warn?: (message: string, context?: Record<string, any>) => void;
-  error?: (message: string, error?: Error, context?: Record<string, any>) => void;
+  error?: (message: string, _error?: Error, context?: Record<string, any>) => void;
 }
 
 /**
@@ -234,7 +234,7 @@ class ProductionLogger {
     // Redact PII
     const redactedMessage = this.redactPII(message);
     const redactedContext = context ? this.redactValue(context) : undefined;
-    const redactedError = error ? (this.redactValue(error) as Error) : undefined;
+    const redactedError = error ? (this.redactValue(_error) as Error) : undefined;
 
     const entry: LogEntry = {
       level: levelName,
@@ -257,11 +257,9 @@ class ProductionLogger {
         console.info(formattedMessage);
         break;
       case LogLevel.WARN:
-         
         console.warn(formattedMessage);
         break;
       case LogLevel.ERROR:
-         
         console.error(formattedMessage);
         break;
     }
@@ -311,8 +309,8 @@ class ProductionLogger {
   /**
    * Log error message
    */
-  error(message: string, errorOrContext?: Error | Record<string, any>): void {
-    this.log(LogLevel.ERROR, 'ERROR', message, errorOrContext);
+  error(message: string, _errorOrContext?: Error | Record<string, any>): void {
+    this.log(LogLevel.ERROR, 'ERROR', message, _errorOrContext);
   }
 }
 

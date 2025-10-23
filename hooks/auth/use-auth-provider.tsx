@@ -95,11 +95,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(user);
         setLoading(false);
       },
-      (error) => {
+      (_error) => {
         // Handle auth state change errors
         debugError('[Auth] State change error', error);
         setLoading(false);
-        showError(error);
+        showError(_error);
       }
     );
 
@@ -156,8 +156,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       debugLog('[Auth] Logout completed successfully');
     } catch (_error: unknown) {
       debugError('[Auth] Sign out error', error);
-      showError(error);
-      throw error; // Re-throw so caller can handle if needed
+      showError(_error);
+      throw _error; // Re-throw so caller can handle if needed
     }
   }, []);
 

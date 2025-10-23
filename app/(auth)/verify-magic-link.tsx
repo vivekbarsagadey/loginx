@@ -65,7 +65,7 @@ export default function VerifyMagicLinkScreen() {
       await finishSignIn(signInEmail, emailLink);
     } catch (_error: unknown) {
       logger.error('Error completing sign-in:', error);
-      showError(error);
+      showError(_error);
     }
   };
 

@@ -63,7 +63,7 @@ export function BiometricLoginSection({ onSuccess, disabled }: BiometricLoginSec
         }
       }
     } catch (_error: unknown) {
-      showError(error);
+      showError(_error);
     }
   };
 

@@ -98,7 +98,7 @@ export const ProfileSlide = ({ width, onNext, onSkip }: ProfileSlideProps) => {
                 setPhotoURL(url);
                 handleInteraction();
               }}
-              onError={(error) => {
+              onError={(_error) => {
                 logger.error('Photo upload error:', error);
                 showAlert('Upload Error', 'Failed to upload photo. You can add one later.', [{ text: 'OK' }], { variant: 'error' });
               }}

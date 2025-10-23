@@ -27,7 +27,7 @@ export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(({ label, hel
   const actualSecureTextEntry = shouldShowToggle ? !isPasswordVisible : secureTextEntry;
 
   const dynamicStyle: TextStyle = {};
-  if (errorMessage) {
+  if (_errorMessage) {
     dynamicStyle.borderColor = colors.error;
     dynamicStyle.borderWidth = 2;
   } else if (isFocused) {

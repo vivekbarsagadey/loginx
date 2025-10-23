@@ -25,7 +25,7 @@ export function ErrorServerIllustration({ size = 120 }: ErrorServerIllustrationP
       <Rect x="35" y="53" width="50" height="15" rx="2" fill="none" stroke={colors.error} strokeWidth="2.5" />
       <Rect x="35" y="71" width="50" height="15" rx="2" fill="none" stroke={colors.error} strokeWidth="2.5" />
 
-      {/* Server lights - red (errors) */}
+      {/* Server lights - red (_errors) */}
       <Circle cx="42" cy="42.5" r="2" fill={colors.error} />
       <Circle cx="49" cy="42.5" r="2" fill={colors.error} opacity="0.3" />
       <Circle cx="56" cy="42.5" r="2" fill={colors.error} opacity="0.3" />

@@ -154,7 +154,7 @@ export function PasswordStrengthMeter({ password, onStrengthChange }: PasswordSt
   const successColor = useThemeColor({}, 'success');
   const borderColor = useThemeColor({}, 'border');
 
-  const errorColorShared = useSharedValue(errorColor);
+  const errorColorShared = useSharedValue(_errorColor);
   const warningColorShared = useSharedValue(warningColor);
   const successColorShared = useSharedValue(successColor);
 

@@ -43,7 +43,7 @@ const getMaxCacheSize = (): number => {
       return adaptiveSize;
     }
   } catch (_error: unknown) {
-    debugWarn('[Cache] Could not get adaptive cache size, using fallback', error);
+    debugWarn('[Cache] Could not get adaptive cache size, using fallback', _error);
   }
   // Fallback to static default if adaptive manager not ready
   return 100;
@@ -135,7 +135,7 @@ const evictOldEntries = async (): Promise<void> => {
       }
     }
   } catch (_error: unknown) {
-    debugError('[Cache] Error during cache eviction:', error);
+    debugError('[Cache] Error during cache eviction:', _error);
   }
 };
 
@@ -163,7 +163,7 @@ export const initializeCache = async (): Promise<void> => {
             }
           }
         } catch (_error: unknown) {
-          debugWarn(`[Cache] Failed to preload cache entry: ${key}`, error);
+          debugWarn(`[Cache] Failed to preload cache entry: ${key}`, _error);
         }
       });
 
@@ -171,7 +171,7 @@ export const initializeCache = async (): Promise<void> => {
       debugLog(`[Cache] 🏠 LOCAL-FIRST: Preloaded ${memoryCache.size} cache entries`);
     }
   } catch (_error: unknown) {
-    debugError('[Cache] Failed to initialize cache system', error);
+    debugError('[Cache] Failed to initialize cache system', _error);
   }
 };
 
@@ -244,7 +244,7 @@ export const set = async (key: string, data: unknown, source: 'local' | 'remote'
       // Continue - we still have it in memory
     }
   } catch (_error: unknown) {
-    debugError('[Cache] Error setting cache:', error);
+    debugError('[Cache] Error setting cache:', _error);
   }
 };
 
@@ -355,7 +355,7 @@ export const get = async (
 
     return entry.data;
   } catch (_error: unknown) {
-    debugError('[Cache] Error getting cache:', error);
+    debugError('[Cache] Error getting cache:', _error);
     // TASK-056: Track access time even on error
     accessCount++;
     totalAccessTime += Date.now() - startTime;
@@ -391,7 +391,7 @@ export const invalidate = async (key: string): Promise<void> => {
       }
     }
   } catch (_error: unknown) {
-    debugError('[Cache] Error invalidating cache:', error);
+    debugError('[Cache] Error invalidating cache:', _error);
   }
 };
 
@@ -418,7 +418,7 @@ export const clear = async (): Promise<void> => {
       debugWarn('[Cache] Failed to clear persistent storage:', storageError);
     }
   } catch (_error: unknown) {
-    debugError('[Cache] Error clearing cache:', error);
+    debugError('[Cache] Error clearing cache:', _error);
   }
 };
 
@@ -460,7 +460,7 @@ export const getCacheStats = async () => {
       lastUpdate: Date.now(),
     };
   } catch (_error: unknown) {
-    debugError('[Cache] Error getting cache stats:', error);
+    debugError('[Cache] Error getting cache stats:', _error);
     return {
       memoryEntries: 0,
       persistentEntries: 0,
@@ -538,7 +538,7 @@ export const warmCache = async (keys: string[]): Promise<void> => {
           debugLog(`[Cache] 🔥 Warmed: ${key}`);
         }
       } catch (_error: unknown) {
-        debugWarn(`[Cache] Failed to warm key: ${key}`, error);
+        debugWarn(`[Cache] Failed to warm key: ${key}`, _error);
       }
     });
 
@@ -547,7 +547,7 @@ export const warmCache = async (keys: string[]): Promise<void> => {
     const warmDuration = Date.now() - warmStart;
     debugLog(`[Cache] 🔥 Cache warming complete: ${warmedCount}/${keys.length} keys in ${warmDuration}ms`);
   } catch (_error: unknown) {
-    debugError('[Cache] Error during cache warming:', error);
+    debugError('[Cache] Error during cache warming:', _error);
   }
 };
 
@@ -603,8 +603,8 @@ export const preloadLikelyNext = async (currentKey: string): Promise<void> => {
     debugLog(`[Cache] 🎯 Preloading likely next: ${likelyNextKey} (confidence: ${maxCount} observations)`);
 
     // Preload in background (don't await)
-    get(likelyNextKey).catch((error) => {
-      debugWarn(`[Cache] Preload failed for ${likelyNextKey}`, error);
+    get(likelyNextKey).catch((_error) => {
+      debugWarn(`[Cache] Preload failed for ${likelyNextKey}`, _error);
     });
   }
 };
@@ -660,6 +660,6 @@ export const syncPendingChanges = async (): Promise<void> => {
 
     debugLog('[Cache] ✅ LOCAL-FIRST: Sync completed');
   } catch (_error: unknown) {
-    debugError('[Cache] Error syncing pending changes:', error);
+    debugError('[Cache] Error syncing pending changes:', _error);
   }
 };

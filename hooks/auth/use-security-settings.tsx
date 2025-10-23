@@ -7,6 +7,7 @@ import { SecurityConstants } from '@/constants/security';
 import { debugError, debugLog } from '@/utils/debug';
 import { logger } from '@/utils/logger-production';
 import { SecurityStorage } from '@/utils/secure-storage';
+import { error } from 'console';
 import { useCallback, useEffect, useState } from 'react';
 
 interface SecuritySettings {
@@ -113,7 +114,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
         resetIn: isRateLimited ? resetIn : 0,
       };
     } catch (_error: unknown) {
-      debugError('[SecuritySettings] Failed to get rate limit data', error);
+      debugError('[SecuritySettings] Failed to get rate limit data', _error);
       return {
         attemptsInWindow: 0,
         windowStart: Date.now(),
@@ -199,7 +200,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
 
       debugLog(`[SecuritySettings] Loaded settings - Auto-lock: ${autoLockSettings.enabled}, Notifications: ${securityNotifications}, Login attempts: ${loginAttempts}`);
     } catch (_error: unknown) {
-      debugError('[SecuritySettings] Failed to load security settings', error);
+      debugError('[SecuritySettings] Failed to load security settings', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,

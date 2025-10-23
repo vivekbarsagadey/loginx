@@ -76,14 +76,14 @@ async function staleWhileRevalidate<T>({ key, fetchFn, ttl, maxAge = 60000, onRe
       debugLog(`[CacheStrategy] SWR: Revalidating ${key} in background`);
       fetchFn()
         .then((freshData) => {
-          cache.set(key, freshData).catch((error) => {
-            debugError('[CacheStrategy] Failed to update cache', error);
+          cache.set(key, freshData).catch((_error) => {
+            debugError('[CacheStrategy] Failed to update cache', _error);
           });
           onRevalidate?.(freshData);
         })
-        .catch((error) => {
-          debugError('[CacheStrategy] Revalidation failed', error);
-          onError?.(error);
+        .catch((_error) => {
+          debugError('[CacheStrategy] Revalidation failed', _error);
+          onError?.(_error);
         });
     }
 
@@ -106,9 +106,9 @@ async function staleWhileRevalidate<T>({ key, fetchFn, ttl, maxAge = 60000, onRe
       revalidating: false,
     };
   } catch (_error: unknown) {
-    debugError('[CacheStrategy] SWR: Fetch failed', error);
-    onError?.(error);
-    throw error;
+    debugError('[CacheStrategy] SWR: Fetch failed', _error);
+    onError?.(_error);
+    throw _error;
   }
 }
 
@@ -145,8 +145,8 @@ async function cacheFirst<T>({ key, fetchFn, ttl, maxAge, onError }: CacheStrate
       revalidating: false,
     };
   } catch (_error: unknown) {
-    debugError('[CacheStrategy] Cache-First: Fetch failed', error);
-    onError?.(error);
+    debugError('[CacheStrategy] Cache-First: Fetch failed', _error);
+    onError?.(_error);
 
     // Fall back to stale cache if available
     if (cachedData) {
@@ -159,7 +159,7 @@ async function cacheFirst<T>({ key, fetchFn, ttl, maxAge, onError }: CacheStrate
       };
     }
 
-    throw error;
+    throw _error;
   }
 }
 
@@ -181,8 +181,8 @@ async function networkFirst<T>({ key, fetchFn, ttl, onError }: CacheStrategyOpti
       revalidating: false,
     };
   } catch (_error: unknown) {
-    debugError('[CacheStrategy] Network-First: Fetch failed', error);
-    onError?.(error);
+    debugError('[CacheStrategy] Network-First: Fetch failed', _error);
+    onError?.(_error);
 
     // Fall back to cache
     const cachedData = await cache.get(key);
@@ -196,7 +196,7 @@ async function networkFirst<T>({ key, fetchFn, ttl, onError }: CacheStrategyOpti
       };
     }
 
-    throw error;
+    throw _error;
   }
 }
 
@@ -216,9 +216,9 @@ async function networkOnly<T>({ fetchFn, onError }: CacheStrategyOptions<T>): Pr
       revalidating: false,
     };
   } catch (_error: unknown) {
-    debugError('[CacheStrategy] Network-Only: Fetch failed', error);
-    onError?.(error);
-    throw error;
+    debugError('[CacheStrategy] Network-Only: Fetch failed', _error);
+    onError?.(_error);
+    throw _error;
   }
 }
 

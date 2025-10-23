@@ -32,7 +32,7 @@ export const testAuthPersistence = async (): Promise<void> => {
       debugLog('[AuthTest] ❌ User needs to log in again');
     }
   } catch (_error: unknown) {
-    debugLog('[AuthTest] ❌ Failed to test auth persistence:', error);
+    debugLog('[AuthTest] ❌ Failed to test auth persistence:', _error);
   }
 };
 
@@ -44,6 +44,6 @@ export const logAuthPersistenceInfo = async (): Promise<void> => {
     const _stats = await getAuthPersistenceStats();
     // Auth persistence logging disabled
   } catch (_error: unknown) {
-    console.error('❌ Failed to get auth persistence info:', error);
+    console.error('❌ Failed to get auth persistence info:', _error);
   }
 };

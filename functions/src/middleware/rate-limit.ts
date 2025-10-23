@@ -148,12 +148,12 @@ export function rateLimit(config: RateLimitConfig) {
       });
     } catch (_error: unknown) {
       // If it's our rate limit error, re-throw it
-      if (error instanceof Error && error.message.includes('Rate limit exceeded')) {
-        throw error;
+      if (_error instanceof Error && error.message.includes('Rate limit exceeded')) {
+        throw _error;
       }
 
       // Log other errors but don't block the request
-      console.error('Rate limit check failed:', error);
+      console.error('Rate limit check failed:', _error);
       // Allow request to proceed if rate limit check fails
     }
   };

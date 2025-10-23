@@ -1,19 +1,19 @@
-import * as SecureStore from "expo-secure-store";
-import { useCallback, useEffect, useState } from "react";
+import * as SecureStore from 'expo-secure-store';
+import { useCallback, useEffect, useState } from 'react';
 
 /**
  * A hook for managing sensitive data in SecureStore (encrypted storage).
- * 
+ *
  * This hook provides a React state-like interface for Expo's SecureStore,
  * which encrypts data before storing it. Use this for sensitive information
  * like authentication tokens, API keys, or user credentials.
- * 
+ *
  * **Note**: SecureStore is only available on iOS and Android devices (not web or simulator).
- * 
+ *
  * @param key - The storage key (unique identifier)
  * @param initialValue - Initial value if key doesn't exist
- * @returns Tuple of [value, setValue, remove, loading, error]
- * 
+ * @returns Tuple of [value, setValue, remove, loading, _error]
+ *
  * @example
  * ```typescript
  * // Storing auth token
@@ -22,16 +22,16 @@ import { useCallback, useEffect, useState } from "react";
  *     'auth-token',
  *     ''
  *   );
- * 
+ *
  *   const login = async (email: string, password: string) => {
  *     const { token } = await api.login(email, password);
  *     await setToken(token);
  *   };
- * 
+ *
  *   const logout = async () => {
  *     await removeToken();
  *   };
- * 
+ *
  *   return (
  *     <View>
  *       <Text>Token: {token ? 'Authenticated' : 'Not logged in'}</Text>
@@ -40,7 +40,7 @@ import { useCallback, useEffect, useState } from "react";
  *   );
  * }
  * ```
- * 
+ *
  * @example
  * ```typescript
  * // Storing API key
@@ -49,7 +49,7 @@ import { useCallback, useEffect, useState } from "react";
  *     'api-key',
  *     ''
  *   );
- * 
+ *
  *   return (
  *     <View>
  *       <TextInput
@@ -63,7 +63,7 @@ import { useCallback, useEffect, useState } from "react";
  *   );
  * }
  * ```
- * 
+ *
  * @example
  * ```typescript
  * // Storing user credentials
@@ -72,11 +72,11 @@ import { useCallback, useEffect, useState } from "react";
  *     email: string;
  *     password: string;
  *   }>('user-credentials', { email: '', password: '' });
- * 
+ *
  *   const saveCredentials = async (email: string, password: string) => {
  *     await setCredentials({ email, password });
  *   };
- * 
+ *
  *   return (
  *     <View>
  *       <Text>Email: {credentials.email}</Text>
@@ -88,16 +88,7 @@ import { useCallback, useEffect, useState } from "react";
  * }
  * ```
  */
-export function useSecureStorage<T>(
-  key: string,
-  initialValue: T
-): [
-  T,
-  (value: T | ((prev: T) => T)) => Promise<void>,
-  () => Promise<void>,
-  boolean,
-  Error | null
-] {
+export function useSecureStorage<T>(key: string, initialValue: T): [T, (value: T | ((prev: T) => T)) => Promise<void>, () => Promise<void>, boolean, Error | null] {
   const [storedValue, setStoredValue] = useState<T>(initialValue);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
@@ -112,11 +103,7 @@ export function useSecureStorage<T>(
           setStoredValue(JSON.parse(item) as T);
         }
       } catch (_error) {
-        setError(
-          _error instanceof Error
-            ? _error
-            : new Error("Failed to load from secure storage")
-        );
+        setError(_error instanceof Error ? _error : new Error('Failed to load from secure storage'));
       } finally {
         setLoading(false);
       }
@@ -130,16 +117,11 @@ export function useSecureStorage<T>(
     async (value: T | ((prev: T) => T)) => {
       try {
         setError(null);
-        const valueToStore =
-          value instanceof Function ? value(storedValue) : value;
+        const valueToStore = value instanceof Function ? value(storedValue) : value;
         setStoredValue(valueToStore);
         await SecureStore.setItemAsync(key, JSON.stringify(valueToStore));
       } catch (_error) {
-        setError(
-          _error instanceof Error
-            ? _error
-            : new Error("Failed to save to secure storage")
-        );
+        setError(_error instanceof Error ? _error : new Error('Failed to save to secure storage'));
       }
     },
     [key, storedValue]
@@ -152,13 +134,9 @@ export function useSecureStorage<T>(
       setStoredValue(initialValue);
       await SecureStore.deleteItemAsync(key);
     } catch (_error) {
-      setError(
-        _error instanceof Error
-          ? _error
-          : new Error("Failed to remove from secure storage")
-      );
+      setError(_error instanceof Error ? _error : new Error('Failed to remove from secure storage'));
     }
   }, [key, initialValue]);
 
-  return [storedValue, setValue, remove, loading, error];
+  return [storedValue, setValue, remove, loading, _error];
 }

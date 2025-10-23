@@ -81,9 +81,9 @@ export default function UpdateEmailScreen() {
     successTitle: i18n.t('screens.updateEmail.success.title'),
     successMessage: i18n.t('screens.updateEmail.success.message'),
     onSuccess: () => back(),
-    onError: (error: unknown) => {
+    onError: (_error: unknown) => {
       // Handle specific Firebase errors
-      if (error && typeof error === 'object' && 'code' in error) {
+      if (_error && typeof error === 'object' && 'code' in error) {
         const firebaseError = error as { code: string; message: string };
         switch (firebaseError.code) {
           case 'auth/requires-recent-login':
@@ -106,10 +106,10 @@ export default function UpdateEmailScreen() {
             setEmailError(i18n.t('screens.updateEmail.errors.invalidEmail'));
             break;
           default:
-            showError(error);
+            showError(_error);
         }
       } else {
-        showError(error);
+        showError(_error);
       }
     },
   });

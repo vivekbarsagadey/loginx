@@ -85,7 +85,7 @@ export function PhotoUpload({ value, onChange, onError }: PhotoUploadProps) {
     } catch (_error: unknown) {
       logger.error('Error picking image:', error);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      onError?.(error instanceof Error ? error : new Error('Failed to pick image'));
+      onError?.(_error instanceof Error ? error : new Error('Failed to pick image'));
       showAlert('Error', 'Failed to pick image. Please try again.', [{ text: 'OK' }], { variant: 'error' });
     } finally {
       setLoading(false);

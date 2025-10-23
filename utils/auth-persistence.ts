@@ -61,7 +61,7 @@ export const saveAuthState = async (user: User | null): Promise<void> => {
       debugLog('[AuthPersistence] ✅ Auth state cleared');
     }
   } catch (_error: unknown) {
-    debugError('[AuthPersistence] Failed to save auth state:', error);
+    debugError('[AuthPersistence] Failed to save auth state:', _error);
   }
 };
 
@@ -88,7 +88,7 @@ export const loadAuthState = async (): Promise<PersistedAuthState | null> => {
     debugLog('[AuthPersistence] ✅ Loaded valid auth state for user:', authState.userId);
     return authState;
   } catch (_error: unknown) {
-    debugError('[AuthPersistence] Failed to load auth state:', error);
+    debugError('[AuthPersistence] Failed to load auth state:', _error);
     return null;
   }
 };
@@ -115,7 +115,7 @@ export const loadSavedUserInfo = async (): Promise<SavedUserInfo | null> => {
     debugLog('[AuthPersistence] ✅ Loaded saved user info for:', userInfo.uid);
     return userInfo;
   } catch (_error: unknown) {
-    debugError('[AuthPersistence] Failed to load user info:', error);
+    debugError('[AuthPersistence] Failed to load user info:', _error);
     return null;
   }
 };
@@ -131,7 +131,7 @@ export const loadSavedAuthToken = async (): Promise<string | null> => {
     }
     return token;
   } catch (_error: unknown) {
-    debugError('[AuthPersistence] Failed to load auth token:', error);
+    debugError('[AuthPersistence] Failed to load auth token:', _error);
     return null;
   }
 };
@@ -149,7 +149,7 @@ export const clearAuthState = async (): Promise<void> => {
     ]);
     debugLog('[AuthPersistence] ✅ All auth data cleared (including encrypted token)');
   } catch (_error: unknown) {
-    debugError('[AuthPersistence] Failed to clear auth data:', error);
+    debugError('[AuthPersistence] Failed to clear auth data:', _error);
   }
 };
 
@@ -173,7 +173,7 @@ export const updateLastLoginTime = async (): Promise<void> => {
       debugLog('[AuthPersistence] ✅ Updated last login time');
     }
   } catch (_error: unknown) {
-    debugError('[AuthPersistence] Failed to update last login time:', error);
+    debugError('[AuthPersistence] Failed to update last login time:', _error);
   }
 };
 
@@ -197,7 +197,7 @@ export const getAuthPersistenceStats = async () => {
       timeUntilExpiry: authState ? authState.expiresAt - Date.now() : 0,
     };
   } catch (_error: unknown) {
-    debugError('[AuthPersistence] Failed to get stats:', error);
+    debugError('[AuthPersistence] Failed to get stats:', _error);
     return {
       hasAuthState: false,
       isAuthenticated: false,

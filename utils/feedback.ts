@@ -136,10 +136,10 @@ export const executeWithFeedback = async <T>(
     return result;
   } catch (_error: unknown) {
     // Error feedback
-    if (errorConfig?.customHandler) {
-      errorConfig.customHandler(error);
+    if (_errorConfig?.customHandler) {
+      errorConfig.customHandler(_error);
     } else {
-      await provideErrorFeedback(error);
+      await provideErrorFeedback(_error);
     }
     return undefined;
   } finally {

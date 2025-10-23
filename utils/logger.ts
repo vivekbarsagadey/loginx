@@ -38,7 +38,6 @@ export const logger = {
    */
   info: (message: string, context?: LogContext): void => {
     if (__DEV__) {
-       
       console.error(formatMessage('info', message), context || '');
     }
   },
@@ -58,19 +57,19 @@ export const logger = {
    * @param message - Error message
    * @param error - Error object or context data
    */
-  error: (message: string, error?: unknown): void => {
+  error: (message: string, _error?: unknown): void => {
     const errorContext: LogContext = {};
 
-    if (error instanceof Error) {
+    if (_error instanceof Error) {
       errorContext.message = error.message;
       errorContext.stack = error.stack;
       errorContext.name = error.name;
-    } else if (error) {
+    } else if (_error) {
       errorContext.error = error;
     }
 
-    console.error(formatMessage('error', message), errorContext);
-    sendToMonitoring('error', message, errorContext);
+    console.error(formatMessage('error', message), _errorContext);
+    sendToMonitoring('error', message, _errorContext);
   },
 
   /**
@@ -80,7 +79,6 @@ export const logger = {
    */
   debug: (message: string, context?: LogContext): void => {
     if (__DEV__) {
-       
       console.error(formatMessage('debug', message), context || '');
     }
   },

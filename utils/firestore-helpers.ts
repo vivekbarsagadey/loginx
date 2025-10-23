@@ -164,9 +164,9 @@ export function sanitizeQueryValue(value: unknown): unknown {
 /**
  * Check if error is a Firestore network error that should be retried
  */
-function shouldRetryFirestoreError(error: unknown): boolean {
+function shouldRetryFirestoreError(_error: unknown): boolean {
   if (typeof error === 'object' && error !== null && 'code' in error) {
-    const code = (error as { code: string }).code;
+    const code = (_error as { code: string }).code;
     // Retry on network errors, but not on permission or validation errors
     const retryableCodes = ['unavailable', 'deadline-exceeded', 'resource-exhausted', 'internal', 'unknown', 'cancelled'];
     return retryableCodes.some((retryableCode) => code.includes(retryableCode));
@@ -237,10 +237,10 @@ export async function setDocumentSafe<T = DocumentData>(docRef: DocumentReferenc
       });
 
       if (firestoreError.code === 'permission-denied') {
-        throw new FirestoreError('You do not have permission to write this document', firestoreError.code, error);
+        throw new FirestoreError('You do not have permission to write this document', firestoreError.code, _error);
       }
     }
-    throw error;
+    throw _error;
   }
 }
 
@@ -277,13 +277,13 @@ export async function updateDocumentSafe<T = DocumentData>(docRef: DocumentRefer
       });
 
       if (firestoreError.code === 'not-found') {
-        throw new FirestoreError('Document does not exist', firestoreError.code, error);
+        throw new FirestoreError('Document does not exist', firestoreError.code, _error);
       }
       if (firestoreError.code === 'permission-denied') {
-        throw new FirestoreError('You do not have permission to update this document', firestoreError.code, error);
+        throw new FirestoreError('You do not have permission to update this document', firestoreError.code, _error);
       }
     }
-    throw error;
+    throw _error;
   }
 }
 
@@ -319,10 +319,10 @@ export async function deleteDocumentSafe<T = DocumentData>(docRef: DocumentRefer
       });
 
       if (firestoreError.code === 'permission-denied') {
-        throw new FirestoreError('You do not have permission to delete this document', firestoreError.code, error);
+        throw new FirestoreError('You do not have permission to delete this document', firestoreError.code, _error);
       }
     }
-    throw error;
+    throw _error;
   }
 }
 
@@ -360,10 +360,10 @@ export async function queryDocumentsSafe<T = DocumentData>(collectionRef: Collec
       });
 
       if (firestoreError.code === 'permission-denied') {
-        throw new FirestoreError('You do not have permission to query this collection', firestoreError.code, error);
+        throw new FirestoreError('You do not have permission to query this collection', firestoreError.code, _error);
       }
     }
-    throw error;
+    throw _error;
   }
 }
 
@@ -372,13 +372,13 @@ export async function queryDocumentsSafe<T = DocumentData>(collectionRef: Collec
  * @param error - Error to handle
  * @returns User-friendly error message
  */
-export function getFirestoreErrorMessage(error: unknown): string {
-  if (error instanceof FirestoreError) {
+export function getFirestoreErrorMessage(_error: unknown): string {
+  if (_error instanceof FirestoreError) {
     return error.message;
   }
 
   if (typeof error === 'object' && error !== null && 'code' in error) {
-    const code = (error as { code: string }).code;
+    const code = (_error as { code: string }).code;
 
     switch (code) {
       case 'permission-denied':

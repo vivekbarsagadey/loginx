@@ -107,7 +107,7 @@ export interface UseShareReturn {
  *     { message: 'Hello!' },
  *     {
  *       onSuccess: (action) => console.error('Shared:', action),
- *       onError: (error) => console.error('Error:', error),
+ *       onError: (_error) => console.error('Error:', _error),
  *       onDismiss: () => console.error('Dismissed'),
  *     }
  *   );
@@ -127,97 +127,93 @@ export function useShare(): UseShareReturn {
   /**
    * Share content using native share dialog
    */
-  const share = useCallback(
-    async (content: ShareContent, options: ShareOptions = {}): Promise<ShareResult> => {
-      const { dialogTitle, subject, excludedActivityTypes, onSuccess, onError, onDismiss } =
-        options;
+  const share = useCallback(async (content: ShareContent, options: ShareOptions = {}): Promise<ShareResult> => {
+    const { dialogTitle, subject, excludedActivityTypes, onSuccess, onError, onDismiss } = options;
 
-      setIsSharing(true);
-      setError(null);
+    setIsSharing(true);
+    setError(null);
 
-      try {
-        // Validate content
-        if (!content.message && !content.url) {
-          throw new Error('Either message or url must be provided');
-        }
-
-        // Prepare share options
-        const shareOptions: any = {
-          message: content.message,
-          url: content.url,
-          title: content.title,
-        };
-
-        // Platform-specific options
-        if (Platform.OS === 'android') {
-          if (dialogTitle) {
-            shareOptions.dialogTitle = dialogTitle;
-          }
-        } else if (Platform.OS === 'ios') {
-          if (subject) {
-            shareOptions.subject = subject;
-          }
-          if (excludedActivityTypes && excludedActivityTypes.length > 0) {
-            shareOptions.excludedActivityTypes = excludedActivityTypes;
-          }
-        }
-
-        // Perform share
-        const result = await RNShare.share(shareOptions);
-
-        let shareResult: ShareResult;
-
-        if (result.action === RNShare.sharedAction) {
-          // Successfully shared
-          shareResult = {
-            success: true,
-            action: result.action,
-            activityType: result.activityType ?? undefined,
-          };
-
-          if (onSuccess) {
-            onSuccess(result.action as unknown as ShareAction);
-          }
-        } else if (result.action === RNShare.dismissedAction) {
-          // User dismissed the share dialog
-          shareResult = {
-            success: false,
-            action: result.action,
-          };
-
-          if (onDismiss) {
-            onDismiss();
-          }
-        } else {
-          // Unknown action
-          shareResult = {
-            success: false,
-          };
-        }
-
-        setLastResult(shareResult);
-        setIsSharing(false);
-        return shareResult;
-      } catch (_error) {
-        const errorObj = _error instanceof Error ? _error : new Error('Failed to share content');
-        setError(errorObj);
-
-        const shareResult: ShareResult = {
-          success: false,
-          error: errorObj,
-        };
-
-        if (onError) {
-          onError(errorObj);
-        }
-
-        setLastResult(shareResult);
-        setIsSharing(false);
-        return shareResult;
+    try {
+      // Validate content
+      if (!content.message && !content.url) {
+        throw new Error('Either message or url must be provided');
       }
-    },
-    []
-  );
+
+      // Prepare share options
+      const shareOptions: any = {
+        message: content.message,
+        url: content.url,
+        title: content.title,
+      };
+
+      // Platform-specific options
+      if (Platform.OS === 'android') {
+        if (dialogTitle) {
+          shareOptions.dialogTitle = dialogTitle;
+        }
+      } else if (Platform.OS === 'ios') {
+        if (subject) {
+          shareOptions.subject = subject;
+        }
+        if (excludedActivityTypes && excludedActivityTypes.length > 0) {
+          shareOptions.excludedActivityTypes = excludedActivityTypes;
+        }
+      }
+
+      // Perform share
+      const result = await RNShare.share(shareOptions);
+
+      let shareResult: ShareResult;
+
+      if (result.action === RNShare.sharedAction) {
+        // Successfully shared
+        shareResult = {
+          success: true,
+          action: result.action,
+          activityType: result.activityType ?? undefined,
+        };
+
+        if (onSuccess) {
+          onSuccess(result.action as unknown as ShareAction);
+        }
+      } else if (result.action === RNShare.dismissedAction) {
+        // User dismissed the share dialog
+        shareResult = {
+          success: false,
+          action: result.action,
+        };
+
+        if (onDismiss) {
+          onDismiss();
+        }
+      } else {
+        // Unknown action
+        shareResult = {
+          success: false,
+        };
+      }
+
+      setLastResult(shareResult);
+      setIsSharing(false);
+      return shareResult;
+    } catch (_error) {
+      const errorObj = _error instanceof Error ? _error : new Error('Failed to share content');
+      setError(_errorObj);
+
+      const shareResult: ShareResult = {
+        success: false,
+        error: errorObj,
+      };
+
+      if (onError) {
+        onError(_errorObj);
+      }
+
+      setLastResult(shareResult);
+      setIsSharing(false);
+      return shareResult;
+    }
+  }, []);
 
   return {
     share,

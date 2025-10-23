@@ -24,14 +24,7 @@ export interface DateFormatOptions extends Intl.DateTimeFormatOptions {
 /**
  * Relative time units
  */
-export type RelativeTimeUnit =
-  | 'year'
-  | 'month'
-  | 'week'
-  | 'day'
-  | 'hour'
-  | 'minute'
-  | 'second';
+export type RelativeTimeUnit = 'year' | 'month' | 'week' | 'day' | 'hour' | 'minute' | 'second';
 
 /**
  * Hook for date formatting with internationalization
@@ -111,7 +104,7 @@ export function useLocalizedDate() {
 
         return formatter.format(dateObj);
       } catch (_error: unknown) {
-        console.error('Error formatting date:', error);
+        console.error('Error formatting date:', _error);
         return 'Invalid Date';
       }
     },
@@ -137,7 +130,7 @@ export function useLocalizedDate() {
 
         return formatter.format(dateObj);
       } catch (_error: unknown) {
-        console.error('Error formatting time:', error);
+        console.error('Error formatting time:', _error);
         return 'Invalid Time';
       }
     },
@@ -164,7 +157,7 @@ export function useLocalizedDate() {
 
         return formatter.format(dateObj);
       } catch (_error: unknown) {
-        console.error('Error formatting date/time:', error);
+        console.error('Error formatting date/time:', _error);
         return 'Invalid Date/Time';
       }
     },
@@ -227,7 +220,7 @@ export function useLocalizedDate() {
 
         return formatter.format(value, unit);
       } catch (_error: unknown) {
-        console.error('Error formatting relative time:', error);
+        console.error('Error formatting relative time:', _error);
         return 'Invalid Date';
       }
     },
@@ -238,18 +231,10 @@ export function useLocalizedDate() {
    * Format a date range with the current locale
    */
   const formatDateRange = useCallback(
-    (
-      startDate: Date | string | number,
-      endDate: Date | string | number,
-      options: DateFormatOptions = {}
-    ): string => {
+    (startDate: Date | string | number, endDate: Date | string | number, options: DateFormatOptions = {}): string => {
       try {
-        const startObj =
-          typeof startDate === 'string' || typeof startDate === 'number'
-            ? new Date(startDate)
-            : startDate;
-        const endObj =
-          typeof endDate === 'string' || typeof endDate === 'number' ? new Date(endDate) : endDate;
+        const startObj = typeof startDate === 'string' || typeof startDate === 'number' ? new Date(startDate) : startDate;
+        const endObj = typeof endDate === 'string' || typeof endDate === 'number' ? new Date(endDate) : endDate;
 
         if (isNaN(startObj.getTime()) || isNaN(endObj.getTime())) {
           return 'Invalid Date Range';
@@ -262,7 +247,7 @@ export function useLocalizedDate() {
 
         return formatter.formatRange(startObj, endObj);
       } catch (_error: unknown) {
-        console.error('Error formatting date range:', error);
+        console.error('Error formatting date range:', _error);
         return 'Invalid Date Range';
       }
     },
@@ -275,11 +260,7 @@ export function useLocalizedDate() {
   const isToday = useCallback((date: Date | string | number): boolean => {
     const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
     const today = new Date();
-    return (
-      dateObj.getDate() === today.getDate() &&
-      dateObj.getMonth() === today.getMonth() &&
-      dateObj.getFullYear() === today.getFullYear()
-    );
+    return dateObj.getDate() === today.getDate() && dateObj.getMonth() === today.getMonth() && dateObj.getFullYear() === today.getFullYear();
   }, []);
 
   /**
@@ -289,11 +270,7 @@ export function useLocalizedDate() {
     const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    return (
-      dateObj.getDate() === yesterday.getDate() &&
-      dateObj.getMonth() === yesterday.getMonth() &&
-      dateObj.getFullYear() === yesterday.getFullYear()
-    );
+    return dateObj.getDate() === yesterday.getDate() && dateObj.getMonth() === yesterday.getMonth() && dateObj.getFullYear() === yesterday.getFullYear();
   }, []);
 
   /**
@@ -303,11 +280,7 @@ export function useLocalizedDate() {
     const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    return (
-      dateObj.getDate() === tomorrow.getDate() &&
-      dateObj.getMonth() === tomorrow.getMonth() &&
-      dateObj.getFullYear() === tomorrow.getFullYear()
-    );
+    return dateObj.getDate() === tomorrow.getDate() && dateObj.getMonth() === tomorrow.getMonth() && dateObj.getFullYear() === tomorrow.getFullYear();
   }, []);
 
   return {

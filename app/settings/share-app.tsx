@@ -55,7 +55,7 @@ export default function ShareAppScreen() {
         }
       }
     } catch (_error: unknown) {
-      showError(error);
+      showError(_error);
     }
   };
 
@@ -79,7 +79,7 @@ export default function ShareAppScreen() {
         });
       }
     } catch (_error: unknown) {
-      showError(error);
+      showError(_error);
     }
   };
 
@@ -108,7 +108,7 @@ export default function ShareAppScreen() {
         }
       }
     } catch (_error: unknown) {
-      showError(error);
+      showError(_error);
     }
   };
 
@@ -133,7 +133,7 @@ export default function ShareAppScreen() {
         });
       }
     } catch (_error: unknown) {
-      showError(error);
+      showError(_error);
     }
   };
 
@@ -153,7 +153,7 @@ export default function ShareAppScreen() {
         })
       );
     } catch (_error: unknown) {
-      showError(error);
+      showError(_error);
     }
   };
 

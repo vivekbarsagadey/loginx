@@ -112,7 +112,7 @@ const saveSyncQueue = async (): Promise<void> => {
     await AsyncStorage.setItem(SYNC_QUEUE_STORAGE_KEY, JSON.stringify(queueArray));
     debugLog(`[LocalFirst] 💾 Saved sync queue: ${queueArray.length} operations`);
   } catch (_error: unknown) {
-    debugError('[LocalFirst] Failed to save sync queue:', error);
+    debugError('[LocalFirst] Failed to save sync queue:', _error);
   }
 };
 
@@ -126,8 +126,8 @@ const debouncedSaveQueue = (): void => {
   }
 
   queueSaveTimeout = setTimeout(() => {
-    saveSyncQueue().catch((error) => {
-      debugError('[LocalFirst] Debounced queue save failed:', error);
+    saveSyncQueue().catch((_error) => {
+      debugError('[LocalFirst] Debounced queue save failed:', _error);
     });
   }, QUEUE_SAVE_DEBOUNCE_MS);
 };
@@ -174,7 +174,7 @@ const loadSyncQueue = async (): Promise<void> => {
       syncQueue.clear();
     }
   } catch (_error: unknown) {
-    debugError('[LocalFirst] Failed to load sync queue:', error);
+    debugError('[LocalFirst] Failed to load sync queue:', _error);
     // Clear corrupted data
     try {
       await AsyncStorage.removeItem(SYNC_QUEUE_STORAGE_KEY);
@@ -204,7 +204,7 @@ const cleanupSyncedOperations = async (syncedKeys: string[]): Promise<void> => {
       await saveSyncQueue();
     }
   } catch (_error: unknown) {
-    debugError('[LocalFirst] Failed to cleanup synced operations:', error);
+    debugError('[LocalFirst] Failed to cleanup synced operations:', _error);
   }
 };
 
@@ -249,8 +249,8 @@ export const clearSyncQueue = async (): Promise<void> => {
     await saveSyncQueue();
     debugWarn('[LocalFirst] Sync queue cleared manually');
   } catch (_error: unknown) {
-    debugError('[LocalFirst] Failed to clear sync queue:', error);
-    throw error;
+    debugError('[LocalFirst] Failed to clear sync queue:', _error);
+    throw _error;
   }
 };
 
@@ -340,7 +340,7 @@ export const initializeLocalFirst = async (): Promise<void> => {
 
     debugLog('[LocalFirst] ✅ LOCAL-FIRST system initialized', fallbackMode ? '(FALLBACK MODE)' : '(FULL MODE)');
   } catch (_error: unknown) {
-    debugError('[LocalFirst] Failed to initialize LOCAL-FIRST system', error);
+    debugError('[LocalFirst] Failed to initialize LOCAL-FIRST system', _error);
     // Even on error, enable fallback mode to keep app functional
     fallbackMode = true;
   }
@@ -364,8 +364,8 @@ export const getData = async <T>(options: LocalFirstOptions): Promise<T | null> 
 
       // TASK-043: Skip background sync if in fallback mode
       if (!fallbackMode && isOnline && options.syncEnabled !== false) {
-        backgroundSync(options).catch((error) => {
-          debugWarn(`[LocalFirst] Background sync failed for ${cacheKey}:`, error);
+        backgroundSync(options).catch((_error) => {
+          debugWarn(`[LocalFirst] Background sync failed for ${cacheKey}:`, _error);
         });
       }
 
@@ -382,8 +382,8 @@ export const getData = async <T>(options: LocalFirstOptions): Promise<T | null> 
 
       // TASK-043: Skip background sync if in fallback mode
       if (!fallbackMode && isOnline && options.syncEnabled !== false) {
-        backgroundSync(options).catch((error) => {
-          debugWarn(`[LocalFirst] Background sync failed for ${cacheKey}:`, error);
+        backgroundSync(options).catch((_error) => {
+          debugWarn(`[LocalFirst] Background sync failed for ${cacheKey}:`, _error);
         });
       }
 
@@ -453,7 +453,7 @@ export const getData = async <T>(options: LocalFirstOptions): Promise<T | null> 
     debugLog(`[LocalFirst] ❌ No data found for: ${cacheKey}`);
     return null;
   } catch (_error: unknown) {
-    debugError(`[LocalFirst] Error getting data for ${cacheKey}:`, error);
+    debugError(`[LocalFirst] Error getting data for ${cacheKey}:`, _error);
     return (fallbackData as T) || null;
   }
 };
@@ -505,14 +505,14 @@ export const setData = async <T>(options: LocalFirstOptions & { data: T }): Prom
 
       // Try immediate sync if online (don't wait)
       if (isOnline) {
-        backgroundSync(options).catch((error) => {
-          debugWarn(`[LocalFirst] Immediate sync failed for ${cacheKey}:`, error);
+        backgroundSync(options).catch((_error) => {
+          debugWarn(`[LocalFirst] Immediate sync failed for ${cacheKey}:`, _error);
         });
       }
     }
   } catch (_error: unknown) {
-    debugError(`[LocalFirst] Error setting data for ${cacheKey}:`, error);
-    throw error;
+    debugError(`[LocalFirst] Error setting data for ${cacheKey}:`, _error);
+    throw _error;
   }
 };
 
@@ -634,7 +634,7 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
   } catch (_error: unknown) {
     failedSyncCount++;
     syncStartTimes.delete(cacheKey);
-    debugWarn(`[LocalFirst] Background sync failed for ${cacheKey}:`, error);
+    debugWarn(`[LocalFirst] Background sync failed for ${cacheKey}:`, _error);
 
     // TASK-030: Implement exponential backoff retry logic
     const queueEntry = syncQueue.get(cacheKey);
@@ -694,14 +694,14 @@ const setupNetworkMonitoring = (): void => {
           .then(() => {
             debugLog('[LocalFirst] ✅ Firestore network enabled');
           })
-          .catch((error) => {
-            debugWarn('[LocalFirst] Failed to enable Firestore network:', error);
+          .catch((_error) => {
+            debugWarn('[LocalFirst] Failed to enable Firestore network:', _error);
           });
       }
 
       // Process sync queue
-      processSyncQueue().catch((error) => {
-        debugWarn('[LocalFirst] Failed to process sync queue:', error);
+      processSyncQueue().catch((_error) => {
+        debugWarn('[LocalFirst] Failed to process sync queue:', _error);
       });
     }
 
@@ -715,8 +715,8 @@ const setupNetworkMonitoring = (): void => {
           .then(() => {
             debugLog('[LocalFirst] ✅ Firestore network disabled for offline mode');
           })
-          .catch((error) => {
-            debugWarn('[LocalFirst] Failed to disable Firestore network:', error);
+          .catch((_error) => {
+            debugWarn('[LocalFirst] Failed to disable Firestore network:', _error);
           });
       }
     }
@@ -752,7 +752,7 @@ const processSyncQueue = async (): Promise<void> => {
     try {
       await backgroundSync({ collection: operation.collection, id: operation.docId });
     } catch (_error: unknown) {
-      debugWarn(`[LocalFirst] Failed to sync ${key} [${operation.priority}]:`, error);
+      debugWarn(`[LocalFirst] Failed to sync ${key} [${operation.priority}]:`, _error);
     }
   });
 
@@ -767,8 +767,8 @@ const startBackgroundSync = (): void => {
   // Process sync queue every 30 seconds when online
   setInterval(() => {
     if (isOnline && syncQueue.size > 0) {
-      processSyncQueue().catch((error) => {
-        debugWarn('[LocalFirst] Background sync process error:', error);
+      processSyncQueue().catch((_error) => {
+        debugWarn('[LocalFirst] Background sync process error:', _error);
       });
     }
   }, 30000);
@@ -782,7 +782,7 @@ const getFromPersistentStorage = async <T>(key: string): Promise<T | null> => {
     const value = await AsyncStorage.getItem(`@LocalFirst:${key}`);
     return value ? JSON.parse(value) : null;
   } catch (_error: unknown) {
-    debugWarn(`[LocalFirst] Failed to get from persistent storage: ${key}`, error);
+    debugWarn(`[LocalFirst] Failed to get from persistent storage: ${key}`, _error);
     return null;
   }
 };
@@ -794,7 +794,7 @@ const saveToPersistentStorage = async <T>(key: string, data: T): Promise<void> =
   try {
     await AsyncStorage.setItem(`@LocalFirst:${key}`, JSON.stringify(data));
   } catch (_error: unknown) {
-    debugWarn(`[LocalFirst] Failed to save to persistent storage: ${key}`, error);
+    debugWarn(`[LocalFirst] Failed to save to persistent storage: ${key}`, _error);
   }
 };
 
@@ -873,13 +873,13 @@ export const batchSetData = async <T>(operations: (LocalFirstOptions & { data: T
 
     // 2. Trigger background sync if online
     if (isOnline) {
-      processSyncQueue().catch((error) => {
-        debugWarn('[LocalFirst] Batch sync failed:', error);
+      processSyncQueue().catch((_error) => {
+        debugWarn('[LocalFirst] Batch sync failed:', _error);
       });
     }
   } catch (_error: unknown) {
-    debugError('[LocalFirst] Batch set data error:', error);
-    throw error;
+    debugError('[LocalFirst] Batch set data error:', _error);
+    throw _error;
   }
 };
 
@@ -925,10 +925,10 @@ export const subscribeToData = <T>(collection: string, id: string, callback: (da
             callback(null);
           }
         },
-        (error) => {
-          debugError(`[LocalFirst] Real-time subscription error: ${cacheKey}`, error);
+        (_error) => {
+          debugError(`[LocalFirst] Real-time subscription error: ${cacheKey}`, _error);
           if (onError) {
-            onError(error as Error);
+            onError(_error as Error);
           }
         }
       );
@@ -936,8 +936,8 @@ export const subscribeToData = <T>(collection: string, id: string, callback: (da
       // TASK-036: Store the actual unsubscribe function
       unsubscribeRef = firestoreUnsubscribe;
     })
-    .catch((error) => {
-      debugError('[LocalFirst] Failed to set up real-time subscription:', error);
+    .catch((_error) => {
+      debugError('[LocalFirst] Failed to set up real-time subscription:', _error);
     });
 
   // TASK-036: Return wrapper that calls stored unsubscribe function

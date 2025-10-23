@@ -1,12 +1,12 @@
 /**
  * Flow Persistence Hook
- * 
+ *
  * Handles saving and loading flow state to/from AsyncStorage
  */
 
-import { useCallback } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { type FlowConfig, type FlowState } from '@/types/flow';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useCallback } from 'react';
 
 /**
  * Default storage key prefix
@@ -52,11 +52,7 @@ function deserializeState(json: string): FlowState {
 /**
  * Hook for flow state persistence
  */
-export function useFlowPersistence(
-  config: FlowConfig,
-  state: FlowState,
-  enabled = true
-) {
+export function useFlowPersistence(config: FlowConfig, state: FlowState, enabled = true) {
   const storageKey = getStorageKey(config.id, config.persistenceKey);
 
   /**
@@ -71,8 +67,8 @@ export function useFlowPersistence(
       const serialized = serializeState(state);
       await AsyncStorage.setItem(storageKey, serialized);
     } catch (_error: unknown) {
-      console.error('Failed to save flow state:', error);
-      throw error;
+      console.error('Failed to save flow state:', _error);
+      throw _error;
     }
   }, [enabled, state, storageKey]);
 
@@ -86,13 +82,13 @@ export function useFlowPersistence(
 
     try {
       const serialized = await AsyncStorage.getItem(storageKey);
-      
+
       if (!serialized) {
         return null;
       }
 
       const deserialized = deserializeState(serialized);
-      
+
       // Verify flow ID and version match
       if (deserialized.flowId !== config.id) {
         console.warn('Saved state is for a different flow, ignoring');
@@ -106,7 +102,7 @@ export function useFlowPersistence(
 
       return deserialized;
     } catch (_error: unknown) {
-      console.error('Failed to load flow state:', error);
+      console.error('Failed to load flow state:', _error);
       return null;
     }
   }, [enabled, storageKey, config.id, config.version]);
@@ -122,8 +118,8 @@ export function useFlowPersistence(
     try {
       await AsyncStorage.removeItem(storageKey);
     } catch (_error: unknown) {
-      console.error('Failed to clear flow state:', error);
-      throw error;
+      console.error('Failed to clear flow state:', _error);
+      throw _error;
     }
   }, [enabled, storageKey]);
 
@@ -139,7 +135,7 @@ export function useFlowPersistence(
       const serialized = await AsyncStorage.getItem(storageKey);
       return serialized !== null;
     } catch (_error: unknown) {
-      console.error('Failed to check for saved state:', error);
+      console.error('Failed to check for saved state:', _error);
       return false;
     }
   }, [enabled, storageKey]);

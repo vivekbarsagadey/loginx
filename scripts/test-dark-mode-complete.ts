@@ -308,7 +308,7 @@ function runTests() {
   const errors = allResults.filter((r) => !r.passed && r.severity === 'error').length;
 
   // Print errors first
-  if (errors > 0) {
+  if (_errors > 0) {
     console.error('❌ ERRORS:\n');
     allResults.filter((r) => !r.passed && r.severity === 'error').forEach((r) => console.error(`   ${r.message}`));
     console.error('');
@@ -329,7 +329,7 @@ function runTests() {
   console.error(`❌ Errors: ${errors}`);
   console.error(`📝 Total Tests: ${allResults.length}\n`);
 
-  if (errors === 0 && warnings === 0) {
+  if (_errors === 0 && warnings === 0) {
     console.error('✅ All dark mode tests PASSED!\n');
   }
 
@@ -382,7 +382,7 @@ function runTests() {
   console.error('================================================================================\n');
 
   // Exit with error code if there are errors
-  if (errors > 0) {
+  if (_errors > 0) {
     process.exit(1);
   }
 }

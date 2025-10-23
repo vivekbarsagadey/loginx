@@ -73,11 +73,11 @@ export interface UseGeolocationOptions {
  * `npx expo install expo-location`
  *
  * @param options - Configuration options
- * @returns Object containing location, loading state, error, and permission status
+ * @returns Object containing location, loading state, _error, and permission status
  *
  * @example
  * // Basic location tracking
- * const { location, loading, error, permission } = useGeolocation();
+ * const { location, loading, _error, permission } = useGeolocation();
  *
  * {loading && <Text>Getting location...</Text>}
  * {error && <Text>Error: {error}</Text>}
@@ -115,14 +115,8 @@ export interface UseGeolocationOptions {
  *   enabled: trackingEnabled,
  * });
  */
-export function useGeolocation(
-  options: UseGeolocationOptions = {}
-): GeolocationState {
-  const {
-    watch = false,
-    enableHighAccuracy = true,
-    enabled = true,
-  } = options;
+export function useGeolocation(options: UseGeolocationOptions = {}): GeolocationState {
+  const { watch = false, enableHighAccuracy = true, enabled = true } = options;
 
   const [state, setState] = useState<GeolocationState>({
     location: null,
@@ -132,7 +126,9 @@ export function useGeolocation(
   });
 
   useEffect(() => {
-    if (!enabled) {return;}
+    if (!enabled) {
+      return;
+    }
 
     let Location: any = null;
     let isMounted = true;
@@ -142,14 +138,18 @@ export function useGeolocation(
       try {
         Location = await import('expo-location');
 
-        if (!isMounted) {return;}
+        if (!isMounted) {
+          return;
+        }
 
         setState((prev) => ({ ...prev, loading: true }));
 
         // Request permission
         const { status } = await Location.requestForegroundPermissionsAsync();
 
-        if (!isMounted) {return;}
+        if (!isMounted) {
+          return;
+        }
 
         if (status !== 'granted') {
           setState({
@@ -167,9 +167,7 @@ export function useGeolocation(
           // Watch position continuously
           subscription = await Location.watchPositionAsync(
             {
-              accuracy: enableHighAccuracy
-                ? Location.Accuracy.High
-                : Location.Accuracy.Balanced,
+              accuracy: enableHighAccuracy ? Location.Accuracy.High : Location.Accuracy.Balanced,
               distanceInterval: 10, // Update every 10 meters
             },
             (loc: any) => {
@@ -194,9 +192,7 @@ export function useGeolocation(
         } else {
           // Get current position once
           const loc = await Location.getCurrentPositionAsync({
-            accuracy: enableHighAccuracy
-              ? Location.Accuracy.High
-              : Location.Accuracy.Balanced,
+            accuracy: enableHighAccuracy ? Location.Accuracy.High : Location.Accuracy.Balanced,
           });
 
           if (isMounted) {

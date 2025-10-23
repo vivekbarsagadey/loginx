@@ -45,7 +45,7 @@ let app: ReturnType<typeof initializeApp>;
 try {
   app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 } catch (_error: unknown) {
-  logger.error('[Firebase] Failed to initialize app', error instanceof Error ? error : new Error(String(error)));
+  logger.error('[Firebase] Failed to initialize app', _error instanceof Error ? error : new Error(String(_error)));
   throw new Error('Firebase initialization failed. Please check your configuration.');
 }
 
@@ -93,7 +93,7 @@ try {
     }
   }
 } catch (_error: unknown) {
-  logger.error('[Firebase] Failed to initialize Functions', error instanceof Error ? error : new Error(String(error)));
+  logger.error('[Firebase] Failed to initialize Functions', _error instanceof Error ? error : new Error(String(_error)));
 }
 
 export const functions = functionsInstance;
@@ -219,8 +219,8 @@ export const initializeFirestore = async (): Promise<void> => {
       clearTimeout(timeoutId);
       firestoreError = error instanceof Error ? error : new Error('Unknown Firestore initialization error');
       firestoreInitializing = false;
-      logger.error('[Firebase] Failed to initialize Firestore', error instanceof Error ? error : new Error(String(error)));
-      if (error instanceof Error) {
+      logger.error('[Firebase] Failed to initialize Firestore', _error instanceof Error ? error : new Error(String(_error)));
+      if (_error instanceof Error) {
         logger.error('[Firebase] Error details', {
           message: error.message,
           stack: __DEV__ ? error.stack : '[REDACTED]',
@@ -245,8 +245,8 @@ export const initializeFirestore = async (): Promise<void> => {
 export const getFirestoreInstance = (): ReturnType<typeof getFirestore> | undefined => {
   // Start initialization if not already started
   if (!firestoreInitialized && !firestoreInitializing) {
-    initializeFirestore().catch((error) => {
-      logger.error('[Firebase] Auto-initialization failed', error);
+    initializeFirestore().catch((_error) => {
+      logger.error('[Firebase] Auto-initialization failed', _error);
     });
   }
   return firestoreInstance;

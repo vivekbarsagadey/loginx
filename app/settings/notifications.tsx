@@ -5,8 +5,8 @@ import { ThemedText } from '@/components/themed-text';
 import { CommonText } from '@/constants/common-styles';
 import { Spacing } from '@/constants/layout';
 import { getNotificationSettings } from '@/data';
-import { useLanguage } from '@/hooks/use-language-provider';
 import { useSettings } from '@/hooks/settings/use-settings-context';
+import { useLanguage } from '@/hooks/use-language-provider';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import i18n from '@/i18n';
 import { showError } from '@/utils/error';
@@ -49,7 +49,7 @@ export default function NotificationsScreen() {
       // Optimistic update happens in SettingsContext
       await updateNotifications({ [key]: value });
     } catch (_error: unknown) {
-      showError(error);
+      showError(_error);
       // Rollback happens automatically in SettingsContext
     }
   };

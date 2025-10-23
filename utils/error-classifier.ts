@@ -66,14 +66,14 @@ const RECOVERABLE_FIREBASE_CODES = ['auth/network-request-failed', 'auth/too-man
 /**
  * Type guard to check if error is a Firebase error
  */
-const isFirebaseError = (error: unknown): error is FirebaseError => {
-  return typeof error === 'object' && error !== null && 'code' in error && 'message' in error && typeof (error as { code: unknown }).code === 'string';
+const isFirebaseError = (_error: unknown): error is FirebaseError => {
+  return typeof error === 'object' && error !== null && 'code' in error && 'message' in error && typeof (_error as { code: unknown }).code === 'string';
 };
 
 /**
  * Type guard to check if error is a network error
  */
-const isNetworkError = (error: unknown): boolean => {
+const isNetworkError = (_error: unknown): boolean => {
   if (typeof error === 'object' && error !== null) {
     const err = error as { code?: string; message?: string; isAxiosError?: boolean };
     return err.isAxiosError === true || RECOVERABLE_NETWORK_CODES.some((code) => err.code === code || err.message?.includes(code)) || err.message?.toLowerCase().includes('network') === true;
@@ -147,7 +147,7 @@ const getFirestoreRecoverySuggestions = (code?: string): string[] => {
 /**
  * Classify a Firebase error
  */
-const classifyFirebaseError = (error: FirebaseError): Omit<ClassifiedError, 'originalError'> => {
+const classifyFirebaseError = (_error: FirebaseError): Omit<ClassifiedError, 'originalError'> => {
   const code = error.code;
   const isFatal = FATAL_FIREBASE_CODES.includes(code);
   const isRecoverable = RECOVERABLE_FIREBASE_CODES.includes(code);
@@ -188,9 +188,9 @@ const classifyFirebaseError = (error: FirebaseError): Omit<ClassifiedError, 'ori
  * Classify an error to determine its severity and recovery options
  * TASK-045: Main classification function
  */
-export const classifyError = (error: unknown): ClassifiedError => {
+export const classifyError = (_error: unknown): ClassifiedError => {
   // Handle network errors
-  if (isNetworkError(error)) {
+  if (isNetworkError(_error)) {
     return {
       severity: ErrorSeverity.RECOVERABLE,
       category: ErrorCategory.NETWORK,
@@ -204,15 +204,15 @@ export const classifyError = (error: unknown): ClassifiedError => {
   }
 
   // Handle Firebase errors
-  if (isFirebaseError(error)) {
+  if (isFirebaseError(_error)) {
     return {
-      ...classifyFirebaseError(error),
+      ...classifyFirebaseError(_error),
       originalError: error,
     };
   }
 
   // Handle storage errors
-  if (error instanceof Error && error.message.includes('storage')) {
+  if (_error instanceof Error && error.message.includes('storage')) {
     return {
       severity: ErrorSeverity.RECOVERABLE,
       category: ErrorCategory.STORAGE,
@@ -226,7 +226,7 @@ export const classifyError = (error: unknown): ClassifiedError => {
   }
 
   // Handle validation errors
-  if (error instanceof Error && error.message.includes('validation')) {
+  if (_error instanceof Error && error.message.includes('validation')) {
     return {
       severity: ErrorSeverity.WARNING,
       category: ErrorCategory.VALIDATION,
@@ -240,7 +240,7 @@ export const classifyError = (error: unknown): ClassifiedError => {
   }
 
   // Handle initialization errors (fatal)
-  if (error instanceof Error && (error.message.includes('initialization') || error.message.includes('CRITICAL'))) {
+  if (_error instanceof Error && (_error.message.includes('initialization') || error.message.includes('CRITICAL'))) {
     return {
       severity: ErrorSeverity.FATAL,
       category: ErrorCategory.INITIALIZATION,
@@ -257,7 +257,7 @@ export const classifyError = (error: unknown): ClassifiedError => {
   return {
     severity: ErrorSeverity.RECOVERABLE,
     category: ErrorCategory.UNKNOWN,
-    message: error instanceof Error ? error.message : String(error),
+    message: error instanceof Error ? error.message : String(_error),
     userMessage: i18n.t('errors.generic.message'),
     recoverable: true,
     recoverySuggestions: [i18n.t('errors.recovery.tryAgain'), i18n.t('errors.recovery.restartApp')],

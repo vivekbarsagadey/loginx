@@ -79,7 +79,7 @@ export function initializeSentry(): void {
 
     logger.log('Sentry monitoring initialized successfully');
   } catch (_error: unknown) {
-    logger.error('Failed to initialize Sentry:', error);
+    logger.error('Failed to initialize Sentry:', _error);
   }
 }
 
@@ -115,7 +115,7 @@ export function setUserContext(userId: string, email?: string, displayName?: str
 
     logger.log('User context set successfully');
   } catch (_error: unknown) {
-    logger.error('Failed to set user context:', error);
+    logger.error('Failed to set user context:', _error);
   }
 }
 
@@ -127,7 +127,7 @@ export function clearUserContext(): void {
     Sentry.setUser(null);
     logger.log('User context cleared');
   } catch (_error: unknown) {
-    logger.error('Failed to clear user context:', error);
+    logger.error('Failed to clear user context:', _error);
   }
 }
 
@@ -150,7 +150,7 @@ export function trackSecurityEvent(eventType: SecurityEventType, metadata?: Reco
     // Log to audit trail
     logger.log(`Security event: ${eventType}`, metadata);
   } catch (_error: unknown) {
-    logger.error('Failed to track security event:', error);
+    logger.error('Failed to track security event:', _error);
   }
 }
 
@@ -165,7 +165,7 @@ export function captureError(_error: Error, context?: Record<string, unknown>): 
     Sentry.captureException(_error);
     logger.error('Error captured:', { error: _error, context });
   } catch (_err) {
-    logger.error("Failed to capture error:", _error);
+    logger.error('Failed to capture error:', _error);
   }
 }
 
@@ -186,7 +186,7 @@ export function trackPerformance(operation: string, duration: number, metadata?:
 
     logger.log(`Performance tracked: ${operation} (${duration}ms)`, metadata);
   } catch (_error: unknown) {
-    logger.error('Failed to track performance:', error);
+    logger.error('Failed to track performance:', _error);
   }
 }
 
@@ -212,7 +212,7 @@ export async function getPerformanceMetrics(): Promise<PerformanceMetrics> {
       networkLatency: 0, // Would be measured from network calls
     };
   } catch (_error: unknown) {
-    logger.error('Failed to get performance metrics:', error);
+    logger.error('Failed to get performance metrics:', _error);
     return {
       syncQueueSize: 0,
       cacheHitRate: 0,
@@ -260,7 +260,7 @@ export function startTransaction(name: string, operation: string) {
     });
     return null;
   } catch (_error: unknown) {
-    logger.error('Failed to start transaction:', error);
+    logger.error('Failed to start transaction:', _error);
     return null;
   }
 }
@@ -279,6 +279,6 @@ export function addBreadcrumb(message: string, category: string, level: 'debug' 
       timestamp: Date.now() / 1000,
     });
   } catch (_error: unknown) {
-    logger.error('Failed to add breadcrumb:', error);
+    logger.error('Failed to add breadcrumb:', _error);
   }
 }

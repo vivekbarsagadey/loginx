@@ -143,7 +143,7 @@ export function useSocialAuth() {
       // Handle successful authentication (creates profile, feedback, navigation)
       await handleSocialAuthSuccess(user, undefined, undefined, router);
     } catch (_error: unknown) {
-      await handleSocialAuthError(error, 'Google sign-in error');
+      await handleSocialAuthError(_error, 'Google sign-in error');
     } finally {
       setLoading(false);
     }
@@ -188,12 +188,12 @@ export function useSocialAuth() {
       await handleSocialAuthSuccess(user, fullName, credential.email || user.email || '', router);
     } catch (_error: unknown) {
       // User cancelled - don't show error
-      if (isAuthCancellation(error)) {
+      if (isAuthCancellation(_error)) {
         setLoading(false);
         return;
       }
 
-      await handleSocialAuthError(error, 'Apple sign-in error');
+      await handleSocialAuthError(_error, 'Apple sign-in error');
     } finally {
       setLoading(false);
     }
@@ -220,9 +220,9 @@ export function useSocialAuth() {
       // Note: Facebook authentication integration is pending
       // See docs/FACEBOOK_AUTH_IMPLEMENTATION.md for complete implementation guide
       const errorMessage = ERROR_MESSAGES.FACEBOOK_PENDING.replace('{appId}', Config.services.facebookAppId || 'Not configured');
-      throw new Error(errorMessage);
+      throw new Error(_errorMessage);
     } catch (_error: unknown) {
-      await provideErrorFeedback(error);
+      await provideErrorFeedback(_error);
     } finally {
       setLoading(false);
     }

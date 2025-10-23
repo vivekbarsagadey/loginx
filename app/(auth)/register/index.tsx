@@ -229,7 +229,7 @@ export default function RegisterScreen() {
     } catch (_error: unknown) {
       // Error haptic feedback
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      showError(error);
+      showError(_error);
     } finally {
       setIsSubmitting(false);
     }

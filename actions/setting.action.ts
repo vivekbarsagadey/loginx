@@ -26,8 +26,8 @@ export const updateSetting = async (uid: string, key: string, value: boolean): P
 
     debugLog(`[SettingAction] ✅ LOCAL-FIRST: Setting ${key} updated to ${value}`);
   } catch (_error: unknown) {
-    debugError('[SettingAction] Error updating setting', error);
-    showError(error);
-    throw error; // Re-throw so UI can handle it
+    debugError('[SettingAction] Error updating setting', _error);
+    showError(_error);
+    throw _error; // Re-throw so UI can handle it
   }
 };

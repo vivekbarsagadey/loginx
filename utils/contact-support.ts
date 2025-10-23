@@ -32,7 +32,7 @@ export async function canSendEmail(): Promise<boolean> {
   try {
     return await MailComposer.isAvailableAsync();
   } catch (_error: unknown) {
-    logger.error('Error checking email availability', error as Error);
+    logger.error('Error checking email availability', _error as Error);
     return false;
   }
 }
@@ -78,7 +78,7 @@ function formatErrorContext(context?: ErrorContext): string {
  * @param errorContext - Optional error details to include
  * @returns Success status
  */
-export async function contactSupport(subject?: string, errorContext?: ErrorContext): Promise<{ success: boolean; error?: string }> {
+export async function contactSupport(subject?: string, _errorContext?: ErrorContext): Promise<{ success: boolean; error?: string }> {
   try {
     // Check if email is available
     const emailAvailable = await canSendEmail();
@@ -86,7 +86,7 @@ export async function contactSupport(subject?: string, errorContext?: ErrorConte
     if (!emailAvailable) {
       // Fallback to opening email app with mailto link
       const emailSubject = encodeURIComponent(subject || SUPPORT_CONFIG.subject);
-      const emailBody = encodeURIComponent(`Please describe your issue:\n\n${formatErrorContext(errorContext)}`);
+      const emailBody = encodeURIComponent(`Please describe your issue:\n\n${formatErrorContext(_errorContext)}`);
       const mailto = `mailto:${SUPPORT_CONFIG.email}?subject=${emailSubject}&body=${emailBody}`;
 
       const canOpen = await Linking.canOpenURL(mailto);
@@ -102,7 +102,7 @@ export async function contactSupport(subject?: string, errorContext?: ErrorConte
     }
 
     // Compose email with expo-mail-composer
-    const emailBody = `Please describe your issue:\n\n${formatErrorContext(errorContext)}`;
+    const emailBody = `Please describe your issue:\n\n${formatErrorContext(_errorContext)}`;
 
     const result = await MailComposer.composeAsync({
       recipients: [SUPPORT_CONFIG.email],
@@ -126,7 +126,7 @@ export async function contactSupport(subject?: string, errorContext?: ErrorConte
       error: i18n.t('errors.support.emailFailed'),
     };
   } catch (_error: unknown) {
-    logger.error('Error contacting support', error as Error);
+    logger.error('Error contacting support', _error as Error);
     return {
       success: false,
       error: error instanceof Error ? error.message : i18n.t('errors.support.emailFailed'),
@@ -146,7 +146,7 @@ export async function openHelpCenter(): Promise<void> {
       logger.error('Cannot open help center URL');
     }
   } catch (_error: unknown) {
-    logger.error('Error opening help center', error as Error);
+    logger.error('Error opening help center', _error as Error);
   }
 }
 
@@ -162,26 +162,26 @@ export async function openFAQ(): Promise<void> {
       logger.error('Cannot open FAQ URL');
     }
   } catch (_error: unknown) {
-    logger.error('Error opening FAQ', error as Error);
+    logger.error('Error opening FAQ', _error as Error);
   }
 }
 
 /**
  * Get current error context for support
  */
-export function getErrorContextForSupport(error: unknown): ErrorContext {
+export function getErrorContextForSupport(_error: unknown): ErrorContext {
   const context: ErrorContext = {
     timestamp: new Date().toISOString(),
     platform: Platform.OS,
   };
 
   // Extract error code if available
-  if (typeof error === 'object' && error !== null && 'code' in error && typeof (error as { code: unknown }).code === 'string') {
-    context.errorCode = (error as { code: string }).code;
+  if (typeof error === 'object' && error !== null && 'code' in error && typeof (_error as { code: unknown }).code === 'string') {
+    context.errorCode = (_error as { code: string }).code;
   }
 
   // Extract error message
-  if (error instanceof Error) {
+  if (_error instanceof Error) {
     context.errorMessage = error.message;
   } else if (typeof error === 'string') {
     context.errorMessage = error;

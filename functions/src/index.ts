@@ -36,9 +36,9 @@ export const validateLogin = onCall(async (request: any) => {
       message: 'Login validation passed',
     };
   } catch (_error: unknown) {
-    if (error instanceof Error) {
-      if (error.message.includes('Rate limit exceeded')) {
-        throw new HttpsError('resource-exhausted', error.message);
+    if (_error instanceof Error) {
+      if (_error.message.includes('Rate limit exceeded')) {
+        throw new HttpsError('resource-exhausted', _error.message);
       }
     }
     throw new HttpsError('internal', 'Login validation failed');
@@ -75,7 +75,7 @@ export const validateRegistration = onCall(async (request: any) => {
       // User not found is expected - continue
       const authError = error as { code?: string };
       if (authError.code !== 'auth/user-not-found') {
-        throw error;
+        throw _error;
       }
     }
 
@@ -84,13 +84,13 @@ export const validateRegistration = onCall(async (request: any) => {
       message: 'Registration validation passed',
     };
   } catch (_error: unknown) {
-    if (error instanceof Error) {
-      if (error.message.includes('Rate limit exceeded')) {
-        throw new HttpsError('resource-exhausted', error.message);
+    if (_error instanceof Error) {
+      if (_error.message.includes('Rate limit exceeded')) {
+        throw new HttpsError('resource-exhausted', _error.message);
       }
     }
-    if (error instanceof HttpsError) {
-      throw error;
+    if (_error instanceof HttpsError) {
+      throw _error;
     }
     throw new HttpsError('internal', 'Registration validation failed');
   }
@@ -127,7 +127,7 @@ export const recordLoginAttempt = onCall(async (request: any) => {
       message: 'Login attempt recorded',
     };
   } catch (_error: unknown) {
-    console.error('Failed to record login attempt:', error);
+    console.error('Failed to record login attempt:', _error);
     // Don't throw - logging failures shouldn't block auth
     return {
       success: false,
@@ -164,9 +164,9 @@ export const validatePasswordReset = onCall(async (request: any) => {
       message: 'Password reset validation passed',
     };
   } catch (_error: unknown) {
-    if (error instanceof Error) {
-      if (error.message.includes('Rate limit exceeded')) {
-        throw new HttpsError('resource-exhausted', error.message);
+    if (_error instanceof Error) {
+      if (_error.message.includes('Rate limit exceeded')) {
+        throw new HttpsError('resource-exhausted', _error.message);
       }
     }
     throw new HttpsError('internal', 'Password reset validation failed');
@@ -193,9 +193,9 @@ export const validateEmailVerification = onCall(async (request: any) => {
       message: 'Email verification validation passed',
     };
   } catch (_error: unknown) {
-    if (error instanceof Error) {
-      if (error.message.includes('Rate limit exceeded')) {
-        throw new HttpsError('resource-exhausted', error.message);
+    if (_error instanceof Error) {
+      if (_error.message.includes('Rate limit exceeded')) {
+        throw new HttpsError('resource-exhausted', _error.message);
       }
     }
     throw new HttpsError('internal', 'Email verification validation failed');
@@ -209,10 +209,10 @@ export const validateEmailVerification = onCall(async (request: any) => {
 export const scheduledRateLimitCleanup = onSchedule('0 2 * * *', async () => {
   try {
     await cleanupExpiredRateLimits();
-     
+
     console.error('Rate limit cleanup completed successfully');
   } catch (_error: unknown) {
-    console.error('Rate limit cleanup failed:', error);
+    console.error('Rate limit cleanup failed:', _error);
   }
 });
 
@@ -253,8 +253,8 @@ export const getRateLimitStatus = onCall(async (request: any) => {
       records,
     };
   } catch (_error: unknown) {
-    if (error instanceof HttpsError) {
-      throw error;
+    if (_error instanceof HttpsError) {
+      throw _error;
     }
     throw new HttpsError('internal', 'Failed to get rate limit status');
   }

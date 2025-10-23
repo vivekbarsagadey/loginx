@@ -13,7 +13,7 @@ export interface RetryConfig {
   /** Maximum backoff delay in milliseconds */
   maxBackoffMs?: number;
   /** Callback invoked on each retry attempt */
-  onRetry?: (attempt: number, error: Error) => void;
+  onRetry?: (attempt: number, _error: Error) => void;
   /** Callback invoked when all retries are exhausted */
   onMaxRetriesReached?: (_error: Error) => void;
   /** Function to determine if error is retryable */
@@ -45,7 +45,7 @@ export interface UseAsyncRetryReturn<T> {
  *
  * @example
  * ```typescript
- * const { execute, isLoading, error, retryCount } = useAsyncRetry(
+ * const { execute, isLoading, _error, retryCount } = useAsyncRetry(
  *   async () => {
  *     const response = await fetch('/api/data');
  *     if (!response.ok) throw new Error('Failed to fetch');

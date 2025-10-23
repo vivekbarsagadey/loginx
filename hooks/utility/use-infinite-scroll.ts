@@ -78,7 +78,7 @@ export interface UseInfiniteScrollReturn<T> {
  * const { items, isLoading, refresh, loadMore } = useInfiniteScroll({
  *   fetchFn: fetchNotifications,
  *   pageSize: 15,
- *   onError: (error) => showError(error)
+ *   onError: (_error) => showError(_error)
  * });
  *
  * <FlatList
@@ -89,17 +89,8 @@ export interface UseInfiniteScrollReturn<T> {
  * />
  * ```
  */
-export function useInfiniteScroll<T>(
-  options: UseInfiniteScrollOptions<T>
-): UseInfiniteScrollReturn<T> {
-  const {
-    fetchFn,
-    pageSize = 20,
-    initialPage = 1,
-    fetchOnMount = true,
-    onComplete,
-    onError,
-  } = options;
+export function useInfiniteScroll<T>(options: UseInfiniteScrollOptions<T>): UseInfiniteScrollReturn<T> {
+  const { fetchFn, pageSize = 20, initialPage = 1, fetchOnMount = true, onComplete, onError } = options;
 
   const [items, setItems] = useState<T[]>([]);
   const [currentPage, setCurrentPage] = useState(initialPage);

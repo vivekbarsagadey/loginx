@@ -219,7 +219,7 @@ export default function ConsistencyExamples() {
             <ThemedText type="bodyBold" style={styles.patternTitle}>
               🔴 Destructive
             </ThemedText>
-            <ThemedText type="caption">Color: Red (error)</ThemedText>
+            <ThemedText type="caption">Color: Red (_error)</ThemedText>
             <ThemedText type="caption">Confirmation: Always required</ThemedText>
             <ThemedText type="caption">Haptic: Heavy impact</ThemedText>
             <ThemedText type="caption">Examples: Delete, Remove, Clear</ThemedText>

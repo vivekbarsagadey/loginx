@@ -118,7 +118,7 @@ export function AddressAutocomplete({ onAddressSelect, initialValue, googleApiKe
             });
           }
         }}
-        onFail={(error) => {
+        onFail={(_error) => {
           logger.error('GooglePlacesAutocomplete error:', error);
         }}
         query={{

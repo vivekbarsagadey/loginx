@@ -12,11 +12,11 @@ import { GlobalDialogProvider } from '@/components/global-dialog-provider';
 import { OfflineIndicator } from '@/components/ui/offline-indicator';
 import { AnimationDurations, ScreenTransitions } from '@/constants/animation';
 import { Routes } from '@/constants/routes';
-import { AuthProvider, useAuth } from '@/hooks/use-auth-provider';
-import { LanguageProvider } from '@/hooks/use-language-provider';
 import { NetworkProvider } from '@/hooks/network/use-network-context';
 import { PermissionsProvider } from '@/hooks/permissions/use-permissions-context';
 import { SettingsProvider } from '@/hooks/settings/use-settings-context';
+import { AuthProvider, useAuth } from '@/hooks/use-auth-provider';
+import { LanguageProvider } from '@/hooks/use-language-provider';
 import { OnboardingProvider, useOnboarding } from '@/hooks/use-onboarding-provider';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { ThemeProvider as CustomThemeProvider, useThemeContext } from '@/hooks/use-theme-context';
@@ -266,10 +266,10 @@ export default function RootLayout() {
       logPerformanceMetrics();
 
       // Initialize adaptive cache manager FIRST (determines cache size)
-      initializeAdaptiveCache().catch((error) => {
+      initializeAdaptiveCache().catch((_error) => {
         logger.error('Failed to initialize adaptive cache:', error);
         // TASK-041: Show user-facing error dialog
-        const errorInfo = getErrorInfo(error);
+        const errorInfo = getErrorInfo(_error);
         showError(`${errorInfo.title}: ${errorInfo.message}`);
       });
 
@@ -277,10 +277,10 @@ export default function RootLayout() {
       const networkUnsubscribe = initializeNetworkMonitoring();
 
       // Initialize LOCAL-FIRST system
-      initializeLocalFirst().catch((error) => {
+      initializeLocalFirst().catch((_error) => {
         logger.error('Failed to initialize LOCAL-FIRST system:', error);
         // TASK-041: Show user-facing error dialog with retry option
-        const classified = classifyError(error);
+        const classified = classifyError(_error);
         showError(`Initialization Error: ${classified.userMessage}`);
         // Note: Retry functionality would need to be implemented in the global dialog
         if (classified.retryable) {

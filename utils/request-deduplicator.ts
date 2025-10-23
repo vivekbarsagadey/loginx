@@ -79,11 +79,13 @@ class RequestDeduplicator {
       debugLog(`[RequestDeduplicator] ✅ Request completed: ${key}`);
       return result;
     } catch (_error: unknown) {
-      debugWarn(`[RequestDeduplicator] ❌ Request failed: ${key}`, error);
-      throw error;
+      debugWarn(`[RequestDeduplicator] ❌ Request failed: ${key}`, _error);
+      throw _error;
     } finally {
       // Clean up
-      if (timeoutId) {clearTimeout(timeoutId);}
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
       this.pendingRequests.delete(key);
       debugLog(`[RequestDeduplicator] 🧹 Cleaned up: ${key}`);
     }
@@ -119,7 +121,9 @@ class RequestDeduplicator {
    */
   getStats(key: string): { hits: number; misses: number; hitRate: number } | null {
     const stats = this.requestStats.get(key);
-    if (!stats) {return null;}
+    if (!stats) {
+      return null;
+    }
 
     const total = stats.hits + stats.misses;
     const hitRate = total > 0 ? stats.hits / total : 0;

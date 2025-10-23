@@ -1,21 +1,23 @@
 /**
  * Flow Navigation Hook
- * 
+ *
  * Handles navigation logic including next, previous, skip, and jump operations
  */
 
-import { useCallback } from 'react';
 import { type FlowConfig, type FlowState, type StepConfig } from '@/types/flow';
+import { useCallback } from 'react';
 
 /**
  * Check if a step should be shown based on its condition
  */
 function shouldShowStep(step: StepConfig, data: Record<string, any>): boolean {
-  if (!step.condition) {return true;}
+  if (!step.condition) {
+    return true;
+  }
   try {
     return step.condition(data);
   } catch (_error: unknown) {
-    console.error('Error evaluating step condition:', error);
+    console.error('Error evaluating step condition:', _error);
     return false;
   }
 }
@@ -23,11 +25,7 @@ function shouldShowStep(step: StepConfig, data: Record<string, any>): boolean {
 /**
  * Find the next visible step index
  */
-function findNextVisibleStep(
-  steps: StepConfig[],
-  currentIndex: number,
-  data: Record<string, any>
-): number {
+function findNextVisibleStep(steps: StepConfig[], currentIndex: number, data: Record<string, any>): number {
   for (let i = currentIndex + 1; i < steps.length; i++) {
     if (shouldShowStep(steps[i], data)) {
       return i;
@@ -39,11 +37,7 @@ function findNextVisibleStep(
 /**
  * Find the previous visible step index
  */
-function findPreviousVisibleStep(
-  steps: StepConfig[],
-  currentIndex: number,
-  data: Record<string, any>
-): number {
+function findPreviousVisibleStep(steps: StepConfig[], currentIndex: number, data: Record<string, any>): number {
   for (let i = currentIndex - 1; i >= 0; i--) {
     if (shouldShowStep(steps[i], data)) {
       return i;
@@ -55,20 +49,12 @@ function findPreviousVisibleStep(
 /**
  * Hook for flow navigation
  */
-export function useFlowNavigation(
-  config: FlowConfig,
-  state: FlowState,
-  updateState: (updates: Partial<FlowState>) => void
-) {
+export function useFlowNavigation(config: FlowConfig, state: FlowState, updateState: (updates: Partial<FlowState>) => void) {
   /**
    * Navigate to next step
    */
   const next = useCallback(async () => {
-    const nextIndex = findNextVisibleStep(
-      config.steps,
-      state.currentStepIndex,
-      state.data
-    );
+    const nextIndex = findNextVisibleStep(config.steps, state.currentStepIndex, state.data);
 
     if (nextIndex === state.currentStepIndex) {
       // No next step, might be last step
@@ -76,14 +62,12 @@ export function useFlowNavigation(
     }
 
     const nextStep = config.steps[nextIndex];
-    
+
     updateState({
       currentStepIndex: nextIndex,
       currentStepId: nextStep.id,
       stepHistory: [...state.stepHistory, state.currentStepId],
-      completedSteps: state.completedSteps.includes(state.currentStepId)
-        ? state.completedSteps
-        : [...state.completedSteps, state.currentStepId],
+      completedSteps: state.completedSteps.includes(state.currentStepId) ? state.completedSteps : [...state.completedSteps, state.currentStepId],
     });
   }, [config.steps, state, updateState]);
 
@@ -91,11 +75,7 @@ export function useFlowNavigation(
    * Navigate to previous step
    */
   const previous = useCallback(() => {
-    const prevIndex = findPreviousVisibleStep(
-      config.steps,
-      state.currentStepIndex,
-      state.data
-    );
+    const prevIndex = findPreviousVisibleStep(config.steps, state.currentStepIndex, state.data);
 
     if (prevIndex === state.currentStepIndex) {
       // No previous step
@@ -115,23 +95,17 @@ export function useFlowNavigation(
    */
   const skip = useCallback(async () => {
     const currentStep = config.steps[state.currentStepIndex];
-    
+
     // Check if step is skippable
-    if (!currentStep.skippable && !(config.showSkip)) {
+    if (!currentStep.skippable && !config.showSkip) {
       return;
     }
 
     // Mark as skipped
-    const skippedSteps = state.skippedSteps.includes(currentStep.id)
-      ? state.skippedSteps
-      : [...state.skippedSteps, currentStep.id];
+    const skippedSteps = state.skippedSteps.includes(currentStep.id) ? state.skippedSteps : [...state.skippedSteps, currentStep.id];
 
     // Find next step
-    const nextIndex = findNextVisibleStep(
-      config.steps,
-      state.currentStepIndex,
-      state.data
-    );
+    const nextIndex = findNextVisibleStep(config.steps, state.currentStepIndex, state.data);
 
     if (nextIndex === state.currentStepIndex) {
       // No next step
@@ -151,28 +125,31 @@ export function useFlowNavigation(
   /**
    * Jump to specific step by ID
    */
-  const jumpTo = useCallback((stepId: string) => {
-    const stepIndex = config.steps.findIndex((step) => step.id === stepId);
-    
-    if (stepIndex === -1) {
-      console.warn(`Step with id "${stepId}" not found`);
-      return;
-    }
+  const jumpTo = useCallback(
+    (stepId: string) => {
+      const stepIndex = config.steps.findIndex((step) => step.id === stepId);
 
-    const targetStep = config.steps[stepIndex];
+      if (stepIndex === -1) {
+        console.warn(`Step with id "${stepId}" not found`);
+        return;
+      }
 
-    // Check if step should be shown
-    if (!shouldShowStep(targetStep, state.data)) {
-      console.warn(`Step "${stepId}" is conditionally hidden`);
-      return;
-    }
+      const targetStep = config.steps[stepIndex];
 
-    updateState({
-      currentStepIndex: stepIndex,
-      currentStepId: stepId,
-      stepHistory: [...state.stepHistory, state.currentStepId],
-    });
-  }, [config.steps, state, updateState]);
+      // Check if step should be shown
+      if (!shouldShowStep(targetStep, state.data)) {
+        console.warn(`Step "${stepId}" is conditionally hidden`);
+        return;
+      }
+
+      updateState({
+        currentStepIndex: stepIndex,
+        currentStepId: stepId,
+        stepHistory: [...state.stepHistory, state.currentStepId],
+      });
+    },
+    [config.steps, state, updateState]
+  );
 
   /**
    * Mark flow as complete
@@ -180,9 +157,7 @@ export function useFlowNavigation(
   const complete = useCallback(async () => {
     updateState({
       completedAt: new Date(),
-      completedSteps: state.completedSteps.includes(state.currentStepId)
-        ? state.completedSteps
-        : [...state.completedSteps, state.currentStepId],
+      completedSteps: state.completedSteps.includes(state.currentStepId) ? state.completedSteps : [...state.completedSteps, state.currentStepId],
     });
   }, [state, updateState]);
 
@@ -191,7 +166,7 @@ export function useFlowNavigation(
    */
   const canGoBack = useCallback(() => {
     const currentStep = config.steps[state.currentStepIndex];
-    
+
     // Check flow-level navigation rules
     if (config.navigation?.allowBack === false) {
       return false;
@@ -203,11 +178,7 @@ export function useFlowNavigation(
     }
 
     // Check if there's a previous visible step
-    const prevIndex = findPreviousVisibleStep(
-      config.steps,
-      state.currentStepIndex,
-      state.data
-    );
+    const prevIndex = findPreviousVisibleStep(config.steps, state.currentStepIndex, state.data);
 
     return prevIndex !== state.currentStepIndex;
   }, [config, state]);
@@ -217,11 +188,7 @@ export function useFlowNavigation(
    */
   const canGoNext = useCallback(() => {
     // Check if there's a next visible step
-    const nextIndex = findNextVisibleStep(
-      config.steps,
-      state.currentStepIndex,
-      state.data
-    );
+    const nextIndex = findNextVisibleStep(config.steps, state.currentStepIndex, state.data);
 
     return nextIndex !== state.currentStepIndex;
   }, [config.steps, state]);
@@ -231,7 +198,7 @@ export function useFlowNavigation(
    */
   const canSkip = useCallback(() => {
     const currentStep = config.steps[state.currentStepIndex];
-    
+
     // Check flow-level skip setting
     if (config.showSkip === false) {
       return false;

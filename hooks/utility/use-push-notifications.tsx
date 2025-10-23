@@ -137,12 +137,12 @@ export const usePushNotifications = (uid?: string) => {
         // Update user document with push token
         if (token && uid) {
           const userDocRef = doc(firestore, 'users', uid);
-          updateDoc(userDocRef, { expoPushToken: token }).catch((error) => {
+          updateDoc(userDocRef, { expoPushToken: token }).catch((_error) => {
             console.error('[Push Notifications] Error updating user token:', error);
           });
         }
       })
-      .catch((error) => {
+      .catch((_error) => {
         console.error('[Push Notifications] Error in registration:', error);
       });
 
@@ -157,7 +157,7 @@ export const usePushNotifications = (uid?: string) => {
           type: 'info',
           title: title,
           message: body,
-        }).catch((error) => {
+        }).catch((_error) => {
           console.error('[Push Notifications] Error saving notification:', error);
         });
       }

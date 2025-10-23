@@ -30,7 +30,7 @@ describe('Rate Limiting', () => {
           await signInWithEmailAndPassword(auth as any, email, password);
         } catch (_error: unknown) {
           // Expected to fail (mock), but should not be rate limited
-          expect((error as any).code).not.toBe('too-many-requests');
+          expect((_error as any).code).not.toBe('too-many-requests');
         }
       }
     });
@@ -45,7 +45,7 @@ describe('Rate Limiting', () => {
         try {
           await signInWithEmailAndPassword(auth as any, email, password);
         } catch (_error: any) {
-          if (error.code === 'auth/too-many-requests') {
+          if (_error.code === 'auth/too-many-requests') {
             rateLimitHit = true;
             break;
           }
@@ -78,7 +78,7 @@ describe('Rate Limiting', () => {
       try {
         await signInWithEmailAndPassword(auth as any, email, password);
       } catch (_error: any) {
-        expect(error.code).not.toBe('auth/too-many-requests');
+        expect(_error.code).not.toBe('auth/too-many-requests');
       }
     });
   });
