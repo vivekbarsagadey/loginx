@@ -21,7 +21,7 @@ export type ThemedScrollViewProps = ScrollViewProps & {
  * TASK-048: Fallback component shown when list rendering fails
  */
 function ScrollViewErrorFallback(_error: Error | null) {
-  if (!error) {
+  if (!_error) {
     return null;
   }
 
@@ -31,7 +31,7 @@ function ScrollViewErrorFallback(_error: Error | null) {
         Failed to render list
       </ThemedText>
       <ThemedText type="body" style={styles.errorMessage}>
-        {error.message}
+        {_error.message}
       </ThemedText>
     </ThemedView>
   );
@@ -42,7 +42,7 @@ function ThemedScrollViewComponent({
   lightColor,
   darkColor,
   variant = 'bg',
-  errorBoundary = true, // TASK-048: Enable error boundary by default
+  errorBoundary: _errorBoundary = true, // TASK-048: Enable error boundary by default
   children,
   ...otherProps
 }: ThemedScrollViewProps) {

@@ -47,10 +47,10 @@ export interface FilterChipProps {
 
 /**
  * FilterChip Component
- * 
+ *
  * Selectable chip component for filters and tags.
  * Used in filter bars, tag lists, and selection interfaces.
- * 
+ *
  * @example Basic usage
  * ```tsx
  * <FilterChip
@@ -59,7 +59,7 @@ export interface FilterChipProps {
  *   onPress={() => setFilter('active')}
  * />
  * ```
- * 
+ *
  * @example With icon
  * ```tsx
  * <FilterChip
@@ -69,7 +69,7 @@ export interface FilterChipProps {
  *   onPress={() => setShowFavorites(!showFavorites)}
  * />
  * ```
- * 
+ *
  * @example Closable chip
  * ```tsx
  * <FilterChip
@@ -80,17 +80,7 @@ export interface FilterChipProps {
  * />
  * ```
  */
-function FilterChipComponent({
-  label,
-  selected = false,
-  onPress,
-  icon,
-  closable = false,
-  onClose,
-  size = 'medium',
-  style,
-  disabled = false,
-}: FilterChipProps) {
+function FilterChipComponent({ label, selected = false, onPress, icon, closable = false, onClose, size = 'medium', style, disabled = false }: FilterChipProps) {
   const primaryColor = useThemeColor({}, 'primary');
   const surfaceColor = useThemeColor({}, 'surface');
   const textColor = useThemeColor({}, 'text');
@@ -117,8 +107,7 @@ function FilterChipComponent({
     }
   };
 
-  const handleClose = (e: any) => {
-    e.stopPropagation();
+  const handleClose = () => {
     if (onClose) {
       onClose();
     }
@@ -155,28 +144,12 @@ function FilterChipComponent({
         accessibilityState={{ selected, disabled }}
         accessibilityLabel={`${label} ${selected ? 'selected' : 'not selected'}`}
       >
-        {icon && (
-          <Ionicons
-            name={icon}
-            size={iconSize}
-            color={iconColor}
-            style={styles.icon}
-          />
-        )}
-        <ThemedText
-          type="body"
-          style={[styles.label, { color: chipTextColor, fontSize }]}
-        >
+        {icon && <Ionicons name={icon} size={iconSize} color={iconColor} style={styles.icon} />}
+        <ThemedText type="body" style={[styles.label, { color: chipTextColor, fontSize }]}>
           {label}
         </ThemedText>
         {closable && (
-          <Pressable
-            onPress={handleClose}
-            style={styles.closeButton}
-            accessibilityRole="button"
-            accessibilityLabel={`Remove ${label}`}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          >
+          <Pressable onPress={handleClose} style={styles.closeButton} accessibilityRole="button" accessibilityLabel={`Remove ${label}`} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
             <Ionicons name="close-circle" size={iconSize} color={iconColor} />
           </Pressable>
         )}

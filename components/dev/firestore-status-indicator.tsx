@@ -40,7 +40,7 @@ export function FirestoreStatusIndicator() {
           const icon = info.emulatorEnabled ? 'Emulator' : 'Cloud';
           setStatusInfo(`${icon} | ${info.platform}`);
         } else {
-          const error = getFirestoreError();
+          const _error = getFirestoreError();
           if (_error?.message.includes('timeout')) {
             setStatus('timeout');
             setStatusInfo('Init timeout');
@@ -51,8 +51,8 @@ export function FirestoreStatusIndicator() {
         }
       } catch (_error: unknown) {
         setStatus('error');
-        setStatusInfo(_error instanceof Error ? error.message.slice(0, 30) : 'Init failed');
-        debugLog('[FirestoreStatus] Error checking status:', error);
+        setStatusInfo(_error instanceof Error ? _error.message.slice(0, 30) : 'Init failed');
+        debugLog('[FirestoreStatus] Error checking status:', _error);
       }
     };
 
