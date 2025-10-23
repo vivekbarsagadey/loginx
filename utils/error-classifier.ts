@@ -73,7 +73,7 @@ const isFirebaseError = (error: unknown): error is FirebaseError => {
 /**
  * Type guard to check if error is a network error
  */
-const isNetworkError = (_error: unknown): boolean => {
+const isNetworkError = (error: unknown): boolean => {
   if (typeof error === 'object' && error !== null) {
     const err = error as { code?: string; message?: string; isAxiosError?: boolean };
     return err.isAxiosError === true || RECOVERABLE_NETWORK_CODES.some((code) => err.code === code || err.message?.includes(code)) || err.message?.toLowerCase().includes('network') === true;

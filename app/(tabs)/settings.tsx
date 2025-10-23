@@ -93,7 +93,7 @@ export default function SettingsScreen() {
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         await deleteUserAccount(user.uid);
         await deleteUser(user);
-      } catch (_error: unknown) {
+      } catch (error: unknown) {
         showError(error);
       } finally {
         setIsDeleting(false);

@@ -49,7 +49,7 @@ export function isFatalError(_error: unknown): boolean {
     return false;
   }
 
-  return FATAL_ERROR_CODES.includes(error.code as (typeof FATAL_ERROR_CODES)[number]);
+  return FATAL_ERROR_CODES.includes((error as any).code as (typeof FATAL_ERROR_CODES)[number]);
 }
 
 /**
@@ -73,7 +73,7 @@ const isFirebaseError = (_error: unknown): boolean => {
   if (!hasErrorCode(_error)) {
     return false;
   }
-  return error.code.startsWith(FIREBASE_AUTH_PREFIX) || error.code.startsWith(FIRESTORE_PREFIX) || error.code.startsWith(STORAGE_PREFIX);
+  return (_error as any).code.startsWith(FIREBASE_AUTH_PREFIX) || error.code.startsWith(FIRESTORE_PREFIX) || error.code.startsWith(STORAGE_PREFIX);
 };
 
 /**
@@ -82,11 +82,11 @@ const isFirebaseError = (_error: unknown): boolean => {
  * @param error - Error object (unknown type for safety)
  * @returns Structured error information with fatal flag
  */
-export const getErrorInfo = (_error: unknown): ErrorInfo => {
+export const getErrorInfo = (error: unknown): ErrorInfo => {
   // Use Firebase error message utility for all Firebase errors
-  if (isFirebaseError(_error) && hasErrorCode(_error)) {
-    const message = getFirebaseErrorMessage(_error.code);
-    const fatal = isFatalError(_error);
+  if (isFirebaseError(error) && hasErrorCode(error)) {
+    const message = getFirebaseErrorMessage(error.code);
+    const fatal = isFatalError(error);
 
     return {
       title: i18n.t('errors.firebase.title'),
@@ -99,13 +99,13 @@ export const getErrorInfo = (_error: unknown): ErrorInfo => {
   // Use error classifier for non-Firebase errors
   let classified: { userMessage: string; recoverySuggestions: string[] } | null = null;
   try {
-    classified = classifyError(_error);
+    classified = classifyError(error);
   } catch (error: unknown) {
     // Fallback if classifier fails
   }
 
   // Handle network/Axios errors
-  if (isAxiosError(_error) && !error.response) {
+  if (isAxiosError(error) && !error.response) {
     return {
       title: i18n.t('errors.network.title'),
       message: classified?.userMessage || i18n.t('errors.network.message'),

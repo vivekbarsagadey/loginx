@@ -152,7 +152,7 @@ function attemptAutoMerge<T>(local: T, remote: T): T | null {
 
     return merged;
   } catch (_error: unknown) {
-    logger.error('[ConflictResolver] Error during auto-merge:', __error as Error);
+    logger.error('[ConflictResolver] Error during auto-merge:', _error as Error);
     return null;
   }
 }

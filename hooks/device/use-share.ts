@@ -199,7 +199,7 @@ export function useShare(): UseShareReturn {
         setIsSharing(false);
         return shareResult;
       } catch (_err) {
-        const errorObj = err instanceof Error ? err : new Error('Failed to share content');
+        const errorObj = _error instanceof Error ? _error : new Error('Failed to share content');
         setError(errorObj);
 
         const shareResult: ShareResult = {

@@ -134,7 +134,7 @@ export async function recordLoginAttempt(email: string, success: boolean): Promi
   } catch (_error: unknown) {
     // Don't throw - recording failures shouldn't block auth flow
     logger.warn('[AuthRateLimiter] Failed to record login attempt', {
-      error: error instanceof Error ? error.message : String(error),
+      error: _error instanceof Error ? _error.message : String(_error),
     });
   }
 }
@@ -183,7 +183,7 @@ export function formatRateLimitMessage(response: ValidationResponse): string {
  * @returns True if rate limit error
  */
 export function isRateLimitError(_error: any): boolean {
-  return _error?.code === 'functions/resource-exhausted' || error?.rateLimited === true;
+  return _error?.code === 'functions/resource-exhausted' || _error?.rateLimited === true;
 }
 
 /**
@@ -192,8 +192,8 @@ export function isRateLimitError(_error: any): boolean {
  * @returns Retry after time in seconds, or 60 as default
  */
 export function getRetryAfterTime(_error: any): number {
-  if (error?.retryAfter) {
-    return error.retryAfter;
+  if (_error?.retryAfter) {
+    return _error.retryAfter;
   }
 
   // Try to extract from error message

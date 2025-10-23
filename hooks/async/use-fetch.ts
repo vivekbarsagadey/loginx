@@ -28,7 +28,7 @@ export interface UseFetchState<T> {
   /** Response data */
   data: T | null;
   /** Error if fetch failed */
-  error: Error | null;
+  error: Error | undefined;
   /** Loading state */
   isLoading: boolean;
   /** Validating/refetching state */
@@ -161,7 +161,7 @@ export function useFetch<T = any>(
         error: null,
       }));
 
-      let lastError: Error | null = null;
+      let lastError: Error | undefined = null;
       const maxRetries = retry?.count ?? 0;
       const retryDelay = retry?.delay ?? 1000;
 
@@ -199,11 +199,11 @@ export function useFetch<T = any>(
           return;
         } catch (_err) {
           // Ignore abort errors
-          if (err instanceof Error && err.name === 'AbortError') {
+          if (_error instanceof Error && err.name === 'AbortError') {
             return;
           }
 
-          lastError = err instanceof Error ? err : new Error(String(err));
+          lastError = _error instanceof Error ? _error : new Error(String(_error));
 
           // If we have retries left and not cancelled, wait and retry
           if (attempt < maxRetries && mountedRef.current) {

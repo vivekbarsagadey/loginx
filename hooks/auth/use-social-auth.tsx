@@ -186,7 +186,7 @@ export function useSocialAuth() {
 
       // Handle successful authentication (creates profile, feedback, navigation)
       await handleSocialAuthSuccess(user, fullName, credential.email || user.email || '', router);
-    } catch (_error: unknown) {
+    } catch (error: unknown) {
       // User cancelled - don't show error
       if (isAuthCancellation(error)) {
         setLoading(false);

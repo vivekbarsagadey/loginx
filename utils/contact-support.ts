@@ -186,7 +186,7 @@ export function getErrorContextForSupport(_error: unknown): ErrorContext {
   // Extract error code if available
   if (
     typeof _error === 'object' &&
-    __error !== null &&
+    _error !== null &&
     'code' in error &&
     typeof (_error as { code: unknown }).code === 'string'
   ) {
@@ -195,9 +195,9 @@ export function getErrorContextForSupport(_error: unknown): ErrorContext {
 
   // Extract error message
   if (_error instanceof Error) {
-    context.errorMessage = error.message;
+    context.errorMessage = _error.message;
   } else if (typeof _error === 'string') {
-    context.errorMessage = error;
+    context.errorMessage = _error;
   }
 
   return context;

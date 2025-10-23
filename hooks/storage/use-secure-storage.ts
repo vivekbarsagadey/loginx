@@ -113,7 +113,7 @@ export function useSecureStorage<T>(
         }
       } catch (_err) {
         setError(
-          err instanceof Error
+          _error instanceof Error
             ? _error
             : new Error("Failed to load from secure storage")
         );
@@ -136,7 +136,7 @@ export function useSecureStorage<T>(
         await SecureStore.setItemAsync(key, JSON.stringify(valueToStore));
       } catch (_err) {
         setError(
-          err instanceof Error
+          _error instanceof Error
             ? _error
             : new Error("Failed to save to secure storage")
         );
@@ -153,7 +153,7 @@ export function useSecureStorage<T>(
       await SecureStore.deleteItemAsync(key);
     } catch (_err) {
       setError(
-        err instanceof Error
+        _error instanceof Error
           ? _error
           : new Error("Failed to remove from secure storage")
       );

@@ -106,7 +106,7 @@ export function useLocalStorage<T>(
         }
       } catch (_err) {
         setError(
-          err instanceof Error ? err : new Error("Failed to load from storage")
+          _error instanceof Error ? _error : new Error("Failed to load from storage")
         );
       } finally {
         setLoading(false);
@@ -126,7 +126,7 @@ export function useLocalStorage<T>(
         await AsyncStorage.setItem(key, JSON.stringify(valueToStore));
       } catch (_err) {
         setError(
-          err instanceof Error ? err : new Error("Failed to save to storage")
+          _error instanceof Error ? _error : new Error("Failed to save to storage")
         );
       }
     },
@@ -141,7 +141,7 @@ export function useLocalStorage<T>(
       await AsyncStorage.removeItem(key);
     } catch (_err) {
       setError(
-        err instanceof Error ? err : new Error("Failed to remove from storage")
+        _error instanceof Error ? _error : new Error("Failed to remove from storage")
       );
     }
   }, [key, initialValue]);

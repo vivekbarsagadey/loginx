@@ -29,7 +29,7 @@ export interface UseAsyncRetryReturn<T> {
   /** Current loading state */
   isLoading: boolean;
   /** Last error encountered */
-  error: Error | null;
+  error: Error | undefined;
   /** Current retry attempt number (0 = initial attempt) */
   retryCount: number;
   /** Whether the operation is currently retrying */
@@ -82,7 +82,7 @@ export function useAsyncRetry<T>(
   } = config;
 
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<Error | undefined>(null);
   const [retryCount, setRetryCount] = useState(0);
   const [isRetrying, setIsRetrying] = useState(false);
   const cancelledRef = useRef(false);
@@ -149,7 +149,7 @@ export function useAsyncRetry<T>(
     setIsLoading(true);
     cancelledRef.current = false;
 
-    let lastError: Error | null = null;
+    let lastError: Error | undefined = null;
     let attempt = 0;
 
     while (attempt <= maxAttempts) {
@@ -166,7 +166,7 @@ export function useAsyncRetry<T>(
         setIsRetrying(false);
         return result;
       } catch (_err) {
-        lastError = err instanceof Error ? err : new Error(String(err));
+        lastError = _error instanceof Error ? _error : new Error(String(_error));
 
         // Check if we should retry this error
         if (!shouldRetry(lastError)) {
