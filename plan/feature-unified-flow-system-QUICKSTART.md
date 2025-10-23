@@ -12,35 +12,35 @@ Create a new file in `templates/flows/`:
 
 ```typescript
 // templates/flows/my-first-flow.ts
-import { FlowConfig } from '@/types/flow';
+import { FlowConfig } from "@/types/flow";
 
 export const myFirstFlow: FlowConfig = {
-  id: 'my-first-flow',
-  title: 'My First Flow',
-  version: '1.0',
-  
-  progressIndicator: 'dots',
+  id: "my-first-flow",
+  title: "My First Flow",
+  version: "1.0",
+
+  progressIndicator: "dots",
   showHeader: true,
-  
+
   steps: [
     {
-      id: 'welcome',
-      type: 'display',
-      title: 'Welcome!',
-      subtitle: 'Let\'s get started',
-      description: 'This is your first flow.',
+      id: "welcome",
+      type: "display",
+      title: "Welcome!",
+      subtitle: "Let's get started",
+      description: "This is your first flow."
     },
     {
-      id: 'done',
-      type: 'display',
-      title: 'All Done!',
-      subtitle: 'That was easy',
+      id: "done",
+      type: "display",
+      title: "All Done!",
+      subtitle: "That was easy",
       primaryButton: {
-        label: 'Finish',
-        action: 'complete',
-      },
-    },
-  ],
+        label: "Finish",
+        action: "complete"
+      }
+    }
+  ]
 };
 ```
 
@@ -48,19 +48,14 @@ export const myFirstFlow: FlowConfig = {
 
 ```tsx
 // app/my-flow/index.tsx
-import { FlowContainer } from '@/components/flow/flow-container';
-import { myFirstFlow } from '@/templates/flows/my-first-flow';
-import { useRouter } from 'expo-router';
+import { FlowContainer } from "@/components/flow/flow-container";
+import { myFirstFlow } from "@/templates/flows/my-first-flow";
+import { useRouter } from "expo-router";
 
 export default function MyFlowScreen() {
   const router = useRouter();
 
-  return (
-    <FlowContainer
-      flow={myFirstFlow}
-      onComplete={() => router.back()}
-    />
-  );
+  return <FlowContainer flow={myFirstFlow} onComplete={() => router.back()} />;
 }
 ```
 
@@ -166,27 +161,27 @@ You now have a working multi-step flow.
 
 ```typescript
 {
-  id: string;                    // Unique flow identifier
-  title: string;                 // Flow title
-  version: string;               // Flow version
-  progressIndicator: 'dots' | 'stepper' | 'bar' | 'none';
-  showHeader: boolean;           // Show/hide header
-  showSkip: boolean;             // Show/hide skip button
-  persistState: boolean;         // Enable state persistence
+  id: string; // Unique flow identifier
+  title: string; // Flow title
+  version: string; // Flow version
+  progressIndicator: "dots" | "stepper" | "bar" | "none";
+  showHeader: boolean; // Show/hide header
+  showSkip: boolean; // Show/hide skip button
+  persistState: boolean; // Enable state persistence
 }
 ```
 
 ### Step Types
 
-| Type | Purpose | Example Use Case |
-|------|---------|------------------|
-| `display` | Show information | Welcome screens, feature introductions |
-| `form` | Collect input | Registration, settings |
-| `selection` | Choose options | Theme selection, preferences |
-| `permission` | Request permissions | Notifications, location |
-| `verification` | Verify codes | Email/phone verification |
-| `action` | Execute actions | Enable biometrics, sync data |
-| `custom` | Custom component | Special requirements |
+| Type           | Purpose             | Example Use Case                       |
+| -------------- | ------------------- | -------------------------------------- |
+| `display`      | Show information    | Welcome screens, feature introductions |
+| `form`         | Collect input       | Registration, settings                 |
+| `selection`    | Choose options      | Theme selection, preferences           |
+| `permission`   | Request permissions | Notifications, location                |
+| `verification` | Verify codes        | Email/phone verification               |
+| `action`       | Execute actions     | Enable biometrics, sync data           |
+| `custom`       | Custom component    | Special requirements                   |
 
 ---
 
@@ -329,7 +324,7 @@ previous();
 skip();
 
 // Jump to specific step
-jumpTo('step-3');
+jumpTo("step-3");
 ```
 
 ---
@@ -345,7 +340,7 @@ const { data, updateData } = useFlowEngine(flow);
 console.log(data.email);
 
 // Update data
-updateData({ email: 'user@example.com' });
+updateData({ email: "user@example.com" });
 ```
 
 ### Form Submission
@@ -423,7 +418,7 @@ updateData({ email: 'user@example.com' });
 ### Manual Persistence
 
 ```typescript
-const { saveState, loadState, clearState } = useFlowPersistence('my-flow');
+const { saveState, loadState, clearState } = useFlowPersistence("my-flow");
 
 // Save current state
 await saveState(currentData);
@@ -575,16 +570,19 @@ All flow components automatically use your app's theme:
 ### Common Issues
 
 **Flow not progressing?**
+
 - Check validation rules
 - Ensure required fields are filled
 - Check console for errors
 
 **State not persisting?**
+
 - Enable `persistState: true`
 - Ensure unique flow ID
 - Check AsyncStorage permissions
 
 **Custom step not rendering?**
+
 - Verify component import
 - Check step type is 'custom'
 - Ensure component prop is passed
@@ -613,6 +611,7 @@ All flow components automatically use your app's theme:
 ---
 
 **Need Help?**
+
 - Check the documentation in `docs/FLOW_SYSTEM_GUIDE.md`
 - Look at example flows in `templates/flows/`
 - Review test cases in `tests/flow/`

@@ -21,9 +21,9 @@ import { WelcomeSlide } from '@/components/onboarding/welcome';
 import { ThemedPressable } from '@/components/themed-pressable';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { useTimeout } from '@/hooks/timing/use-timeout';
 import { useOnboarding } from '@/hooks/use-onboarding-provider';
 import { useThemeColors } from '@/hooks/use-theme-colors';
-import { useTimeout } from '@/hooks/timing/use-timeout';
 
 const SLIDES = [
   { key: 'welcome' },
@@ -49,19 +49,11 @@ export default function Onboarding() {
   const colors = useThemeColors();
   const { width } = useWindowDimensions();
   const { top, bottom } = useSafeAreaInsets();
-  
+
   // Timeout hooks for slide transition animations
-  const forwardTransitionTimeout = useTimeout(
-    () => setSlideTransitioning(false),
-    400,
-    { immediate: false }
-  );
-  
-  const backwardTransitionTimeout = useTimeout(
-    () => setSlideTransitioning(false),
-    350,
-    { immediate: false }
-  );
+  const forwardTransitionTimeout = useTimeout(() => setSlideTransitioning(false), 400, { immediate: false });
+
+  const backwardTransitionTimeout = useTimeout(() => setSlideTransitioning(false), 350, { immediate: false });
 
   // Enhanced Animation values
   const slideProgress = useSharedValue(0);

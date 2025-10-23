@@ -69,20 +69,16 @@ function DeleteItemButton({ itemId, onDelete }: Props) {
   const alert = useAlert();
 
   const handleDelete = () => {
-    alert.show(
-      "Delete Item",
-      "Are you sure you want to delete this item? This action cannot be undone.",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          style: "destructive", // Red button with heavy haptic
-          onPress: async () => {
-            await onDelete(itemId);
-          }
+    alert.show("Delete Item", "Are you sure you want to delete this item? This action cannot be undone.", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive", // Red button with heavy haptic
+        onPress: async () => {
+          await onDelete(itemId);
         }
-      ]
-    );
+      }
+    ]);
   };
 
   return (
@@ -176,24 +172,16 @@ All confirmation dialogs follow the same structure:
 
 ```tsx
 // Destructive confirmation
-alert.show(
-  "Delete Photo",
-  "Are you sure you want to delete this photo? This cannot be undone.",
-  [
-    { text: "Cancel", style: "cancel" },
-    { text: "Delete", style: "destructive" } // Red button
-  ]
-);
+alert.show("Delete Photo", "Are you sure you want to delete this photo? This cannot be undone.", [
+  { text: "Cancel", style: "cancel" },
+  { text: "Delete", style: "destructive" } // Red button
+]);
 
 // Warning confirmation
-alert.show(
-  "Unsaved Changes",
-  "You have unsaved changes. Do you want to discard them?",
-  [
-    { text: "Keep Editing", style: "cancel" },
-    { text: "Discard", style: "destructive" }
-  ]
-);
+alert.show("Unsaved Changes", "You have unsaved changes. Do you want to discard them?", [
+  { text: "Keep Editing", style: "cancel" },
+  { text: "Discard", style: "destructive" }
+]);
 ```
 
 #### Touch Target Consistency
@@ -989,15 +977,8 @@ import { ValidationConstants, ValidationMessages } from "@/constants";
 
 const schema = z.object({
   email: z.string().email(ValidationMessages.EMAIL_INVALID),
-  password: z
-    .string()
-    .min(
-      ValidationConstants.PASSWORD_MIN_LENGTH,
-      ValidationMessages.PASSWORD_TOO_SHORT
-    ),
-  age: z
-    .number()
-    .min(ValidationConstants.MIN_AGE, ValidationMessages.AGE_TOO_LOW)
+  password: z.string().min(ValidationConstants.PASSWORD_MIN_LENGTH, ValidationMessages.PASSWORD_TOO_SHORT),
+  age: z.number().min(ValidationConstants.MIN_AGE, ValidationMessages.AGE_TOO_LOW)
 });
 ```
 

@@ -38,13 +38,7 @@
     "ol_multi": 1
   },
   "MD033": {
-    "allowed_elements": [
-      "details",
-      "summary",
-      "br",
-      "sub",
-      "sup"
-    ]
+    "allowed_elements": ["details", "summary", "br", "sub", "sup"]
   },
   "MD034": false,
   "MD040": false,

@@ -3,8 +3,8 @@
  * Determines device category (phone, tablet, desktop) based on screen dimensions
  */
 
-import { Platform, useWindowDimensions } from 'react-native';
 import { useMemo } from 'react';
+import { Platform, useWindowDimensions } from 'react-native';
 
 export type DeviceCategory = 'phone' | 'tablet' | 'desktop';
 
@@ -80,10 +80,7 @@ export function useDeviceCategory(): UseDeviceCategoryReturn {
 
     // Phone subcategories
     const isSmallPhone = category === 'phone' && width < DEVICE_BREAKPOINTS.smallPhone;
-    const isMediumPhone =
-      category === 'phone' &&
-      width >= DEVICE_BREAKPOINTS.smallPhone &&
-      width < DEVICE_BREAKPOINTS.mediumPhone;
+    const isMediumPhone = category === 'phone' && width >= DEVICE_BREAKPOINTS.smallPhone && width < DEVICE_BREAKPOINTS.mediumPhone;
     const isLargePhone = category === 'phone' && width >= DEVICE_BREAKPOINTS.mediumPhone;
 
     // Compact vs Expanded (useful for adaptive UI)

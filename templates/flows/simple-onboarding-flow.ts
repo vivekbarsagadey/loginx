@@ -1,6 +1,6 @@
 /**
  * Simple Onboarding Flow Template
- * 
+ *
  * A basic 3-step onboarding flow demonstrating the flow system
  */
 
@@ -11,12 +11,12 @@ export const simpleOnboardingFlow: FlowConfig = {
   id: 'simple-onboarding',
   title: 'Welcome to LoginX',
   version: '1.0',
-  
+
   progressIndicator: 'dots',
   showHeader: true,
   showSkip: true,
   persistState: false,
-  
+
   steps: [
     {
       id: 'welcome',
@@ -26,7 +26,7 @@ export const simpleOnboardingFlow: FlowConfig = {
       description: 'LoginX provides enterprise-grade security with a beautiful user experience.',
       skippable: false,
     },
-    
+
     {
       id: 'features',
       type: 'display',
@@ -51,7 +51,7 @@ export const simpleOnboardingFlow: FlowConfig = {
       ],
       skippable: true,
     },
-    
+
     {
       id: 'completion',
       type: 'display',
@@ -64,12 +64,12 @@ export const simpleOnboardingFlow: FlowConfig = {
       },
     },
   ],
-  
+
   onComplete: async (data) => {
     await AsyncStorage.setItem('onboarding_completed', 'true');
     return { success: true };
   },
-  
+
   analytics: {
     trackStepView: true,
     trackCompletion: true,

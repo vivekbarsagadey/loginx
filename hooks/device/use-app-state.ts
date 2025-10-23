@@ -87,13 +87,9 @@ export interface UseAppStateOptions {
  *   }
  * }, [isActive]);
  */
-export function useAppState(
-  options: UseAppStateOptions = {}
-): AppStateStatus {
+export function useAppState(options: UseAppStateOptions = {}): AppStateStatus {
   const { onForeground, onBackground, onChange } = options;
-  const [appState, setAppState] = useState<AppStateStatus>(
-    AppState.currentState
-  );
+  const [appState, setAppState] = useState<AppStateStatus>(AppState.currentState);
   const previousState = useRef<AppStateStatus>(AppState.currentState);
 
   useEffect(() => {
@@ -102,18 +98,12 @@ export function useAppState(
       onChange?.(nextAppState);
 
       // Detect transitions
-      if (
-        previousState.current.match(/inactive|background/) &&
-        nextAppState === 'active'
-      ) {
+      if (previousState.current.match(/inactive|background/) && nextAppState === 'active') {
         // App came to foreground
         onForeground?.();
       }
 
-      if (
-        previousState.current === 'active' &&
-        nextAppState.match(/inactive|background/)
-      ) {
+      if (previousState.current === 'active' && nextAppState.match(/inactive|background/)) {
         // App went to background
         onBackground?.();
       }

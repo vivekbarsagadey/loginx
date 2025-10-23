@@ -4,8 +4,8 @@ version: 1.0
 date_created: 2025-10-20
 last_updated: 2025-10-23
 owner: Vivek Barsagadey
-status: 'Completed'
-tags: ['refactor', 'bug-fix', 'code-quality', 'type-safety', 'dependencies']
+status: "Completed"
+tags: ["refactor", "bug-fix", "code-quality", "type-safety", "dependencies"]
 ---
 
 # Introduction
@@ -74,120 +74,120 @@ This implementation plan addressed **103 code quality issues** discovered during
 
 **GOAL-001**: Eliminate all `any` type violations and establish proper type safety throughout the codebase
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-001 | Fix 10 `any` types in `hooks/use-flow-validation.ts` - Create proper validation types | ⏭️ | N/A - Already fixed |
-| TASK-002 | Fix 4 `any` types in `hooks/use-flow-state.ts` - Use `FlowData` type properly | ⏭️ | N/A - Already fixed |
-| TASK-003 | Fix 4 `any` types in `hooks/use-flow-engine.ts` - Define proper option types | ⏭️ | N/A - Already fixed |
-| TASK-004 | Fix 4 `any` types in `hooks/async/use-fetch.ts` - Create generic fetch types | ✅ | 2025-10-20 |
-| TASK-005 | Fix 5 `any` types in `hooks/auth/use-registration-state.ts` - Type registration data | ⏭️ | N/A - Already fixed |
-| TASK-006 | Fix 3 `any` types in `hooks/use-flow-navigation.ts` - Type navigation parameters | ⏭️ | N/A - Already fixed |
-| TASK-007 | Fix 2 `any` types in `hooks/device/use-battery.ts` - Type battery status properly | ⏭️ | N/A - Already fixed |
-| TASK-008 | Fix 3 `any` types in `hooks/device/use-geolocation.ts` - Use proper Geolocation types | ⏭️ | N/A - Already fixed |
-| TASK-009 | Fix 1 `any` type in `hooks/device/use-share.ts` - Type share options | ⏭️ | N/A - Already fixed |
-| TASK-010 | Fix 9 `any` types in test files - Create proper test utility types | ⏭️ | N/A - Already fixed |
-| TASK-011 | Fix remaining 7 `any` types across other files | ⏭️ | N/A - Already fixed |
+| Task     | Description                                                                           | Completed | Date                |
+| -------- | ------------------------------------------------------------------------------------- | --------- | ------------------- |
+| TASK-001 | Fix 10 `any` types in `hooks/use-flow-validation.ts` - Create proper validation types | ⏭️        | N/A - Already fixed |
+| TASK-002 | Fix 4 `any` types in `hooks/use-flow-state.ts` - Use `FlowData` type properly         | ⏭️        | N/A - Already fixed |
+| TASK-003 | Fix 4 `any` types in `hooks/use-flow-engine.ts` - Define proper option types          | ⏭️        | N/A - Already fixed |
+| TASK-004 | Fix 4 `any` types in `hooks/async/use-fetch.ts` - Create generic fetch types          | ✅        | 2025-10-20          |
+| TASK-005 | Fix 5 `any` types in `hooks/auth/use-registration-state.ts` - Type registration data  | ⏭️        | N/A - Already fixed |
+| TASK-006 | Fix 3 `any` types in `hooks/use-flow-navigation.ts` - Type navigation parameters      | ⏭️        | N/A - Already fixed |
+| TASK-007 | Fix 2 `any` types in `hooks/device/use-battery.ts` - Type battery status properly     | ⏭️        | N/A - Already fixed |
+| TASK-008 | Fix 3 `any` types in `hooks/device/use-geolocation.ts` - Use proper Geolocation types | ⏭️        | N/A - Already fixed |
+| TASK-009 | Fix 1 `any` type in `hooks/device/use-share.ts` - Type share options                  | ⏭️        | N/A - Already fixed |
+| TASK-010 | Fix 9 `any` types in test files - Create proper test utility types                    | ⏭️        | N/A - Already fixed |
+| TASK-011 | Fix remaining 7 `any` types across other files                                        | ⏭️        | N/A - Already fixed |
 
 ### Phase 2: Unused Variables Cleanup
 
 **GOAL-002**: Remove or properly prefix all unused variables to improve code clarity and pass linting
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-012 | Fix unused `useState` import in `hooks/use-flow-engine.ts` (line 11) | ⏭️ | N/A - Already fixed |
-| TASK-013 | Fix unused `resetState` in `hooks/use-flow-engine.ts` (line 91) - Remove or implement | ⏭️ | N/A - Already fixed |
-| TASK-014 | Fix unused `StepConfig` import in `hooks/use-flow-validation.ts` (line 8) | ⏭️ | N/A - Already fixed |
-| TASK-015 | Prefix 6 unused `error` catches in `hooks/auth/` files with `_error` | ⏭️ | N/A - Already fixed |
-| TASK-016 | Fix unused `User` import in `hooks/auth/use-registration-state.ts` (line 11) | ⏭️ | N/A - Already fixed |
-| TASK-017 | Fix unused `error` in `hooks/device/use-battery.ts` (line 127) | ⏭️ | N/A - Already fixed |
-| TASK-018 | Fix unused `handlePress` in `hooks/ui/use-click-outside.ts` (line 79) | ⏭️ | N/A - Already fixed |
-| TASK-019 | Fix unused `error` in `hooks/ui/use-long-press.ts` (line 157) | ⏭️ | N/A - Already fixed |
-| TASK-020 | Fix unused `error` in `hooks/utility/use-notification-count.tsx` (line 23) | ⏭️ | N/A - Already fixed |
-| TASK-021 | Fix unused `data` param in `templates/flows/simple-onboarding-flow.ts` (line 68) | ⏭️ | N/A - Already fixed |
-| TASK-022 | Fix 5 unused variables in test files | ⏭️ | N/A - Already fixed |
+| Task     | Description                                                                           | Completed | Date                |
+| -------- | ------------------------------------------------------------------------------------- | --------- | ------------------- |
+| TASK-012 | Fix unused `useState` import in `hooks/use-flow-engine.ts` (line 11)                  | ⏭️        | N/A - Already fixed |
+| TASK-013 | Fix unused `resetState` in `hooks/use-flow-engine.ts` (line 91) - Remove or implement | ⏭️        | N/A - Already fixed |
+| TASK-014 | Fix unused `StepConfig` import in `hooks/use-flow-validation.ts` (line 8)             | ⏭️        | N/A - Already fixed |
+| TASK-015 | Prefix 6 unused `error` catches in `hooks/auth/` files with `_error`                  | ⏭️        | N/A - Already fixed |
+| TASK-016 | Fix unused `User` import in `hooks/auth/use-registration-state.ts` (line 11)          | ⏭️        | N/A - Already fixed |
+| TASK-017 | Fix unused `error` in `hooks/device/use-battery.ts` (line 127)                        | ⏭️        | N/A - Already fixed |
+| TASK-018 | Fix unused `handlePress` in `hooks/ui/use-click-outside.ts` (line 79)                 | ⏭️        | N/A - Already fixed |
+| TASK-019 | Fix unused `error` in `hooks/ui/use-long-press.ts` (line 157)                         | ⏭️        | N/A - Already fixed |
+| TASK-020 | Fix unused `error` in `hooks/utility/use-notification-count.tsx` (line 23)            | ⏭️        | N/A - Already fixed |
+| TASK-021 | Fix unused `data` param in `templates/flows/simple-onboarding-flow.ts` (line 68)      | ⏭️        | N/A - Already fixed |
+| TASK-022 | Fix 5 unused variables in test files                                                  | ⏭️        | N/A - Already fixed |
 
 ### Phase 3: Missing Dependencies Resolution
 
 **GOAL-003**: Resolve all missing dependencies and broken imports
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-023 | Install `expo-battery` package: `pnpm add expo-battery` | ⏭️ | N/A - Already installed |
-| TASK-024 | Fix `nosql-injection-guard` import in `tests/security/injection-attacks.test.ts` | ⏭️ | N/A - Already fixed |
-| TASK-025 | Verify all import paths resolve correctly across the project | ✅ | 2025-10-20 |
-| TASK-026 | Update package.json if any dependencies are outdated | ✅ | 2025-10-20 |
+| Task     | Description                                                                      | Completed | Date                    |
+| -------- | -------------------------------------------------------------------------------- | --------- | ----------------------- |
+| TASK-023 | Install `expo-battery` package: `pnpm add expo-battery`                          | ⏭️        | N/A - Already installed |
+| TASK-024 | Fix `nosql-injection-guard` import in `tests/security/injection-attacks.test.ts` | ⏭️        | N/A - Already fixed     |
+| TASK-025 | Verify all import paths resolve correctly across the project                     | ✅        | 2025-10-20              |
+| TASK-026 | Update package.json if any dependencies are outdated                             | ✅        | 2025-10-20              |
 
 ### Phase 4: React Hook Dependency Fixes (Priority 2)
 
 **GOAL-004**: Fix all missing dependencies in useEffect, useCallback, and useMemo hooks
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-027 | Fix missing `countdownInterval` in `app/(auth)/otp-login.tsx` (line 74) | ✅ | 2025-10-20 |
-| TASK-028 | Fix missing `countdownInterval` in `app/(auth)/verify-phone.tsx` (line 56) | ✅ | 2025-10-20 |
-| TASK-029 | Fix 2 missing dependencies in `components/ui/success-animation.tsx` (lines 158, 254) | ✅ | 2025-10-20 |
-| TASK-030 | Fix missing `config` dependency in `hooks/use-flow-engine.ts` (lines 137, 299) | ⏭️ | N/A - Already fixed |
-| TASK-031 | Fix missing `checkRateLimit` in `hooks/auth/use-security-settings.tsx` (line 377) | ⏭️ | N/A - Already fixed |
-| TASK-032 | Fix missing dependencies in `hooks/layout/use-media-query.ts` (line 133) | ⏭️ | N/A - Already fixed |
-| TASK-033 | Fix 3 missing dependencies in `hooks/utility/use-infinite-scroll.ts` (line 202) | ⏭️ | N/A - Already fixed |
-| TASK-034 | Fix 2 missing dependencies in `hooks/utility/use-search.ts` (lines 196, 205) | ⏭️ | N/A - Already fixed |
+| Task     | Description                                                                          | Completed | Date                |
+| -------- | ------------------------------------------------------------------------------------ | --------- | ------------------- |
+| TASK-027 | Fix missing `countdownInterval` in `app/(auth)/otp-login.tsx` (line 74)              | ✅        | 2025-10-20          |
+| TASK-028 | Fix missing `countdownInterval` in `app/(auth)/verify-phone.tsx` (line 56)           | ✅        | 2025-10-20          |
+| TASK-029 | Fix 2 missing dependencies in `components/ui/success-animation.tsx` (lines 158, 254) | ✅        | 2025-10-20          |
+| TASK-030 | Fix missing `config` dependency in `hooks/use-flow-engine.ts` (lines 137, 299)       | ⏭️        | N/A - Already fixed |
+| TASK-031 | Fix missing `checkRateLimit` in `hooks/auth/use-security-settings.tsx` (line 377)    | ⏭️        | N/A - Already fixed |
+| TASK-032 | Fix missing dependencies in `hooks/layout/use-media-query.ts` (line 133)             | ⏭️        | N/A - Already fixed |
+| TASK-033 | Fix 3 missing dependencies in `hooks/utility/use-infinite-scroll.ts` (line 202)      | ⏭️        | N/A - Already fixed |
+| TASK-034 | Fix 2 missing dependencies in `hooks/utility/use-search.ts` (lines 196, 205)         | ⏭️        | N/A - Already fixed |
 
 ### Phase 5: Import Style Modernization
 
 **GOAL-005**: Convert all require() to ES6 imports and properly type imports
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-035 | Convert 4 `require()` in `app/_layout.tsx` to ES6 imports (lines 270, 272, 287, 289) | ✅ | 2025-10-20 |
-| TASK-036 | Convert `require()` in `hooks/async/use-async-error-handler.ts` (line 121) | ⏭️ | N/A - Already fixed |
-| TASK-037 | Convert `require()` in `hooks/auth/use-registration-flow.ts` (line 80) | ⏭️ | N/A - Already fixed |
-| TASK-038 | Convert 6 `require()` in `hooks/auth/use-registration-state.ts` (lines 200-205) | ⏭️ | N/A - Already fixed |
-| TASK-039 | Add `import type` for `AppStateStatus` in `hooks/device/use-app-state.ts` (line 11) | ⏭️ | N/A - Already fixed |
-| TASK-040 | Add `import type` in `hooks/use-flow-persistence.ts` (line 9) | ⏭️ | N/A - Already fixed |
-| TASK-041 | Add `import type` in `hooks/use-flow-state.ts` (line 9) | ⏭️ | N/A - Already fixed |
-| TASK-042 | Add `import type` in `templates/flows/simple-onboarding-flow.ts` (line 7) | ⏭️ | N/A - Already fixed |
+| Task     | Description                                                                          | Completed | Date                |
+| -------- | ------------------------------------------------------------------------------------ | --------- | ------------------- |
+| TASK-035 | Convert 4 `require()` in `app/_layout.tsx` to ES6 imports (lines 270, 272, 287, 289) | ✅        | 2025-10-20          |
+| TASK-036 | Convert `require()` in `hooks/async/use-async-error-handler.ts` (line 121)           | ⏭️        | N/A - Already fixed |
+| TASK-037 | Convert `require()` in `hooks/auth/use-registration-flow.ts` (line 80)               | ⏭️        | N/A - Already fixed |
+| TASK-038 | Convert 6 `require()` in `hooks/auth/use-registration-state.ts` (lines 200-205)      | ⏭️        | N/A - Already fixed |
+| TASK-039 | Add `import type` for `AppStateStatus` in `hooks/device/use-app-state.ts` (line 11)  | ⏭️        | N/A - Already fixed |
+| TASK-040 | Add `import type` in `hooks/use-flow-persistence.ts` (line 9)                        | ⏭️        | N/A - Already fixed |
+| TASK-041 | Add `import type` in `hooks/use-flow-state.ts` (line 9)                              | ⏭️        | N/A - Already fixed |
+| TASK-042 | Add `import type` in `templates/flows/simple-onboarding-flow.ts` (line 7)            | ⏭️        | N/A - Already fixed |
 
 ### Phase 6: Code Style Improvements (Priority 3)
 
 **GOAL-006**: Improve code readability with consistent formatting
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-043 | Add curly braces to 3 conditionals in `hooks/device/use-geolocation.ts` | ⏭️ | N/A - Already fixed |
-| TASK-044 | Add curly braces to 2 conditionals in `hooks/utility/use-counter.ts` | ⏭️ | N/A - Already fixed |
-| TASK-045 | Add curly braces to 4 conditionals in `hooks/utility/use-list.ts` | ⏭️ | N/A - Already fixed |
-| TASK-046 | Remove trivial type annotation in `hooks/use-flow-persistence.ts` (line 58) | ⏭️ | N/A - Already fixed |
-| TASK-047 | Remove trivial type annotation in `hooks/utility/use-counter.ts` (line 103) | ⏭️ | N/A - Already fixed |
-| TASK-048 | Remove trivial type annotation in `hooks/utility/use-toggle.ts` (line 37) | ⏭️ | N/A - Already fixed |
-| TASK-049 | Fix import sorting in `hooks/device/use-app-state.ts` (line 10) | ⏭️ | N/A - Already fixed |
-| TASK-050 | Fix import sorting in `hooks/use-flow-state.ts` (line 8) | ⏭️ | N/A - Already fixed |
-| TASK-051 | Fix import sorting in `hooks/utility/use-error-handler.tsx` (line 1) | ⏭️ | N/A - Already fixed |
-| TASK-052 | Remove unused eslint-disable in `functions/src/index.ts` (line 212) | ⏭️ | N/A - Already fixed |
+| Task     | Description                                                                 | Completed | Date                |
+| -------- | --------------------------------------------------------------------------- | --------- | ------------------- |
+| TASK-043 | Add curly braces to 3 conditionals in `hooks/device/use-geolocation.ts`     | ⏭️        | N/A - Already fixed |
+| TASK-044 | Add curly braces to 2 conditionals in `hooks/utility/use-counter.ts`        | ⏭️        | N/A - Already fixed |
+| TASK-045 | Add curly braces to 4 conditionals in `hooks/utility/use-list.ts`           | ⏭️        | N/A - Already fixed |
+| TASK-046 | Remove trivial type annotation in `hooks/use-flow-persistence.ts` (line 58) | ⏭️        | N/A - Already fixed |
+| TASK-047 | Remove trivial type annotation in `hooks/utility/use-counter.ts` (line 103) | ⏭️        | N/A - Already fixed |
+| TASK-048 | Remove trivial type annotation in `hooks/utility/use-toggle.ts` (line 37)   | ⏭️        | N/A - Already fixed |
+| TASK-049 | Fix import sorting in `hooks/device/use-app-state.ts` (line 10)             | ⏭️        | N/A - Already fixed |
+| TASK-050 | Fix import sorting in `hooks/use-flow-state.ts` (line 8)                    | ⏭️        | N/A - Already fixed |
+| TASK-051 | Fix import sorting in `hooks/utility/use-error-handler.tsx` (line 1)        | ⏭️        | N/A - Already fixed |
+| TASK-052 | Remove unused eslint-disable in `functions/src/index.ts` (line 212)         | ⏭️        | N/A - Already fixed |
 
 ### Phase 7: Documentation Fixes
 
 **GOAL-007**: Fix all markdown linting issues in documentation
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-053 | Fix 38 markdown issues in `PHASE-3-COMPLETION-REPORT.md` | ⏭️ | N/A - Already fixed |
-| TASK-054 | Run `pnpm lint:md:fix` to auto-fix markdown formatting | ⏭️ | N/A - Already fixed |
-| TASK-055 | Manually review and fix remaining markdown issues | ⏭️ | N/A - Already fixed |
+| Task     | Description                                              | Completed | Date                |
+| -------- | -------------------------------------------------------- | --------- | ------------------- |
+| TASK-053 | Fix 38 markdown issues in `PHASE-3-COMPLETION-REPORT.md` | ⏭️        | N/A - Already fixed |
+| TASK-054 | Run `pnpm lint:md:fix` to auto-fix markdown formatting   | ⏭️        | N/A - Already fixed |
+| TASK-055 | Manually review and fix remaining markdown issues        | ⏭️        | N/A - Already fixed |
 
 ### Phase 8: Testing & Validation
 
 **GOAL-008**: Ensure all fixes pass validation and don't break existing functionality
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-056 | Run `pnpm type-check` to verify TypeScript compilation | ✅ | 2025-10-20 |
-| TASK-057 | Run `pnpm lint` to verify all ESLint issues resolved | ✅ | 2025-10-20 |
-| TASK-058 | Run `pnpm test` to ensure no tests broken | ⚠️ | 2025-10-20 |
-| TASK-059 | Run `pnpm test:security` to verify security tests pass | ⚠️ | 2025-10-20 |
-| TASK-060 | Run `pnpm test:performance` to verify performance tests pass | ⚠️ | 2025-10-20 |
-| TASK-061 | Run `pnpm validate` for full validation suite | ✅ | 2025-10-20 |
-| TASK-062 | Manual testing of critical flows (auth, registration, onboarding) | ✅ | 2025-10-20 |
-| TASK-063 | Review git diff for unintended changes | ✅ | 2025-10-20 |
+| Task     | Description                                                       | Completed | Date       |
+| -------- | ----------------------------------------------------------------- | --------- | ---------- |
+| TASK-056 | Run `pnpm type-check` to verify TypeScript compilation            | ✅        | 2025-10-20 |
+| TASK-057 | Run `pnpm lint` to verify all ESLint issues resolved              | ✅        | 2025-10-20 |
+| TASK-058 | Run `pnpm test` to ensure no tests broken                         | ⚠️        | 2025-10-20 |
+| TASK-059 | Run `pnpm test:security` to verify security tests pass            | ⚠️        | 2025-10-20 |
+| TASK-060 | Run `pnpm test:performance` to verify performance tests pass      | ⚠️        | 2025-10-20 |
+| TASK-061 | Run `pnpm validate` for full validation suite                     | ✅        | 2025-10-20 |
+| TASK-062 | Manual testing of critical flows (auth, registration, onboarding) | ✅        | 2025-10-20 |
+| TASK-063 | Review git diff for unintended changes                            | ✅        | 2025-10-20 |
 
 **Note**: Tests have pre-existing Jest configuration issues unrelated to code quality fixes.
 
@@ -204,6 +204,7 @@ This implementation plan addressed **103 code quality issues** discovered during
 ### Chosen Approach Rationale
 
 The systematic phase-by-phase approach was chosen because:
+
 1. Allows for incremental progress with validation at each stage
 2. Prioritizes critical issues (type safety) over style issues
 3. Each phase can be committed independently for easy rollback
@@ -423,6 +424,7 @@ pnpm dlx depcheck
 **Completion Status**: ✅ **100% COMPLETED**
 
 ### Final Results
+
 - ✅ **0 ESLint errors** (down from 79)
 - ✅ **0 ESLint warnings** (down from 24)
 - ✅ **0 TypeScript compilation errors** (down from 19)
@@ -431,6 +433,7 @@ pnpm dlx depcheck
 - ✅ **Proper React Hook dependencies**
 
 ### Key Achievements
+
 1. **Fixed 6 React Hook dependency warnings** - Prevents stale closures and memory leaks
 2. **Converted 4 require() to ES6 imports** - Better tree-shaking and type safety
 3. **Fixed 18 NodeJS.Timeout type errors** - Cross-platform compatibility
@@ -438,6 +441,7 @@ pnpm dlx depcheck
 5. **Excluded scripts from React Native type checking** - Proper separation of concerns
 
 ### Files Modified
+
 - `app/(auth)/otp-login.tsx`
 - `app/(auth)/verify-phone.tsx`
 - `components/ui/success-animation.tsx`
@@ -453,6 +457,7 @@ pnpm dlx depcheck
 **Total**: 11 files modified
 
 ### Documentation
+
 Detailed completion report available at: `CODE_QUALITY_FIXES_COMPLETION_REPORT.md`
 
 ---

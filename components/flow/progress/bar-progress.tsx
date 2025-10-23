@@ -2,9 +2,9 @@
  * Bar Progress Indicator
  */
 
+import { useThemeColors } from '@/hooks/use-theme-colors';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useThemeColors } from '@/hooks/use-theme-colors';
 
 interface BarProgressProps {
   currentStep: number;

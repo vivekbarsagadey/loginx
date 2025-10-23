@@ -12,9 +12,4 @@
  * NOTE: useDebouncedCallback and useThrottledCallback have been moved to hooks/timing/
  */
 
-export {
-    useBatchedState,
-    useCallbackRef, useDeepCallback, useIsMounted, usePrevious,
-    useUpdateEffect
-} from './use-optimized-callback';
-
+export { useBatchedState, useCallbackRef, useDeepCallback, useIsMounted, usePrevious, useUpdateEffect } from './use-optimized-callback';

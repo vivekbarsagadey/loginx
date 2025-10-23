@@ -19,9 +19,7 @@ jest.mock('@/utils/local-first', () => ({
   setData: jest.fn(() => Promise.resolve()),
 }));
 
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <SettingsProvider>{children}</SettingsProvider>
-);
+const wrapper = ({ children }: { children: React.ReactNode }) => <SettingsProvider>{children}</SettingsProvider>;
 
 describe('SettingsProvider', () => {
   beforeEach(() => {
@@ -53,7 +51,7 @@ describe('SettingsProvider', () => {
       });
 
       const updates = { pushEnabled: true };
-      
+
       // Call update
       await result.current.updateNotifications(updates);
 
@@ -71,7 +69,7 @@ describe('SettingsProvider', () => {
       });
 
       const updates = { biometricEnabled: true };
-      
+
       await result.current.updateSecurity(updates);
 
       expect(result.current.security.biometricEnabled).toBe(true);
@@ -87,7 +85,7 @@ describe('SettingsProvider', () => {
       });
 
       const updates = { textSize: 'large' as const };
-      
+
       await result.current.updateApp(updates);
 
       expect(result.current.app.textSize).toBe('large');
@@ -103,7 +101,7 @@ describe('SettingsProvider', () => {
       });
 
       const updates = { shareUsageData: false };
-      
+
       await result.current.updatePrivacy(updates);
 
       expect(result.current.privacy.shareUsageData).toBe(false);

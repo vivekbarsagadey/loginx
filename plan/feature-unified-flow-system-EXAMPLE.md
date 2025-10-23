@@ -18,89 +18,89 @@ A simple 4-step onboarding flow with welcome, features, permissions, and complet
 
 ```typescript
 // templates/flows/onboarding-flow.ts
-import { FlowConfig } from '@/types/flow';
+import { FlowConfig } from "@/types/flow";
 
 export const onboardingFlow: FlowConfig = {
-  id: 'app-onboarding',
-  title: 'Welcome to LoginX',
-  version: '1.0',
-  
+  id: "app-onboarding",
+  title: "Welcome to LoginX",
+  version: "1.0",
+
   // Visual configuration
-  progressIndicator: 'dots',
+  progressIndicator: "dots",
   showHeader: true,
   showSkip: true,
-  
+
   // Steps configuration
   steps: [
     {
-      id: 'welcome',
-      type: 'display',
-      title: 'Welcome to LoginX',
-      subtitle: 'Secure authentication made simple',
-      description: 'LoginX provides enterprise-grade security with a beautiful user experience.',
-      image: require('@/assets/images/onboarding-welcome.png'),
-      skippable: false,
+      id: "welcome",
+      type: "display",
+      title: "Welcome to LoginX",
+      subtitle: "Secure authentication made simple",
+      description: "LoginX provides enterprise-grade security with a beautiful user experience.",
+      image: require("@/assets/images/onboarding-welcome.png"),
+      skippable: false
     },
     {
-      id: 'features',
-      type: 'display',
-      title: 'Key Features',
-      subtitle: 'Everything you need for secure authentication',
+      id: "features",
+      type: "display",
+      title: "Key Features",
+      subtitle: "Everything you need for secure authentication",
       content: [
         {
-          icon: 'shield-checkmark',
-          title: 'Multi-Factor Authentication',
-          description: 'Add an extra layer of security with 2FA',
+          icon: "shield-checkmark",
+          title: "Multi-Factor Authentication",
+          description: "Add an extra layer of security with 2FA"
         },
         {
-          icon: 'finger-print',
-          title: 'Biometric Login',
-          description: 'Use Face ID or fingerprint for quick access',
+          icon: "finger-print",
+          title: "Biometric Login",
+          description: "Use Face ID or fingerprint for quick access"
         },
         {
-          icon: 'lock-closed',
-          title: 'End-to-End Encryption',
-          description: 'Your data is always encrypted and secure',
-        },
+          icon: "lock-closed",
+          title: "End-to-End Encryption",
+          description: "Your data is always encrypted and secure"
+        }
       ],
-      skippable: true,
+      skippable: true
     },
     {
-      id: 'permissions',
-      type: 'permission',
-      title: 'Enable Notifications',
-      subtitle: 'Stay informed about your account',
-      description: 'We\'ll notify you about login attempts and security alerts.',
-      permissions: ['notifications'],
-      icon: 'notifications',
-      skippable: true,
+      id: "permissions",
+      type: "permission",
+      title: "Enable Notifications",
+      subtitle: "Stay informed about your account",
+      description: "We'll notify you about login attempts and security alerts.",
+      permissions: ["notifications"],
+      icon: "notifications",
+      skippable: true
     },
     {
-      id: 'completion',
-      type: 'display',
-      title: 'You\'re All Set!',
-      subtitle: 'Let\'s get started',
-      description: 'Your account is ready. Tap below to start using LoginX.',
-      image: require('@/assets/images/onboarding-complete.png'),
+      id: "completion",
+      type: "display",
+      title: "You're All Set!",
+      subtitle: "Let's get started",
+      description: "Your account is ready. Tap below to start using LoginX.",
+      image: require("@/assets/images/onboarding-complete.png"),
       primaryButton: {
-        label: 'Get Started',
-        action: 'complete',
-      },
-    },
+        label: "Get Started",
+        action: "complete"
+      }
+    }
   ],
-  
+
   // Completion handler
   onComplete: async (data) => {
-    await AsyncStorage.setItem('onboarding_completed', 'true');
+    await AsyncStorage.setItem("onboarding_completed", "true");
     return { success: true };
   },
-  
+
   // Analytics
   analytics: {
     trackStepView: true,
     trackCompletion: true,
-    trackAbandonment: true,
-  },
+    trackAbandonment: true
+  }
 };
 ```
 
@@ -108,24 +108,18 @@ export const onboardingFlow: FlowConfig = {
 
 ```tsx
 // app/onboarding/index.tsx
-import { FlowContainer } from '@/components/flow/flow-container';
-import { onboardingFlow } from '@/templates/flows/onboarding-flow';
-import { useRouter } from 'expo-router';
+import { FlowContainer } from "@/components/flow/flow-container";
+import { onboardingFlow } from "@/templates/flows/onboarding-flow";
+import { useRouter } from "expo-router";
 
 export default function OnboardingScreen() {
   const router = useRouter();
 
   const handleComplete = () => {
-    router.replace('/(tabs)');
+    router.replace("/(tabs)");
   };
 
-  return (
-    <FlowContainer
-      flow={onboardingFlow}
-      onComplete={handleComplete}
-      onSkip={handleComplete}
-    />
-  );
+  return <FlowContainer flow={onboardingFlow} onComplete={handleComplete} onSkip={handleComplete} />;
 }
 ```
 
@@ -137,178 +131,176 @@ A comprehensive registration flow with form validation and conditional steps.
 
 ```typescript
 // templates/flows/registration-flow.ts
-import { FlowConfig } from '@/types/flow';
-import { z } from 'zod';
+import { FlowConfig } from "@/types/flow";
+import { z } from "zod";
 
-const registrationSchema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
-  email: z.string().email('Please enter a valid email'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-  confirmPassword: z.string(),
-  phoneNumber: z.string().optional(),
-  acceptTerms: z.boolean().refine((val) => val === true, {
-    message: 'You must accept the terms',
-  }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Passwords do not match',
-  path: ['confirmPassword'],
-});
+const registrationSchema = z
+  .object({
+    firstName: z.string().min(1, "First name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    email: z.string().email("Please enter a valid email"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string(),
+    phoneNumber: z.string().optional(),
+    acceptTerms: z.boolean().refine((val) => val === true, {
+      message: "You must accept the terms"
+    })
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"]
+  });
 
 export const registrationFlow: FlowConfig = {
-  id: 'user-registration',
-  title: 'Create Account',
-  version: '2.0',
-  
-  progressIndicator: 'stepper',
+  id: "user-registration",
+  title: "Create Account",
+  version: "2.0",
+
+  progressIndicator: "stepper",
   showHeader: true,
   persistState: true,
-  
+
   steps: [
     {
-      id: 'personal-info',
-      type: 'form',
-      title: 'Personal Information',
-      subtitle: 'Tell us about yourself',
+      id: "personal-info",
+      type: "form",
+      title: "Personal Information",
+      subtitle: "Tell us about yourself",
       fields: [
         {
-          name: 'firstName',
-          label: 'First Name',
-          type: 'text',
+          name: "firstName",
+          label: "First Name",
+          type: "text",
           required: true,
-          autoComplete: 'given-name',
+          autoComplete: "given-name"
         },
         {
-          name: 'lastName',
-          label: 'Last Name',
-          type: 'text',
+          name: "lastName",
+          label: "Last Name",
+          type: "text",
           required: true,
-          autoComplete: 'family-name',
+          autoComplete: "family-name"
         },
         {
-          name: 'photoURL',
-          label: 'Profile Photo',
-          type: 'image-upload',
-          optional: true,
-        },
+          name: "photoURL",
+          label: "Profile Photo",
+          type: "image-upload",
+          optional: true
+        }
       ],
       validationSchema: registrationSchema.pick({
         firstName: true,
-        lastName: true,
-      }),
+        lastName: true
+      })
     },
     {
-      id: 'account-security',
-      type: 'form',
-      title: 'Account Security',
-      subtitle: 'Create your secure credentials',
+      id: "account-security",
+      type: "form",
+      title: "Account Security",
+      subtitle: "Create your secure credentials",
       fields: [
         {
-          name: 'email',
-          label: 'Email Address',
-          type: 'email',
+          name: "email",
+          label: "Email Address",
+          type: "email",
           required: true,
-          autoComplete: 'email',
+          autoComplete: "email"
         },
         {
-          name: 'password',
-          label: 'Password',
-          type: 'password',
+          name: "password",
+          label: "Password",
+          type: "password",
           required: true,
           showStrengthMeter: true,
-          autoComplete: 'new-password',
+          autoComplete: "new-password"
         },
         {
-          name: 'confirmPassword',
-          label: 'Confirm Password',
-          type: 'password',
+          name: "confirmPassword",
+          label: "Confirm Password",
+          type: "password",
           required: true,
-          autoComplete: 'new-password',
-        },
+          autoComplete: "new-password"
+        }
       ],
       validationSchema: registrationSchema.pick({
         email: true,
         password: true,
-        confirmPassword: true,
-      }),
+        confirmPassword: true
+      })
     },
     {
-      id: 'phone-number',
-      type: 'form',
-      title: 'Phone Number',
-      subtitle: 'Add your phone for account recovery',
-      description: 'Optional but recommended for account security',
+      id: "phone-number",
+      type: "form",
+      title: "Phone Number",
+      subtitle: "Add your phone for account recovery",
+      description: "Optional but recommended for account security",
       fields: [
         {
-          name: 'phoneNumber',
-          label: 'Phone Number',
-          type: 'phone',
-          optional: true,
-        },
+          name: "phoneNumber",
+          label: "Phone Number",
+          type: "phone",
+          optional: true
+        }
       ],
-      skippable: true,
+      skippable: true
     },
     {
-      id: 'terms-acceptance',
-      type: 'form',
-      title: 'Terms & Privacy',
-      subtitle: 'Review and accept our policies',
+      id: "terms-acceptance",
+      type: "form",
+      title: "Terms & Privacy",
+      subtitle: "Review and accept our policies",
       fields: [
         {
-          name: 'acceptTerms',
-          label: 'I accept the Terms of Service and Privacy Policy',
-          type: 'checkbox',
+          name: "acceptTerms",
+          label: "I accept the Terms of Service and Privacy Policy",
+          type: "checkbox",
           required: true,
           links: [
-            { text: 'Terms of Service', href: '/terms' },
-            { text: 'Privacy Policy', href: '/privacy' },
-          ],
-        },
+            { text: "Terms of Service", href: "/terms" },
+            { text: "Privacy Policy", href: "/privacy" }
+          ]
+        }
       ],
       validationSchema: registrationSchema.pick({
-        acceptTerms: true,
-      }),
+        acceptTerms: true
+      })
     },
     {
-      id: 'verify-email',
-      type: 'verification',
-      title: 'Verify Your Email',
-      subtitle: 'Check your inbox',
-      description: 'We sent a verification code to {{email}}',
-      verificationType: 'email',
+      id: "verify-email",
+      type: "verification",
+      title: "Verify Your Email",
+      subtitle: "Check your inbox",
+      description: "We sent a verification code to {{email}}",
+      verificationType: "email",
       codeLength: 6,
-      resendInterval: 60,
-    },
+      resendInterval: 60
+    }
   ],
-  
+
   // Navigation rules
   navigation: {
     allowBack: true,
     confirmExit: true,
-    exitMessage: 'Are you sure? Your progress will be lost.',
+    exitMessage: "Are you sure? Your progress will be lost."
   },
-  
+
   // Form submission
   onSubmit: async (data) => {
-    const { user } = await createUserWithEmailAndPassword(
-      auth,
-      data.email,
-      data.password
-    );
-    
+    const { user } = await createUserWithEmailAndPassword(auth, data.email, data.password);
+
     await createUserProfile(user.uid, {
       displayName: `${data.firstName} ${data.lastName}`,
       email: data.email,
-      photoURL: data.photoURL,
+      photoURL: data.photoURL
     });
-    
+
     return { success: true, userId: user.uid };
   },
-  
+
   onComplete: async (data) => {
     // Navigate to email verification
     return { success: true };
-  },
+  }
 };
 ```
 
@@ -320,136 +312,136 @@ A wizard-style flow for setting up 2FA with conditional steps.
 
 ```typescript
 // templates/flows/2fa-setup-flow.ts
-import { FlowConfig } from '@/types/flow';
+import { FlowConfig } from "@/types/flow";
 
 export const twoFactorSetupFlow: FlowConfig = {
-  id: '2fa-setup',
-  title: 'Set Up Two-Factor Authentication',
-  version: '1.0',
-  
-  progressIndicator: 'bar',
-  
+  id: "2fa-setup",
+  title: "Set Up Two-Factor Authentication",
+  version: "1.0",
+
+  progressIndicator: "bar",
+
   steps: [
     {
-      id: 'intro',
-      type: 'display',
-      title: 'Secure Your Account',
-      subtitle: 'Add an extra layer of protection',
+      id: "intro",
+      type: "display",
+      title: "Secure Your Account",
+      subtitle: "Add an extra layer of protection",
       content: [
         {
-          icon: 'shield',
-          title: 'Enhanced Security',
-          description: 'Protect your account from unauthorized access',
+          icon: "shield",
+          title: "Enhanced Security",
+          description: "Protect your account from unauthorized access"
         },
         {
-          icon: 'time',
-          title: 'Quick Setup',
-          description: 'Takes less than 2 minutes to complete',
-        },
-      ],
+          icon: "time",
+          title: "Quick Setup",
+          description: "Takes less than 2 minutes to complete"
+        }
+      ]
     },
     {
-      id: 'method-selection',
-      type: 'selection',
-      title: 'Choose Your Method',
-      subtitle: 'Select how you want to receive codes',
+      id: "method-selection",
+      type: "selection",
+      title: "Choose Your Method",
+      subtitle: "Select how you want to receive codes",
       options: [
         {
-          id: 'app',
-          icon: 'phone-portrait',
-          title: 'Authenticator App',
-          description: 'Use Google Authenticator, Authy, or similar',
-          recommended: true,
+          id: "app",
+          icon: "phone-portrait",
+          title: "Authenticator App",
+          description: "Use Google Authenticator, Authy, or similar",
+          recommended: true
         },
         {
-          id: 'sms',
-          icon: 'chatbubble',
-          title: 'SMS',
-          description: 'Receive codes via text message',
+          id: "sms",
+          icon: "chatbubble",
+          title: "SMS",
+          description: "Receive codes via text message"
         },
         {
-          id: 'email',
-          icon: 'mail',
-          title: 'Email',
-          description: 'Receive codes via email',
-        },
+          id: "email",
+          icon: "mail",
+          title: "Email",
+          description: "Receive codes via email"
+        }
       ],
-      required: true,
+      required: true
     },
     {
-      id: 'app-setup',
-      type: 'action',
-      title: 'Scan QR Code',
-      subtitle: 'Open your authenticator app',
-      description: 'Scan this QR code with your authenticator app',
+      id: "app-setup",
+      type: "action",
+      title: "Scan QR Code",
+      subtitle: "Open your authenticator app",
+      description: "Scan this QR code with your authenticator app",
       action: async () => {
         const secret = await generateTOTPSecret();
         return { qrCode: generateQRCode(secret) };
       },
       // Only show if user selected 'app' method
-      condition: (data) => data.methodSelection === 'app',
+      condition: (data) => data.methodSelection === "app"
     },
     {
-      id: 'sms-setup',
-      type: 'form',
-      title: 'Phone Verification',
-      subtitle: 'Enter your phone number',
+      id: "sms-setup",
+      type: "form",
+      title: "Phone Verification",
+      subtitle: "Enter your phone number",
       fields: [
         {
-          name: 'phoneNumber',
-          label: 'Phone Number',
-          type: 'phone',
-          required: true,
-        },
+          name: "phoneNumber",
+          label: "Phone Number",
+          type: "phone",
+          required: true
+        }
       ],
-      condition: (data) => data.methodSelection === 'sms',
+      condition: (data) => data.methodSelection === "sms"
     },
     {
-      id: 'verify-code',
-      type: 'verification',
-      title: 'Verify Setup',
-      subtitle: 'Enter the 6-digit code',
-      description: 'Enter the code from your authenticator app',
-      verificationType: 'totp',
-      codeLength: 6,
+      id: "verify-code",
+      type: "verification",
+      title: "Verify Setup",
+      subtitle: "Enter the 6-digit code",
+      description: "Enter the code from your authenticator app",
+      verificationType: "totp",
+      codeLength: 6
     },
     {
-      id: 'backup-codes',
-      type: 'display',
-      title: 'Save Backup Codes',
-      subtitle: 'Keep these in a safe place',
-      description: 'Use these codes if you lose access to your device',
+      id: "backup-codes",
+      type: "display",
+      title: "Save Backup Codes",
+      subtitle: "Keep these in a safe place",
+      description: "Use these codes if you lose access to your device",
       content: {
-        type: 'backup-codes',
-        codes: [], // Generated dynamically
+        type: "backup-codes",
+        codes: [] // Generated dynamically
       },
       primaryButton: {
-        label: 'Download Codes',
-        action: 'download',
+        label: "Download Codes",
+        action: "download"
       },
       secondaryButton: {
-        label: 'I\'ve Saved Them',
-        action: 'continue',
-      },
+        label: "I've Saved Them",
+        action: "continue"
+      }
     },
     {
-      id: 'success',
-      type: 'display',
-      title: 'You\'re Protected!',
-      subtitle: '2FA is now active',
-      description: 'Your account is now more secure',
-      icon: 'checkmark-circle',
+      id: "success",
+      type: "display",
+      title: "You're Protected!",
+      subtitle: "2FA is now active",
+      description: "Your account is now more secure",
+      icon: "checkmark-circle",
       primaryButton: {
-        label: 'Done',
-        action: 'complete',
-      },
-    },
+        label: "Done",
+        action: "complete"
+      }
+    }
   ],
-  
+
   onComplete: async (data) => {
     await enable2FA(data);
     return { success: true };
-  },
+  }
 };
 ```
 
@@ -461,75 +453,75 @@ A tutorial flow with interactive elements and progress tracking.
 
 ```typescript
 // templates/flows/tutorial-flow.ts
-import { FlowConfig } from '@/types/flow';
+import { FlowConfig } from "@/types/flow";
 
 export const appTutorialFlow: FlowConfig = {
-  id: 'app-tutorial',
-  title: 'Quick Tutorial',
-  version: '1.0',
-  
-  progressIndicator: 'dots',
+  id: "app-tutorial",
+  title: "Quick Tutorial",
+  version: "1.0",
+
+  progressIndicator: "dots",
   showSkip: true,
-  
+
   steps: [
     {
-      id: 'navigation',
-      type: 'interactive',
-      title: 'Navigation Basics',
-      subtitle: 'Swipe or tap to navigate',
+      id: "navigation",
+      type: "interactive",
+      title: "Navigation Basics",
+      subtitle: "Swipe or tap to navigate",
       media: {
-        type: 'animation',
-        source: require('@/assets/animations/swipe-gesture.json'),
+        type: "animation",
+        source: require("@/assets/animations/swipe-gesture.json")
       },
       interactions: [
         {
-          type: 'gesture',
-          gesture: 'swipe-right',
-          target: 'screen',
-          feedback: 'Great! You can swipe between screens',
-        },
-      ],
+          type: "gesture",
+          gesture: "swipe-right",
+          target: "screen",
+          feedback: "Great! You can swipe between screens"
+        }
+      ]
     },
     {
-      id: 'menu-access',
-      type: 'interactive',
-      title: 'Access the Menu',
-      subtitle: 'Tap the menu icon',
-      highlightElement: 'menu-button',
+      id: "menu-access",
+      type: "interactive",
+      title: "Access the Menu",
+      subtitle: "Tap the menu icon",
+      highlightElement: "menu-button",
       interactions: [
         {
-          type: 'tap',
-          target: 'menu-button',
-          feedback: 'Perfect! The menu gives you quick access to all features',
-        },
-      ],
+          type: "tap",
+          target: "menu-button",
+          feedback: "Perfect! The menu gives you quick access to all features"
+        }
+      ]
     },
     {
-      id: 'search',
-      type: 'interactive',
-      title: 'Search',
-      subtitle: 'Try searching for something',
-      highlightElement: 'search-bar',
+      id: "search",
+      type: "interactive",
+      title: "Search",
+      subtitle: "Try searching for something",
+      highlightElement: "search-bar",
       interactions: [
         {
-          type: 'input',
-          target: 'search-bar',
-          feedback: 'Nice! You can search across all your data',
-        },
-      ],
+          type: "input",
+          target: "search-bar",
+          feedback: "Nice! You can search across all your data"
+        }
+      ]
     },
     {
-      id: 'completion',
-      type: 'display',
-      title: 'You\'re Ready!',
-      subtitle: 'Start exploring',
-      description: 'You can replay this tutorial anytime from Settings',
+      id: "completion",
+      type: "display",
+      title: "You're Ready!",
+      subtitle: "Start exploring",
+      description: "You can replay this tutorial anytime from Settings",
       primaryButton: {
-        label: 'Start Using App',
-        action: 'complete',
-      },
-    },
-  ],
+        label: "Start Using App",
+        action: "complete"
+      }
+    }
+  ]
 };
 ```
 
@@ -541,145 +533,145 @@ A flow that adapts based on user input with multiple paths.
 
 ```typescript
 // templates/flows/personalization-flow.ts
-import { FlowConfig } from '@/types/flow';
+import { FlowConfig } from "@/types/flow";
 
 export const personalizationFlow: FlowConfig = {
-  id: 'personalization',
-  title: 'Personalize Your Experience',
-  version: '1.0',
-  
-  progressIndicator: 'stepper',
+  id: "personalization",
+  title: "Personalize Your Experience",
+  version: "1.0",
+
+  progressIndicator: "stepper",
   persistState: true,
-  
+
   steps: [
     {
-      id: 'user-type',
-      type: 'selection',
-      title: 'How will you use this app?',
-      subtitle: 'Select your primary use case',
+      id: "user-type",
+      type: "selection",
+      title: "How will you use this app?",
+      subtitle: "Select your primary use case",
       options: [
         {
-          id: 'personal',
-          title: 'Personal Use',
-          icon: 'person',
+          id: "personal",
+          title: "Personal Use",
+          icon: "person"
         },
         {
-          id: 'business',
-          title: 'Business',
-          icon: 'briefcase',
+          id: "business",
+          title: "Business",
+          icon: "briefcase"
         },
         {
-          id: 'team',
-          title: 'Team Collaboration',
-          icon: 'people',
-        },
+          id: "team",
+          title: "Team Collaboration",
+          icon: "people"
+        }
       ],
-      required: true,
+      required: true
     },
-    
+
     // Personal flow
     {
-      id: 'personal-interests',
-      type: 'selection',
-      title: 'What are you interested in?',
-      subtitle: 'Select all that apply',
+      id: "personal-interests",
+      type: "selection",
+      title: "What are you interested in?",
+      subtitle: "Select all that apply",
       multiple: true,
       options: [
-        { id: 'security', title: 'Security', icon: 'shield' },
-        { id: 'privacy', title: 'Privacy', icon: 'lock-closed' },
-        { id: 'convenience', title: 'Convenience', icon: 'flash' },
+        { id: "security", title: "Security", icon: "shield" },
+        { id: "privacy", title: "Privacy", icon: "lock-closed" },
+        { id: "convenience", title: "Convenience", icon: "flash" }
       ],
-      condition: (data) => data.userType === 'personal',
+      condition: (data) => data.userType === "personal"
     },
-    
+
     // Business flow
     {
-      id: 'company-size',
-      type: 'selection',
-      title: 'Company Size',
-      subtitle: 'How many employees?',
+      id: "company-size",
+      type: "selection",
+      title: "Company Size",
+      subtitle: "How many employees?",
       options: [
-        { id: 'solo', title: 'Solo' },
-        { id: 'small', title: '2-10' },
-        { id: 'medium', title: '11-50' },
-        { id: 'large', title: '50+' },
+        { id: "solo", title: "Solo" },
+        { id: "small", title: "2-10" },
+        { id: "medium", title: "11-50" },
+        { id: "large", title: "50+" }
       ],
-      condition: (data) => data.userType === 'business',
+      condition: (data) => data.userType === "business"
     },
-    
+
     // Team flow
     {
-      id: 'team-role',
-      type: 'selection',
-      title: 'Your Role',
-      subtitle: 'What\'s your position?',
+      id: "team-role",
+      type: "selection",
+      title: "Your Role",
+      subtitle: "What's your position?",
       options: [
-        { id: 'admin', title: 'Administrator' },
-        { id: 'member', title: 'Team Member' },
-        { id: 'viewer', title: 'Viewer' },
+        { id: "admin", title: "Administrator" },
+        { id: "member", title: "Team Member" },
+        { id: "viewer", title: "Viewer" }
       ],
-      condition: (data) => data.userType === 'team',
+      condition: (data) => data.userType === "team"
     },
-    
+
     // Common for all flows
     {
-      id: 'theme-preference',
-      type: 'selection',
-      title: 'Choose Your Theme',
-      subtitle: 'Pick a color scheme',
+      id: "theme-preference",
+      type: "selection",
+      title: "Choose Your Theme",
+      subtitle: "Pick a color scheme",
       options: [
-        { id: 'default', title: 'Default Blue', color: '#007AFF' },
-        { id: 'ocean', title: 'Ocean', color: '#00CED1' },
-        { id: 'sunset', title: 'Sunset', color: '#FF6347' },
-        { id: 'forest', title: 'Forest', color: '#228B22' },
-        { id: 'purple', title: 'Purple', color: '#9370DB' },
-      ],
+        { id: "default", title: "Default Blue", color: "#007AFF" },
+        { id: "ocean", title: "Ocean", color: "#00CED1" },
+        { id: "sunset", title: "Sunset", color: "#FF6347" },
+        { id: "forest", title: "Forest", color: "#228B22" },
+        { id: "purple", title: "Purple", color: "#9370DB" }
+      ]
     },
-    
+
     {
-      id: 'notifications',
-      type: 'form',
-      title: 'Notification Preferences',
-      subtitle: 'Choose what you want to hear about',
+      id: "notifications",
+      type: "form",
+      title: "Notification Preferences",
+      subtitle: "Choose what you want to hear about",
       fields: [
         {
-          name: 'security',
-          label: 'Security Alerts',
-          type: 'switch',
-          defaultValue: true,
+          name: "security",
+          label: "Security Alerts",
+          type: "switch",
+          defaultValue: true
         },
         {
-          name: 'updates',
-          label: 'Product Updates',
-          type: 'switch',
-          defaultValue: true,
+          name: "updates",
+          label: "Product Updates",
+          type: "switch",
+          defaultValue: true
         },
         {
-          name: 'tips',
-          label: 'Tips & Tricks',
-          type: 'switch',
-          defaultValue: false,
-        },
-      ],
+          name: "tips",
+          label: "Tips & Tricks",
+          type: "switch",
+          defaultValue: false
+        }
+      ]
     },
-    
+
     {
-      id: 'completion',
-      type: 'display',
-      title: 'All Set!',
-      subtitle: 'Your experience is personalized',
-      description: 'You can change these settings anytime',
+      id: "completion",
+      type: "display",
+      title: "All Set!",
+      subtitle: "Your experience is personalized",
+      description: "You can change these settings anytime",
       primaryButton: {
-        label: 'Continue',
-        action: 'complete',
-      },
-    },
+        label: "Continue",
+        action: "complete"
+      }
+    }
   ],
-  
+
   onComplete: async (data) => {
     await saveUserPreferences(data);
     return { success: true };
-  },
+  }
 };
 ```
 
@@ -691,16 +683,12 @@ Create a custom step component for unique use cases.
 
 ```tsx
 // components/flow/steps/custom-calendar-step.tsx
-import { CustomStepProps } from '@/types/flow';
-import { Calendar } from '@/components/ui/calendar';
-import { ThemedView } from '@/components/themed-view';
-import { ThemedText } from '@/components/themed-text';
+import { CustomStepProps } from "@/types/flow";
+import { Calendar } from "@/components/ui/calendar";
+import { ThemedView } from "@/components/themed-view";
+import { ThemedText } from "@/components/themed-text";
 
-export function CustomCalendarStep({ 
-  step, 
-  data, 
-  onUpdate 
-}: CustomStepProps) {
+export function CustomCalendarStep({ step, data, onUpdate }: CustomStepProps) {
   const handleDateSelect = (date: Date) => {
     onUpdate({ selectedDate: date });
   };
@@ -709,13 +697,8 @@ export function CustomCalendarStep({
     <ThemedView style={styles.container}>
       <ThemedText type="title">{step.title}</ThemedText>
       <ThemedText type="subtitle">{step.subtitle}</ThemedText>
-      
-      <Calendar
-        onDateSelect={handleDateSelect}
-        selectedDate={data.selectedDate}
-        minDate={new Date()}
-        maxDate={addMonths(new Date(), 6)}
-      />
+
+      <Calendar onDateSelect={handleDateSelect} selectedDate={data.selectedDate} minDate={new Date()} maxDate={addMonths(new Date(), 6)} />
     </ThemedView>
   );
 }
@@ -725,17 +708,17 @@ export function CustomCalendarStep({
 
 ```typescript
 const appointmentFlow: FlowConfig = {
-  id: 'book-appointment',
+  id: "book-appointment",
   steps: [
     {
-      id: 'select-date',
-      type: 'custom',
+      id: "select-date",
+      type: "custom",
       component: CustomCalendarStep,
-      title: 'Choose a Date',
-      subtitle: 'Select your preferred appointment date',
-    },
+      title: "Choose a Date",
+      subtitle: "Select your preferred appointment date"
+    }
     // ... more steps
-  ],
+  ]
 };
 ```
 

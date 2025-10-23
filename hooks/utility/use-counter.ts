@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
 
 /**
  * Configuration options for the counter hook.
@@ -34,21 +34,21 @@ export interface UseCounterReturn {
 
 /**
  * A hook for managing counter state with optional min/max bounds.
- * 
+ *
  * This hook provides a simple way to manage numeric counters with
  * increment, decrement, and reset functionality. Optionally enforce
  * minimum and maximum bounds.
- * 
+ *
  * @param initialValue - The initial counter value
  * @param options - Configuration options (min, max, step)
  * @returns Counter state and control functions
- * 
+ *
  * @example
  * ```typescript
  * // Basic counter
  * function BasicCounter() {
  *   const { count, increment, decrement, reset } = useCounter(0);
- * 
+ *
  *   return (
  *     <>
  *       <Text>Count: {count}</Text>
@@ -59,7 +59,7 @@ export interface UseCounterReturn {
  *   );
  * }
  * ```
- * 
+ *
  * @example
  * ```typescript
  * // Counter with bounds
@@ -69,7 +69,7 @@ export interface UseCounterReturn {
  *     max: 10,
  *     step: 1
  *   });
- * 
+ *
  *   return (
  *     <>
  *       <Text>Quantity: {count}</Text>
@@ -79,7 +79,7 @@ export interface UseCounterReturn {
  *   );
  * }
  * ```
- * 
+ *
  * @example
  * ```typescript
  * // Cart quantity selector
@@ -88,7 +88,7 @@ export interface UseCounterReturn {
  *     min: 1,
  *     max: 99
  *   });
- * 
+ *
  *   return (
  *     <View>
  *       <Button onPress={decrement}>-</Button>
@@ -99,17 +99,18 @@ export interface UseCounterReturn {
  * }
  * ```
  */
-export function useCounter(
-  initialValue = 0,
-  options: UseCounterOptions = {}
-): UseCounterReturn {
+export function useCounter(initialValue = 0, options: UseCounterOptions = {}): UseCounterReturn {
   const { min, max, step = 1 } = options;
 
   // Ensure initial value respects bounds
   const clamp = useCallback(
     (value: number): number => {
-      if (min !== undefined && value < min) {return min;}
-      if (max !== undefined && value > max) {return max;}
+      if (min !== undefined && value < min) {
+        return min;
+      }
+      if (max !== undefined && value > max) {
+        return max;
+      }
       return value;
     },
     [min, max]

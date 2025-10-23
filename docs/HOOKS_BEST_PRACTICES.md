@@ -26,7 +26,7 @@ const [isModalOpen, toggleModal, setModalOpen] = useToggle(false);
 // Use useCounter for numeric counters
 const [count, { increment, decrement, reset }] = useCounter(0, {
   min: 0,
-  max: 100,
+  max: 100
 });
 
 // Use useList for array state
@@ -62,18 +62,18 @@ const { data, loading, error, execute } = useAsyncOperation(
   },
   {
     onSuccess: (data) => {
-      showToast('User loaded successfully');
+      showToast("User loaded successfully");
     },
     onError: (error) => {
-      logError('Failed to load user', error);
-    },
+      logError("Failed to load user", error);
+    }
   }
 );
 
 // Use useFetch for API calls
-const { data, isLoading, refetch } = useFetch('/api/user/profile', {
+const { data, isLoading, refetch } = useFetch("/api/user/profile", {
   retry: 3,
-  retryDelay: 1000,
+  retryDelay: 1000
 });
 ```
 
@@ -106,7 +106,7 @@ const fetchData = async () => {
 // Use useTimeout for delayed actions
 const { start, cancel } = useTimeout(
   () => {
-    router.push('/home');
+    router.push("/home");
   },
   3000,
   { immediate: false }
@@ -122,12 +122,9 @@ useInterval(
 );
 
 // Use useDebouncedCallback for search
-const debouncedSearch = useDebouncedCallback(
-  (query: string) => {
-    searchAPI(query);
-  },
-  500
-);
+const debouncedSearch = useDebouncedCallback((query: string) => {
+  searchAPI(query);
+}, 500);
 ```
 
 #### ❌ DON'T: Use raw setTimeout/setInterval
@@ -138,7 +135,7 @@ useEffect(() => {
   const timer = setTimeout(() => {
     doSomething();
   }, 1000);
-  
+
   return () => clearTimeout(timer);
 }, []);
 
@@ -147,7 +144,7 @@ useEffect(() => {
   const interval = setInterval(() => {
     updateData();
   }, 5000);
-  
+
   return () => clearInterval(interval);
 }, []);
 ```
@@ -160,22 +157,22 @@ useEffect(() => {
 // Use useForm for consistent form handling
 const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useForm({
   initialValues: {
-    email: '',
-    password: '',
+    email: "",
+    password: ""
   },
   validate: (values) => {
     const errors: Record<string, string> = {};
     if (!values.email) {
-      errors.email = 'Email is required';
+      errors.email = "Email is required";
     }
     if (!values.password || values.password.length < 8) {
-      errors.password = 'Password must be at least 8 characters';
+      errors.password = "Password must be at least 8 characters";
     }
     return errors;
   },
   onSubmit: async (values) => {
     await login(values.email, values.password);
-  },
+  }
 });
 ```
 
@@ -183,14 +180,14 @@ const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useF
 
 ```typescript
 // Avoid manual form management
-const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
 const [errors, setErrors] = useState({});
 
 const handleSubmit = () => {
   const newErrors = {};
-  if (!email) newErrors.email = 'Required';
-  if (!password) newErrors.password = 'Required';
+  if (!email) newErrors.email = "Required";
+  if (!password) newErrors.password = "Required";
   setErrors(newErrors);
   // ...
 };
@@ -222,7 +219,7 @@ const { focusRef } = useAutoFocus<TextInput>({
 ```typescript
 // Avoid manual navigation without feedback
 const handleNavigate = () => {
-  router.push('/profile');
+  router.push("/profile");
 };
 
 // Avoid manual focus management
@@ -296,12 +293,12 @@ export function AppProviders({ children }: PropsWithChildren) {
 // Memoize context values
 export function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<User | null>(null);
-  
+
   const value = useMemo(() => ({
     user,
     setUser,
   }), [user]);
-  
+
   return (
     <AuthContext.Provider value={value}>
       {children}
@@ -352,7 +349,7 @@ if (isEnabled) {
 }
 
 // Wrong: Conditional hook call in loop
-items.forEach(item => {
+items.forEach((item) => {
   const itemData = useCustomHook(item.id); // ❌ Hooks in loops
 });
 ```
@@ -398,12 +395,12 @@ const fetchData = useCallback(() => {
 ```typescript
 // Anti-pattern: No cleanup
 useEffect(() => {
-  const subscription = eventEmitter.on('event', handler);
+  const subscription = eventEmitter.on("event", handler);
 }, []);
 
 // Better: Always clean up
 useEffect(() => {
-  const subscription = eventEmitter.on('event', handler);
+  const subscription = eventEmitter.on("event", handler);
   return () => {
     subscription.remove();
   };
@@ -460,32 +457,32 @@ const handleClick = () => {
 ### Unit Testing
 
 ```typescript
-import { renderHook, act, waitFor } from '@testing-library/react-native';
-import { useToggle } from '@/hooks/utility/use-toggle';
+import { renderHook, act, waitFor } from "@testing-library/react-native";
+import { useToggle } from "@/hooks/utility/use-toggle";
 
-describe('useToggle', () => {
-  it('should initialize with default value', () => {
+describe("useToggle", () => {
+  it("should initialize with default value", () => {
     const { result } = renderHook(() => useToggle(false));
     expect(result.current[0]).toBe(false);
   });
-  
-  it('should toggle value', () => {
+
+  it("should toggle value", () => {
     const { result } = renderHook(() => useToggle(false));
-    
+
     act(() => {
       result.current[1](); // toggle
     });
-    
+
     expect(result.current[0]).toBe(true);
   });
-  
-  it('should set specific value', () => {
+
+  it("should set specific value", () => {
     const { result } = renderHook(() => useToggle(false));
-    
+
     act(() => {
       result.current[2](true); // setValue
     });
-    
+
     expect(result.current[0]).toBe(true);
   });
 });
@@ -504,7 +501,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 describe('useAuth', () => {
   it('should provide auth context', () => {
     const { result } = renderHook(() => useAuth(), { wrapper });
-    
+
     expect(result.current).toHaveProperty('user');
     expect(result.current).toHaveProperty('login');
     expect(result.current).toHaveProperty('logout');
@@ -515,24 +512,24 @@ describe('useAuth', () => {
 ### Testing Async Hooks
 
 ```typescript
-import { renderHook, waitFor } from '@testing-library/react-native';
-import { useAsyncOperation } from '@/hooks/async/use-async-operation';
+import { renderHook, waitFor } from "@testing-library/react-native";
+import { useAsyncOperation } from "@/hooks/async/use-async-operation";
 
-describe('useAsyncOperation', () => {
-  it('should handle successful async operation', async () => {
-    const mockFetch = jest.fn().mockResolvedValue('data');
-    
+describe("useAsyncOperation", () => {
+  it("should handle successful async operation", async () => {
+    const mockFetch = jest.fn().mockResolvedValue("data");
+
     const { result } = renderHook(() => useAsyncOperation(mockFetch));
-    
+
     expect(result.current.loading).toBe(false);
-    
+
     result.current.execute();
-    
+
     expect(result.current.loading).toBe(true);
-    
+
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
-      expect(result.current.data).toBe('data');
+      expect(result.current.data).toBe("data");
     });
   });
 });
@@ -552,11 +549,11 @@ describe('useAsyncOperation', () => {
 // Add debug logging to hooks
 export function useCustomHook() {
   const [state, setState] = useState(initialState);
-  
+
   useEffect(() => {
     console.log('[useCustomHook] State changed:', state);
   }, [state]);
-  
+
   // ...
 }
 
@@ -565,9 +562,9 @@ import { useDebugValue } from 'react';
 
 export function useCustomHook() {
   const value = /* ... */;
-  
+
   useDebugValue(value, (v) => `Value: ${v}`);
-  
+
   return value;
 }
 ```
@@ -575,16 +572,19 @@ export function useCustomHook() {
 ### 3. Common Issues
 
 **Issue: Hook not updating**
+
 - Check dependencies in useEffect/useMemo/useCallback
 - Verify state updates are not mutating existing state
 - Ensure context provider is wrapping the component
 
 **Issue: Infinite re-renders**
+
 - Check for missing dependencies in useEffect
 - Verify callbacks are memoized
 - Check for object/array creation in render
 
 **Issue: Stale values**
+
 - Use refs for latest values in callbacks
 - Check closure scope in async operations
 - Verify dependencies are correct
@@ -620,14 +620,14 @@ When migrating, maintain backward compatibility:
 // Old API (keep for now)
 export function OldComponent() {
   const [isOpen, setIsOpen] = useState(false);
-  
+
   // ...
 }
 
 // New API (gradually adopt)
 export function NewComponent() {
   const [isOpen, toggle, setIsOpen] = useToggle(false);
-  
+
   // ...
 }
 ```

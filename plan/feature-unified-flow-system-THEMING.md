@@ -15,7 +15,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
   id: 'welcome',
   type: 'display',
   title: 'Welcome',
-  
+
   // Override theme colors for this step only
   theme: {
     backgroundColor: '#F0F9FF',
@@ -33,7 +33,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
   id: 'welcome',
   type: 'display',
   title: 'Welcome',
-  
+
   // Define multiple theme variants
   themes: {
     default: {
@@ -57,7 +57,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
       image: require('@/assets/welcome-sunset.png'),
     },
   },
-  
+
   // Active theme (can be dynamic)
   activeTheme: 'default', // or use function: (userTheme) => userTheme
 }
@@ -70,12 +70,12 @@ Every step in the flow system supports **multiple themes, images, animations, an
   id: 'welcome',
   type: 'display',
   title: 'Welcome',
-  
+
   themes: {
     light: { /* ... */ },
     dark: { /* ... */ },
   },
-  
+
   // Dynamically select theme based on user preference
   activeTheme: (flowData, appTheme) => {
     return appTheme === 'dark' ? 'dark' : 'light';
@@ -94,18 +94,18 @@ Every step in the flow system supports **multiple themes, images, animations, an
   id: 'features',
   type: 'display',
   title: 'Key Features',
-  
+
   images: {
     // Different images for different themes
     light: require('@/assets/features-light.png'),
     dark: require('@/assets/features-dark.png'),
     ocean: require('@/assets/features-ocean.png'),
-    
+
     // Responsive images for different screen sizes
     light_small: require('@/assets/features-light-sm.png'),
     light_large: require('@/assets/features-light-lg.png'),
   },
-  
+
   // Image selection logic
   getImage: (theme, screenSize) => {
     const size = screenSize.width > 768 ? 'large' : 'small';
@@ -121,7 +121,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
   id: 'tutorial',
   type: 'display',
   title: 'How It Works',
-  
+
   // Array of images for carousel/slideshow
   images: [
     {
@@ -140,7 +140,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
       theme: 'default',
     },
   ],
-  
+
   // Carousel configuration
   carousel: {
     autoPlay: true,
@@ -157,12 +157,12 @@ Every step in the flow system supports **multiple themes, images, animations, an
   id: 'loading',
   type: 'display',
   title: 'Setting Up',
-  
+
   animation: {
     source: require('@/assets/animations/setup.json'),
     autoPlay: true,
     loop: true,
-    
+
     // Multiple animation variants
     variants: {
       light: require('@/assets/animations/setup-light.json'),
@@ -182,10 +182,10 @@ Every step in the flow system supports **multiple themes, images, animations, an
 {
   id: 'welcome',
   type: 'display',
-  
+
   // Visual variant
   variant: 'hero' | 'card' | 'fullscreen' | 'minimal' | 'split',
-  
+
   variants: {
     hero: {
       layout: 'center-aligned',
@@ -224,10 +224,10 @@ Every step in the flow system supports **multiple themes, images, animations, an
 {
   id: 'profile',
   type: 'form',
-  
+
   // Form visual style
   variant: 'standard' | 'material' | 'minimal' | 'card' | 'floating',
-  
+
   variants: {
     standard: {
       inputStyle: 'outlined',
@@ -264,10 +264,10 @@ Every step in the flow system supports **multiple themes, images, animations, an
 {
   id: 'theme-selection',
   type: 'selection',
-  
+
   // Selection UI variant
   variant: 'grid' | 'list' | 'cards' | 'buttons' | 'pills',
-  
+
   variants: {
     grid: {
       columns: 2,
@@ -310,7 +310,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
   type: 'display',
   title: 'Welcome to LoginX',
   subtitle: 'Secure authentication made simple',
-  
+
   // Multiple complete themes
   themes: {
     // Default Blue Theme
@@ -337,7 +337,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
         subtitleSize: 18,
       },
     },
-    
+
     // Ocean Theme
     ocean: {
       colors: {
@@ -362,7 +362,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
         subtitleSize: 18,
       },
     },
-    
+
     // Sunset Theme
     sunset: {
       colors: {
@@ -387,7 +387,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
         subtitleSize: 18,
       },
     },
-    
+
     // Dark Theme
     dark: {
       colors: {
@@ -413,22 +413,22 @@ Every step in the flow system supports **multiple themes, images, animations, an
       },
     },
   },
-  
+
   // Dynamic theme selection
   activeTheme: (flowData, userPrefs) => {
     // Check user's app theme preference
     if (userPrefs.theme === 'dark') return 'dark';
-    
+
     // Check selected brand theme
     if (flowData.selectedTheme) return flowData.selectedTheme;
-    
+
     // Default
     return 'default';
   },
-  
+
   // Layout variant
   variant: 'hero',
-  
+
   // Content that adapts to theme
   content: [
     {
@@ -463,7 +463,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
 {
   id: 'features',
   type: 'display',
-  
+
   // Transition animations
   animations: {
     enter: {
@@ -480,7 +480,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
       duration: 200,
     },
   },
-  
+
   // Element-level animations
   elementAnimations: {
     title: {
@@ -510,7 +510,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
 {
   id: 'selection',
   type: 'selection',
-  
+
   // Interaction animations
   interactions: {
     onPress: {
@@ -542,7 +542,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
 {
   id: 'welcome',
   type: 'display',
-  
+
   // Different layouts for different screen sizes
   responsive: {
     small: {
@@ -570,7 +570,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
       spacing: 40,
     },
   },
-  
+
   // Breakpoints
   breakpoints: {
     small: 0,
@@ -587,7 +587,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
 {
   id: 'features',
   type: 'display',
-  
+
   // Different layouts for portrait vs landscape
   orientation: {
     portrait: {
@@ -614,7 +614,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
 {
   id: 'welcome',
   type: 'display',
-  
+
   themes: {
     default: { /* ... */ },
     halloween: {
@@ -638,19 +638,19 @@ Every step in the flow system supports **multiple themes, images, animations, an
       },
     },
   },
-  
+
   // Auto-select theme based on date
   activeTheme: () => {
     const now = new Date();
     const month = now.getMonth();
     const day = now.getDate();
-    
+
     // Halloween (October 15-31)
     if (month === 9 && day >= 15) return 'halloween';
-    
+
     // Christmas (December 1-31)
     if (month === 11) return 'christmas';
-    
+
     return 'default';
   },
 }
@@ -666,7 +666,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
 {
   id: 'welcome',
   type: 'display',
-  
+
   // A/B test variants
   experiments: {
     welcome_screen_test: {
@@ -690,7 +690,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
           layout: 'split',
         },
       },
-      
+
       // Variant selection logic
       selectVariant: (userId) => {
         const hash = hashUserId(userId);
@@ -698,7 +698,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
         if (hash % 3 === 1) return 'variant_a';
         return 'variant_b';
       },
-      
+
       // Track experiment results
       onComplete: (variant, data) => {
         analytics.track('experiment_complete', {
@@ -722,7 +722,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
 {
   id: 'welcome',
   type: 'display',
-  
+
   // Different branding for different clients
   brands: {
     acme: {
@@ -752,7 +752,7 @@ Every step in the flow system supports **multiple themes, images, animations, an
       },
     },
   },
-  
+
   // Select brand dynamically
   activeBrand: (flowData) => {
     return flowData.brandId || 'acme';
@@ -796,32 +796,34 @@ interface Step {
   id: string;
   type: StepType;
   title: string;
-  
+
   // Single theme override
   theme?: StepTheme;
-  
+
   // Multiple theme variants
   themes?: {
     [themeName: string]: StepTheme;
   };
-  
+
   // Active theme selector
   activeTheme?: string | ((flowData: any, userPrefs: any) => string);
-  
+
   // Visual variant
   variant?: string;
-  
+
   // Multiple visual variants
   variants?: {
     [variantName: string]: any;
   };
-  
+
   // Images
   image?: ImageSourcePropType;
-  images?: ImageSourcePropType[] | {
-    [key: string]: ImageSourcePropType;
-  };
-  
+  images?:
+    | ImageSourcePropType[]
+    | {
+        [key: string]: ImageSourcePropType;
+      };
+
   // Animations
   animation?: LottieAnimation;
   animations?: {
@@ -829,23 +831,23 @@ interface Step {
     exit?: Animation;
     [key: string]: Animation | undefined;
   };
-  
+
   // Responsive configurations
   responsive?: {
     [breakpoint: string]: Partial<Step>;
   };
-  
+
   // Orientation configurations
   orientation?: {
     portrait?: Partial<Step>;
     landscape?: Partial<Step>;
   };
-  
+
   // A/B testing
   experiments?: {
     [experimentId: string]: Experiment;
   };
-  
+
   // Brand customization
   brands?: {
     [brandId: string]: StepTheme;
@@ -859,19 +861,19 @@ interface Step {
 ```typescript
 <FlowContainer
   flow={myFlow}
-  
+
   // Global theme (can be overridden per step)
   theme="ocean"
-  
+
   // User preferences for theme selection
   userPreferences={{
     theme: 'dark',
     colorScheme: 'ocean',
   }}
-  
+
   // Brand selection
   brandId="acme"
-  
+
   // Experiment tracking
   onExperimentView={(experimentId, variant) => {
     analytics.track('experiment_view', { experimentId, variant });
@@ -885,117 +887,123 @@ interface Step {
 
 ```typescript
 export const advancedOnboardingFlow: FlowConfig = {
-  id: 'advanced-onboarding',
-  title: 'Welcome',
-  version: '2.0',
-  
+  id: "advanced-onboarding",
+  title: "Welcome",
+  version: "2.0",
+
   // Global themes for the flow
   themes: {
-    light: { /* ... */ },
-    dark: { /* ... */ },
-    ocean: { /* ... */ },
+    light: {
+      /* ... */
+    },
+    dark: {
+      /* ... */
+    },
+    ocean: {
+      /* ... */
+    }
   },
-  
+
   steps: [
     // Step 1: Hero Welcome with Multiple Themes
     {
-      id: 'welcome',
-      type: 'display',
-      title: 'Welcome to LoginX',
-      subtitle: 'Secure authentication made simple',
-      
+      id: "welcome",
+      type: "display",
+      title: "Welcome to LoginX",
+      subtitle: "Secure authentication made simple",
+
       themes: {
         light: {
           colors: {
-            background: '#F0F9FF',
-            primary: '#0EA5E9',
+            background: "#F0F9FF",
+            primary: "#0EA5E9"
           },
           images: {
-            hero: require('@/assets/onboarding/welcome-light.png'),
-          },
+            hero: require("@/assets/onboarding/welcome-light.png")
+          }
         },
         dark: {
           colors: {
-            background: '#0B1220',
-            primary: '#3B82F6',
+            background: "#0B1220",
+            primary: "#3B82F6"
           },
           images: {
-            hero: require('@/assets/onboarding/welcome-dark.png'),
-          },
+            hero: require("@/assets/onboarding/welcome-dark.png")
+          }
         },
         ocean: {
           colors: {
-            background: '#E0F2FE',
-            primary: '#0891B2',
+            background: "#E0F2FE",
+            primary: "#0891B2"
           },
           images: {
-            hero: require('@/assets/onboarding/welcome-ocean.png'),
-          },
-        },
+            hero: require("@/assets/onboarding/welcome-ocean.png")
+          }
+        }
       },
-      
-      variant: 'hero',
-      
+
+      variant: "hero",
+
       responsive: {
-        small: { variant: 'minimal' },
-        large: { variant: 'hero' },
-      },
+        small: { variant: "minimal" },
+        large: { variant: "hero" }
+      }
     },
-    
+
     // Step 2: Features with Carousel
     {
-      id: 'features',
-      type: 'display',
-      title: 'Key Features',
-      
+      id: "features",
+      type: "display",
+      title: "Key Features",
+
       images: [
         {
-          source: require('@/assets/onboarding/feature-1.png'),
-          darkSource: require('@/assets/onboarding/feature-1-dark.png'),
+          source: require("@/assets/onboarding/feature-1.png"),
+          darkSource: require("@/assets/onboarding/feature-1-dark.png")
         },
         {
-          source: require('@/assets/onboarding/feature-2.png'),
-          darkSource: require('@/assets/onboarding/feature-2-dark.png'),
+          source: require("@/assets/onboarding/feature-2.png"),
+          darkSource: require("@/assets/onboarding/feature-2-dark.png")
         },
         {
-          source: require('@/assets/onboarding/feature-3.png'),
-          darkSource: require('@/assets/onboarding/feature-3-dark.png'),
-        },
+          source: require("@/assets/onboarding/feature-3.png"),
+          darkSource: require("@/assets/onboarding/feature-3-dark.png")
+        }
       ],
-      
+
       carousel: {
         autoPlay: true,
-        interval: 3000,
-      },
+        interval: 3000
+      }
     },
-    
+
     // Step 3: Theme Selection
     {
-      id: 'theme-selection',
-      type: 'selection',
-      title: 'Choose Your Theme',
-      
-      variant: 'cards',
-      
+      id: "theme-selection",
+      type: "selection",
+      title: "Choose Your Theme",
+
+      variant: "cards",
+
       options: [
         {
-          id: 'light',
-          title: 'Light',
-          preview: require('@/assets/themes/light-preview.png'),
+          id: "light",
+          title: "Light",
+          preview: require("@/assets/themes/light-preview.png")
         },
         {
-          id: 'dark',
-          title: 'Dark',
-          preview: require('@/assets/themes/dark-preview.png'),
+          id: "dark",
+          title: "Dark",
+          preview: require("@/assets/themes/dark-preview.png")
         },
         {
-          id: 'ocean',
-          title: 'Ocean',
-          preview: require('@/assets/themes/ocean-preview.png'),
-        },
-      ],
-    },
-  ],
+          id: "ocean",
+          title: "Ocean",
+          preview: require("@/assets/themes/ocean-preview.png")
+        }
+      ]
+    }
+  ]
 };
 ```
 

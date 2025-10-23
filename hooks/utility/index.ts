@@ -25,6 +25,5 @@ export * from './use-toggle';
 
 // Advanced utilities
 export * from './use-form';
-export * from './use-search';
 export * from './use-infinite-scroll';
-
+export * from './use-search';

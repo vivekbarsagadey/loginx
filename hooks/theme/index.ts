@@ -18,4 +18,3 @@ export * from './use-theme-context';
 // use-language-provider is the main provider, use-language is standalone
 export { LanguageProvider, useLanguage } from './use-language-provider';
 export * from './use-localized-date';
-

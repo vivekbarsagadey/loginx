@@ -2,8 +2,8 @@
  * Tests for useCounter hook
  */
 
-import { act, renderHook } from '@testing-library/react-native';
 import { useCounter } from '@/hooks/utility/use-counter';
+import { act, renderHook } from '@testing-library/react-native';
 
 describe('useCounter', () => {
   describe('Initialization', () => {
@@ -330,9 +330,7 @@ describe('useCounter', () => {
 
     it('should work for page navigation', () => {
       const totalPages = 10;
-      const { result } = renderHook(() =>
-        useCounter(1, { min: 1, max: totalPages })
-      );
+      const { result } = renderHook(() => useCounter(1, { min: 1, max: totalPages }));
 
       // First page
       expect(result.current.count).toBe(1);
@@ -363,9 +361,7 @@ describe('useCounter', () => {
     });
 
     it('should work for volume control', () => {
-      const { result } = renderHook(() =>
-        useCounter(50, { min: 0, max: 100, step: 10 })
-      );
+      const { result } = renderHook(() => useCounter(50, { min: 0, max: 100, step: 10 }));
 
       // Start at 50%
       expect(result.current.count).toBe(50);

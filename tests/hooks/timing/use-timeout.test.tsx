@@ -2,8 +2,8 @@
  * Tests for useTimeout hook
  */
 
-import { _waitFor, act, renderHook } from '@testing-library/react-native';
 import { useTimeout } from '@/hooks/timing/use-timeout';
+import { act, renderHook } from '@testing-library/react-native';
 
 describe('useTimeout', () => {
   beforeEach(() => {
@@ -28,9 +28,7 @@ describe('useTimeout', () => {
 
     it('should not start timeout when immediate is false', () => {
       const callback = jest.fn();
-      const { result } = renderHook(() =>
-        useTimeout(callback, 1000, { immediate: false })
-      );
+      const { result } = renderHook(() => useTimeout(callback, 1000, { immediate: false }));
 
       expect(result.current.isPending).toBe(false);
       expect(result.current.isComplete).toBe(false);
@@ -38,9 +36,7 @@ describe('useTimeout', () => {
 
     it('should not start timeout when enabled is false', () => {
       const callback = jest.fn();
-      const { result } = renderHook(() =>
-        useTimeout(callback, 1000, { enabled: false })
-      );
+      const { result } = renderHook(() => useTimeout(callback, 1000, { enabled: false }));
 
       expect(result.current.isPending).toBe(false);
     });
@@ -97,9 +93,7 @@ describe('useTimeout', () => {
   describe('Control Methods', () => {
     it('should start timeout manually', () => {
       const callback = jest.fn();
-      const { result } = renderHook(() =>
-        useTimeout(callback, 1000, { immediate: false })
-      );
+      const { result } = renderHook(() => useTimeout(callback, 1000, { immediate: false }));
 
       expect(result.current.isPending).toBe(false);
 
@@ -197,10 +191,7 @@ describe('useTimeout', () => {
 
     it('should cancel timeout when delay changes', () => {
       const callback = jest.fn();
-      const { rerender } = renderHook(
-        ({ delay }) => useTimeout(callback, delay),
-        { initialProps: { delay: 1000 } }
-      );
+      const { rerender } = renderHook(({ delay }) => useTimeout(callback, delay), { initialProps: { delay: 1000 } });
 
       act(() => {
         jest.advanceTimersByTime(500);
@@ -238,10 +229,7 @@ describe('useTimeout', () => {
       const callback1 = jest.fn();
       const callback2 = jest.fn();
 
-      const { rerender } = renderHook(
-        ({ callback }) => useTimeout(callback, 1000),
-        { initialProps: { callback: callback1 } }
-      );
+      const { rerender } = renderHook(({ callback }) => useTimeout(callback, 1000), { initialProps: { callback: callback1 } });
 
       rerender({ callback: callback2 });
 

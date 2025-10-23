@@ -14,42 +14,42 @@ export const FIREBASE_AUTH_ERROR_MESSAGES: Record<string, string> = {
   'auth/user-disabled': i18n.t('errors.auth.userDisabled'),
   'auth/email-already-in-use': i18n.t('errors.auth.emailInUse'),
   'auth/account-exists-with-different-credential': i18n.t('errors.auth.accountExistsDifferentCredential'),
-  
+
   // Credential errors
   'auth/invalid-credential': i18n.t('errors.auth.invalidCredential'),
   'auth/wrong-password': i18n.t('errors.auth.wrongPassword'),
   'auth/invalid-email': i18n.t('errors.auth.invalidEmail'),
   'auth/invalid-password': i18n.t('errors.auth.invalidPassword'),
-  
+
   // Token/Session errors
   'auth/expired-action-code': i18n.t('errors.auth.expiredActionCode'),
   'auth/invalid-action-code': i18n.t('errors.auth.invalidActionCode'),
   'auth/user-token-expired': i18n.t('errors.auth.tokenExpired'),
   'auth/requires-recent-login': i18n.t('errors.auth.requiresRecentLogin'),
-  
+
   // Rate limiting
   'auth/too-many-requests': i18n.t('errors.auth.tooManyRequests'),
-  
+
   // Network errors
   'auth/network-request-failed': i18n.t('errors.auth.networkFailed'),
-  
+
   // Configuration errors
   'auth/invalid-api-key': i18n.t('errors.auth.invalidApiKey'),
   'auth/app-deleted': i18n.t('errors.auth.appDeleted'),
   'auth/app-not-authorized': i18n.t('errors.auth.appNotAuthorized'),
-  
+
   // Popup/Redirect errors
   'auth/popup-closed-by-user': i18n.t('errors.auth.popupClosed'),
   'auth/popup-blocked': i18n.t('errors.auth.popupBlocked'),
   'auth/redirect-cancelled-by-user': i18n.t('errors.auth.redirectCancelled'),
-  
+
   // Provider errors
   'auth/provider-already-linked': i18n.t('errors.auth.providerAlreadyLinked'),
   'auth/credential-already-in-use': i18n.t('errors.auth.credentialInUse'),
-  
+
   // Weak password
   'auth/weak-password': i18n.t('errors.auth.weakPassword'),
-  
+
   // Operation not allowed
   'auth/operation-not-allowed': i18n.t('errors.auth.operationNotAllowed'),
 };
@@ -63,15 +63,15 @@ export const FIRESTORE_ERROR_MESSAGES: Record<string, string> = {
   'already-exists': i18n.t('errors.firestore.alreadyExists'),
   'resource-exhausted': i18n.t('errors.firestore.resourceExhausted'),
   'failed-precondition': i18n.t('errors.firestore.failedPrecondition'),
-  'aborted': i18n.t('errors.firestore.aborted'),
+  aborted: i18n.t('errors.firestore.aborted'),
   'out-of-range': i18n.t('errors.firestore.outOfRange'),
-  'unimplemented': i18n.t('errors.firestore.unimplemented'),
-  'internal': i18n.t('errors.firestore.internal'),
-  'unavailable': i18n.t('errors.firestore.unavailable'),
+  unimplemented: i18n.t('errors.firestore.unimplemented'),
+  internal: i18n.t('errors.firestore.internal'),
+  unavailable: i18n.t('errors.firestore.unavailable'),
   'data-loss': i18n.t('errors.firestore.dataLoss'),
-  'unauthenticated': i18n.t('errors.firestore.unauthenticated'),
+  unauthenticated: i18n.t('errors.firestore.unauthenticated'),
   'deadline-exceeded': i18n.t('errors.firestore.deadlineExceeded'),
-  'cancelled': i18n.t('errors.firestore.cancelled'),
+  cancelled: i18n.t('errors.firestore.cancelled'),
   'invalid-argument': i18n.t('errors.firestore.invalidArgument'),
 };
 
@@ -105,17 +105,17 @@ export function getFirebaseErrorMessage(code: string): string {
   if (code in FIREBASE_AUTH_ERROR_MESSAGES) {
     return FIREBASE_AUTH_ERROR_MESSAGES[code];
   }
-  
+
   // Check Firestore errors
   if (code in FIRESTORE_ERROR_MESSAGES) {
     return FIRESTORE_ERROR_MESSAGES[code];
   }
-  
+
   // Check storage errors
   if (code in STORAGE_ERROR_MESSAGES) {
     return STORAGE_ERROR_MESSAGES[code];
   }
-  
+
   // Fallback to generic error message
   return i18n.t('errors.generic.message');
 }
@@ -124,25 +124,21 @@ export function getFirebaseErrorMessage(code: string): string {
  * Check if error code is a network-related error
  */
 export function isNetworkError(code: string): boolean {
-  return code === 'auth/network-request-failed' 
-    || code === 'unavailable' 
-    || code === 'deadline-exceeded';
+  return code === 'auth/network-request-failed' || code === 'unavailable' || code === 'deadline-exceeded';
 }
 
 /**
  * Check if error requires user re-authentication
  */
 export function requiresReauth(code: string): boolean {
-  return code === 'auth/requires-recent-login' 
-    || code === 'auth/user-token-expired';
+  return code === 'auth/requires-recent-login' || code === 'auth/user-token-expired';
 }
 
 /**
  * Check if error is due to rate limiting
  */
 export function isRateLimited(code: string): boolean {
-  return code === 'auth/too-many-requests' 
-    || code === 'resource-exhausted';
+  return code === 'auth/too-many-requests' || code === 'resource-exhausted';
 }
 
 /**

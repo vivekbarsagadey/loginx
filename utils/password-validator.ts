@@ -149,15 +149,29 @@ function calculatePasswordScore(password: string, criteria: PasswordCriteria): n
   }
 
   // Character type bonuses (10 points each, 40 total)
-  if (criteria.hasUppercase) {score += 10;}
-  if (criteria.hasLowercase) {score += 10;}
-  if (criteria.hasNumber) {score += 10;}
-  if (criteria.hasSpecialChar) {score += 10;}
+  if (criteria.hasUppercase) {
+    score += 10;
+  }
+  if (criteria.hasLowercase) {
+    score += 10;
+  }
+  if (criteria.hasNumber) {
+    score += 10;
+  }
+  if (criteria.hasSpecialChar) {
+    score += 10;
+  }
 
   // Pattern bonuses (10 points each, 30 total)
-  if (criteria.noCommonPatterns) {score += 10;}
-  if (criteria.noSequentialChars) {score += 10;}
-  if (criteria.noRepeatedChars) {score += 10;}
+  if (criteria.noCommonPatterns) {
+    score += 10;
+  }
+  if (criteria.noSequentialChars) {
+    score += 10;
+  }
+  if (criteria.noRepeatedChars) {
+    score += 10;
+  }
 
   // Ensure score is between 0 and 100
   return Math.min(100, Math.max(0, score));
@@ -169,9 +183,15 @@ function calculatePasswordScore(password: string, criteria: PasswordCriteria): n
  * @returns Strength category
  */
 function getPasswordStrength(score: number): 'weak' | 'medium' | 'strong' | 'very-strong' {
-  if (score < 40) {return 'weak';}
-  if (score < 60) {return 'medium';}
-  if (score < 80) {return 'strong';}
+  if (score < 40) {
+    return 'weak';
+  }
+  if (score < 60) {
+    return 'medium';
+  }
+  if (score < 80) {
+    return 'strong';
+  }
   return 'very-strong';
 }
 

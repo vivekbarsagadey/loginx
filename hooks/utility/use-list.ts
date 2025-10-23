@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
 
 /**
  * Return type for the useList hook.
@@ -38,30 +38,30 @@ export interface UseListReturn<T> {
 
 /**
  * A hook for managing array/list state with helpful mutation methods.
- * 
+ *
  * This hook provides a comprehensive set of array manipulation methods,
  * making it easy to manage lists without writing repetitive state updates.
- * 
+ *
  * @param initialList - The initial array value
  * @returns List state and manipulation functions
- * 
+ *
  * @example
  * ```typescript
  * // Basic list operations
  * function TodoList() {
  *   const { list, push, removeAt, clear } = useList<Todo>([]);
- * 
+ *
  *   const addTodo = (text: string) => {
  *     push({ id: Date.now(), text, completed: false });
  *   };
- * 
+ *
  *   return (
  *     <>
  *       {list.map((todo, index) => (
- *         <TodoItem 
- *           key={todo.id} 
- *           todo={todo} 
- *           onRemove={() => removeAt(index)} 
+ *         <TodoItem
+ *           key={todo.id}
+ *           todo={todo}
+ *           onRemove={() => removeAt(index)}
  *         />
  *       ))}
  *       <Button onPress={() => addTodo('New Task')}>Add</Button>
@@ -70,25 +70,25 @@ export interface UseListReturn<T> {
  *   );
  * }
  * ```
- * 
+ *
  * @example
  * ```typescript
  * // Advanced list operations
  * function ShoppingCart() {
  *   const { list, updateAt, filter, sort } = useList<CartItem>([]);
- * 
+ *
  *   const updateQuantity = (index: number, quantity: number) => {
  *     updateAt(index, { ...list[index], quantity });
  *   };
- * 
+ *
  *   const removeOutOfStock = () => {
  *     filter(item => item.inStock);
  *   };
- * 
+ *
  *   const sortByPrice = () => {
  *     sort((a, b) => a.price - b.price);
  *   };
- * 
+ *
  *   return (
  *     <>
  *       {list.map((item, index) => (
@@ -113,7 +113,9 @@ export function useList<T>(initialList: T[] = []): UseListReturn<T> {
   const pop = useCallback((): T | undefined => {
     let item: T | undefined;
     setList((prev) => {
-      if (prev.length === 0) {return prev;}
+      if (prev.length === 0) {
+        return prev;
+      }
       item = prev[prev.length - 1];
       return prev.slice(0, -1);
     });
@@ -127,7 +129,9 @@ export function useList<T>(initialList: T[] = []): UseListReturn<T> {
   const shift = useCallback((): T | undefined => {
     let item: T | undefined;
     setList((prev) => {
-      if (prev.length === 0) {return prev;}
+      if (prev.length === 0) {
+        return prev;
+      }
       item = prev[0];
       return prev.slice(1);
     });
@@ -136,7 +140,9 @@ export function useList<T>(initialList: T[] = []): UseListReturn<T> {
 
   const removeAt = useCallback((index: number) => {
     setList((prev) => {
-      if (index < 0 || index >= prev.length) {return prev;}
+      if (index < 0 || index >= prev.length) {
+        return prev;
+      }
       return [...prev.slice(0, index), ...prev.slice(index + 1)];
     });
   }, []);
@@ -144,17 +150,15 @@ export function useList<T>(initialList: T[] = []): UseListReturn<T> {
   const insertAt = useCallback((index: number, item: T) => {
     setList((prev) => {
       const clampedIndex = Math.max(0, Math.min(index, prev.length));
-      return [
-        ...prev.slice(0, clampedIndex),
-        item,
-        ...prev.slice(clampedIndex),
-      ];
+      return [...prev.slice(0, clampedIndex), item, ...prev.slice(clampedIndex)];
     });
   }, []);
 
   const updateAt = useCallback((index: number, item: T) => {
     setList((prev) => {
-      if (index < 0 || index >= prev.length) {return prev;}
+      if (index < 0 || index >= prev.length) {
+        return prev;
+      }
       const newList = [...prev];
       newList[index] = item;
       return newList;
@@ -165,12 +169,9 @@ export function useList<T>(initialList: T[] = []): UseListReturn<T> {
     setList([]);
   }, []);
 
-  const filter = useCallback(
-    (predicate: (item: T, index: number) => boolean) => {
-      setList((prev) => prev.filter(predicate));
-    },
-    []
-  );
+  const filter = useCallback((predicate: (item: T, index: number) => boolean) => {
+    setList((prev) => prev.filter(predicate));
+  }, []);
 
   const sort = useCallback((comparator?: (a: T, b: T) => number) => {
     setList((prev) => {

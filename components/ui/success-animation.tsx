@@ -1,7 +1,7 @@
 /**
  * SuccessAnimation Component
  * Displays animated success feedback with checkmark, scale, and optional celebration effects
- * 
+ *
  * @example
  * ```tsx
  * <SuccessAnimation
@@ -21,17 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Animated, {
-  Easing,
-  FadeIn,
-  FadeOut,
-  useAnimatedStyle,
-  useSharedValue,
-  withDelay,
-  withSequence,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { Easing, FadeIn, FadeOut, useAnimatedStyle, useSharedValue, withDelay, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 
 export interface SuccessAnimationProps {
   /**
@@ -81,16 +71,7 @@ export interface SuccessAnimationProps {
  * SuccessAnimation Component
  * Animated success feedback with checkmark and optional celebration
  */
-export function SuccessAnimation({
-  visible,
-  message,
-  title = 'Success!',
-  duration = 2500,
-  onComplete,
-  showConfetti = false,
-  icon = 'checkmark-circle',
-  iconColor,
-}: SuccessAnimationProps) {
+export function SuccessAnimation({ visible, message, title = 'Success!', duration = 2500, onComplete, showConfetti = false, icon = 'checkmark-circle', iconColor }: SuccessAnimationProps) {
   const successColor = useThemeColor({}, 'success');
   const backgroundColor = useThemeColor({}, 'surface');
   const textColor = useThemeColor({}, 'text');
@@ -108,10 +89,7 @@ export function SuccessAnimation({
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
       // Icon entrance animation
-      scale.value = withSequence(
-        withSpring(1.2, { damping: 10, stiffness: 100 }),
-        withSpring(1, { damping: 15, stiffness: 150 })
-      );
+      scale.value = withSequence(withSpring(1.2, { damping: 10, stiffness: 100 }), withSpring(1, { damping: 15, stiffness: 150 }));
 
       rotation.value = withTiming(0, {
         duration: AnimationDurations.MEDIUM,
@@ -124,16 +102,7 @@ export function SuccessAnimation({
 
       // Confetti animation
       if (showConfetti) {
-        confettiScale.value = withSequence(
-          withDelay(
-            100,
-            withSpring(1, { damping: 12, stiffness: 120 })
-          ),
-          withDelay(
-            duration - 500,
-            withTiming(0, { duration: AnimationDurations.MEDIUM })
-          )
-        );
+        confettiScale.value = withSequence(withDelay(100, withSpring(1, { damping: 12, stiffness: 120 })), withDelay(duration - 500, withTiming(0, { duration: AnimationDurations.MEDIUM })));
       }
 
       // Auto-hide after duration
@@ -141,7 +110,7 @@ export function SuccessAnimation({
         scale.value = withTiming(0, { duration: AnimationDurations.FAST });
         iconOpacity.value = withTiming(0, { duration: AnimationDurations.FAST });
         rotation.value = withTiming(180, { duration: AnimationDurations.FAST });
-        
+
         setTimeout(() => {
           onComplete?.();
         }, AnimationDurations.FAST);
@@ -158,10 +127,7 @@ export function SuccessAnimation({
   }, [visible, duration, onComplete, showConfetti, scale, rotation, iconOpacity, confettiScale]);
 
   const iconAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { scale: scale.value },
-      { rotate: `${rotation.value}deg` },
-    ],
+    transform: [{ scale: scale.value }, { rotate: `${rotation.value}deg` }],
     opacity: iconOpacity.value,
   }));
 
@@ -176,34 +142,19 @@ export function SuccessAnimation({
 
   return (
     <View style={styles.overlay} pointerEvents="none">
-      <Animated.View
-        style={[
-          styles.container,
-          { backgroundColor, shadowColor },
-        ]}
-        entering={FadeIn.duration(AnimationDurations.FAST)}
-        exiting={FadeOut.duration(AnimationDurations.FAST)}
-      >
+      <Animated.View style={[styles.container, { backgroundColor, shadowColor }]} entering={FadeIn.duration(AnimationDurations.FAST)} exiting={FadeOut.duration(AnimationDurations.FAST)}>
         {/* Confetti effect (if enabled) */}
         {showConfetti && (
           <Animated.View style={[styles.confettiContainer, confettiAnimatedStyle]}>
             {[...Array(12)].map((_, i) => (
-              <ConfettiParticle
-                key={i}
-                index={i}
-                color={i % 3 === 0 ? successColor : i % 3 === 1 ? iconColor || successColor : '#FFC107'}
-              />
+              <ConfettiParticle key={i} index={i} color={i % 3 === 0 ? successColor : i % 3 === 1 ? iconColor || successColor : '#FFC107'} />
             ))}
           </Animated.View>
         )}
 
         {/* Success icon */}
         <Animated.View style={iconAnimatedStyle}>
-          <Ionicons
-            name={icon}
-            size={80}
-            color={iconColor || successColor}
-          />
+          <Ionicons name={icon} size={80} color={iconColor || successColor} />
         </Animated.View>
 
         {/* Success message */}
@@ -232,45 +183,24 @@ function ConfettiParticle({ index, color }: { index: number; color: string }) {
   useEffect(() => {
     const angle = (index * 30) % 360;
     const distance = 80 + Math.random() * 40;
-    
-    translateX.value = withSpring(
-      Math.cos((angle * Math.PI) / 180) * distance,
-      { damping: 15 }
-    );
-    
-    translateY.value = withSpring(
-      Math.sin((angle * Math.PI) / 180) * distance,
-      { damping: 15 }
-    );
-    
+
+    translateX.value = withSpring(Math.cos((angle * Math.PI) / 180) * distance, { damping: 15 });
+
+    translateY.value = withSpring(Math.sin((angle * Math.PI) / 180) * distance, { damping: 15 });
+
     rotate.value = withTiming(360 + Math.random() * 360, {
       duration: 1000 + Math.random() * 500,
     });
-    
-    opacity.value = withDelay(
-      800,
-      withTiming(0, { duration: 500 })
-    );
+
+    opacity.value = withDelay(800, withTiming(0, { duration: 500 }));
   }, [index, translateX, translateY, rotate, opacity]);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: translateX.value },
-      { translateY: translateY.value },
-      { rotate: `${rotate.value}deg` },
-    ],
+    transform: [{ translateX: translateX.value }, { translateY: translateY.value }, { rotate: `${rotate.value}deg` }],
     opacity: opacity.value,
   }));
 
-  return (
-    <Animated.View
-      style={[
-        styles.confetti,
-        { backgroundColor: color },
-        animatedStyle,
-      ]}
-    />
-  );
+  return <Animated.View style={[styles.confetti, { backgroundColor: color }, animatedStyle]} />;
 }
 
 const styles = StyleSheet.create({

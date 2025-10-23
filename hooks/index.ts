@@ -41,4 +41,3 @@ export * from './timing';
 
 // Future categories will be exported here when implemented:
 // export * from './adapters';  // Phase 8: LoginX-Specific Integrations
-

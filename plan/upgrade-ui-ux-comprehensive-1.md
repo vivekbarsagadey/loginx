@@ -150,12 +150,12 @@ This implementation plan addresses 23 identified UI/UX improvement opportunities
 | Task     | Description                                                                | Completed | Date       |
 | -------- | -------------------------------------------------------------------------- | --------- | ---------- |
 | TASK-036 | Create StepIndicator component with 3 variants (dots, numbers, horizontal) | ✅        | 2025-10-23 |
-| TASK-037 | Add step names/labels to registration progress                             |           |      |
+| TASK-037 | Add step names/labels to registration progress                             |           |            |
 | TASK-038 | Show checkmarks on completed steps                                         | ✅        | 2025-10-23 |
 | TASK-039 | Calculate and display estimated time remaining                             | ✅        | 2025-10-23 |
 | TASK-040 | Allow navigating back to previous steps                                    | ✅        | 2025-10-23 |
-| TASK-041 | Add "Draft saved automatically" indicator                                  |           |      |
-| TASK-042 | Add progress persistence (save to AsyncStorage)                            |           |      |
+| TASK-041 | Add "Draft saved automatically" indicator                                  |           |            |
+| TASK-042 | Add progress persistence (save to AsyncStorage)                            |           |            |
 
 **GOAL-007:** Search and filter system for Items screen
 

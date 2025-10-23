@@ -36,36 +36,30 @@ export interface LoadingStateProps {
 
 /**
  * LoadingState Component
- * 
+ *
  * Unified loading state component with multiple variants for different use cases.
- * 
+ *
  * @example Fullscreen loading
  * ```tsx
  * <LoadingState variant="fullscreen" message="Loading your data..." />
  * ```
- * 
+ *
  * @example Section loading
  * ```tsx
  * <LoadingState variant="section" message="Loading items..." />
  * ```
- * 
+ *
  * @example Inline loading
  * ```tsx
  * <LoadingState variant="inline" size="small" />
  * ```
- * 
+ *
  * @example Button loading
  * ```tsx
  * <LoadingState variant="button" size="small" />
  * ```
  */
-function LoadingStateComponent({
-  variant = 'section',
-  message,
-  size = 'large',
-  style,
-  loading = true,
-}: LoadingStateProps) {
+function LoadingStateComponent({ variant = 'section', message, size = 'large', style, loading = true }: LoadingStateProps) {
   const primaryColor = useThemeColor({}, 'primary');
   const textColor = useThemeColor({}, 'text');
 
@@ -102,10 +96,7 @@ function LoadingStateComponent({
       <ThemedView style={[styles.sectionContainer, style]}>
         <ActivityIndicator size={size} color={primaryColor} />
         {message && (
-          <ThemedText
-            type="body"
-            style={[styles.sectionMessage, { color: textColor }]}
-          >
+          <ThemedText type="body" style={[styles.sectionMessage, { color: textColor }]}>
             {message}
           </ThemedText>
         )}
@@ -119,10 +110,7 @@ function LoadingStateComponent({
       <ThemedView style={[styles.fullscreenContainer, style]}>
         <ActivityIndicator size={size} color={primaryColor} />
         {message && (
-          <ThemedText
-            type="body"
-            style={[styles.fullscreenMessage, { color: textColor }]}
-          >
+          <ThemedText type="body" style={[styles.fullscreenMessage, { color: textColor }]}>
             {message}
           </ThemedText>
         )}

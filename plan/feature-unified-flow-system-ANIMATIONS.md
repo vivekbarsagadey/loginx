@@ -30,7 +30,7 @@ Every step can have animations at multiple levels:
   id: 'welcome',
   type: 'display',
   title: 'Welcome',
-  
+
   // Step entrance animation
   enterAnimation: {
     type: 'spring',
@@ -39,7 +39,7 @@ Every step can have animations at multiple levels:
     to: { opacity: 1, translateY: 0 },
     duration: 400,
   },
-  
+
   // Step exit animation
   exitAnimation: {
     type: 'timing',
@@ -57,7 +57,7 @@ Every step can have animations at multiple levels:
 {
   id: 'features',
   type: 'display',
-  
+
   // Different animations based on direction
   animations: {
     enterFromRight: {
@@ -81,7 +81,7 @@ Every step can have animations at multiple levels:
       duration: 200,
     },
   },
-  
+
   // Select animation based on navigation direction
   selectAnimation: (direction: 'forward' | 'backward') => {
     if (direction === 'forward') return 'enterFromRight';
@@ -102,7 +102,7 @@ Animate individual elements with delays for a cascading effect:
 {
   id: 'welcome',
   type: 'display',
-  
+
   // Element-specific animations
   elementAnimations: {
     // Image animates first
@@ -114,7 +114,7 @@ Animate individual elements with delays for a cascading effect:
       delay: 0,
       duration: 600,
     },
-    
+
     // Title animates 100ms after image
     title: {
       type: 'spring',
@@ -123,7 +123,7 @@ Animate individual elements with delays for a cascading effect:
       delay: 100,
       duration: 400,
     },
-    
+
     // Subtitle animates 200ms after image
     subtitle: {
       type: 'spring',
@@ -132,7 +132,7 @@ Animate individual elements with delays for a cascading effect:
       delay: 200,
       duration: 400,
     },
-    
+
     // Description animates 300ms after image
     description: {
       type: 'timing',
@@ -141,7 +141,7 @@ Animate individual elements with delays for a cascading effect:
       delay: 300,
       duration: 300,
     },
-    
+
     // Features list with stagger
     featuresList: {
       type: 'spring',
@@ -150,7 +150,7 @@ Animate individual elements with delays for a cascading effect:
       stagger: 100, // Each item delayed by 100ms
       delay: 400,
     },
-    
+
     // Button animates last
     button: {
       type: 'spring',
@@ -169,7 +169,7 @@ Animate individual elements with delays for a cascading effect:
 {
   id: 'info',
   type: 'display',
-  
+
   animationSequence: {
     // Parallel animations (run simultaneously)
     parallel: [
@@ -182,7 +182,7 @@ Animate individual elements with delays for a cascading effect:
         animation: { type: 'zoom', duration: 400 },
       },
     ],
-    
+
     // Then sequential animations (one after another)
     sequential: [
       {
@@ -222,7 +222,7 @@ Animate individual elements with delays for a cascading effect:
         loop: true,
         duration: 800,
       },
-      
+
       // Completed dot check mark
       completedDot: {
         type: 'spring',
@@ -230,7 +230,7 @@ Animate individual elements with delays for a cascading effect:
         from: { scale: 0, rotate: '-45deg' },
         to: { scale: 1, rotate: '0deg' },
       },
-      
+
       // Inactive dot subtle pulse
       inactiveDot: {
         type: 'timing',
@@ -239,7 +239,7 @@ Animate individual elements with delays for a cascading effect:
         loop: true,
         duration: 1500,
       },
-      
+
       // Transition between dots
       dotTransition: {
         type: 'spring',
@@ -247,7 +247,7 @@ Animate individual elements with delays for a cascading effect:
         duration: 300,
       },
     },
-    
+
     // Stepper animations
     stepper: {
       // Number to checkmark transition
@@ -273,7 +273,7 @@ Animate individual elements with delays for a cascading effect:
           },
         ],
       },
-      
+
       // Line fill animation
       lineFill: {
         type: 'timing',
@@ -281,7 +281,7 @@ Animate individual elements with delays for a cascading effect:
         duration: 400,
       },
     },
-    
+
     // Progress bar animations
     bar: {
       // Bar fill animation
@@ -290,14 +290,14 @@ Animate individual elements with delays for a cascading effect:
         preset: 'gentle',
         duration: 500,
       },
-      
+
       // Percentage counter animation
       counter: {
         type: 'timing',
         easing: 'easeOut',
         duration: 500,
       },
-      
+
       // Shimmer effect
       shimmer: {
         type: 'timing',
@@ -307,7 +307,7 @@ Animate individual elements with delays for a cascading effect:
         duration: 2000,
       },
     },
-    
+
     // Circular progress animations
     circular: {
       // Circle stroke animation
@@ -316,14 +316,14 @@ Animate individual elements with delays for a cascading effect:
         easing: 'easeInOut',
         duration: 600,
       },
-      
+
       // Center number counting
       counter: {
         type: 'timing',
         easing: 'easeOut',
         duration: 600,
       },
-      
+
       // Completion celebration
       complete: {
         type: 'spring',
@@ -347,7 +347,7 @@ Animate individual elements with delays for a cascading effect:
 {
   id: 'selection',
   type: 'selection',
-  
+
   // Interaction animations
   interactions: {
     // Button press animation
@@ -358,7 +358,7 @@ Animate individual elements with delays for a cascading effect:
       duration: 100,
       haptic: 'light',
     },
-    
+
     // Button release animation
     release: {
       type: 'spring',
@@ -366,43 +366,43 @@ Animate individual elements with delays for a cascading effect:
       to: { scale: 1 },
       duration: 200,
     },
-    
+
     // Hover effect (web/tablet)
     hover: {
       type: 'timing',
       to: { scale: 1.05, elevation: 4 },
       duration: 150,
     },
-    
+
     // Selection animation
     select: {
       type: 'spring',
       preset: 'gentle',
-      from: { 
-        scale: 1, 
+      from: {
+        scale: 1,
         borderWidth: 2,
         borderColor: 'transparent',
       },
-      to: { 
-        scale: 1.02, 
+      to: {
+        scale: 1.02,
         borderWidth: 3,
         borderColor: colors.primary,
       },
       duration: 200,
       haptic: 'medium',
     },
-    
+
     // Deselection animation
     deselect: {
       type: 'timing',
-      to: { 
-        scale: 1, 
+      to: {
+        scale: 1,
         borderWidth: 2,
         borderColor: 'transparent',
       },
       duration: 150,
     },
-    
+
     // Error shake animation
     error: {
       type: 'spring',
@@ -418,7 +418,7 @@ Animate individual elements with delays for a cascading effect:
       duration: 400,
       haptic: 'error',
     },
-    
+
     // Success animation
     success: {
       type: 'spring',
@@ -428,7 +428,7 @@ Animate individual elements with delays for a cascading effect:
       duration: 300,
       haptic: 'success',
     },
-    
+
     // Loading pulse
     loading: {
       type: 'timing',
@@ -438,7 +438,7 @@ Animate individual elements with delays for a cascading effect:
       yoyo: true,
       duration: 800,
     },
-    
+
     // Swipe gesture
     swipe: {
       type: 'spring',
@@ -460,7 +460,7 @@ Animate individual elements with delays for a cascading effect:
 {
   id: 'registration',
   type: 'form',
-  
+
   fieldAnimations: {
     // Field focus animation
     focus: {
@@ -472,7 +472,7 @@ Animate individual elements with delays for a cascading effect:
       },
       duration: 200,
     },
-    
+
     // Field blur animation
     blur: {
       type: 'timing',
@@ -483,7 +483,7 @@ Animate individual elements with delays for a cascading effect:
       },
       duration: 150,
     },
-    
+
     // Label float animation
     labelFloat: {
       type: 'timing',
@@ -492,7 +492,7 @@ Animate individual elements with delays for a cascading effect:
       to: { translateY: -20, fontSize: 12 },
       duration: 200,
     },
-    
+
     // Validation success
     validationSuccess: {
       type: 'spring',
@@ -500,7 +500,7 @@ Animate individual elements with delays for a cascading effect:
       to: { scale: 1, opacity: 1 },
       duration: 300,
     },
-    
+
     // Validation error
     validationError: {
       type: 'sequence',
@@ -524,23 +524,23 @@ Animate individual elements with delays for a cascading effect:
       ],
       haptic: 'error',
     },
-    
+
     // Error message slide in
     errorMessageEnter: {
       type: 'spring',
-      from: { 
-        translateY: -10, 
+      from: {
+        translateY: -10,
         opacity: 0,
         maxHeight: 0,
       },
-      to: { 
-        translateY: 0, 
+      to: {
+        translateY: 0,
         opacity: 1,
         maxHeight: 100,
       },
       duration: 300,
     },
-    
+
     // Password visibility toggle
     toggleVisibility: {
       type: 'spring',
@@ -562,7 +562,7 @@ Animate individual elements with delays for a cascading effect:
 {
   id: 'verification',
   type: 'verification',
-  
+
   stateAnimations: {
     // Initial loading
     loading: {
@@ -574,7 +574,7 @@ Animate individual elements with delays for a cascading effect:
         duration: 1000,
       },
     },
-    
+
     // Skeleton shimmer
     skeleton: {
       type: 'loop',
@@ -585,7 +585,7 @@ Animate individual elements with delays for a cascading effect:
         duration: 1500,
       },
     },
-    
+
     // Loading to success transition
     loadingToSuccess: {
       type: 'sequence',
@@ -608,7 +608,7 @@ Animate individual elements with delays for a cascading effect:
       ],
       haptic: 'success',
     },
-    
+
     // Loading to error transition
     loadingToError: {
       type: 'sequence',
@@ -627,7 +627,7 @@ Animate individual elements with delays for a cascading effect:
       ],
       haptic: 'error',
     },
-    
+
     // Retry button animation
     retry: {
       type: 'spring',
@@ -635,7 +635,7 @@ Animate individual elements with delays for a cascading effect:
       to: { scale: 1, opacity: 1 },
       duration: 300,
     },
-    
+
     // Success checkmark animation
     successCheck: {
       type: 'spring',
@@ -644,7 +644,7 @@ Animate individual elements with delays for a cascading effect:
       to: { scale: 1, rotate: '0deg' },
       duration: 500,
     },
-    
+
     // Error icon animation
     errorIcon: {
       type: 'spring',
@@ -666,7 +666,7 @@ Animate individual elements with delays for a cascading effect:
 {
   id: 'celebration',
   type: 'display',
-  
+
   specialEffects: {
     // Confetti animation
     confetti: {
@@ -677,7 +677,7 @@ Animate individual elements with delays for a cascading effect:
       gravity: 0.5,
       velocity: { x: [-2, 2], y: [-10, -5] },
     },
-    
+
     // Ripple effect
     ripple: {
       type: 'ripple',
@@ -685,7 +685,7 @@ Animate individual elements with delays for a cascading effect:
       to: { scale: 2, opacity: 0 },
       duration: 800,
     },
-    
+
     // Particles floating
     floatingParticles: {
       type: 'loop',
@@ -698,24 +698,24 @@ Animate individual elements with delays for a cascading effect:
         stagger: 200,
       },
     },
-    
+
     // Shimmer effect
     shimmer: {
       type: 'loop',
       animation: {
         type: 'timing',
-        from: { 
-          translateX: -100, 
+        from: {
+          translateX: -100,
           opacity: 0,
         },
-        to: { 
-          translateX: 100, 
+        to: {
+          translateX: 100,
           opacity: 0.5,
         },
         duration: 1500,
       },
     },
-    
+
     // Glow pulse
     glow: {
       type: 'loop',
@@ -727,7 +727,7 @@ Animate individual elements with delays for a cascading effect:
         duration: 1000,
       },
     },
-    
+
     // Parallax effect
     parallax: {
       type: 'gesture',
@@ -758,88 +758,88 @@ const ANIMATION_PRESETS = {
     stiffness: 150,
     mass: 1,
   },
-  
+
   bouncy: {
     type: 'spring',
     damping: 8,
     stiffness: 200,
     mass: 0.8,
   },
-  
+
   stiff: {
     type: 'spring',
     damping: 20,
     stiffness: 300,
     mass: 1,
   },
-  
+
   // Timing presets
   quick: {
     type: 'timing',
     duration: 200,
     easing: 'easeOut',
   },
-  
+
   smooth: {
     type: 'timing',
     duration: 400,
     easing: 'easeInOut',
   },
-  
+
   slow: {
     type: 'timing',
     duration: 600,
     easing: 'easeInOut',
   },
-  
+
   // Named animations
   fadeIn: {
     from: { opacity: 0 },
     to: { opacity: 1 },
     duration: 300,
   },
-  
+
   fadeOut: {
     from: { opacity: 1 },
     to: { opacity: 0 },
     duration: 200,
   },
-  
+
   slideUp: {
     from: { translateY: 50, opacity: 0 },
     to: { translateY: 0, opacity: 1 },
     type: 'spring',
     preset: 'gentle',
   },
-  
+
   slideDown: {
     from: { translateY: -50, opacity: 0 },
     to: { translateY: 0, opacity: 1 },
     type: 'spring',
     preset: 'gentle',
   },
-  
+
   slideRight: {
     from: { translateX: -50, opacity: 0 },
     to: { translateX: 0, opacity: 1 },
     type: 'spring',
     preset: 'gentle',
   },
-  
+
   slideLeft: {
     from: { translateX: 50, opacity: 0 },
     to: { translateX: 0, opacity: 1 },
     type: 'spring',
     preset: 'gentle',
   },
-  
+
   zoom: {
     from: { scale: 0.8, opacity: 0 },
     to: { scale: 1, opacity: 1 },
     type: 'spring',
     preset: 'bouncy',
   },
-  
+
   shake: {
     keyframes: [
       { translateX: 0 },
@@ -853,7 +853,7 @@ const ANIMATION_PRESETS = {
     preset: 'stiff',
     duration: 400,
   },
-  
+
   bounce: {
     keyframes: [
       { translateY: 0 },
@@ -866,7 +866,7 @@ const ANIMATION_PRESETS = {
     preset: 'bouncy',
     duration: 500,
   },
-  
+
   pulse: {
     from: { scale: 1 },
     to: { scale: 1.05 },
@@ -874,13 +874,13 @@ const ANIMATION_PRESETS = {
     loop: true,
     duration: 800,
   },
-  
+
   rotate: {
     from: { rotate: '0deg' },
     to: { rotate: '360deg' },
     duration: 1000,
   },
-  
+
   flip: {
     from: { rotateY: '0deg' },
     to: { rotateY: '180deg' },
@@ -892,7 +892,7 @@ const ANIMATION_PRESETS = {
 {
   enterAnimation: 'fadeIn', // Use preset name
   exitAnimation: 'slideLeft',
-  
+
   // Or customize preset
   enterAnimation: {
     ...ANIMATION_PRESETS.slideUp,
@@ -911,7 +911,7 @@ const ANIMATION_PRESETS = {
   type: 'display',
   title: 'Welcome to LoginX',
   subtitle: 'Secure authentication made simple',
-  
+
   // Overall step animation
   enterAnimation: {
     type: 'spring',
@@ -920,13 +920,13 @@ const ANIMATION_PRESETS = {
     to: { opacity: 1, translateY: 0 },
     duration: 400,
   },
-  
+
   exitAnimation: {
     type: 'timing',
     to: { opacity: 0, scale: 0.95 },
     duration: 200,
   },
-  
+
   // Element-specific animations with stagger
   elementAnimations: {
     background: {
@@ -936,7 +936,7 @@ const ANIMATION_PRESETS = {
       delay: 0,
       duration: 400,
     },
-    
+
     image: {
       type: 'spring',
       preset: 'bouncy',
@@ -945,7 +945,7 @@ const ANIMATION_PRESETS = {
       delay: 100,
       duration: 600,
     },
-    
+
     title: {
       type: 'spring',
       from: { translateY: 30, opacity: 0 },
@@ -953,7 +953,7 @@ const ANIMATION_PRESETS = {
       delay: 200,
       duration: 400,
     },
-    
+
     subtitle: {
       type: 'spring',
       from: { translateY: 30, opacity: 0 },
@@ -961,7 +961,7 @@ const ANIMATION_PRESETS = {
       delay: 300,
       duration: 400,
     },
-    
+
     features: {
       type: 'spring',
       from: { translateX: -20, opacity: 0 },
@@ -969,7 +969,7 @@ const ANIMATION_PRESETS = {
       stagger: 100,
       delay: 400,
     },
-    
+
     button: {
       type: 'spring',
       preset: 'bouncy',
@@ -978,7 +978,7 @@ const ANIMATION_PRESETS = {
       delay: 800,
     },
   },
-  
+
   // Interaction animations
   interactions: {
     buttonPress: {
@@ -987,7 +987,7 @@ const ANIMATION_PRESETS = {
       duration: 100,
       haptic: 'light',
     },
-    
+
     buttonRelease: {
       type: 'spring',
       preset: 'bouncy',
@@ -995,7 +995,7 @@ const ANIMATION_PRESETS = {
       duration: 200,
     },
   },
-  
+
   // Special effects
   specialEffects: {
     shimmer: {
@@ -1006,7 +1006,7 @@ const ANIMATION_PRESETS = {
         duration: 2000,
       },
     },
-    
+
     glow: {
       type: 'loop',
       animation: {
@@ -1044,7 +1044,7 @@ const ANIMATION_PRESETS = {
       reduceMotion: 'auto', // Respect system settings
     },
   },
-  
+
   // Conditional animations based on device
   deviceOptimization: {
     lowEnd: {
@@ -1077,7 +1077,7 @@ import { useReducedMotion } from 'react-native-reanimated';
   animations: {
     // Check if user prefers reduced motion
     respectReducedMotion: true,
-    
+
     // Fallback animations for reduced motion
     reducedMotionAlternative: {
       type: 'timing',

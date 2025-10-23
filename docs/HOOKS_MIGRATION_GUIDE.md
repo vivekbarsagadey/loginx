@@ -37,6 +37,7 @@ Follow this order for safest migration:
 ### Scenario 1: Boolean State → useToggle
 
 **Before:**
+
 ```typescript
 const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -57,6 +58,7 @@ return (
 ```
 
 **After:**
+
 ```typescript
 const [isModalOpen, toggleModal, setIsModalOpen] = useToggle(false);
 
@@ -73,6 +75,7 @@ return (
 ```
 
 **Benefits:**
+
 - ✅ Less boilerplate code
 - ✅ Consistent toggle pattern
 - ✅ Memoized toggle function
@@ -80,6 +83,7 @@ return (
 ### Scenario 2: setTimeout → useTimeout
 
 **Before:**
+
 ```typescript
 const [showMessage, setShowMessage] = useState(false);
 
@@ -87,7 +91,7 @@ useEffect(() => {
   const timer = setTimeout(() => {
     setShowMessage(true);
   }, 3000);
-  
+
   return () => clearTimeout(timer);
 }, []);
 
@@ -100,13 +104,11 @@ const handleReset = () => {
 ```
 
 **After:**
+
 ```typescript
 const [showMessage, setShowMessage] = useState(false);
 
-const { start, cancel } = useTimeout(
-  () => setShowMessage(true),
-  3000
-);
+const { start, cancel } = useTimeout(() => setShowMessage(true), 3000);
 
 const handleReset = () => {
   setShowMessage(false);
@@ -116,6 +118,7 @@ const handleReset = () => {
 ```
 
 **Benefits:**
+
 - ✅ Automatic cleanup
 - ✅ Declarative API
 - ✅ Easy to control (start, cancel, reset)
@@ -123,6 +126,7 @@ const handleReset = () => {
 ### Scenario 3: setInterval → useInterval
 
 **Before:**
+
 ```typescript
 const [countdown, setCountdown] = useState(60);
 
@@ -136,12 +140,13 @@ useEffect(() => {
       return prev - 1;
     });
   }, 1000);
-  
+
   return () => clearInterval(interval);
 }, []);
 ```
 
 **After:**
+
 ```typescript
 const [countdown, setCountdown] = useState(60);
 
@@ -154,6 +159,7 @@ useInterval(
 ```
 
 **Benefits:**
+
 - ✅ Automatic cleanup
 - ✅ Easy to pause/resume (pass null delay)
 - ✅ Less boilerplate
@@ -161,8 +167,9 @@ useInterval(
 ### Scenario 4: Debounced Search → useDebouncedCallback
 
 **Before:**
+
 ```typescript
-const [searchQuery, setSearchQuery] = useState('');
+const [searchQuery, setSearchQuery] = useState("");
 const [searchResults, setSearchResults] = useState([]);
 
 useEffect(() => {
@@ -171,7 +178,7 @@ useEffect(() => {
       searchAPI(searchQuery).then(setSearchResults);
     }
   }, 500);
-  
+
   return () => clearTimeout(timer);
 }, [searchQuery]);
 
@@ -181,19 +188,17 @@ const handleSearchChange = (text: string) => {
 ```
 
 **After:**
+
 ```typescript
-const [searchQuery, setSearchQuery] = useState('');
+const [searchQuery, setSearchQuery] = useState("");
 const [searchResults, setSearchResults] = useState([]);
 
-const debouncedSearch = useDebouncedCallback(
-  async (query: string) => {
-    if (query) {
-      const results = await searchAPI(query);
-      setSearchResults(results);
-    }
-  },
-  500
-);
+const debouncedSearch = useDebouncedCallback(async (query: string) => {
+  if (query) {
+    const results = await searchAPI(query);
+    setSearchResults(results);
+  }
+}, 500);
 
 const handleSearchChange = (text: string) => {
   setSearchQuery(text);
@@ -202,6 +207,7 @@ const handleSearchChange = (text: string) => {
 ```
 
 **Benefits:**
+
 - ✅ Cleaner separation of concerns
 - ✅ Reusable debounced function
 - ✅ Automatic cleanup
@@ -209,6 +215,7 @@ const handleSearchChange = (text: string) => {
 ### Scenario 5: Array State → useList
 
 **Before:**
+
 ```typescript
 const [items, setItems] = useState<Item[]>([]);
 
@@ -217,13 +224,11 @@ const addItem = (item: Item) => {
 };
 
 const removeItem = (id: string) => {
-  setItems(items.filter(item => item.id !== id));
+  setItems(items.filter((item) => item.id !== id));
 };
 
 const updateItem = (id: string, updates: Partial<Item>) => {
-  setItems(items.map(item => 
-    item.id === id ? { ...item, ...updates } : item
-  ));
+  setItems(items.map((item) => (item.id === id ? { ...item, ...updates } : item)));
 };
 
 const clearItems = () => {
@@ -232,6 +237,7 @@ const clearItems = () => {
 ```
 
 **After:**
+
 ```typescript
 const [items, { push, remove, update, clear }] = useList<Item>([]);
 
@@ -243,6 +249,7 @@ clear();
 ```
 
 **Benefits:**
+
 - ✅ Built-in array operations
 - ✅ Immutability handled automatically
 - ✅ Less boilerplate code
@@ -250,11 +257,12 @@ clear();
 ### Scenario 6: Counter State → useCounter
 
 **Before:**
+
 ```typescript
 const [count, setCount] = useState(0);
 
-const increment = () => setCount(prev => Math.min(prev + 1, 100));
-const decrement = () => setCount(prev => Math.max(prev - 1, 0));
+const increment = () => setCount((prev) => Math.min(prev + 1, 100));
+const decrement = () => setCount((prev) => Math.max(prev - 1, 0));
 const reset = () => setCount(0);
 const set = (value: number) => {
   if (value >= 0 && value <= 100) {
@@ -264,14 +272,16 @@ const set = (value: number) => {
 ```
 
 **After:**
+
 ```typescript
 const [count, { increment, decrement, reset, set }] = useCounter(0, {
   min: 0,
-  max: 100,
+  max: 100
 });
 ```
 
 **Benefits:**
+
 - ✅ Built-in min/max constraints
 - ✅ All counter operations included
 - ✅ Less error-prone
@@ -279,6 +289,7 @@ const [count, { increment, decrement, reset, set }] = useCounter(0, {
 ### Scenario 7: Async Operation → useAsyncOperation
 
 **Before:**
+
 ```typescript
 const [data, setData] = useState<User | null>(null);
 const [loading, setLoading] = useState(false);
@@ -287,13 +298,13 @@ const [error, setError] = useState<Error | null>(null);
 const fetchUser = async () => {
   setLoading(true);
   setError(null);
-  
+
   try {
     const response = await api.getUser(userId);
     setData(response.data);
   } catch (err) {
     setError(err as Error);
-    showToast('Failed to load user');
+    showToast("Failed to load user");
   } finally {
     setLoading(false);
   }
@@ -305,6 +316,7 @@ useEffect(() => {
 ```
 
 **After:**
+
 ```typescript
 const { data, loading, error, execute } = useAsyncOperation(
   async () => {
@@ -316,8 +328,8 @@ const { data, loading, error, execute } = useAsyncOperation(
       // Optional success handler
     },
     onError: (error) => {
-      showToast('Failed to load user');
-    },
+      showToast("Failed to load user");
+    }
   }
 );
 
@@ -327,6 +339,7 @@ useEffect(() => {
 ```
 
 **Benefits:**
+
 - ✅ Standardized error handling
 - ✅ Loading state managed automatically
 - ✅ Success/error callbacks
@@ -335,40 +348,41 @@ useEffect(() => {
 ### Scenario 8: Form Handling → useForm
 
 **Before:**
+
 ```typescript
-const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
 const [errors, setErrors] = useState<Record<string, string>>({});
 const [touched, setTouched] = useState<Record<string, boolean>>({});
 const [isSubmitting, setIsSubmitting] = useState(false);
 
 const validate = () => {
   const newErrors: Record<string, string> = {};
-  
+
   if (!email) {
-    newErrors.email = 'Email is required';
+    newErrors.email = "Email is required";
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    newErrors.email = 'Invalid email address';
+    newErrors.email = "Invalid email address";
   }
-  
+
   if (!password) {
-    newErrors.password = 'Password is required';
+    newErrors.password = "Password is required";
   } else if (password.length < 8) {
-    newErrors.password = 'Password must be at least 8 characters';
+    newErrors.password = "Password must be at least 8 characters";
   }
-  
+
   setErrors(newErrors);
   return Object.keys(newErrors).length === 0;
 };
 
 const handleSubmit = async () => {
   if (!validate()) return;
-  
+
   setIsSubmitting(true);
   try {
     await login(email, password);
   } catch (error) {
-    setErrors({ submit: 'Login failed' });
+    setErrors({ submit: "Login failed" });
   } finally {
     setIsSubmitting(false);
   }
@@ -376,36 +390,38 @@ const handleSubmit = async () => {
 ```
 
 **After:**
+
 ```typescript
 const { values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting } = useForm({
   initialValues: {
-    email: '',
-    password: '',
+    email: "",
+    password: ""
   },
   validate: (values) => {
     const errors: Record<string, string> = {};
-    
+
     if (!values.email) {
-      errors.email = 'Email is required';
+      errors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
-      errors.email = 'Invalid email address';
+      errors.email = "Invalid email address";
     }
-    
+
     if (!values.password) {
-      errors.password = 'Password is required';
+      errors.password = "Password is required";
     } else if (values.password.length < 8) {
-      errors.password = 'Password must be at least 8 characters';
+      errors.password = "Password must be at least 8 characters";
     }
-    
+
     return errors;
   },
   onSubmit: async (values) => {
     await login(values.email, values.password);
-  },
+  }
 });
 ```
 
 **Benefits:**
+
 - ✅ All form state in one place
 - ✅ Validation integrated
 - ✅ Touch tracking
@@ -427,26 +443,26 @@ grep -n "setTimeout\|setInterval" app/path/to/file.tsx
 
 ### Step 2: Choose the Right Hook
 
-| Pattern | Hook to Use |
-|---------|-------------|
-| `useState(false)` with toggle | `useToggle` |
-| `useState(0)` with increment/decrement | `useCounter` |
-| `useState([])` with array operations | `useList` |
-| `useState({})` with map operations | `useMap` |
-| `setTimeout` | `useTimeout` |
-| `setInterval` | `useInterval` |
-| Debounced function | `useDebouncedCallback` |
-| Throttled function | `useThrottledCallback` |
-| Async operation | `useAsyncOperation` or `useFetch` |
-| Form handling | `useForm` |
+| Pattern                                | Hook to Use                       |
+| -------------------------------------- | --------------------------------- |
+| `useState(false)` with toggle          | `useToggle`                       |
+| `useState(0)` with increment/decrement | `useCounter`                      |
+| `useState([])` with array operations   | `useList`                         |
+| `useState({})` with map operations     | `useMap`                          |
+| `setTimeout`                           | `useTimeout`                      |
+| `setInterval`                          | `useInterval`                     |
+| Debounced function                     | `useDebouncedCallback`            |
+| Throttled function                     | `useThrottledCallback`            |
+| Async operation                        | `useAsyncOperation` or `useFetch` |
+| Form handling                          | `useForm`                         |
 
 ### Step 3: Update Imports
 
 ```typescript
 // Add hook imports
-import { useToggle } from '@/hooks/utility/use-toggle';
-import { useTimeout } from '@/hooks/timing/use-timeout';
-import { useAsyncOperation } from '@/hooks/async/use-async-operation';
+import { useToggle } from "@/hooks/utility/use-toggle";
+import { useTimeout } from "@/hooks/timing/use-timeout";
+import { useAsyncOperation } from "@/hooks/async/use-async-operation";
 ```
 
 ### Step 4: Replace the Code
@@ -493,14 +509,14 @@ import { render, fireEvent } from '@testing-library/react-native';
 describe('MyComponent after migration', () => {
   it('should toggle modal', () => {
     const { getByText, queryByText } = render(<MyComponent />);
-    
+
     // Modal should be closed initially
     expect(queryByText('Modal Content')).toBeNull();
-    
+
     // Open modal
     fireEvent.press(getByText('Open Modal'));
     expect(queryByText('Modal Content')).toBeTruthy();
-    
+
     // Close modal
     fireEvent.press(getByText('Close'));
     expect(queryByText('Modal Content')).toBeNull();
@@ -527,11 +543,11 @@ function useDataManager() {
   const [isLoading, toggleLoading] = useToggle(false);
   const [data, { push, clear }] = useList([]);
   const [error, setError] = useState<Error | null>(null);
-  
+
   const fetchData = useCallback(async () => {
     // Implementation
   }, []);
-  
+
   return { isLoading, data, error, fetchData };
 }
 ```
@@ -571,7 +587,7 @@ const { start } = useTimeout(() => {
 ```typescript
 // Problem
 const [items, { push }] = useList([]);
-push({ id: '1', name: 'Item' }); // Type error
+push({ id: "1", name: "Item" }); // Type error
 
 // Solution
 interface Item {
@@ -580,7 +596,7 @@ interface Item {
 }
 
 const [items, { push }] = useList<Item>([]);
-push({ id: '1', name: 'Item' }); // ✅
+push({ id: "1", name: "Item" }); // ✅
 ```
 
 ### Challenge 4: Effect Dependencies
@@ -616,17 +632,19 @@ useEffect(() => {
 ### If Migration Fails
 
 1. **Revert the changes:**
+
 ```bash
 git checkout -- path/to/file.tsx
 ```
 
 2. **Or create a rollback commit:**
+
 ```bash
 git revert HEAD
 ```
 
 3. **Document the issue:**
-Create an issue in the repository explaining what went wrong.
+   Create an issue in the repository explaining what went wrong.
 
 ### Incremental Rollback
 
@@ -641,23 +659,28 @@ If only part of the migration is problematic:
 Use this checklist to track progress:
 
 ### Phase 1: Utility Hooks
+
 - [ ] useToggle migrations
 - [ ] useTimeout migrations
 - [ ] useInterval migrations
 
 ### Phase 2: State Management
+
 - [ ] useList migrations
 - [ ] useCounter migrations
 - [ ] useMap migrations
 
 ### Phase 3: Async Operations
+
 - [ ] useAsyncOperation migrations
 - [ ] useFetch migrations
 
 ### Phase 4: Forms
+
 - [ ] useForm migrations
 
 ### Phase 5: UI Interactions
+
 - [ ] useHapticNavigation migrations
 - [ ] useHapticAction migrations
 - [ ] useAutoFocus migrations

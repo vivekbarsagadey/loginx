@@ -408,8 +408,8 @@ const { theme, setTheme, toggleTheme } = useThemeProvider();
 const styles = useThemedStyles((colors) => ({
   container: {
     backgroundColor: colors.background,
-    borderColor: colors.border,
-  },
+    borderColor: colors.border
+  }
 }));
 ```
 
@@ -423,7 +423,7 @@ const systemTheme = useSystemTheme();
 
 // Auto-sync with system preferences
 useEffect(() => {
-  if (userPreference === 'system') {
+  if (userPreference === "system") {
     setTheme(systemTheme);
   }
 }, [systemTheme]);
@@ -437,7 +437,7 @@ useEffect(() => {
 ```typescript
 const colorScheme = useColorScheme();
 
-const defaultTheme = colorScheme || 'light';
+const defaultTheme = colorScheme || "light";
 ```
 
 ---
@@ -452,9 +452,12 @@ Located in `hooks/lifecycle/`
 **Returns**: Memoized callback
 
 ```typescript
-const handleUpdate = useDeepCallback((data) => {
-  updateUser(data);
-}, [complexObject]);
+const handleUpdate = useDeepCallback(
+  (data) => {
+    updateUser(data);
+  },
+  [complexObject]
+);
 ```
 
 ### usePrevious
@@ -658,7 +661,7 @@ if (loading) return <LoadingSpinner />;
 **Returns**: `[value, setValue, loading, error]`
 
 ```typescript
-const [token, setToken, loading] = useSecureStorage('auth_token', '');
+const [token, setToken, loading] = useSecureStorage("auth_token", "");
 
 await setToken(newToken); // Encrypted storage
 ```
@@ -742,20 +745,23 @@ const { start, cancel, isPending } = useTimeout(() => {
 ## Import Patterns
 
 ### Individual Hook Import
+
 ```typescript
-import { useTheme } from '@/hooks/theme/use-theme';
-import { useAsync } from '@/hooks/async/use-async';
+import { useTheme } from "@/hooks/theme/use-theme";
+import { useAsync } from "@/hooks/async/use-async";
 ```
 
 ### Category Import
+
 ```typescript
-import { useTheme, useThemeProvider, useThemedStyles } from '@/hooks/theme';
-import { useToggle, useCounter, useList, useMap } from '@/hooks/utility';
+import { useTheme, useThemeProvider, useThemedStyles } from "@/hooks/theme";
+import { useToggle, useCounter, useList, useMap } from "@/hooks/utility";
 ```
 
 ### Barrel Import (Backward Compatible)
+
 ```typescript
-import { useTheme, useAsync, useToggle } from '@/hooks';
+import { useTheme, useAsync, useToggle } from "@/hooks";
 ```
 
 ---
@@ -765,18 +771,14 @@ import { useTheme, useAsync, useToggle } from '@/hooks';
 All hooks are fully typed with TypeScript. Import types alongside hooks:
 
 ```typescript
-import { useAsync } from '@/hooks/async';
-import type { AsyncState } from '@/hooks/async';
+import { useAsync } from "@/hooks/async";
+import type { AsyncState } from "@/hooks/async";
 
-import { useCounter } from '@/hooks/utility';
-import type { UseCounterOptions, UseCounterReturn } from '@/hooks/utility';
+import { useCounter } from "@/hooks/utility";
+import type { UseCounterOptions, UseCounterReturn } from "@/hooks/utility";
 
-import { useGeolocation } from '@/hooks/device';
-import type { 
-  LocationCoordinates, 
-  GeolocationState, 
-  UseGeolocationOptions 
-} from '@/hooks/device';
+import { useGeolocation } from "@/hooks/device";
+import type { LocationCoordinates, GeolocationState, UseGeolocationOptions } from "@/hooks/device";
 ```
 
 ---
@@ -784,11 +786,13 @@ import type {
 ## Best Practices
 
 ### 1. Hook Naming Convention
+
 - Hooks **must** start with `use` (React convention)
 - Use descriptive names: `useTheme` not `useT`
 - Category prefix for clarity: `useAuthProvider`, `useThemeProvider`
 
 ### 2. Dependency Management
+
 ```typescript
 // ✅ Good - Include all dependencies
 useEffect(() => {
@@ -802,10 +806,11 @@ useEffect(() => {
 ```
 
 ### 3. Cleanup Functions
+
 ```typescript
 // ✅ Good - Always cleanup subscriptions
 useEffect(() => {
-  const subscription = eventEmitter.on('event', handler);
+  const subscription = eventEmitter.on("event", handler);
   return () => {
     subscription.remove();
   };
@@ -813,6 +818,7 @@ useEffect(() => {
 ```
 
 ### 4. Conditional Hook Execution
+
 ```typescript
 // ❌ Bad - Hooks cannot be conditional
 if (condition) {
@@ -828,18 +834,19 @@ useEffect(() => {
 ```
 
 ### 5. Custom Hook Composition
+
 ```typescript
 // ✅ Good - Compose hooks in custom hooks
 function useUserData(userId: string) {
   const { data, loading } = useFetch(`/users/${userId}`);
   const [cached, setCached] = useLocalStorage(`user_${userId}`, null);
-  
+
   useEffect(() => {
     if (data) {
       setCached(data);
     }
   }, [data]);
-  
+
   return { data: data || cached, loading };
 }
 ```
@@ -849,6 +856,7 @@ function useUserData(userId: string) {
 ## Performance Tips
 
 ### 1. Memoization
+
 ```typescript
 // Use useMemo for expensive computations
 const expensiveValue = useMemo(() => {
@@ -862,17 +870,19 @@ const handlePress = useCallback(() => {
 ```
 
 ### 2. Avoid Over-fetching
+
 ```typescript
 // ✅ Good - Conditional fetching
-const { data } = useFetch('/api/data', { 
-  enabled: isAuthenticated 
+const { data } = useFetch("/api/data", {
+  enabled: isAuthenticated
 });
 
 // ❌ Bad - Always fetching
-const { data } = useFetch('/api/data');
+const { data } = useFetch("/api/data");
 ```
 
 ### 3. Debounce/Throttle Heavy Operations
+
 ```typescript
 // ✅ Good - Debounced search
 const debouncedSearch = useDebouncedCallback(searchAPI, 500);
@@ -888,16 +898,19 @@ const handleChange = (text) => {
 ## Troubleshooting
 
 ### Hook Rules Violation
+
 **Error**: "Hooks can only be called inside the body of a function component"
 
 **Solution**: Ensure hooks are called at the top level, not inside loops, conditions, or nested functions.
 
 ### Stale Closure
+
 **Problem**: Hook callback uses old values
 
 **Solution**: Include all dependencies in dependency array or use callback refs.
 
 ### Memory Leaks
+
 **Problem**: Component updates after unmount
 
 **Solution**: Always cleanup subscriptions and use mounted checks:
@@ -914,6 +927,7 @@ const fetchData = async () => {
 ```
 
 ### Infinite Loop
+
 **Problem**: useEffect runs continuously
 
 **Solution**: Check dependency array - avoid objects/arrays created inline:
@@ -937,18 +951,19 @@ useEffect(() => {
 ### From Class Components
 
 **Before (Class Component)**:
+
 ```typescript
 class MyComponent extends React.Component {
   state = { count: 0 };
-  
+
   componentDidMount() {
     this.fetchData();
   }
-  
+
   fetchData = () => {
     // Fetch logic
   }
-  
+
   render() {
     return <Text>{this.state.count}</Text>;
   }
@@ -956,18 +971,19 @@ class MyComponent extends React.Component {
 ```
 
 **After (Functional Component with Hooks)**:
+
 ```typescript
 function MyComponent() {
   const [count, setCount] = useState(0);
-  
+
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   const fetchData = () => {
     // Fetch logic
   };
-  
+
   return <Text>{count}</Text>;
 }
 ```

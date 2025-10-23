@@ -14,7 +14,6 @@ export const showSuccess = (title: string, message: string, onOk?: () => void) =
   } else {
     // Fallback to console if no handler is set (development only)
     if (__DEV__) {
-       
       console.error(`[${title}] ${message}`);
     }
     if (onOk) {

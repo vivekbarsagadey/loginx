@@ -2,8 +2,8 @@
  * Tests for useList hook
  */
 
-import { act, renderHook } from '@testing-library/react-native';
 import { useList } from '@/hooks/utility/use-list';
+import { act, renderHook } from '@testing-library/react-native';
 
 interface TestItem {
   id: number;
@@ -44,10 +44,7 @@ describe('useList', () => {
       const { result } = renderHook(() => useList<TestItem>());
 
       act(() => {
-        result.current.push(
-          { id: 1, name: 'Item 1' },
-          { id: 2, name: 'Item 2' }
-        );
+        result.current.push({ id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' });
       });
 
       expect(result.current.list).toHaveLength(2);
@@ -89,9 +86,7 @@ describe('useList', () => {
 
   describe('Unshift', () => {
     it('should add single item to beginning', () => {
-      const { result } = renderHook(() =>
-        useList([{ id: 2, name: 'Item 2' }])
-      );
+      const { result } = renderHook(() => useList([{ id: 2, name: 'Item 2' }]));
 
       act(() => {
         result.current.unshift({ id: 1, name: 'Item 1' });
@@ -102,15 +97,10 @@ describe('useList', () => {
     });
 
     it('should add multiple items to beginning', () => {
-      const { result } = renderHook(() =>
-        useList([{ id: 3, name: 'Item 3' }])
-      );
+      const { result } = renderHook(() => useList([{ id: 3, name: 'Item 3' }]));
 
       act(() => {
-        result.current.unshift(
-          { id: 1, name: 'Item 1' },
-          { id: 2, name: 'Item 2' }
-        );
+        result.current.unshift({ id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' });
       });
 
       expect(result.current.list[0]).toEqual({ id: 1, name: 'Item 1' });
@@ -211,9 +201,7 @@ describe('useList', () => {
     });
 
     it('should insert at beginning', () => {
-      const { result } = renderHook(() =>
-        useList([{ id: 2, name: 'Item 2' }])
-      );
+      const { result } = renderHook(() => useList([{ id: 2, name: 'Item 2' }]));
 
       act(() => {
         result.current.insertAt(0, { id: 1, name: 'Item 1' });
@@ -223,9 +211,7 @@ describe('useList', () => {
     });
 
     it('should insert at end', () => {
-      const { result } = renderHook(() =>
-        useList([{ id: 1, name: 'Item 1' }])
-      );
+      const { result } = renderHook(() => useList([{ id: 1, name: 'Item 1' }]));
 
       act(() => {
         result.current.insertAt(1, { id: 2, name: 'Item 2' });
@@ -436,10 +422,7 @@ describe('useList', () => {
 
       // Add todos
       act(() => {
-        result.current.push(
-          { id: 1, text: 'Task 1', completed: false },
-          { id: 2, text: 'Task 2', completed: false }
-        );
+        result.current.push({ id: 1, text: 'Task 1', completed: false }, { id: 2, text: 'Task 2', completed: false });
       });
 
       expect(result.current.list).toHaveLength(2);
@@ -513,9 +496,7 @@ describe('useList', () => {
 
       // Mark all as read
       act(() => {
-        result.current.set(
-          result.current.list.map((n) => ({ ...n, read: true }))
-        );
+        result.current.set(result.current.list.map((n) => ({ ...n, read: true })));
       });
 
       expect(result.current.list.every((n) => n.read)).toBe(true);

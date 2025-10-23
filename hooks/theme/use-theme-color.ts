@@ -46,11 +46,7 @@ export interface UseThemeColorConfig {
  * };
  * const primaryColor = useThemeColor({}, 'primary', { themeColors: myColors });
  */
-export function useThemeColor(
-  props: Partial<Record<string, string>>,
-  colorName: keyof ThemeColors,
-  config?: UseThemeColorConfig
-) {
+export function useThemeColor(props: Partial<Record<string, string>>, colorName: keyof ThemeColors, config?: UseThemeColorConfig) {
   const { resolvedTheme } = useThemeContext();
   const colorFromProps = props[resolvedTheme];
 

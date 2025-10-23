@@ -3,8 +3,8 @@
  * Provides comprehensive search functionality with performance optimization
  */
 
-import { useDebouncedCallback } from '../timing/use-debounced-callback';
 import { useCallback, useEffect, useState } from 'react';
+import { useDebouncedCallback } from '../timing/use-debounced-callback';
 
 export interface UseSearchOptions<T> {
   /** Data to search through */
@@ -89,16 +89,7 @@ export interface UseSearchReturn<T> {
  * ```
  */
 export function useSearch<T>(options: UseSearchOptions<T>): UseSearchReturn<T> {
-  const {
-    data,
-    filterFn,
-    debounceMs = 300,
-    initialQuery = '',
-    minQueryLength = 0,
-    transformQuery,
-    sortFn,
-    maxResults,
-  } = options;
+  const { data, filterFn, debounceMs = 300, initialQuery = '', minQueryLength = 0, transformQuery, sortFn, maxResults } = options;
 
   const [query, setQueryState] = useState(initialQuery);
   const [results, setResults] = useState<T[]>([]);
@@ -113,9 +104,7 @@ export function useSearch<T>(options: UseSearchOptions<T>): UseSearchReturn<T> {
 
       try {
         // Transform query if transformer provided
-        const transformedQuery = transformQuery
-          ? transformQuery(searchQuery)
-          : searchQuery;
+        const transformedQuery = transformQuery ? transformQuery(searchQuery) : searchQuery;
 
         // Check minimum length requirement
         if (transformedQuery.length < minQueryLength) {

@@ -9,19 +9,19 @@ import React from 'react';
 
 // Mock dependencies
 jest.mock('@/utils/network', () => ({
-  getNetworkStatus: jest.fn(() => Promise.resolve({
-    isOnline: true,
-    isConnected: true,
-    isInternetReachable: true,
-    connectionType: 'wifi',
-  })),
+  getNetworkStatus: jest.fn(() =>
+    Promise.resolve({
+      isOnline: true,
+      isConnected: true,
+      isInternetReachable: true,
+      connectionType: 'wifi',
+    })
+  ),
   initializeNetworkMonitoring: jest.fn(() => jest.fn()),
   subscribeToNetworkChanges: jest.fn(() => jest.fn()),
 }));
 
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <NetworkProvider>{children}</NetworkProvider>
-);
+const wrapper = ({ children }: { children: React.ReactNode }) => <NetworkProvider>{children}</NetworkProvider>;
 
 describe('NetworkProvider', () => {
   beforeEach(() => {

@@ -59,11 +59,7 @@ function getUser(userId: any): Promise<any> {
 
 ```typescript
 // ✅ Good - Discriminated Union
-type AsyncState<T> =
-  | { status: "idle" }
-  | { status: "loading" }
-  | { status: "success"; data: T }
-  | { status: "error"; error: Error };
+type AsyncState<T> = { status: "idle" } | { status: "loading" } | { status: "success"; data: T } | { status: "error"; error: Error };
 ```
 
 ### Generics
@@ -98,12 +94,7 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-export function Button({
-  title,
-  onPress,
-  variant = "primary",
-  disabled
-}: ButtonProps) {
+export function Button({ title, onPress, variant = "primary", disabled }: ButtonProps) {
   // implementation
 }
 ```
@@ -1677,20 +1668,12 @@ export const db = getFirestore(app);
 
 ```typescript
 // ✅ Good - Proper auth flow
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut
-} from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "@/firebase-config";
 
 export async function loginWithEmail(email: string, password: string) {
   try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
     return userCredential.user;
   } catch (error: unknown) {
     if (error instanceof FirebaseError) {
@@ -1741,10 +1724,7 @@ export async function getUserProfile(userId: string): Promise<User | null> {
   }
 }
 
-export async function updateUserProfile(
-  userId: string,
-  updates: Partial<User>
-): Promise<void> {
+export async function updateUserProfile(userId: string, updates: Partial<User>): Promise<void> {
   try {
     const docRef = doc(db, "users", userId);
     await updateDoc(docRef, updates);
@@ -1812,10 +1792,7 @@ synchronization:
 import { saveDataLocally, syncToFirestore } from "@/utils/local-first";
 import { getCachedData, setCachedData } from "@/utils/cache";
 
-export async function saveUserPreferences(
-  userId: string,
-  preferences: UserPreferences
-) {
+export async function saveUserPreferences(userId: string, preferences: UserPreferences) {
   try {
     // 1. Save locally first (always succeeds)
     await saveDataLocally(`preferences_${userId}`, preferences);
@@ -1832,20 +1809,14 @@ export async function saveUserPreferences(
   }
 }
 
-export async function getUserPreferences(
-  userId: string
-): Promise<UserPreferences | null> {
+export async function getUserPreferences(userId: string): Promise<UserPreferences | null> {
   try {
     // 1. Check cache first (fastest)
-    const cached = await getCachedData<UserPreferences>(
-      `preferences_${userId}`
-    );
+    const cached = await getCachedData<UserPreferences>(`preferences_${userId}`);
     if (cached) return cached;
 
     // 2. Check local storage
-    const local = await getDataLocally<UserPreferences>(
-      `preferences_${userId}`
-    );
+    const local = await getDataLocally<UserPreferences>(`preferences_${userId}`);
     if (local) {
       await setCachedData(`preferences_${userId}`, local);
       return local;
@@ -1878,10 +1849,7 @@ export async function getUserPreferences(
 // ✅ Good - Network-aware operations
 import NetInfo from "@react-native-community/netinfo";
 
-export async function performNetworkOperation<T>(
-  operation: () => Promise<T>,
-  fallback?: T
-): Promise<T> {
+export async function performNetworkOperation<T>(operation: () => Promise<T>, fallback?: T): Promise<T> {
   const netInfo = await NetInfo.fetch();
 
   if (!netInfo.isConnected) {
@@ -1993,9 +1961,7 @@ export async function getUserData(userId: string, forceRefresh = false) {
  *   console.log(profile.displayName);
  * }
  */
-export async function getUserProfile(
-  userId: string
-): Promise<UserProfile | null> {
+export async function getUserProfile(userId: string): Promise<UserProfile | null> {
   try {
     const response = await api.get(`/users/${userId}`);
     return response.data;

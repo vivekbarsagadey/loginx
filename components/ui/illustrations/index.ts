@@ -10,4 +10,3 @@ export { ErrorAuthIllustration } from './error-auth';
 export { ErrorNetworkIllustration } from './error-network';
 export { ErrorServerIllustration } from './error-server';
 export { ErrorValidationIllustration } from './error-validation';
-

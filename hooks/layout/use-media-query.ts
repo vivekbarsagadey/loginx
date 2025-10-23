@@ -130,16 +130,7 @@ export function useMediaQuery(conditions: MediaQueryCondition): boolean {
     return () => {
       subscription.remove();
     };
-  }, [
-    conditions.minWidth,
-    conditions.maxWidth,
-    conditions.minHeight,
-    conditions.maxHeight,
-    conditions.orientation,
-    conditions.minAspectRatio,
-    conditions.maxAspectRatio,
-    conditions.platform,
-  ]);
+  }, [conditions.minWidth, conditions.maxWidth, conditions.minHeight, conditions.maxHeight, conditions.orientation, conditions.minAspectRatio, conditions.maxAspectRatio, conditions.platform]);
 
   return matches;
 }

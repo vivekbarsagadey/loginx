@@ -6,16 +6,7 @@
 /**
  * Network connection type
  */
-export type ConnectionType =
-  | 'wifi'
-  | 'cellular'
-  | 'bluetooth'
-  | 'ethernet'
-  | 'wimax'
-  | 'vpn'
-  | 'other'
-  | 'unknown'
-  | 'none';
+export type ConnectionType = 'wifi' | 'cellular' | 'bluetooth' | 'ethernet' | 'wimax' | 'vpn' | 'other' | 'unknown' | 'none';
 
 /**
  * Network state information

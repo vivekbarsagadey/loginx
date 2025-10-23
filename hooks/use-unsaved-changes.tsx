@@ -30,19 +30,19 @@ export interface UseUnsavedChangesOptions {
 
 /**
  * Hook to warn users about unsaved changes before navigation
- * 
+ *
  * Provides protection against accidental data loss by warning users
  * when they try to navigate away from a form with unsaved changes.
- * 
+ *
  * @param options - Configuration options
  * @returns Methods to control unsaved changes behavior
- * 
+ *
  * @example
  * ```tsx
  * function EditProfileScreen() {
  *   const [name, setName] = useState('');
  *   const [hasChanges, setHasChanges] = useState(false);
- *   
+ *
  *   const { promptIfUnsaved } = useUnsavedChanges({
  *     hasChanges,
  *     onSave: async () => {
@@ -50,7 +50,7 @@ export interface UseUnsavedChangesOptions {
  *       setHasChanges(false);
  *     },
  *   });
- * 
+ *
  *   return (
  *     <View>
  *       <TextInput value={name} onChangeText={(text) => {
@@ -64,13 +64,7 @@ export interface UseUnsavedChangesOptions {
  * ```
  */
 export function useUnsavedChanges(options: UseUnsavedChangesOptions) {
-  const {
-    hasChanges,
-    onSave,
-    onDiscard,
-    warningMessage,
-    warnOnBack = true,
-  } = options;
+  const { hasChanges, onSave, onDiscard, warningMessage, warnOnBack = true } = options;
 
   const alert = useAlert();
   const router = useRouter();
@@ -79,11 +73,7 @@ export function useUnsavedChanges(options: UseUnsavedChangesOptions) {
 
   // Get warning message
   const getWarningMessage = useCallback(() => {
-    return (
-      warningMessage ||
-      i18n.t('common.unsavedChanges.message') ||
-      'You have unsaved changes. Do you want to save them before leaving?'
-    );
+    return warningMessage || i18n.t('common.unsavedChanges.message') || 'You have unsaved changes. Do you want to save them before leaving?';
   }, [warningMessage]);
 
   // Prompt user about unsaved changes
@@ -97,53 +87,49 @@ export function useUnsavedChanges(options: UseUnsavedChangesOptions) {
       return new Promise<boolean>((resolve) => {
         hasPromptedRef.current = true;
 
-        alert.show(
-          i18n.t('common.unsavedChanges.title') || 'Unsaved Changes',
-          getWarningMessage(),
-          [
-            {
-              text: i18n.t('common.discard') || 'Discard',
-              onPress: () => {
-                onDiscard?.();
-                hasPromptedRef.current = false;
-                callback?.();
-                resolve(true);
-              },
-              style: 'destructive',
+        alert.show(i18n.t('common.unsavedChanges.title') || 'Unsaved Changes', getWarningMessage(), [
+          {
+            text: i18n.t('common.discard') || 'Discard',
+            onPress: () => {
+              onDiscard?.();
+              hasPromptedRef.current = false;
+              callback?.();
+              resolve(true);
             },
-            {
-              text: i18n.t('common.save') || 'Save',
-              onPress: async () => {
-                if (onSave) {
-                  setIsSaving(true);
-                  try {
-                    await onSave();
-                    hasPromptedRef.current = false;
-                    callback?.();
-                    resolve(true);
-                  } catch (_error: unknown) {
-                    console.error('Error saving changes:', error);
-                    resolve(false);
-                  } finally {
-                    setIsSaving(false);
-                  }
-                } else {
+            style: 'destructive',
+          },
+          {
+            text: i18n.t('common.save') || 'Save',
+            onPress: async () => {
+              if (onSave) {
+                setIsSaving(true);
+                try {
+                  await onSave();
                   hasPromptedRef.current = false;
                   callback?.();
                   resolve(true);
+                } catch (_error: unknown) {
+                  console.error('Error saving changes:', error);
+                  resolve(false);
+                } finally {
+                  setIsSaving(false);
                 }
-              },
-            },
-            {
-              text: i18n.t('common.cancel') || 'Cancel',
-              onPress: () => {
+              } else {
                 hasPromptedRef.current = false;
-                resolve(false);
-              },
-              style: 'cancel',
+                callback?.();
+                resolve(true);
+              }
             },
-          ]
-        );
+          },
+          {
+            text: i18n.t('common.cancel') || 'Cancel',
+            onPress: () => {
+              hasPromptedRef.current = false;
+              resolve(false);
+            },
+            style: 'cancel',
+          },
+        ]);
       });
     },
     [hasChanges, getWarningMessage, onSave, onDiscard, alert]
@@ -163,10 +149,7 @@ export function useUnsavedChanges(options: UseUnsavedChangesOptions) {
   // Setup back handler
   useEffect(() => {
     if (warnOnBack && hasChanges) {
-      const backHandler = BackHandler.addEventListener(
-        'hardwareBackPress',
-        handleNavigateBack
-      );
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', handleNavigateBack);
 
       return () => backHandler.remove();
     }
@@ -197,12 +180,12 @@ export function useUnsavedChanges(options: UseUnsavedChangesOptions) {
 
 /**
  * Hook to track form changes and warn on navigation
- * 
+ *
  * @param initialValues - Initial form values
  * @param currentValues - Current form values
  * @param onSave - Save callback
  * @returns Unsaved changes state and methods
- * 
+ *
  * @example
  * ```tsx
  * const { hasChanges, promptIfUnsaved } = useFormUnsavedChanges(
@@ -214,11 +197,7 @@ export function useUnsavedChanges(options: UseUnsavedChangesOptions) {
  * );
  * ```
  */
-export function useFormUnsavedChanges<T extends Record<string, any>>(
-  initialValues: T,
-  currentValues: T,
-  onSave?: () => void | Promise<void>
-) {
+export function useFormUnsavedChanges<T extends Record<string, any>>(initialValues: T, currentValues: T, onSave?: () => void | Promise<void>) {
   const hasChanges = JSON.stringify(initialValues) !== JSON.stringify(currentValues);
 
   return useUnsavedChanges({

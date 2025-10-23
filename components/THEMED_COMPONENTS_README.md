@@ -230,29 +230,11 @@ import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
 
 ```tsx
 <VStack spacing="sm">
-  <ThemedListItem
-    icon="user"
-    title="Profile"
-    description="Edit your information"
-    onPress={navigateToProfile}
-    showChevron
-  />
+  <ThemedListItem icon="user" title="Profile" description="Edit your information" onPress={navigateToProfile} showChevron />
   <ThemedDivider />
-  <ThemedListItem
-    icon="bell"
-    title="Notifications"
-    badge="3"
-    badgeVariant="error"
-    onPress={navigateToNotifications}
-    showChevron
-  />
+  <ThemedListItem icon="bell" title="Notifications" badge="3" badgeVariant="error" onPress={navigateToNotifications} showChevron />
   <ThemedDivider />
-  <ThemedListItem
-    icon="moon"
-    title="Dark Mode"
-    switchValue={isDarkMode}
-    onSwitchChange={toggleDarkMode}
-  />
+  <ThemedListItem icon="moon" title="Dark Mode" switchValue={isDarkMode} onSwitchChange={toggleDarkMode} />
 </VStack>
 ```
 
@@ -276,12 +258,7 @@ import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
 ### Alert with Action
 
 ```tsx
-<ThemedInfoBox
-  variant="warning"
-  action={{ label: "Learn More", onPress: handleLearnMore }}
-  dismissible
-  onDismiss={handleDismiss}
->
+<ThemedInfoBox variant="warning" action={{ label: "Learn More", onPress: handleLearnMore }} dismissible onDismiss={handleDismiss}>
   Your subscription expires in 7 days
 </ThemedInfoBox>
 ```
@@ -290,11 +267,7 @@ import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
 
 ```tsx
 {
-  loading ? (
-    <ThemedLoadingSpinner size="large" text="Loading data..." centered />
-  ) : (
-    <DataList />
-  );
+  loading ? <ThemedLoadingSpinner size="large" text="Loading data..." centered /> : <DataList />;
 }
 ```
 
@@ -345,20 +318,8 @@ ThemedIconContainer, ThemedBadge).
 ```tsx
 const colors = useThemeColors();
 
-<Pressable
-  style={({ pressed }) => [
-    styles.listItem,
-    { backgroundColor: colors.surface },
-    pressed && { opacity: 0.7 }
-  ]}
-  onPress={handlePress}
->
-  <View
-    style={[
-      styles.iconContainer,
-      { backgroundColor: colors["surface-variant"] }
-    ]}
-  >
+<Pressable style={({ pressed }) => [styles.listItem, { backgroundColor: colors.surface }, pressed && { opacity: 0.7 }]} onPress={handlePress}>
+  <View style={[styles.iconContainer, { backgroundColor: colors["surface-variant"] }]}>
     <Ionicons name="settings" size={24} color={colors.primary} />
   </View>
   <View style={styles.content}>
@@ -382,13 +343,7 @@ const styles = StyleSheet.create({
 ### After (With Themed Components)
 
 ```tsx
-<ThemedListItem
-  icon="settings"
-  title="Settings"
-  description="Manage preferences"
-  onPress={handlePress}
-  showChevron
-/>
+<ThemedListItem icon="settings" title="Settings" description="Manage preferences" onPress={handlePress} showChevron />
 
 // No styles needed! ✨
 ```

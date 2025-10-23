@@ -4,8 +4,8 @@ version: 1.0
 date_created: 2025-01-19
 last_updated: 2025-01-19
 owner: LoginX Team
-status: 'Planned'
-tags: ['architecture', 'refactor', 'state-management', 'context', 'performance']
+status: "Planned"
+tags: ["architecture", "refactor", "state-management", "context", "performance"]
 ---
 
 # Context Architecture Refactoring Implementation Plan
@@ -15,6 +15,7 @@ tags: ['architecture', 'refactor', 'state-management', 'context', 'performance']
 ## Introduction
 
 This plan addresses the identified gaps in LoginX's state management architecture. Currently, the app uses inconsistent patterns:
+
 - Some state managed via Context (Theme, Auth, Language, Onboarding)
 - Most state managed via local `useState` in individual screens
 - No centralized state for Settings, Permissions, or Network status
@@ -22,6 +23,7 @@ This plan addresses the identified gaps in LoginX's state management architectur
 - Stale data visible to users after changes
 
 **Goal:** Establish a cohesive, performant Context architecture that provides:
+
 1. Single source of truth for all app-wide state
 2. Immediate synchronization across all screens
 3. Better developer experience with consistent patterns
@@ -86,155 +88,155 @@ This plan addresses the identified gaps in LoginX's state management architectur
 
 **GOAL-001**: Audit existing state management and prepare infrastructure
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-001 | Audit all screens using `useState` for settings/preferences | | |
-| TASK-002 | Document current data flow for settings (fetch → display → update) | | |
-| TASK-003 | Identify all components that would benefit from SettingsContext | | |
-| TASK-004 | Create types file: `types/settings.ts` for all settings types | | |
-| TASK-005 | Create types file: `types/network.ts` for network status types | | |
-| TASK-006 | Create types file: `types/permissions.ts` for permission types | | |
-| TASK-007 | Add Context documentation to project guidelines | | |
+| Task     | Description                                                        | Completed | Date |
+| -------- | ------------------------------------------------------------------ | --------- | ---- |
+| TASK-001 | Audit all screens using `useState` for settings/preferences        |           |      |
+| TASK-002 | Document current data flow for settings (fetch → display → update) |           |      |
+| TASK-003 | Identify all components that would benefit from SettingsContext    |           |      |
+| TASK-004 | Create types file: `types/settings.ts` for all settings types      |           |      |
+| TASK-005 | Create types file: `types/network.ts` for network status types     |           |      |
+| TASK-006 | Create types file: `types/permissions.ts` for permission types     |           |      |
+| TASK-007 | Add Context documentation to project guidelines                    |           |      |
 
 ### Phase 2: SettingsProvider Implementation
 
 **GOAL-002**: Create centralized SettingsContext to replace scattered useState
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-008 | Create `hooks/settings/use-settings-context.tsx` | | |
-| TASK-009 | Define SettingsState interface (notifications, security, app preferences) | | |
-| TASK-010 | Implement SettingsProvider with AsyncStorage integration | | |
-| TASK-011 | Add optimistic updates for settings changes | | |
-| TASK-012 | Implement Firestore sync for authenticated users | | |
-| TASK-013 | Add error handling and retry logic | | |
-| TASK-014 | Create `useSettings()` custom hook | | |
-| TASK-015 | Add loading states and error states | | |
-| TASK-016 | Implement settings cache warming on app launch | | |
-| TASK-017 | Add debug logging for settings changes (dev mode) | | |
-| TASK-018 | Write unit tests for SettingsProvider | | |
-| TASK-019 | Add SettingsProvider to app/_layout.tsx | | |
+| Task     | Description                                                               | Completed | Date |
+| -------- | ------------------------------------------------------------------------- | --------- | ---- |
+| TASK-008 | Create `hooks/settings/use-settings-context.tsx`                          |           |      |
+| TASK-009 | Define SettingsState interface (notifications, security, app preferences) |           |      |
+| TASK-010 | Implement SettingsProvider with AsyncStorage integration                  |           |      |
+| TASK-011 | Add optimistic updates for settings changes                               |           |      |
+| TASK-012 | Implement Firestore sync for authenticated users                          |           |      |
+| TASK-013 | Add error handling and retry logic                                        |           |      |
+| TASK-014 | Create `useSettings()` custom hook                                        |           |      |
+| TASK-015 | Add loading states and error states                                       |           |      |
+| TASK-016 | Implement settings cache warming on app launch                            |           |      |
+| TASK-017 | Add debug logging for settings changes (dev mode)                         |           |      |
+| TASK-018 | Write unit tests for SettingsProvider                                     |           |      |
+| TASK-019 | Add SettingsProvider to app/\_layout.tsx                                  |           |      |
 
 ### Phase 3: NetworkProvider Implementation
 
 **GOAL-003**: Create NetworkContext for global network status management
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-020 | Create `hooks/network/use-network-context.tsx` | | |
-| TASK-021 | Define NetworkState interface (isConnected, connectionType, isInternetReachable) | | |
-| TASK-022 | Wrap existing `initializeNetworkMonitoring()` in Context | | |
-| TASK-023 | Add sync queue status to NetworkContext | | |
-| TASK-024 | Implement network quality indicators | | |
-| TASK-025 | Create `useNetwork()` custom hook | | |
-| TASK-026 | Add network change event listeners | | |
-| TASK-027 | Integrate with existing OfflineIndicator component | | |
-| TASK-028 | Write unit tests for NetworkProvider | | |
-| TASK-029 | Add NetworkProvider to app/_layout.tsx | | |
+| Task     | Description                                                                      | Completed | Date |
+| -------- | -------------------------------------------------------------------------------- | --------- | ---- |
+| TASK-020 | Create `hooks/network/use-network-context.tsx`                                   |           |      |
+| TASK-021 | Define NetworkState interface (isConnected, connectionType, isInternetReachable) |           |      |
+| TASK-022 | Wrap existing `initializeNetworkMonitoring()` in Context                         |           |      |
+| TASK-023 | Add sync queue status to NetworkContext                                          |           |      |
+| TASK-024 | Implement network quality indicators                                             |           |      |
+| TASK-025 | Create `useNetwork()` custom hook                                                |           |      |
+| TASK-026 | Add network change event listeners                                               |           |      |
+| TASK-027 | Integrate with existing OfflineIndicator component                               |           |      |
+| TASK-028 | Write unit tests for NetworkProvider                                             |           |      |
+| TASK-029 | Add NetworkProvider to app/\_layout.tsx                                          |           |      |
 
 ### Phase 4: Security & Permissions Consolidation
 
 **GOAL-004**: Centralize security settings and permissions in dedicated Contexts
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-030 | Refactor `useSecuritySettings()` to use SettingsContext | | |
-| TASK-031 | Create `hooks/permissions/use-permissions-context.tsx` | | |
-| TASK-032 | Define PermissionsState interface (camera, media, location, notifications) | | |
-| TASK-033 | Implement PermissionsProvider with real-time permission checking | | |
-| TASK-034 | Add permission request handlers to Context | | |
-| TASK-035 | Create `usePermissions()` custom hook | | |
-| TASK-036 | Migrate existing `usePermissions()` logic to Context | | |
-| TASK-037 | Write unit tests for PermissionsProvider | | |
-| TASK-038 | Add PermissionsProvider to app/_layout.tsx | | |
+| Task     | Description                                                                | Completed | Date |
+| -------- | -------------------------------------------------------------------------- | --------- | ---- |
+| TASK-030 | Refactor `useSecuritySettings()` to use SettingsContext                    |           |      |
+| TASK-031 | Create `hooks/permissions/use-permissions-context.tsx`                     |           |      |
+| TASK-032 | Define PermissionsState interface (camera, media, location, notifications) |           |      |
+| TASK-033 | Implement PermissionsProvider with real-time permission checking           |           |      |
+| TASK-034 | Add permission request handlers to Context                                 |           |      |
+| TASK-035 | Create `usePermissions()` custom hook                                      |           |      |
+| TASK-036 | Migrate existing `usePermissions()` logic to Context                       |           |      |
+| TASK-037 | Write unit tests for PermissionsProvider                                   |           |      |
+| TASK-038 | Add PermissionsProvider to app/\_layout.tsx                                |           |      |
 
 ### Phase 5: Migration - Settings Screens
 
 **GOAL-005**: Migrate existing settings screens to use new SettingsContext
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-039 | Migrate `app/settings/notifications.tsx` to use SettingsContext | | |
-| TASK-040 | Remove local useState from notifications screen | | |
-| TASK-041 | Migrate `app/(tabs)/settings.tsx` to use SettingsContext | | |
-| TASK-042 | Migrate `app/security/*` screens to use SettingsContext | | |
-| TASK-043 | Update NotificationPreferencesCard to use SettingsContext | | |
-| TASK-044 | Test cross-screen synchronization (change in Settings → reflect in Home) | | |
-| TASK-045 | Remove redundant data fetching logic from migrated screens | | |
+| Task     | Description                                                              | Completed | Date |
+| -------- | ------------------------------------------------------------------------ | --------- | ---- |
+| TASK-039 | Migrate `app/settings/notifications.tsx` to use SettingsContext          |           |      |
+| TASK-040 | Remove local useState from notifications screen                          |           |      |
+| TASK-041 | Migrate `app/(tabs)/settings.tsx` to use SettingsContext                 |           |      |
+| TASK-042 | Migrate `app/security/*` screens to use SettingsContext                  |           |      |
+| TASK-043 | Update NotificationPreferencesCard to use SettingsContext                |           |      |
+| TASK-044 | Test cross-screen synchronization (change in Settings → reflect in Home) |           |      |
+| TASK-045 | Remove redundant data fetching logic from migrated screens               |           |      |
 
 ### Phase 6: Migration - Permission Screens
 
 **GOAL-006**: Migrate permission-related screens to use PermissionsContext
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-046 | Migrate `app/settings/permissions.tsx` to use PermissionsContext | | |
-| TASK-047 | Migrate onboarding permission slides to use PermissionsContext | | |
-| TASK-048 | Remove local useState from permission screens | | |
-| TASK-049 | Test permission flow (request → grant → update UI instantly) | | |
+| Task     | Description                                                      | Completed | Date |
+| -------- | ---------------------------------------------------------------- | --------- | ---- |
+| TASK-046 | Migrate `app/settings/permissions.tsx` to use PermissionsContext |           |      |
+| TASK-047 | Migrate onboarding permission slides to use PermissionsContext   |           |      |
+| TASK-048 | Remove local useState from permission screens                    |           |      |
+| TASK-049 | Test permission flow (request → grant → update UI instantly)     |           |      |
 
 ### Phase 7: OnboardingProvider Refactoring
 
 **GOAL-007**: Optimize OnboardingProvider to reduce bundle size and runtime overhead
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-050 | Analyze OnboardingProvider usage patterns | | |
-| TASK-051 | Decision: Keep minimal completion tracking OR remove entirely | | |
-| TASK-052 | Option A: Implement lazy loading (only mount during onboarding) | | |
-| TASK-053 | Option B: Move analytics to separate module (not in Context) | | |
-| TASK-054 | Option C: Remove OnboardingProvider, use local state in screens | | |
-| TASK-055 | Implement chosen optimization strategy | | |
-| TASK-056 | Test onboarding flow with new implementation | | |
-| TASK-057 | Update documentation for onboarding state management | | |
+| Task     | Description                                                     | Completed | Date |
+| -------- | --------------------------------------------------------------- | --------- | ---- |
+| TASK-050 | Analyze OnboardingProvider usage patterns                       |           |      |
+| TASK-051 | Decision: Keep minimal completion tracking OR remove entirely   |           |      |
+| TASK-052 | Option A: Implement lazy loading (only mount during onboarding) |           |      |
+| TASK-053 | Option B: Move analytics to separate module (not in Context)    |           |      |
+| TASK-054 | Option C: Remove OnboardingProvider, use local state in screens |           |      |
+| TASK-055 | Implement chosen optimization strategy                          |           |      |
+| TASK-056 | Test onboarding flow with new implementation                    |           |      |
+| TASK-057 | Update documentation for onboarding state management            |           |      |
 
 ### Phase 8: Performance Optimization
 
 **GOAL-008**: Ensure all Contexts are optimized and don't cause performance regressions
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-058 | Profile app with React DevTools Profiler (before optimization) | | |
-| TASK-059 | Ensure all Context values are memoized with `useMemo` | | |
-| TASK-060 | Ensure all callbacks are memoized with `useCallback` | | |
-| TASK-061 | Implement Context selectors to prevent unnecessary re-renders | | |
-| TASK-062 | Add React.memo to expensive components consuming Contexts | | |
-| TASK-063 | Profile app with React DevTools Profiler (after optimization) | | |
-| TASK-064 | Compare FPS metrics (before vs after) | | |
-| TASK-065 | Benchmark app launch time (before vs after) | | |
-| TASK-066 | Document performance optimization patterns | | |
+| Task     | Description                                                    | Completed | Date |
+| -------- | -------------------------------------------------------------- | --------- | ---- |
+| TASK-058 | Profile app with React DevTools Profiler (before optimization) |           |      |
+| TASK-059 | Ensure all Context values are memoized with `useMemo`          |           |      |
+| TASK-060 | Ensure all callbacks are memoized with `useCallback`           |           |      |
+| TASK-061 | Implement Context selectors to prevent unnecessary re-renders  |           |      |
+| TASK-062 | Add React.memo to expensive components consuming Contexts      |           |      |
+| TASK-063 | Profile app with React DevTools Profiler (after optimization)  |           |      |
+| TASK-064 | Compare FPS metrics (before vs after)                          |           |      |
+| TASK-065 | Benchmark app launch time (before vs after)                    |           |      |
+| TASK-066 | Document performance optimization patterns                     |           |      |
 
 ### Phase 9: Testing & Quality Assurance
 
 **GOAL-009**: Comprehensive testing of all new Contexts and migrated screens
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-067 | Write unit tests for SettingsProvider (80%+ coverage) | | |
-| TASK-068 | Write unit tests for NetworkProvider (80%+ coverage) | | |
-| TASK-069 | Write unit tests for PermissionsProvider (80%+ coverage) | | |
-| TASK-070 | Write integration tests for cross-screen synchronization | | |
-| TASK-071 | Test offline scenarios (settings change while offline) | | |
-| TASK-072 | Test Firestore sync scenarios (conflict resolution) | | |
-| TASK-073 | Test error handling (storage failures, network errors) | | |
-| TASK-074 | Test on low-end devices (performance validation) | | |
-| TASK-075 | Manual QA testing on iOS and Android | | |
+| Task     | Description                                              | Completed | Date |
+| -------- | -------------------------------------------------------- | --------- | ---- |
+| TASK-067 | Write unit tests for SettingsProvider (80%+ coverage)    |           |      |
+| TASK-068 | Write unit tests for NetworkProvider (80%+ coverage)     |           |      |
+| TASK-069 | Write unit tests for PermissionsProvider (80%+ coverage) |           |      |
+| TASK-070 | Write integration tests for cross-screen synchronization |           |      |
+| TASK-071 | Test offline scenarios (settings change while offline)   |           |      |
+| TASK-072 | Test Firestore sync scenarios (conflict resolution)      |           |      |
+| TASK-073 | Test error handling (storage failures, network errors)   |           |      |
+| TASK-074 | Test on low-end devices (performance validation)         |           |      |
+| TASK-075 | Manual QA testing on iOS and Android                     |           |      |
 
 ### Phase 10: Documentation & Cleanup
 
 **GOAL-010**: Complete documentation and remove deprecated code
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-076 | Update project README with Context architecture overview | | |
-| TASK-077 | Create `docs/CONTEXT_ARCHITECTURE.md` documentation | | |
-| TASK-078 | Document migration patterns for future developers | | |
-| TASK-079 | Add JSDoc comments to all Context APIs | | |
-| TASK-080 | Remove deprecated `useState` patterns from codebase | | |
-| TASK-081 | Remove redundant utility functions replaced by Contexts | | |
-| TASK-082 | Update `.github/instructions/rule.instructions.md` with Context guidelines | | |
-| TASK-083 | Create examples in `app/examples/` demonstrating Context usage | | |
-| TASK-084 | Record demo video showing cross-screen synchronization | | |
+| Task     | Description                                                                | Completed | Date |
+| -------- | -------------------------------------------------------------------------- | --------- | ---- |
+| TASK-076 | Update project README with Context architecture overview                   |           |      |
+| TASK-077 | Create `docs/CONTEXT_ARCHITECTURE.md` documentation                        |           |      |
+| TASK-078 | Document migration patterns for future developers                          |           |      |
+| TASK-079 | Add JSDoc comments to all Context APIs                                     |           |      |
+| TASK-080 | Remove deprecated `useState` patterns from codebase                        |           |      |
+| TASK-081 | Remove redundant utility functions replaced by Contexts                    |           |      |
+| TASK-082 | Update `.github/instructions/rule.instructions.md` with Context guidelines |           |      |
+| TASK-083 | Create examples in `app/examples/` demonstrating Context usage             |           |      |
+| TASK-084 | Record demo video showing cross-screen synchronization                     |           |      |
 
 ## 3. Alternatives
 
@@ -424,12 +426,14 @@ This plan addresses the identified gaps in LoginX's state management architectur
 ## 8. Related Specifications / Further Reading
 
 ### Internal Documentation
+
 - [LoginX Architecture Guidelines](/.github/instructions/rule.instructions.md)
 - [React Development Standards](/.github/instructions/reactjs.instructions.md)
 - [Performance Optimization Guide](/.github/instructions/performance-optimization.instructions.md)
 - [Local-First Implementation](../docs/LOCAL_FIRST_IMPLEMENTATION.md)
 
 ### External References
+
 - [React Context Best Practices](https://react.dev/learn/passing-data-deeply-with-context)
 - [React Performance Optimization](https://react.dev/learn/render-and-commit)
 - [React Native Performance](https://reactnative.dev/docs/performance)
@@ -439,6 +443,7 @@ This plan addresses the identified gaps in LoginX's state management architectur
 ---
 
 **Next Steps:**
+
 1. Review and approve this plan
 2. Set up development branch: `feature/context-architecture`
 3. Begin Phase 1: Foundation & Analysis
@@ -446,6 +451,7 @@ This plan addresses the identified gaps in LoginX's state management architectur
 5. Plan rollback strategy if issues arise
 
 **Estimated Timeline:**
+
 - Phase 1-2: 3 days (SettingsProvider)
 - Phase 3: 1 day (NetworkProvider)
 - Phase 4: 2 days (Security & Permissions)

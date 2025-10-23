@@ -86,7 +86,7 @@ async function callAuthFunction(functionName: string, data: Record<string, any>)
     }
 
     // Log unexpected errors
-    logger.error("[AuthRateLimiter] Validation failed", _error);
+    logger.error('[AuthRateLimiter] Validation failed', _error);
 
     // Allow operation on unexpected errors (fail open for better UX)
     return {

@@ -5,9 +5,9 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
+import { useAsyncStorage } from '@/hooks/storage/use-async-storage';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
-import { useAsyncStorage } from '@/hooks/storage/use-async-storage';
 import i18n from '@/i18n';
 import { Config } from '@/utils/config';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,7 +27,7 @@ const schema = z.object({
  */
 export default function PasswordlessLoginScreen() {
   const { push, back } = useHapticNavigation();
-  
+
   // Use storage hook for email persistence
   const emailForSignInStorage = useAsyncStorage<string>('emailForSignIn', '');
 

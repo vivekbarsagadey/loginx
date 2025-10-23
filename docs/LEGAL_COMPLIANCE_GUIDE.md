@@ -319,9 +319,7 @@ All legal screens implement WCAG 2.1 AA compliance standards.
 ```typescript
 // Automatic announcement on screen mount
 useEffect(() => {
-  AccessibilityInfo.announceForAccessibility(
-    "Terms of Service. Legal document. Scroll to read all sections."
-  );
+  AccessibilityInfo.announceForAccessibility("Terms of Service. Legal document. Scroll to read all sections.");
 }, []);
 ```
 
@@ -348,10 +346,7 @@ useEffect(() => {
 
 ```tsx
 // Section grouping with labels
-<ThemedView
-  accessible={true}
-  accessibilityLabel={`Section ${index + 1}: ${section.title}`}
->
+<ThemedView accessible={true} accessibilityLabel={`Section ${index + 1}: ${section.title}`}>
   {/* Section content */}
 </ThemedView>
 ```
@@ -433,23 +428,19 @@ GDPR Article 15-22.
 ```typescript
 const handleRequestData = async () => {
   // 1. Show confirmation dialog
-  Alert.alert(
-    "Request Your Data",
-    "We will prepare a copy of your data and send it to your registered email within 30 days.",
-    [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Confirm",
-        onPress: async () => {
-          // 2. Create data export request
-          await createDataExportRequest(userId);
+  Alert.alert("Request Your Data", "We will prepare a copy of your data and send it to your registered email within 30 days.", [
+    { text: "Cancel", style: "cancel" },
+    {
+      text: "Confirm",
+      onPress: async () => {
+        // 2. Create data export request
+        await createDataExportRequest(userId);
 
-          // 3. Notify user
-          Alert.alert("Success", "Your data request has been submitted.");
-        }
+        // 3. Notify user
+        Alert.alert("Success", "Your data request has been submitted.");
       }
-    ]
-  );
+    }
+  ]);
 };
 ```
 
@@ -465,27 +456,23 @@ const handleRequestData = async () => {
 
 ```typescript
 const handleDeleteData = async () => {
-  Alert.alert(
-    "Delete Account",
-    "This will permanently delete your account and all associated data. This action cannot be undone.",
-    [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete Permanently",
-        style: "destructive",
-        onPress: async () => {
-          // 1. Delete user data
-          await deleteUserAccount(userId);
+  Alert.alert("Delete Account", "This will permanently delete your account and all associated data. This action cannot be undone.", [
+    { text: "Cancel", style: "cancel" },
+    {
+      text: "Delete Permanently",
+      style: "destructive",
+      onPress: async () => {
+        // 1. Delete user data
+        await deleteUserAccount(userId);
 
-          // 2. Sign out
-          await signOut();
+        // 2. Sign out
+        await signOut();
 
-          // 3. Navigate to welcome
-          router.replace(Routes.AUTH.WELCOME);
-        }
+        // 3. Navigate to welcome
+        router.replace(Routes.AUTH.WELCOME);
       }
-    ]
-  );
+    }
+  ]);
 };
 ```
 
@@ -534,11 +521,7 @@ const handleDeleteData = async () => {
 **Code:**
 
 ```tsx
-<TermsCheckbox
-  checked={acceptedTerms}
-  onChange={setAcceptedTerms}
-  error={errors.terms}
-/>
+<TermsCheckbox checked={acceptedTerms} onChange={setAcceptedTerms} error={errors.terms} />
 // Links to /legal/terms and /legal/privacy
 ```
 

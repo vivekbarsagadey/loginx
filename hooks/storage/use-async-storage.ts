@@ -1,5 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useCallback, useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useCallback, useEffect, useState } from 'react';
 
 export interface UseAsyncStorageOptions {
   cache?: boolean;
@@ -18,25 +18,13 @@ export interface UseAsyncStorageReturn<T> {
   isCached: boolean;
 }
 
-const cache = new Map<
-  string,
-  { value: unknown; timestamp: number; ttl: number }
->();
+const cache = new Map<string, { value: unknown; timestamp: number; ttl: number }>();
 
 /**
  * Enhanced AsyncStorage hook with caching and TTL support.
  */
-export function useAsyncStorage<T>(
-  key: string,
-  initialValue: T,
-  options: UseAsyncStorageOptions = {}
-): UseAsyncStorageReturn<T> {
-  const {
-    cache: useCache = true,
-    ttl = 300000,
-    serialize = JSON.stringify,
-    deserialize = JSON.parse,
-  } = options;
+export function useAsyncStorage<T>(key: string, initialValue: T, options: UseAsyncStorageOptions = {}): UseAsyncStorageReturn<T> {
+  const { cache: useCache = true, ttl = 300000, serialize = JSON.stringify, deserialize = JSON.parse } = options;
 
   const [storedValue, setStoredValue] = useState<T>(initialValue);
   const [loading, setLoading] = useState<boolean>(true);
@@ -44,10 +32,14 @@ export function useAsyncStorage<T>(
   const [isCached, setIsCached] = useState<boolean>(false);
 
   const getCachedValue = useCallback((): T | null => {
-    if (!useCache) {return null;}
+    if (!useCache) {
+      return null;
+    }
 
     const cached = cache.get(key);
-    if (!cached) {return null;}
+    if (!cached) {
+      return null;
+    }
 
     const isExpired = Date.now() - cached.timestamp > cached.ttl;
     if (isExpired) {
@@ -60,7 +52,9 @@ export function useAsyncStorage<T>(
 
   const setCachedValue = useCallback(
     (value: T) => {
-      if (!useCache) {return;}
+      if (!useCache) {
+        return;
+      }
       cache.set(key, { value, timestamp: Date.now(), ttl });
     },
     [key, useCache, ttl]
@@ -90,9 +84,7 @@ export function useAsyncStorage<T>(
           setIsCached(false);
         }
       } catch (_error) {
-        setError(
-          _error instanceof Error ? _error : new Error("Failed to load from storage")
-        );
+        setError(_error instanceof Error ? _error : new Error('Failed to load from storage'));
       } finally {
         setLoading(false);
       }
@@ -108,16 +100,13 @@ export function useAsyncStorage<T>(
     async (value: T | ((prev: T) => T)) => {
       try {
         setError(null);
-        const valueToStore =
-          value instanceof Function ? value(storedValue) : value;
+        const valueToStore = value instanceof Function ? value(storedValue) : value;
         setStoredValue(valueToStore);
         setCachedValue(valueToStore);
         await AsyncStorage.setItem(key, serialize(valueToStore));
         setIsCached(true);
       } catch (_error) {
-        setError(
-          _error instanceof Error ? _error : new Error("Failed to save to storage")
-        );
+        setError(_error instanceof Error ? _error : new Error('Failed to save to storage'));
       }
     },
     [key, storedValue, serialize, setCachedValue]
@@ -131,9 +120,7 @@ export function useAsyncStorage<T>(
       setIsCached(false);
       await AsyncStorage.removeItem(key);
     } catch (_error) {
-      setError(
-        _error instanceof Error ? _error : new Error("Failed to remove from storage")
-      );
+      setError(_error instanceof Error ? _error : new Error('Failed to remove from storage'));
     }
   }, [key, initialValue]);
 

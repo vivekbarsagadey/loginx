@@ -5,10 +5,10 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
 import { auth } from '@/firebase-config';
-import { useFormSubmit } from '@/hooks/use-form-submit';
-import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import { useAsyncStorage } from '@/hooks/storage/use-async-storage';
 import { useInterval } from '@/hooks/timing/use-interval';
+import { useFormSubmit } from '@/hooks/use-form-submit';
+import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
 import i18n from '@/i18n';
 import { createLogger } from '@/utils/debug';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -40,7 +40,7 @@ export default function OTPLoginScreen() {
   const [resending, setResending] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const otpRefs = useRef<TextInput[]>([]);
-  
+
   // Use storage hooks for persistent data
   const otpStorage = useAsyncStorage<{
     code: string;
@@ -48,7 +48,7 @@ export default function OTPLoginScreen() {
     timestamp: number;
     expiresAt: number;
   } | null>('emailOTP', null);
-  
+
   const emailForSignInStorage = useAsyncStorage<string>('emailForSignIn', '');
 
   // Use useInterval for countdown timer

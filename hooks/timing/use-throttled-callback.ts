@@ -43,10 +43,7 @@ import { useCallback, useRef } from 'react';
  *   saveToAPI(data);
  * }, 2000); // At most once every 2 seconds
  */
-export function useThrottledCallback<T extends (...args: never[]) => unknown>(
-  callback: T,
-  limit: number
-): (...args: Parameters<T>) => void {
+export function useThrottledCallback<T extends (...args: never[]) => unknown>(callback: T, limit: number): (...args: Parameters<T>) => void {
   const inThrottle = useRef(false);
 
   return useCallback(

@@ -2,8 +2,8 @@
  * Tests for useInterval hook
  */
 
-import { act, renderHook } from '@testing-library/react-native';
 import { useInterval } from '@/hooks/timing/use-interval';
+import { act, renderHook } from '@testing-library/react-native';
 
 describe('useInterval', () => {
   beforeEach(() => {
@@ -27,18 +27,14 @@ describe('useInterval', () => {
 
     it('should not start interval when immediate is false', () => {
       const callback = jest.fn();
-      const { result } = renderHook(() =>
-        useInterval(callback, 1000, { immediate: false })
-      );
+      const { result } = renderHook(() => useInterval(callback, 1000, { immediate: false }));
 
       expect(result.current.isRunning).toBe(false);
     });
 
     it('should not start interval when enabled is false', () => {
       const callback = jest.fn();
-      const { result } = renderHook(() =>
-        useInterval(callback, 1000, { enabled: false })
-      );
+      const { result } = renderHook(() => useInterval(callback, 1000, { enabled: false }));
 
       expect(result.current.isRunning).toBe(false);
     });
@@ -101,9 +97,7 @@ describe('useInterval', () => {
   describe('Control Methods', () => {
     it('should start interval manually', () => {
       const callback = jest.fn();
-      const { result } = renderHook(() =>
-        useInterval(callback, 1000, { immediate: false })
-      );
+      const { result } = renderHook(() => useInterval(callback, 1000, { immediate: false }));
 
       expect(result.current.isRunning).toBe(false);
 
@@ -172,9 +166,7 @@ describe('useInterval', () => {
 
     it('should handle multiple start/stop cycles', () => {
       const callback = jest.fn();
-      const { result } = renderHook(() =>
-        useInterval(callback, 1000, { immediate: false })
-      );
+      const { result } = renderHook(() => useInterval(callback, 1000, { immediate: false }));
 
       // Start
       act(() => {
@@ -233,10 +225,7 @@ describe('useInterval', () => {
 
     it('should stop interval when delay changes', () => {
       const callback = jest.fn();
-      const { rerender } = renderHook(
-        ({ delay }) => useInterval(callback, delay),
-        { initialProps: { delay: 1000 } }
-      );
+      const { rerender } = renderHook(({ delay }) => useInterval(callback, delay), { initialProps: { delay: 1000 } });
 
       act(() => {
         jest.advanceTimersByTime(1000);
@@ -261,10 +250,7 @@ describe('useInterval', () => {
 
     it('should stop interval when enabled becomes false', () => {
       const callback = jest.fn();
-      const { rerender } = renderHook(
-        ({ enabled }) => useInterval(callback, 1000, { enabled }),
-        { initialProps: { enabled: true } }
-      );
+      const { rerender } = renderHook(({ enabled }) => useInterval(callback, 1000, { enabled }), { initialProps: { enabled: true } });
 
       act(() => {
         jest.advanceTimersByTime(1000);
@@ -298,10 +284,7 @@ describe('useInterval', () => {
       const callback1 = jest.fn();
       const callback2 = jest.fn();
 
-      const { rerender } = renderHook(
-        ({ callback }) => useInterval(callback, 1000),
-        { initialProps: { callback: callback1 } }
-      );
+      const { rerender } = renderHook(({ callback }) => useInterval(callback, 1000), { initialProps: { callback: callback1 } });
 
       act(() => {
         jest.advanceTimersByTime(1000);
@@ -322,10 +305,7 @@ describe('useInterval', () => {
 
     it('should handle delay changing to null', () => {
       const callback = jest.fn();
-      const { rerender, result } = renderHook(
-        ({ delay }) => useInterval(callback, delay),
-        { initialProps: { delay: 1000 as number | null } }
-      );
+      const { rerender, result } = renderHook(({ delay }) => useInterval(callback, delay), { initialProps: { delay: 1000 as number | null } });
 
       act(() => {
         jest.advanceTimersByTime(1000);

@@ -3,8 +3,8 @@
  * Provides boolean flags for different screen size breakpoints
  */
 
-import { useWindowDimensions } from 'react-native';
 import { useMemo } from 'react';
+import { useWindowDimensions } from 'react-native';
 
 export interface Breakpoint {
   /** Extra small screens (< 480px) */
@@ -72,7 +72,15 @@ export function useBreakpoint(): Breakpoint {
     const xl = width >= BREAKPOINTS.lg;
 
     let current: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 'xs';
-    if (xl) {current = 'xl';} else if (lg) {current = 'lg';} else if (md) {current = 'md';} else if (sm) {current = 'sm';}
+    if (xl) {
+      current = 'xl';
+    } else if (lg) {
+      current = 'lg';
+    } else if (md) {
+      current = 'md';
+    } else if (sm) {
+      current = 'sm';
+    }
 
     return {
       xs,

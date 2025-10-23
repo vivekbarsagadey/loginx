@@ -3,8 +3,8 @@
  * Tracks device orientation changes and provides orientation state
  */
 
-import { useWindowDimensions } from 'react-native';
 import { useMemo } from 'react';
+import { useWindowDimensions } from 'react-native';
 
 export type Orientation = 'portrait' | 'landscape';
 

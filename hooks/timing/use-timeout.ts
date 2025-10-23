@@ -93,11 +93,7 @@ export interface UseTimeoutReturn {
  *   {isPending && <ActivityIndicator />}
  * </View>
  */
-export function useTimeout(
-  callback: () => void,
-  delay: number | null,
-  options: UseTimeoutOptions = {}
-): UseTimeoutReturn {
+export function useTimeout(callback: () => void, delay: number | null, options: UseTimeoutOptions = {}): UseTimeoutReturn {
   const { immediate = true, enabled = true } = options;
 
   const [isPending, setIsPending] = useState(immediate && enabled && delay !== null);
@@ -121,7 +117,9 @@ export function useTimeout(
 
   // Start timeout
   const start = useCallback(() => {
-    if (delay === null) {return;}
+    if (delay === null) {
+      return;
+    }
 
     // Cancel existing timeout
     cancel();

@@ -86,16 +86,16 @@ export type EmptyStateProps = {
  * />
  * ```
  */
-function EmptyStateComponent({ 
-  icon, 
-  illustration, 
-  title, 
-  description, 
-  actionLabel, 
-  onActionPress, 
-  secondaryActionLabel, 
-  onSecondaryActionPress, 
-  style, 
+function EmptyStateComponent({
+  icon,
+  illustration,
+  title,
+  description,
+  actionLabel,
+  onActionPress,
+  secondaryActionLabel,
+  onSecondaryActionPress,
+  style,
   accessibilityLabel,
   screenName,
   emptyStateType,

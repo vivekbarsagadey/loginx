@@ -87,11 +87,7 @@ export interface UseIntervalReturn {
  *   setTime(new Date());
  * }, 1000);
  */
-export function useInterval(
-  callback: () => void,
-  delay: number | null,
-  options: UseIntervalOptions = {}
-): UseIntervalReturn {
+export function useInterval(callback: () => void, delay: number | null, options: UseIntervalOptions = {}): UseIntervalReturn {
   const { immediate = true, enabled = true } = options;
 
   const [isRunning, setIsRunning] = useState(immediate && enabled);

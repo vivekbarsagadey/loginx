@@ -7,12 +7,14 @@ This is a quick reference guide to get started with the Hooks Optimization Plan.
 Based on the audit report (Oct 19, 2025):
 
 ### ✅ Strengths
+
 - **84 custom hooks** available across 13 categories
 - **266 hook imports** across the codebase showing active usage
 - Well-organized category structure (auth, async, ui, layout, device, theme, lifecycle, utility, storage, timing, network, permissions, settings)
 - Most popular hooks: `useThemeColor` (380 uses), `useThemeColors` (125 uses), `useAlert` (52 uses)
 
 ### ⚠️ Opportunities for Improvement
+
 - **20+ components** have NO custom hooks (using only React built-in hooks)
 - **10 files** with 4+ `useState` calls (candidates for state management hooks)
 - **10+ files** with manual `setTimeout`/`setInterval` (should use timing hooks)
@@ -26,22 +28,25 @@ Based on the audit report (Oct 19, 2025):
 ### Phase 1: Low-Hanging Fruit (Week 1-2)
 
 **Replace boolean useState with useToggle:**
+
 ```typescript
 // BEFORE
 const [isOpen, setIsOpen] = useState(false);
 const toggleOpen = () => setIsOpen(!isOpen);
 
 // AFTER
-import { useToggle } from '@/hooks/utility';
+import { useToggle } from "@/hooks/utility";
 const [isOpen, toggleOpen] = useToggle(false);
 ```
 
 **Files to update:**
+
 - All modal/dialog components
 - Components with visibility toggles
 - Components with expanded/collapsed states
 
 **Replace manual debounce with useDebouncedCallback:**
+
 ```typescript
 // BEFORE
 const [timer, setTimer] = useState<NodeJS.Timeout>();
@@ -54,13 +59,14 @@ const handleSearch = (text: string) => {
 };
 
 // AFTER
-import { useDebouncedCallback } from '@/hooks/timing';
+import { useDebouncedCallback } from "@/hooks/timing";
 const handleSearch = useDebouncedCallback((text: string) => {
   performSearch(text);
 }, 300);
 ```
 
 **Files to update:**
+
 - `dialogs.tsx`
 - `verify-phone.tsx`
 - `step-2.tsx`
@@ -72,7 +78,6 @@ const handleSearch = useDebouncedCallback((text: string) => {
 
 1. **profile/edit.tsx** (14 useState calls)
    - Use `useFormState` or create custom `useProfileForm` hook
-   
 2. **change-password.tsx** (9 useState calls)
    - Use `useFormState` with validation
 
@@ -91,15 +96,19 @@ const handleSearch = useDebouncedCallback((text: string) => {
 **Priority hooks to create:**
 
 1. **useForm** - Standardized form handling
+
 ```typescript
 const { values, errors, handleChange, handleSubmit, isValid } = useForm({
-  initialValues: { email: '', password: '' },
+  initialValues: { email: "", password: "" },
   validationSchema: loginSchema,
-  onSubmit: async (values) => { /* submit logic */ }
+  onSubmit: async (values) => {
+    /* submit logic */
+  }
 });
 ```
 
 2. **useSearch** - Search with debouncing and filtering
+
 ```typescript
 const { query, results, loading, setQuery } = useSearch({
   data: items,
@@ -109,6 +118,7 @@ const { query, results, loading, setQuery } = useSearch({
 ```
 
 3. **useInfiniteScroll** - Pagination support
+
 ```typescript
 const { items, loadMore, hasMore, loading } = useInfiniteScroll({
   fetchFn: fetchItems,
@@ -134,8 +144,9 @@ When refactoring a component, ask:
 ## Quick Hook Reference
 
 ### State Management
+
 ```typescript
-import { useToggle, useCounter, useList, useMap } from '@/hooks/utility';
+import { useToggle, useCounter, useList, useMap } from "@/hooks/utility";
 
 const [isOpen, toggle, setOpen] = useToggle(false);
 const [count, { increment, decrement, reset }] = useCounter(0);
@@ -144,27 +155,20 @@ const [map, { set, remove, clear }] = useMap();
 ```
 
 ### Timing
+
 ```typescript
-import { 
-  useDebouncedCallback, 
-  useThrottledCallback, 
-  useTimeout, 
-  useInterval 
-} from '@/hooks/timing';
+import { useDebouncedCallback, useThrottledCallback, useTimeout, useInterval } from "@/hooks/timing";
 
 const debouncedSearch = useDebouncedCallback(handleSearch, 300);
 const throttledScroll = useThrottledCallback(handleScroll, 100);
-useTimeout(() => console.log('delayed'), 1000);
-useInterval(() => console.log('repeating'), 5000);
+useTimeout(() => console.log("delayed"), 1000);
+useInterval(() => console.log("repeating"), 5000);
 ```
 
 ### Lifecycle
+
 ```typescript
-import { 
-  useUpdateEffect, 
-  usePrevious, 
-  useIsMounted 
-} from '@/hooks/lifecycle';
+import { useUpdateEffect, usePrevious, useIsMounted } from "@/hooks/lifecycle";
 
 useUpdateEffect(() => {
   // Runs on updates, not on mount
@@ -175,19 +179,21 @@ const isMounted = useIsMounted();
 ```
 
 ### Async Operations
+
 ```typescript
-import { useAsyncOperation, useLoadingState } from '@/hooks/async';
+import { useAsyncOperation, useLoadingState } from "@/hooks/async";
 
 const { execute, loading, error, data } = useAsyncOperation();
 const { loading, startLoading, stopLoading } = useLoadingState();
 ```
 
 ### Storage
-```typescript
-import { useAsyncStorage, useSecureStorage } from '@/hooks/storage';
 
-const [value, setValue] = useAsyncStorage<string>('key', 'default');
-const [token, setToken] = useSecureStorage<string>('auth_token');
+```typescript
+import { useAsyncStorage, useSecureStorage } from "@/hooks/storage";
+
+const [value, setValue] = useAsyncStorage<string>("key", "default");
+const [token, setToken] = useSecureStorage<string>("auth_token");
 ```
 
 ## Implementation Order
@@ -205,6 +211,7 @@ const [token, setToken] = useSecureStorage<string>('auth_token');
 ## Success Tracking
 
 Track progress weekly:
+
 - Number of components refactored
 - Number of `useState` replaced
 - Number of manual timing logic removed

@@ -48,10 +48,7 @@ import { useCallback, useEffect, useRef } from 'react';
  *   validateField(value);
  * }, 400);
  */
-export function useDebouncedCallback<T extends (...args: never[]) => unknown>(
-  callback: T,
-  delay: number
-): (...args: Parameters<T>) => void {
+export function useDebouncedCallback<T extends (...args: never[]) => unknown>(callback: T, delay: number): (...args: Parameters<T>) => void {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Cleanup timeout on unmount

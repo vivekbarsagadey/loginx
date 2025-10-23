@@ -1,9 +1,9 @@
 /**
  * Universal Multi-Step Flow System - Type Definitions
- * 
+ *
  * Comprehensive type system for creating reusable, type-safe multi-step flows
  * for onboarding, registration, setup wizards, tutorials, and more.
- * 
+ *
  * @see plan/feature-unified-flow-system-1.md for complete specification
  */
 
@@ -22,26 +22,46 @@ export type ProgressIndicatorType = 'dots' | 'stepper' | 'bar' | 'circular' | 'n
 /**
  * Step types supported by the flow system
  */
-export type StepType = 
-  | 'display'      // Show information, images, features
-  | 'form'         // Collect user input with validation
-  | 'selection'    // Single or multiple choice selection
+export type StepType =
+  | 'display' // Show information, images, features
+  | 'form' // Collect user input with validation
+  | 'selection' // Single or multiple choice selection
   | 'verification' // OTP/code verification
-  | 'action'       // Execute async actions (enable biometrics, etc.)
-  | 'permission'   // Request device permissions
-  | 'info'         // Terms, privacy policy, scrollable content
-  | 'custom';      // Custom component
+  | 'action' // Execute async actions (enable biometrics, etc.)
+  | 'permission' // Request device permissions
+  | 'info' // Terms, privacy policy, scrollable content
+  | 'custom'; // Custom component
 
 /**
  * Animation types for transitions
  */
-export type AnimationType = 
-  | 'fade' | 'fadeIn' | 'fadeOut' | 'fadeInUp' | 'fadeInDown' | 'fadeOutUp' | 'fadeOutDown'
-  | 'slide' | 'slideInRight' | 'slideInLeft' | 'slideOutRight' | 'slideOutLeft'
-  | 'slideInUp' | 'slideInDown' | 'slideOutUp' | 'slideOutDown'
-  | 'zoom' | 'zoomIn' | 'zoomOut'
-  | 'bounce' | 'shake' | 'pulse' | 'rotate' | 'flip'
-  | 'spring' | 'timing';
+export type AnimationType =
+  | 'fade'
+  | 'fadeIn'
+  | 'fadeOut'
+  | 'fadeInUp'
+  | 'fadeInDown'
+  | 'fadeOutUp'
+  | 'fadeOutDown'
+  | 'slide'
+  | 'slideInRight'
+  | 'slideInLeft'
+  | 'slideOutRight'
+  | 'slideOutLeft'
+  | 'slideInUp'
+  | 'slideInDown'
+  | 'slideOutUp'
+  | 'slideOutDown'
+  | 'zoom'
+  | 'zoomIn'
+  | 'zoomOut'
+  | 'bounce'
+  | 'shake'
+  | 'pulse'
+  | 'rotate'
+  | 'flip'
+  | 'spring'
+  | 'timing';
 
 /**
  * Visual layout variants for display steps
@@ -147,22 +167,22 @@ export interface BaseStepConfig {
   title: string;
   subtitle?: string;
   description?: string;
-  
+
   // Visual customization
   icon?: string;
   iconColor?: string;
   image?: ImageSourcePropType;
   images?: ImageSourcePropType[] | { [key: string]: ImageSourcePropType };
-  
+
   // Theme customization (single or multiple themes)
   theme?: StepTheme;
   themes?: { [themeName: string]: StepTheme };
   activeTheme?: string | ((flowData: any, userPrefs: any) => string);
-  
+
   // Visual variant
   variant?: string;
   variants?: { [variantName: string]: any };
-  
+
   // Animations
   animation?: AnimationConfig;
   animations?: {
@@ -171,12 +191,12 @@ export interface BaseStepConfig {
     elements?: Record<string, AnimationConfig>;
     [key: string]: AnimationConfig | Record<string, AnimationConfig> | undefined;
   };
-  
+
   // Element-level animations
   elementAnimations?: {
     [elementId: string]: AnimationConfig;
   };
-  
+
   // Responsive configuration
   responsive?: {
     small?: Partial<BaseStepConfig>;
@@ -184,24 +204,24 @@ export interface BaseStepConfig {
     large?: Partial<BaseStepConfig>;
     xlarge?: Partial<BaseStepConfig>;
   };
-  
+
   // Orientation configuration
   orientation?: {
     portrait?: Partial<BaseStepConfig>;
     landscape?: Partial<BaseStepConfig>;
   };
-  
+
   // Navigation
   skippable?: boolean;
   allowBack?: boolean;
-  
+
   // Conditional rendering
   condition?: (data: Record<string, any>) => boolean;
-  
+
   // Validation
   validation?: z.ZodSchema<any>;
   validate?: (data: Record<string, any>) => Promise<{ valid: boolean; error?: string }>;
-  
+
   // Buttons
   primaryButton?: {
     label: string;
@@ -212,14 +232,14 @@ export interface BaseStepConfig {
     icon?: string;
     style?: 'primary' | 'secondary' | 'outlined' | 'text';
   };
-  
+
   secondaryButton?: {
     label: string;
     action?: 'back' | 'skip' | 'custom' | ((data: any) => void);
     icon?: string;
     style?: 'primary' | 'secondary' | 'outlined' | 'text';
   };
-  
+
   // Custom styles
   containerStyle?: ViewStyle;
   contentStyle?: ViewStyle;
@@ -233,7 +253,7 @@ export interface BaseStepConfig {
 export interface DisplayStepConfig extends BaseStepConfig {
   type: 'display';
   variant?: DisplayVariant;
-  
+
   // Content items (features, benefits, etc.)
   content?: {
     icon?: string;
@@ -243,7 +263,7 @@ export interface DisplayStepConfig extends BaseStepConfig {
     description?: string;
     animation?: AnimationConfig;
   }[];
-  
+
   // Image carousel
   carousel?: {
     autoPlay?: boolean;
@@ -251,7 +271,7 @@ export interface DisplayStepConfig extends BaseStepConfig {
     showIndicators?: boolean;
     showPagination?: boolean;
   };
-  
+
   // Video support
   video?: {
     source: any;
@@ -267,27 +287,45 @@ export interface DisplayStepConfig extends BaseStepConfig {
 export interface FormFieldConfig {
   name: string;
   label: string;
-  type: 
-    | 'text' | 'email' | 'password' | 'phone' | 'number' | 'url'
-    | 'textarea' | 'select' | 'radio' | 'checkbox' | 'switch'
-    | 'date' | 'time' | 'datetime'
-    | 'slider' | 'rating'
-    | 'image-upload' | 'file-upload' | 'multi-image-upload' | 'multi-file-upload'
-    | 'currency' | 'percentage'
-    | 'multi-select' | 'autocomplete' | 'search';
-  
+  type:
+    | 'text'
+    | 'email'
+    | 'password'
+    | 'phone'
+    | 'number'
+    | 'url'
+    | 'textarea'
+    | 'select'
+    | 'radio'
+    | 'checkbox'
+    | 'switch'
+    | 'date'
+    | 'time'
+    | 'datetime'
+    | 'slider'
+    | 'rating'
+    | 'image-upload'
+    | 'file-upload'
+    | 'multi-image-upload'
+    | 'multi-file-upload'
+    | 'currency'
+    | 'percentage'
+    | 'multi-select'
+    | 'autocomplete'
+    | 'search';
+
   required?: boolean;
   optional?: boolean;
   placeholder?: string;
   helperText?: string;
   icon?: string;
-  
+
   // Validation
   validation?: z.ZodSchema<any>;
   validateOnBlur?: boolean;
   validateOnChange?: boolean;
   asyncValidation?: (value: any) => Promise<void>;
-  
+
   // Value configuration
   defaultValue?: any;
   value?: any;
@@ -296,33 +334,33 @@ export interface FormFieldConfig {
   minLength?: number;
   maxLength?: number;
   pattern?: RegExp;
-  
+
   // Options for select/radio/checkbox
   options?: { id: string; label: string; value?: any; disabled?: boolean }[] | string[];
-  
+
   // File upload configuration
   acceptedFormats?: string[];
   maxFileSize?: number;
   maxFiles?: number;
   minFiles?: number;
-  
+
   // Input masking
   mask?: string;
-  
+
   // Auto-complete
   autoComplete?: string;
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   autoCorrect?: boolean;
-  
+
   // Conditional display
   condition?: (data: Record<string, any>) => boolean;
-  
+
   // Visual
   secure?: boolean;
   showStrengthMeter?: boolean;
   multiline?: boolean;
   numberOfLines?: number;
-  
+
   // Repeater fields (for dynamic lists)
   repeater?: {
     fields: FormFieldConfig[];
@@ -331,14 +369,14 @@ export interface FormFieldConfig {
     addButtonLabel?: string;
     removeButtonLabel?: string;
   };
-  
+
   // Links for checkboxes (e.g., terms & conditions)
   links?: {
     text: string;
     href: string;
     modal?: boolean;
   }[];
-  
+
   // Country code picker for phone inputs
   countryCodePicker?: boolean;
 }
@@ -351,16 +389,16 @@ export interface FormStepConfig extends BaseStepConfig {
   variant?: FormVariant;
   fields: FormFieldConfig[];
   validationSchema?: z.ZodSchema<any>;
-  
+
   // Form submission
   onSubmit?: (data: Record<string, any>) => Promise<{ success: boolean; error?: string }>;
-  
+
   // Auto-complete support
   autoComplete?: {
     service: 'google-places' | 'custom';
     onSelect?: (value: any) => Record<string, any>;
   };
-  
+
   // Integration with external services
   integration?: {
     provider: 'stripe' | 'paypal' | 'custom';
@@ -386,13 +424,13 @@ export interface SelectionOption {
   recommended?: boolean;
   disabled?: boolean;
   badge?: string;
-  
+
   // Additional data
   price?: string;
   duration?: string;
   rating?: number;
   reviewCount?: number;
-  
+
   // Conditional display
   condition?: (data: Record<string, any>) => boolean;
 }
@@ -403,27 +441,27 @@ export interface SelectionOption {
 export interface SelectionStepConfig extends BaseStepConfig {
   type: 'selection';
   variant?: SelectionVariant;
-  
+
   // Options (can be static or loaded dynamically)
   options: SelectionOption[] | ((data: Record<string, any>) => Promise<SelectionOption[]>);
-  
+
   // Selection mode
   multiple?: boolean;
   required?: boolean;
   minSelections?: number;
   maxSelections?: number;
-  
+
   // "Any" option
   allowAny?: {
     id: string;
     title: string;
     description?: string;
   };
-  
+
   // Grid configuration (for grid variant)
   columns?: number | 'auto';
   aspectRatio?: number;
-  
+
   // Interaction animations
   interactions?: {
     onPress?: AnimationConfig;
@@ -440,16 +478,16 @@ export interface VerificationStepConfig extends BaseStepConfig {
   type: 'verification';
   verificationType: 'email' | 'phone' | 'sms' | 'totp' | 'custom';
   codeLength: number;
-  
+
   // Verification handlers
   onVerify: (code: string) => Promise<{ verified: boolean; error?: string }>;
   onResend?: () => Promise<{ sent: boolean; error?: string }>;
-  
+
   // Configuration
   resendInterval?: number; // Seconds before resend is allowed
   maxAttempts?: number;
   autoSubmit?: boolean; // Auto-submit when code is complete
-  
+
   // Display
   showResendButton?: boolean;
   showTimer?: boolean;
@@ -460,24 +498,24 @@ export interface VerificationStepConfig extends BaseStepConfig {
  */
 export interface ActionStepConfig extends BaseStepConfig {
   type: 'action';
-  
+
   // Action to execute
   action: () => Promise<any>;
-  
+
   // Loading state
   loadingTitle?: string;
   loadingSubtitle?: string;
-  
+
   // Success state
   successTitle?: string;
   successSubtitle?: string;
   successIcon?: string;
-  
+
   // Error state
   errorTitle?: string;
   errorSubtitle?: string;
   errorIcon?: string;
-  
+
   // Retry configuration
   retry?: {
     enabled?: boolean;
@@ -492,11 +530,11 @@ export interface ActionStepConfig extends BaseStepConfig {
 export interface PermissionStepConfig extends BaseStepConfig {
   type: 'permission';
   permissions: ('camera' | 'location' | 'notifications' | 'photos' | 'microphone' | 'contacts' | string)[];
-  
+
   // Permission handlers
   onGrant?: (permissions: string[]) => Promise<void>;
   onDeny?: (permissions: string[]) => Promise<void>;
-  
+
   // Display
   benefits?: {
     icon: string;
@@ -510,15 +548,15 @@ export interface PermissionStepConfig extends BaseStepConfig {
  */
 export interface InfoStepConfig extends BaseStepConfig {
   type: 'info';
-  
+
   // Content
   content: string | React.ReactNode;
   contentUrl?: string; // Load from URL
-  
+
   // Acknowledgment
   requireAcknowledgment?: boolean;
   acknowledgmentText?: string;
-  
+
   // Scrolling
   scrollable?: boolean;
   showScrollProgress?: boolean;
@@ -537,15 +575,7 @@ export interface CustomStepConfig extends BaseStepConfig {
 /**
  * Union type of all step configurations
  */
-export type StepConfig = 
-  | DisplayStepConfig
-  | FormStepConfig
-  | SelectionStepConfig
-  | VerificationStepConfig
-  | ActionStepConfig
-  | PermissionStepConfig
-  | InfoStepConfig
-  | CustomStepConfig;
+export type StepConfig = DisplayStepConfig | FormStepConfig | SelectionStepConfig | VerificationStepConfig | ActionStepConfig | PermissionStepConfig | InfoStepConfig | CustomStepConfig;
 
 // ============================================================================
 // Flow Configuration
@@ -605,20 +635,20 @@ export interface FlowConfig {
   title: string;
   version: string;
   description?: string;
-  
+
   // Visual configuration
   progressIndicator: ProgressIndicatorType;
   showHeader?: boolean;
   showSkip?: boolean;
-  
+
   // Steps
   steps: StepConfig[];
-  
+
   // Theme (global for flow, can be overridden per step)
   theme?: StepTheme;
   themes?: { [themeName: string]: StepTheme };
   activeTheme?: string | ((flowData: any, userPrefs: any) => string);
-  
+
   // Animations (global for flow)
   animations?: {
     stepTransition?: AnimationType | AnimationConfig;
@@ -628,18 +658,18 @@ export interface FlowConfig {
       staggerDelay?: number;
     };
   };
-  
+
   // Navigation
   navigation?: NavigationRules;
-  
+
   // State persistence
   persistState?: boolean;
   persistenceKey?: string;
   autoSave?: boolean | AutoSaveConfig;
-  
+
   // Analytics
   analytics?: AnalyticsConfig;
-  
+
   // Handlers
   onComplete?: (data: Record<string, any>) => Promise<{ success: boolean; error?: string }>;
   onSkip?: (data: Record<string, any>) => Promise<{ success: boolean }>;
@@ -647,18 +677,18 @@ export interface FlowConfig {
   onError?: (_error: Error, stepId?: string) => Promise<{ handled: boolean }>;
   onStepView?: (stepId: string, data: Record<string, any>) => void;
   onSubmit?: (data: Record<string, any>) => Promise<any>;
-  
+
   // A/B Testing
   experiments?: {
     [experimentId: string]: ExperimentConfig;
   };
-  
+
   // Brand customization (multi-tenant)
   brands?: {
     [brandId: string]: StepTheme;
   };
   activeBrand?: string | ((flowData: any) => string);
-  
+
   // Responsive breakpoints
   breakpoints?: {
     small?: number;
@@ -681,20 +711,20 @@ export interface FlowState {
   currentStepId: string;
   totalSteps: number;
   progress: number; // 0-100
-  
+
   // Navigation history
   stepHistory: string[];
   completedSteps: string[];
   skippedSteps: string[];
-  
+
   // Data
   data: Record<string, any>;
-  
+
   // UI state
   loading: boolean;
   errors: Record<string, string>;
   validationErrors: Record<string, string>;
-  
+
   // Flow metadata
   flowId: string;
   flowVersion: string;
@@ -711,29 +741,29 @@ export interface FlowContextValue {
   state: FlowState;
   config: FlowConfig;
   currentStep: StepConfig;
-  
+
   // Navigation
   next: () => Promise<void>;
   previous: () => void;
   skip: () => Promise<void>;
   jumpTo: (stepId: string) => void;
   complete: () => Promise<void>;
-  
+
   // Data management
   updateData: (data: Partial<Record<string, any>>) => void;
   getData: (key: string) => any;
   setData: (key: string, value: any) => void;
   clearData: () => void;
-  
+
   // Validation
   validateStep: (stepId?: string) => Promise<boolean>;
   validateField: (fieldName: string, value: any) => Promise<boolean>;
-  
+
   // State persistence
   saveState: () => Promise<void>;
   loadState: () => Promise<FlowState | null>;
   clearState: () => Promise<void>;
-  
+
   // Utilities
   canGoBack: boolean;
   canGoNext: boolean;
@@ -751,26 +781,26 @@ export interface FlowContextValue {
  */
 export interface FlowContainerProps {
   flow: FlowConfig;
-  
+
   // Handlers
   onComplete?: (data: Record<string, any>) => void;
   onSkip?: (data: Record<string, any>) => void;
   onAbandonment?: (data: Record<string, any>, currentStep: string) => void;
-  
+
   // Customization
   theme?: 'light' | 'dark' | 'system' | string;
   userPreferences?: Record<string, any>;
   brandId?: string;
-  
+
   // Experiment tracking
   onExperimentView?: (experimentId: string, variant: string) => void;
-  
+
   // Initial data
   initialData?: Record<string, any>;
-  
+
   // Resume state
   resumeState?: FlowState;
-  
+
   // Custom styles
   containerStyle?: ViewStyle;
   headerStyle?: ViewStyle;

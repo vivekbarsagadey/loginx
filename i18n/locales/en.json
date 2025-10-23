@@ -119,12 +119,7 @@
       "alreadyEnabled": "Notifications are already enabled! You'll receive important security alerts and updates.",
       "benefits": {
         "title": "What You'll Get:",
-        "items": [
-          "Security alerts for suspicious login attempts",
-          "Important app updates and new features",
-          "Account activity notifications",
-          "Login confirmations from new devices"
-        ]
+        "items": ["Security alerts for suspicious login attempts", "Important app updates and new features", "Account activity notifications", "Login confirmations from new devices"]
       },
       "enable": "Enable Notifications",
       "skipButton": "Skip for Now",
@@ -261,12 +256,7 @@
       "theme": {
         "title": "Customize Appearance",
         "description": "Switch between light and dark themes to match your style",
-        "steps": [
-          "Navigate to Settings from the main screen",
-          "Tap on Appearance or Theme",
-          "Choose from System, Light, or Dark mode",
-          "See the changes applied instantly"
-        ]
+        "steps": ["Navigate to Settings from the main screen", "Tap on Appearance or Theme", "Choose from System, Light, or Dark mode", "See the changes applied instantly"]
       },
       "security": {
         "title": "Security Features",
@@ -282,13 +272,7 @@
       "profile": {
         "title": "Profile Management",
         "description": "Keep your profile information up to date",
-        "steps": [
-          "Tap on your profile picture or name",
-          "Select Edit Profile",
-          "Update your display name",
-          "Change your profile photo",
-          "Save your changes"
-        ]
+        "steps": ["Tap on your profile picture or name", "Select Edit Profile", "Update your display name", "Change your profile photo", "Save your changes"]
       }
     },
     "profile": {
@@ -772,12 +756,7 @@
         }
       ],
       "bugFixes": "Bug Fixes",
-      "bugFixesList": [
-        "Fixed login issues on slower network connections",
-        "Resolved theme switching glitches",
-        "Improved email verification flow",
-        "Fixed text scaling in different languages"
-      ],
+      "bugFixesList": ["Fixed login issues on slower network connections", "Resolved theme switching glitches", "Improved email verification flow", "Fixed text scaling in different languages"],
       "thankYou": "Thank you for using our app! We're constantly working to improve your experience."
     },
     "support": {
@@ -1245,11 +1224,7 @@
         "notEnabled": {
           "title": "2FA Not Enabled",
           "description": "Two-factor authentication is currently disabled for your account. Enable it to add an extra layer of security.",
-          "benefits": [
-            "Protect your account from unauthorized access",
-            "Secure your personal information",
-            "Peace of mind with enhanced security"
-          ],
+          "benefits": ["Protect your account from unauthorized access", "Secure your personal information", "Peace of mind with enhanced security"],
           "enableButton": "Enable Two-Factor Authentication"
         },
         "enabled": {
@@ -1475,13 +1450,7 @@
           },
           "builtWith": {
             "title": "Built With",
-            "items": [
-              "• React Native 0.81.4",
-              "• Expo SDK 54",
-              "• TypeScript",
-              "• Firebase",
-              "• Expo Router"
-            ]
+            "items": ["• React Native 0.81.4", "• Expo SDK 54", "• TypeScript", "• Firebase", "• Expo Router"]
           }
         },
         "footer": {

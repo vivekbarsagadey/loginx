@@ -57,14 +57,13 @@ import type { View } from 'react-native';
  *   )}
  * </View>
  */
-export function useClickOutside<T extends View>(
-  handler: () => void,
-  enabled = true
-): React.RefObject<T | null> {
+export function useClickOutside<T extends View>(handler: () => void, enabled = true): React.RefObject<T | null> {
   const ref = useRef<T | null>(null);
 
   useEffect(() => {
-    if (!enabled) {return;}
+    if (!enabled) {
+      return;
+    }
 
     // Note: In React Native, true click-outside detection requires
     // a library like react-native-gesture-handler or custom touch handling.

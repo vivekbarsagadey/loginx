@@ -17,29 +17,21 @@ function DeleteExample() {
   const alert = useAlert();
 
   const handleDelete = () => {
-    alert.show(
-      "Delete Item",
-      "Are you sure you want to delete this item? This action cannot be undone.",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          style: "destructive", // Red button + heavy haptic
-          onPress: async () => {
-            // Delete logic here
-          }
+    alert.show("Delete Item", "Are you sure you want to delete this item? This action cannot be undone.", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive", // Red button + heavy haptic
+        onPress: async () => {
+          // Delete logic here
         }
-      ]
-    );
+      }
+    ]);
   };
 
   return (
     <>
-      <ThemedButton
-        title="Delete"
-        variant="destructive"
-        onPress={handleDelete}
-      />
+      <ThemedButton title="Delete" variant="destructive" onPress={handleDelete} />
       {alert.AlertComponent}
     </>
   );
@@ -64,19 +56,9 @@ function SaveExample() {
       await saveData();
 
       // Success feedback
-      alert.show(
-        "Saved",
-        "Your changes have been saved successfully.",
-        [{ text: "OK" }],
-        { variant: "success" }
-      );
+      alert.show("Saved", "Your changes have been saved successfully.", [{ text: "OK" }], { variant: "success" });
     } catch (error) {
-      alert.show(
-        "Error",
-        "Failed to save changes. Please try again.",
-        [{ text: "OK" }],
-        { variant: "error" }
-      );
+      alert.show("Error", "Failed to save changes. Please try again.", [{ text: "OK" }], { variant: "error" });
     } finally {
       setSaving(false);
     }
@@ -84,13 +66,7 @@ function SaveExample() {
 
   return (
     <>
-      <ThemedButton
-        title="Save Changes"
-        variant="primary"
-        onPress={handleSave}
-        loading={saving}
-        disabled={saving}
-      />
+      <ThemedButton title="Save Changes" variant="primary" onPress={handleSave} loading={saving} disabled={saving} />
       {alert.AlertComponent}
     </>
   );
@@ -121,11 +97,7 @@ function SignOutExample() {
 
   return (
     <>
-      <ThemedButton
-        title="Sign Out"
-        variant="secondary"
-        onPress={handleSignOut}
-      />
+      <ThemedButton title="Sign Out" variant="secondary" onPress={handleSignOut} />
       {alert.AlertComponent}
     </>
   );
@@ -144,30 +116,21 @@ function ClearAllExample() {
   const items = ["Item 1", "Item 2", "Item 3"];
 
   const handleClearAll = () => {
-    alert.show(
-      "Clear All Items",
-      `Are you sure you want to delete all ${items.length} items? This action cannot be undone.`,
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete All",
-          style: "destructive",
-          onPress: () => {
-            // Clear all logic here
-          }
+    alert.show("Clear All Items", `Are you sure you want to delete all ${items.length} items? This action cannot be undone.`, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete All",
+        style: "destructive",
+        onPress: () => {
+          // Clear all logic here
         }
-      ]
-    );
+      }
+    ]);
   };
 
   return (
     <>
-      <ThemedButton
-        title="Clear All"
-        variant="destructive"
-        onPress={handleClearAll}
-        disabled={items.length === 0}
-      />
+      <ThemedButton title="Clear All" variant="destructive" onPress={handleClearAll} disabled={items.length === 0} />
       {alert.AlertComponent}
     </>
   );
@@ -187,20 +150,16 @@ function DiscardChangesExample() {
 
   const handleBack = () => {
     if (hasUnsavedChanges) {
-      alert.show(
-        "Unsaved Changes",
-        "You have unsaved changes. Do you want to discard them?",
-        [
-          { text: "Keep Editing", style: "cancel" },
-          {
-            text: "Discard",
-            style: "destructive", // Red because losing work is destructive
-            onPress: () => {
-              // Navigate back
-            }
+      alert.show("Unsaved Changes", "You have unsaved changes. Do you want to discard them?", [
+        { text: "Keep Editing", style: "cancel" },
+        {
+          text: "Discard",
+          style: "destructive", // Red because losing work is destructive
+          onPress: () => {
+            // Navigate back
           }
-        ]
-      );
+        }
+      ]);
     } else {
       // Navigate back directly
     }
@@ -243,12 +202,7 @@ function RemovePhotoExample() {
   };
 
   return (
-    <Pressable
-      onPress={() => handleRemove(0)}
-      style={[styles.removeButton, { backgroundColor: errorColor }]}
-      accessibilityLabel="Remove photo"
-      accessibilityRole="button"
-    >
+    <Pressable onPress={() => handleRemove(0)} style={[styles.removeButton, { backgroundColor: errorColor }]} accessibilityLabel="Remove photo" accessibilityRole="button">
       <Ionicons name="close" size={16} color="white" />
     </Pressable>
   );
@@ -263,12 +217,7 @@ function RemovePhotoExample() {
 
 ```tsx
 function showSuccessFeedback() {
-  alert.show(
-    "Success!",
-    "Your action completed successfully.",
-    [{ text: "OK" }],
-    { variant: "success" }
-  );
+  alert.show("Success!", "Your action completed successfully.", [{ text: "OK" }], { variant: "success" });
 }
 ```
 
@@ -280,12 +229,7 @@ function showSuccessFeedback() {
 
 ```tsx
 function showErrorFeedback() {
-  alert.show(
-    "Error",
-    "Something went wrong. Please try again.",
-    [{ text: "OK" }],
-    { variant: "error" }
-  );
+  alert.show("Error", "Something went wrong. Please try again.", [{ text: "OK" }], { variant: "error" });
 }
 ```
 
@@ -297,12 +241,7 @@ function showErrorFeedback() {
 
 ```tsx
 function showWarningFeedback() {
-  alert.show(
-    "Warning",
-    "This action may have unintended consequences.",
-    [{ text: "OK" }],
-    { variant: "warning" }
-  );
+  alert.show("Warning", "This action may have unintended consequences.", [{ text: "OK" }], { variant: "warning" });
 }
 ```
 

@@ -6,21 +6,21 @@ export enum AnalyticsEvent {
   // Empty State Events
   EMPTY_STATE_VIEW = 'empty_state_view',
   EMPTY_STATE_CTA_CLICK = 'empty_state_cta_click',
-  
+
   // Error Events
   ERROR_OCCURRED = 'error_occurred',
   ERROR_RECOVERY_ATTEMPTED = 'error_recovery_attempted',
-  
+
   // Form Events
   FORM_STARTED = 'form_started',
   FORM_COMPLETED = 'form_completed',
   FORM_ABANDONED = 'form_abandoned',
   FORM_VALIDATION_ERROR = 'form_validation_error',
-  
+
   // Search Events
   SEARCH_PERFORMED = 'search_performed',
   SEARCH_RESULT_CLICKED = 'search_result_clicked',
-  
+
   // User Actions
   FEATURE_USED = 'feature_used',
   SETTING_CHANGED = 'setting_changed',
@@ -35,14 +35,11 @@ export interface AnalyticsEventParams {
  * @param event - Event name
  * @param params - Event parameters
  */
-export function logAnalyticsEvent(
-  event: AnalyticsEvent,
-  params?: AnalyticsEventParams
-): void {
+export function logAnalyticsEvent(event: AnalyticsEvent, params?: AnalyticsEventParams): void {
   if (__DEV__) {
     console.log('[Analytics]', event, params);
   }
-  
+
   // TODO: Integrate with actual analytics service (Firebase Analytics, Amplitude, etc.)
   // Example: analytics().logEvent(event, params);
 }
@@ -52,10 +49,7 @@ export function logAnalyticsEvent(
  * @param screenName - Name of the screen showing empty state
  * @param emptyStateType - Type of empty state (items, notifications, search, etc.)
  */
-export function logEmptyStateView(
-  screenName: string,
-  emptyStateType: string
-): void {
+export function logEmptyStateView(screenName: string, emptyStateType: string): void {
   logAnalyticsEvent(AnalyticsEvent.EMPTY_STATE_VIEW, {
     screen_name: screenName,
     empty_state_type: emptyStateType,
@@ -68,11 +62,7 @@ export function logEmptyStateView(
  * @param emptyStateType - Type of empty state
  * @param ctaLabel - Label of the CTA button clicked
  */
-export function logEmptyStateCTAClick(
-  screenName: string,
-  emptyStateType: string,
-  ctaLabel: string
-): void {
+export function logEmptyStateCTAClick(screenName: string, emptyStateType: string, ctaLabel: string): void {
   logAnalyticsEvent(AnalyticsEvent.EMPTY_STATE_CTA_CLICK, {
     screen_name: screenName,
     empty_state_type: emptyStateType,
@@ -86,11 +76,7 @@ export function logEmptyStateCTAClick(
  * @param errorCode - Error code
  * @param screenName - Screen where error occurred
  */
-export function logErrorOccurrence(
-  errorType: string,
-  errorCode: string,
-  screenName?: string
-): void {
+export function logErrorOccurrence(errorType: string, errorCode: string, screenName?: string): void {
   logAnalyticsEvent(AnalyticsEvent.ERROR_OCCURRED, {
     error_type: errorType,
     error_code: errorCode,
@@ -103,10 +89,7 @@ export function logErrorOccurrence(
  * @param errorType - Type of error
  * @param recoveryAction - Action taken to recover
  */
-export function logErrorRecovery(
-  errorType: string,
-  recoveryAction: string
-): void {
+export function logErrorRecovery(errorType: string, recoveryAction: string): void {
   logAnalyticsEvent(AnalyticsEvent.ERROR_RECOVERY_ATTEMPTED, {
     error_type: errorType,
     recovery_action: recoveryAction,
@@ -119,11 +102,7 @@ export function logErrorRecovery(
  * @param event - Type of form event
  * @param additionalParams - Additional parameters
  */
-export function logFormEvent(
-  formName: string,
-  event: 'started' | 'completed' | 'abandoned' | 'validation_error',
-  additionalParams?: AnalyticsEventParams
-): void {
+export function logFormEvent(formName: string, event: 'started' | 'completed' | 'abandoned' | 'validation_error', additionalParams?: AnalyticsEventParams): void {
   const eventMap = {
     started: AnalyticsEvent.FORM_STARTED,
     completed: AnalyticsEvent.FORM_COMPLETED,
@@ -143,11 +122,7 @@ export function logFormEvent(
  * @param resultsCount - Number of results found
  * @param screenName - Screen where search occurred
  */
-export function logSearchPerformed(
-  searchQuery: string,
-  resultsCount: number,
-  screenName: string
-): void {
+export function logSearchPerformed(searchQuery: string, resultsCount: number, screenName: string): void {
   logAnalyticsEvent(AnalyticsEvent.SEARCH_PERFORMED, {
     search_query: searchQuery,
     results_count: resultsCount,
@@ -161,11 +136,7 @@ export function logSearchPerformed(
  * @param screenName - Screen where feature was used
  * @param additionalParams - Additional parameters
  */
-export function logFeatureUsed(
-  featureName: string,
-  screenName: string,
-  additionalParams?: AnalyticsEventParams
-): void {
+export function logFeatureUsed(featureName: string, screenName: string, additionalParams?: AnalyticsEventParams): void {
   logAnalyticsEvent(AnalyticsEvent.FEATURE_USED, {
     feature_name: featureName,
     screen_name: screenName,
@@ -177,13 +148,11 @@ export function logFeatureUsed(
  * Set user properties for analytics
  * @param properties - User properties to set
  */
-export function setAnalyticsUserProperties(
-  properties: AnalyticsEventParams
-): void {
+export function setAnalyticsUserProperties(properties: AnalyticsEventParams): void {
   if (__DEV__) {
     console.log('[Analytics] User Properties:', properties);
   }
-  
+
   // TODO: Integrate with actual analytics service
   // Example: analytics().setUserProperties(properties);
 }

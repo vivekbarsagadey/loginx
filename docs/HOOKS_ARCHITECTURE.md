@@ -19,18 +19,23 @@ LoginX features a comprehensive custom hooks library with 70+ hooks organized in
 The LoginX hooks architecture follows these core principles:
 
 ### 1. **Single Responsibility Principle**
+
 Each hook should do one thing and do it well. Complex functionality is composed from multiple focused hooks rather than creating monolithic hooks.
 
 ### 2. **Composability**
+
 Hooks are designed to work together seamlessly. Higher-level hooks compose lower-level hooks to create powerful abstractions.
 
 ### 3. **Type Safety**
+
 All hooks are written in TypeScript with explicit types for parameters, return values, and internal state.
 
 ### 4. **Performance First**
+
 Hooks use proper memoization, optimize re-renders, and follow React's performance best practices.
 
 ### 5. **Developer Experience**
+
 Clear naming conventions, comprehensive documentation, and intuitive APIs make hooks easy to discover and use.
 
 ## Hook Categories
@@ -38,6 +43,7 @@ Clear naming conventions, comprehensive documentation, and intuitive APIs make h
 The hooks library is organized into 13 categories based on functionality:
 
 ### 1. **Auth Hooks** (`hooks/auth/`)
+
 Authentication and authorization related hooks.
 
 - `useAuthProvider` - Main auth context provider
@@ -50,6 +56,7 @@ Authentication and authorization related hooks.
 - `useRegistrationState` - Registration form state
 
 **Common Patterns:**
+
 ```typescript
 // Auth state access
 const { user, isAuthenticated, login, logout } = useAuth();
@@ -59,6 +66,7 @@ const { authenticate, isAvailable, biometricType } = useBiometricAuth();
 ```
 
 ### 2. **Async Hooks** (`hooks/async/`)
+
 Asynchronous operation management hooks.
 
 - `useAsyncOperation` - Generic async operation handling
@@ -67,18 +75,20 @@ Asynchronous operation management hooks.
 - `useFetch` - Standardized API calls with loading/error states
 
 **Common Patterns:**
+
 ```typescript
 // Async operations with loading/error states
 const { data, loading, error, execute } = useAsyncOperation(fetchData);
 
 // Fetch with automatic retry
-const { data, isLoading, refetch } = useFetch('/api/user', {
+const { data, isLoading, refetch } = useFetch("/api/user", {
   retry: 3,
-  retryDelay: 1000,
+  retryDelay: 1000
 });
 ```
 
 ### 3. **UI Hooks** (`hooks/ui/`)
+
 User interface interaction hooks.
 
 - `useHapticNavigation` - Navigation with haptic feedback
@@ -91,16 +101,18 @@ User interface interaction hooks.
 - `useKeyboard` - Keyboard visibility and height tracking
 
 **Common Patterns:**
+
 ```typescript
 // Haptic feedback on navigation
 const navigateWithFeedback = useHapticNavigation();
-navigateWithFeedback('/profile');
+navigateWithFeedback("/profile");
 
 // Auto-focus first input
 const { focusRef, focus } = useAutoFocus<TextInput>();
 ```
 
 ### 4. **Layout Hooks** (`hooks/layout/`)
+
 Responsive design and layout hooks.
 
 - `useResponsive` - Responsive design utilities
@@ -111,6 +123,7 @@ Responsive design and layout hooks.
 - `useMediaQuery` - Advanced responsive design queries
 
 **Common Patterns:**
+
 ```typescript
 // Responsive layout
 const { isMobile, isTablet, isDesktop, breakpoint } = useResponsive();
@@ -120,6 +133,7 @@ const { isPortrait, isLandscape } = useOrientation();
 ```
 
 ### 5. **Device Hooks** (`hooks/device/`)
+
 Device API and hardware interaction hooks.
 
 - `useAppState` - App state (active/background/inactive)
@@ -130,6 +144,7 @@ Device API and hardware interaction hooks.
 - `useShare` - Native share functionality
 
 **Common Patterns:**
+
 ```typescript
 // App state monitoring
 const { appState, isActive, isBackground } = useAppState();
@@ -139,6 +154,7 @@ const { level, isCharging, isLowPowerMode } = useBattery();
 ```
 
 ### 6. **Theme Hooks** (`hooks/theme/`)
+
 Theming, styling, and internationalization hooks.
 
 - `useThemeContext` - Theme provider context
@@ -150,6 +166,7 @@ Theming, styling, and internationalization hooks.
 - `useLocalizedDate` - Date formatting with i18n
 
 **Common Patterns:**
+
 ```typescript
 // Theme access
 const { theme, colors, isDark, toggleTheme } = useTheme();
@@ -159,6 +176,7 @@ const { t, locale, changeLanguage } = useLanguage();
 ```
 
 ### 7. **Lifecycle Hooks** (`hooks/lifecycle/`)
+
 React lifecycle optimization hooks.
 
 - `useOptimizedCallback` - Memoized callbacks with deep comparison
@@ -170,6 +188,7 @@ React lifecycle optimization hooks.
 - `useCallbackRef` - Stable callback refs
 
 **Common Patterns:**
+
 ```typescript
 // Track previous value
 const prevCount = usePrevious(count);
@@ -181,6 +200,7 @@ useUpdateEffect(() => {
 ```
 
 ### 8. **Utility Hooks** (`hooks/utility/`)
+
 General-purpose utility hooks.
 
 - `useToggle` - Boolean toggle state
@@ -197,6 +217,7 @@ General-purpose utility hooks.
 - `useOnboardingProvider` - Onboarding flow management
 
 **Common Patterns:**
+
 ```typescript
 // Toggle state
 const [isOpen, toggle, setIsOpen] = useToggle(false);
@@ -206,13 +227,14 @@ const [items, { push, remove, clear, update }] = useList<Item>([]);
 
 // Form handling
 const { values, errors, handleChange, handleSubmit } = useForm({
-  initialValues: { email: '', password: '' },
+  initialValues: { email: "", password: "" },
   validate: validateLoginForm,
-  onSubmit: handleLogin,
+  onSubmit: handleLogin
 });
 ```
 
 ### 9. **Storage Hooks** (`hooks/storage/`)
+
 Data persistence hooks.
 
 - `useAsyncStorage` - AsyncStorage wrapper with reactivity
@@ -220,15 +242,17 @@ Data persistence hooks.
 - `useLocalStorage` - Web localStorage (for web platform)
 
 **Common Patterns:**
+
 ```typescript
 // Persistent state
-const [token, setToken] = useAsyncStorage('auth_token');
+const [token, setToken] = useAsyncStorage("auth_token");
 
 // Secure storage for sensitive data
-const [credentials, setCredentials] = useSecureStorage('user_credentials');
+const [credentials, setCredentials] = useSecureStorage("user_credentials");
 ```
 
 ### 10. **Timing Hooks** (`hooks/timing/`)
+
 Time-based operation hooks.
 
 - `useTimeout` - Declarative setTimeout wrapper
@@ -237,10 +261,11 @@ Time-based operation hooks.
 - `useThrottledCallback` - Throttled function execution
 
 **Common Patterns:**
+
 ```typescript
 // Delayed action
 const { start, cancel } = useTimeout(() => {
-  showToast('Welcome!');
+  showToast("Welcome!");
 }, 3000);
 
 // Debounced search
@@ -250,6 +275,7 @@ const debouncedSearch = useDebouncedCallback((query) => {
 ```
 
 ### 11. **Network Hooks** (`hooks/network/`)
+
 Network connectivity and status hooks.
 
 - `useNetworkContext` - Network provider context
@@ -257,6 +283,7 @@ Network connectivity and status hooks.
 - `useNetworkStatus` - Network status monitoring
 
 **Common Patterns:**
+
 ```typescript
 // Network awareness
 const { isConnected, isInternetReachable, connectionType } = useNetwork();
@@ -268,15 +295,17 @@ if (!isConnected) {
 ```
 
 ### 12. **Permissions Hooks** (`hooks/permissions/`)
+
 System permissions management hooks.
 
 - `usePermissions` - Request and check permissions
 - `usePermissionsContext` - Permissions provider context
 
 **Common Patterns:**
+
 ```typescript
 // Permission checking
-const { hasPermission, requestPermission } = usePermissions('camera');
+const { hasPermission, requestPermission } = usePermissions("camera");
 
 if (!hasPermission) {
   await requestPermission();
@@ -284,12 +313,14 @@ if (!hasPermission) {
 ```
 
 ### 13. **Settings Hooks** (`hooks/settings/`)
+
 App settings and preferences hooks.
 
 - `useSettingsContext` - Settings provider context
 - `useSecuritySettings` - Security preferences management
 
 **Common Patterns:**
+
 ```typescript
 // Settings access
 const { settings, updateSetting } = useSettings();
@@ -307,13 +338,13 @@ Complex hooks are built by composing simpler hooks:
 ```typescript
 // Example: useAuth composes multiple lower-level hooks
 export function useAuth() {
-  const [user, setUser] = useAsyncStorage('user');
+  const [user, setUser] = useAsyncStorage("user");
   const [loading, setLoading] = useToggle(true);
   const network = useNetwork();
   const { show: showError } = useAlert();
-  
+
   // Implementation...
-  
+
   return { user, loading, login, logout };
 }
 ```
@@ -326,13 +357,13 @@ Context-based hooks follow the provider pattern:
 // Provider component
 export function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<User | null>(null);
-  
+
   const value = useMemo(() => ({
     user,
     setUser,
     // ... other values
   }), [user]);
-  
+
   return (
     <AuthContext.Provider value={value}>
       {children}
@@ -355,39 +386,46 @@ export function useAuth() {
 Custom hooks follow a consistent pattern:
 
 ```typescript
-export function useCustomHook(
-  param: Type,
-  options?: Options
-): ReturnType {
+export function useCustomHook(param: Type, options?: Options): ReturnType {
   // 1. State declarations
   const [state, setState] = useState<State>(initialState);
-  
+
   // 2. Refs for stable references
   const savedCallback = useRef(callback);
-  
+
   // 3. Derived values (memoized)
   const derived = useMemo(() => {
     return computeValue(state);
   }, [state]);
-  
+
   // 4. Callbacks (memoized)
-  const handleAction = useCallback(() => {
-    // Implementation
-  }, [/* dependencies */]);
-  
+  const handleAction = useCallback(
+    () => {
+      // Implementation
+    },
+    [
+      /* dependencies */
+    ]
+  );
+
   // 5. Effects
-  useEffect(() => {
-    // Side effects
-    return () => {
-      // Cleanup
-    };
-  }, [/* dependencies */]);
-  
+  useEffect(
+    () => {
+      // Side effects
+      return () => {
+        // Cleanup
+      };
+    },
+    [
+      /* dependencies */
+    ]
+  );
+
   // 6. Return values
   return {
     state,
     derived,
-    handleAction,
+    handleAction
   };
 }
 ```
@@ -395,18 +433,21 @@ export function useCustomHook(
 ## Hook Lifecycle
 
 ### Initialization Phase
+
 1. Hook is called during component render
 2. Initial state is set
 3. Refs are created
 4. Context is accessed (if applicable)
 
 ### Update Phase
+
 1. Dependencies change
 2. Memoized values are recalculated
 3. Callbacks are recreated (if dependencies changed)
 4. Effects run
 
 ### Cleanup Phase
+
 1. Component unmounts or dependencies change
 2. Effect cleanup functions run
 3. Event listeners are removed
@@ -418,6 +459,7 @@ export function useCustomHook(
 ### Memoization Strategy
 
 1. **useMemo for expensive computations:**
+
 ```typescript
 const expensiveValue = useMemo(() => {
   return computeExpensiveValue(data);
@@ -425,13 +467,20 @@ const expensiveValue = useMemo(() => {
 ```
 
 2. **useCallback for stable function references:**
+
 ```typescript
-const handleSubmit = useCallback((data: FormData) => {
-  submitForm(data);
-}, [/* only include necessary dependencies */]);
+const handleSubmit = useCallback(
+  (data: FormData) => {
+    submitForm(data);
+  },
+  [
+    /* only include necessary dependencies */
+  ]
+);
 ```
 
 3. **Refs for values that don't trigger re-renders:**
+
 ```typescript
 const latestCallback = useRef(callback);
 useEffect(() => {
@@ -442,6 +491,7 @@ useEffect(() => {
 ### Re-render Optimization
 
 1. **Split context values to prevent unnecessary re-renders:**
+
 ```typescript
 // Bad: Single context with all values
 const value = { user, theme, settings, network };
@@ -452,6 +502,7 @@ const themeValue = useMemo(() => ({ theme, toggleTheme }), [theme]);
 ```
 
 2. **Use React.memo for expensive child components:**
+
 ```typescript
 const MemoizedComponent = React.memo(Component, (prev, next) => {
   return prev.data === next.data;
@@ -461,16 +512,18 @@ const MemoizedComponent = React.memo(Component, (prev, next) => {
 ### Bundle Size Optimization
 
 1. **Tree-shakable exports:**
+
 ```typescript
 // hooks/index.ts
-export { useAuth } from './auth/use-auth-provider';
-export { useTheme } from './theme/use-theme-context';
+export { useAuth } from "./auth/use-auth-provider";
+export { useTheme } from "./theme/use-theme-context";
 // ... individual exports
 ```
 
 2. **Lazy loading for heavy hooks:**
+
 ```typescript
-const { useBiometricAuth } = await import('@/hooks/auth/use-biometric-auth');
+const { useBiometricAuth } = await import("@/hooks/auth/use-biometric-auth");
 ```
 
 ## Testing Strategy
@@ -480,19 +533,19 @@ const { useBiometricAuth } = await import('@/hooks/auth/use-biometric-auth');
 Each hook should have comprehensive unit tests:
 
 ```typescript
-import { renderHook, act } from '@testing-library/react-native';
-import { useToggle } from '@/hooks/utility/use-toggle';
+import { renderHook, act } from "@testing-library/react-native";
+import { useToggle } from "@/hooks/utility/use-toggle";
 
-describe('useToggle', () => {
-  it('should toggle value', () => {
+describe("useToggle", () => {
+  it("should toggle value", () => {
     const { result } = renderHook(() => useToggle(false));
-    
+
     expect(result.current[0]).toBe(false);
-    
+
     act(() => {
       result.current[1](); // toggle
     });
-    
+
     expect(result.current[0]).toBe(true);
   });
 });
@@ -517,7 +570,7 @@ it('should handle auth with network context', () => {
     const network = useNetwork();
     return { auth, network };
   }, { wrapper });
-  
+
   // Test integration
 });
 ```
@@ -551,10 +604,10 @@ Hooks are exported from category index files and the main index:
 
 ```typescript
 // Import from category
-import { useAuth } from '@/hooks/auth';
+import { useAuth } from "@/hooks/auth";
 
 // Import from main index
-import { useAuth, useTheme, useNetwork } from '@/hooks';
+import { useAuth, useTheme, useNetwork } from "@/hooks";
 ```
 
 ### Hook Dependencies

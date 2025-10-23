@@ -15,22 +15,8 @@ export function EmptyFavoritesIllustration({ size = 120 }: { size?: number }) {
         opacity="0.6"
       />
       {/* Dashed lines indicating empty */}
-      <Path
-        d="M55 50 L55 65"
-        stroke={colors['text-muted']}
-        strokeWidth="1.5"
-        strokeDasharray="3 3"
-        strokeLinecap="round"
-        opacity="0.4"
-      />
-      <Path
-        d="M65 50 L65 65"
-        stroke={colors['text-muted']}
-        strokeWidth="1.5"
-        strokeDasharray="3 3"
-        strokeLinecap="round"
-        opacity="0.4"
-      />
+      <Path d="M55 50 L55 65" stroke={colors['text-muted']} strokeWidth="1.5" strokeDasharray="3 3" strokeLinecap="round" opacity="0.4" />
+      <Path d="M65 50 L65 65" stroke={colors['text-muted']} strokeWidth="1.5" strokeDasharray="3 3" strokeLinecap="round" opacity="0.4" />
     </Svg>
   );
 }

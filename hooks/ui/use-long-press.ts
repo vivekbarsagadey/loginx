@@ -7,8 +7,8 @@
  * @module hooks/ui/use-long-press
  */
 
-import { useCallback, useRef } from 'react';
 import * as Haptics from 'expo-haptics';
+import { useCallback, useRef } from 'react';
 
 /**
  * Configuration options for useLongPress
@@ -122,24 +122,16 @@ export interface UseLongPressHandlers {
  *   </View>
  * </Pressable>
  */
-export function useLongPress(
-  options: UseLongPressOptions = {}
-): UseLongPressHandlers {
-  const {
-    delay = 500,
-    onLongPress,
-    onPressIn: onPressInCallback,
-    onPressOut: onPressOutCallback,
-    hapticFeedback = true,
-    hapticType = 'medium',
-    enabled = true,
-  } = options;
+export function useLongPress(options: UseLongPressOptions = {}): UseLongPressHandlers {
+  const { delay = 500, onLongPress, onPressIn: onPressInCallback, onPressOut: onPressOutCallback, hapticFeedback = true, hapticType = 'medium', enabled = true } = options;
 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isLongPressRef = useRef(false);
 
   const triggerHaptic = useCallback(async () => {
-    if (!hapticFeedback) {return;}
+    if (!hapticFeedback) {
+      return;
+    }
 
     try {
       switch (hapticType) {
@@ -160,7 +152,9 @@ export function useLongPress(
   }, [hapticFeedback, hapticType]);
 
   const handlePressIn = useCallback(() => {
-    if (!enabled) {return;}
+    if (!enabled) {
+      return;
+    }
 
     isLongPressRef.current = false;
     onPressInCallback?.();
@@ -179,7 +173,9 @@ export function useLongPress(
   }, [enabled, delay, onLongPress, onPressInCallback, triggerHaptic]);
 
   const handlePressOut = useCallback(() => {
-    if (!enabled) {return;}
+    if (!enabled) {
+      return;
+    }
 
     // Clear timer if press is released before long press completes
     if (timerRef.current) {

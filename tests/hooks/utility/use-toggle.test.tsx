@@ -2,8 +2,8 @@
  * Tests for useToggle hook
  */
 
-import { act, renderHook } from '@testing-library/react-native';
 import { useToggle } from '@/hooks/utility/use-toggle';
+import { act, renderHook } from '@testing-library/react-native';
 
 describe('useToggle', () => {
   describe('Initialization', () => {

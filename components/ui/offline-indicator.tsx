@@ -40,7 +40,7 @@ export function OfflineIndicator({ message, visible }: OfflineIndicatorProps) {
   const onPrimaryColor = useThemeColor({}, 'on-primary');
 
   // Determine online status: both connected and internet reachable
-  const isOnline = isConnected && (isInternetReachable !== false);
+  const isOnline = isConnected && isInternetReachable !== false;
 
   // Don't show if online (unless manually overridden)
   const shouldShow = visible !== undefined ? visible : !isOnline;

@@ -10,53 +10,67 @@ import React from 'react';
 // Mock Expo permissions
 jest.mock('expo-camera', () => ({
   Camera: {
-    getCameraPermissionsAsync: jest.fn(() => Promise.resolve({
-      granted: false,
-      canAskAgain: true,
-    })),
-    requestCameraPermissionsAsync: jest.fn(() => Promise.resolve({
-      status: 'granted',
-      canAskAgain: true,
-    })),
+    getCameraPermissionsAsync: jest.fn(() =>
+      Promise.resolve({
+        granted: false,
+        canAskAgain: true,
+      })
+    ),
+    requestCameraPermissionsAsync: jest.fn(() =>
+      Promise.resolve({
+        status: 'granted',
+        canAskAgain: true,
+      })
+    ),
   },
 }));
 
 jest.mock('expo-image-picker', () => ({
-  getMediaLibraryPermissionsAsync: jest.fn(() => Promise.resolve({
-    granted: false,
-    canAskAgain: true,
-  })),
-  requestMediaLibraryPermissionsAsync: jest.fn(() => Promise.resolve({
-    status: 'granted',
-    canAskAgain: true,
-  })),
+  getMediaLibraryPermissionsAsync: jest.fn(() =>
+    Promise.resolve({
+      granted: false,
+      canAskAgain: true,
+    })
+  ),
+  requestMediaLibraryPermissionsAsync: jest.fn(() =>
+    Promise.resolve({
+      status: 'granted',
+      canAskAgain: true,
+    })
+  ),
 }));
 
 jest.mock('expo-location', () => ({
-  getForegroundPermissionsAsync: jest.fn(() => Promise.resolve({
-    granted: false,
-    canAskAgain: true,
-  })),
-  requestForegroundPermissionsAsync: jest.fn(() => Promise.resolve({
-    status: 'granted',
-    canAskAgain: true,
-  })),
+  getForegroundPermissionsAsync: jest.fn(() =>
+    Promise.resolve({
+      granted: false,
+      canAskAgain: true,
+    })
+  ),
+  requestForegroundPermissionsAsync: jest.fn(() =>
+    Promise.resolve({
+      status: 'granted',
+      canAskAgain: true,
+    })
+  ),
 }));
 
 jest.mock('expo-notifications', () => ({
-  getPermissionsAsync: jest.fn(() => Promise.resolve({
-    granted: false,
-    canAskAgain: true,
-  })),
-  requestPermissionsAsync: jest.fn(() => Promise.resolve({
-    status: 'granted',
-    canAskAgain: true,
-  })),
+  getPermissionsAsync: jest.fn(() =>
+    Promise.resolve({
+      granted: false,
+      canAskAgain: true,
+    })
+  ),
+  requestPermissionsAsync: jest.fn(() =>
+    Promise.resolve({
+      status: 'granted',
+      canAskAgain: true,
+    })
+  ),
 }));
 
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <PermissionsProvider>{children}</PermissionsProvider>
-);
+const wrapper = ({ children }: { children: React.ReactNode }) => <PermissionsProvider>{children}</PermissionsProvider>;
 
 describe('PermissionsProvider', () => {
   beforeEach(() => {

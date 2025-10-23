@@ -2,8 +2,8 @@
  * Tests for useDebouncedCallback hook
  */
 
-import { act, renderHook } from '@testing-library/react-native';
 import { useDebouncedCallback } from '@/hooks/timing/use-debounced-callback';
+import { act, renderHook } from '@testing-library/react-native';
 
 describe('useDebouncedCallback', () => {
   beforeEach(() => {
@@ -94,9 +94,7 @@ describe('useDebouncedCallback', () => {
   describe('Parameters', () => {
     it('should pass arguments to callback', () => {
       const callback = jest.fn();
-      const { result } = renderHook(() =>
-        useDebouncedCallback((a: number, b: string) => callback(a, b), 500)
-      );
+      const { result } = renderHook(() => useDebouncedCallback((a: number, b: string) => callback(a, b), 500));
 
       act(() => {
         result.current(42, 'test');
@@ -111,9 +109,7 @@ describe('useDebouncedCallback', () => {
 
     it('should use arguments from last call', () => {
       const callback = jest.fn();
-      const { result } = renderHook(() =>
-        useDebouncedCallback((value: number) => callback(value), 500)
-      );
+      const { result } = renderHook(() => useDebouncedCallback((value: number) => callback(value), 500));
 
       act(() => {
         result.current(1);
@@ -131,13 +127,7 @@ describe('useDebouncedCallback', () => {
 
     it('should handle multiple parameter types', () => {
       const callback = jest.fn();
-      const { result } = renderHook(() =>
-        useDebouncedCallback(
-          (str: string, num: number, bool: boolean, obj: { key: string }) =>
-            callback(str, num, bool, obj),
-          500
-        )
-      );
+      const { result } = renderHook(() => useDebouncedCallback((str: string, num: number, bool: boolean, obj: { key: string }) => callback(str, num, bool, obj), 500));
 
       const testObj = { key: 'value' };
 
@@ -156,10 +146,7 @@ describe('useDebouncedCallback', () => {
   describe('Delay Changes', () => {
     it('should update delay when changed', () => {
       const callback = jest.fn();
-      const { result, rerender } = renderHook(
-        ({ delay }) => useDebouncedCallback(callback, delay),
-        { initialProps: { delay: 500 } }
-      );
+      const { result, rerender } = renderHook(({ delay }) => useDebouncedCallback(callback, delay), { initialProps: { delay: 500 } });
 
       act(() => {
         result.current();
@@ -204,10 +191,7 @@ describe('useDebouncedCallback', () => {
       const callback1 = jest.fn();
       const callback2 = jest.fn();
 
-      const { result, rerender } = renderHook(
-        ({ callback }) => useDebouncedCallback(callback, 500),
-        { initialProps: { callback: callback1 } }
-      );
+      const { result, rerender } = renderHook(({ callback }) => useDebouncedCallback(callback, 500), { initialProps: { callback: callback1 } });
 
       act(() => {
         result.current();
@@ -227,9 +211,7 @@ describe('useDebouncedCallback', () => {
   describe('Cleanup', () => {
     it('should cancel pending callback on unmount', () => {
       const callback = jest.fn();
-      const { result, unmount } = renderHook(() =>
-        useDebouncedCallback(callback, 500)
-      );
+      const { result, unmount } = renderHook(() => useDebouncedCallback(callback, 500));
 
       act(() => {
         result.current();
@@ -277,9 +259,7 @@ describe('useDebouncedCallback', () => {
   describe('Real-World Scenarios', () => {
     it('should debounce search input', () => {
       const searchAPI = jest.fn();
-      const { result } = renderHook(() =>
-        useDebouncedCallback((query: string) => searchAPI(query), 300)
-      );
+      const { result } = renderHook(() => useDebouncedCallback((query: string) => searchAPI(query), 300));
 
       // Simulate user typing
       act(() => {
@@ -325,9 +305,7 @@ describe('useDebouncedCallback', () => {
 
     it('should debounce form validation', () => {
       const validate = jest.fn();
-      const { result } = renderHook(() =>
-        useDebouncedCallback((value: string) => validate(value), 400)
-      );
+      const { result } = renderHook(() => useDebouncedCallback((value: string) => validate(value), 400));
 
       // Rapid value changes
       act(() => {
@@ -347,9 +325,7 @@ describe('useDebouncedCallback', () => {
 
     it('should debounce window resize', () => {
       const recalculate = jest.fn();
-      const { result } = renderHook(() =>
-        useDebouncedCallback(() => recalculate(), 500)
-      );
+      const { result } = renderHook(() => useDebouncedCallback(() => recalculate(), 500));
 
       // Simulate multiple resize events
       for (let i = 0; i < 10; i++) {

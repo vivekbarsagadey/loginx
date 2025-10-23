@@ -1,18 +1,12 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "module": "commonjs",
-        "types": [
-            "node"
-        ],
-        "noEmit": true,
-        "esModuleInterop": true,
-        "moduleResolution": "node"
-    },
-    "include": [
-        "scripts/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "types": ["node"],
+    "noEmit": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node"
+  },
+  "include": ["scripts/**/*.ts"],
+  "exclude": ["node_modules"]
 }
