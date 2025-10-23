@@ -89,7 +89,7 @@ export function useAsyncStorage<T>(
           setCachedValue(parsed);
           setIsCached(false);
         }
-      } catch (_err) {
+      } catch (_error) {
         setError(
           _error instanceof Error ? _error : new Error("Failed to load from storage")
         );
@@ -114,7 +114,7 @@ export function useAsyncStorage<T>(
         setCachedValue(valueToStore);
         await AsyncStorage.setItem(key, serialize(valueToStore));
         setIsCached(true);
-      } catch (_err) {
+      } catch (_error) {
         setError(
           _error instanceof Error ? _error : new Error("Failed to save to storage")
         );
@@ -130,7 +130,7 @@ export function useAsyncStorage<T>(
       cache.delete(key);
       setIsCached(false);
       await AsyncStorage.removeItem(key);
-    } catch (_err) {
+    } catch (_error) {
       setError(
         _error instanceof Error ? _error : new Error("Failed to remove from storage")
       );

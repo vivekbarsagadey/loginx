@@ -139,7 +139,7 @@ export function useInfiniteScroll<T>(
         }
 
         setCurrentPage(page);
-      } catch (_err) {
+      } catch (_error) {
         setError(_error);
         if (onError) {
           onError(_error);

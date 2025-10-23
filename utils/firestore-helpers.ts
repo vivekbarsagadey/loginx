@@ -372,7 +372,7 @@ export async function queryDocumentsSafe<T = DocumentData>(collectionRef: Collec
  * @param error - Error to handle
  * @returns User-friendly error message
  */
-export function getFirestoreErrorMessage(_error: unknown): string {
+export function getFirestoreErrorMessage(error: unknown): string {
   if (error instanceof FirestoreError) {
     return error.message;
   }

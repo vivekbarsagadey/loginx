@@ -98,7 +98,7 @@ export function useFetch<T = any>(
 
   const [state, setState] = useState<UseFetchState<T>>({
     data: null,
-    error: null,
+    error: undefined,
     isLoading: !manual,
     isValidating: false,
   });
@@ -133,7 +133,7 @@ export function useFetch<T = any>(
     cancel();
     setState({
       data: null,
-      error: null,
+      error: undefined,
       isLoading: false,
       isValidating: false,
     });
@@ -158,7 +158,7 @@ export function useFetch<T = any>(
         ...prev,
         isLoading: !isRefetch,
         isValidating: isRefetch,
-        error: null,
+        error: undefined,
       }));
 
       let lastError: Error | undefined = null;
@@ -187,7 +187,7 @@ export function useFetch<T = any>(
 
           setState({
             data,
-            error: null,
+            error: undefined,
             isLoading: false,
             isValidating: false,
           });

@@ -198,7 +198,7 @@ export function useShare(): UseShareReturn {
         setLastResult(shareResult);
         setIsSharing(false);
         return shareResult;
-      } catch (_err) {
+      } catch (_error) {
         const errorObj = _error instanceof Error ? _error : new Error('Failed to share content');
         setError(errorObj);
 

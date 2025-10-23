@@ -44,8 +44,8 @@ interface ErrorInfo {
 /**
  * Check if an error is fatal (requires support contact)
  */
-export function isFatalError(_error: unknown): boolean {
-  if (!hasErrorCode(_error)) {
+export function isFatalError(error: unknown): boolean {
+  if (!hasErrorCode(error)) {
     return false;
   }
 
@@ -69,11 +69,11 @@ const hasErrorCode = (error: unknown): error is { code: string } => {
 /**
  * Check if error is a Firebase error (auth, firestore, or storage)
  */
-const isFirebaseError = (_error: unknown): boolean => {
-  if (!hasErrorCode(_error)) {
+const isFirebaseError = (error: unknown): boolean => {
+  if (!hasErrorCode(error)) {
     return false;
   }
-  return (_error as any).code.startsWith(FIREBASE_AUTH_PREFIX) || error.code.startsWith(FIRESTORE_PREFIX) || error.code.startsWith(STORAGE_PREFIX);
+  return (error as any).code.startsWith(FIREBASE_AUTH_PREFIX) || (error as any).code.startsWith(FIRESTORE_PREFIX) || (error as any).code.startsWith(STORAGE_PREFIX);
 };
 
 /**

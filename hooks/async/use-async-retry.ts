@@ -131,7 +131,7 @@ export function useAsyncRetry<T>(
    */
   const reset = useCallback(() => {
     setIsLoading(false);
-    setError(null);
+    setError(undefined);
     setRetryCount(0);
     setIsRetrying(false);
     cancelledRef.current = false;
@@ -161,7 +161,7 @@ export function useAsyncRetry<T>(
       try {
         const result = await operation();
         setIsLoading(false);
-        setError(null);
+        setError(undefined);
         setRetryCount(0);
         setIsRetrying(false);
         return result;

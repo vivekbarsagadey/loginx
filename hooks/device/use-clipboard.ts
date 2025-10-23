@@ -109,7 +109,7 @@ export function useClipboard(): UseClipboardReturn {
 
         setIsCopying(false);
         return true;
-      } catch (_err) {
+      } catch (_error) {
         const errorObj = _error instanceof Error ? _error : new Error('Failed to copy to clipboard');
         setError(errorObj);
 
@@ -139,7 +139,7 @@ export function useClipboard(): UseClipboardReturn {
 
       const text = await Clipboard.getStringAsync();
       return text || null;
-    } catch (_err) {
+    } catch (_error) {
       const errorObj = _error instanceof Error ? _error : new Error('Failed to read from clipboard');
       setError(errorObj);
       return null;

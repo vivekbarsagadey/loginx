@@ -5,10 +5,10 @@ import { ThemedView } from '@/components/themed-view';
 import { SuccessAnimation } from '@/components/ui/success-animation';
 import { Spacing, Typography } from '@/constants/layout';
 import { auth } from '@/firebase-config';
+import { useInterval } from '@/hooks/timing/use-interval';
 import { useAlert } from '@/hooks/use-alert';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useHapticNavigation } from '@/hooks/use-haptic-navigation';
-import { useInterval } from '@/hooks/timing/use-interval';
 import i18n from '@/i18n';
 import { createLogger } from '@/utils/debug';
 import { useLocalSearchParams } from 'expo-router';
@@ -64,7 +64,7 @@ export default function VerifyEmailScreen() {
     onSuccess: () => {
       showAlert(i18n.t('screens.verifyEmail.success.emailSent'), i18n.t('screens.verifyEmail.success.emailSentMessage'), [{ text: 'OK' }], { variant: 'success' });
     },
-    onError: (_error: unknown) => {
+    onError: (error: unknown) => {
       const errorCode = (error as { code?: string })?.code ?? '';
       const friendlyMessage = getFirebaseAuthErrorMessage(errorCode);
       showAlert(i18n.t('errors.generic.title'), friendlyMessage, [{ text: 'OK' }], { variant: 'error' });
