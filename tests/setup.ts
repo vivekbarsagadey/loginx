@@ -3,7 +3,8 @@
  * @description Jest test environment setup
  */
 
-import '@testing-library/jest-native/extend-expect';
+// Define global __DEV__ variable
+(global as typeof globalThis & { __DEV__: boolean }).__DEV__ = true;
 
 // Mock AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () => require('@react-native-async-storage/async-storage/jest/async-storage-mock'));

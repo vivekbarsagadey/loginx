@@ -28,9 +28,9 @@ describe('Rate Limiting', () => {
       for (let i = 0; i < 3; i++) {
         try {
           await signInWithEmailAndPassword(auth as any, email, password);
-        } catch (_error: unknown) {
+        } catch (error: unknown) {
           // Expected to fail (mock), but should not be rate limited
-          expect((_error as any).code).not.toBe('too-many-requests');
+          expect((error as any).code).not.toBe('too-many-requests');
         }
       }
     });
@@ -44,8 +44,8 @@ describe('Rate Limiting', () => {
       for (let i = 0; i < 10; i++) {
         try {
           await signInWithEmailAndPassword(auth as any, email, password);
-        } catch (error: any) {
-          if (_error.code === 'auth/too-many-requests') {
+        } catch (error: unknown) {
+          if ((error as any).code === 'auth/too-many-requests') {
             rateLimitHit = true;
             break;
           }
@@ -77,30 +77,22 @@ describe('Rate Limiting', () => {
       // Should be able to attempt again
       try {
         await signInWithEmailAndPassword(auth as any, email, password);
-      } catch (error: any) {
-        expect(_error.code).not.toBe('auth/too-many-requests');
+      } catch (error: unknown) {
+        expect((error as any).code).not.toBe('auth/too-many-requests');
       }
     });
   });
 
   describe('Registration Rate Limiting', () => {
     it('should prevent mass account creation', async () => {
-      const baseEmail = 'spam';
       const attempts = [];
 
       // Try to create 20 accounts rapidly
       for (let i = 0; i < 20; i++) {
-        const email = `${baseEmail}${i}@example.com`;
-        attempts.push(
-          new Promise((resolve) => {
-            // Simulate registration attempt
-            setTimeout(() => resolve(true), Math.random() * 100);
-          })
-        );
+        attempts.push(Promise.resolve(true));
       }
 
       const results = await Promise.allSettled(attempts);
-      const successful = results.filter((r) => r.status === 'fulfilled').length;
 
       // In production, rate limiting should prevent most of these
       // Mock allows all, but structure is tested
@@ -138,8 +130,8 @@ describe('Rate Limiting', () => {
         trackAttempt(legitimateIP);
       }
 
-      expect(ipAttempts.get(attackerIP)!.length).toBe(10);
-      expect(ipAttempts.get(legitimateIP)!.length).toBe(2);
+      expect(ipAttempts.get(attackerIP)?.length).toBe(10);
+      expect(ipAttempts.get(legitimateIP)?.length).toBe(2);
     });
   });
 });

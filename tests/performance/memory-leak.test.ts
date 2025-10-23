@@ -72,7 +72,7 @@ describe('Memory Leak Detection', () => {
 
   describe('Memory Growth', () => {
     it('should not leak memory with repeated component mounting', () => {
-      const initialMemory = (performance as any).memory?.usedJSHeapSize || 0;
+      const initialMemory = (performance as unknown as { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize || 0;
 
       // Mount and unmount component 100 times
       for (let i = 0; i < 100; i++) {
@@ -94,7 +94,7 @@ describe('Memory Leak Detection', () => {
         global.gc();
       }
 
-      const finalMemory = (performance as any).memory?.usedJSHeapSize || 0;
+      const finalMemory = (performance as unknown as { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize || 0;
       const memoryGrowth = finalMemory - initialMemory;
 
       // Memory growth should be minimal (<10MB)
@@ -102,23 +102,24 @@ describe('Memory Leak Detection', () => {
     });
 
     it('should not leak memory with cached data', async () => {
-      const { getCachedData, setCachedData, clearCache } = await import('@/utils/cache');
+      // Use require instead of dynamic import for Jest compatibility
+      const { set, get, clear } = require('@/utils/cache');
 
-      const initialMemory = (performance as any).memory?.usedJSHeapSize || 0;
+      const initialMemory = (performance as unknown as { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize || 0;
 
       // Create and destroy cache data 1000 times
       for (let i = 0; i < 1000; i++) {
-        await setCachedData(`leak-test-${i}`, { data: new Array(100).fill(i) });
-        await getCachedData(`leak-test-${i}`);
+        await set(`leak-test-${i}`, { data: new Array(100).fill(i) });
+        await get(`leak-test-${i}`);
       }
 
-      await clearCache();
+      await clear();
 
       if (global.gc) {
         global.gc();
       }
 
-      const finalMemory = (performance as any).memory?.usedJSHeapSize || 0;
+      const finalMemory = (performance as unknown as { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize || 0;
       const memoryGrowth = finalMemory - initialMemory;
 
       // Should not retain significant memory after cache clear
@@ -159,17 +160,15 @@ describe('Memory Leak Detection', () => {
 
   describe('Closure Memory Leaks', () => {
     it('should not retain large objects in closures', () => {
-      let capturedData: any = null;
+      let capturedData: unknown = null;
 
       const { unmount } = renderHook(() => {
         useEffect(() => {
           // Large data that should be released
           const largeData = new Array(10000).fill({ value: 'test' });
 
-          const _handler = () => {
-            // Capture reference (potential leak)
-            capturedData = largeData;
-          };
+          // Immediately capture reference to simulate usage
+          capturedData = largeData;
 
           return () => {
             // Clean up reference
@@ -199,7 +198,7 @@ describe('Resource Cleanup', () => {
       return conn;
     };
 
-    const closeConnection = (conn: any) => {
+    const closeConnection = (conn: { id: number }) => {
       connections.delete(conn);
     };
 

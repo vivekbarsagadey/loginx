@@ -57,7 +57,7 @@ export function debugError(message: string, _error?: Error | unknown): void {
     if (_error instanceof Error) {
       logger.error(`${Colors.red}[ERROR]${Colors.reset} ${message}`, _error);
     } else {
-      logger.error(`${Colors.red}[ERROR]${Colors.reset} ${message}`, { error });
+      logger.error(`${Colors.red}[ERROR]${Colors.reset} ${message}`, { _error });
     }
   }
 }

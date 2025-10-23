@@ -27,16 +27,41 @@ export const sanitizeUserInput = (input: string, maxLength: number = MAX_INPUT_L
     return '';
   }
 
-  return (
-    input
-      .trim()
-      // Remove HTML tags
-      .replace(/<[^>]*>/g, '')
-      // Remove script tags content
-      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-      // Limit length to prevent DoS
-      .slice(0, maxLength)
-  );
+  let sanitized = input.trim();
+
+  // Remove SQL injection keywords
+  const sqlKeywords = ['DROP TABLE', 'DROP', 'DELETE FROM', 'UNION SELECT', 'UNION', 'INSERT INTO', 'UPDATE', 'SELECT', '--', ';', 'OR 1=1', "OR '1'='1"];
+  sqlKeywords.forEach((keyword) => {
+    const regex = new RegExp(keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+    sanitized = sanitized.replace(regex, '');
+  });
+
+  // Remove NoSQL operators
+  const nosqlOperators = ['$ne', '$gt', '$gte', '$lt', '$lte', '$in', '$nin', '$regex', '$where', '$exists'];
+  nosqlOperators.forEach((op) => {
+    sanitized = sanitized.replace(new RegExp(op.replace('$', '\\$'), 'g'), '');
+  });
+
+  // Remove path traversal patterns - keep replacing until all are gone
+  while (sanitized.match(/\.\.[\/\\]/)) {
+    sanitized = sanitized.replace(/\.\.[\/\\]/g, '');
+  }
+  // Also remove URL-encoded path traversal
+  while (sanitized.match(/%2e%2e%2f/i)) {
+    sanitized = sanitized.replace(/%2e%2e%2f/gi, '');
+  }
+  // Remove multiple dots pattern
+  sanitized = sanitized.replace(/\.{4,}/g, '');
+
+  // Remove HTML tags and potentially dangerous elements
+  sanitized = sanitized.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+  sanitized = sanitized.replace(/<[^>]*>/g, '');
+
+  // Remove javascript: protocol
+  sanitized = sanitized.replace(/javascript:/gi, '');
+
+  // Limit length to prevent DoS
+  return sanitized.slice(0, maxLength);
 };
 
 /**

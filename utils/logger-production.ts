@@ -234,7 +234,7 @@ class ProductionLogger {
     // Redact PII
     const redactedMessage = this.redactPII(message);
     const redactedContext = context ? this.redactValue(context) : undefined;
-    const redactedError = error ? (this.redactValue(_error) as Error) : undefined;
+    const redactedError = error ? (this.redactValue(error) as Error) : undefined;
 
     const entry: LogEntry = {
       level: levelName,

@@ -3,10 +3,14 @@
  * Supports unit, integration, security, and performance tests
  */
 
+const { getNodePreset } = require('jest-expo/config/getPlatformPreset');
+
+const nodePreset = getNodePreset();
+
 module.exports = {
-  preset: 'react-native',
+  ...nodePreset,
+  setupFiles: undefined, // Don't use the preset's setup files
   setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
-  transformIgnorePatterns: ['node_modules/(?!(react-native|@react-native|@react-navigation|expo|@expo|@sentry/react-native|firebase|@firebase)/)'],
   testMatch: ['<rootDir>/tests/**/*.test.ts', '<rootDir>/tests/**/*.test.tsx'],
   collectCoverageFrom: ['app/**/*.{ts,tsx}', 'components/**/*.{ts,tsx}', 'hooks/**/*.{ts,tsx}', 'utils/**/*.{ts,tsx}', '!**/*.d.ts', '!**/node_modules/**', '!**/vendor/**'],
   coverageThreshold: {
@@ -18,17 +22,8 @@ module.exports = {
     },
   },
   moduleNameMapper: {
+    ...nodePreset.moduleNameMapper,
     '^@/(.*)$': '<rootDir>/$1',
   },
-  testEnvironment: 'node',
   testTimeout: 30000,
-  globals: {
-    'ts-jest': {
-      tsconfig: {
-        jsx: 'react-native',
-        esModuleInterop: true,
-        allowSyntheticDefaultImports: true,
-      },
-    },
-  },
 };
