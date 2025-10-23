@@ -100,7 +100,7 @@ export interface UseCounterReturn {
  * ```
  */
 export function useCounter(
-  initialValue: number = 0,
+  initialValue = 0,
   options: UseCounterOptions = {}
 ): UseCounterReturn {
   const { min, max, step = 1 } = options;
@@ -108,8 +108,8 @@ export function useCounter(
   // Ensure initial value respects bounds
   const clamp = useCallback(
     (value: number): number => {
-      if (min !== undefined && value < min) return min;
-      if (max !== undefined && value > max) return max;
+      if (min !== undefined && value < min) {return min;}
+      if (max !== undefined && value > max) {return max;}
       return value;
     },
     [min, max]

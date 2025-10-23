@@ -75,7 +75,7 @@ export function checkFirebaseConfig(): DiagnosticResult[] {
         });
       }
     }
-  } catch (error) {
+  } catch (_error) {
     results.push({
       category: 'Firebase',
       status: 'error',
@@ -111,7 +111,7 @@ export function validateFormSchema(schema: unknown): DiagnosticResult[] {
 
     // Schema is validated by Zod at runtime
     // This just checks that it exists
-  } catch (error) {
+  } catch (_error) {
     results.push({
       category: 'Schema',
       status: 'error',
@@ -144,7 +144,7 @@ export function checkNavigationSetup(): DiagnosticResult[] {
       status: 'success',
       message: 'Navigation module loaded successfully',
     });
-  } catch (error) {
+  } catch (_error) {
     results.push({
       category: 'Navigation',
       status: 'error',
@@ -232,7 +232,7 @@ export function checkKeyboardAvoidingView(): DiagnosticResult[] {
         message: 'Not running on mobile platform',
       });
     }
-  } catch (error) {
+  } catch (_error) {
     results.push({
       category: 'Keyboard',
       status: 'error',

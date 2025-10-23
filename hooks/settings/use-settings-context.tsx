@@ -95,7 +95,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
       if (__DEV__) {
         console.error('[SettingsContext] Settings loaded from local storage');
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('[SettingsContext] Failed to load settings:', error);
       setState((prev) => ({
         ...prev,
@@ -128,7 +128,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
         if (__DEV__) {
           console.error(`[SettingsContext] ${key} saved and synced`);
         }
-      } catch (error) {
+      } catch (_error) {
         console.error(`[SettingsContext] Failed to save ${key}:`, error);
         throw error;
       }
@@ -151,7 +151,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
 
       try {
         await saveSettingsSection(SETTINGS_NOTIFICATIONS_KEY, 'userSettings', newNotifications);
-      } catch (error) {
+      } catch (_error) {
         // Rollback on error
         setState((prev) => ({
           ...prev,
@@ -179,7 +179,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
 
       try {
         await saveSettingsSection(SETTINGS_SECURITY_KEY, 'userSettings', newSecurity);
-      } catch (error) {
+      } catch (_error) {
         // Rollback on error
         setState((prev) => ({
           ...prev,
@@ -207,7 +207,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
 
       try {
         await saveSettingsSection(SETTINGS_APP_KEY, 'userSettings', newApp);
-      } catch (error) {
+      } catch (_error) {
         // Rollback on error
         setState((prev) => ({
           ...prev,
@@ -235,7 +235,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
 
       try {
         await saveSettingsSection(SETTINGS_PRIVACY_KEY, 'userSettings', newPrivacy);
-      } catch (error) {
+      } catch (_error) {
         // Rollback on error
         setState((prev) => ({
           ...prev,
@@ -284,7 +284,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
       if (__DEV__) {
         console.error('[SettingsContext] All settings reset to defaults');
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('[SettingsContext] Failed to reset settings:', error);
       setState((prev) => ({
         ...prev,

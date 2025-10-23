@@ -20,7 +20,7 @@ export function useNotificationCount(refreshInterval = 30000) {
     try {
       const count = await getUnreadCount();
       setUnreadCount(count);
-    } catch (error) {
+    } catch (_error) {
       return 0;
     }
   }, []);

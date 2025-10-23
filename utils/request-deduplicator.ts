@@ -78,7 +78,7 @@ class RequestDeduplicator {
       const result = await requestPromise;
       debugLog(`[RequestDeduplicator] ✅ Request completed: ${key}`);
       return result;
-    } catch (error) {
+    } catch (_error) {
       debugWarn(`[RequestDeduplicator] ❌ Request failed: ${key}`, error);
       throw error;
     } finally {

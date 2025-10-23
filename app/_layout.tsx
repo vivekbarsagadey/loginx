@@ -299,7 +299,7 @@ export default function RootLayout() {
             'theme:current', // Current theme selection
             'language:current', // Current language
           ]);
-        } catch (error) {
+        } catch (_error) {
           logger.warn('Cache warming failed:', error);
         }
       })();
@@ -311,7 +311,7 @@ export default function RootLayout() {
           const { initializeFirestore } = await import('@/firebase-config');
           await initializeFirestore();
           logger.log('Firestore initialized successfully');
-        } catch (error) {
+        } catch (_error) {
           logger.warn('Firestore initialization failed:', error);
           // App continues - local-first architecture handles offline
         }

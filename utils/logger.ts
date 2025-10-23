@@ -38,7 +38,7 @@ export const logger = {
    */
   info: (message: string, context?: LogContext): void => {
     if (__DEV__) {
-      // eslint-disable-next-line no-console
+       
       console.error(formatMessage('info', message), context || '');
     }
   },
@@ -80,7 +80,7 @@ export const logger = {
    */
   debug: (message: string, context?: LogContext): void => {
     if (__DEV__) {
-      // eslint-disable-next-line no-console
+       
       console.error(formatMessage('debug', message), context || '');
     }
   },

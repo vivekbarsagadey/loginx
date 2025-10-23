@@ -154,7 +154,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       debugLog('[Auth] Logout completed successfully');
-    } catch (error) {
+    } catch (_error) {
       debugError('[Auth] Sign out error', error);
       showError(error);
       throw error; // Re-throw so caller can handle if needed

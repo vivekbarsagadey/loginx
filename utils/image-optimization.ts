@@ -62,7 +62,7 @@ export async function optimizeImage(uri: string, options: ImageOptimizationOptio
       width: result.width,
       height: result.height,
     };
-  } catch (error) {
+  } catch (_error) {
     throw new Error('Failed to optimize image');
   }
 }
@@ -134,7 +134,7 @@ export async function batchOptimizeImages(uris: string[], options: ImageOptimiza
     try {
       const optimized = await optimizeImage(uri, options);
       results.push(optimized);
-    } catch (error) {
+    } catch (_error) {
       // Continue with other images even if one fails
     }
   }

@@ -52,7 +52,7 @@ export async function addNotification(notification: Omit<NotificationItem, 'id' 
     };
 
     await AsyncStorage.setItem(NOTIFICATION_STORAGE_KEY, JSON.stringify(historyData));
-  } catch (error) {
+  } catch (_error) {
     // Silently fail - not critical
   }
 }
@@ -71,7 +71,7 @@ export async function markNotificationAsRead(notificationId: string): Promise<vo
     };
 
     await AsyncStorage.setItem(NOTIFICATION_STORAGE_KEY, JSON.stringify(updated));
-  } catch (error) {
+  } catch (_error) {
     // Silently fail
   }
 }
@@ -90,7 +90,7 @@ export async function markAllNotificationsAsRead(): Promise<void> {
     };
 
     await AsyncStorage.setItem(NOTIFICATION_STORAGE_KEY, JSON.stringify(updated));
-  } catch (error) {
+  } catch (_error) {
     // Silently fail
   }
 }
@@ -109,7 +109,7 @@ export async function deleteNotification(notificationId: string): Promise<void> 
     };
 
     await AsyncStorage.setItem(NOTIFICATION_STORAGE_KEY, JSON.stringify(historyData));
-  } catch (error) {
+  } catch (_error) {
     // Silently fail
   }
 }
@@ -120,7 +120,7 @@ export async function deleteNotification(notificationId: string): Promise<void> 
 export async function clearNotifications(): Promise<void> {
   try {
     await AsyncStorage.removeItem(NOTIFICATION_STORAGE_KEY);
-  } catch (error) {
+  } catch (_error) {
     // Silently fail
   }
 }

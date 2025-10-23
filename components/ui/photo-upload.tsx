@@ -14,7 +14,7 @@ const logger = createLogger('PhotoUpload');
 interface PhotoUploadProps {
   value?: string;
   onChange: (uri: string) => void;
-  onError?: (error: Error) => void;
+  onError?: (_error: Error) => void;
 }
 
 /**
@@ -82,7 +82,7 @@ export function PhotoUpload({ value, onChange, onError }: PhotoUploadProps) {
         onChange(uri);
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       }
-    } catch (error) {
+    } catch (_error) {
       logger.error('Error picking image:', error);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       onError?.(error instanceof Error ? error : new Error('Failed to pick image'));

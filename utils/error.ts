@@ -44,7 +44,7 @@ interface ErrorInfo {
 /**
  * Check if an error is fatal (requires support contact)
  */
-export function isFatalError(error: unknown): boolean {
+export function isFatalError(_error: unknown): boolean {
   if (!hasErrorCode(error)) {
     return false;
   }
@@ -55,21 +55,21 @@ export function isFatalError(error: unknown): boolean {
 /**
  * Type guard: Check if error is an Axios-like error
  */
-const isAxiosError = (error: unknown): error is { isAxiosError: boolean; response?: unknown } => {
+const isAxiosError = (_error: unknown): error is { isAxiosError: boolean; response?: unknown } => {
   return typeof error === 'object' && error !== null && 'isAxiosError' in error;
 };
 
 /**
  * Type guard: Check if error has a code property (Firebase errors)
  */
-const hasErrorCode = (error: unknown): error is { code: string } => {
+const hasErrorCode = (_error: unknown): error is { code: string } => {
   return typeof error === 'object' && error !== null && 'code' in error && typeof (error as { code: unknown }).code === 'string';
 };
 
 /**
  * Check if error is a Firebase error (auth, firestore, or storage)
  */
-const isFirebaseError = (error: unknown): boolean => {
+const isFirebaseError = (_error: unknown): boolean => {
   if (!hasErrorCode(error)) {
     return false;
   }
@@ -82,7 +82,7 @@ const isFirebaseError = (error: unknown): boolean => {
  * @param error - Error object (unknown type for safety)
  * @returns Structured error information with fatal flag
  */
-export const getErrorInfo = (error: unknown): ErrorInfo => {
+export const getErrorInfo = (_error: unknown): ErrorInfo => {
   // Use Firebase error message utility for all Firebase errors
   if (isFirebaseError(error) && hasErrorCode(error)) {
     const message = getFirebaseErrorMessage(error.code);
@@ -135,7 +135,7 @@ export const getErrorInfo = (error: unknown): ErrorInfo => {
  * Safely handles all error types and provides fallback behavior
  * @param error - Error object (unknown type for safety)
  */
-export const showError = (error: unknown): void => {
+export const showError = (_error: unknown): void => {
   try {
     const { title, message } = getErrorInfo(error);
 

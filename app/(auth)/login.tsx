@@ -93,7 +93,7 @@ export default function LoginScreen() {
       }
 
       // If 2FA is not enabled, user will be redirected to main app by root layout observer
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       // TASK-012: Record failed login attempt
       const { sanitizeEmail } = await import('@/utils/sanitize');
       const sanitizedEmail = sanitizeEmail(data.email);

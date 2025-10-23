@@ -25,7 +25,7 @@ export const getUserProfile = async (uid: string): Promise<UserProfile | null> =
     });
 
     return userProfile;
-  } catch (error) {
+  } catch (_error) {
     debugError('[UserAction] Error getting user profile', error);
     showError(error);
     return null;
@@ -63,7 +63,7 @@ export const updateUser = async (uid: string, data: Partial<UserProfile>): Promi
     });
 
     debugLog('[UserAction] ✅ LOCAL-FIRST: User profile updated locally');
-  } catch (error) {
+  } catch (_error) {
     debugError('[UserAction] Error updating user', error);
     showError(error);
   }
@@ -93,7 +93,7 @@ export const createUserProfile = async (uid: string, data: UserProfile): Promise
     });
 
     debugLog('[UserAction] ✅ LOCAL-FIRST: User profile created locally');
-  } catch (error) {
+  } catch (_error) {
     debugError('[UserAction] Error creating user profile', error);
     showError(error);
   }
@@ -132,7 +132,7 @@ export const deleteUserAccount = async (uid: string): Promise<void> => {
     });
 
     debugLog('[UserAction] ✅ LOCAL-FIRST: User account marked as deleted locally');
-  } catch (error) {
+  } catch (_error) {
     debugError('[UserAction] Error deleting user account', error);
     showError(error);
   }

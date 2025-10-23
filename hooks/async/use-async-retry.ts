@@ -15,9 +15,9 @@ export interface RetryConfig {
   /** Callback invoked on each retry attempt */
   onRetry?: (attempt: number, error: Error) => void;
   /** Callback invoked when all retries are exhausted */
-  onMaxRetriesReached?: (error: Error) => void;
+  onMaxRetriesReached?: (_error: Error) => void;
   /** Function to determine if error is retryable */
-  shouldRetry?: (error: Error) => boolean;
+  shouldRetry?: (_error: Error) => boolean;
 }
 
 /**
@@ -165,7 +165,7 @@ export function useAsyncRetry<T>(
         setRetryCount(0);
         setIsRetrying(false);
         return result;
-      } catch (err) {
+      } catch (_err) {
         lastError = err instanceof Error ? err : new Error(String(err));
 
         // Check if we should retry this error

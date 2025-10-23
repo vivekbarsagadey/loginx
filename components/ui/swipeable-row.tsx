@@ -1,18 +1,11 @@
 import { AnimationDurations } from '@/constants/animation';
-import { BorderRadius, Spacing } from '@/constants/layout';
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { Spacing } from '@/constants/layout';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import React, { memo, type ReactNode } from 'react';
 import { Pressable, StyleSheet, View, type ViewStyle } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, {
-  runOnJS,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { ThemedText } from '../themed-text';
 
 export interface SwipeAction {
@@ -69,10 +62,10 @@ export interface SwipeableRowProps {
 
 /**
  * SwipeableRow Component
- * 
+ *
  * List item with swipeable actions on left and right sides.
  * Commonly used for delete, archive, favorite, and other quick actions.
- * 
+ *
  * @example Delete action on right swipe
  * ```tsx
  * <SwipeableRow
@@ -89,7 +82,7 @@ export interface SwipeableRowProps {
  *   <ItemCard item={item} />
  * </SwipeableRow>
  * ```
- * 
+ *
  * @example Multiple actions
  * ```tsx
  * <SwipeableRow
@@ -121,14 +114,7 @@ export interface SwipeableRowProps {
  * </SwipeableRow>
  * ```
  */
-function SwipeableRowComponent({
-  children,
-  leftActions = [],
-  rightActions = [],
-  swipeThreshold = 80,
-  enableHaptics = true,
-  style,
-}: SwipeableRowProps) {
+function SwipeableRowComponent({ children, leftActions = [], rightActions = [], swipeThreshold = 80, enableHaptics = true, style }: SwipeableRowProps) {
   const translateX = useSharedValue(0);
   const hasTriggeredHaptic = useSharedValue(false);
 
@@ -153,7 +139,7 @@ function SwipeableRowComponent({
   const panGesture = Gesture.Pan()
     .onUpdate((event) => {
       const translation = event.translationX;
-      
+
       // Limit swipe distance based on available actions
       const maxLeft = leftActions.length > 0 ? swipeThreshold * leftActions.length : 0;
       const maxRight = rightActions.length > 0 ? swipeThreshold * rightActions.length : 0;
@@ -166,10 +152,7 @@ function SwipeableRowComponent({
         translateX.value = 0;
       } else {
         // Allow swipe with limits
-        translateX.value = Math.max(
-          -maxRight,
-          Math.min(maxLeft, translation)
-        );
+        translateX.value = Math.max(-maxRight, Math.min(maxLeft, translation));
 
         // Trigger haptic at threshold
         const absTranslation = Math.abs(translation);
@@ -206,11 +189,12 @@ function SwipeableRowComponent({
 
   const handleActionPress = (action: SwipeAction) => {
     // Close swipe with animation
-    translateX.value = withTiming(0, { duration: AnimationDurations.QUICK });
+    translateX.value = withTiming(0, { duration: AnimationDurations.FAST });
     executeAction(action);
   };
 
-  const closeSwipe = () => {
+  // Utility function to close swipe programmatically if needed in future
+  const _closeSwipe = () => {
     translateX.value = withSpring(0);
   };
 
@@ -223,10 +207,7 @@ function SwipeableRowComponent({
             <Pressable
               key={index}
               onPress={() => handleActionPress(action)}
-              style={[
-                styles.action,
-                { backgroundColor: action.backgroundColor },
-              ]}
+              style={[styles.action, { backgroundColor: action.backgroundColor }]}
               accessibilityRole="button"
               accessibilityLabel={action.label}
             >
@@ -246,10 +227,7 @@ function SwipeableRowComponent({
             <Pressable
               key={index}
               onPress={() => handleActionPress(action)}
-              style={[
-                styles.action,
-                { backgroundColor: action.backgroundColor },
-              ]}
+              style={[styles.action, { backgroundColor: action.backgroundColor }]}
               accessibilityRole="button"
               accessibilityLabel={action.label}
             >
@@ -264,9 +242,7 @@ function SwipeableRowComponent({
 
       {/* Swipeable Content */}
       <GestureDetector gesture={panGesture}>
-        <Animated.View style={[styles.content, animatedStyle]}>
-          {children}
-        </Animated.View>
+        <Animated.View style={[styles.content, animatedStyle]}>{children}</Animated.View>
       </GestureDetector>
     </View>
   );

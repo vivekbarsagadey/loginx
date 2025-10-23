@@ -113,7 +113,7 @@ export function useList<T>(initialList: T[] = []): UseListReturn<T> {
   const pop = useCallback((): T | undefined => {
     let item: T | undefined;
     setList((prev) => {
-      if (prev.length === 0) return prev;
+      if (prev.length === 0) {return prev;}
       item = prev[prev.length - 1];
       return prev.slice(0, -1);
     });
@@ -127,7 +127,7 @@ export function useList<T>(initialList: T[] = []): UseListReturn<T> {
   const shift = useCallback((): T | undefined => {
     let item: T | undefined;
     setList((prev) => {
-      if (prev.length === 0) return prev;
+      if (prev.length === 0) {return prev;}
       item = prev[0];
       return prev.slice(1);
     });
@@ -136,7 +136,7 @@ export function useList<T>(initialList: T[] = []): UseListReturn<T> {
 
   const removeAt = useCallback((index: number) => {
     setList((prev) => {
-      if (index < 0 || index >= prev.length) return prev;
+      if (index < 0 || index >= prev.length) {return prev;}
       return [...prev.slice(0, index), ...prev.slice(index + 1)];
     });
   }, []);
@@ -154,7 +154,7 @@ export function useList<T>(initialList: T[] = []): UseListReturn<T> {
 
   const updateAt = useCallback((index: number, item: T) => {
     setList((prev) => {
-      if (index < 0 || index >= prev.length) return prev;
+      if (index < 0 || index >= prev.length) {return prev;}
       const newList = [...prev];
       newList[index] = item;
       return newList;

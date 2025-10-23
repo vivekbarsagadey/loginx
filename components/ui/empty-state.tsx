@@ -3,7 +3,7 @@ import { Spacing } from '@/constants/layout';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import { logEmptyStateCTAClick, logEmptyStateView } from '@/utils/analytics';
 import { Ionicons } from '@expo/vector-icons';
-import { memo, useEffect, type ReactNode } from 'react';
+import { memo, type ReactNode, useEffect } from 'react';
 import { StyleSheet, View, type ViewStyle } from 'react-native';
 import { ThemedButton } from '../themed-button';
 import { ThemedText } from '../themed-text';

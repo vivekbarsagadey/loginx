@@ -111,7 +111,7 @@ export function useSecureStorage<T>(
         if (item !== null) {
           setStoredValue(JSON.parse(item) as T);
         }
-      } catch (err) {
+      } catch (_err) {
         setError(
           err instanceof Error
             ? err
@@ -134,7 +134,7 @@ export function useSecureStorage<T>(
           value instanceof Function ? value(storedValue) : value;
         setStoredValue(valueToStore);
         await SecureStore.setItemAsync(key, JSON.stringify(valueToStore));
-      } catch (err) {
+      } catch (_err) {
         setError(
           err instanceof Error
             ? err
@@ -151,7 +151,7 @@ export function useSecureStorage<T>(
       setError(null);
       setStoredValue(initialValue);
       await SecureStore.deleteItemAsync(key);
-    } catch (err) {
+    } catch (_err) {
       setError(
         err instanceof Error
           ? err

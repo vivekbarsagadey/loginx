@@ -104,7 +104,7 @@ export function useLocalStorage<T>(
         if (item !== null) {
           setStoredValue(JSON.parse(item) as T);
         }
-      } catch (err) {
+      } catch (_err) {
         setError(
           err instanceof Error ? err : new Error("Failed to load from storage")
         );
@@ -124,7 +124,7 @@ export function useLocalStorage<T>(
         const valueToStore = value instanceof Function ? value(storedValue) : value;
         setStoredValue(valueToStore);
         await AsyncStorage.setItem(key, JSON.stringify(valueToStore));
-      } catch (err) {
+      } catch (_err) {
         setError(
           err instanceof Error ? err : new Error("Failed to save to storage")
         );
@@ -139,7 +139,7 @@ export function useLocalStorage<T>(
       setError(null);
       setStoredValue(initialValue);
       await AsyncStorage.removeItem(key);
-    } catch (err) {
+    } catch (_err) {
       setError(
         err instanceof Error ? err : new Error("Failed to remove from storage")
       );

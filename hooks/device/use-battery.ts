@@ -124,7 +124,7 @@ export function useBattery(): BatteryState {
           levelSubscription.remove();
           stateSubscription.remove();
         };
-      } catch (error) {
+      } catch (_error) {
         // expo-battery not installed or not available on this platform
         if (isMounted) {
           setBatteryState({

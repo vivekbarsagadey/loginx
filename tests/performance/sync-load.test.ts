@@ -105,7 +105,7 @@ describe('Sync Queue Performance', () => {
     try {
       // Attempt sync with network error
       await backgroundSync();
-    } catch (error) {
+    } catch (_error) {
       expect(error).toBeDefined();
     }
 

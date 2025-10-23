@@ -58,7 +58,7 @@ export function QRScanner({ onScan, onClose, title = 'Scan QR Code', description
           },
         ]);
       }
-    } catch (error) {
+    } catch (_error) {
       logger.error('Error requesting camera permission:', error);
       alert.show('Error', 'Failed to request camera permission. Please try again.', [{ text: 'OK' }], { variant: 'error' });
       onClose();

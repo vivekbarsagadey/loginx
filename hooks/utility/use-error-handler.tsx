@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { getErrorInfo, isFatalError } from '@/utils/error';
 import { contactSupport, getErrorContextForSupport } from '@/utils/contact-support';
 import i18n from '@/i18n';
@@ -26,7 +26,7 @@ export function useErrorHandler() {
   /**
    * Display an error to the user
    */
-  const showError = useCallback((error: unknown) => {
+  const showError = useCallback((_error: unknown) => {
     const errorInfo = getErrorInfo(error);
     const fatal = isFatalError(error);
 
@@ -57,7 +57,7 @@ export function useErrorHandler() {
    * Handle contact support for fatal errors
    */
   const handleContactSupport = useCallback(
-    async (error: unknown) => {
+    async (_error: unknown) => {
       const errorContext = getErrorContextForSupport(error);
       const result = await contactSupport(
         i18n.t('errors.support.contactButton'),

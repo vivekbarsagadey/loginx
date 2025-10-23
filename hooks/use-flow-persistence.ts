@@ -6,7 +6,7 @@
 
 import { useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FlowConfig, FlowState } from '@/types/flow';
+import { type FlowConfig, type FlowState } from '@/types/flow';
 
 /**
  * Default storage key prefix
@@ -55,7 +55,7 @@ function deserializeState(json: string): FlowState {
 export function useFlowPersistence(
   config: FlowConfig,
   state: FlowState,
-  enabled: boolean = true
+  enabled = true
 ) {
   const storageKey = getStorageKey(config.id, config.persistenceKey);
 
@@ -70,7 +70,7 @@ export function useFlowPersistence(
     try {
       const serialized = serializeState(state);
       await AsyncStorage.setItem(storageKey, serialized);
-    } catch (error) {
+    } catch (_error) {
       console.error('Failed to save flow state:', error);
       throw error;
     }
@@ -105,7 +105,7 @@ export function useFlowPersistence(
       }
 
       return deserialized;
-    } catch (error) {
+    } catch (_error) {
       console.error('Failed to load flow state:', error);
       return null;
     }
@@ -121,7 +121,7 @@ export function useFlowPersistence(
 
     try {
       await AsyncStorage.removeItem(storageKey);
-    } catch (error) {
+    } catch (_error) {
       console.error('Failed to clear flow state:', error);
       throw error;
     }
@@ -138,7 +138,7 @@ export function useFlowPersistence(
     try {
       const serialized = await AsyncStorage.getItem(storageKey);
       return serialized !== null;
-    } catch (error) {
+    } catch (_error) {
       console.error('Failed to check for saved state:', error);
       return false;
     }

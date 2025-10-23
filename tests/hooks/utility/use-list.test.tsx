@@ -2,7 +2,7 @@
  * Tests for useList hook
  */
 
-import { renderHook, act } from '@testing-library/react-native';
+import { act, renderHook } from '@testing-library/react-native';
 import { useList } from '@/hooks/utility/use-list';
 
 interface TestItem {

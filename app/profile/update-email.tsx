@@ -81,7 +81,7 @@ export default function UpdateEmailScreen() {
     successTitle: i18n.t('screens.updateEmail.success.title'),
     successMessage: i18n.t('screens.updateEmail.success.message'),
     onSuccess: () => back(),
-    onError: (error: unknown) => {
+    onError: (_error: unknown) => {
       // Handle specific Firebase errors
       if (error && typeof error === 'object' && 'code' in error) {
         const firebaseError = error as { code: string; message: string };

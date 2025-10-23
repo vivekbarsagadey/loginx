@@ -54,7 +54,7 @@ export default function ShareAppScreen() {
           showSuccess(i18n.t('shareApp.success.title', { defaultValue: 'Shared!' }), i18n.t('shareApp.success.message', { defaultValue: 'Your referral link has been shared successfully.' }));
         }
       }
-    } catch (error) {
+    } catch (_error) {
       showError(error);
     }
   };
@@ -78,7 +78,7 @@ export default function ShareAppScreen() {
           }),
         });
       }
-    } catch (error) {
+    } catch (_error) {
       showError(error);
     }
   };
@@ -107,7 +107,7 @@ export default function ShareAppScreen() {
           });
         }
       }
-    } catch (error) {
+    } catch (_error) {
       showError(error);
     }
   };
@@ -132,7 +132,7 @@ export default function ShareAppScreen() {
           }),
         });
       }
-    } catch (error) {
+    } catch (_error) {
       showError(error);
     }
   };
@@ -152,7 +152,7 @@ export default function ShareAppScreen() {
           defaultValue: 'Your referral link has been copied to clipboard.',
         })
       );
-    } catch (error) {
+    } catch (_error) {
       showError(error);
     }
   };

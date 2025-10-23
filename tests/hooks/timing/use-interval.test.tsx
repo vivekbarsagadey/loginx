@@ -2,7 +2,7 @@
  * Tests for useInterval hook
  */
 
-import { renderHook, act } from '@testing-library/react-native';
+import { act, renderHook } from '@testing-library/react-native';
 import { useInterval } from '@/hooks/timing/use-interval';
 
 describe('useInterval', () => {

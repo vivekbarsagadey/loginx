@@ -170,7 +170,7 @@ class CleanupScope {
             debugLog(`[CleanupManager] ✅ Executed custom cleanup: ${id}`);
             break;
         }
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         debugWarn(`[CleanupManager] Error cleaning up ${id}:`, error as Error);
       }
     }

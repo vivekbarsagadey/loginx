@@ -8,7 +8,7 @@ import { useCallback, useState } from 'react';
 
 export interface UseAsyncOperationOptions {
   onSuccess?: () => void;
-  onError?: (error: unknown) => void;
+  onError?: (_error: unknown) => void;
   showErrorToast?: boolean;
 }
 

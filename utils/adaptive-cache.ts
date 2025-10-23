@@ -50,7 +50,7 @@ class AdaptiveCacheManager {
       this.startMonitoring();
 
       this.isInitialized = true;
-    } catch (error) {
+    } catch (_error) {
       debugError('[AdaptiveCache] Failed to initialize, using default size:', error);
       this.currentCacheSize = 100; // Fallback to static default
       this.isInitialized = true; // Still mark as initialized to prevent retries

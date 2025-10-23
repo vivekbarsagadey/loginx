@@ -4,7 +4,7 @@
  * A basic 3-step onboarding flow demonstrating the flow system
  */
 
-import { FlowConfig } from '@/types/flow';
+import { type FlowConfig } from '@/types/flow';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const simpleOnboardingFlow: FlowConfig = {

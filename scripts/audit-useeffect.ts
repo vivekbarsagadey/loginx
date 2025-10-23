@@ -74,7 +74,7 @@ function scanFile(filePath: string): void {
         }
       }
     }
-  } catch (error) {
+  } catch (_error) {
     // Silently skip unreadable files
   }
 }

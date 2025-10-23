@@ -119,7 +119,7 @@ export default function ChangePasswordScreen() {
 
       // Show success animation
       toggleSuccessAnimation();
-    } catch (error) {
+    } catch (_error) {
       showError(error);
     }
   };

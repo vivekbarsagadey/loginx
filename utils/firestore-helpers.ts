@@ -164,7 +164,7 @@ export function sanitizeQueryValue(value: unknown): unknown {
 /**
  * Check if error is a Firestore network error that should be retried
  */
-function shouldRetryFirestoreError(error: unknown): boolean {
+function shouldRetryFirestoreError(_error: unknown): boolean {
   if (typeof error === 'object' && error !== null && 'code' in error) {
     const code = (error as { code: string }).code;
     // Retry on network errors, but not on permission or validation errors
@@ -225,7 +225,7 @@ export async function setDocumentSafe<T = DocumentData>(docRef: DocumentReferenc
       initialDelay: 500,
       shouldRetry: shouldRetryFirestoreError,
     });
-  } catch (error) {
+  } catch (_error) {
     if (typeof error === 'object' && error !== null && 'code' in error) {
       const firestoreError = error as { code: string; message: string };
       // SECURITY FIX (TASK-007): Log only metadata, not actual document data
@@ -266,7 +266,7 @@ export async function updateDocumentSafe<T = DocumentData>(docRef: DocumentRefer
       initialDelay: 500,
       shouldRetry: shouldRetryFirestoreError,
     });
-  } catch (error) {
+  } catch (_error) {
     if (typeof error === 'object' && error !== null && 'code' in error) {
       const firestoreError = error as { code: string; message: string };
       // SECURITY FIX (TASK-007): Log only metadata, not actual document data
@@ -308,7 +308,7 @@ export async function deleteDocumentSafe<T = DocumentData>(docRef: DocumentRefer
       initialDelay: 500,
       shouldRetry: shouldRetryFirestoreError,
     });
-  } catch (error) {
+  } catch (_error) {
     if (typeof error === 'object' && error !== null && 'code' in error) {
       const firestoreError = error as { code: string; message: string };
       // SECURITY FIX (TASK-007): Log only metadata
@@ -350,7 +350,7 @@ export async function queryDocumentsSafe<T = DocumentData>(collectionRef: Collec
       initialDelay: 500,
       shouldRetry: shouldRetryFirestoreError,
     });
-  } catch (error) {
+  } catch (_error) {
     if (typeof error === 'object' && error !== null && 'code' in error) {
       const firestoreError = error as { code: string; message: string };
       // SECURITY FIX (TASK-007): Log only metadata, not query details
@@ -372,7 +372,7 @@ export async function queryDocumentsSafe<T = DocumentData>(collectionRef: Collec
  * @param error - Error to handle
  * @returns User-friendly error message
  */
-export function getFirestoreErrorMessage(error: unknown): string {
+export function getFirestoreErrorMessage(_error: unknown): string {
   if (error instanceof FirestoreError) {
     return error.message;
   }

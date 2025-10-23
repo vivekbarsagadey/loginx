@@ -19,7 +19,7 @@ export interface UseInfiniteScrollOptions<T> {
   /** Callback when all items are loaded */
   onComplete?: () => void;
   /** Callback on error */
-  onError?: (error: unknown) => void;
+  onError?: (_error: unknown) => void;
 }
 
 export interface UseInfiniteScrollReturn<T> {
@@ -139,7 +139,7 @@ export function useInfiniteScroll<T>(
         }
 
         setCurrentPage(page);
-      } catch (err) {
+      } catch (_err) {
         setError(err);
         if (onError) {
           onError(err);

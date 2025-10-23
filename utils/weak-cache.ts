@@ -54,7 +54,7 @@ class WeakCache<K extends object, V> {
       });
 
       debugLog(`[WeakCache:${this.name}] ✅ Set: ${keyId}`);
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       debugWarn(`[WeakCache:${this.name}] Error setting value:`, error as Error);
     }
   }
@@ -81,7 +81,7 @@ class WeakCache<K extends object, V> {
       }
 
       return value;
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       debugWarn(`[WeakCache:${this.name}] Error getting value:`, error as Error);
       return undefined;
     }
@@ -108,7 +108,7 @@ class WeakCache<K extends object, V> {
       }
 
       return deleted;
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       debugWarn(`[WeakCache:${this.name}] Error deleting value:`, error as Error);
       return false;
     }

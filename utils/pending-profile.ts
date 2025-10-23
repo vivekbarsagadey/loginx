@@ -17,7 +17,7 @@ const PENDING_PROFILE_KEY = 'pendingProfileData';
 export async function savePendingProfileData(data: PendingProfileData): Promise<void> {
   try {
     await AsyncStorage.setItem(PENDING_PROFILE_KEY, JSON.stringify(data));
-  } catch (error) {
+  } catch (_error) {
     throw error;
   }
 }
@@ -81,7 +81,7 @@ export async function applyPendingProfileData(user: User): Promise<boolean> {
     await clearPendingProfile();
 
     return true;
-  } catch (error) {
+  } catch (_error) {
     console.error('Failed to apply pending profile data:', error);
     // Don't throw - this is a non-critical operation
     return false;
@@ -94,7 +94,7 @@ export async function applyPendingProfileData(user: User): Promise<boolean> {
 export async function clearPendingProfile(): Promise<void> {
   try {
     await AsyncStorage.removeItem(PENDING_PROFILE_KEY);
-  } catch (error) {
+  } catch (_error) {
     // Silently fail - not critical
   }
 }

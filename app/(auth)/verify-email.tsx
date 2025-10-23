@@ -64,7 +64,7 @@ export default function VerifyEmailScreen() {
     onSuccess: () => {
       showAlert(i18n.t('screens.verifyEmail.success.emailSent'), i18n.t('screens.verifyEmail.success.emailSentMessage'), [{ text: 'OK' }], { variant: 'success' });
     },
-    onError: (error: unknown) => {
+    onError: (_error: unknown) => {
       const errorCode = (error as { code?: string })?.code ?? '';
       const friendlyMessage = getFirebaseAuthErrorMessage(errorCode);
       showAlert(i18n.t('errors.generic.title'), friendlyMessage, [{ text: 'OK' }], { variant: 'error' });

@@ -51,10 +51,10 @@ export interface SortButtonProps {
 
 /**
  * SortButton Component
- * 
+ *
  * Dropdown button for sorting options.
  * Displays a modal with sort options when pressed.
- * 
+ *
  * @example
  * ```tsx
  * <SortButton
@@ -69,22 +69,14 @@ export interface SortButtonProps {
  * />
  * ```
  */
-function SortButtonComponent({
-  selectedValue,
-  options,
-  onChange,
-  label = 'Sort',
-  style,
-  disabled = false,
-}: SortButtonProps) {
+function SortButtonComponent({ selectedValue, options, onChange, label = 'Sort', style, disabled = false }: SortButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const primaryColor = useThemeColor({}, 'primary');
   const surfaceColor = useThemeColor({}, 'surface');
   const textColor = useThemeColor({}, 'text');
   const mutedTextColor = useThemeColor({}, 'text-muted');
   const borderColor = useThemeColor({}, 'border');
-  const overlayColor = useThemeColor({}, 'overlay');
 
   const selectedOption = options.find((opt) => opt.value === selectedValue);
 
@@ -130,26 +122,13 @@ function SortButtonComponent({
         <Ionicons name="chevron-down" size={20} color={mutedTextColor} />
       </Pressable>
 
-      <Modal
-        visible={isOpen}
-        transparent
-        animationType="none"
-        onRequestClose={handleClose}
-        statusBarTranslucent
-      >
+      <Modal visible={isOpen} transparent animationType="none" onRequestClose={handleClose} statusBarTranslucent>
         <Pressable style={styles.modalOverlay} onPress={handleClose}>
-          <Animated.View
-            entering={FadeIn.duration(200)}
-            exiting={FadeOut.duration(200)}
-            style={[styles.modalBackground, { backgroundColor: overlayColor }]}
-          />
+          <Animated.View entering={FadeIn.duration(200)} exiting={FadeOut.duration(200)} style={[styles.modalBackground, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]} />
         </Pressable>
 
         <View style={styles.modalContent} pointerEvents="box-none">
-          <Animated.View
-            entering={FadeIn.duration(200)}
-            exiting={FadeOut.duration(200)}
-          >
+          <Animated.View entering={FadeIn.duration(200)} exiting={FadeOut.duration(200)}>
             <ThemedView
               style={[
                 styles.menu,
@@ -163,12 +142,7 @@ function SortButtonComponent({
                 <ThemedText type="heading" style={{ color: textColor }}>
                   {label}
                 </ThemedText>
-                <Pressable
-                  onPress={handleClose}
-                  accessibilityRole="button"
-                  accessibilityLabel="Close"
-                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                >
+                <Pressable onPress={handleClose} accessibilityRole="button" accessibilityLabel="Close" hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
                   <Ionicons name="close" size={24} color={textColor} />
                 </Pressable>
               </View>
@@ -182,39 +156,18 @@ function SortButtonComponent({
                     style={[
                       styles.menuItem,
                       {
-                        backgroundColor: isSelected
-                          ? `${primaryColor}15`
-                          : 'transparent',
+                        backgroundColor: isSelected ? `${primaryColor}15` : 'transparent',
                       },
                     ]}
                     accessibilityRole="button"
                     accessibilityState={{ selected: isSelected }}
                     accessibilityLabel={option.label}
                   >
-                    {option.icon && (
-                      <Ionicons
-                        name={option.icon}
-                        size={20}
-                        color={isSelected ? primaryColor : mutedTextColor}
-                      />
-                    )}
-                    <ThemedText
-                      type="body"
-                      style={[
-                        styles.menuItemText,
-                        { color: isSelected ? primaryColor : textColor },
-                      ]}
-                    >
+                    {option.icon && <Ionicons name={option.icon} size={20} color={isSelected ? primaryColor : mutedTextColor} />}
+                    <ThemedText type="body" style={[styles.menuItemText, { color: isSelected ? primaryColor : textColor }]}>
                       {option.label}
                     </ThemedText>
-                    {isSelected && (
-                      <Ionicons
-                        name="checkmark"
-                        size={20}
-                        color={primaryColor}
-                        style={styles.checkmark}
-                      />
-                    )}
+                    {isSelected && <Ionicons name="checkmark" size={20} color={primaryColor} style={styles.checkmark} />}
                   </Pressable>
                 );
               })}

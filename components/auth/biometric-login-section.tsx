@@ -62,7 +62,7 @@ export function BiometricLoginSection({ onSuccess, disabled }: BiometricLoginSec
           showError(new Error('Biometric authentication not set up. Please login with password first.'));
         }
       }
-    } catch (error) {
+    } catch (_error) {
       showError(error);
     }
   };

@@ -34,7 +34,7 @@ import { useCallback, useState } from "react";
  * ```
  */
 export function useToggle(
-  initialValue: boolean = false
+  initialValue = false
 ): [boolean, () => void, (value: boolean) => void] {
   const [value, setValue] = useState<boolean>(initialValue);
 

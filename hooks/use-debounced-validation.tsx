@@ -15,15 +15,15 @@ export interface DebouncedValidationOptions {
 
 /**
  * Hook for debounced form field validation
- * 
+ *
  * Delays validation until the user stops typing for a specified duration.
  * This provides a better user experience by not showing errors while actively typing.
- * 
+ *
  * @param value - The field value to validate
  * @param validator - Validation function that returns error message or undefined if valid
  * @param options - Configuration options
  * @returns Validation state and methods
- * 
+ *
  * @example
  * ```tsx
  * const { error, isValidating, validate } = useDebouncedValidation(
@@ -37,18 +37,14 @@ export interface DebouncedValidationOptions {
  * );
  * ```
  */
-export function useDebouncedValidation<T>(
-  value: T,
-  validator: (value: T) => string | undefined | Promise<string | undefined>,
-  options: DebouncedValidationOptions = {}
-) {
+export function useDebouncedValidation<T>(value: T, validator: (value: T) => string | undefined | Promise<string | undefined>, options: DebouncedValidationOptions = {}) {
   const { delay = 500, validateOnFirstChange = false } = options;
-  
+
   const [error, setError] = useState<string | undefined>(undefined);
   const [isValidating, setIsValidating] = useState(false);
   const [hasValidated, setHasValidated] = useState(false);
-  
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isFirstChangeRef = useRef(true);
 
   const validate = useCallback(async () => {
@@ -57,7 +53,7 @@ export function useDebouncedValidation<T>(
       const result = await validator(value);
       setError(result);
       setHasValidated(true);
-    } catch (err) {
+    } catch (_err) {
       setError('Validation error occurred');
     } finally {
       setIsValidating(false);
@@ -106,12 +102,12 @@ export function useDebouncedValidation<T>(
 
 /**
  * Hook for debounced async validation (e.g., checking username availability)
- * 
+ *
  * @param value - The value to validate
  * @param asyncValidator - Async validation function
  * @param options - Configuration options
  * @returns Validation state and methods
- * 
+ *
  * @example
  * ```tsx
  * const { error, isValidating } = useAsyncDebouncedValidation(
@@ -123,59 +119,50 @@ export function useDebouncedValidation<T>(
  * );
  * ```
  */
-export function useAsyncDebouncedValidation(
-  value: string,
-  asyncValidator: (value: string) => Promise<string | undefined>,
-  options: DebouncedValidationOptions = {}
-) {
+export function useAsyncDebouncedValidation(value: string, asyncValidator: (value: string) => Promise<string | undefined>, options: DebouncedValidationOptions = {}) {
   return useDebouncedValidation(value, asyncValidator, options);
 }
 
 /**
- * Hook for multiple field validations with debounce
- * 
+ * Hook for validating multiple form fields with debouncing
+ *
+ * Useful for forms with multiple fields that need individual validation.
+ *
  * @param fields - Object containing field values and validators
  * @param options - Configuration options
  * @returns Validation state for all fields
- * 
+ *
  * @example
  * ```tsx
  * const validation = useMultiFieldDebouncedValidation({
  *   email: {
  *     value: email,
- *     validator: (v) => !v ? 'Required' : undefined,
+ *     validator: (v) => !v.includes('@') ? 'Invalid email' : undefined,
  *   },
  *   password: {
  *     value: password,
  *     validator: (v) => v.length < 8 ? 'Too short' : undefined,
  *   },
  * });
- * 
+ *
  * // Access errors: validation.email.error, validation.password.error
  * ```
  */
-export function useMultiFieldDebouncedValidation<
-  T extends Record<string, { value: any; validator: (value: any) => string | undefined }>
->(
-  fields: T,
-  options: DebouncedValidationOptions = {}
-) {
+export function useMultiFieldDebouncedValidation<T extends Record<string, { value: unknown; validator: (value: unknown) => string | undefined }>>(fields: T, options: DebouncedValidationOptions = {}) {
+  type ValidationResult = ReturnType<typeof useDebouncedValidation<unknown>>;
+
   const validations = Object.entries(fields).reduce(
     (acc, [key, { value, validator }]) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      acc[key] = useDebouncedValidation(value, validator, options);
-      return acc;
+      const validation = useDebouncedValidation(value, validator, options);
+      return { ...acc, [key]: validation };
     },
-    {} as Record<keyof T, ReturnType<typeof useDebouncedValidation>>
+    {} as Record<keyof T, ValidationResult>
   );
 
-  const isValid = Object.values(validations).every(
-    (v: any) => v.isValid
-  );
-  
-  const hasErrors = Object.values(validations).some(
-    (v: any) => v.error
-  );
+  const isValid = Object.values(validations).every((v) => (v as ValidationResult).isValid);
+
+  const hasErrors = Object.values(validations).some((v) => (v as ValidationResult).error);
 
   return {
     ...validations,

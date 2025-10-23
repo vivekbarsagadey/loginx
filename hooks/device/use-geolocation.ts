@@ -132,7 +132,7 @@ export function useGeolocation(
   });
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {return;}
 
     let Location: any = null;
     let isMounted = true;
@@ -142,14 +142,14 @@ export function useGeolocation(
       try {
         Location = await import('expo-location');
 
-        if (!isMounted) return;
+        if (!isMounted) {return;}
 
         setState((prev) => ({ ...prev, loading: true }));
 
         // Request permission
         const { status } = await Location.requestForegroundPermissionsAsync();
 
-        if (!isMounted) return;
+        if (!isMounted) {return;}
 
         if (status !== 'granted') {
           setState({
@@ -216,7 +216,7 @@ export function useGeolocation(
             });
           }
         }
-      } catch (error) {
+      } catch (_error) {
         if (isMounted) {
           setState({
             location: null,

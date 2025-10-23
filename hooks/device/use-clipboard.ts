@@ -12,7 +12,7 @@ export interface ClipboardOptions {
   /** Callback on successful copy */
   onSuccess?: (text: string) => void;
   /** Callback on copy error */
-  onError?: (error: Error) => void;
+  onError?: (_error: Error) => void;
   /** Automatically clear copied state after this duration (ms) */
   clearAfter?: number;
 }
@@ -109,7 +109,7 @@ export function useClipboard(): UseClipboardReturn {
 
         setIsCopying(false);
         return true;
-      } catch (err) {
+      } catch (_err) {
         const errorObj = err instanceof Error ? err : new Error('Failed to copy to clipboard');
         setError(errorObj);
 
@@ -139,7 +139,7 @@ export function useClipboard(): UseClipboardReturn {
 
       const text = await Clipboard.getStringAsync();
       return text || null;
-    } catch (err) {
+    } catch (_err) {
       const errorObj = err instanceof Error ? err : new Error('Failed to read from clipboard');
       setError(errorObj);
       return null;

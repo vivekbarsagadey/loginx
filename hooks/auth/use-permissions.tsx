@@ -93,7 +93,7 @@ export function usePermissions(): UsePermissionsReturn {
           status: notificationStatus.granted ? 'granted' : notificationStatus.canAskAgain ? 'undetermined' : 'denied',
         },
       });
-    } catch (error) {
+    } catch (_error) {
       // Silently fail - permissions will be checked again when needed
     }
   }, []);
@@ -117,7 +117,7 @@ export function usePermissions(): UsePermissionsReturn {
       }));
 
       return granted;
-    } catch (error) {
+    } catch (_error) {
       return false;
     } finally {
       setLoading(false);
@@ -143,7 +143,7 @@ export function usePermissions(): UsePermissionsReturn {
       }));
 
       return granted;
-    } catch (error) {
+    } catch (_error) {
       return false;
     } finally {
       setLoading(false);
@@ -169,7 +169,7 @@ export function usePermissions(): UsePermissionsReturn {
       }));
 
       return granted;
-    } catch (error) {
+    } catch (_error) {
       return false;
     } finally {
       setLoading(false);
@@ -195,7 +195,7 @@ export function usePermissions(): UsePermissionsReturn {
       }));
 
       return granted;
-    } catch (error) {
+    } catch (_error) {
       return false;
     } finally {
       setLoading(false);

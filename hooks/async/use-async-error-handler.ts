@@ -83,7 +83,7 @@ interface AsyncErrorHandlerOptions {
    * Custom error handler
    * Called after showing alert, useful for logging or additional actions
    */
-  onError?: (error: Error) => void;
+  onError?: (_error: Error) => void;
   /**
    * Custom success handler
    * Called after operation succeeds
@@ -150,7 +150,7 @@ export function useAsyncErrorHandler(config?: UseAsyncErrorHandlerConfig) {
         }
 
         return { success: true, data };
-      } catch (error) {
+      } catch (_error) {
         const err = error instanceof Error ? error : new Error(String(error));
 
         // Provide haptic feedback on error
@@ -186,7 +186,7 @@ export function useAsyncErrorHandler(config?: UseAsyncErrorHandlerConfig) {
     try {
       const data = await asyncFn();
       return { success: true, data };
-    } catch (error) {
+    } catch (_error) {
       const err = error instanceof Error ? error : new Error(String(error));
       return { success: false, error: err };
     }

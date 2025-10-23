@@ -65,7 +65,7 @@ const checkMemoryPressure = async (): Promise<void> => {
       memoryCriticalListeners.forEach((listener) => {
         try {
           listener();
-        } catch (error: unknown) {
+        } catch (_error: unknown) {
           debugError('[MemoryMonitor] Error in critical listener:', error as Error);
         }
       });
@@ -77,14 +77,14 @@ const checkMemoryPressure = async (): Promise<void> => {
       memoryWarningListeners.forEach((listener) => {
         try {
           listener();
-        } catch (error: unknown) {
+        } catch (_error: unknown) {
           debugError('[MemoryMonitor] Error in warning listener:', error as Error);
         }
       });
     }
 
     lastMemoryCheck = Date.now();
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugError('[MemoryMonitor] Error checking memory pressure:', error as Error);
   }
 };
@@ -108,7 +108,7 @@ const handleMemoryWarning = async (): Promise<void> => {
     const statsAfter = await cache.getCacheStats();
     debugLog(`[MemoryMonitor] Cache after cleanup: ${statsAfter.memoryEntries} entries`);
     debugLog('[MemoryMonitor] ✅ Light cleanup completed');
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugError('[MemoryMonitor] Error handling memory warning:', error as Error);
   }
 };
@@ -141,7 +141,7 @@ const handleCriticalMemoryPressure = async (): Promise<void> => {
     }
 
     debugLog('[MemoryMonitor] ✅ Aggressive cleanup completed');
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugError('[MemoryMonitor] Error handling critical memory pressure:', error as Error);
   }
 };
@@ -166,7 +166,7 @@ const handleAppStateChange = async (nextAppState: AppStateStatus): Promise<void>
     }
 
     currentAppState = nextAppState;
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugError('[MemoryMonitor] Error handling app state change:', error as Error);
   }
 };

@@ -97,7 +97,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
     try {
       setThemePreferenceState(theme);
       await AsyncStorage.setItem(THEME_STORAGE_KEY, theme);
-    } catch (error) {
+    } catch (_error) {
       console.error('Failed to save theme preference:', error);
       throw error;
     }

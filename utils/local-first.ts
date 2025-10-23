@@ -111,7 +111,7 @@ const saveSyncQueue = async (): Promise<void> => {
 
     await AsyncStorage.setItem(SYNC_QUEUE_STORAGE_KEY, JSON.stringify(queueArray));
     debugLog(`[LocalFirst] 💾 Saved sync queue: ${queueArray.length} operations`);
-  } catch (error) {
+  } catch (_error) {
     debugError('[LocalFirst] Failed to save sync queue:', error);
   }
 };
@@ -173,7 +173,7 @@ const loadSyncQueue = async (): Promise<void> => {
       await AsyncStorage.removeItem(SYNC_QUEUE_STORAGE_KEY);
       syncQueue.clear();
     }
-  } catch (error) {
+  } catch (_error) {
     debugError('[LocalFirst] Failed to load sync queue:', error);
     // Clear corrupted data
     try {
@@ -203,7 +203,7 @@ const cleanupSyncedOperations = async (syncedKeys: string[]): Promise<void> => {
       // Save updated queue immediately (don't debounce cleanup)
       await saveSyncQueue();
     }
-  } catch (error) {
+  } catch (_error) {
     debugError('[LocalFirst] Failed to cleanup synced operations:', error);
   }
 };
@@ -248,7 +248,7 @@ export const clearSyncQueue = async (): Promise<void> => {
     syncQueue.clear();
     await saveSyncQueue();
     debugWarn('[LocalFirst] Sync queue cleared manually');
-  } catch (error) {
+  } catch (_error) {
     debugError('[LocalFirst] Failed to clear sync queue:', error);
     throw error;
   }
@@ -339,7 +339,7 @@ export const initializeLocalFirst = async (): Promise<void> => {
     }
 
     debugLog('[LocalFirst] ✅ LOCAL-FIRST system initialized', fallbackMode ? '(FALLBACK MODE)' : '(FULL MODE)');
-  } catch (error) {
+  } catch (_error) {
     debugError('[LocalFirst] Failed to initialize LOCAL-FIRST system', error);
     // Even on error, enable fallback mode to keep app functional
     fallbackMode = true;
@@ -452,7 +452,7 @@ export const getData = async <T>(options: LocalFirstOptions): Promise<T | null> 
 
     debugLog(`[LocalFirst] ❌ No data found for: ${cacheKey}`);
     return null;
-  } catch (error) {
+  } catch (_error) {
     debugError(`[LocalFirst] Error getting data for ${cacheKey}:`, error);
     return (fallbackData as T) || null;
   }
@@ -510,7 +510,7 @@ export const setData = async <T>(options: LocalFirstOptions & { data: T }): Prom
         });
       }
     }
-  } catch (error) {
+  } catch (_error) {
     debugError(`[LocalFirst] Error setting data for ${cacheKey}:`, error);
     throw error;
   }
@@ -631,7 +631,7 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
     syncStartTimes.delete(cacheKey);
 
     debugLog(`[LocalFirst] ✅ Background sync completed: ${cacheKey} (${syncDuration}ms)`);
-  } catch (error) {
+  } catch (_error) {
     failedSyncCount++;
     syncStartTimes.delete(cacheKey);
     debugWarn(`[LocalFirst] Background sync failed for ${cacheKey}:`, error);
@@ -751,7 +751,7 @@ const processSyncQueue = async (): Promise<void> => {
   const syncPromises = sortedOperations.map(async ([key, operation]) => {
     try {
       await backgroundSync({ collection: operation.collection, id: operation.docId });
-    } catch (error) {
+    } catch (_error) {
       debugWarn(`[LocalFirst] Failed to sync ${key} [${operation.priority}]:`, error);
     }
   });
@@ -781,7 +781,7 @@ const getFromPersistentStorage = async <T>(key: string): Promise<T | null> => {
   try {
     const value = await AsyncStorage.getItem(`@LocalFirst:${key}`);
     return value ? JSON.parse(value) : null;
-  } catch (error) {
+  } catch (_error) {
     debugWarn(`[LocalFirst] Failed to get from persistent storage: ${key}`, error);
     return null;
   }
@@ -793,7 +793,7 @@ const getFromPersistentStorage = async <T>(key: string): Promise<T | null> => {
 const saveToPersistentStorage = async <T>(key: string, data: T): Promise<void> => {
   try {
     await AsyncStorage.setItem(`@LocalFirst:${key}`, JSON.stringify(data));
-  } catch (error) {
+  } catch (_error) {
     debugWarn(`[LocalFirst] Failed to save to persistent storage: ${key}`, error);
   }
 };
@@ -877,7 +877,7 @@ export const batchSetData = async <T>(operations: (LocalFirstOptions & { data: T
         debugWarn('[LocalFirst] Batch sync failed:', error);
       });
     }
-  } catch (error) {
+  } catch (_error) {
     debugError('[LocalFirst] Batch set data error:', error);
     throw error;
   }
@@ -888,7 +888,7 @@ export const batchSetData = async <T>(operations: (LocalFirstOptions & { data: T
  * Uses Firestore onSnapshot for real-time updates
  * TASK-036: Properly returns unsubscribe function for cleanup
  */
-export const subscribeToData = <T>(collection: string, id: string, callback: (data: T | null) => void, onError?: (error: Error) => void): (() => void) => {
+export const subscribeToData = <T>(collection: string, id: string, callback: (data: T | null) => void, onError?: (_error: Error) => void): (() => void) => {
   if (!firestore) {
     debugWarn('[LocalFirst] Cannot subscribe - Firestore not initialized');
     // TASK-036: Return no-op unsubscribe function

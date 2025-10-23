@@ -5,8 +5,8 @@
  * and validation errors.
  */
 
-import { useState, useCallback } from 'react';
-import { FlowConfig, FlowState } from '@/types/flow';
+import { useCallback, useState } from 'react';
+import { type FlowConfig, type FlowState } from '@/types/flow';
 
 /**
  * Create initial flow state
@@ -46,7 +46,7 @@ function createInitialState(
  * Calculate progress percentage
  */
 function calculateProgress(currentStepIndex: number, totalSteps: number): number {
-  if (totalSteps === 0) return 0;
+  if (totalSteps === 0) {return 0;}
   return Math.round(((currentStepIndex + 1) / totalSteps) * 100);
 }
 

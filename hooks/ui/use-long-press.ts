@@ -154,7 +154,7 @@ export function useLongPress(
           await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
           break;
       }
-    } catch (error) {
+    } catch (_error) {
       // Haptics not available on this device
     }
   }, [hapticFeedback, hapticType]);

@@ -1,4 +1,3 @@
-import { AnimationDurations } from '@/constants/animation';
 import { Spacing } from '@/constants/layout';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { Ionicons } from '@expo/vector-icons';
@@ -60,9 +59,9 @@ export interface StepIndicatorProps {
 
 /**
  * StepIndicator Component
- * 
+ *
  * Displays progress through a multi-step process with different visual variants.
- * 
+ *
  * @example Horizontal variant with step names
  * ```tsx
  * <StepIndicator
@@ -77,7 +76,7 @@ export interface StepIndicatorProps {
  *   onStepPress={(index) => navigateToStep(index)}
  * />
  * ```
- * 
+ *
  * @example Dots variant
  * ```tsx
  * <StepIndicator
@@ -88,20 +87,8 @@ export interface StepIndicatorProps {
  * />
  * ```
  */
-function StepIndicatorComponent({
-  steps,
-  currentStep,
-  variant = 'horizontal',
-  allowStepNavigation = false,
-  onStepPress,
-  estimatedTimeRemaining,
-  style,
-}: StepIndicatorProps) {
-  const primaryColor = useThemeColor({}, 'primary');
-  const textColor = useThemeColor({}, 'text');
+function StepIndicatorComponent({ steps, currentStep, variant = 'horizontal', allowStepNavigation = false, onStepPress, estimatedTimeRemaining, style }: StepIndicatorProps) {
   const mutedTextColor = useThemeColor({}, 'text-muted');
-  const successColor = useThemeColor({}, 'success');
-  const surfaceColor = useThemeColor({}, 'surface');
 
   const handleStepPress = (index: number) => {
     if (allowStepNavigation && onStepPress) {
@@ -114,13 +101,7 @@ function StepIndicatorComponent({
       <View style={[styles.dotsContainer, style]}>
         <View style={styles.dotsRow}>
           {steps.map((step, index) => (
-            <DotIndicator
-              key={index}
-              status={step.status}
-              isActive={index === currentStep}
-              onPress={() => handleStepPress(index)}
-              allowPress={allowStepNavigation}
-            />
+            <DotIndicator key={index} status={step.status} isActive={index === currentStep} onPress={() => handleStepPress(index)} allowPress={allowStepNavigation} />
           ))}
         </View>
         {estimatedTimeRemaining !== undefined && (
@@ -177,17 +158,7 @@ function StepIndicatorComponent({
 export const StepIndicator = memo(StepIndicatorComponent);
 
 // Dot Indicator Component
-function DotIndicator({
-  status,
-  isActive,
-  onPress,
-  allowPress,
-}: {
-  status: StepStatus;
-  isActive: boolean;
-  onPress: () => void;
-  allowPress: boolean;
-}) {
+function DotIndicator({ status, isActive, onPress, allowPress }: { status: StepStatus; isActive: boolean; onPress: () => void; allowPress: boolean }) {
   const primaryColor = useThemeColor({}, 'primary');
   const successColor = useThemeColor({}, 'success');
   const mutedColor = useThemeColor({}, 'text-muted');
@@ -207,10 +178,7 @@ function DotIndicator({
     }
   };
 
-  const dotColor =
-    status === 'completed' ? successColor :
-    isActive ? primaryColor :
-    mutedColor;
+  const dotColor = status === 'completed' ? successColor : isActive ? primaryColor : mutedColor;
 
   const dotSize = isActive ? 12 : 8;
 
@@ -255,14 +223,9 @@ function NumberIndicator({
   const successColor = useThemeColor({}, 'success');
   const surfaceColor = useThemeColor({}, 'surface');
 
-  const circleBgColor =
-    status === 'completed' ? successColor :
-    isActive ? primaryColor :
-    surfaceColor;
+  const circleBgColor = status === 'completed' ? successColor : isActive ? primaryColor : surfaceColor;
 
-  const circleTextColor =
-    status === 'completed' || isActive ? '#FFFFFF' :
-    mutedTextColor;
+  const circleTextColor = status === 'completed' || isActive ? '#FFFFFF' : mutedTextColor;
 
   return (
     <View style={styles.numberStep}>
@@ -276,13 +239,7 @@ function NumberIndicator({
             </ThemedText>
           )}
         </View>
-        <ThemedText
-          type="caption"
-          style={[
-            styles.numberLabel,
-            { color: isActive ? textColor : mutedTextColor },
-          ]}
-        >
+        <ThemedText type="caption" style={[styles.numberLabel, { color: isActive ? textColor : mutedTextColor }]}>
           {label}
         </ThemedText>
       </Pressable>
@@ -312,10 +269,7 @@ function HorizontalStepIndicator({
   const mutedTextColor = useThemeColor({}, 'text-muted');
   const successColor = useThemeColor({}, 'success');
 
-  const indicatorColor =
-    step.status === 'completed' ? successColor :
-    isActive ? primaryColor :
-    mutedTextColor;
+  const indicatorColor = step.status === 'completed' ? successColor : isActive ? primaryColor : mutedTextColor;
 
   return (
     <View style={styles.horizontalStep}>
@@ -331,13 +285,7 @@ function HorizontalStepIndicator({
             )}
           </View>
           <View style={styles.horizontalStepText}>
-            <ThemedText
-              type="body"
-              style={[
-                styles.horizontalLabel,
-                { color: isActive ? textColor : mutedTextColor },
-              ]}
-            >
+            <ThemedText type="body" style={[styles.horizontalLabel, { color: isActive ? textColor : mutedTextColor }]}>
               {step.label}
             </ThemedText>
             {step.description && (
@@ -348,9 +296,7 @@ function HorizontalStepIndicator({
           </View>
         </View>
       </Pressable>
-      {!isLast && (
-        <View style={[styles.horizontalConnector, { backgroundColor: mutedTextColor }]} />
-      )}
+      {!isLast && <View style={[styles.horizontalConnector, { backgroundColor: mutedTextColor }]} />}
     </View>
   );
 }

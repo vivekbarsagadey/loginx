@@ -16,7 +16,7 @@ export const securelySetItem = async (key: string, value: string): Promise<void>
   try {
     await SecureStore.setItemAsync(key, value);
     debugLog(`[SecureStore] Successfully saved item: ${key}`);
-  } catch (error) {
+  } catch (_error) {
     debugError(`[SecureStore] Failed to save item: ${key}`, error);
     throw new Error(`Failed to save secure item: ${key}`);
   }
@@ -32,7 +32,7 @@ export const securelyGetItem = async (key: string): Promise<string | null> => {
     const value = await SecureStore.getItemAsync(key);
     debugLog(`[SecureStore] Successfully retrieved item: ${key}`);
     return value;
-  } catch (error) {
+  } catch (_error) {
     debugError(`[SecureStore] Failed to retrieve item: ${key}`, error);
     return null;
   }
@@ -47,7 +47,7 @@ export const securelyDeleteItem = async (key: string): Promise<void> => {
   try {
     await SecureStore.deleteItemAsync(key);
     debugLog(`[SecureStore] Successfully deleted item: ${key}`);
-  } catch (error) {
+  } catch (_error) {
     debugError(`[SecureStore] Failed to delete item: ${key}`, error);
     throw new Error(`Failed to delete secure item: ${key}`);
   }
@@ -154,7 +154,7 @@ export const clearSecureStorage = async (keys?: string[]): Promise<void> => {
   try {
     await Promise.all(keysToDelete.map((key) => securelyDeleteItem(key)));
     debugLog('[SecureStore] Successfully cleared secure storage');
-  } catch (error) {
+  } catch (_error) {
     debugError('[SecureStore] Failed to clear some secure storage items', error);
     throw new Error('Failed to clear secure storage');
   }

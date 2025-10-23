@@ -7,8 +7,8 @@
  * @module hooks/device/use-app-state
  */
 
-import { useEffect, useState, useRef } from 'react';
-import { AppState, AppStateStatus } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { AppState, type AppStateStatus } from 'react-native';
 
 /**
  * Configuration options for useAppState

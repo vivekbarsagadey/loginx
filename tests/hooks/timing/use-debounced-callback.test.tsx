@@ -2,7 +2,7 @@
  * Tests for useDebouncedCallback hook
  */
 
-import { renderHook, act } from '@testing-library/react-native';
+import { act, renderHook } from '@testing-library/react-native';
 import { useDebouncedCallback } from '@/hooks/timing/use-debounced-callback';
 
 describe('useDebouncedCallback', () => {
