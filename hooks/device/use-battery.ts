@@ -81,45 +81,39 @@ export function useBattery(): BatteryState {
         // eslint-disable-next-line import/no-unresolved
         Battery = await import('expo-battery');
 
-        if (!isMounted) {return;}
+        if (!isMounted) {
+          return;
+        }
 
         // Get initial battery state
-        const [level, state] = await Promise.all([
-          Battery.getBatteryLevelAsync(),
-          Battery.getBatteryStateAsync(),
-        ]);
+        const [level, state] = await Promise.all([Battery.getBatteryLevelAsync(), Battery.getBatteryStateAsync()]);
 
-        if (!isMounted) {return;}
+        if (!isMounted) {
+          return;
+        }
 
         setBatteryState({
           level,
-          charging: state === Battery.BatteryState.CHARGING ||
-                    state === Battery.BatteryState.FULL,
+          charging: state === Battery.BatteryState.CHARGING || state === Battery.BatteryState.FULL,
           available: true,
         });
 
         // Subscribe to battery level changes
-        const levelSubscription = Battery.addBatteryLevelListener(
-          ({ batteryLevel }: { batteryLevel: number }) => {
-            if (isMounted) {
-              setBatteryState((prev) => ({ ...prev, level: batteryLevel }));
-            }
+        const levelSubscription = Battery.addBatteryLevelListener(({ batteryLevel }: { batteryLevel: number }) => {
+          if (isMounted) {
+            setBatteryState((prev) => ({ ...prev, level: batteryLevel }));
           }
-        );
+        });
 
         // Subscribe to battery state changes
-        const stateSubscription = Battery.addBatteryStateListener(
-          ({ batteryState }: { batteryState: number }) => {
-            if (isMounted) {
-              setBatteryState((prev) => ({
-                ...prev,
-                charging:
-                  batteryState === Battery.BatteryState.CHARGING ||
-                  batteryState === Battery.BatteryState.FULL,
-              }));
-            }
+        const stateSubscription = Battery.addBatteryStateListener(({ batteryState }: { batteryState: number }) => {
+          if (isMounted) {
+            setBatteryState((prev) => ({
+              ...prev,
+              charging: batteryState === Battery.BatteryState.CHARGING || batteryState === Battery.BatteryState.FULL,
+            }));
           }
-        );
+        });
 
         return () => {
           levelSubscription.remove();
