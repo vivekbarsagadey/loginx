@@ -86,7 +86,7 @@ export function useAsyncRetry<T>(
   const [retryCount, setRetryCount] = useState(0);
   const [isRetrying, setIsRetrying] = useState(false);
   const cancelledRef = useRef(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /**
    * Calculate backoff delay for current retry attempt
@@ -109,7 +109,7 @@ export function useAsyncRetry<T>(
    */
   const sleep = useCallback((ms: number): Promise<void> => {
     return new Promise((resolve) => {
-      timeoutRef.current = setTimeout(resolve, ms) as unknown as NodeJS.Timeout;
+      timeoutRef.current = setTimeout(resolve, ms);
     });
   }, []);
 

@@ -56,12 +56,12 @@ class RequestDeduplicator {
     this.requestStats.set(key, stats);
 
     // Create promise with timeout if specified
-    let timeoutId: NodeJS.Timeout | undefined;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
     const requestPromise = options.timeout
       ? Promise.race([
           requestFn(),
           new Promise<T>((_, reject) => {
-            timeoutId = setTimeout(() => reject(new Error(`Request timeout: ${key}`)), options.timeout) as unknown as NodeJS.Timeout;
+            timeoutId = setTimeout(() => reject(new Error(`Request timeout: ${key}`)), options.timeout);
           }),
         ])
       : requestFn();

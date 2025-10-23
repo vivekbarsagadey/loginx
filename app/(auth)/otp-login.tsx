@@ -71,7 +71,7 @@ export default function OTPLoginScreen() {
       countdownInterval.start();
     }
     return () => countdownInterval.stop();
-  }, [step, countdown]);
+  }, [step, countdown, countdownInterval]);
 
   const emailForm = useForm({
     resolver: zodResolver(emailSchema),

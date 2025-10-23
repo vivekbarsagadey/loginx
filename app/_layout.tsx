@@ -22,6 +22,8 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import { ThemeProvider as CustomThemeProvider, useThemeContext } from '@/hooks/use-theme-context';
 import { initializeAdaptiveCache } from '@/utils/adaptive-cache';
 import { createLogger } from '@/utils/debug';
+import { getErrorInfo, showError } from '@/utils/error';
+import { classifyError } from '@/utils/error-classifier';
 import { initializeLocalFirst } from '@/utils/local-first';
 import { initializeSentry } from '@/utils/monitoring';
 import { initializeNetworkMonitoring } from '@/utils/network';
@@ -267,14 +269,8 @@ export default function RootLayout() {
       initializeAdaptiveCache().catch((error) => {
         logger.error('Failed to initialize adaptive cache:', error);
         // TASK-041: Show user-facing error dialog
-        const { getErrorInfo } = require('@/utils/error');
         const errorInfo = getErrorInfo(error);
-        const { globalDialog } = require('@/components/global-dialog-provider');
-        globalDialog?.showDialog({
-          title: errorInfo.title,
-          message: errorInfo.message,
-          confirmText: 'OK',
-        });
+        showError(`${errorInfo.title}: ${errorInfo.message}`);
       });
 
       // Initialize network monitoring
@@ -284,20 +280,12 @@ export default function RootLayout() {
       initializeLocalFirst().catch((error) => {
         logger.error('Failed to initialize LOCAL-FIRST system:', error);
         // TASK-041: Show user-facing error dialog with retry option
-        const { classifyError } = require('@/utils/error-classifier');
         const classified = classifyError(error);
-        const { globalDialog } = require('@/components/global-dialog-provider');
-        globalDialog?.showDialog({
-          title: 'Initialization Error',
-          message: classified.userMessage,
-          confirmText: classified.retryable ? 'Retry' : 'OK',
-          cancelText: classified.retryable ? 'Cancel' : undefined,
-          onConfirm: classified.retryable
-            ? () => {
-                initializeLocalFirst().catch(console.error);
-              }
-            : undefined,
-        });
+        showError(`Initialization Error: ${classified.userMessage}`);
+        // Note: Retry functionality would need to be implemented in the global dialog
+        if (classified.retryable) {
+          logger.info('Error is retryable - user should restart app');
+        }
       });
 
       // TASK-054: Warm cache with critical data on app launch

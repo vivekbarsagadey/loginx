@@ -36,7 +36,7 @@ const MIN_DISPLAY_INTERVAL = 3000; // 3 seconds
  */
 let currentAggregation: AggregatedError | null = null;
 let lastDisplayTime = 0;
-let aggregationTimeoutId: NodeJS.Timeout | null = null;
+let aggregationTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
 /**
  * Callback for displaying aggregated errors
@@ -86,7 +86,7 @@ export function addError(error: unknown): void {
   // Set timeout to display after aggregation window
   aggregationTimeoutId = setTimeout(() => {
     displayAggregatedErrors();
-  }, AGGREGATION_WINDOW) as unknown as NodeJS.Timeout;
+  }, AGGREGATION_WINDOW);
 }
 
 /**
@@ -106,7 +106,7 @@ function displayAggregatedErrors(): void {
     // Reschedule for later
     aggregationTimeoutId = setTimeout(() => {
       displayAggregatedErrors();
-    }, MIN_DISPLAY_INTERVAL - timeSinceLastDisplay) as unknown as NodeJS.Timeout;
+    }, MIN_DISPLAY_INTERVAL - timeSinceLastDisplay);
     return;
   }
 
