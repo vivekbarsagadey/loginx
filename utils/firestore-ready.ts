@@ -41,7 +41,7 @@ export function initializeFirestoreMonitoring(): void {
 
   // Check current state
   const ready = isFirestoreReady();
-  updateReadyState({ ready, loading: !ready, _error: null });
+  updateReadyState({ ready, loading: !ready, error: null });
 
   if (ready) {
     debugLog('[FirestoreReady] ✅ Firestore is ready');
@@ -60,7 +60,7 @@ export function initializeFirestoreMonitoring(): void {
 
     if (ready) {
       debugLog('[FirestoreReady] ✅ Firestore became ready');
-      updateReadyState({ ready: true, loading: false, _error: null });
+      updateReadyState({ ready: true, loading: false, error: null });
       return;
     }
 
@@ -95,7 +95,7 @@ function updateReadyState(newState: Partial<FirestoreReadyState>): void {
       try {
         listener(firestoreReadyState.ready);
       } catch (_error: unknown) {
-        debugWarn('[FirestoreReady] Listener error', _error);
+        debugWarn('[FirestoreReady] Listener _error', _error);
       }
     });
   }

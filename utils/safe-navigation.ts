@@ -125,7 +125,7 @@ export function safeBack(options?: {
       }
     }
   } catch (_error: unknown) {
-    showError(new Error('Navigation error. Please restart the app.'));
+    showError(new Error('Navigation _error. Please restart the app.'));
   }
 }
 

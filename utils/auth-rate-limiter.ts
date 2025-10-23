@@ -50,7 +50,7 @@ async function callAuthFunction(functionName: string, data: Record<string, any>)
       success: true,
       message: (result.data as any)?.message || 'Validation passed',
     };
-  } catch (_error: any) {
+  } catch (error: any) {
     // Handle rate limit errors (HTTP 429)
     if (_error.code === 'functions/resource-exhausted') {
       logger.warn('[AuthRateLimiter] Rate limit exceeded', {
@@ -134,7 +134,7 @@ export async function recordLoginAttempt(email: string, success: boolean): Promi
   } catch (_error: unknown) {
     // Don't throw - recording failures shouldn't block auth flow
     logger.warn('[AuthRateLimiter] Failed to record login attempt', {
-      error: _error instanceof Error ? _error.message : String(_error),
+      _error: _error instanceof Error ? _error.message : String(_error),
     });
   }
 }
@@ -182,7 +182,7 @@ export function formatRateLimitMessage(response: ValidationResponse): string {
  * @param error - Error to check
  * @returns True if rate limit error
  */
-export function isRateLimitError(_error: any): boolean {
+export function isRateLimitError(error: any): boolean {
   return _error?.code === 'functions/resource-exhausted' || _error?.rateLimited === true;
 }
 
@@ -191,7 +191,7 @@ export function isRateLimitError(_error: any): boolean {
  * @param error - Error object
  * @returns Retry after time in seconds, or 60 as default
  */
-export function getRetryAfterTime(_error: any): number {
+export function getRetryAfterTime(error: any): number {
   if (_error?.retryAfter) {
     return _error.retryAfter;
   }

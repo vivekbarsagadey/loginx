@@ -104,7 +104,7 @@ export default function LoginScreen() {
 
       // TASK-015: Check for rate limit errors
       if (isRateLimitError(_error)) {
-        showAlert('Too Many Attempts', 'You have exceeded the maximum number of login attempts. Please try again later.', [{ text: 'OK' }], { variant: 'error' });
+        showAlert('Too Many Attempts', 'You have exceeded the maximum number of login attempts. Please try again later.', [{ text: 'OK' }], { variant: '_error' });
         return;
       }
 

@@ -47,9 +47,9 @@ export interface UseFormReturn<T> {
   /** Set multiple field values at once */
   setValues: (values: Partial<T>) => void;
   /** Set error for a specific field */
-  setError: <K extends keyof T>(field: K, _error: string) => void;
+  setError: <K extends keyof T>(field: K, error: string) => void;
   /** Set multiple errors at once */
-  setErrors: (_errors: Partial<Record<keyof T, string>>) => void;
+  setErrors: (errors: Partial<Record<keyof T, string>>) => void;
   /** Mark a field as touched */
   setTouched: <K extends keyof T>(field: K, isTouched?: boolean) => void;
   /** Handle field change (combines setValue and setTouched) */
@@ -201,7 +201,7 @@ export function useForm<T extends Record<string, unknown>>(options: UseFormOptio
   /**
    * Set error for a specific field
    */
-  const setError = useCallback(<K extends keyof T>(field: K, _error: string) => {
+  const setError = useCallback(<K extends keyof T>(field: K, error: string) => {
     setErrorsState((prev) => ({ ...prev, [field]: error }));
   }, []);
 

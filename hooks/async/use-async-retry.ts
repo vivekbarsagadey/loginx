@@ -13,11 +13,11 @@ export interface RetryConfig {
   /** Maximum backoff delay in milliseconds */
   maxBackoffMs?: number;
   /** Callback invoked on each retry attempt */
-  onRetry?: (attempt: number, _error: Error) => void;
+  onRetry?: (attempt: number, error: Error) => void;
   /** Callback invoked when all retries are exhausted */
-  onMaxRetriesReached?: (_error: Error) => void;
+  onMaxRetriesReached?: (error: Error) => void;
   /** Function to determine if error is retryable */
-  shouldRetry?: (_error: Error) => boolean;
+  shouldRetry?: (error: Error) => boolean;
 }
 
 /**
@@ -154,7 +154,7 @@ export function useAsyncRetry<T>(operation: () => Promise<T>, config: RetryConfi
         setRetryCount(0);
         setIsRetrying(false);
         return result;
-      } catch (_error: unknown) {
+      } catch (error: unknown) {
         lastError = _error instanceof Error ? _error : new Error(String(_error));
 
         // Check if we should retry this error

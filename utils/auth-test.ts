@@ -44,6 +44,6 @@ export const logAuthPersistenceInfo = async (): Promise<void> => {
     const _stats = await getAuthPersistenceStats();
     // Auth persistence logging disabled
   } catch (_error: unknown) {
-    console.error('❌ Failed to get auth persistence info:', _error);
+    console._error('❌ Failed to get auth persistence info:', _error);
   }
 };

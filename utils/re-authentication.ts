@@ -221,10 +221,10 @@ export const promptBiometric = async (options: ReAuthOptions = {}): Promise<ReAu
       error: result.error || 'Biometric authentication failed',
     };
   } catch (_error: unknown) {
-    debugError('[ReAuth] Biometric authentication error:', _error);
+    debugError('[ReAuth] Biometric authentication _error:', _error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Authentication failed',
+      _error: _error instanceof Error ? _error.message : 'Authentication failed',
     };
   }
 };
@@ -276,10 +276,10 @@ export const requireAuth = async (options: ReAuthOptions = {}): Promise<ReAuthRe
 
     return biometricResult;
   } catch (_error: unknown) {
-    debugError('[ReAuth] Re-authentication error:', _error);
+    debugError('[ReAuth] Re-authentication _error:', _error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Authentication failed',
+      _error: _error instanceof Error ? _error.message : 'Authentication failed',
     };
   }
 };
@@ -319,7 +319,7 @@ export const verifyPasswordFallback = async (password: string, userEmail: string
     debugError('[ReAuth] Password fallback failed:', _error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Password verification failed',
+      _error: _error instanceof Error ? _error.message : 'Password verification failed',
     };
   }
 };

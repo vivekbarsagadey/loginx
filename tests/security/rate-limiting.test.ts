@@ -44,7 +44,7 @@ describe('Rate Limiting', () => {
       for (let i = 0; i < 10; i++) {
         try {
           await signInWithEmailAndPassword(auth as any, email, password);
-        } catch (_error: any) {
+        } catch (error: any) {
           if (_error.code === 'auth/too-many-requests') {
             rateLimitHit = true;
             break;
@@ -77,7 +77,7 @@ describe('Rate Limiting', () => {
       // Should be able to attempt again
       try {
         await signInWithEmailAndPassword(auth as any, email, password);
-      } catch (_error: any) {
+      } catch (error: any) {
         expect(_error.code).not.toBe('auth/too-many-requests');
       }
     });

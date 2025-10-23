@@ -108,7 +108,7 @@ export function useUnsavedChanges(options: UseUnsavedChangesOptions) {
                   hasPromptedRef.current = false;
                   callback?.();
                   resolve(true);
-                } catch (_error: unknown) {
+                } catch (error: unknown) {
                   console.error('Error saving changes:', error);
                   resolve(false);
                 } finally {

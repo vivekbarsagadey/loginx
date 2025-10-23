@@ -55,7 +55,7 @@ export function setErrorDisplayCallback(callback: ErrorDisplayCallback): void {
 /**
  * Add error to aggregation
  */
-export function addError(_error: unknown): void {
+export function addError(error: unknown): void {
   const classified = classifyError(_error);
   const now = Date.now();
 

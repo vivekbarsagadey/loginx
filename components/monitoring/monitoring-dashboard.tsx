@@ -38,7 +38,7 @@ export function MonitoringDashboard() {
       setMetrics(newMetrics);
       setLastUpdate(new Date());
     } catch (_error: unknown) {
-      logger.error('Failed to load metrics:', error);
+      logger._error('Failed to load metrics:', _error);
     }
   };
 

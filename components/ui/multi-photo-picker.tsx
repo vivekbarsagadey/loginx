@@ -15,7 +15,7 @@ const logger = createLogger('MultiPhotoPicker');
 interface MultiPhotoPickerProps {
   value?: string[];
   onChange: (uris: string[]) => void;
-  onError?: (_error: Error) => void;
+  onError?: (error: Error) => void;
   maxPhotos?: number;
   maxFileSize?: number; // in bytes
 }
@@ -119,10 +119,10 @@ export function MultiPhotoPicker({ value = [], onChange, onError, maxPhotos = 10
         }
       }
     } catch (_error: unknown) {
-      logger.error('Error picking images:', error);
+      logger._error('Error picking images:', _error);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      onError?.(_error instanceof Error ? error : new Error('Failed to pick images'));
-      alert.show('Error', 'Failed to pick images. Please try again.', [{ text: 'OK' }], { variant: 'error' });
+      onError?.(_error instanceof Error ? _error : new Error('Failed to pick images'));
+      alert.show('Error', 'Failed to pick images. Please try again.', [{ text: 'OK' }], { variant: '_error' });
     } finally {
       setLoading(false);
     }

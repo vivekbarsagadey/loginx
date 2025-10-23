@@ -29,7 +29,7 @@ export interface UseRegistrationStateDependencies {
   /** Function to create user profile in database */
   createUserProfile: (userId: string, profileData: any) => Promise<void>;
   /** Function to show error messages to user */
-  showError: (_error: unknown) => void;
+  showError: (error: unknown) => void;
   /** Optional logger for debugging */
   logger?: {
     log: (...args: any[]) => void;
@@ -137,7 +137,7 @@ export interface UseRegistrationStateOptions {
   /** Callback fired on successful registration */
   onSuccess?: (userId: string, hasPhoneNumber: boolean) => void;
   /** Callback fired on registration error */
-  onError?: (_error: Error) => void;
+  onError?: (error: Error) => void;
   /** Required dependencies for independent operation */
   dependencies?: UseRegistrationStateDependencies;
 }
@@ -216,7 +216,7 @@ export function useRegistrationState(options: UseRegistrationStateOptions = {}) 
   };
 
   const deps = getDependencies();
-  const logger = deps.logger || { log: () => {}, warn: () => {}, _error: () => {} };
+  const logger = deps.logger || { log: () => {}, warn: () => {}, error: () => {} };
 
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -368,7 +368,7 @@ export function useRegistrationState(options: UseRegistrationStateOptions = {}) 
       // Call success callback
       const hasPhoneNumber = Boolean(sanitizedData.phoneNumber && sanitizedData.phoneNumber.trim());
       onSuccess?.(user.uid, hasPhoneNumber);
-    } catch (_error: unknown) {
+    } catch (error: unknown) {
       logger.error('Registration error:', _error);
 
       if (_error instanceof Error) {

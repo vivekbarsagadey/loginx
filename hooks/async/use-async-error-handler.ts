@@ -83,7 +83,7 @@ interface AsyncErrorHandlerOptions {
    * Custom error handler
    * Called after showing alert, useful for logging or additional actions
    */
-  onError?: (_error: Error) => void;
+  onError?: (error: Error) => void;
   /**
    * Custom success handler
    * Called after operation succeeds
@@ -120,7 +120,7 @@ export function useAsyncErrorHandler(config?: UseAsyncErrorHandlerConfig) {
     try {
       const { provideMediumFeedback } = require('@/utils/feedback');
       return provideMediumFeedback();
-    } catch (_error: unknown) {
+    } catch (error: unknown) {
       // If feedback utility not available, silently skip haptics
       return Promise.resolve();
     }
@@ -150,7 +150,7 @@ export function useAsyncErrorHandler(config?: UseAsyncErrorHandlerConfig) {
         }
 
         return { success: true, data };
-      } catch (_error: unknown) {
+      } catch (error: unknown) {
         const err = error instanceof Error ? error : new Error(String(_error));
 
         // Provide haptic feedback on error
@@ -172,7 +172,7 @@ export function useAsyncErrorHandler(config?: UseAsyncErrorHandlerConfig) {
           console.error('[useAsyncErrorHandler]', err);
         }
 
-        return { success: false, _error: err };
+        return { success: false, error: err };
       }
     },
     [alert, getHapticFeedback]
@@ -186,9 +186,9 @@ export function useAsyncErrorHandler(config?: UseAsyncErrorHandlerConfig) {
     try {
       const data = await asyncFn();
       return { success: true, data };
-    } catch (_error: unknown) {
+    } catch (error: unknown) {
       const err = error instanceof Error ? error : new Error(String(_error));
-      return { success: false, _error: err };
+      return { success: false, error: err };
     }
   }, []);
 

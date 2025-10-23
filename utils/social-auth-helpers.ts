@@ -54,7 +54,7 @@ export const handleSocialAuthSuccess = async (user: FirebaseUser, displayNameOve
  * Handle social authentication error
  * Provides error feedback with haptics
  */
-export const handleSocialAuthError = async (_error: unknown, context?: string): Promise<void> => {
+export const handleSocialAuthError = async (error: unknown, context?: string): Promise<void> => {
   // Silent error handling - logging delegated to monitoring service
   await provideErrorFeedback(_error);
 };
@@ -63,7 +63,7 @@ export const handleSocialAuthError = async (_error: unknown, context?: string): 
  * Check if user cancelled authentication
  * Returns true if error is a cancellation (should be handled silently)
  */
-export const isAuthCancellation = (_error: unknown): boolean => {
+export const isAuthCancellation = (error: unknown): boolean => {
   if (_error && typeof error === 'object' && 'code' in error) {
     const code = (_error as { code: string }).code;
     return code === 'ERR_REQUEST_CANCELED' || code === 'ERR_CANCELED';

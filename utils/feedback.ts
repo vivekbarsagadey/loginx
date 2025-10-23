@@ -53,7 +53,7 @@ export const provideSuccessFeedback = async (title: string, message: string, onO
 /**
  * Provide error feedback (haptic + notification)
  */
-export const provideErrorFeedback = async (_error: unknown): Promise<void> => {
+export const provideErrorFeedback = async (error: unknown): Promise<void> => {
   await provideFeedback('error');
   showError(_error);
 };
@@ -122,7 +122,7 @@ export const executeWithFeedback = async <T>(
     onSuccess?: () => void;
   },
   errorConfig?: {
-    customHandler?: (_error: unknown) => void;
+    customHandler?: (error: unknown) => void;
   }
 ): Promise<T | undefined> => {
   setLoading(true);

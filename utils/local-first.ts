@@ -341,7 +341,7 @@ export const initializeLocalFirst = async (): Promise<void> => {
     debugLog('[LocalFirst] ✅ LOCAL-FIRST system initialized', fallbackMode ? '(FALLBACK MODE)' : '(FULL MODE)');
   } catch (_error: unknown) {
     debugError('[LocalFirst] Failed to initialize LOCAL-FIRST system', _error);
-    // Even on error, enable fallback mode to keep app functional
+    // Even on _error, enable fallback mode to keep app functional
     fallbackMode = true;
   }
 };
@@ -641,7 +641,7 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
     if (queueEntry) {
       queueEntry.retries = (queueEntry.retries || 0) + 1;
       queueEntry.lastSyncAttempt = Date.now();
-      queueEntry.syncStatus = 'error';
+      queueEntry.syncStatus = '_error';
 
       const maxRetries = options.maxRetries || 5;
 
@@ -768,7 +768,7 @@ const startBackgroundSync = (): void => {
   setInterval(() => {
     if (isOnline && syncQueue.size > 0) {
       processSyncQueue().catch((_error) => {
-        debugWarn('[LocalFirst] Background sync process error:', _error);
+        debugWarn('[LocalFirst] Background sync process _error:', _error);
       });
     }
   }, 30000);
@@ -878,7 +878,7 @@ export const batchSetData = async <T>(operations: (LocalFirstOptions & { data: T
       });
     }
   } catch (_error: unknown) {
-    debugError('[LocalFirst] Batch set data error:', _error);
+    debugError('[LocalFirst] Batch set data _error:', _error);
     throw _error;
   }
 };
@@ -888,7 +888,7 @@ export const batchSetData = async <T>(operations: (LocalFirstOptions & { data: T
  * Uses Firestore onSnapshot for real-time updates
  * TASK-036: Properly returns unsubscribe function for cleanup
  */
-export const subscribeToData = <T>(collection: string, id: string, callback: (data: T | null) => void, onError?: (_error: Error) => void): (() => void) => {
+export const subscribeToData = <T>(collection: string, id: string, callback: (data: T | null) => void, onError?: (error: Error) => void): (() => void) => {
   if (!firestore) {
     debugWarn('[LocalFirst] Cannot subscribe - Firestore not initialized');
     // TASK-036: Return no-op unsubscribe function

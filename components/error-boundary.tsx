@@ -9,8 +9,8 @@ import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 
 interface Props {
   children: ReactNode;
-  fallback?: (_error: Error | null) => ReactNode;
-  onError?: (_error: Error, errorInfo: ErrorInfo) => void;
+  fallback?: (error: Error | null) => ReactNode;
+  onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
 
 interface State {
@@ -33,14 +33,14 @@ export class ErrorBoundary extends Component<Props, State> {
     };
   }
 
-  static getDerivedStateFromError(_error: Error): Partial<State> {
+  static getDerivedStateFromError(error: Error): Partial<State> {
     return {
       hasError: true,
       error,
     };
   }
 
-  componentDidCatch(_error: Error, errorInfo: ErrorInfo): void {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Log error to console for debugging
     console.error('[ErrorBoundary] Caught error:', error);
     console.error('[ErrorBoundary] Error info:', errorInfo);

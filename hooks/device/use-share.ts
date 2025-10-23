@@ -28,7 +28,7 @@ export interface ShareOptions {
   /** Callback on successful share */
   onSuccess?: (action: ShareAction) => void;
   /** Callback on share error */
-  onError?: (_error: Error) => void;
+  onError?: (error: Error) => void;
   /** Callback when share is dismissed */
   onDismiss?: () => void;
 }
@@ -202,7 +202,7 @@ export function useShare(): UseShareReturn {
 
       const shareResult: ShareResult = {
         success: false,
-        error: errorObj,
+        _error: errorObj,
       };
 
       if (onError) {

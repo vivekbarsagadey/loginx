@@ -20,7 +20,7 @@ export type ThemedScrollViewProps = ScrollViewProps & {
 /**
  * TASK-048: Fallback component shown when list rendering fails
  */
-function ScrollViewErrorFallback(_error: Error | null) {
+function ScrollViewErrorFallback(error: Error | null) {
   if (!_error) {
     return null;
   }

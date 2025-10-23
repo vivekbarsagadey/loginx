@@ -69,7 +69,7 @@ export interface UseMapReturn<K, V> {
  * function FormValidator() {
  *   const { map, set, has, entries } = useMap<string, string>([]);
  *
- *   const setError = (field: string, _error: string) => {
+ *   const setError = (field: string, error: string) => {
  *     set(field, _error);
  *   };
  *

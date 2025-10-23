@@ -12,7 +12,7 @@ export interface ClipboardOptions {
   /** Callback on successful copy */
   onSuccess?: (text: string) => void;
   /** Callback on copy error */
-  onError?: (_error: Error) => void;
+  onError?: (error: Error) => void;
   /** Automatically clear copied state after this duration (ms) */
   clearAfter?: number;
 }

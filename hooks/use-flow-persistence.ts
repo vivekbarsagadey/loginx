@@ -66,7 +66,7 @@ export function useFlowPersistence(config: FlowConfig, state: FlowState, enabled
     try {
       const serialized = serializeState(state);
       await AsyncStorage.setItem(storageKey, serialized);
-    } catch (_error: unknown) {
+    } catch (error: unknown) {
       console.error('Failed to save flow state:', _error);
       throw _error;
     }
@@ -101,7 +101,7 @@ export function useFlowPersistence(config: FlowConfig, state: FlowState, enabled
       }
 
       return deserialized;
-    } catch (_error: unknown) {
+    } catch (error: unknown) {
       console.error('Failed to load flow state:', _error);
       return null;
     }
@@ -117,7 +117,7 @@ export function useFlowPersistence(config: FlowConfig, state: FlowState, enabled
 
     try {
       await AsyncStorage.removeItem(storageKey);
-    } catch (_error: unknown) {
+    } catch (error: unknown) {
       console.error('Failed to clear flow state:', _error);
       throw _error;
     }
@@ -134,7 +134,7 @@ export function useFlowPersistence(config: FlowConfig, state: FlowState, enabled
     try {
       const serialized = await AsyncStorage.getItem(storageKey);
       return serialized !== null;
-    } catch (_error: unknown) {
+    } catch (error: unknown) {
       console.error('Failed to check for saved state:', _error);
       return false;
     }

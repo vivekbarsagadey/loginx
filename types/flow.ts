@@ -674,7 +674,7 @@ export interface FlowConfig {
   onComplete?: (data: Record<string, any>) => Promise<{ success: boolean; error?: string }>;
   onSkip?: (data: Record<string, any>) => Promise<{ success: boolean }>;
   onAbandonment?: (data: Record<string, any>, currentStep: string) => Promise<void>;
-  onError?: (_error: Error, stepId?: string) => Promise<{ handled: boolean }>;
+  onError?: (error: Error, stepId?: string) => Promise<{ handled: boolean }>;
   onStepView?: (stepId: string, data: Record<string, any>) => void;
   onSubmit?: (data: Record<string, any>) => Promise<any>;
 

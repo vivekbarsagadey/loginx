@@ -92,9 +92,9 @@ The mode emits GitHub Flavored Markdown (GFM) that passes common markdownlint ru
 
 - Each Mermaid diagram is saved as a .mmd file under docs/diagrams/ and linked:
 
-  ````markdown
+  ```markdown
   `mermaid src="./diagrams/payments_sequence.mmd" alt="Payment request sequence"`
-  ````
+  ```
 
 - Every .mmd file begins with YAML front‑matter specifying alt:
 

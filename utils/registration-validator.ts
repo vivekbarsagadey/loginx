@@ -61,16 +61,16 @@ export const NAME_REGEX = /^[a-zA-Z\s\-']{2,50}$/;
  */
 export function validateFirstName(firstName: string): ValidationResult {
   if (!firstName || firstName.trim().length === 0) {
-    return { isValid: false, _error: 'First name is required' };
+    return { isValid: false, error: 'First name is required' };
   }
   if (!NAME_REGEX.test(firstName)) {
-    return { isValid: false, _error: 'First name contains invalid characters' };
+    return { isValid: false, error: 'First name contains invalid characters' };
   }
   if (firstName.length < 2) {
-    return { isValid: false, _error: 'First name must be at least 2 characters' };
+    return { isValid: false, error: 'First name must be at least 2 characters' };
   }
   if (firstName.length > 50) {
-    return { isValid: false, _error: 'First name must be less than 50 characters' };
+    return { isValid: false, error: 'First name must be less than 50 characters' };
   }
   return { isValid: true };
 }
@@ -82,16 +82,16 @@ export function validateFirstName(firstName: string): ValidationResult {
  */
 export function validateLastName(lastName: string): ValidationResult {
   if (!lastName || lastName.trim().length === 0) {
-    return { isValid: false, _error: 'Last name is required' };
+    return { isValid: false, error: 'Last name is required' };
   }
   if (!NAME_REGEX.test(lastName)) {
-    return { isValid: false, _error: 'Last name contains invalid characters' };
+    return { isValid: false, error: 'Last name contains invalid characters' };
   }
   if (lastName.length < 2) {
-    return { isValid: false, _error: 'Last name must be at least 2 characters' };
+    return { isValid: false, error: 'Last name must be at least 2 characters' };
   }
   if (lastName.length > 50) {
-    return { isValid: false, _error: 'Last name must be less than 50 characters' };
+    return { isValid: false, error: 'Last name must be less than 50 characters' };
   }
   return { isValid: true };
 }
@@ -103,13 +103,13 @@ export function validateLastName(lastName: string): ValidationResult {
  */
 export function validateEmail(email: string): ValidationResult {
   if (!email || email.trim().length === 0) {
-    return { isValid: false, _error: 'Email is required' };
+    return { isValid: false, error: 'Email is required' };
   }
   if (!EMAIL_REGEX.test(email)) {
-    return { isValid: false, _error: 'Please enter a valid email address' };
+    return { isValid: false, error: 'Please enter a valid email address' };
   }
   if (email.length > 254) {
-    return { isValid: false, _error: 'Email address is too long' };
+    return { isValid: false, error: 'Email address is too long' };
   }
   return { isValid: true };
 }
@@ -121,17 +121,17 @@ export function validateEmail(email: string): ValidationResult {
  */
 export function validatePhoneNumber(phoneNumber: string): ValidationResult {
   if (!phoneNumber || phoneNumber.trim().length === 0) {
-    return { isValid: false, _error: 'Phone number is required' };
+    return { isValid: false, error: 'Phone number is required' };
   }
   if (!PHONE_REGEX.test(phoneNumber)) {
-    return { isValid: false, _error: 'Phone number contains invalid characters' };
+    return { isValid: false, error: 'Phone number contains invalid characters' };
   }
   const digitsOnly = phoneNumber.replace(/\D/g, '');
   if (digitsOnly.length < 10) {
-    return { isValid: false, _error: 'Phone number must have at least 10 digits' };
+    return { isValid: false, error: 'Phone number must have at least 10 digits' };
   }
   if (digitsOnly.length > 15) {
-    return { isValid: false, _error: 'Phone number is too long' };
+    return { isValid: false, error: 'Phone number is too long' };
   }
   return { isValid: true };
 }
@@ -146,7 +146,7 @@ export function validateReferralCode(referralCode?: string): ValidationResult {
     return { isValid: true }; // Optional field
   }
   if (!REFERRAL_CODE_REGEX.test(referralCode)) {
-    return { isValid: false, _error: 'Referral code must be 6-12 uppercase letters/numbers' };
+    return { isValid: false, error: 'Referral code must be 6-12 uppercase letters/numbers' };
   }
   return { isValid: true };
 }
@@ -158,10 +158,10 @@ export function validateReferralCode(referralCode?: string): ValidationResult {
  */
 export function validateZipCode(zipCode: string): ValidationResult {
   if (!zipCode || zipCode.trim().length === 0) {
-    return { isValid: false, _error: 'ZIP code is required' };
+    return { isValid: false, error: 'ZIP code is required' };
   }
   if (!ZIP_CODE_REGEX.test(zipCode)) {
-    return { isValid: false, _error: 'Please enter a valid ZIP code (12345 or 12345-6789)' };
+    return { isValid: false, error: 'Please enter a valid ZIP code (12345 or 12345-6789)' };
   }
   return { isValid: true };
 }
@@ -173,13 +173,13 @@ export function validateZipCode(zipCode: string): ValidationResult {
  */
 export function validateAddress(address: string): ValidationResult {
   if (!address || address.trim().length === 0) {
-    return { isValid: false, _error: 'Street address is required' };
+    return { isValid: false, error: 'Street address is required' };
   }
   if (address.length < 5) {
-    return { isValid: false, _error: 'Address must be at least 5 characters' };
+    return { isValid: false, error: 'Address must be at least 5 characters' };
   }
   if (address.length > 200) {
-    return { isValid: false, _error: 'Address is too long' };
+    return { isValid: false, error: 'Address is too long' };
   }
   return { isValid: true };
 }
@@ -191,13 +191,13 @@ export function validateAddress(address: string): ValidationResult {
  */
 export function validateCity(city: string): ValidationResult {
   if (!city || city.trim().length === 0) {
-    return { isValid: false, _error: 'City is required' };
+    return { isValid: false, error: 'City is required' };
   }
   if (city.length < 2) {
-    return { isValid: false, _error: 'City name must be at least 2 characters' };
+    return { isValid: false, error: 'City name must be at least 2 characters' };
   }
   if (city.length > 100) {
-    return { isValid: false, _error: 'City name is too long' };
+    return { isValid: false, error: 'City name is too long' };
   }
   return { isValid: true };
 }
@@ -209,13 +209,13 @@ export function validateCity(city: string): ValidationResult {
  */
 export function validateState(state: string): ValidationResult {
   if (!state || state.trim().length === 0) {
-    return { isValid: false, _error: 'State is required' };
+    return { isValid: false, error: 'State is required' };
   }
   if (state.length < 2) {
-    return { isValid: false, _error: 'State must be at least 2 characters' };
+    return { isValid: false, error: 'State must be at least 2 characters' };
   }
   if (state.length > 50) {
-    return { isValid: false, _error: 'State name is too long' };
+    return { isValid: false, error: 'State name is too long' };
   }
   return { isValid: true };
 }
@@ -227,7 +227,7 @@ export function validateState(state: string): ValidationResult {
  */
 export function validateTermsAccepted(termsAccepted: boolean): ValidationResult {
   if (!termsAccepted) {
-    return { isValid: false, _error: 'You must accept the terms and conditions' };
+    return { isValid: false, error: 'You must accept the terms and conditions' };
   }
   return { isValid: true };
 }

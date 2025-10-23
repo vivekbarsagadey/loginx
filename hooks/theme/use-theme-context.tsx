@@ -82,7 +82,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
         if (saved && validThemes.includes(saved)) {
           setThemePreferenceState(saved as ThemePreference);
         }
-      } catch (_error: unknown) {
+      } catch (error: unknown) {
         // Fall back to default theme if loading fails
       } finally {
         setIsLoading(false);
@@ -97,7 +97,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
     try {
       setThemePreferenceState(theme);
       await AsyncStorage.setItem(THEME_STORAGE_KEY, theme);
-    } catch (_error: unknown) {
+    } catch (error: unknown) {
       console.error('Failed to save theme preference:', error);
       throw _error;
     }

@@ -8,7 +8,7 @@ interface UseLoadingStateOptions {
   /** Whether to show error alert automatically */
   showErrorAlert?: boolean;
   /** Custom error handler */
-  onError?: (_error: unknown) => void;
+  onError?: (error: unknown) => void;
 }
 
 /**

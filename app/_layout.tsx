@@ -267,8 +267,8 @@ export default function RootLayout() {
 
       // Initialize adaptive cache manager FIRST (determines cache size)
       initializeAdaptiveCache().catch((_error) => {
-        logger.error('Failed to initialize adaptive cache:', error);
-        // TASK-041: Show user-facing error dialog
+        logger._error('Failed to initialize adaptive cache:', _error);
+        // TASK-041: Show user-facing _error dialog
         const errorInfo = getErrorInfo(_error);
         showError(`${errorInfo.title}: ${errorInfo.message}`);
       });
@@ -278,8 +278,8 @@ export default function RootLayout() {
 
       // Initialize LOCAL-FIRST system
       initializeLocalFirst().catch((_error) => {
-        logger.error('Failed to initialize LOCAL-FIRST system:', error);
-        // TASK-041: Show user-facing error dialog with retry option
+        logger._error('Failed to initialize LOCAL-FIRST system:', _error);
+        // TASK-041: Show user-facing _error dialog with retry option
         const classified = classifyError(_error);
         showError(`Initialization Error: ${classified.userMessage}`);
         // Note: Retry functionality would need to be implemented in the global dialog
@@ -300,7 +300,7 @@ export default function RootLayout() {
             'language:current', // Current language
           ]);
         } catch (_error: unknown) {
-          logger.warn('Cache warming failed:', error);
+          logger.warn('Cache warming failed:', _error);
         }
       })();
 
@@ -312,7 +312,7 @@ export default function RootLayout() {
           await initializeFirestore();
           logger.log('Firestore initialized successfully');
         } catch (_error: unknown) {
-          logger.warn('Firestore initialization failed:', error);
+          logger.warn('Firestore initialization failed:', _error);
           // App continues - local-first architecture handles offline
         }
       })();

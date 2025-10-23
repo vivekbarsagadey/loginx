@@ -472,7 +472,7 @@ export const getCacheStats = async () => {
       totalAccess: 0,
       revalidations: 0,
       utilization: '0%',
-      syncStatus: 'error',
+      syncStatus: '_error',
       lastUpdate: Date.now(),
     };
   }

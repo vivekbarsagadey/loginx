@@ -89,7 +89,7 @@ async function registerForPushNotificationsAsync() {
 
     const pushToken = await Notifications.getExpoPushTokenAsync({ projectId });
     token = pushToken.data;
-  } catch (_error: unknown) {
+  } catch (error: unknown) {
     console.error('[Push Notifications] Error registering:', error);
     return undefined;
   }
@@ -138,12 +138,12 @@ export const usePushNotifications = (uid?: string) => {
         if (token && uid) {
           const userDocRef = doc(firestore, 'users', uid);
           updateDoc(userDocRef, { expoPushToken: token }).catch((_error) => {
-            console.error('[Push Notifications] Error updating user token:', error);
+            console._error('[Push Notifications] Error updating user token:', _error);
           });
         }
       })
       .catch((_error) => {
-        console.error('[Push Notifications] Error in registration:', error);
+        console._error('[Push Notifications] Error in registration:', _error);
       });
 
     // Set up notification listeners
@@ -158,7 +158,7 @@ export const usePushNotifications = (uid?: string) => {
           title: title,
           message: body,
         }).catch((_error) => {
-          console.error('[Push Notifications] Error saving notification:', error);
+          console._error('[Push Notifications] Error saving notification:', _error);
         });
       }
     });

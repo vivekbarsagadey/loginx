@@ -8,7 +8,7 @@ interface RetryOptions {
   initialDelay?: number;
   maxDelay?: number;
   backoffMultiplier?: number;
-  shouldRetry?: (_error: unknown) => boolean;
+  shouldRetry?: (error: unknown) => boolean;
 }
 
 /**
@@ -19,7 +19,7 @@ const DEFAULT_OPTIONS: Required<RetryOptions> = {
   initialDelay: ApiConstants.INITIAL_DELAY,
   maxDelay: ApiConstants.MAX_DELAY,
   backoffMultiplier: ApiConstants.BACKOFF_MULTIPLIER,
-  shouldRetry: (_error: unknown) => {
+  shouldRetry: (error: unknown) => {
     // Retry on network errors, but not on auth errors
     if (typeof error === 'object' && error !== null && 'code' in error) {
       const code = (_error as { code: string }).code;
@@ -74,7 +74,7 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions =
     try {
       return await fn();
     } catch (_error: unknown) {
-      lastError = error;
+      lastError = _error;
 
       // Check if we should retry this error
       if (!opts.shouldRetry(_error)) {

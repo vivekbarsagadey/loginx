@@ -44,11 +44,11 @@ export async function submitFeedback(
 ): Promise<{ success: boolean; feedbackId?: string; error?: string }> {
   try {
     if (!subject.trim() || !message.trim()) {
-      return { success: false, _error: 'Subject and message are required' };
+      return { success: false, error: 'Subject and message are required' };
     }
 
     if (message.trim().length < 10) {
-      return { success: false, _error: 'Message must be at least 10 characters' };
+      return { success: false, error: 'Message must be at least 10 characters' };
     }
 
     const deviceInfo = getDeviceInfo();
@@ -73,9 +73,9 @@ export async function submitFeedback(
     });
 
     return { success: true, feedbackId: feedbackRef.id };
-  } catch (_error: unknown) {
+  } catch (error: unknown) {
     // Error already logged by Firebase, return user-friendly message
-    return { success: false, _error: 'Failed to submit feedback. Please try again.' };
+    return { success: false, error: 'Failed to submit feedback. Please try again.' };
   }
 }
 
@@ -85,7 +85,7 @@ export async function submitFeedback(
 export async function submitRating(userId: string, rating: number, review?: string, likes?: string[], improvements?: string[]): Promise<{ success: boolean; ratingId?: string; error?: string }> {
   try {
     if (rating < 1 || rating > 5) {
-      return { success: false, _error: 'Rating must be between 1 and 5' };
+      return { success: false, error: 'Rating must be between 1 and 5' };
     }
 
     const deviceInfo = getDeviceInfo();
@@ -106,8 +106,8 @@ export async function submitRating(userId: string, rating: number, review?: stri
     });
 
     return { success: true, ratingId: ratingRef.id };
-  } catch (_error: unknown) {
-    return { success: false, _error: 'Failed to submit rating. Please try again.' };
+  } catch (error: unknown) {
+    return { success: false, error: 'Failed to submit rating. Please try again.' };
   }
 }
 
@@ -127,7 +127,7 @@ export async function submitIssueReport(
 ): Promise<{ success: boolean; issueId?: string; error?: string }> {
   try {
     if (!subject.trim() || !message.trim()) {
-      return { success: false, _error: 'Subject and message are required' };
+      return { success: false, error: 'Subject and message are required' };
     }
 
     const deviceInfo = getDeviceInfo();
@@ -157,8 +157,8 @@ export async function submitIssueReport(
     });
 
     return { success: true, issueId: issueRef.id };
-  } catch (_error: unknown) {
-    return { success: false, _error: 'Failed to submit issue report. Please try again.' };
+  } catch (error: unknown) {
+    return { success: false, error: 'Failed to submit issue report. Please try again.' };
   }
 }
 
@@ -179,8 +179,8 @@ export async function getUserFeedback(userId: string, limitCount = 10): Promise<
     })) as FeedbackSubmission[];
 
     return { success: true, feedback };
-  } catch (_error: unknown) {
-    return { success: false, _error: 'Failed to fetch feedback. Please try again.' };
+  } catch (error: unknown) {
+    return { success: false, error: 'Failed to fetch feedback. Please try again.' };
   }
 }
 
@@ -201,8 +201,8 @@ export async function getUserRatings(userId: string): Promise<{ success: boolean
     })) as AppRating[];
 
     return { success: true, ratings };
-  } catch (_error: unknown) {
-    return { success: false, _error: 'Failed to fetch rating history' };
+  } catch (error: unknown) {
+    return { success: false, error: 'Failed to fetch rating history' };
   }
 }
 
@@ -220,8 +220,8 @@ export async function updateFeedbackStatus(feedbackId: string, status: FeedbackS
     });
 
     return { success: true };
-  } catch (_error: unknown) {
-    return { success: false, _error: 'Failed to update feedback status' };
+  } catch (error: unknown) {
+    return { success: false, error: 'Failed to update feedback status' };
   }
 }
 
@@ -237,7 +237,7 @@ export async function checkRecentFeedback(userId: string, withinMinutes = 5): Pr
     const querySnapshot = await getDocs(q);
 
     return !querySnapshot.empty;
-  } catch (_error: unknown) {
+  } catch (error: unknown) {
     return false;
   }
 }
@@ -263,7 +263,7 @@ export async function getAverageRating(): Promise<{ averageRating: number; total
     const averageRating = count > 0 ? totalRating / count : 0;
 
     return { averageRating, totalRatings: count };
-  } catch (_error: unknown) {
+  } catch (error: unknown) {
     return { averageRating: 0, totalRatings: 0 };
   }
 }

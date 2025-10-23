@@ -40,7 +40,7 @@ export interface CacheStrategyOptions<T> {
   /** Callback when data is revalidated */
   onRevalidate?: (data: T) => void;
   /** Callback on error */
-  onError?: (_error: unknown) => void;
+  onError?: (error: unknown) => void;
 }
 
 /**

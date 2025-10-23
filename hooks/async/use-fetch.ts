@@ -9,7 +9,7 @@ export interface UseFetchOptions extends RequestInit {
   /** Callback on successful fetch */
   onSuccess?: (data: any) => void;
   /** Callback on error */
-  onError?: (_error: Error) => void;
+  onError?: (error: Error) => void;
   /** Transform response data before setting state */
   transform?: (data: any) => any;
   /** Retry configuration */
@@ -190,7 +190,7 @@ export function useFetch<T = any>(url: string, options: UseFetchOptions = {}): U
           }
 
           return;
-        } catch (_error: unknown) {
+        } catch (error: unknown) {
           // Ignore abort errors
           if (_error instanceof Error && _error.name === 'AbortError') {
             return;

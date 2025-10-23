@@ -128,7 +128,7 @@ export function useFlowState(config: FlowConfig, initialData: Record<string, any
   /**
    * Set errors
    */
-  const setErrors = useCallback((_errors: Record<string, string>) => {
+  const setErrors = useCallback((errors: Record<string, string>) => {
     setState((prevState) => ({
       ...prevState,
       errors,

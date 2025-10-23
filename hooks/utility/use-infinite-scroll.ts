@@ -19,7 +19,7 @@ export interface UseInfiniteScrollOptions<T> {
   /** Callback when all items are loaded */
   onComplete?: () => void;
   /** Callback on error */
-  onError?: (_error: unknown) => void;
+  onError?: (error: unknown) => void;
 }
 
 export interface UseInfiniteScrollReturn<T> {
