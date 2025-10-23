@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @module utils/registration-validator
  * @description Centralized validation utilities for registration form fields
  * Provides regex patterns and validation functions for all registration inputs

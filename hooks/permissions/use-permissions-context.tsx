@@ -1,7 +1,7 @@
 /**
  * Permissions Context
  * Centralized permissions management
- * 
+ *
  * Features:
  * - Real-time permission status tracking
  * - Permission request handlers
@@ -10,7 +10,7 @@
  * - Permission change notifications
  */
 
-import type { DEFAULT_PERMISSIONS_STATE, PermissionsContextState, PermissionsStatusMap, PermissionStatus } from '@/types/permission';
+import type { PermissionsContextState, PermissionsStatusMap, PermissionStatus } from '@/types/permission';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
@@ -102,7 +102,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
         console.error('[PermissionsContext] Permissions checked:', newPermissions);
       }
     } catch (_error: unknown) {
-      console.error('[PermissionsContext] Failed to check permissions:', error);
+      console.error('[PermissionsContext] Failed to check permissions:', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
@@ -137,7 +137,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
 
       return granted;
     } catch (_error: unknown) {
-      console.error('[PermissionsContext] Failed to request camera permission:', error);
+      console.error('[PermissionsContext] Failed to request camera permission:', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
@@ -173,7 +173,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
 
       return granted;
     } catch (_error: unknown) {
-      console.error('[PermissionsContext] Failed to request media library permission:', error);
+      console.error('[PermissionsContext] Failed to request media library permission:', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
@@ -209,7 +209,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
 
       return granted;
     } catch (_error: unknown) {
-      console.error('[PermissionsContext] Failed to request location permission:', error);
+      console.error('[PermissionsContext] Failed to request location permission:', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
@@ -245,7 +245,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
 
       return granted;
     } catch (_error: unknown) {
-      console.error('[PermissionsContext] Failed to request notification permission:', error);
+      console.error('[PermissionsContext] Failed to request notification permission:', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
@@ -280,12 +280,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
    * Request all permissions
    */
   const requestAllPermissions = useCallback(async () => {
-    await Promise.all([
-      requestCameraPermission(),
-      requestMediaLibraryPermission(),
-      requestLocationPermission(),
-      requestNotificationPermission(),
-    ]);
+    await Promise.all([requestCameraPermission(), requestMediaLibraryPermission(), requestLocationPermission(), requestNotificationPermission()]);
   }, [requestCameraPermission, requestMediaLibraryPermission, requestLocationPermission, requestNotificationPermission]);
 
   /**
@@ -350,16 +345,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       areAllCriticalPermissionsGranted,
       getPermissionStatus,
     }),
-    [
-      state,
-      requestPermission,
-      requestAllPermissions,
-      checkAllPermissions,
-      openSettings,
-      isPermissionGranted,
-      areAllCriticalPermissionsGranted,
-      getPermissionStatus,
-    ]
+    [state, requestPermission, requestAllPermissions, checkAllPermissions, openSettings, isPermissionGranted, areAllCriticalPermissionsGranted, getPermissionStatus]
   );
 
   return <PermissionsContext.Provider value={contextValue}>{children}</PermissionsContext.Provider>;
