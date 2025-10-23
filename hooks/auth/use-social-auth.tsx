@@ -220,7 +220,7 @@ export function useSocialAuth() {
       // Note: Facebook authentication integration is pending
       // See docs/FACEBOOK_AUTH_IMPLEMENTATION.md for complete implementation guide
       const errorMessage = ERROR_MESSAGES.FACEBOOK_PENDING.replace('{appId}', Config.services.facebookAppId || 'Not configured');
-      throw new Error(_errorMessage);
+      throw new Error(errorMessage);
     } catch (_error: unknown) {
       await provideErrorFeedback(_error);
     } finally {

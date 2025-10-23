@@ -217,7 +217,7 @@ export function useGeolocation(options: UseGeolocationOptions = {}): Geolocation
           setState({
             location: null,
             loading: false,
-            error: error instanceof Error ? error.message : 'Location error',
+            error: _error instanceof Error ? _error.message : 'Location error',
             permission: 'denied',
           });
         }

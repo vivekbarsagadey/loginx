@@ -126,7 +126,7 @@ export function useForm<T extends Record<string, unknown>>(options: UseFormOptio
   });
 
   // Check if form is valid (no errors)
-  const isValid = Object.keys(_errors).length === 0;
+  const isValid = Object.keys(errors).length === 0;
 
   /**
    * Validate a single field
@@ -146,7 +146,7 @@ export function useForm<T extends Record<string, unknown>>(options: UseFormOptio
       // Run custom validation
       if (fieldValidation?.validate) {
         const error = await fieldValidation.validate(value, values);
-        if (_error) {
+        if (error) {
           setErrorsState((prev) => ({ ...prev, [field]: error }));
           return false;
         }

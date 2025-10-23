@@ -55,15 +55,15 @@ export function isFatalError(_error: unknown): boolean {
 /**
  * Type guard: Check if error is an Axios-like error
  */
-const isAxiosError = (_error: unknown): error is { isAxiosError: boolean; response?: unknown } => {
-  return typeof error === 'object' && error !== null && 'isAxiosError' in error;
+const isAxiosError = (_error: unknown): _error is { isAxiosError: boolean; response?: unknown } => {
+  return typeof _error === 'object' && _error !== null && 'isAxiosError' in _error;
 };
 
 /**
  * Type guard: Check if error has a code property (Firebase errors)
  */
-const hasErrorCode = (_error: unknown): error is { code: string } => {
-  return typeof error === 'object' && error !== null && 'code' in error && typeof (_error as { code: unknown }).code === 'string';
+const hasErrorCode = (_error: unknown): _error is { code: string } => {
+  return typeof _error === 'object' && _error !== null && 'code' in _error && typeof (_error as { code: unknown }).code === 'string';
 };
 
 /**
@@ -105,7 +105,7 @@ export const getErrorInfo = (_error: unknown): ErrorInfo => {
   }
 
   // Handle network/Axios errors
-  if (isAxiosError(_error) && !error.response) {
+  if (isAxiosError(_error) && !_error.response) {
     return {
       title: i18n.t('errors.network.title'),
       message: classified?.userMessage || i18n.t('errors.network.message'),
@@ -117,7 +117,7 @@ export const getErrorInfo = (_error: unknown): ErrorInfo => {
   if (_error instanceof Error) {
     return {
       title: i18n.t('errors.generic.title'),
-      message: classified?.userMessage || error.message || i18n.t('errors.generic.message'),
+      message: classified?.userMessage || _error.message || i18n.t('errors.generic.message'),
       isFatal: false,
     };
   }
@@ -143,7 +143,7 @@ export const showError = (_error: unknown): void => {
       globalErrorHandler(title, message);
     } else {
       // Fallback to logger if no handler is set (shouldn't happen in production)
-      logger.error(`[${title}] ${message}`, { error });
+      logger.error(`[${title}] ${message}`, { error: _error });
     }
   } catch (displayError: unknown) {
     // Fallback if error display fails - this is the last resort

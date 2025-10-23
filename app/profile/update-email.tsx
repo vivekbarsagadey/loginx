@@ -83,8 +83,8 @@ export default function UpdateEmailScreen() {
     onSuccess: () => back(),
     onError: (_error: unknown) => {
       // Handle specific Firebase errors
-      if (_error && typeof error === 'object' && 'code' in error) {
-        const firebaseError = error as { code: string; message: string };
+      if (_error && typeof _error === 'object' && 'code' in _error) {
+        const firebaseError = _error as { code: string; message: string };
         switch (firebaseError.code) {
           case 'auth/requires-recent-login':
             alert.show(i18n.t('screens.updateEmail.errors.reauthRequired.title'), i18n.t('screens.updateEmail.errors.reauthRequired.message'), [

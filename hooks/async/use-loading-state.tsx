@@ -8,7 +8,7 @@ interface UseLoadingStateOptions {
   /** Whether to show error alert automatically */
   showErrorAlert?: boolean;
   /** Custom error handler */
-  onError?: (_error: unknown) => void;
+  onError?: (error: unknown) => void;
 }
 
 /**
@@ -50,7 +50,7 @@ export function useLoadingState(options: UseLoadingStateOptions = {}) {
           onError(err);
         }
 
-        return { success: false, _error: err };
+        return { success: false, error: err };
       } finally {
         setLoading(false);
       }

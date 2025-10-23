@@ -66,8 +66,8 @@ export function initializeFirestoreMonitoring(): void {
 
     if (attempt >= maxAttempts) {
       const error = new Error('Firestore initialization timeout');
-      debugWarn('[FirestoreReady] ❌ Firestore initialization timed out', _error);
-      updateReadyState({ ready: false, loading: false, _error });
+      debugWarn('[Warning]', error);
+      updateReadyState({ ready: false, loading: false, error: error });
       return;
     }
 
@@ -95,7 +95,7 @@ function updateReadyState(newState: Partial<FirestoreReadyState>): void {
       try {
         listener(firestoreReadyState.ready);
       } catch (_error: unknown) {
-        debugWarn('[FirestoreReady] Listener _error', _error);
+        debugWarn('[Warning]', _error);
       }
     });
   }
@@ -184,7 +184,7 @@ export async function whenFirestoreReady<T>(fn: () => Promise<T> | T, options: {
     await waitForFirestore(timeout);
     return await fn();
   } catch (_error: unknown) {
-    debugWarn('[FirestoreReady] Operation failed, Firestore not ready', _error);
+    debugWarn('[Warning]', _error);
 
     // Use fallback if provided
     if (fallback) {

@@ -78,7 +78,7 @@ export function checkFirebaseConfig(): DiagnosticResult[] {
   } catch (_error: unknown) {
     results.push({
       category: 'Firebase',
-      status: '_error',
+      status: 'error',
       message: 'Error checking Firebase configuration',
       details: _error instanceof Error ? _error.message : 'Unknown _error',
     });
@@ -114,7 +114,7 @@ export function validateFormSchema(schema: unknown): DiagnosticResult[] {
   } catch (_error: unknown) {
     results.push({
       category: 'Schema',
-      status: '_error',
+      status: 'error',
       message: 'Error validating schema',
       details: _error instanceof Error ? _error.message : 'Unknown _error',
     });
@@ -147,7 +147,7 @@ export function checkNavigationSetup(): DiagnosticResult[] {
   } catch (_error: unknown) {
     results.push({
       category: 'Navigation',
-      status: '_error',
+      status: 'error',
       message: 'Navigation configuration _error',
       details: _error instanceof Error ? _error.message : 'Unknown _error',
     });
@@ -235,7 +235,7 @@ export function checkKeyboardAvoidingView(): DiagnosticResult[] {
   } catch (_error: unknown) {
     results.push({
       category: 'Keyboard',
-      status: '_error',
+      status: 'error',
       message: 'Error checking keyboard setup',
       details: _error instanceof Error ? _error.message : 'Unknown _error',
     });

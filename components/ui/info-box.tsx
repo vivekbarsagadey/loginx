@@ -27,7 +27,7 @@ export function InfoBox({ message, icon = 'info', variant = 'info', style }: Inf
     info: primaryColor,
     success: successColor,
     warning: warningColor,
-    _error: errorColor,
+    error: errorColor,
   };
 
   const color = variantColors[variant];

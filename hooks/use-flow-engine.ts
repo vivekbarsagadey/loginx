@@ -108,7 +108,7 @@ export function useFlowEngine(config: FlowConfig, options: UseFlowEngineOptions 
 
     const interval = setInterval(() => {
       saveState().catch((_error) => {
-        console._error('Failed to auto-save flow state:', _error);
+        console.error('Failed to auto-save flow state:', _error);
         onError?.(_error as Error, currentStep.id);
       });
     }, autoSaveInterval);
@@ -153,7 +153,7 @@ export function useFlowEngine(config: FlowConfig, options: UseFlowEngineOptions 
       // Save state after navigation
       if (enablePersistence) {
         saveState().catch((_error) => {
-          console._error('Failed to save state after going back:', _error);
+          console.error('Failed to save state after going back:', _error);
         });
       }
     } catch (_error: unknown) {
@@ -197,7 +197,7 @@ export function useFlowEngine(config: FlowConfig, options: UseFlowEngineOptions 
         // Save state after jumping
         if (enablePersistence) {
           saveState().catch((_error) => {
-            console._error('Failed to save state after jumping:', _error);
+            console.error('Failed to save state after jumping:', _error);
           });
         }
       } catch (_error: unknown) {

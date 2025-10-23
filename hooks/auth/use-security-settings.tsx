@@ -29,7 +29,7 @@ interface RateLimitInfo {
 
 interface SecurityState extends SecuritySettings {
   isLoading: boolean;
-  _error: string | null;
+  error: string | null;
   rateLimitInfo: RateLimitInfo;
 }
 
@@ -65,7 +65,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
     securityNotifications: true,
     loginAttempts: 0,
     isLoading: true,
-    _error: null,
+    error: null,
     rateLimitInfo: {
       attemptsInWindow: 0,
       windowStart: Date.now(),
@@ -180,7 +180,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
    */
   const loadSecuritySettings = useCallback(async (): Promise<void> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       const [autoLockSettings, securityNotifications, loginAttempts] = await Promise.all([
         SecurityStorage.getAutoLockSettings(),
@@ -203,7 +203,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        _error: 'Failed to load security settings',
+        error: 'Failed to load security settings',
       }));
     }
   }, []);
@@ -213,7 +213,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
    */
   const updateAutoLock = async (enabled: boolean, timeout?: number): Promise<void> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       const newTimeout = timeout || state.autoLockTimeout;
       await SecurityStorage.setAutoLock(enabled, newTimeout);
@@ -231,7 +231,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        _error: 'Failed to update auto-lock settings',
+        error: 'Failed to update auto-lock settings',
       }));
     }
   };
@@ -241,7 +241,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
    */
   const updateSecurityNotifications = async (enabled: boolean): Promise<void> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       await SecurityStorage.setSecurityNotifications(enabled);
 
@@ -257,7 +257,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        _error: 'Failed to update security notifications',
+        error: 'Failed to update security notifications',
       }));
     }
   };

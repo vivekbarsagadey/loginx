@@ -129,7 +129,7 @@ export async function contactSupport(subject?: string, _errorContext?: ErrorCont
     logger.error('Error contacting support', _error as Error);
     return {
       success: false,
-      _error: _error instanceof Error ? _error.message : i18n.t('errors.support.emailFailed'),
+      error: _error instanceof Error ? _error.message : i18n.t('errors.support.emailFailed'),
     };
   }
 }
@@ -176,15 +176,15 @@ export function getErrorContextForSupport(_error: unknown): ErrorContext {
   };
 
   // Extract error code if available
-  if (typeof error === 'object' && error !== null && 'code' in error && typeof (_error as { code: unknown }).code === 'string') {
+  if (typeof _error === 'object' && _error !== null && 'code' in _error && typeof (_error as { code: unknown }).code === 'string') {
     context.errorCode = (_error as { code: string }).code;
   }
 
   // Extract error message
   if (_error instanceof Error) {
-    context.errorMessage = error.message;
-  } else if (typeof error === 'string') {
-    context.errorMessage = error;
+    context.errorMessage = _error.message;
+  } else if (typeof _error === 'string') {
+    context.errorMessage = _error;
   }
 
   return context;

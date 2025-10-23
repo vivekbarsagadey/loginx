@@ -165,7 +165,7 @@ export function sanitizeQueryValue(value: unknown): unknown {
  * Check if error is a Firestore network error that should be retried
  */
 function shouldRetryFirestoreError(_error: unknown): boolean {
-  if (typeof error === 'object' && error !== null && 'code' in error) {
+  if (typeof _error === 'object' && _error !== null && 'code' in _error) {
     const code = (_error as { code: string }).code;
     // Retry on network errors, but not on permission or validation errors
     const retryableCodes = ['unavailable', 'deadline-exceeded', 'resource-exhausted', 'internal', 'unknown', 'cancelled'];
@@ -374,10 +374,10 @@ export async function queryDocumentsSafe<T = DocumentData>(collectionRef: Collec
  */
 export function getFirestoreErrorMessage(_error: unknown): string {
   if (_error instanceof FirestoreError) {
-    return error.message;
+    return _error.message;
   }
 
-  if (typeof error === 'object' && error !== null && 'code' in error) {
+  if (typeof _error === 'object' && _error !== null && 'code' in _error) {
     const code = (_error as { code: string }).code;
 
     switch (code) {

@@ -12,7 +12,7 @@ import { useCallback, useEffect, useState } from 'react';
  *
  * @param key - The storage key (unique identifier)
  * @param initialValue - Initial value if key doesn't exist
- * @returns Tuple of [value, setValue, remove, loading, _error]
+ * @returns Tuple of [value, setValue, remove, loading, error]
  *
  * @example
  * ```typescript
@@ -138,5 +138,5 @@ export function useSecureStorage<T>(key: string, initialValue: T): [T, (value: T
     }
   }, [key, initialValue]);
 
-  return [storedValue, setValue, remove, loading, _error];
+  return [storedValue, setValue, remove, loading, error];
 }

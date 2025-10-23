@@ -153,7 +153,7 @@ export const validateRequiredConfig = (): void => {
     const errorMessage = `CRITICAL: Missing required Firebase configuration: ${missingList}. Please check your .env file and ensure all Firebase credentials are properly configured.`;
 
     // SECURITY: Fail fast in all environments (development and production)
-    throw new Error(_errorMessage);
+    throw new Error(errorMessage);
   }
 };
 

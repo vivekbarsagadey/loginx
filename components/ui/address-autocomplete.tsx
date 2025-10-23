@@ -119,7 +119,7 @@ export function AddressAutocomplete({ onAddressSelect, initialValue, googleApiKe
           }
         }}
         onFail={(_error) => {
-          logger.error('GooglePlacesAutocomplete _error:', _error);
+          logger.error('GooglePlacesAutocomplete error:', _error);
         }}
         query={{
           key: isValidApiKey ? googleApiKey : '',

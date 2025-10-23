@@ -29,7 +29,7 @@ export interface UseRegistrationStateDependencies {
   /** Function to create user profile in database */
   createUserProfile: (userId: string, profileData: any) => Promise<void>;
   /** Function to show error messages to user */
-  showError: (_error: unknown) => void;
+  showError: (error: unknown) => void;
   /** Optional logger for debugging */
   logger?: {
     log: (...args: any[]) => void;

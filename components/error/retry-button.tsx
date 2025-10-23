@@ -51,7 +51,7 @@ export function RetryButton({ onRetry, error, maxRetries = 3, initialDelay = 100
   const [nextRetryIn, setNextRetryIn] = useState(0);
 
   // Check if error is retryable
-  const canRetry = !error || isRetryable(_error);
+  const canRetry = !error || isRetryable(error);
   const retriesExhausted = retryCount >= maxRetries;
   const isDisabled = disabled || !canRetry || retriesExhausted;
 

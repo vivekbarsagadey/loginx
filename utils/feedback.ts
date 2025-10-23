@@ -136,7 +136,7 @@ export const executeWithFeedback = async <T>(
     return result;
   } catch (_error: unknown) {
     // Error feedback
-    if (_errorConfig?.customHandler) {
+    if (errorConfig?.customHandler) {
       errorConfig.customHandler(_error);
     } else {
       await provideErrorFeedback(_error);

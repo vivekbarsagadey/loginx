@@ -198,15 +198,15 @@ export function useShare(): UseShareReturn {
       return shareResult;
     } catch (_error) {
       const errorObj = _error instanceof Error ? _error : new Error('Failed to share content');
-      setError(_errorObj);
+      setError(errorObj);
 
       const shareResult: ShareResult = {
         success: false,
-        _error: errorObj,
+        error: errorObj,
       };
 
       if (onError) {
-        onError(_errorObj);
+        onError(errorObj);
       }
 
       setLastResult(shareResult);

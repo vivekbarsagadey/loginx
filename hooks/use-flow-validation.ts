@@ -65,7 +65,7 @@ async function validateFormStep(step: FormStepConfig, data: Record<string, any>)
   }
 
   // Run step-level validation schema
-  if (step.validationSchema && Object.keys(_errors).length === 0) {
+  if (step.validationSchema && Object.keys(errors).length === 0) {
     try {
       // Extract field values
       const fieldValues: Record<string, any> = {};
@@ -88,7 +88,7 @@ async function validateFormStep(step: FormStepConfig, data: Record<string, any>)
   }
 
   return {
-    valid: Object.keys(_errors).length === 0,
+    valid: Object.keys(errors).length === 0,
     errors,
   };
 }

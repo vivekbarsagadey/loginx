@@ -64,7 +64,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
     app: DEFAULT_APP_PREFERENCES,
     privacy: DEFAULT_PRIVACY_SETTINGS,
     isLoading: true,
-    _error: null,
+    error: null,
     lastSyncedAt: null,
   });
 
@@ -73,7 +73,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
    */
   const loadSettings = useCallback(async () => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       const [notifications, security, app, privacy] = await Promise.all([
         getData<NotificationSettings>({ collection: 'settings', id: SETTINGS_NOTIFICATIONS_KEY, syncEnabled: false }),
@@ -100,7 +100,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        _error: 'Failed to load settings',
+        error: 'Failed to load settings',
       }));
     }
   }, []);
@@ -153,7 +153,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
         setState((prev) => ({
           ...prev,
           notifications: state.notifications,
-          _error: 'Failed to update notification settings',
+          error: 'Failed to update notification settings',
         }));
         throw _error;
       }
@@ -181,7 +181,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
         setState((prev) => ({
           ...prev,
           security: state.security,
-          _error: 'Failed to update security settings',
+          error: 'Failed to update security settings',
         }));
         throw _error;
       }
@@ -209,7 +209,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
         setState((prev) => ({
           ...prev,
           app: state.app,
-          _error: 'Failed to update app preferences',
+          error: 'Failed to update app preferences',
         }));
         throw _error;
       }
@@ -237,7 +237,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
         setState((prev) => ({
           ...prev,
           privacy: state.privacy,
-          _error: 'Failed to update privacy settings',
+          error: 'Failed to update privacy settings',
         }));
         throw _error;
       }
@@ -274,7 +274,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
         app: DEFAULT_APP_PREFERENCES,
         privacy: DEFAULT_PRIVACY_SETTINGS,
         isLoading: false,
-        _error: null,
+        error: null,
         lastSyncedAt: null,
       });
 
@@ -286,7 +286,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        _error: 'Failed to reset settings',
+        error: 'Failed to reset settings',
       }));
     }
   }, []);
@@ -331,7 +331,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
           }
         },
         (_error) => {
-          console.error('[SettingsContext] Notifications sync _error:', _error);
+          console.error('[SettingsContext] Notifications sync error:', _error);
         }
       )
     );
@@ -351,7 +351,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
           }
         },
         (_error) => {
-          console.error('[SettingsContext] Security sync _error:', _error);
+          console.error('[SettingsContext] Security sync error:', _error);
         }
       )
     );
@@ -371,7 +371,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
           }
         },
         (_error) => {
-          console.error('[SettingsContext] App sync _error:', _error);
+          console.error('[SettingsContext] App sync error:', _error);
         }
       )
     );
@@ -391,7 +391,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
           }
         },
         (_error) => {
-          console.error('[SettingsContext] Privacy sync _error:', _error);
+          console.error('[SettingsContext] Privacy sync error:', _error);
         }
       )
     );

@@ -316,5 +316,5 @@ export function validateRegistrationForm(data: RegistrationData): RegistrationVa
     isValid = false;
   }
 
-  return { isValid, _errors };
+  return { isValid, errors };
 }

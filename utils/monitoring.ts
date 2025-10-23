@@ -162,10 +162,10 @@ export function captureError(error: Error, context?: Record<string, unknown>): v
     if (context) {
       Sentry.setContext('error_context', context);
     }
-    Sentry.captureException(_error);
-    logger.error('Error captured:', { error: _error, context });
+    Sentry.captureException(error);
+    logger.error('[Error]', { error, context });
   } catch (_err) {
-    logger.error('Failed to capture error:', _error);
+    logger.error('Failed to capture error:', _err);
   }
 }
 

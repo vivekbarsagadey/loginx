@@ -68,7 +68,7 @@ export function ThemedDot({ size = 'sm', variant = 'primary', color, pulse = fal
     primary: primaryColor,
     success: successColor,
     warning: warningColor,
-    _error: errorColor,
+    error: errorColor,
     info: infoColor,
     muted: mutedColor,
   };

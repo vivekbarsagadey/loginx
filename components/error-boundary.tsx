@@ -9,13 +9,13 @@ import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 
 interface Props {
   children: ReactNode;
-  fallback?: (_error: Error | null) => ReactNode;
-  onError?: (_error: Error, errorInfo: ErrorInfo) => void;
+  fallback?: (error: Error | null) => ReactNode;
+  onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
 
 interface State {
   hasError: boolean;
-  _error: Error | null;
+  error: Error | null;
   errorInfo: ErrorInfo | null;
 }
 
@@ -28,37 +28,37 @@ export class ErrorBoundary extends Component<Props, State> {
     super(props);
     this.state = {
       hasError: false,
-      _error: null,
+      error: null,
       errorInfo: null,
     };
   }
 
-  static getDerivedStateFromError(_error: Error): Partial<State> {
+  static getDerivedStateFromError(error: Error): Partial<State> {
     return {
       hasError: true,
       error,
     };
   }
 
-  componentDidCatch(_error: Error, errorInfo: ErrorInfo): void {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Log error to console for debugging
-    console.error('[ErrorBoundary] Caught _error:', _error);
+    console.error('[ErrorBoundary] Caught error:', error);
     console.error('[ErrorBoundary] Error info:', errorInfo);
 
     // Store error info for display
     this.setState({ errorInfo });
 
     // Call custom error handler if provided
-    this.props.onError?.(_error, errorInfo);
+    this.props.onError?.(error, errorInfo);
 
     // You can also log to an error reporting service here
-    // Example: Sentry.captureException(_error, { extra: errorInfo });
+    // Example: Sentry.captureException(error, { extra: errorInfo });
   }
 
   handleReset = (): void => {
     this.setState({
       hasError: false,
-      _error: null,
+      error: null,
       errorInfo: null,
     });
   };
@@ -76,7 +76,7 @@ export class ErrorBoundary extends Component<Props, State> {
  * Default fallback UI shown when an error is caught
  * Provides comprehensive recovery options for users
  */
-function ErrorFallback({ error, resetError }: { _error: Error | null; resetError?: () => void }) {
+function ErrorFallback({ error, resetError }: { error: Error | null; resetError?: () => void }) {
   const router = useRouter();
   const colors = useThemeColors();
 

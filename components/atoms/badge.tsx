@@ -43,7 +43,7 @@ export function Badge({ label, variant = 'primary', size = 'md', style, accessib
     primary: { bg: themeColors.primary, text: themeColors['on-primary'] },
     success: { bg: themeColors.success, text: themeColors['on-primary'] },
     warning: { bg: themeColors.warning, text: themeColors['on-primary'] },
-    _error: { bg: themeColors.error, text: themeColors['on-primary'] },
+    error: { bg: themeColors.error, text: themeColors['on-primary'] },
     info: { bg: themeColors.info, text: themeColors['on-primary'] },
     neutral: { bg: themeColors.surface, text: themeColors.text },
   };

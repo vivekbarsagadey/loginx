@@ -50,7 +50,7 @@ export function FirestoreStatusIndicator() {
           }
         }
       } catch (_error: unknown) {
-        setStatus('_error');
+        setStatus('error');
         setStatusInfo(_error instanceof Error ? _error.message.slice(0, 30) : 'Init failed');
         debugLog('[FirestoreStatus] Error checking status:', _error);
       }

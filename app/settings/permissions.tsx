@@ -125,7 +125,7 @@ export default function PermissionsScreen() {
     try {
       await requestPermission(type);
     } catch (_error: unknown) {
-      console._error('Failed to request permission:', _error);
+      console.error('Failed to request permission:', _error);
     }
   };
 

@@ -131,5 +131,5 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
     }
   }, [key, initialValue]);
 
-  return [storedValue, setValue, remove, loading, _error];
+  return [storedValue, setValue, remove, loading, error];
 }

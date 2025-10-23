@@ -62,8 +62,8 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
       }));
 
       debugLog(`[TwoFactorAuth] Loaded settings - Enabled: ${isEnabled}, Backup codes: ${backupCodes.length}`);
-    } catch (error: unknown) {
-      debugError('[TwoFactorAuth] Failed to load 2FA settings', error);
+    } catch (_error: unknown) {
+      debugError('[TwoFactorAuth] Failed to load 2FA settings', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
@@ -94,8 +94,8 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
 
       debugLog('[TwoFactorAuth] 2FA enabled successfully');
       return true;
-    } catch (error: unknown) {
-      debugError('[TwoFactorAuth] Failed to enable 2FA', error);
+    } catch (_error: unknown) {
+      debugError('[TwoFactorAuth] Failed to enable 2FA', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
@@ -123,8 +123,8 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
       }));
 
       debugLog('[TwoFactorAuth] 2FA disabled successfully');
-    } catch (error: unknown) {
-      debugError('[TwoFactorAuth] Failed to disable 2FA', error);
+    } catch (_error: unknown) {
+      debugError('[TwoFactorAuth] Failed to disable 2FA', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
@@ -151,8 +151,8 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
 
       debugLog('[TwoFactorAuth] Generated new backup codes');
       return newBackupCodes;
-    } catch (error: unknown) {
-      debugError('[TwoFactorAuth] Failed to generate backup codes', error);
+    } catch (_error: unknown) {
+      debugError('[TwoFactorAuth] Failed to generate backup codes', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
@@ -188,8 +188,8 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
 
       debugLog('[TwoFactorAuth] Backup code used successfully');
       return true;
-    } catch (error: unknown) {
-      debugError('[TwoFactorAuth] Failed to use backup code', error);
+    } catch (_error: unknown) {
+      debugError('[TwoFactorAuth] Failed to use backup code', _error);
       setState((prev) => ({
         ...prev,
         error: 'Failed to use backup code',

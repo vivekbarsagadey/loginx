@@ -28,7 +28,7 @@ export function LinearProgress({ value, variant = 'primary', height = 4, showLab
   const indeterminatePosition = useSharedValue(-100);
 
   const variantColors = {
-    _error: errorColor,
+    error: errorColor,
     primary: primaryColor,
     success: successColor,
     warning: warningColor,
@@ -125,7 +125,7 @@ export function CircularProgress({ value, size = 40, variant = 'primary', showLa
   const errorColor = useThemeColor({}, 'error');
 
   const variantColors = {
-    _error: errorColor,
+    error: errorColor,
     primary: primaryColor,
     success: successColor,
     warning: warningColor,

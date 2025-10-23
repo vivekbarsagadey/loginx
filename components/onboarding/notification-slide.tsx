@@ -133,7 +133,7 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
       }
     } catch (_error: unknown) {
       logger.error('Error requesting notification permissions:', _error);
-      showAlert(i18n.t('onb.notifications._error.title'), i18n.t('onb.notifications._error.message'), [{ text: 'OK' }], { variant: '_error' });
+      showAlert(i18n.t('onb.notifications._error.title'), i18n.t('onb.notifications._error.message'), [{ text: 'OK' }], { variant: 'error' });
     } finally {
       setIsLoading(false);
     }

@@ -39,7 +39,7 @@ export function Snackbar({ message, variant = 'info', position = 'bottom', visib
   const opacity = useSharedValue(0);
 
   const variantColors = {
-    _error: errorColor,
+    error: errorColor,
     info: primaryColor,
     success: successColor,
     warning: warningColor,

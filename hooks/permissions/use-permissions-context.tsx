@@ -54,7 +54,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       notifications: { granted: false, canAskAgain: true },
     },
     isLoading: false,
-    _error: null,
+    error: null,
     lastCheckedAt: null,
   });
 
@@ -63,7 +63,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
    */
   const checkAllPermissions = useCallback(async () => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       const [cameraStatus, mediaLibraryStatus, locationStatus, notificationStatus] = await Promise.all([
         Camera.getCameraPermissionsAsync(),
@@ -106,7 +106,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        _error: 'Failed to check permissions',
+        error: 'Failed to check permissions',
       }));
     }
   }, []);
@@ -116,7 +116,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
    */
   const requestCameraPermission = useCallback(async (): Promise<boolean> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       const { status, canAskAgain } = await Camera.requestCameraPermissionsAsync();
       const granted = status === 'granted';
@@ -141,7 +141,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        _error: 'Failed to request camera permission',
+        error: 'Failed to request camera permission',
       }));
       return false;
     }
@@ -152,7 +152,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
    */
   const requestMediaLibraryPermission = useCallback(async (): Promise<boolean> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       const { status, canAskAgain } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       const granted = status === 'granted';
@@ -177,7 +177,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        _error: 'Failed to request media library permission',
+        error: 'Failed to request media library permission',
       }));
       return false;
     }
@@ -188,7 +188,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
    */
   const requestLocationPermission = useCallback(async (): Promise<boolean> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       const { status, canAskAgain } = await Location.requestForegroundPermissionsAsync();
       const granted = status === 'granted';
@@ -213,7 +213,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        _error: 'Failed to request location permission',
+        error: 'Failed to request location permission',
       }));
       return false;
     }
@@ -224,7 +224,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
    */
   const requestNotificationPermission = useCallback(async (): Promise<boolean> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       const { status, canAskAgain } = await Notifications.requestPermissionsAsync();
       const granted = status === 'granted';
@@ -249,7 +249,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        _error: 'Failed to request notification permission',
+        error: 'Failed to request notification permission',
       }));
       return false;
     }

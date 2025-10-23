@@ -61,15 +61,15 @@ export const logger = {
     const errorContext: LogContext = {};
 
     if (_error instanceof Error) {
-      errorContext.message = error.message;
-      errorContext.stack = error.stack;
-      errorContext.name = error.name;
+      errorContext.message = _error.message;
+      errorContext.stack = _error.stack;
+      errorContext.name = _error.name;
     } else if (_error) {
-      errorContext.error = error;
+      errorContext.error = _error;
     }
 
-    console.error(formatMessage('error', message), _errorContext);
-    sendToMonitoring('error', message, _errorContext);
+    console.error(formatMessage('error', message), errorContext);
+    sendToMonitoring('error', message, errorContext);
   },
 
   /**

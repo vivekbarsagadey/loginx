@@ -50,7 +50,7 @@ export default function IndexScreen() {
         }
       } catch (_error: unknown) {
         logger.error('Error fetching user profile:', _error);
-        alert.show('Error', 'Failed to fetch user profile.', [{ text: 'OK' }], { variant: '_error' });
+        alert.show('Error', 'Failed to fetch user profile.', [{ text: 'OK' }], { variant: 'error' });
       } finally {
         setLoading(false);
         setRefreshing(false);

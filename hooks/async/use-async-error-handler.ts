@@ -134,7 +134,7 @@ export function useAsyncErrorHandler(config?: UseAsyncErrorHandlerConfig) {
    */
   const handleAsync = useCallback(
     async <T = void>(asyncFn: () => Promise<T>, options: AsyncErrorHandlerOptions = {}): Promise<{ success: boolean; data?: T; error?: Error }> => {
-      const { successMessage, _errorMessage, successTitle = 'Success', _errorTitle = 'Error', showSuccessAlert = false, _errorHaptics = true, onError, onSuccess } = options;
+      const { successMessage, errorMessage, successTitle = 'Success', errorTitle = 'Error', showSuccessAlert = false, errorHaptics = true, onError, onSuccess } = options;
 
       try {
         const data = await asyncFn();
@@ -151,16 +151,16 @@ export function useAsyncErrorHandler(config?: UseAsyncErrorHandlerConfig) {
 
         return { success: true, data };
       } catch (_error: unknown) {
-        const err = error instanceof Error ? error : new Error(String(_error));
+        const err = _error instanceof Error ? _error : new Error(String(_error));
 
         // Provide haptic feedback on error
-        if (_errorHaptics) {
+        if (errorHaptics) {
           await getHapticFeedback();
         }
 
         // Show error alert
         const message = errorMessage || err.message || 'An unexpected error occurred';
-        alert.show(_errorTitle, message, [{ text: 'OK' }], { variant: 'error' });
+        alert.show(errorTitle, message, [{ text: 'OK' }], { variant: 'error' });
 
         // Call custom error handler
         if (onError) {
@@ -187,7 +187,7 @@ export function useAsyncErrorHandler(config?: UseAsyncErrorHandlerConfig) {
       const data = await asyncFn();
       return { success: true, data };
     } catch (_error: unknown) {
-      const err = error instanceof Error ? error : new Error(String(_error));
+      const err = _error instanceof Error ? _error : new Error(String(_error));
       return { success: false, error: err };
     }
   }, []);

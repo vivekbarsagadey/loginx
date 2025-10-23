@@ -16,7 +16,7 @@ interface UseFormSubmitOptions {
   /** Callback after successful submission */
   onSuccess?: () => void;
   /** Callback after failed submission */
-  onError?: (_error: unknown) => void;
+  onError?: (error: unknown) => void;
   /** Custom validation function */
   validate?: () => boolean | Promise<boolean>;
   /** Whether to show success alert */
@@ -80,8 +80,8 @@ export function useFormSubmit<T = void>(submitFn: () => Promise<T>, options: Use
 
       // Show error alert
       if (showErrorAlert) {
-        if (_errorMessage) {
-          showAlert(_errorTitle, errorMessage, [{ text: 'OK' }], { variant: 'error' });
+        if (errorMessage) {
+          showAlert(errorTitle, errorMessage, [{ text: 'OK' }], { variant: 'error' });
         } else {
           showError(_error);
         }
@@ -91,7 +91,7 @@ export function useFormSubmit<T = void>(submitFn: () => Promise<T>, options: Use
         onError(_error);
       }
 
-      return { success: false, _error: _error };
+      return { success: false, error: _error };
     } finally {
       setIsSubmitting(false);
     }

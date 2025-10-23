@@ -66,16 +66,16 @@ const RECOVERABLE_FIREBASE_CODES = ['auth/network-request-failed', 'auth/too-man
 /**
  * Type guard to check if error is a Firebase error
  */
-const isFirebaseError = (_error: unknown): error is FirebaseError => {
-  return typeof error === 'object' && error !== null && 'code' in error && 'message' in error && typeof (_error as { code: unknown }).code === 'string';
+const isFirebaseError = (_error: unknown): _error is FirebaseError => {
+  return typeof _error === 'object' && _error !== null && 'code' in _error && 'message' in _error && typeof (_error as { code: unknown }).code === 'string';
 };
 
 /**
  * Type guard to check if error is a network error
  */
 const isNetworkError = (_error: unknown): boolean => {
-  if (typeof error === 'object' && error !== null) {
-    const err = error as { code?: string; message?: string; isAxiosError?: boolean };
+  if (typeof _error === 'object' && _error !== null) {
+    const err = _error as { code?: string; message?: string; isAxiosError?: boolean };
     return err.isAxiosError === true || RECOVERABLE_NETWORK_CODES.some((code) => err.code === code || err.message?.includes(code)) || err.message?.toLowerCase().includes('network') === true;
   }
   return false;
@@ -194,12 +194,12 @@ export const classifyError = (_error: unknown): ClassifiedError => {
     return {
       severity: ErrorSeverity.RECOVERABLE,
       category: ErrorCategory.NETWORK,
-      message: error instanceof Error ? error.message : 'Network error occurred',
+      message: _error instanceof Error ? _error.message : 'Network error occurred',
       userMessage: i18n.t('errors.network.message'),
       recoverable: true,
       recoverySuggestions: getNetworkRecoverySuggestions(),
       retryable: true,
-      originalError: error,
+      originalError: _error,
     };
   }
 
@@ -207,49 +207,49 @@ export const classifyError = (_error: unknown): ClassifiedError => {
   if (isFirebaseError(_error)) {
     return {
       ...classifyFirebaseError(_error),
-      originalError: error,
+      originalError: _error,
     };
   }
 
   // Handle storage errors
-  if (_error instanceof Error && error.message.includes('storage')) {
+  if (_error instanceof Error && _error.message.includes('storage')) {
     return {
       severity: ErrorSeverity.RECOVERABLE,
       category: ErrorCategory.STORAGE,
-      message: error.message,
+      message: _error.message,
       userMessage: i18n.t('errors.storage.message'),
       recoverable: true,
       recoverySuggestions: getStorageRecoverySuggestions(),
       retryable: true,
-      originalError: error,
+      originalError: _error,
     };
   }
 
   // Handle validation errors
-  if (_error instanceof Error && error.message.includes('validation')) {
+  if (_error instanceof Error && _error.message.includes('validation')) {
     return {
       severity: ErrorSeverity.WARNING,
       category: ErrorCategory.VALIDATION,
-      message: error.message,
-      userMessage: error.message,
+      message: _error.message,
+      userMessage: _error.message,
       recoverable: true,
       recoverySuggestions: [i18n.t('errors.recovery.checkInput')],
       retryable: false,
-      originalError: error,
+      originalError: _error,
     };
   }
 
   // Handle initialization errors (fatal)
-  if (_error instanceof Error && (_error.message.includes('initialization') || error.message.includes('CRITICAL'))) {
+  if (_error instanceof Error && (_error.message.includes('initialization') || _error.message.includes('CRITICAL'))) {
     return {
       severity: ErrorSeverity.FATAL,
       category: ErrorCategory.INITIALIZATION,
-      message: error.message,
+      message: _error.message,
       userMessage: i18n.t('errors.initialization.message'),
       recoverable: false,
       recoverySuggestions: [i18n.t('errors.recovery.restartApp'), i18n.t('errors.recovery.reinstallApp'), i18n.t('errors.recovery.contactSupport')],
       retryable: false,
-      originalError: error,
+      originalError: _error,
     };
   }
 
@@ -257,12 +257,12 @@ export const classifyError = (_error: unknown): ClassifiedError => {
   return {
     severity: ErrorSeverity.RECOVERABLE,
     category: ErrorCategory.UNKNOWN,
-    message: error instanceof Error ? error.message : String(_error),
+    message: _error instanceof Error ? _error.message : String(_error),
     userMessage: i18n.t('errors.generic.message'),
     recoverable: true,
     recoverySuggestions: [i18n.t('errors.recovery.tryAgain'), i18n.t('errors.recovery.restartApp')],
     retryable: true,
-    originalError: error,
+    originalError: _error,
   };
 };
 

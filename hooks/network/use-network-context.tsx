@@ -43,7 +43,7 @@ export function NetworkProvider({ children }: PropsWithChildren) {
       failedCount: 0,
     },
     isMonitoring: false,
-    _error: null,
+    error: null,
   });
 
   /**
@@ -59,7 +59,7 @@ export function NetworkProvider({ children }: PropsWithChildren) {
         connectionType: status.connectionType as ConnectionType,
         isInternetReachable: status.isInternetReachable,
         isAirplaneMode: !status.isConnected && status.connectionType === 'none',
-        _error: null,
+        error: null,
       }));
 
       if (__DEV__) {
@@ -69,7 +69,7 @@ export function NetworkProvider({ children }: PropsWithChildren) {
       console.error('[NetworkContext] Failed to refresh status:', _error);
       setState((prev) => ({
         ...prev,
-        _error: 'Failed to refresh network status',
+        error: 'Failed to refresh network status',
       }));
     }
   }, []);

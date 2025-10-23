@@ -157,7 +157,7 @@ export default function TwoFactorAuthScreen() {
     );
   }
 
-  if (_error) {
+  if (error) {
     return (
       <>
         <ScreenContainer>

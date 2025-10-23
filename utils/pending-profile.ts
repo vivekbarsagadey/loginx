@@ -82,7 +82,7 @@ export async function applyPendingProfileData(user: User): Promise<boolean> {
 
     return true;
   } catch (_error: unknown) {
-    console._error('Failed to apply pending profile data:', _error);
+    console.error('Failed to apply pending profile data:', _error);
     // Don't throw - this is a non-critical operation
     return false;
   }
