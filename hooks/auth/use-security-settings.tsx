@@ -112,7 +112,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
         isRateLimited,
         resetIn: isRateLimited ? resetIn : 0,
       };
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       debugError('[SecuritySettings] Failed to get rate limit data', error);
       return {
         attemptsInWindow: 0,
@@ -129,7 +129,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
   const saveRateLimitData = async (data: Omit<RateLimitInfo, 'isRateLimited' | 'resetIn'>): Promise<void> => {
     try {
       await SecurityStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       debugError('[SecuritySettings] Failed to save rate limit data', error);
     }
   };
@@ -198,7 +198,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
       }));
 
       debugLog(`[SecuritySettings] Loaded settings - Auto-lock: ${autoLockSettings.enabled}, Notifications: ${securityNotifications}, Login attempts: ${loginAttempts}`);
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       debugError('[SecuritySettings] Failed to load security settings', error);
       setState((prev) => ({
         ...prev,
@@ -226,7 +226,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
       }));
 
       debugLog(`[SecuritySettings] Updated auto-lock - Enabled: ${enabled}, Timeout: ${newTimeout}min`);
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       debugError('[SecuritySettings] Failed to update auto-lock settings', error);
       setState((prev) => ({
         ...prev,
@@ -252,7 +252,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
       }));
 
       debugLog(`[SecuritySettings] Updated security notifications: ${enabled}`);
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       debugError('[SecuritySettings] Failed to update security notifications', error);
       setState((prev) => ({
         ...prev,
@@ -276,7 +276,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
       }));
 
       debugLog(`[SecuritySettings] Incremented login attempts to: ${newAttempts}`);
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       debugError('[SecuritySettings] Failed to increment login attempts', error);
     }
   };
@@ -294,7 +294,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
       }));
 
       debugLog('[SecuritySettings] Reset login attempts');
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       debugError('[SecuritySettings] Failed to reset login attempts', error);
     }
   };

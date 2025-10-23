@@ -8,7 +8,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as Haptics from 'expo-haptics';
-import { type Auth, createUserWithEmailAndPassword, deleteUser, sendEmailVerification, type User } from 'firebase/auth';
+import { type _User, type Auth, createUserWithEmailAndPassword, deleteUser, sendEmailVerification } from 'firebase/auth';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -368,7 +368,7 @@ export function useRegistrationState(options: UseRegistrationStateOptions = {}) 
       // Call success callback
       const hasPhoneNumber = Boolean(sanitizedData.phoneNumber && sanitizedData.phoneNumber.trim());
       onSuccess?.(user.uid, hasPhoneNumber);
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       logger.error('Registration error:', error);
 
       if (error instanceof Error) {

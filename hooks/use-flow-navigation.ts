@@ -14,7 +14,7 @@ function shouldShowStep(step: StepConfig, data: Record<string, any>): boolean {
   if (!step.condition) {return true;}
   try {
     return step.condition(data);
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     console.error('Error evaluating step condition:', error);
     return false;
   }

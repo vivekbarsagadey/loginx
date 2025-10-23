@@ -166,7 +166,7 @@ describe('Memory Leak Detection', () => {
           // Large data that should be released
           const largeData = new Array(10000).fill({ value: 'test' });
 
-          const handler = () => {
+          const _handler = () => {
             // Capture reference (potential leak)
             capturedData = largeData;
           };

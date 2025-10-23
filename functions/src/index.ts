@@ -35,7 +35,7 @@ export const validateLogin = onCall(async (request: any) => {
       success: true,
       message: 'Login validation passed',
     };
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     if (error instanceof Error) {
       if (error.message.includes('Rate limit exceeded')) {
         throw new HttpsError('resource-exhausted', error.message);
@@ -83,7 +83,7 @@ export const validateRegistration = onCall(async (request: any) => {
       success: true,
       message: 'Registration validation passed',
     };
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     if (error instanceof Error) {
       if (error.message.includes('Rate limit exceeded')) {
         throw new HttpsError('resource-exhausted', error.message);
@@ -126,7 +126,7 @@ export const recordLoginAttempt = onCall(async (request: any) => {
       success: true,
       message: 'Login attempt recorded',
     };
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     console.error('Failed to record login attempt:', error);
     // Don't throw - logging failures shouldn't block auth
     return {
@@ -163,7 +163,7 @@ export const validatePasswordReset = onCall(async (request: any) => {
       success: true,
       message: 'Password reset validation passed',
     };
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     if (error instanceof Error) {
       if (error.message.includes('Rate limit exceeded')) {
         throw new HttpsError('resource-exhausted', error.message);
@@ -192,7 +192,7 @@ export const validateEmailVerification = onCall(async (request: any) => {
       success: true,
       message: 'Email verification validation passed',
     };
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     if (error instanceof Error) {
       if (error.message.includes('Rate limit exceeded')) {
         throw new HttpsError('resource-exhausted', error.message);
@@ -211,7 +211,7 @@ export const scheduledRateLimitCleanup = onSchedule('0 2 * * *', async () => {
     await cleanupExpiredRateLimits();
      
     console.error('Rate limit cleanup completed successfully');
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     console.error('Rate limit cleanup failed:', error);
   }
 });
@@ -252,7 +252,7 @@ export const getRateLimitStatus = onCall(async (request: any) => {
       count: records.length,
       records,
     };
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     if (error instanceof HttpsError) {
       throw error;
     }

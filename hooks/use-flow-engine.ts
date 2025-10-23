@@ -8,7 +8,7 @@
  * @see plan/feature-unified-flow-system-1.md for specification
  */
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { _useState, useCallback, useEffect, useMemo } from 'react';
 import { 
   type FlowConfig, 
   type FlowContextValue, 
@@ -171,7 +171,7 @@ export function useFlowEngine(
       if (enablePersistence) {
         await saveState();
       }
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('Error navigating to next step:', error);
       onError?.(error as Error, currentStep.id);
     }
@@ -199,7 +199,7 @@ export function useFlowEngine(
           console.error('Failed to save state after going back:', error);
         });
       }
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('Error navigating to previous step:', error);
       onError?.(error as Error, currentStep.id);
     }
@@ -223,7 +223,7 @@ export function useFlowEngine(
       if (enablePersistence) {
         await saveState();
       }
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('Error skipping step:', error);
       onError?.(error as Error, currentStep.id);
     }
@@ -253,7 +253,7 @@ export function useFlowEngine(
             console.error('Failed to save state after jumping:', error);
           });
         }
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         console.error('Error jumping to step:', error);
         onError?.(error as Error, currentStep.id);
       }
@@ -291,7 +291,7 @@ export function useFlowEngine(
 
       // Mark flow as completed
       await complete();
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('Error completing flow:', error);
       onError?.(error as Error, currentStep.id);
       throw error;

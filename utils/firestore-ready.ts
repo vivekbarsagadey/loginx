@@ -94,7 +94,7 @@ function updateReadyState(newState: Partial<FirestoreReadyState>): void {
     readyListeners.forEach((listener) => {
       try {
         listener(firestoreReadyState.ready);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         debugWarn('[FirestoreReady] Listener error', error);
       }
     });
@@ -183,7 +183,7 @@ export async function whenFirestoreReady<T>(fn: () => Promise<T> | T, options: {
   try {
     await waitForFirestore(timeout);
     return await fn();
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugWarn('[FirestoreReady] Operation failed, Firestore not ready', error);
 
     // Use fallback if provided

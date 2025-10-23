@@ -73,7 +73,7 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions =
   for (let attempt = 0; attempt <= opts.maxRetries; attempt++) {
     try {
       return await fn();
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       lastError = error;
 
       // Check if we should retry this error

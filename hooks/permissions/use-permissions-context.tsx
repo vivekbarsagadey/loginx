@@ -101,7 +101,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       if (__DEV__) {
         console.error('[PermissionsContext] Permissions checked:', newPermissions);
       }
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('[PermissionsContext] Failed to check permissions:', error);
       setState((prev) => ({
         ...prev,
@@ -136,7 +136,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       }
 
       return granted;
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('[PermissionsContext] Failed to request camera permission:', error);
       setState((prev) => ({
         ...prev,
@@ -172,7 +172,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       }
 
       return granted;
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('[PermissionsContext] Failed to request media library permission:', error);
       setState((prev) => ({
         ...prev,
@@ -208,7 +208,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       }
 
       return granted;
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('[PermissionsContext] Failed to request location permission:', error);
       setState((prev) => ({
         ...prev,
@@ -244,7 +244,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       }
 
       return granted;
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('[PermissionsContext] Failed to request notification permission:', error);
       setState((prev) => ({
         ...prev,

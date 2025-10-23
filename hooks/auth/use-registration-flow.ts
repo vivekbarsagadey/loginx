@@ -79,7 +79,7 @@ export function useRegistrationFlow<T extends Record<string, unknown>>({ steps, 
     try {
       const { logStateChange } = require('@/utils/registration-diagnostics');
       return logStateChange;
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       // If diagnostics not available, use no-op logger
       return () => {};
     }

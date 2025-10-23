@@ -21,7 +21,7 @@ export async function getNotificationHistory(): Promise<NotificationItem[]> {
 
     const history: NotificationHistory = JSON.parse(data);
     return history.notifications || [];
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     return [];
   }
 }
@@ -52,7 +52,7 @@ export async function addNotification(notification: Omit<NotificationItem, 'id' 
     };
 
     await AsyncStorage.setItem(NOTIFICATION_STORAGE_KEY, JSON.stringify(historyData));
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     // Silently fail - not critical
   }
 }
@@ -71,7 +71,7 @@ export async function markNotificationAsRead(notificationId: string): Promise<vo
     };
 
     await AsyncStorage.setItem(NOTIFICATION_STORAGE_KEY, JSON.stringify(updated));
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     // Silently fail
   }
 }
@@ -90,7 +90,7 @@ export async function markAllNotificationsAsRead(): Promise<void> {
     };
 
     await AsyncStorage.setItem(NOTIFICATION_STORAGE_KEY, JSON.stringify(updated));
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     // Silently fail
   }
 }
@@ -109,7 +109,7 @@ export async function deleteNotification(notificationId: string): Promise<void> 
     };
 
     await AsyncStorage.setItem(NOTIFICATION_STORAGE_KEY, JSON.stringify(historyData));
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     // Silently fail
   }
 }
@@ -120,7 +120,7 @@ export async function deleteNotification(notificationId: string): Promise<void> 
 export async function clearNotifications(): Promise<void> {
   try {
     await AsyncStorage.removeItem(NOTIFICATION_STORAGE_KEY);
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     // Silently fail
   }
 }
@@ -132,7 +132,7 @@ export async function getUnreadCount(): Promise<number> {
   try {
     const notifications = await getNotificationHistory();
     return notifications.filter((n) => !n.read).length;
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     return 0;
   }
 }

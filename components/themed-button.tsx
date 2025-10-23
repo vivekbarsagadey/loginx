@@ -34,7 +34,7 @@ function ThemedButtonComponent({ title, style, variant = 'primary', disabled, lo
     (async () => {
       try {
         await Haptics.impactAsync(hapticStrength);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         // Haptic feedback unavailable - continue without it
       }
     })();

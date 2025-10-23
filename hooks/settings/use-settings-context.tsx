@@ -28,7 +28,7 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import React, { createContext, type PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 // Storage keys
-const SETTINGS_STORAGE_KEY = '@LoginX:settings';
+const _SETTINGS_STORAGE_KEY = '@LoginX:settings';
 const SETTINGS_NOTIFICATIONS_KEY = 'settings:notifications';
 const SETTINGS_SECURITY_KEY = 'settings:security';
 const SETTINGS_APP_KEY = 'settings:app';
@@ -95,7 +95,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
       if (__DEV__) {
         console.error('[SettingsContext] Settings loaded from local storage');
       }
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('[SettingsContext] Failed to load settings:', error);
       setState((prev) => ({
         ...prev,
@@ -128,7 +128,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
         if (__DEV__) {
           console.error(`[SettingsContext] ${key} saved and synced`);
         }
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         console.error(`[SettingsContext] Failed to save ${key}:`, error);
         throw error;
       }
@@ -151,7 +151,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
 
       try {
         await saveSettingsSection(SETTINGS_NOTIFICATIONS_KEY, 'userSettings', newNotifications);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         // Rollback on error
         setState((prev) => ({
           ...prev,
@@ -179,7 +179,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
 
       try {
         await saveSettingsSection(SETTINGS_SECURITY_KEY, 'userSettings', newSecurity);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         // Rollback on error
         setState((prev) => ({
           ...prev,
@@ -207,7 +207,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
 
       try {
         await saveSettingsSection(SETTINGS_APP_KEY, 'userSettings', newApp);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         // Rollback on error
         setState((prev) => ({
           ...prev,
@@ -235,7 +235,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
 
       try {
         await saveSettingsSection(SETTINGS_PRIVACY_KEY, 'userSettings', newPrivacy);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         // Rollback on error
         setState((prev) => ({
           ...prev,
@@ -284,7 +284,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
       if (__DEV__) {
         console.error('[SettingsContext] All settings reset to defaults');
       }
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('[SettingsContext] Failed to reset settings:', error);
       setState((prev) => ({
         ...prev,

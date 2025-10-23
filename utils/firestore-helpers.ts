@@ -197,7 +197,7 @@ export async function getDocumentSafe<T = DocumentData>(docRef: DocumentReferenc
       shouldRetry: shouldRetryFirestoreError,
     });
     return snapshot.exists() ? snapshot : null;
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     return null;
   }
 }
@@ -225,7 +225,7 @@ export async function setDocumentSafe<T = DocumentData>(docRef: DocumentReferenc
       initialDelay: 500,
       shouldRetry: shouldRetryFirestoreError,
     });
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     if (typeof error === 'object' && error !== null && 'code' in error) {
       const firestoreError = error as { code: string; message: string };
       // SECURITY FIX (TASK-007): Log only metadata, not actual document data
@@ -266,7 +266,7 @@ export async function updateDocumentSafe<T = DocumentData>(docRef: DocumentRefer
       initialDelay: 500,
       shouldRetry: shouldRetryFirestoreError,
     });
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     if (typeof error === 'object' && error !== null && 'code' in error) {
       const firestoreError = error as { code: string; message: string };
       // SECURITY FIX (TASK-007): Log only metadata, not actual document data
@@ -308,7 +308,7 @@ export async function deleteDocumentSafe<T = DocumentData>(docRef: DocumentRefer
       initialDelay: 500,
       shouldRetry: shouldRetryFirestoreError,
     });
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     if (typeof error === 'object' && error !== null && 'code' in error) {
       const firestoreError = error as { code: string; message: string };
       // SECURITY FIX (TASK-007): Log only metadata
@@ -350,7 +350,7 @@ export async function queryDocumentsSafe<T = DocumentData>(collectionRef: Collec
       initialDelay: 500,
       shouldRetry: shouldRetryFirestoreError,
     });
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     if (typeof error === 'object' && error !== null && 'code' in error) {
       const firestoreError = error as { code: string; message: string };
       // SECURITY FIX (TASK-007): Log only metadata, not query details

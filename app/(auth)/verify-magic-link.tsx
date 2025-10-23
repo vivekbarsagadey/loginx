@@ -63,7 +63,7 @@ export default function VerifyMagicLinkScreen() {
       }
 
       await finishSignIn(signInEmail, emailLink);
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       logger.error('Error completing sign-in:', error);
       showError(error);
     }
@@ -90,7 +90,7 @@ export default function VerifyMagicLinkScreen() {
       if (initialUrl && isSignInWithEmailLink(auth, initialUrl)) {
         await completeSignIn(initialUrl);
       }
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       logger.error('Error checking initial URL:', error);
     }
   };

@@ -37,7 +37,7 @@ export function MonitoringDashboard() {
       const newMetrics = await getPerformanceMetrics();
       setMetrics(newMetrics);
       setLastUpdate(new Date());
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       logger.error('Failed to load metrics:', error);
     }
   };

@@ -17,7 +17,7 @@ describe('Memory Leak Detection', () => {
 
   describe('Cleanup Manager', () => {
     it('should track and clean up subscriptions', async () => {
-      const scope = cleanupManager.createScope('test-subscriptions');
+      const _scope = cleanupManager.createScope('test-subscriptions');
 
       let unsubscribeCalled = false;
       const mockUnsubscribe = () => {
@@ -35,7 +35,7 @@ describe('Memory Leak Detection', () => {
     });
 
     it('should track and clean up timers', async () => {
-      const scope = cleanupManager.createScope('test-timers');
+      const _scope = cleanupManager.createScope('test-timers');
 
       let timerFired = false;
       const timerId = setTimeout(() => {
@@ -56,7 +56,7 @@ describe('Memory Leak Detection', () => {
     });
 
     it('should track and clean up intervals', async () => {
-      const scope = cleanupManager.createScope('test-intervals');
+      const _scope = cleanupManager.createScope('test-intervals');
 
       let counter = 0;
       const intervalId = setInterval(() => {
@@ -81,7 +81,7 @@ describe('Memory Leak Detection', () => {
     });
 
     it('should track and clean up event listeners', async () => {
-      const scope = cleanupManager.createScope('test-listeners');
+      const _scope = cleanupManager.createScope('test-listeners');
 
       let listenerRemoved = false;
       const mockRemove = () => {
@@ -99,7 +99,7 @@ describe('Memory Leak Detection', () => {
     });
 
     it('should handle multiple resource types in one scope', async () => {
-      const scope = cleanupManager.createScope('test-mixed');
+      const _scope = cleanupManager.createScope('test-mixed');
 
       let cleanupCount = 0;
 
@@ -247,7 +247,7 @@ describe('Memory Leak Detection', () => {
       const service = mockSubscribe();
 
       const useTestHook = () => {
-        const scope = cleanupManager.createScope('component-scope');
+        const _scope = cleanupManager.createScope('component-scope');
 
         const unsubscribe = service.subscribe(() => {});
         scope.registerSubscription('service', unsubscribe);
@@ -269,7 +269,7 @@ describe('Memory Leak Detection', () => {
     });
 
     it('should detect leaked resources after unmount', async () => {
-      const scope = cleanupManager.createScope('leak-detection-test');
+      const _scope = cleanupManager.createScope('leak-detection-test');
 
       // Simulate component that forgets to cleanup
       const leakyComponent = () => {
@@ -297,7 +297,7 @@ describe('Memory Leak Detection', () => {
       const scopes: any[] = [];
 
       for (let i = 0; i < iterations; i++) {
-        const scope = cleanupManager.createScope(`cycle-${i}`);
+        const _scope = cleanupManager.createScope(`cycle-${i}`);
         scope.registerTimer(
           `timer-${i}`,
           setTimeout(() => {}, 1000)

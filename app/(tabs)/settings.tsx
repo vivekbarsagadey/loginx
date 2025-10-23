@@ -47,7 +47,7 @@ export default function SettingsScreen() {
         try {
           await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
           await auth.signOut();
-        } catch (error: unknown) {
+        } catch (_error: unknown) {
           showError(error);
         }
       },
@@ -64,7 +64,7 @@ export default function SettingsScreen() {
           await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           clearCache();
           showSuccess('Success', 'Cache cleared successfully');
-        } catch (error: unknown) {
+        } catch (_error: unknown) {
           showError(error);
         }
       },
@@ -93,7 +93,7 @@ export default function SettingsScreen() {
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         await deleteUserAccount(user.uid);
         await deleteUser(user);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         showError(error);
       } finally {
         setIsDeleting(false);

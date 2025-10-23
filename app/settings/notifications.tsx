@@ -48,7 +48,7 @@ export default function NotificationsScreen() {
     try {
       // Optimistic update happens in SettingsContext
       await updateNotifications({ [key]: value });
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       showError(error);
       // Rollback happens automatically in SettingsContext
     }

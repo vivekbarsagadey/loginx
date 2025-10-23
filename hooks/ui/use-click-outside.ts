@@ -76,7 +76,7 @@ export function useClickOutside<T extends View>(
     // 3. react-native-gesture-handler for advanced gestures
 
     // Store handler in ref to avoid recreating listener
-    const handlePress = () => {
+    const _handlePress = () => {
       handler();
     };
 

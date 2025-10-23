@@ -31,7 +31,7 @@ export interface ErrorContext {
 export async function canSendEmail(): Promise<boolean> {
   try {
     return await MailComposer.isAvailableAsync();
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     logger.error('Error checking email availability', error as Error);
     return false;
   }
@@ -125,7 +125,7 @@ export async function contactSupport(subject?: string, errorContext?: ErrorConte
       success: false,
       error: i18n.t('errors.support.emailFailed'),
     };
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     logger.error('Error contacting support', error as Error);
     return {
       success: false,
@@ -145,7 +145,7 @@ export async function openHelpCenter(): Promise<void> {
     } else {
       logger.error('Cannot open help center URL');
     }
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     logger.error('Error opening help center', error as Error);
   }
 }
@@ -161,7 +161,7 @@ export async function openFAQ(): Promise<void> {
     } else {
       logger.error('Cannot open FAQ URL');
     }
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     logger.error('Error opening FAQ', error as Error);
   }
 }

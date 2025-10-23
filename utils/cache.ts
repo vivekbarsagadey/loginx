@@ -42,7 +42,7 @@ const getMaxCacheSize = (): number => {
     if (adaptiveSize > 0) {
       return adaptiveSize;
     }
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugWarn('[Cache] Could not get adaptive cache size, using fallback', error);
   }
   // Fallback to static default if adaptive manager not ready
@@ -134,7 +134,7 @@ const evictOldEntries = async (): Promise<void> => {
         break;
       }
     }
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugError('[Cache] Error during cache eviction:', error);
   }
 };
@@ -162,7 +162,7 @@ export const initializeCache = async (): Promise<void> => {
               memoryCache.set(key, entry);
             }
           }
-        } catch (error: unknown) {
+        } catch (_error: unknown) {
           debugWarn(`[Cache] Failed to preload cache entry: ${key}`, error);
         }
       });
@@ -170,7 +170,7 @@ export const initializeCache = async (): Promise<void> => {
       await Promise.allSettled(loadPromises);
       debugLog(`[Cache] 🏠 LOCAL-FIRST: Preloaded ${memoryCache.size} cache entries`);
     }
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugError('[Cache] Failed to initialize cache system', error);
   }
 };
@@ -243,7 +243,7 @@ export const set = async (key: string, data: unknown, source: 'local' | 'remote'
       debugError(`[Cache] Failed to persist cache entry: ${key}`, persistError);
       // Continue - we still have it in memory
     }
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugError('[Cache] Error setting cache:', error);
   }
 };
@@ -354,7 +354,7 @@ export const get = async (
     totalAccessTime += Date.now() - startTime;
 
     return entry.data;
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugError('[Cache] Error getting cache:', error);
     // TASK-056: Track access time even on error
     accessCount++;
@@ -390,7 +390,7 @@ export const invalidate = async (key: string): Promise<void> => {
         debugWarn(`[Cache] Failed to remove from storage: ${key}`, storageError);
       }
     }
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugError('[Cache] Error invalidating cache:', error);
   }
 };
@@ -417,7 +417,7 @@ export const clear = async (): Promise<void> => {
     } catch (storageError) {
       debugWarn('[Cache] Failed to clear persistent storage:', storageError);
     }
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugError('[Cache] Error clearing cache:', error);
   }
 };
@@ -440,7 +440,7 @@ export const getCacheStats = async () => {
     // Update adaptive cache manager with current hit rate
     try {
       updateAdaptiveCacheStats(hitRate);
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       // Adaptive manager may not be initialized yet, ignore
     }
 
@@ -459,7 +459,7 @@ export const getCacheStats = async () => {
       syncStatus: 'healthy',
       lastUpdate: Date.now(),
     };
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugError('[Cache] Error getting cache stats:', error);
     return {
       memoryEntries: 0,
@@ -537,7 +537,7 @@ export const warmCache = async (keys: string[]): Promise<void> => {
           warmedCount++;
           debugLog(`[Cache] 🔥 Warmed: ${key}`);
         }
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         debugWarn(`[Cache] Failed to warm key: ${key}`, error);
       }
     });
@@ -546,7 +546,7 @@ export const warmCache = async (keys: string[]): Promise<void> => {
 
     const warmDuration = Date.now() - warmStart;
     debugLog(`[Cache] 🔥 Cache warming complete: ${warmedCount}/${keys.length} keys in ${warmDuration}ms`);
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugError('[Cache] Error during cache warming:', error);
   }
 };
@@ -659,7 +659,7 @@ export const syncPendingChanges = async (): Promise<void> => {
     }
 
     debugLog('[Cache] ✅ LOCAL-FIRST: Sync completed');
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugError('[Cache] Error syncing pending changes:', error);
   }
 };

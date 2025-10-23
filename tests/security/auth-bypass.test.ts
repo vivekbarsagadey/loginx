@@ -111,7 +111,7 @@ describe('Authentication Security', () => {
   describe('Authorization Checks', () => {
     it('should prevent unauthorized access to protected routes', () => {
       const user = null; // No authenticated user
-      const protectedRoute = '/profile/settings';
+      const _protectedRoute = '/profile/settings';
 
       const canAccess = user !== null;
 
@@ -119,8 +119,8 @@ describe('Authentication Security', () => {
     });
 
     it('should allow access to public routes without authentication', () => {
-      const user = null;
-      const publicRoute = '/login';
+      const _user = null;
+      const _publicRoute = '/login';
 
       const canAccess = true; // Public routes always accessible
 

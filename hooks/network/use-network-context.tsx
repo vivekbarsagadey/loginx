@@ -1,7 +1,7 @@
 /**
  * Network Context
  * Centralized network status management
- * 
+ *
  * Features:
  * - Real-time network status monitoring
  * - Connection type detection
@@ -10,12 +10,7 @@
  * - Automatic reconnection handling
  */
 
-import type {
-  ConnectionType,
-  DEFAULT_NETWORK_CONTEXT_STATE,
-  NetworkContextState,
-  SyncQueueInfo,
-} from '@/types/network';
+import type { ConnectionType, NetworkContextState, SyncQueueInfo } from '@/types/network';
 import { getNetworkStatus, initializeNetworkMonitoring, subscribeToNetworkChanges } from '@/utils/network';
 import React, { createContext, type PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
@@ -70,8 +65,8 @@ export function NetworkProvider({ children }: PropsWithChildren) {
       if (__DEV__) {
         console.error('[NetworkContext] Status refreshed:', status);
       }
-    } catch (error: unknown) {
-      console.error('[NetworkContext] Failed to refresh status:', error);
+    } catch (_error: unknown) {
+      console.error('[NetworkContext] Failed to refresh status:', _error);
       setState((prev) => ({
         ...prev,
         error: 'Failed to refresh network status',

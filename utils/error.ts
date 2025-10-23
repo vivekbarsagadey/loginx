@@ -100,7 +100,7 @@ export const getErrorInfo = (error: unknown): ErrorInfo => {
   let classified: { userMessage: string; recoverySuggestions: string[] } | null = null;
   try {
     classified = classifyError(error);
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     // Fallback if classifier fails
   }
 

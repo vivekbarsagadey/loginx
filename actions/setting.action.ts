@@ -25,7 +25,7 @@ export const updateSetting = async (uid: string, key: string, value: boolean): P
     await updateUser(uid, { [key]: value });
 
     debugLog(`[SettingAction] ✅ LOCAL-FIRST: Setting ${key} updated to ${value}`);
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugError('[SettingAction] Error updating setting', error);
     showError(error);
     throw error; // Re-throw so UI can handle it

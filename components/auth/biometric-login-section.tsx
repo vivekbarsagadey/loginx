@@ -37,7 +37,7 @@ export function BiometricLoginSection({ onSuccess, disabled }: BiometricLoginSec
               showError(new Error('Biometric authentication not set up. Please login with password first.'));
             }
           }
-        } catch (error: unknown) {
+        } catch (_error: unknown) {
           // Silently fail to password login if biometric fails
         }
       }
@@ -62,7 +62,7 @@ export function BiometricLoginSection({ onSuccess, disabled }: BiometricLoginSec
           showError(new Error('Biometric authentication not set up. Please login with password first.'));
         }
       }
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       showError(error);
     }
   };

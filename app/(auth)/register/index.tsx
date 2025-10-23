@@ -226,7 +226,7 @@ export default function RegisterScreen() {
           showError(new Error('Registration complete! Please check your email for verification link and then log in.'));
         }
       }
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       // Error haptic feedback
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       showError(error);

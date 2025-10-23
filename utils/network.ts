@@ -38,7 +38,7 @@ export const initializeNetworkMonitoring = (): (() => void) => {
       networkListeners.forEach((listener) => {
         try {
           listener(isOnline);
-        } catch (error: unknown) {
+        } catch (_error: unknown) {
           debugWarn('[Network] Error in network listener:', error);
         }
       });
@@ -81,7 +81,7 @@ export const getNetworkStatus = async (): Promise<{
       isInternetReachable: state.isInternetReachable ?? false,
       connectionType: state.type,
     };
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugWarn('[Network] Failed to fetch network status:', error);
     return {
       isOnline: false,
@@ -183,7 +183,7 @@ export const refreshNetworkStatus = async (): Promise<void> => {
 
     const online = isConnected && isInternetReachable;
     debugLog(`[Network] Refreshed status: ${online ? '🌐 ONLINE' : '🏠 OFFLINE'} (${connectionType})`);
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugWarn('[Network] Failed to refresh network status:', error);
   }
 };
@@ -200,7 +200,7 @@ export const getConnectionInfo = async () => {
       isInternetReachable: state.isInternetReachable,
       details: state.details,
     };
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     debugWarn('[Network] Failed to get connection info:', error);
     return null;
   }

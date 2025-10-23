@@ -78,6 +78,7 @@ export function useBattery(): BatteryState {
     const loadBattery = async () => {
       try {
         // @ts-ignore - Optional dependency, may not be installed
+        // eslint-disable-next-line import/no-unresolved
         Battery = await import('expo-battery');
 
         if (!isMounted) {return;}
