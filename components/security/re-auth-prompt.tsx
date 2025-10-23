@@ -65,7 +65,7 @@ export function ReAuthPrompt({ visible, onSuccess, onCancel, reason = 'Please au
     try {
       const type = await getBiometricType();
       setBiometricType(type);
-    } catch (_err) {
+    } catch (_error: unknown) {
       debugError("[Error]", _error);
     }
   };
@@ -92,7 +92,7 @@ export function ReAuthPrompt({ visible, onSuccess, onCancel, reason = 'Please au
       });
 
       handleAuthResult(result);
-    } catch (_err) {
+    } catch (_error: unknown) {
       debugError("[Error]", _error);
       setError('Authentication failed. Please try again.');
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
@@ -122,7 +122,7 @@ export function ReAuthPrompt({ visible, onSuccess, onCancel, reason = 'Please au
 
       const result = await verifyPasswordFallback(password, userEmail);
       handleAuthResult(result);
-    } catch (_err) {
+    } catch (_error: unknown) {
       debugError("[Error]", _error);
       setError('Invalid password. Please try again.');
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);

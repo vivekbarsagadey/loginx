@@ -67,22 +67,11 @@ export interface UseAsyncRetryReturn<T> {
  * @param config - Retry configuration
  * @returns Object with execute function and state
  */
-export function useAsyncRetry<T>(
-  operation: () => Promise<T>,
-  config: RetryConfig
-): UseAsyncRetryReturn<T> {
-  const {
-    maxAttempts,
-    backoffMs,
-    backoffStrategy = 'exponential',
-    maxBackoffMs = 30000,
-    onRetry,
-    onMaxRetriesReached,
-    shouldRetry = () => true,
-  } = config;
+export function useAsyncRetry<T>(operation: () => Promise<T>, config: RetryConfig): UseAsyncRetryReturn<T> {
+  const { maxAttempts, backoffMs, backoffStrategy = 'exponential', maxBackoffMs = 30000, onRetry, onMaxRetriesReached, shouldRetry = () => true } = config;
 
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | undefined>(null);
+  const [error, setError] = useState<Error | undefined>(undefined);
   const [retryCount, setRetryCount] = useState(0);
   const [isRetrying, setIsRetrying] = useState(false);
   const cancelledRef = useRef(false);
@@ -149,7 +138,7 @@ export function useAsyncRetry<T>(
     setIsLoading(true);
     cancelledRef.current = false;
 
-    let lastError: Error | undefined = null;
+    let lastError: Error | undefined = undefined;
     let attempt = 0;
 
     while (attempt <= maxAttempts) {
@@ -165,11 +154,11 @@ export function useAsyncRetry<T>(
         setRetryCount(0);
         setIsRetrying(false);
         return result;
-      } catch (_err) {
+      } catch (_error: unknown) {
         lastError = _error instanceof Error ? _error : new Error(String(_error));
 
         // Check if we should retry this error
-        if (!shouldRetry(lastError)) {
+        if (lastError && !shouldRetry(lastError)) {
           setError(lastError);
           setIsLoading(false);
           setIsRetrying(false);
@@ -183,7 +172,7 @@ export function useAsyncRetry<T>(
           setIsRetrying(false);
           setRetryCount(attempt);
 
-          if (onMaxRetriesReached) {
+          if (onMaxRetriesReached && lastError) {
             onMaxRetriesReached(lastError);
           }
 
@@ -196,7 +185,7 @@ export function useAsyncRetry<T>(
         setIsRetrying(true);
         setError(lastError);
 
-        if (onRetry) {
+        if (onRetry && lastError) {
           onRetry(attempt, lastError);
         }
 
@@ -210,16 +199,7 @@ export function useAsyncRetry<T>(
     setIsLoading(false);
     setIsRetrying(false);
     return null;
-  }, [
-    operation,
-    maxAttempts,
-    shouldRetry,
-    onRetry,
-    onMaxRetriesReached,
-    calculateBackoff,
-    sleep,
-    reset,
-  ]);
+  }, [operation, maxAttempts, shouldRetry, onRetry, onMaxRetriesReached, calculateBackoff, sleep, reset]);
 
   return {
     execute,

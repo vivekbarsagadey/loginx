@@ -82,19 +82,8 @@ export interface UseFetchReturn<T> extends UseFetchState<T> {
  * @param options - Fetch options and hook configuration
  * @returns Object with data, loading state, and control functions
  */
-export function useFetch<T = any>(
-  url: string,
-  options: UseFetchOptions = {}
-): UseFetchReturn<T> {
-  const {
-    manual = false,
-    onSuccess,
-    onError,
-    transform,
-    retry,
-    debounce,
-    ...fetchOptions
-  } = options;
+export function useFetch<T = any>(url: string, options: UseFetchOptions = {}): UseFetchReturn<T> {
+  const { manual = false, onSuccess, onError, transform, retry, debounce, ...fetchOptions } = options;
 
   const [state, setState] = useState<UseFetchState<T>>({
     data: null,
@@ -144,7 +133,9 @@ export function useFetch<T = any>(
    */
   const performFetch = useCallback(
     async (isRefetch = false) => {
-      if (!mountedRef.current) {return;}
+      if (!mountedRef.current) {
+        return;
+      }
 
       // Cancel any existing request
       cancel();
@@ -161,7 +152,7 @@ export function useFetch<T = any>(
         error: undefined,
       }));
 
-      let lastError: Error | undefined = null;
+      let lastError: Error | undefined = undefined;
       const maxRetries = retry?.count ?? 0;
       const retryDelay = retry?.delay ?? 1000;
 
@@ -183,7 +174,9 @@ export function useFetch<T = any>(
             data = transform(data);
           }
 
-          if (!mountedRef.current) {return;}
+          if (!mountedRef.current) {
+            return;
+          }
 
           setState({
             data,
@@ -197,9 +190,9 @@ export function useFetch<T = any>(
           }
 
           return;
-        } catch (_err) {
+        } catch (_error: unknown) {
           // Ignore abort errors
-          if (_error instanceof Error && err.name === 'AbortError') {
+          if (_error instanceof Error && _error.name === 'AbortError') {
             return;
           }
 
@@ -220,7 +213,7 @@ export function useFetch<T = any>(
               isValidating: false,
             });
 
-            if (onError) {
+            if (onError && lastError) {
               onError(lastError);
             }
           }

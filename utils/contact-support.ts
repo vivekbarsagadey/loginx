@@ -78,10 +78,7 @@ function formatErrorContext(context?: ErrorContext): string {
  * @param errorContext - Optional error details to include
  * @returns Success status
  */
-export async function contactSupport(
-  subject?: string,
-  errorContext?: ErrorContext
-): Promise<{ success: boolean; error?: string }> {
+export async function contactSupport(subject?: string, errorContext?: ErrorContext): Promise<{ success: boolean; error?: string }> {
   try {
     // Check if email is available
     const emailAvailable = await canSendEmail();
@@ -89,9 +86,7 @@ export async function contactSupport(
     if (!emailAvailable) {
       // Fallback to opening email app with mailto link
       const emailSubject = encodeURIComponent(subject || SUPPORT_CONFIG.subject);
-      const emailBody = encodeURIComponent(
-        `Please describe your issue:\n\n${formatErrorContext(errorContext)}`
-      );
+      const emailBody = encodeURIComponent(`Please describe your issue:\n\n${formatErrorContext(errorContext)}`);
       const mailto = `mailto:${SUPPORT_CONFIG.email}?subject=${emailSubject}&body=${emailBody}`;
 
       const canOpen = await Linking.canOpenURL(mailto);
@@ -134,10 +129,7 @@ export async function contactSupport(
     logger.error('Error contacting support', error as Error);
     return {
       success: false,
-      error:
-        error instanceof Error
-          ? error.message
-          : i18n.t('errors.support.emailFailed'),
+      error: error instanceof Error ? error.message : i18n.t('errors.support.emailFailed'),
     };
   }
 }
@@ -177,27 +169,22 @@ export async function openFAQ(): Promise<void> {
 /**
  * Get current error context for support
  */
-export function getErrorContextForSupport(_error: unknown): ErrorContext {
+export function getErrorContextForSupport(error: unknown): ErrorContext {
   const context: ErrorContext = {
     timestamp: new Date().toISOString(),
     platform: Platform.OS,
   };
 
   // Extract error code if available
-  if (
-    typeof _error === 'object' &&
-    _error !== null &&
-    'code' in error &&
-    typeof (_error as { code: unknown }).code === 'string'
-  ) {
-    context.errorCode = (_error as { code: string }).code;
+  if (typeof error === 'object' && error !== null && 'code' in error && typeof (error as { code: unknown }).code === 'string') {
+    context.errorCode = (error as { code: string }).code;
   }
 
   // Extract error message
-  if (_error instanceof Error) {
-    context.errorMessage = _error.message;
-  } else if (typeof _error === 'string') {
-    context.errorMessage = _error;
+  if (error instanceof Error) {
+    context.errorMessage = error.message;
+  } else if (typeof error === 'string') {
+    context.errorMessage = error;
   }
 
   return context;

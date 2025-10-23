@@ -93,7 +93,7 @@ export default function TwoFactorAuthScreen() {
         });
         setShowSuccessAnimation(true);
       }
-    } catch (_err) {
+    } catch (_error: unknown) {
       showError(_error);
     } finally {
       setPendingTwoFactorAction(null);
@@ -122,7 +122,7 @@ export default function TwoFactorAuthScreen() {
           try {
             await generateBackupCodes();
             showSuccess(i18n.t('screens.security.twoFactor.success.codesGenerated.title'), i18n.t('screens.security.twoFactor.success.codesGenerated.message'));
-          } catch (_err) {
+          } catch (_error: unknown) {
             showError(_error);
           }
         },
@@ -141,7 +141,7 @@ export default function TwoFactorAuthScreen() {
         await disableBiometric();
         showSuccess(i18n.t('screens.security.twoFactor.success.biometricDisabled.title'), i18n.t('screens.security.twoFactor.success.biometricDisabled.message', { type: biometricTypeName }));
       }
-    } catch (_err) {
+    } catch (_error: unknown) {
       showError(_error);
     }
   };

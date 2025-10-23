@@ -164,7 +164,7 @@ export function sanitizeQueryValue(value: unknown): unknown {
 /**
  * Check if error is a Firestore network error that should be retried
  */
-function shouldRetryFirestoreError(_error: unknown): boolean {
+function shouldRetryFirestoreError(error: unknown): boolean {
   if (typeof error === 'object' && error !== null && 'code' in error) {
     const code = (error as { code: string }).code;
     // Retry on network errors, but not on permission or validation errors
