@@ -114,7 +114,7 @@ export function useSecureStorage<T>(
       } catch (_err) {
         setError(
           err instanceof Error
-            ? err
+            ? _error
             : new Error("Failed to load from secure storage")
         );
       } finally {
@@ -137,7 +137,7 @@ export function useSecureStorage<T>(
       } catch (_err) {
         setError(
           err instanceof Error
-            ? err
+            ? _error
             : new Error("Failed to save to secure storage")
         );
       }
@@ -154,7 +154,7 @@ export function useSecureStorage<T>(
     } catch (_err) {
       setError(
         err instanceof Error
-          ? err
+          ? _error
           : new Error("Failed to remove from secure storage")
       );
     }

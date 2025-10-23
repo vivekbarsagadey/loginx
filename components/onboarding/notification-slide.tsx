@@ -19,7 +19,7 @@ const isNotificationsAvailable = (): boolean => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     require('expo-notifications');
     return true;
-  } catch {
+  } catch (error: unknown) {
     return false;
   }
 };
@@ -68,7 +68,7 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
       const { status } = await Notifications.getPermissionsAsync();
       setPermissionStatus(status);
       setHasCheckedPermission(true);
-    } catch {
+    } catch (error: unknown) {
       setHasCheckedPermission(true);
     }
   };
@@ -131,7 +131,7 @@ export const NotificationSlide = ({ width, onNext, onSkip }: NotificationSlidePr
           { variant: 'warning' }
         );
       }
-    } catch (_error) {
+    } catch (error: unknown) {
       logger.error('Error requesting notification permissions:', error);
       showAlert(i18n.t('onb.notifications.error.title'), i18n.t('onb.notifications.error.message'), [{ text: 'OK' }], { variant: 'error' });
     } finally {

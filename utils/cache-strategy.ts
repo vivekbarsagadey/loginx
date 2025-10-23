@@ -105,7 +105,7 @@ async function staleWhileRevalidate<T>({ key, fetchFn, ttl, maxAge = 60000, onRe
       isStale: false,
       revalidating: false,
     };
-  } catch (_error) {
+  } catch (error: unknown) {
     debugError('[CacheStrategy] SWR: Fetch failed', error);
     onError?.(error);
     throw error;
@@ -144,7 +144,7 @@ async function cacheFirst<T>({ key, fetchFn, ttl, maxAge, onError }: CacheStrate
       isStale: false,
       revalidating: false,
     };
-  } catch (_error) {
+  } catch (error: unknown) {
     debugError('[CacheStrategy] Cache-First: Fetch failed', error);
     onError?.(error);
 
@@ -180,7 +180,7 @@ async function networkFirst<T>({ key, fetchFn, ttl, onError }: CacheStrategyOpti
       isStale: false,
       revalidating: false,
     };
-  } catch (_error) {
+  } catch (error: unknown) {
     debugError('[CacheStrategy] Network-First: Fetch failed', error);
     onError?.(error);
 
@@ -215,7 +215,7 @@ async function networkOnly<T>({ fetchFn, onError }: CacheStrategyOptions<T>): Pr
       isStale: false,
       revalidating: false,
     };
-  } catch (_error) {
+  } catch (error: unknown) {
     debugError('[CacheStrategy] Network-Only: Fetch failed', error);
     onError?.(error);
     throw error;

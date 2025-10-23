@@ -31,7 +31,7 @@ async function validateFormField(
     try {
       await field.validation.parseAsync(value);
     } catch (_error: any) {
-      return { valid: false, error: error.errors?.[0]?.message || 'Validation error' };
+      return { valid: false, error: _error.errors?.[0]?.message || 'Validation error' };
     }
   }
 
@@ -40,7 +40,7 @@ async function validateFormField(
     try {
       await field.asyncValidation(value);
     } catch (_error: any) {
-      return { valid: false, error: error.message || 'Validation error' };
+      return { valid: false, error: _error.message || 'Validation error' };
     }
   }
 
@@ -85,8 +85,8 @@ async function validateFormStep(
       await step.validationSchema.parseAsync(fieldValues);
     } catch (_error: any) {
       // Add schema validation errors
-      if (error.errors) {
-        for (const err of error.errors) {
+      if (_error.errors) {
+        for (const err of _error.errors) {
           const path = err.path.join('.');
           errors[path] = err.message;
         }
@@ -184,7 +184,7 @@ export function useFlowValidation(
         } catch (_error: any) {
           updateState({
             validationErrors: {
-              [stepToValidate.id]: error.message || 'Validation error',
+              [stepToValidate.id]: _error.message || 'Validation error',
             },
           });
           return false;

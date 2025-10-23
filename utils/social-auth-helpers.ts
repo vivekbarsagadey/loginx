@@ -56,7 +56,7 @@ export const handleSocialAuthSuccess = async (user: FirebaseUser, displayNameOve
  */
 export const handleSocialAuthError = async (_error: unknown, context?: string): Promise<void> => {
   // Silent error handling - logging delegated to monitoring service
-  await provideErrorFeedback(error);
+  await provideErrorFeedback(_error);
 };
 
 /**
@@ -64,8 +64,8 @@ export const handleSocialAuthError = async (_error: unknown, context?: string): 
  * Returns true if error is a cancellation (should be handled silently)
  */
 export const isAuthCancellation = (_error: unknown): boolean => {
-  if (error && typeof error === 'object' && 'code' in error) {
-    const code = (error as { code: string }).code;
+  if (_error && typeof _error === 'object' && 'code' in error) {
+    const code = (_error as { code: string }).code;
     return code === 'ERR_REQUEST_CANCELED' || code === 'ERR_CANCELED';
   }
   return false;

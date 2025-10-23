@@ -44,7 +44,7 @@ const firebaseConfig = {
 let app: ReturnType<typeof initializeApp>;
 try {
   app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-} catch (_error) {
+} catch (error: unknown) {
   logger.error('[Firebase] Failed to initialize app', error instanceof Error ? error : new Error(String(error)));
   throw new Error('Firebase initialization failed. Please check your configuration.');
 }
@@ -92,7 +92,7 @@ try {
       });
     }
   }
-} catch (_error) {
+} catch (error: unknown) {
   logger.error('[Firebase] Failed to initialize Functions', error instanceof Error ? error : new Error(String(error)));
 }
 
@@ -215,7 +215,7 @@ export const initializeFirestore = async (): Promise<void> => {
         logger.info('[Firebase] Firestore initialized with native offline support');
         resolve();
       }
-    } catch (_error) {
+    } catch (error: unknown) {
       clearTimeout(timeoutId);
       firestoreError = error instanceof Error ? error : new Error('Unknown Firestore initialization error');
       firestoreInitializing = false;

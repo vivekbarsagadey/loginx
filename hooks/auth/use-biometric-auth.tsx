@@ -87,7 +87,7 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
       }));
 
       debugLog(`[BiometricAuth] Support check - Available: ${isAvailable}, Type: ${biometryType}, Enrolled: ${isEnrolled}, Enabled: ${enabled}`);
-    } catch (_error) {
+    } catch (error: unknown) {
       debugError('[BiometricAuth] Failed to check biometric support', error);
       setState((prev) => ({
         ...prev,
@@ -144,7 +144,7 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
         }));
         return false;
       }
-    } catch (_error) {
+    } catch (error: unknown) {
       debugError('[BiometricAuth] Failed to enable biometric authentication', error);
       setState((prev) => ({
         ...prev,
@@ -172,7 +172,7 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
       }));
 
       debugLog('[BiometricAuth] Biometric authentication disabled');
-    } catch (_error) {
+    } catch (error: unknown) {
       debugError('[BiometricAuth] Failed to disable biometric authentication', error);
       setState((prev) => ({
         ...prev,
@@ -235,7 +235,7 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
         }));
         return false;
       }
-    } catch (_error) {
+    } catch (error: unknown) {
       debugError('[BiometricAuth] Biometric authentication error', error);
       setState((prev) => ({
         ...prev,

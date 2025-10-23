@@ -44,7 +44,7 @@ export function useAccessibility(): AccessibilityState {
           isBoldTextEnabled: boldText,
           preferredContentSizeCategory: null,
         });
-      } catch {
+      } catch (error: unknown) {
         // Silently fail - not critical for app functionality
       }
     };

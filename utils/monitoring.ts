@@ -78,7 +78,7 @@ export function initializeSentry(): void {
     });
 
     logger.log('Sentry monitoring initialized successfully');
-  } catch (_error) {
+  } catch (error: unknown) {
     logger.error('Failed to initialize Sentry:', error);
   }
 }
@@ -114,7 +114,7 @@ export function setUserContext(userId: string, email?: string, displayName?: str
     });
 
     logger.log('User context set successfully');
-  } catch (_error) {
+  } catch (error: unknown) {
     logger.error('Failed to set user context:', error);
   }
 }
@@ -126,7 +126,7 @@ export function clearUserContext(): void {
   try {
     Sentry.setUser(null);
     logger.log('User context cleared');
-  } catch (_error) {
+  } catch (error: unknown) {
     logger.error('Failed to clear user context:', error);
   }
 }
@@ -149,7 +149,7 @@ export function trackSecurityEvent(eventType: SecurityEventType, metadata?: Reco
 
     // Log to audit trail
     logger.log(`Security event: ${eventType}`, metadata);
-  } catch (_error) {
+  } catch (error: unknown) {
     logger.error('Failed to track security event:', error);
   }
 }
@@ -162,10 +162,10 @@ export function captureError(_error: Error, context?: Record<string, unknown>): 
     if (context) {
       Sentry.setContext('error_context', context);
     }
-    Sentry.captureException(error);
-    logger.error('Error captured:', { error, context });
+    Sentry.captureException(_error);
+    logger.error('Error captured:', { error: _error, context });
   } catch (_err) {
-    logger.error('Failed to capture error:', err);
+    logger.error("Failed to capture error:", _error);
   }
 }
 
@@ -185,7 +185,7 @@ export function trackPerformance(operation: string, duration: number, metadata?:
     });
 
     logger.log(`Performance tracked: ${operation} (${duration}ms)`, metadata);
-  } catch (_error) {
+  } catch (error: unknown) {
     logger.error('Failed to track performance:', error);
   }
 }
@@ -211,7 +211,7 @@ export async function getPerformanceMetrics(): Promise<PerformanceMetrics> {
       memoryUsage: 0, // Would use performance.memory if available
       networkLatency: 0, // Would be measured from network calls
     };
-  } catch (_error) {
+  } catch (error: unknown) {
     logger.error('Failed to get performance metrics:', error);
     return {
       syncQueueSize: 0,
@@ -259,7 +259,7 @@ export function startTransaction(name: string, operation: string) {
       level: 'info',
     });
     return null;
-  } catch (_error) {
+  } catch (error: unknown) {
     logger.error('Failed to start transaction:', error);
     return null;
   }
@@ -278,7 +278,7 @@ export function addBreadcrumb(message: string, category: string, level: 'debug' 
       data,
       timestamp: Date.now() / 1000,
     });
-  } catch (_error) {
+  } catch (error: unknown) {
     logger.error('Failed to add breadcrumb:', error);
   }
 }

@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           // Apply any pending profile data from onboarding
           try {
             await applyPendingProfileData(user);
-          } catch (_error) {
+          } catch (error: unknown) {
             // Silently fail - profile can be updated later
           }
 
@@ -154,7 +154,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       debugLog('[Auth] Logout completed successfully');
-    } catch (_error) {
+    } catch (error: unknown) {
       debugError('[Auth] Sign out error', error);
       showError(error);
       throw error; // Re-throw so caller can handle if needed

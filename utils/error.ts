@@ -45,7 +45,7 @@ interface ErrorInfo {
  * Check if an error is fatal (requires support contact)
  */
 export function isFatalError(_error: unknown): boolean {
-  if (!hasErrorCode(error)) {
+  if (!hasErrorCode(_error)) {
     return false;
   }
 
@@ -55,14 +55,14 @@ export function isFatalError(_error: unknown): boolean {
 /**
  * Type guard: Check if error is an Axios-like error
  */
-const isAxiosError = (_error: unknown): error is { isAxiosError: boolean; response?: unknown } => {
+const isAxiosError = (error: unknown): error is { isAxiosError: boolean; response?: unknown } => {
   return typeof error === 'object' && error !== null && 'isAxiosError' in error;
 };
 
 /**
  * Type guard: Check if error has a code property (Firebase errors)
  */
-const hasErrorCode = (_error: unknown): error is { code: string } => {
+const hasErrorCode = (error: unknown): error is { code: string } => {
   return typeof error === 'object' && error !== null && 'code' in error && typeof (error as { code: unknown }).code === 'string';
 };
 
@@ -70,7 +70,7 @@ const hasErrorCode = (_error: unknown): error is { code: string } => {
  * Check if error is a Firebase error (auth, firestore, or storage)
  */
 const isFirebaseError = (_error: unknown): boolean => {
-  if (!hasErrorCode(error)) {
+  if (!hasErrorCode(_error)) {
     return false;
   }
   return error.code.startsWith(FIREBASE_AUTH_PREFIX) || error.code.startsWith(FIRESTORE_PREFIX) || error.code.startsWith(STORAGE_PREFIX);
@@ -84,9 +84,9 @@ const isFirebaseError = (_error: unknown): boolean => {
  */
 export const getErrorInfo = (_error: unknown): ErrorInfo => {
   // Use Firebase error message utility for all Firebase errors
-  if (isFirebaseError(error) && hasErrorCode(error)) {
-    const message = getFirebaseErrorMessage(error.code);
-    const fatal = isFatalError(error);
+  if (isFirebaseError(_error) && hasErrorCode(_error)) {
+    const message = getFirebaseErrorMessage(_error.code);
+    const fatal = isFatalError(_error);
 
     return {
       title: i18n.t('errors.firebase.title'),
@@ -99,13 +99,13 @@ export const getErrorInfo = (_error: unknown): ErrorInfo => {
   // Use error classifier for non-Firebase errors
   let classified: { userMessage: string; recoverySuggestions: string[] } | null = null;
   try {
-    classified = classifyError(error);
-  } catch {
+    classified = classifyError(_error);
+  } catch (error: unknown) {
     // Fallback if classifier fails
   }
 
   // Handle network/Axios errors
-  if (isAxiosError(error) && !error.response) {
+  if (isAxiosError(_error) && !error.response) {
     return {
       title: i18n.t('errors.network.title'),
       message: classified?.userMessage || i18n.t('errors.network.message'),
@@ -135,7 +135,7 @@ export const getErrorInfo = (_error: unknown): ErrorInfo => {
  * Safely handles all error types and provides fallback behavior
  * @param error - Error object (unknown type for safety)
  */
-export const showError = (_error: unknown): void => {
+export const showError = (error: unknown): void => {
   try {
     const { title, message } = getErrorInfo(error);
 

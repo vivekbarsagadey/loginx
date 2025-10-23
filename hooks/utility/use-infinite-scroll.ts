@@ -140,9 +140,9 @@ export function useInfiniteScroll<T>(
 
         setCurrentPage(page);
       } catch (_err) {
-        setError(err);
+        setError(_error);
         if (onError) {
-          onError(err);
+          onError(_error);
         }
       } finally {
         setIsLoading(false);

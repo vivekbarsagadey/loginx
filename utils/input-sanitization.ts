@@ -252,7 +252,7 @@ export function sanitizeUrl(url: string): string {
   try {
     new URL(sanitized);
     return sanitized;
-  } catch {
+  } catch (error: unknown) {
     logger.warn('[InputSanitization] Invalid URL format');
     return '';
   }

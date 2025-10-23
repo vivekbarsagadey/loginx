@@ -28,7 +28,7 @@ describe('Rate Limiting', () => {
       for (let i = 0; i < 3; i++) {
         try {
           await signInWithEmailAndPassword(auth as any, email, password);
-        } catch (_error) {
+        } catch (error: unknown) {
           // Expected to fail (mock), but should not be rate limited
           expect((error as any).code).not.toBe('too-many-requests');
         }
@@ -65,7 +65,7 @@ describe('Rate Limiting', () => {
       for (let i = 0; i < 6; i++) {
         try {
           await signInWithEmailAndPassword(auth as any, email, password);
-        } catch (_error) {
+        } catch (error: unknown) {
           // Expected
         }
       }

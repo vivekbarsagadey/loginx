@@ -70,7 +70,7 @@ export function NetworkProvider({ children }: PropsWithChildren) {
       if (__DEV__) {
         console.error('[NetworkContext] Status refreshed:', status);
       }
-    } catch (_error) {
+    } catch (error: unknown) {
       console.error('[NetworkContext] Failed to refresh status:', error);
       setState((prev) => ({
         ...prev,

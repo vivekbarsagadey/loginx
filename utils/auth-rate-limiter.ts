@@ -52,41 +52,41 @@ async function callAuthFunction(functionName: string, data: Record<string, any>)
     };
   } catch (_error: any) {
     // Handle rate limit errors (HTTP 429)
-    if (error.code === 'functions/resource-exhausted') {
+    if (_error.code === 'functions/resource-exhausted') {
       logger.warn('[AuthRateLimiter] Rate limit exceeded', {
         function: functionName,
-        message: error.message,
+        message: _error.message,
       });
 
       // Extract retry time from error message
-      const retryMatch = error.message.match(/(\d+)\s*minute/i);
+      const retryMatch = _error.message.match(/(\d+)\s*minute/i);
       const retryAfter = retryMatch ? parseInt(retryMatch[1], 10) * 60 : 60;
 
       return {
         success: false,
-        message: error.message || 'Too many attempts. Please try again later.',
+        message: _error.message || 'Too many attempts. Please try again later.',
         rateLimited: true,
         retryAfter,
       };
     }
 
     // Handle other errors
-    if (error.code === 'functions/already-exists') {
+    if (_error.code === 'functions/already-exists') {
       return {
         success: false,
-        message: error.message || 'Resource already exists',
+        message: _error.message || 'Resource already exists',
       };
     }
 
-    if (error.code === 'functions/invalid-argument') {
+    if (_error.code === 'functions/invalid-argument') {
       return {
         success: false,
-        message: error.message || 'Invalid input',
+        message: _error.message || 'Invalid input',
       };
     }
 
     // Log unexpected errors
-    logger.error('[AuthRateLimiter] Validation function failed', error);
+    logger.error("[AuthRateLimiter] Validation failed", _error);
 
     // Allow operation on unexpected errors (fail open for better UX)
     return {
@@ -131,7 +131,7 @@ export async function recordLoginAttempt(email: string, success: boolean): Promi
 
     const fn = httpsCallable(functions, 'recordLoginAttempt');
     await fn({ email, success });
-  } catch (_error) {
+  } catch (_error: unknown) {
     // Don't throw - recording failures shouldn't block auth flow
     logger.warn('[AuthRateLimiter] Failed to record login attempt', {
       error: error instanceof Error ? error.message : String(error),
@@ -183,7 +183,7 @@ export function formatRateLimitMessage(response: ValidationResponse): string {
  * @returns True if rate limit error
  */
 export function isRateLimitError(_error: any): boolean {
-  return error?.code === 'functions/resource-exhausted' || error?.rateLimited === true;
+  return _error?.code === 'functions/resource-exhausted' || error?.rateLimited === true;
 }
 
 /**
@@ -197,7 +197,7 @@ export function getRetryAfterTime(_error: any): number {
   }
 
   // Try to extract from error message
-  const message = error?.message || '';
+  const message = _error?.message || '';
   const match = message.match(/(\d+)\s*minute/i);
 
   if (match) {

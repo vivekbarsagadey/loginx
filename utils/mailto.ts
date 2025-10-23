@@ -47,7 +47,7 @@ export async function openMailto(options: MailtoOptions): Promise<boolean> {
 
     await Linking.openURL(url);
     return true;
-  } catch {
+  } catch (error: unknown) {
     return false;
   }
 }

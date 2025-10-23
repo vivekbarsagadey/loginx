@@ -146,7 +146,7 @@ export function rateLimit(config: RateLimitConfig) {
         };
         transaction.update(docRef, updateData);
       });
-    } catch (_error) {
+    } catch (error: unknown) {
       // If it's our rate limit error, re-throw it
       if (error instanceof Error && error.message.includes('Rate limit exceeded')) {
         throw error;

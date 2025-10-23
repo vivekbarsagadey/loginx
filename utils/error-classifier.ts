@@ -66,7 +66,7 @@ const RECOVERABLE_FIREBASE_CODES = ['auth/network-request-failed', 'auth/too-man
 /**
  * Type guard to check if error is a Firebase error
  */
-const isFirebaseError = (_error: unknown): error is FirebaseError => {
+const isFirebaseError = (error: unknown): error is FirebaseError => {
   return typeof error === 'object' && error !== null && 'code' in error && 'message' in error && typeof (error as { code: unknown }).code === 'string';
 };
 
@@ -147,7 +147,7 @@ const getFirestoreRecoverySuggestions = (code?: string): string[] => {
 /**
  * Classify a Firebase error
  */
-const classifyFirebaseError = (_error: FirebaseError): Omit<ClassifiedError, 'originalError'> => {
+const classifyFirebaseError = (error: FirebaseError): Omit<ClassifiedError, 'originalError'> => {
   const code = error.code;
   const isFatal = FATAL_FIREBASE_CODES.includes(code);
   const isRecoverable = RECOVERABLE_FIREBASE_CODES.includes(code);
@@ -188,7 +188,7 @@ const classifyFirebaseError = (_error: FirebaseError): Omit<ClassifiedError, 'or
  * Classify an error to determine its severity and recovery options
  * TASK-045: Main classification function
  */
-export const classifyError = (_error: unknown): ClassifiedError => {
+export const classifyError = (error: unknown): ClassifiedError => {
   // Handle network errors
   if (isNetworkError(error)) {
     return {
@@ -270,7 +270,7 @@ export const classifyError = (_error: unknown): ClassifiedError => {
  * Check if an error is retryable
  */
 export const isRetryable = (_error: unknown): boolean => {
-  const classified = classifyError(error);
+  const classified = classifyError(_error);
   return classified.retryable;
 };
 
@@ -278,7 +278,7 @@ export const isRetryable = (_error: unknown): boolean => {
  * Check if an error is fatal
  */
 export const isFatal = (_error: unknown): boolean => {
-  const classified = classifyError(error);
+  const classified = classifyError(_error);
   return classified.severity === ErrorSeverity.FATAL;
 };
 
@@ -286,7 +286,7 @@ export const isFatal = (_error: unknown): boolean => {
  * Get user-friendly error message with recovery suggestions
  */
 export const getErrorWithSuggestions = (_error: unknown): { message: string; suggestions: string[] } => {
-  const classified = classifyError(error);
+  const classified = classifyError(_error);
   return {
     message: classified.userMessage,
     suggestions: classified.recoverySuggestions,

@@ -28,7 +28,7 @@ export function safeNavigate(options: NavigationOptions): void {
     } else {
       router.push(pathname as never);
     }
-  } catch (_error) {
+  } catch (error: unknown) {
     // Try fallback route if provided
     if (fallbackRoute) {
       try {
@@ -61,7 +61,7 @@ export function safeReplace(options: NavigationOptions): void {
     } else {
       router.replace(pathname as never);
     }
-  } catch (_error) {
+  } catch (error: unknown) {
     // Try fallback route if provided
     if (fallbackRoute) {
       try {
@@ -110,7 +110,7 @@ export function safeBack(options?: {
             } else {
               router.replace('/(tabs)/' as never);
             }
-          } catch (_error) {
+          } catch (error: unknown) {
             showError(new Error('Cannot go back. Try closing the app.'));
           }
         },
@@ -124,7 +124,7 @@ export function safeBack(options?: {
         router.replace('/(tabs)/' as never);
       }
     }
-  } catch (_error) {
+  } catch (error: unknown) {
     showError(new Error('Navigation error. Please restart the app.'));
   }
 }
@@ -141,7 +141,7 @@ export function isValidRoute(pathname: string): boolean {
 
     // Additional validation logic can be added here
     return true;
-  } catch {
+  } catch (error: unknown) {
     return false;
   }
 }

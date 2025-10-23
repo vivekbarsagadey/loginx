@@ -55,7 +55,7 @@ export const provideSuccessFeedback = async (title: string, message: string, onO
  */
 export const provideErrorFeedback = async (_error: unknown): Promise<void> => {
   await provideFeedback('error');
-  showError(error);
+  showError(_error);
 };
 
 /**
@@ -134,7 +134,7 @@ export const executeWithFeedback = async <T>(
     await provideSuccessFeedback(successConfig.title, successConfig.message, successConfig.onSuccess);
 
     return result;
-  } catch (_error) {
+  } catch (error: unknown) {
     // Error feedback
     if (errorConfig?.customHandler) {
       errorConfig.customHandler(error);

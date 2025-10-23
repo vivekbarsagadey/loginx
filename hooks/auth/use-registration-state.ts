@@ -368,7 +368,7 @@ export function useRegistrationState(options: UseRegistrationStateOptions = {}) 
       // Call success callback
       const hasPhoneNumber = Boolean(sanitizedData.phoneNumber && sanitizedData.phoneNumber.trim());
       onSuccess?.(user.uid, hasPhoneNumber);
-    } catch (_error) {
+    } catch (error: unknown) {
       logger.error('Registration error:', error);
 
       if (error instanceof Error) {

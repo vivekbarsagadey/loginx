@@ -171,7 +171,7 @@ class CleanupScope {
             break;
         }
       } catch (_error: unknown) {
-        debugWarn(`[CleanupManager] Error cleaning up ${id}:`, error as Error);
+        debugWarn(`[CleanupManager] Error cleaning up ${id}:`, __error as Error);
       }
     }
 

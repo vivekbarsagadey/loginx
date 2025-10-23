@@ -57,7 +57,7 @@ export function AddressAutocomplete({ onAddressSelect, initialValue, googleApiKe
         try {
           const component = addressComponents.find((c) => c && c.types && Array.isArray(c.types) && c.types.includes(type));
           return component ? (useShort ? component.short_name : component.long_name) : '';
-        } catch {
+        } catch (error: unknown) {
           return '';
         }
       };
@@ -74,7 +74,7 @@ export function AddressAutocomplete({ onAddressSelect, initialValue, googleApiKe
         zipCode: getComponent('postal_code'),
         country: getComponent('country', true),
       };
-    } catch (_error) {
+    } catch (error: unknown) {
       logger.error('Error parsing address components:', error);
       // Return a fallback object
       return {
@@ -105,7 +105,7 @@ export function AddressAutocomplete({ onAddressSelect, initialValue, googleApiKe
               const addressComponents = parseAddressComponents(details);
               onAddressSelect(addressComponents);
             }
-          } catch (_error) {
+          } catch (error: unknown) {
             logger.error('Error parsing address:', error);
             // Fallback - use the basic address text
             onAddressSelect({

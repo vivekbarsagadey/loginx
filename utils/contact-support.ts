@@ -31,7 +31,7 @@ export interface ErrorContext {
 export async function canSendEmail(): Promise<boolean> {
   try {
     return await MailComposer.isAvailableAsync();
-  } catch (_error) {
+  } catch (error: unknown) {
     logger.error('Error checking email availability', error as Error);
     return false;
   }
@@ -130,7 +130,7 @@ export async function contactSupport(
       success: false,
       error: i18n.t('errors.support.emailFailed'),
     };
-  } catch (_error) {
+  } catch (error: unknown) {
     logger.error('Error contacting support', error as Error);
     return {
       success: false,
@@ -153,7 +153,7 @@ export async function openHelpCenter(): Promise<void> {
     } else {
       logger.error('Cannot open help center URL');
     }
-  } catch (_error) {
+  } catch (error: unknown) {
     logger.error('Error opening help center', error as Error);
   }
 }
@@ -169,7 +169,7 @@ export async function openFAQ(): Promise<void> {
     } else {
       logger.error('Cannot open FAQ URL');
     }
-  } catch (_error) {
+  } catch (error: unknown) {
     logger.error('Error opening FAQ', error as Error);
   }
 }
@@ -185,18 +185,18 @@ export function getErrorContextForSupport(_error: unknown): ErrorContext {
 
   // Extract error code if available
   if (
-    typeof error === 'object' &&
-    error !== null &&
+    typeof _error === 'object' &&
+    __error !== null &&
     'code' in error &&
-    typeof (error as { code: unknown }).code === 'string'
+    typeof (_error as { code: unknown }).code === 'string'
   ) {
-    context.errorCode = (error as { code: string }).code;
+    context.errorCode = (_error as { code: string }).code;
   }
 
   // Extract error message
-  if (error instanceof Error) {
+  if (_error instanceof Error) {
     context.errorMessage = error.message;
-  } else if (typeof error === 'string') {
+  } else if (typeof _error === 'string') {
     context.errorMessage = error;
   }
 

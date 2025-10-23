@@ -69,7 +69,7 @@ export function ProfilePhotoSection({ photoURL, userId, onPhotoChange, disabled 
           onPhotoChange(downloadURL);
 
           await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        } catch (_error) {
+        } catch (error: unknown) {
           logger.error('Error uploading image:', error);
           await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
           showError(error);
@@ -77,7 +77,7 @@ export function ProfilePhotoSection({ photoURL, userId, onPhotoChange, disabled 
           setImageLoading(false);
         }
       }
-    } catch (_error) {
+    } catch (error: unknown) {
       logger.error('Error picking image:', error);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       showError(error);

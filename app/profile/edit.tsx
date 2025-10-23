@@ -120,7 +120,7 @@ export default function EditProfileScreen() {
             };
 
         form.setValues(newValues);
-      } catch (_error) {
+      } catch (error: unknown) {
         logger.error('Error loading profile:', error);
         // Fallback to auth data
         form.setValues({

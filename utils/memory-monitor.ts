@@ -66,7 +66,7 @@ const checkMemoryPressure = async (): Promise<void> => {
         try {
           listener();
         } catch (_error: unknown) {
-          debugError('[MemoryMonitor] Error in critical listener:', error as Error);
+          debugError('[MemoryMonitor] Error in critical listener:', _error as Error);
         }
       });
     } else if (memoryUsage >= MEMORY_WARNING_THRESHOLD) {
@@ -78,14 +78,14 @@ const checkMemoryPressure = async (): Promise<void> => {
         try {
           listener();
         } catch (_error: unknown) {
-          debugError('[MemoryMonitor] Error in warning listener:', error as Error);
+          debugError('[MemoryMonitor] Error in warning listener:', _error as Error);
         }
       });
     }
 
     lastMemoryCheck = Date.now();
   } catch (_error: unknown) {
-    debugError('[MemoryMonitor] Error checking memory pressure:', error as Error);
+    debugError('[MemoryMonitor] Error checking memory pressure:', _error as Error);
   }
 };
 
@@ -109,7 +109,7 @@ const handleMemoryWarning = async (): Promise<void> => {
     debugLog(`[MemoryMonitor] Cache after cleanup: ${statsAfter.memoryEntries} entries`);
     debugLog('[MemoryMonitor] ✅ Light cleanup completed');
   } catch (_error: unknown) {
-    debugError('[MemoryMonitor] Error handling memory warning:', error as Error);
+    debugError('[MemoryMonitor] Error handling memory warning:', _error as Error);
   }
 };
 
@@ -142,7 +142,7 @@ const handleCriticalMemoryPressure = async (): Promise<void> => {
 
     debugLog('[MemoryMonitor] ✅ Aggressive cleanup completed');
   } catch (_error: unknown) {
-    debugError('[MemoryMonitor] Error handling critical memory pressure:', error as Error);
+    debugError('[MemoryMonitor] Error handling critical memory pressure:', _error as Error);
   }
 };
 
@@ -167,7 +167,7 @@ const handleAppStateChange = async (nextAppState: AppStateStatus): Promise<void>
 
     currentAppState = nextAppState;
   } catch (_error: unknown) {
-    debugError('[MemoryMonitor] Error handling app state change:', error as Error);
+    debugError('[MemoryMonitor] Error handling app state change:', _error as Error);
   }
 };
 

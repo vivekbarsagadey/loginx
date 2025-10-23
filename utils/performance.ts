@@ -282,7 +282,7 @@ export const preloadImages = async (uris: string[]): Promise<void> => {
         });
       })
     );
-  } catch (_error) {
+  } catch (error: unknown) {
     if (__DEV__) {
       console.warn('[Performance] Failed to preload some images:', error);
     }

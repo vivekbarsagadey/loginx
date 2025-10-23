@@ -216,7 +216,7 @@ export function useGeolocation(
             });
           }
         }
-      } catch (_error) {
+      } catch (error: unknown) {
         if (isMounted) {
           setState({
             location: null,

@@ -113,7 +113,7 @@ export const sanitizeUserProfile = <T extends Partial<UserProfile>>(profile: T):
       if (sanitized.photoURL && !sanitized.photoURL.startsWith('http')) {
         sanitized.photoURL = '';
       }
-    } catch {
+    } catch (error: unknown) {
       sanitized.photoURL = '';
     }
   }

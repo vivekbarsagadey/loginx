@@ -120,7 +120,7 @@ export function useAsyncErrorHandler(config?: UseAsyncErrorHandlerConfig) {
     try {
       const { provideMediumFeedback } = require('@/utils/feedback');
       return provideMediumFeedback();
-    } catch {
+    } catch (error: unknown) {
       // If feedback utility not available, silently skip haptics
       return Promise.resolve();
     }
@@ -150,7 +150,7 @@ export function useAsyncErrorHandler(config?: UseAsyncErrorHandlerConfig) {
         }
 
         return { success: true, data };
-      } catch (_error) {
+      } catch (error: unknown) {
         const err = error instanceof Error ? error : new Error(String(error));
 
         // Provide haptic feedback on error
@@ -186,7 +186,7 @@ export function useAsyncErrorHandler(config?: UseAsyncErrorHandlerConfig) {
     try {
       const data = await asyncFn();
       return { success: true, data };
-    } catch (_error) {
+    } catch (error: unknown) {
       const err = error instanceof Error ? error : new Error(String(error));
       return { success: false, error: err };
     }

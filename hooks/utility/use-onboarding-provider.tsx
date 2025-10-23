@@ -121,7 +121,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
           const savedAnalytics = JSON.parse(analyticsValue);
           setAnalytics(savedAnalytics);
         }
-      } catch (_error) {
+      } catch (error: unknown) {
         // handle error silently
       } finally {
         setCheckingOnboarding(false);
@@ -134,7 +134,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
   const saveToStorage = useCallback(async (key: string, data: OnboardingPermissions | OnboardingAnalytics) => {
     try {
       await AsyncStorage.setItem(key, JSON.stringify(data));
-    } catch (_error) {
+    } catch (error: unknown) {
       // handle error silently
     }
   }, []);
@@ -155,7 +155,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
         }
 
         setOnboardingCompletedState(value);
-      } catch (_error) {
+      } catch (error: unknown) {
         // handle error silently
       }
     },
@@ -227,7 +227,7 @@ export function OnboardingProvider({ children }: { children: React.ReactNode }) 
   const saveCurrentSlide = useCallback(async (slideId: string) => {
     try {
       await AsyncStorage.setItem('currentOnboardingSlide', slideId);
-    } catch (_error) {
+    } catch (error: unknown) {
       // handle error silently
     }
   }, []);

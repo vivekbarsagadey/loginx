@@ -124,7 +124,7 @@ export default function PermissionsScreen() {
   const handleRequestPermission = async (type: 'camera' | 'mediaLibrary' | 'location' | 'notifications') => {
     try {
       await requestPermission(type);
-    } catch (_error) {
+    } catch (error: unknown) {
       console.error('Failed to request permission:', error);
     }
   };

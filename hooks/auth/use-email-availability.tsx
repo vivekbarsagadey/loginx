@@ -64,7 +64,7 @@ export function useEmailAvailability(debounceMs = 800): UseEmailAvailabilityResu
           setStatus('available');
           setMessage('Email is available');
         }
-      } catch (_error) {
+      } catch (error: unknown) {
         // Don't show error to user - fail silently
         // They'll get a proper error on submission if needed
         setStatus('error');

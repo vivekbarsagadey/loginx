@@ -48,7 +48,7 @@ export default function IndexScreen() {
         } else {
           alert.show('Error', 'User profile not found. Please complete your registration.', [{ text: 'OK' }], { variant: 'error' });
         }
-      } catch (_error) {
+      } catch (error: unknown) {
         logger.error('Error fetching user profile:', error);
         alert.show('Error', 'Failed to fetch user profile.', [{ text: 'OK' }], { variant: 'error' });
       } finally {

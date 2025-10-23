@@ -35,7 +35,7 @@ export default function HelpScreen() {
       if (supported) {
         await Linking.openURL(url);
       }
-    } catch (_error) {
+    } catch (error: unknown) {
       logger.error('Error opening website:', error);
     }
   };

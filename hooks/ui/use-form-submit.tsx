@@ -83,15 +83,15 @@ export function useFormSubmit<T = void>(submitFn: () => Promise<T>, options: Use
         if (errorMessage) {
           showAlert(errorTitle, errorMessage, [{ text: 'OK' }], { variant: 'error' });
         } else {
-          showError(error);
+          showError(_error);
         }
       }
 
       if (onError) {
-        onError(error);
+        onError(_error);
       }
 
-      return { success: false, error };
+      return { success: false, error: _error };
     } finally {
       setIsSubmitting(false);
     }

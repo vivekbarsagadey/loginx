@@ -1,8 +1,8 @@
-import { useCallback, useState } from 'react';
-import { getErrorInfo, isFatalError } from '@/utils/error';
-import { contactSupport, getErrorContextForSupport } from '@/utils/contact-support';
 import i18n from '@/i18n';
+import { contactSupport, getErrorContextForSupport } from '@/utils/contact-support';
+import { getErrorInfo, isFatalError } from '@/utils/error';
 import { logger } from '@/utils/logger-production';
+import { useCallback, useState } from 'react';
 
 export interface ErrorDisplay {
   title: string;
@@ -27,8 +27,8 @@ export function useErrorHandler() {
    * Display an error to the user
    */
   const showError = useCallback((_error: unknown) => {
-    const errorInfo = getErrorInfo(error);
-    const fatal = isFatalError(error);
+    const errorInfo = getErrorInfo(_error);
+    const fatal = isFatalError(_error);
 
     setErrorDisplay({
       title: errorInfo.title,
@@ -42,7 +42,7 @@ export function useErrorHandler() {
       title: errorInfo.title,
       message: errorInfo.message,
       isFatal: fatal,
-      error,
+      error: _error,
     });
   }, []);
 
@@ -58,11 +58,8 @@ export function useErrorHandler() {
    */
   const handleContactSupport = useCallback(
     async (_error: unknown) => {
-      const errorContext = getErrorContextForSupport(error);
-      const result = await contactSupport(
-        i18n.t('errors.support.contactButton'),
-        errorContext
-      );
+      const errorContext = getErrorContextForSupport(_error);
+      const result = await contactSupport(i18n.t('errors.support.contactButton'), errorContext);
 
       if (!result.success && result.error) {
         // Show error if email composition failed

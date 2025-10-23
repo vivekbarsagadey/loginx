@@ -47,7 +47,7 @@ export default function SettingsScreen() {
         try {
           await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
           await auth.signOut();
-        } catch (_error) {
+        } catch (error: unknown) {
           showError(error);
         }
       },
@@ -64,7 +64,7 @@ export default function SettingsScreen() {
           await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           clearCache();
           showSuccess('Success', 'Cache cleared successfully');
-        } catch (_error) {
+        } catch (error: unknown) {
           showError(error);
         }
       },

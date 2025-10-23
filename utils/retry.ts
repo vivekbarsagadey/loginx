@@ -21,8 +21,8 @@ const DEFAULT_OPTIONS: Required<RetryOptions> = {
   backoffMultiplier: ApiConstants.BACKOFF_MULTIPLIER,
   shouldRetry: (_error: unknown) => {
     // Retry on network errors, but not on auth errors
-    if (typeof error === 'object' && error !== null && 'code' in error) {
-      const code = (error as { code: string }).code;
+    if (typeof _error === 'object' && _error !== null && 'code' in error) {
+      const code = (_error as { code: string }).code;
       // Don't retry authentication errors
       if (code.startsWith('auth/')) {
         return false;
@@ -73,12 +73,12 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions =
   for (let attempt = 0; attempt <= opts.maxRetries; attempt++) {
     try {
       return await fn();
-    } catch (_error) {
-      lastError = error;
+    } catch (error: unknown) {
+      lastError = _error;
 
       // Check if we should retry this error
-      if (!opts.shouldRetry(error)) {
-        throw error;
+      if (!opts.shouldRetry(_error)) {
+        throw _error;
       }
 
       // Don't retry if we've exhausted all attempts
