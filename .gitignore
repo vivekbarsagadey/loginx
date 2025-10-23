@@ -83,4 +83,4 @@ expo-env.d.ts
 # @end expo-cli
 
 keystore/
-.history/
+.history/package-lock.json
