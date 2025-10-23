@@ -439,19 +439,6 @@ export const getData = async <T>(options: LocalFirstOptions): Promise<T | null> 
     );
 
     return result as T | null;
-
-    // 4. Use fallback data if provided
-    if (fallbackData !== undefined) {
-      debugLog(`[LocalFirst] 🔄 Using fallback data for: ${cacheKey}`);
-
-      // Cache fallback data locally
-      await cache.set(cacheKey, fallbackData, 'local', 'pending');
-
-      return fallbackData as T;
-    }
-
-    debugLog(`[LocalFirst] ❌ No data found for: ${cacheKey}`);
-    return null;
   } catch (_error: unknown) {
     debugError(`[LocalFirst] Error getting data for ${cacheKey}:`, _error);
     return (fallbackData as T) || null;
@@ -641,7 +628,7 @@ const backgroundSync = async (options: LocalFirstOptions): Promise<void> => {
     if (queueEntry) {
       queueEntry.retries = (queueEntry.retries || 0) + 1;
       queueEntry.lastSyncAttempt = Date.now();
-      queueEntry.syncStatus = '_error';
+      queueEntry.syncStatus = 'error';
 
       const maxRetries = options.maxRetries || 5;
 

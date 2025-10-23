@@ -33,7 +33,7 @@ export interface ValidationResponse {
  * @param data - Data to pass to the function
  * @returns Validation response
  */
-async function callAuthFunction(functionName: string, data: Record<string, any>): Promise<ValidationResponse> {
+async function callAuthFunction(functionName: string, data: Record<string, unknown>): Promise<ValidationResponse> {
   try {
     if (!functions) {
       logger.warn('[AuthRateLimiter] Firebase Functions not initialized');
@@ -48,45 +48,46 @@ async function callAuthFunction(functionName: string, data: Record<string, any>)
 
     return {
       success: true,
-      message: (result.data as any)?.message || 'Validation passed',
+      message: (result.data as { message?: string })?.message || 'Validation passed',
     };
-  } catch (error: any) {
+  } catch (_error: unknown) {
+    const error = _error as { code?: string; message?: string };
     // Handle rate limit errors (HTTP 429)
-    if (_error.code === 'functions/resource-exhausted') {
+    if (error.code === 'functions/resource-exhausted') {
       logger.warn('[AuthRateLimiter] Rate limit exceeded', {
         function: functionName,
-        message: _error.message,
+        message: error.message,
       });
 
       // Extract retry time from error message
-      const retryMatch = _error.message.match(/(\d+)\s*minute/i);
+      const retryMatch = error.message?.match(/(\d+)\s*minute/i);
       const retryAfter = retryMatch ? parseInt(retryMatch[1], 10) * 60 : 60;
 
       return {
         success: false,
-        message: _error.message || 'Too many attempts. Please try again later.',
+        message: error.message || 'Too many attempts. Please try again later.',
         rateLimited: true,
         retryAfter,
       };
     }
 
     // Handle other errors
-    if (_error.code === 'functions/already-exists') {
+    if (error.code === 'functions/already-exists') {
       return {
         success: false,
-        message: _error.message || 'Resource already exists',
+        message: error.message || 'Resource already exists',
       };
     }
 
-    if (_error.code === 'functions/invalid-argument') {
+    if (error.code === 'functions/invalid-argument') {
       return {
         success: false,
-        message: _error.message || 'Invalid input',
+        message: error.message || 'Invalid input',
       };
     }
 
     // Log unexpected errors
-    logger.error('[AuthRateLimiter] Validation failed', _error);
+    logger.error('[AuthRateLimiter] Validation failed', error as Error);
 
     // Allow operation on unexpected errors (fail open for better UX)
     return {
@@ -182,8 +183,9 @@ export function formatRateLimitMessage(response: ValidationResponse): string {
  * @param error - Error to check
  * @returns True if rate limit error
  */
-export function isRateLimitError(error: any): boolean {
-  return _error?.code === 'functions/resource-exhausted' || _error?.rateLimited === true;
+export function isRateLimitError(_error: unknown): boolean {
+  const error = _error as { code?: string; rateLimited?: boolean };
+  return error?.code === 'functions/resource-exhausted' || error?.rateLimited === true;
 }
 
 /**
@@ -191,13 +193,14 @@ export function isRateLimitError(error: any): boolean {
  * @param error - Error object
  * @returns Retry after time in seconds, or 60 as default
  */
-export function getRetryAfterTime(error: any): number {
-  if (_error?.retryAfter) {
-    return _error.retryAfter;
+export function getRetryAfterTime(_error: unknown): number {
+  const error = _error as { retryAfter?: number; message?: string };
+  if (error?.retryAfter) {
+    return error.retryAfter;
   }
 
   // Try to extract from error message
-  const message = _error?.message || '';
+  const message = error?.message || '';
   const match = message.match(/(\d+)\s*minute/i);
 
   if (match) {
