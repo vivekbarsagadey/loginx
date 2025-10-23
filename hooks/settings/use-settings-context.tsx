@@ -64,7 +64,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
     app: DEFAULT_APP_PREFERENCES,
     privacy: DEFAULT_PRIVACY_SETTINGS,
     isLoading: true,
-    error: null,
+    _error: null,
     lastSyncedAt: null,
   });
 
@@ -73,7 +73,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
    */
   const loadSettings = useCallback(async () => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       const [notifications, security, app, privacy] = await Promise.all([
         getData<NotificationSettings>({ collection: 'settings', id: SETTINGS_NOTIFICATIONS_KEY, syncEnabled: false }),
@@ -95,12 +95,12 @@ export function SettingsProvider({ children }: PropsWithChildren) {
       if (__DEV__) {
         console.error('[SettingsContext] Settings loaded from local storage');
       }
-    } catch (error: unknown) {
-      console.error('[SettingsContext] Failed to load settings:', error);
+    } catch (_error: unknown) {
+      console.error('[SettingsContext] Failed to load settings:', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to load settings',
+        _error: 'Failed to load settings',
       }));
     }
   }, []);
@@ -127,8 +127,8 @@ export function SettingsProvider({ children }: PropsWithChildren) {
       if (__DEV__) {
         console.error(`[SettingsContext] ${key} saved and synced`);
       }
-    } catch (error: unknown) {
-      console.error(`[SettingsContext] Failed to save ${key}:`, error);
+    } catch (_error: unknown) {
+      console.error(`[SettingsContext] Failed to save ${key}:`, _error);
       throw _error;
     }
   }, []);
@@ -148,12 +148,12 @@ export function SettingsProvider({ children }: PropsWithChildren) {
 
       try {
         await saveSettingsSection(SETTINGS_NOTIFICATIONS_KEY, 'userSettings', newNotifications);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         // Rollback on error
         setState((prev) => ({
           ...prev,
           notifications: state.notifications,
-          error: 'Failed to update notification settings',
+          _error: 'Failed to update notification settings',
         }));
         throw _error;
       }
@@ -176,12 +176,12 @@ export function SettingsProvider({ children }: PropsWithChildren) {
 
       try {
         await saveSettingsSection(SETTINGS_SECURITY_KEY, 'userSettings', newSecurity);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         // Rollback on error
         setState((prev) => ({
           ...prev,
           security: state.security,
-          error: 'Failed to update security settings',
+          _error: 'Failed to update security settings',
         }));
         throw _error;
       }
@@ -204,12 +204,12 @@ export function SettingsProvider({ children }: PropsWithChildren) {
 
       try {
         await saveSettingsSection(SETTINGS_APP_KEY, 'userSettings', newApp);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         // Rollback on error
         setState((prev) => ({
           ...prev,
           app: state.app,
-          error: 'Failed to update app preferences',
+          _error: 'Failed to update app preferences',
         }));
         throw _error;
       }
@@ -232,12 +232,12 @@ export function SettingsProvider({ children }: PropsWithChildren) {
 
       try {
         await saveSettingsSection(SETTINGS_PRIVACY_KEY, 'userSettings', newPrivacy);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         // Rollback on error
         setState((prev) => ({
           ...prev,
           privacy: state.privacy,
-          error: 'Failed to update privacy settings',
+          _error: 'Failed to update privacy settings',
         }));
         throw _error;
       }
@@ -274,19 +274,19 @@ export function SettingsProvider({ children }: PropsWithChildren) {
         app: DEFAULT_APP_PREFERENCES,
         privacy: DEFAULT_PRIVACY_SETTINGS,
         isLoading: false,
-        error: null,
+        _error: null,
         lastSyncedAt: null,
       });
 
       if (__DEV__) {
         console.error('[SettingsContext] All settings reset to defaults');
       }
-    } catch (error: unknown) {
-      console.error('[SettingsContext] Failed to reset settings:', error);
+    } catch (_error: unknown) {
+      console.error('[SettingsContext] Failed to reset settings:', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to reset settings',
+        _error: 'Failed to reset settings',
       }));
     }
   }, []);
@@ -331,7 +331,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
           }
         },
         (_error) => {
-          console.error('[SettingsContext] Notifications sync error:', error);
+          console.error('[SettingsContext] Notifications sync _error:', _error);
         }
       )
     );
@@ -351,7 +351,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
           }
         },
         (_error) => {
-          console.error('[SettingsContext] Security sync error:', error);
+          console.error('[SettingsContext] Security sync _error:', _error);
         }
       )
     );
@@ -371,7 +371,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
           }
         },
         (_error) => {
-          console.error('[SettingsContext] App sync error:', error);
+          console.error('[SettingsContext] App sync _error:', _error);
         }
       )
     );
@@ -391,7 +391,7 @@ export function SettingsProvider({ children }: PropsWithChildren) {
           }
         },
         (_error) => {
-          console.error('[SettingsContext] Privacy sync error:', error);
+          console.error('[SettingsContext] Privacy sync _error:', _error);
         }
       )
     );

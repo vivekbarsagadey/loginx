@@ -9,13 +9,13 @@ import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 
 interface Props {
   children: ReactNode;
-  fallback?: (error: Error | null) => ReactNode;
-  onError?: (error: Error, errorInfo: ErrorInfo) => void;
+  fallback?: (_error: Error | null) => ReactNode;
+  onError?: (_error: Error, errorInfo: ErrorInfo) => void;
 }
 
 interface State {
   hasError: boolean;
-  error: Error | null;
+  _error: Error | null;
   errorInfo: ErrorInfo | null;
 }
 
@@ -28,21 +28,21 @@ export class ErrorBoundary extends Component<Props, State> {
     super(props);
     this.state = {
       hasError: false,
-      error: null,
+      _error: null,
       errorInfo: null,
     };
   }
 
-  static getDerivedStateFromError(error: Error): Partial<State> {
+  static getDerivedStateFromError(_error: Error): Partial<State> {
     return {
       hasError: true,
       error,
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  componentDidCatch(_error: Error, errorInfo: ErrorInfo): void {
     // Log error to console for debugging
-    console.error('[ErrorBoundary] Caught error:', error);
+    console.error('[ErrorBoundary] Caught _error:', _error);
     console.error('[ErrorBoundary] Error info:', errorInfo);
 
     // Store error info for display
@@ -58,7 +58,7 @@ export class ErrorBoundary extends Component<Props, State> {
   handleReset = (): void => {
     this.setState({
       hasError: false,
-      error: null,
+      _error: null,
       errorInfo: null,
     });
   };
@@ -76,7 +76,7 @@ export class ErrorBoundary extends Component<Props, State> {
  * Default fallback UI shown when an error is caught
  * Provides comprehensive recovery options for users
  */
-function ErrorFallback({ error, resetError }: { error: Error | null; resetError?: () => void }) {
+function ErrorFallback({ error, resetError }: { _error: Error | null; resetError?: () => void }) {
   const router = useRouter();
   const colors = useThemeColors();
 

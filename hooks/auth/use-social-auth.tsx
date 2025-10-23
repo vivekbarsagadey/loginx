@@ -51,7 +51,7 @@ const isGoogleSigninAvailable = (): boolean => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     require('@react-native-google-signin/google-signin');
     return true;
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     return false;
   }
 };
@@ -75,7 +75,7 @@ const isFacebookSigninAvailable = (): boolean => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     require('expo-auth-session/providers/facebook');
     return true;
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     return false;
   }
 };
@@ -142,7 +142,7 @@ export function useSocialAuth() {
 
       // Handle successful authentication (creates profile, feedback, navigation)
       await handleSocialAuthSuccess(user, undefined, undefined, router);
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       await handleSocialAuthError(_error, 'Google sign-in error');
     } finally {
       setLoading(false);
@@ -186,7 +186,7 @@ export function useSocialAuth() {
 
       // Handle successful authentication (creates profile, feedback, navigation)
       await handleSocialAuthSuccess(user, fullName, credential.email || user.email || '', router);
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       // User cancelled - don't show error
       if (isAuthCancellation(_error)) {
         setLoading(false);
@@ -221,7 +221,7 @@ export function useSocialAuth() {
       // See docs/FACEBOOK_AUTH_IMPLEMENTATION.md for complete implementation guide
       const errorMessage = ERROR_MESSAGES.FACEBOOK_PENDING.replace('{appId}', Config.services.facebookAppId || 'Not configured');
       throw new Error(_errorMessage);
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       await provideErrorFeedback(_error);
     } finally {
       setLoading(false);

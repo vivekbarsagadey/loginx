@@ -89,8 +89,8 @@ async function registerForPushNotificationsAsync() {
 
     const pushToken = await Notifications.getExpoPushTokenAsync({ projectId });
     token = pushToken.data;
-  } catch (error: unknown) {
-    console.error('[Push Notifications] Error registering:', error);
+  } catch (_error: unknown) {
+    console.error('[Push Notifications] Error registering:', _error);
     return undefined;
   }
 

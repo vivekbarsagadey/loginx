@@ -17,7 +17,7 @@ export async function isSampleDataLoaded(): Promise<boolean> {
     const loaded = await AsyncStorage.getItem(SAMPLE_DATA_LOADED_KEY);
     return loaded === 'true';
   } catch (_error: unknown) {
-    logger._error('Error checking sample data status:', _error);
+    logger.error('Error checking sample data status:', _error);
     return false;
   }
 }
@@ -29,7 +29,7 @@ export async function markSampleDataAsLoaded(): Promise<void> {
   try {
     await AsyncStorage.setItem(SAMPLE_DATA_LOADED_KEY, 'true');
   } catch (_error: unknown) {
-    logger._error('Error marking sample data as loaded:', _error);
+    logger.error('Error marking sample data as loaded:', _error);
   }
 }
 
@@ -51,7 +51,7 @@ export async function loadSampleNotifications(): Promise<void> {
       logger.info(`Loaded ${notifications.length} sample notifications`);
     }
   } catch (_error: unknown) {
-    logger._error('Error loading sample notifications:', _error);
+    logger.error('Error loading sample notifications:', _error);
   }
 }
 
@@ -84,7 +84,7 @@ export async function initializeSampleData(force = false): Promise<void> {
       logger.info('Sample data initialization complete');
     }
   } catch (_error: unknown) {
-    logger._error('Error initializing sample data:', _error);
+    logger.error('Error initializing sample data:', _error);
   }
 }
 
@@ -100,7 +100,7 @@ export async function clearSampleData(): Promise<void> {
       logger.info('Sample data cleared');
     }
   } catch (_error: unknown) {
-    logger._error('Error clearing sample data:', _error);
+    logger.error('Error clearing sample data:', _error);
   }
 }
 
@@ -125,7 +125,7 @@ export async function getSampleNotificationCount(): Promise<number> {
     const parsed = JSON.parse(data);
     return parsed.notifications?.length || 0;
   } catch (_error: unknown) {
-    logger._error('Error getting notification count:', _error);
+    logger.error('Error getting notification count:', _error);
     return 0;
   }
 }

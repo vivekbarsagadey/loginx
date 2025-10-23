@@ -75,7 +75,7 @@ export function AddressAutocomplete({ onAddressSelect, initialValue, googleApiKe
         country: getComponent('country', true),
       };
     } catch (_error: unknown) {
-      logger._error('Error parsing address components:', _error);
+      logger.error('Error parsing address components:', _error);
       // Return a fallback object
       return {
         fullAddress: '',
@@ -106,7 +106,7 @@ export function AddressAutocomplete({ onAddressSelect, initialValue, googleApiKe
               onAddressSelect(addressComponents);
             }
           } catch (_error: unknown) {
-            logger._error('Error parsing address:', _error);
+            logger.error('Error parsing address:', _error);
             // Fallback - use the basic address text
             onAddressSelect({
               fullAddress: data.description || '',
@@ -119,7 +119,7 @@ export function AddressAutocomplete({ onAddressSelect, initialValue, googleApiKe
           }
         }}
         onFail={(_error) => {
-          logger.error('GooglePlacesAutocomplete error:', error);
+          logger.error('GooglePlacesAutocomplete _error:', _error);
         }}
         query={{
           key: isValidApiKey ? googleApiKey : '',

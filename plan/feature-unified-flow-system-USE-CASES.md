@@ -520,7 +520,7 @@ export const registrationFlow: FlowConfig = {
 
   // Error handling
   onError: async (error) => {
-    await logError("registration_error", error);
+    await logError("registration_error", _error);
     return { handled: true };
   },
 

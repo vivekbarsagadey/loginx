@@ -8,7 +8,7 @@ import { useCallback, useState } from 'react';
 
 export interface UseAsyncOperationOptions {
   onSuccess?: () => void;
-  onError?: (error: unknown) => void;
+  onError?: (_error: unknown) => void;
   showErrorToast?: boolean;
 }
 
@@ -16,7 +16,7 @@ type AsyncFunction = (...args: readonly unknown[]) => Promise<unknown>;
 
 export interface UseAsyncOperationResult<T extends AsyncFunction> {
   loading: boolean;
-  error: unknown;
+  _error: unknown;
   execute: T;
   reset: () => void;
 }
@@ -64,5 +64,5 @@ export function useAsyncOperation<T extends AsyncFunction>(asyncFunction: T, opt
     setExecutionError(null);
   }, []);
 
-  return { loading: isLoading, error: executionError, execute, reset };
+  return { loading: isLoading, _error: executionError, execute, reset };
 }

@@ -275,7 +275,7 @@ Never expose internal errors:
 
 ```typescript
 catch (error) {
-  console.error('[Internal]', error); // Log full error
+  console.error('[Internal]', _error); // Log full error
   throw new HttpsError('internal', 'Operation failed'); // Generic message
 }
 ```

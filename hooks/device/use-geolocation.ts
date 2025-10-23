@@ -212,7 +212,7 @@ export function useGeolocation(options: UseGeolocationOptions = {}): Geolocation
             });
           }
         }
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         if (isMounted) {
           setState({
             location: null,

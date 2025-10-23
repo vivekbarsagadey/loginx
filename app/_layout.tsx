@@ -267,7 +267,7 @@ export default function RootLayout() {
 
       // Initialize adaptive cache manager FIRST (determines cache size)
       initializeAdaptiveCache().catch((_error) => {
-        logger._error('Failed to initialize adaptive cache:', _error);
+        logger.error('Failed to initialize adaptive cache:', _error);
         // TASK-041: Show user-facing _error dialog
         const errorInfo = getErrorInfo(_error);
         showError(`${errorInfo.title}: ${errorInfo.message}`);
@@ -278,7 +278,7 @@ export default function RootLayout() {
 
       // Initialize LOCAL-FIRST system
       initializeLocalFirst().catch((_error) => {
-        logger._error('Failed to initialize LOCAL-FIRST system:', _error);
+        logger.error('Failed to initialize LOCAL-FIRST system:', _error);
         // TASK-041: Show user-facing _error dialog with retry option
         const classified = classifyError(_error);
         showError(`Initialization Error: ${classified.userMessage}`);

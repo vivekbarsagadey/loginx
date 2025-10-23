@@ -16,7 +16,7 @@ import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 interface CriticalErrorScreenProps {
-  error: Error | unknown;
+  _error: Error | unknown;
   onRetry?: () => void;
   onRestart?: () => void;
 }
@@ -25,7 +25,7 @@ interface CriticalErrorScreenProps {
  * Critical error screen shown when app initialization fails
  * Provides user-friendly error messages and recovery options
  */
-export function CriticalErrorScreen({ error: _error, onRetry, onRestart }: CriticalErrorScreenProps) {
+export function CriticalErrorScreen({ _error: _error, onRetry, onRestart }: CriticalErrorScreenProps) {
   const colors = useThemeColors();
   const classified = classifyError(_error);
 

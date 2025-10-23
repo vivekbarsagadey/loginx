@@ -45,7 +45,7 @@ let app: ReturnType<typeof initializeApp>;
 try {
   app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 } catch (_error: unknown) {
-  logger._error('[Firebase] Failed to initialize app', _error instanceof Error ? _error : new Error(String(_error)));
+  logger.error('[Firebase] Failed to initialize app', _error instanceof Error ? _error : new Error(String(_error)));
   throw new Error('Firebase initialization failed. Please check your configuration.');
 }
 
@@ -93,7 +93,7 @@ try {
     }
   }
 } catch (_error: unknown) {
-  logger._error('[Firebase] Failed to initialize Functions', _error instanceof Error ? _error : new Error(String(_error)));
+  logger.error('[Firebase] Failed to initialize Functions', _error instanceof Error ? _error : new Error(String(_error)));
 }
 
 export const functions = functionsInstance;
@@ -219,9 +219,9 @@ export const initializeFirestore = async (): Promise<void> => {
       clearTimeout(timeoutId);
       firestoreError = _error instanceof Error ? _error : new Error('Unknown Firestore initialization _error');
       firestoreInitializing = false;
-      logger._error('[Firebase] Failed to initialize Firestore', _error instanceof Error ? _error : new Error(String(_error)));
+      logger.error('[Firebase] Failed to initialize Firestore', _error instanceof Error ? _error : new Error(String(_error)));
       if (_error instanceof Error) {
-        logger._error('[Firebase] Error details', {
+        logger.error('[Firebase] Error details', {
           message: _error.message,
           stack: __DEV__ ? _error.stack : '[REDACTED]',
         });
@@ -246,7 +246,7 @@ export const getFirestoreInstance = (): ReturnType<typeof getFirestore> | undefi
   // Start initialization if not already started
   if (!firestoreInitialized && !firestoreInitializing) {
     initializeFirestore().catch((_error) => {
-      logger._error('[Firebase] Auto-initialization failed', _error);
+      logger.error('[Firebase] Auto-initialization failed', _error);
     });
   }
   return firestoreInstance;

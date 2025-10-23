@@ -45,7 +45,7 @@ interface State {
   /** Whether an error has been caught */
   hasError: boolean;
   /** The caught error object */
-  error: Error | null;
+  _error: Error | null;
   /** Error info from React */
   errorInfo: ErrorInfo | null;
   /** Error count for rate limiting retries */
@@ -61,7 +61,7 @@ export class AuthErrorBoundary extends Component<Props, State> {
     super(props);
     this.state = {
       hasError: false,
-      error: null,
+      _error: null,
       errorInfo: null,
       errorCount: 0,
     };
@@ -70,7 +70,7 @@ export class AuthErrorBoundary extends Component<Props, State> {
   /**
    * Update state when an error is caught
    */
-  static getDerivedStateFromError(error: Error): Partial<State> {
+  static getDerivedStateFromError(_error: Error): Partial<State> {
     return {
       hasError: true,
       error,
@@ -80,10 +80,10 @@ export class AuthErrorBoundary extends Component<Props, State> {
   /**
    * Log error details
    */
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  componentDidCatch(_error: Error, errorInfo: ErrorInfo): void {
     // Log error with production-safe logger
     logger.error('[AuthErrorBoundary] React component error caught', {
-      error: {
+      _error: {
         name: error.name,
         message: error.message,
         stack: __DEV__ ? error.stack : '[REDACTED]',
@@ -114,7 +114,7 @@ export class AuthErrorBoundary extends Component<Props, State> {
 
     this.setState({
       hasError: false,
-      error: null,
+      _error: null,
       errorInfo: null,
     });
 

@@ -49,7 +49,7 @@ export default function IndexScreen() {
           alert.show('Error', 'User profile not found. Please complete your registration.', [{ text: 'OK' }], { variant: 'error' });
         }
       } catch (_error: unknown) {
-        logger._error('Error fetching user profile:', _error);
+        logger.error('Error fetching user profile:', _error);
         alert.show('Error', 'Failed to fetch user profile.', [{ text: 'OK' }], { variant: '_error' });
       } finally {
         setLoading(false);

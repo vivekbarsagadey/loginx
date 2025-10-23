@@ -32,7 +32,7 @@ export async function canSendEmail(): Promise<boolean> {
   try {
     return await MailComposer.isAvailableAsync();
   } catch (_error: unknown) {
-    logger._error('Error checking email availability', _error as Error);
+    logger.error('Error checking email availability', _error as Error);
     return false;
   }
 }
@@ -126,7 +126,7 @@ export async function contactSupport(subject?: string, _errorContext?: ErrorCont
       error: i18n.t('errors.support.emailFailed'),
     };
   } catch (_error: unknown) {
-    logger._error('Error contacting support', _error as Error);
+    logger.error('Error contacting support', _error as Error);
     return {
       success: false,
       _error: _error instanceof Error ? _error.message : i18n.t('errors.support.emailFailed'),
@@ -146,7 +146,7 @@ export async function openHelpCenter(): Promise<void> {
       logger.error('Cannot open help center URL');
     }
   } catch (_error: unknown) {
-    logger._error('Error opening help center', _error as Error);
+    logger.error('Error opening help center', _error as Error);
   }
 }
 
@@ -162,14 +162,14 @@ export async function openFAQ(): Promise<void> {
       logger.error('Cannot open FAQ URL');
     }
   } catch (_error: unknown) {
-    logger._error('Error opening FAQ', _error as Error);
+    logger.error('Error opening FAQ', _error as Error);
   }
 }
 
 /**
  * Get current error context for support
  */
-export function getErrorContextForSupport(error: unknown): ErrorContext {
+export function getErrorContextForSupport(_error: unknown): ErrorContext {
   const context: ErrorContext = {
     timestamp: new Date().toISOString(),
     platform: Platform.OS,

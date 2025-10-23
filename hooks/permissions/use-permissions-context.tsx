@@ -54,7 +54,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       notifications: { granted: false, canAskAgain: true },
     },
     isLoading: false,
-    error: null,
+    _error: null,
     lastCheckedAt: null,
   });
 
@@ -63,7 +63,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
    */
   const checkAllPermissions = useCallback(async () => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       const [cameraStatus, mediaLibraryStatus, locationStatus, notificationStatus] = await Promise.all([
         Camera.getCameraPermissionsAsync(),
@@ -101,12 +101,12 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       if (__DEV__) {
         console.error('[PermissionsContext] Permissions checked:', newPermissions);
       }
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('[PermissionsContext] Failed to check permissions:', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to check permissions',
+        _error: 'Failed to check permissions',
       }));
     }
   }, []);
@@ -116,7 +116,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
    */
   const requestCameraPermission = useCallback(async (): Promise<boolean> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       const { status, canAskAgain } = await Camera.requestCameraPermissionsAsync();
       const granted = status === 'granted';
@@ -136,12 +136,12 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       }
 
       return granted;
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('[PermissionsContext] Failed to request camera permission:', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to request camera permission',
+        _error: 'Failed to request camera permission',
       }));
       return false;
     }
@@ -152,7 +152,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
    */
   const requestMediaLibraryPermission = useCallback(async (): Promise<boolean> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       const { status, canAskAgain } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       const granted = status === 'granted';
@@ -172,12 +172,12 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       }
 
       return granted;
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('[PermissionsContext] Failed to request media library permission:', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to request media library permission',
+        _error: 'Failed to request media library permission',
       }));
       return false;
     }
@@ -188,7 +188,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
    */
   const requestLocationPermission = useCallback(async (): Promise<boolean> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       const { status, canAskAgain } = await Location.requestForegroundPermissionsAsync();
       const granted = status === 'granted';
@@ -208,12 +208,12 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       }
 
       return granted;
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('[PermissionsContext] Failed to request location permission:', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to request location permission',
+        _error: 'Failed to request location permission',
       }));
       return false;
     }
@@ -224,7 +224,7 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
    */
   const requestNotificationPermission = useCallback(async (): Promise<boolean> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       const { status, canAskAgain } = await Notifications.requestPermissionsAsync();
       const granted = status === 'granted';
@@ -244,12 +244,12 @@ export function PermissionsProvider({ children }: PropsWithChildren) {
       }
 
       return granted;
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('[PermissionsContext] Failed to request notification permission:', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to request notification permission',
+        _error: 'Failed to request notification permission',
       }));
       return false;
     }

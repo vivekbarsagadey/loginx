@@ -137,7 +137,7 @@ export function useFlowEngine(config: FlowConfig, options: UseFlowEngineOptions 
       if (enablePersistence) {
         await saveState();
       }
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('Error navigating to next step:', _error);
       onError?.(_error as Error, currentStep.id);
     }
@@ -156,7 +156,7 @@ export function useFlowEngine(config: FlowConfig, options: UseFlowEngineOptions 
           console._error('Failed to save state after going back:', _error);
         });
       }
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('Error navigating to previous step:', _error);
       onError?.(_error as Error, currentStep.id);
     }
@@ -180,7 +180,7 @@ export function useFlowEngine(config: FlowConfig, options: UseFlowEngineOptions 
       if (enablePersistence) {
         await saveState();
       }
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('Error skipping step:', _error);
       onError?.(_error as Error, currentStep.id);
     }
@@ -200,7 +200,7 @@ export function useFlowEngine(config: FlowConfig, options: UseFlowEngineOptions 
             console._error('Failed to save state after jumping:', _error);
           });
         }
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         console.error('Error jumping to step:', _error);
         onError?.(_error as Error, currentStep.id);
       }
@@ -238,7 +238,7 @@ export function useFlowEngine(config: FlowConfig, options: UseFlowEngineOptions 
 
       // Mark flow as completed
       await complete();
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       console.error('Error completing flow:', _error);
       onError?.(_error as Error, currentStep.id);
       throw _error;

@@ -16,7 +16,7 @@ interface UseFormSubmitOptions {
   /** Callback after successful submission */
   onSuccess?: () => void;
   /** Callback after failed submission */
-  onError?: (error: unknown) => void;
+  onError?: (_error: unknown) => void;
   /** Custom validation function */
   validate?: () => boolean | Promise<boolean>;
   /** Whether to show success alert */
@@ -72,7 +72,7 @@ export function useFormSubmit<T = void>(submitFn: () => Promise<T>, options: Use
       }
 
       return { success: true, data };
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       // Error haptic feedback
       if (enableHaptics) {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
@@ -91,7 +91,7 @@ export function useFormSubmit<T = void>(submitFn: () => Promise<T>, options: Use
         onError(_error);
       }
 
-      return { success: false, error: _error };
+      return { success: false, _error: _error };
     } finally {
       setIsSubmitting(false);
     }

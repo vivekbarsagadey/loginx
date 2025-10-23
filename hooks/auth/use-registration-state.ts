@@ -29,7 +29,7 @@ export interface UseRegistrationStateDependencies {
   /** Function to create user profile in database */
   createUserProfile: (userId: string, profileData: any) => Promise<void>;
   /** Function to show error messages to user */
-  showError: (error: unknown) => void;
+  showError: (_error: unknown) => void;
   /** Optional logger for debugging */
   logger?: {
     log: (...args: any[]) => void;
@@ -368,7 +368,7 @@ export function useRegistrationState(options: UseRegistrationStateOptions = {}) 
       // Call success callback
       const hasPhoneNumber = Boolean(sanitizedData.phoneNumber && sanitizedData.phoneNumber.trim());
       onSuccess?.(user.uid, hasPhoneNumber);
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       logger.error('Registration error:', _error);
 
       if (_error instanceof Error) {

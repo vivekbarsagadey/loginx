@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  error: {
+  _error: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

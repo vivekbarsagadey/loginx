@@ -492,7 +492,7 @@ All flow components automatically use your app's theme:
 ```typescript
 {
   onError: (error, stepId) => {
-    console.error(`Error in step ${stepId}:`, error);
+    console.error(`Error in step ${stepId}:`, _error);
     showToast(error.message);
   },
 }

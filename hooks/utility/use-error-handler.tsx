@@ -26,7 +26,7 @@ export function useErrorHandler() {
   /**
    * Display an error to the user
    */
-  const showError = useCallback((error: unknown) => {
+  const showError = useCallback((_error: unknown) => {
     const errorInfo = getErrorInfo(_error);
     const fatal = isFatalError(_error);
 
@@ -42,7 +42,7 @@ export function useErrorHandler() {
       title: errorInfo.title,
       message: errorInfo.message,
       isFatal: fatal,
-      error: _error,
+      _error: _error,
     });
   }, []);
 
@@ -57,7 +57,7 @@ export function useErrorHandler() {
    * Handle contact support for fatal errors
    */
   const handleContactSupport = useCallback(
-    async (error: unknown) => {
+    async (_error: unknown) => {
       const errorContext = getErrorContextForSupport(_error);
       const result = await contactSupport(i18n.t('errors.support.contactButton'), errorContext);
 

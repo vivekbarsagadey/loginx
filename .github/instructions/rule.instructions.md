@@ -1675,7 +1675,7 @@ export async function loginWithEmail(email: string, password: string) {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     return userCredential.user;
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     if (error instanceof FirebaseError) {
       // Handle specific Firebase auth errors
       switch (error.code) {
@@ -1719,7 +1719,7 @@ export async function getUserProfile(userId: string): Promise<User | null> {
 
     return docSnap.data() as User;
   } catch (error) {
-    console.error("Error fetching user profile:", error);
+    console.error("Error fetching user profile:", _error);
     throw new FirestoreError("Failed to fetch user profile");
   }
 }
@@ -1729,7 +1729,7 @@ export async function updateUserProfile(userId: string, updates: Partial<User>):
     const docRef = doc(db, "users", userId);
     await updateDoc(docRef, updates);
   } catch (error) {
-    console.error("Error updating user profile:", error);
+    console.error("Error updating user profile:", _error);
     throw new FirestoreError("Failed to update user profile");
   }
 }
@@ -1804,7 +1804,7 @@ export async function saveUserPreferences(userId: string, preferences: UserPrefe
     return { success: true };
   } catch (error) {
     // Data is saved locally, will sync when online
-    console.log("Will sync preferences when online:", error);
+    console.log("Will sync preferences when online:", _error);
     return { success: true, synced: false };
   }
 }
@@ -1832,7 +1832,7 @@ export async function getUserPreferences(userId: string): Promise<UserPreference
 
     return null;
   } catch (error) {
-    console.error("Error fetching preferences:", error);
+    console.error("Error fetching preferences:", _error);
     return null;
   }
 }
@@ -1965,7 +1965,7 @@ export async function getUserProfile(userId: string): Promise<UserProfile | null
   try {
     const response = await api.get(`/users/${userId}`);
     return response.data;
-  } catch (error: unknown) {
+  } catch (_error: unknown) {
     if (error instanceof NetworkError) {
       logError("Failed to fetch user profile", { userId, error });
       throw error;

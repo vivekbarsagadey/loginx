@@ -10,7 +10,7 @@ interface TwoFactorState {
   isEnabled: boolean;
   backupCodes: string[];
   isLoading: boolean;
-  error: string | null;
+  _error: string | null;
 }
 
 interface TwoFactorActions {
@@ -42,7 +42,7 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
     isEnabled: false,
     backupCodes: [],
     isLoading: true,
-    error: null,
+    _error: null,
   });
 
   /**
@@ -50,7 +50,7 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
    */
   const loadTwoFactorSettings = useCallback(async (): Promise<void> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       const [isEnabled, backupCodes] = await Promise.all([TwoFactorStorage.getTwoFactorEnabled(), TwoFactorStorage.getBackupCodes()]);
 
@@ -62,12 +62,12 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
       }));
 
       debugLog(`[TwoFactorAuth] Loaded settings - Enabled: ${isEnabled}, Backup codes: ${backupCodes.length}`);
-    } catch (error: unknown) {
-      debugError('[TwoFactorAuth] Failed to load 2FA settings', error);
+    } catch (_error: unknown) {
+      debugError('[TwoFactorAuth] Failed to load 2FA settings', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to load 2FA settings',
+        _error: 'Failed to load 2FA settings',
       }));
     }
   }, []);
@@ -77,7 +77,7 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
    */
   const enableTwoFactor = async (): Promise<boolean> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       // Generate backup codes
       const newBackupCodes = generateSecureBackupCodes();
@@ -94,12 +94,12 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
 
       debugLog('[TwoFactorAuth] 2FA enabled successfully');
       return true;
-    } catch (error: unknown) {
-      debugError('[TwoFactorAuth] Failed to enable 2FA', error);
+    } catch (_error: unknown) {
+      debugError('[TwoFactorAuth] Failed to enable 2FA', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to enable two-factor authentication',
+        _error: 'Failed to enable two-factor authentication',
       }));
       return false;
     }
@@ -110,7 +110,7 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
    */
   const disableTwoFactor = async (): Promise<void> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       // Clear all 2FA data from secure storage
       await TwoFactorStorage.clearTwoFactorSettings();
@@ -123,12 +123,12 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
       }));
 
       debugLog('[TwoFactorAuth] 2FA disabled successfully');
-    } catch (error: unknown) {
-      debugError('[TwoFactorAuth] Failed to disable 2FA', error);
+    } catch (_error: unknown) {
+      debugError('[TwoFactorAuth] Failed to disable 2FA', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to disable two-factor authentication',
+        _error: 'Failed to disable two-factor authentication',
       }));
     }
   };
@@ -138,7 +138,7 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
    */
   const generateBackupCodes = async (): Promise<string[]> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       const newBackupCodes = generateSecureBackupCodes();
       await TwoFactorStorage.setBackupCodes(newBackupCodes);
@@ -151,12 +151,12 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
 
       debugLog('[TwoFactorAuth] Generated new backup codes');
       return newBackupCodes;
-    } catch (error: unknown) {
-      debugError('[TwoFactorAuth] Failed to generate backup codes', error);
+    } catch (_error: unknown) {
+      debugError('[TwoFactorAuth] Failed to generate backup codes', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to generate backup codes',
+        _error: 'Failed to generate backup codes',
       }));
       return [];
     }
@@ -171,7 +171,7 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
       if (!state.backupCodes.includes(code)) {
         setState((prev) => ({
           ...prev,
-          error: 'Invalid backup code',
+          _error: 'Invalid backup code',
         }));
         return false;
       }
@@ -183,16 +183,16 @@ export function useTwoFactorAuth(): TwoFactorState & TwoFactorActions {
       setState((prev) => ({
         ...prev,
         backupCodes: prev.backupCodes.filter((c) => c !== code),
-        error: null,
+        _error: null,
       }));
 
       debugLog('[TwoFactorAuth] Backup code used successfully');
       return true;
-    } catch (error: unknown) {
-      debugError('[TwoFactorAuth] Failed to use backup code', error);
+    } catch (_error: unknown) {
+      debugError('[TwoFactorAuth] Failed to use backup code', _error);
       setState((prev) => ({
         ...prev,
-        error: 'Failed to use backup code',
+        _error: 'Failed to use backup code',
       }));
       return false;
     }

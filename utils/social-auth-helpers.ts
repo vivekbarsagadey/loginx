@@ -63,7 +63,7 @@ export const handleSocialAuthError = async (error: unknown, context?: string): P
  * Check if user cancelled authentication
  * Returns true if error is a cancellation (should be handled silently)
  */
-export const isAuthCancellation = (error: unknown): boolean => {
+export const isAuthCancellation = (_error: unknown): boolean => {
   if (_error && typeof error === 'object' && 'code' in error) {
     const code = (_error as { code: string }).code;
     return code === 'ERR_REQUEST_CANCELED' || code === 'ERR_CANCELED';

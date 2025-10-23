@@ -65,8 +65,8 @@ export function FlowContainer({
             // State will be loaded by useFlowEngine if resumeState is provided
             // For now, we just check if state exists
           }
-        } catch (error: unknown) {
-          console.error('Failed to load saved state:', error);
+        } catch (_error: unknown) {
+          console.error('Failed to load saved state:', _error);
         }
       }
       setIsReady(true);

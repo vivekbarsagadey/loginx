@@ -93,7 +93,7 @@ export async function acquireLock(lockKey: string, ownerId: string, timeoutMs: n
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
     } catch (_error: unknown) {
-      logger._error(`[DistributedLock] Error acquiring lock ${lockKey}:`, _error as Error);
+      logger.error(`[DistributedLock] Error acquiring lock ${lockKey}:`, _error as Error);
       if (attempt === MAX_ACQUIRE_ATTEMPTS - 1) {
         throw _error;
       }
@@ -133,7 +133,7 @@ export async function releaseLock(lockKey: string, lockId: string): Promise<void
       logger.warn(`[DistributedLock] Attempted to release lock owned by someone else: ${lockKey}`);
     }
   } catch (_error: unknown) {
-    logger._error(`[DistributedLock] Error releasing lock ${lockKey}:`, _error as Error);
+    logger.error(`[DistributedLock] Error releasing lock ${lockKey}:`, _error as Error);
   }
 }
 
@@ -181,7 +181,7 @@ export async function isLockHeld(lockKey: string): Promise<boolean> {
     const lockData = lockDoc.data() as LockInfo;
     return lockData.expiresAt > Date.now();
   } catch (_error: unknown) {
-    logger._error(`[DistributedLock] Error checking lock status ${lockKey}:`, _error as Error);
+    logger.error(`[DistributedLock] Error checking lock status ${lockKey}:`, _error as Error);
     return false;
   }
 }
@@ -207,6 +207,6 @@ export async function cleanupExpiredLocks(): Promise<void> {
       logger.debug(`[DistributedLock] Cleaned up ${snapshot.size} expired locks`);
     }
   } catch (_error: unknown) {
-    logger._error('[DistributedLock] Error cleaning up expired locks:', _error as Error);
+    logger.error('[DistributedLock] Error cleaning up expired locks:', _error as Error);
   }
 }

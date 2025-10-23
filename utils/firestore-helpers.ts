@@ -164,7 +164,7 @@ export function sanitizeQueryValue(value: unknown): unknown {
 /**
  * Check if error is a Firestore network error that should be retried
  */
-function shouldRetryFirestoreError(error: unknown): boolean {
+function shouldRetryFirestoreError(_error: unknown): boolean {
   if (typeof error === 'object' && error !== null && 'code' in error) {
     const code = (_error as { code: string }).code;
     // Retry on network errors, but not on permission or validation errors
@@ -229,7 +229,7 @@ export async function setDocumentSafe<T = DocumentData>(docRef: DocumentReferenc
     if (typeof _error === 'object' && _error !== null && 'code' in _error) {
       const firestoreError = _error as { code: string; message: string };
       // SECURITY FIX (TASK-007): Log only metadata, not actual document data
-      logger._error('[Firestore] Set document failed', {
+      logger.error('[Firestore] Set document failed', {
         path: docRef.path,
         code: firestoreError.code,
         message: firestoreError.message,
@@ -270,7 +270,7 @@ export async function updateDocumentSafe<T = DocumentData>(docRef: DocumentRefer
     if (typeof _error === 'object' && _error !== null && 'code' in _error) {
       const firestoreError = _error as { code: string; message: string };
       // SECURITY FIX (TASK-007): Log only metadata, not actual document data
-      logger._error('[Firestore] Update document failed', {
+      logger.error('[Firestore] Update document failed', {
         path: docRef.path,
         code: firestoreError.code,
         message: firestoreError.message,
@@ -312,7 +312,7 @@ export async function deleteDocumentSafe<T = DocumentData>(docRef: DocumentRefer
     if (typeof _error === 'object' && _error !== null && 'code' in _error) {
       const firestoreError = _error as { code: string; message: string };
       // SECURITY FIX (TASK-007): Log only metadata
-      logger._error('[Firestore] Delete document failed', {
+      logger.error('[Firestore] Delete document failed', {
         path: docRef.path,
         code: firestoreError.code,
         message: firestoreError.message,
@@ -354,7 +354,7 @@ export async function queryDocumentsSafe<T = DocumentData>(collectionRef: Collec
     if (typeof _error === 'object' && _error !== null && 'code' in _error) {
       const firestoreError = _error as { code: string; message: string };
       // SECURITY FIX (TASK-007): Log only metadata, not query details
-      logger._error('[Firestore] Query documents failed', {
+      logger.error('[Firestore] Query documents failed', {
         code: firestoreError.code,
         message: firestoreError.message,
       });
@@ -372,7 +372,7 @@ export async function queryDocumentsSafe<T = DocumentData>(collectionRef: Collec
  * @param error - Error to handle
  * @returns User-friendly error message
  */
-export function getFirestoreErrorMessage(error: unknown): string {
+export function getFirestoreErrorMessage(_error: unknown): string {
   if (_error instanceof FirestoreError) {
     return error.message;
   }

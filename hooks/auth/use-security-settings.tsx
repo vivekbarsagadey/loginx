@@ -29,7 +29,7 @@ interface RateLimitInfo {
 
 interface SecurityState extends SecuritySettings {
   isLoading: boolean;
-  error: string | null;
+  _error: string | null;
   rateLimitInfo: RateLimitInfo;
 }
 
@@ -65,7 +65,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
     securityNotifications: true,
     loginAttempts: 0,
     isLoading: true,
-    error: null,
+    _error: null,
     rateLimitInfo: {
       attemptsInWindow: 0,
       windowStart: Date.now(),
@@ -112,7 +112,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
         isRateLimited,
         resetIn: isRateLimited ? resetIn : 0,
       };
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       debugError('[SecuritySettings] Failed to get rate limit data', _error);
       return {
         attemptsInWindow: 0,
@@ -129,8 +129,8 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
   const saveRateLimitData = async (data: Omit<RateLimitInfo, 'isRateLimited' | 'resetIn'>): Promise<void> => {
     try {
       await SecurityStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
-    } catch (error: unknown) {
-      debugError('[SecuritySettings] Failed to save rate limit data', error);
+    } catch (_error: unknown) {
+      debugError('[SecuritySettings] Failed to save rate limit data', _error);
     }
   };
 
@@ -180,7 +180,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
    */
   const loadSecuritySettings = useCallback(async (): Promise<void> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       const [autoLockSettings, securityNotifications, loginAttempts] = await Promise.all([
         SecurityStorage.getAutoLockSettings(),
@@ -198,12 +198,12 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
       }));
 
       debugLog(`[SecuritySettings] Loaded settings - Auto-lock: ${autoLockSettings.enabled}, Notifications: ${securityNotifications}, Login attempts: ${loginAttempts}`);
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       debugError('[SecuritySettings] Failed to load security settings', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to load security settings',
+        _error: 'Failed to load security settings',
       }));
     }
   }, []);
@@ -213,7 +213,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
    */
   const updateAutoLock = async (enabled: boolean, timeout?: number): Promise<void> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       const newTimeout = timeout || state.autoLockTimeout;
       await SecurityStorage.setAutoLock(enabled, newTimeout);
@@ -226,12 +226,12 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
       }));
 
       debugLog(`[SecuritySettings] Updated auto-lock - Enabled: ${enabled}, Timeout: ${newTimeout}min`);
-    } catch (error: unknown) {
-      debugError('[SecuritySettings] Failed to update auto-lock settings', error);
+    } catch (_error: unknown) {
+      debugError('[SecuritySettings] Failed to update auto-lock settings', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to update auto-lock settings',
+        _error: 'Failed to update auto-lock settings',
       }));
     }
   };
@@ -241,7 +241,7 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
    */
   const updateSecurityNotifications = async (enabled: boolean): Promise<void> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       await SecurityStorage.setSecurityNotifications(enabled);
 
@@ -252,12 +252,12 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
       }));
 
       debugLog(`[SecuritySettings] Updated security notifications: ${enabled}`);
-    } catch (error: unknown) {
-      debugError('[SecuritySettings] Failed to update security notifications', error);
+    } catch (_error: unknown) {
+      debugError('[SecuritySettings] Failed to update security notifications', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to update security notifications',
+        _error: 'Failed to update security notifications',
       }));
     }
   };
@@ -276,8 +276,8 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
       }));
 
       debugLog(`[SecuritySettings] Incremented login attempts to: ${newAttempts}`);
-    } catch (error: unknown) {
-      debugError('[SecuritySettings] Failed to increment login attempts', error);
+    } catch (_error: unknown) {
+      debugError('[SecuritySettings] Failed to increment login attempts', _error);
     }
   };
 
@@ -294,8 +294,8 @@ export function useSecuritySettings(): SecurityState & SecurityActions {
       }));
 
       debugLog('[SecuritySettings] Reset login attempts');
-    } catch (error: unknown) {
-      debugError('[SecuritySettings] Failed to reset login attempts', error);
+    } catch (_error: unknown) {
+      debugError('[SecuritySettings] Failed to reset login attempts', _error);
     }
   };
 

@@ -65,7 +65,7 @@ const { data, loading, error, execute } = useAsyncOperation(
       showToast("User loaded successfully");
     },
     onError: (error) => {
-      logError("Failed to load user", error);
+      logError("Failed to load user", _error);
     }
   }
 );

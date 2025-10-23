@@ -63,7 +63,7 @@ function ThemedBadgeComponent({ variant = 'default', size = 'md', icon, outlined
   const variantColors = {
     success: { bg: colors.success, text: colors['on-primary'] },
     warning: { bg: colors.warning, text: colors['on-primary'] },
-    error: { bg: colors.error, text: colors['on-primary'] },
+    _error: { bg: colors.error, text: colors['on-primary'] },
     info: { bg: colors.info, text: colors['on-primary'] },
     primary: { bg: colors.primary, text: colors['on-primary'] },
     default: { bg: colors['surface-variant'], text: colors.text },

@@ -190,7 +190,7 @@ export function useFetch<T = any>(url: string, options: UseFetchOptions = {}): U
           }
 
           return;
-        } catch (error: unknown) {
+        } catch (_error: unknown) {
           // Ignore abort errors
           if (_error instanceof Error && _error.name === 'AbortError') {
             return;

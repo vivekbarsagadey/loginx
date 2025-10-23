@@ -83,7 +83,7 @@ function ThemedIconContainerComponent({ icon, variant = 'default', size = 'md', 
   const variantColors = {
     success: { bg: colors.success, icon: colors['on-primary'] },
     warning: { bg: colors.warning, icon: colors['on-primary'] },
-    error: { bg: colors.error, icon: colors['on-primary'] },
+    _error: { bg: colors.error, icon: colors['on-primary'] },
     info: { bg: colors.info, icon: colors['on-primary'] },
     primary: { bg: colors.primary, icon: colors['on-primary'] },
     default: { bg: colors['surface-variant'], icon: colors.text },

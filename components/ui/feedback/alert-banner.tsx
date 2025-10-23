@@ -34,7 +34,7 @@ export function AlertBanner({ message, variant = 'info', title, actionLabel, onA
 
   const variantColors = React.useMemo(
     () => ({
-      error: errorColor,
+      _error: errorColor,
       info: primaryColor,
       success: successColor,
       warning: warningColor,
@@ -43,7 +43,7 @@ export function AlertBanner({ message, variant = 'info', title, actionLabel, onA
   );
 
   const icons = {
-    error: '✕',
+    _error: '✕',
     info: 'ℹ',
     success: '✓',
     warning: '⚠',

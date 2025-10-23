@@ -14,7 +14,7 @@ interface BiometricState {
   biometryType: string | null;
   isEnabled: boolean;
   isLoading: boolean;
-  error: string | null;
+  _error: string | null;
 }
 
 interface BiometricActions {
@@ -31,7 +31,7 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
     biometryType: null,
     isEnabled: false,
     isLoading: true,
-    error: null,
+    _error: null,
   });
 
   /**
@@ -39,7 +39,7 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
    */
   const checkBiometricSupport = useCallback(async (): Promise<void> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       // Check hardware availability
       const hasHardware = await LocalAuthentication.hasHardwareAsync();
@@ -87,15 +87,15 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
       }));
 
       debugLog(`[BiometricAuth] Support check - Available: ${isAvailable}, Type: ${biometryType}, Enrolled: ${isEnrolled}, Enabled: ${enabled}`);
-    } catch (error: unknown) {
-      debugError('[BiometricAuth] Failed to check biometric support', error);
+    } catch (_error: unknown) {
+      debugError('[BiometricAuth] Failed to check biometric support', _error);
       setState((prev) => ({
         ...prev,
         isAvailable: false,
         biometryType: null,
         isEnabled: false,
         isLoading: false,
-        error: 'Failed to check biometric support',
+        _error: 'Failed to check biometric support',
       }));
     }
   }, []);
@@ -105,13 +105,13 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
    */
   const enableBiometric = async (): Promise<boolean> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       if (!state.isAvailable) {
         setState((prev) => ({
           ...prev,
           isLoading: false,
-          error: 'Biometric authentication is not available on this device',
+          _error: 'Biometric authentication is not available on this device',
         }));
         return false;
       }
@@ -140,16 +140,16 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
         setState((prev) => ({
           ...prev,
           isLoading: false,
-          error: result.error || 'Biometric authentication failed',
+          _error: result.error || 'Biometric authentication failed',
         }));
         return false;
       }
-    } catch (error: unknown) {
-      debugError('[BiometricAuth] Failed to enable biometric authentication', error);
+    } catch (_error: unknown) {
+      debugError('[BiometricAuth] Failed to enable biometric authentication', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to enable biometric authentication',
+        _error: 'Failed to enable biometric authentication',
       }));
       return false;
     }
@@ -160,7 +160,7 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
    */
   const disableBiometric = async (): Promise<void> => {
     try {
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, _error: null }));
 
       // Clear biometric preferences from secure storage
       await BiometricStorage.clearBiometricSettings();
@@ -172,12 +172,12 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
       }));
 
       debugLog('[BiometricAuth] Biometric authentication disabled');
-    } catch (error: unknown) {
-      debugError('[BiometricAuth] Failed to disable biometric authentication', error);
+    } catch (_error: unknown) {
+      debugError('[BiometricAuth] Failed to disable biometric authentication', _error);
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to disable biometric authentication',
+        _error: 'Failed to disable biometric authentication',
       }));
     }
   };
@@ -197,7 +197,7 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
       if (failedAttempts >= 3) {
         setState((prev) => ({
           ...prev,
-          error: 'Too many failed attempts. Please try again later.',
+          _error: 'Too many failed attempts. Please try again later.',
         }));
         debugLog('[BiometricAuth] Biometric locked due to failed attempts');
         return false;
@@ -231,15 +231,15 @@ export function useBiometricAuth(): BiometricState & BiometricActions {
         debugLog(`[BiometricAuth] Biometric authentication failed or cancelled. Attempts: ${failedAttempts + 1}/3`);
         setState((prev) => ({
           ...prev,
-          error: result.error || `Authentication failed. ${2 - failedAttempts} attempts remaining.`,
+          _error: result.error || `Authentication failed. ${2 - failedAttempts} attempts remaining.`,
         }));
         return false;
       }
-    } catch (error: unknown) {
-      debugError('[BiometricAuth] Biometric authentication error', error);
+    } catch (_error: unknown) {
+      debugError('[BiometricAuth] Biometric authentication error', _error);
       setState((prev) => ({
         ...prev,
-        error: 'Biometric authentication error occurred',
+        _error: 'Biometric authentication error occurred',
       }));
       return false;
     }

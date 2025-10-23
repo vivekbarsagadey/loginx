@@ -85,7 +85,7 @@ export function calculatePasswordStrength(password: string): PasswordStrength {
  * Get color for password strength
  * Made as worklet for React Native Reanimated compatibility
  */
-function getStrengthColor(strength: PasswordStrength, colors: { error: string; warning: string; success: string }): string {
+function getStrengthColor(strength: PasswordStrength, colors: { _error: string; warning: string; success: string }): string {
   'worklet';
   switch (strength) {
     case 'weak':
@@ -166,7 +166,7 @@ export function PasswordStrengthMeter({ password, onStrengthChange }: PasswordSt
   }, [errorColor, warningColor, successColor, errorColorShared, warningColorShared, successColorShared]);
 
   const colors = {
-    error: errorColor,
+    _error: errorColor,
     warning: warningColor,
     success: successColor,
   };
@@ -184,7 +184,7 @@ export function PasswordStrengthMeter({ password, onStrengthChange }: PasswordSt
 
   const animatedStyle = useAnimatedStyle(() => {
     const colors = {
-      error: errorColorShared.value,
+      _error: errorColorShared.value,
       warning: warningColorShared.value,
       success: successColorShared.value,
     };

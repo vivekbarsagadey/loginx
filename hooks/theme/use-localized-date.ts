@@ -103,7 +103,7 @@ export function useLocalizedDate() {
         });
 
         return formatter.format(dateObj);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         console.error('Error formatting date:', _error);
         return 'Invalid Date';
       }
@@ -129,7 +129,7 @@ export function useLocalizedDate() {
         });
 
         return formatter.format(dateObj);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         console.error('Error formatting time:', _error);
         return 'Invalid Time';
       }
@@ -156,7 +156,7 @@ export function useLocalizedDate() {
         });
 
         return formatter.format(dateObj);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         console.error('Error formatting date/time:', _error);
         return 'Invalid Date/Time';
       }
@@ -219,7 +219,7 @@ export function useLocalizedDate() {
         });
 
         return formatter.format(value, unit);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         console.error('Error formatting relative time:', _error);
         return 'Invalid Date';
       }
@@ -246,7 +246,7 @@ export function useLocalizedDate() {
         });
 
         return formatter.formatRange(startObj, endObj);
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         console.error('Error formatting date range:', _error);
         return 'Invalid Date Range';
       }

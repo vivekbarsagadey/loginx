@@ -154,7 +154,7 @@ export function useAsyncRetry<T>(operation: () => Promise<T>, config: RetryConfi
         setRetryCount(0);
         setIsRetrying(false);
         return result;
-      } catch (error: unknown) {
+      } catch (_error: unknown) {
         lastError = _error instanceof Error ? _error : new Error(String(_error));
 
         // Check if we should retry this error

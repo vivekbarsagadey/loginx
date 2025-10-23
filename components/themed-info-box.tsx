@@ -89,7 +89,7 @@ function ThemedInfoBoxComponent({ variant, icon, dismissible = false, onDismiss,
     info: 'info',
     success: 'check-circle',
     warning: 'alert-triangle',
-    error: 'alert-circle',
+    _error: 'alert-circle',
   };
 
   const iconName = icon || defaultIcons[variant];
@@ -114,7 +114,7 @@ function ThemedInfoBoxComponent({ variant, icon, dismissible = false, onDismiss,
       icon: colors.warning,
       text: colors.text,
     },
-    error: {
+    _error: {
       bg: `${colors.error}15`,
       border: colors.error,
       icon: colors.error,
