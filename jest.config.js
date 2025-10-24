@@ -3,13 +3,9 @@
  * Supports unit, integration, security, and performance tests
  */
 
-const { getNodePreset } = require('jest-expo/config/getPlatformPreset');
-
-const nodePreset = getNodePreset();
-
 module.exports = {
-  ...nodePreset,
-  setupFiles: undefined, // Don't use the preset's setup files
+  testEnvironment: 'jsdom',
+  setupFiles: [],
   setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
   testMatch: ['<rootDir>/tests/**/*.test.ts', '<rootDir>/tests/**/*.test.tsx'],
   collectCoverageFrom: ['app/**/*.{ts,tsx}', 'components/**/*.{ts,tsx}', 'hooks/**/*.{ts,tsx}', 'utils/**/*.{ts,tsx}', '!**/*.d.ts', '!**/node_modules/**', '!**/vendor/**'],
@@ -22,8 +18,15 @@ module.exports = {
     },
   },
   moduleNameMapper: {
-    ...nodePreset.moduleNameMapper,
     '^@/(.*)$': '<rootDir>/$1',
+    '^react-native$': '<rootDir>/tests/mocks/react-native.js',
   },
+  transformIgnorePatterns: [
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|@sentry/.*|@testing-library/react-native))',
+  ],
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+  },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   testTimeout: 30000,
 };

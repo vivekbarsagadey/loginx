@@ -7,7 +7,37 @@
 (global as typeof globalThis & { __DEV__: boolean }).__DEV__ = true;
 
 // Mock AsyncStorage
-jest.mock('@react-native-async-storage/async-storage', () => require('@react-native-async-storage/async-storage/jest/async-storage-mock'));
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  removeItem: jest.fn(),
+  clear: jest.fn(),
+  getAllKeys: jest.fn(() => Promise.resolve([])),
+}));
+
+// Mock React Native core modules
+jest.mock('react-native', () => ({
+  StyleSheet: {
+    create: jest.fn((styles) => styles),
+    flatten: jest.fn(),
+  },
+  Platform: {
+    OS: 'ios',
+    select: jest.fn((config) => config.ios || config.default),
+  },
+  Dimensions: {
+    get: jest.fn(() => ({ width: 375, height: 667 })),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+  },
+  Alert: {
+    alert: jest.fn(),
+  },
+  Linking: {
+    openURL: jest.fn(() => Promise.resolve()),
+    canOpenURL: jest.fn(() => Promise.resolve(true)),
+  },
+}));
 
 // Mock Expo modules
 jest.mock('expo-secure-store', () => ({

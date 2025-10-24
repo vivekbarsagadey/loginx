@@ -67,6 +67,7 @@
     "Mult",
     "myapp",
     "myappdb",
+    "nent",
     "netinfo",
     "nostrud",
     "notif",
@@ -92,6 +93,7 @@
     "UICT",
     "uiux",
     "ullamco",
+    "unimodules",
     "veniam",
     "videocam",
     "vivek",
@@ -109,5 +111,12 @@
     "हिन्दी"
   ],
   "flagWords": [],
-  "enabledLanguageIds": ["typescript", "typescriptreact", "javascript", "javascriptreact", "json", "jsonc"]
+  "enabledLanguageIds": [
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact",
+    "json",
+    "jsonc"
+  ]
 }
