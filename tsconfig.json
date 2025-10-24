@@ -23,6 +23,18 @@
     "forceConsistentCasingInFileNames": true,
     "exactOptionalPropertyTypes": false
   },
-  "include": ["**/*.ts", "**/*.tsx", "expo-env.d.ts", ".expo/types/**/*.ts"],
+  "include": [
+    "**/*.ts", 
+    "**/*.tsx", 
+    "expo-env.d.ts", 
+    ".expo/types/**/*.ts",
+    "types/**/*.ts",
+    "types/**/*.d.ts",
+    "constants/**/*.ts",
+    "utils/**/*.ts",
+    "hooks/**/*.ts",
+    "components/**/*.ts",
+    "components/**/*.tsx"
+  ],
   "exclude": ["node_modules", "tests/**/*", "functions/**/*", "scripts/**/*", "**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"]
 }
