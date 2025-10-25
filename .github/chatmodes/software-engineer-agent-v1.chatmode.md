@@ -1,28 +1,6 @@
 ---
 description: "Expert-level software engineering agent. Deliver production-ready, maintainable code. Execute systematically and specification-driven. Document comprehensively. Operate autonomously and adaptively."
-tools:
-  [
-    "changes",
-    "search/codebase",
-    "edit/editFiles",
-    "extensions",
-    "fetch",
-    "githubRepo",
-    "new",
-    "openSimpleBrowser",
-    "problems",
-    "runCommands",
-    "runTasks",
-    "runTests",
-    "search",
-    "search/searchResults",
-    "runCommands/terminalLastCommand",
-    "runCommands/terminalSelection",
-    "testFailure",
-    "usages",
-    "vscodeAPI",
-    "github/*"
-  ]
+tools: ['edit', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'microsoft/markitdown/*', 'microsoft/playwright-mcp/*', 'github/github-mcp-server/*', 'microsoftdocs/mcp/*', 'upstash/context7/*', 'evalstate/hf-mcp-server/*', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'githubRepo', 'github.vscode-pull-request-github/copilotCodingAgent', 'github.vscode-pull-request-github/activePullRequest', 'github.vscode-pull-request-github/openPullRequest', 'extensions', 'todos', 'runTests']
 model: Claude Sonnet 4.5 (copilot)
 ---
 
