@@ -5,9 +5,6 @@
  * but before each test file is executed.
  */
 
-// Mock React Native modules that don't work well in Jest environment
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
-
 // Mock Expo modules
 jest.mock('expo-font', () => ({
   loadAsync: jest.fn().mockResolvedValue(undefined),
@@ -26,6 +23,8 @@ jest.mock('expo-secure-store', () => ({
   deleteItemAsync: jest.fn(),
 }));
 
+// Mock AsyncStorage with the official mock
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 jest.mock('@react-native-async-storage/async-storage', () => require('@react-native-async-storage/async-storage/jest/async-storage-mock'));
 
 // Mock Haptics
