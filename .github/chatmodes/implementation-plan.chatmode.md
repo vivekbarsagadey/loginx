@@ -1,7 +1,6 @@
 ---
 description: "Generate an implementation plan for new features or refactoring existing code."
-tools:
-  [
+tools:  [
     "search/codebase",
     "usages",
     "vscodeAPI",
