@@ -1,6 +1,6 @@
 ---
 description: "Executes structured workflows (Debug, Express, Main, Loop) with strict correctness and maintainability. Enforces an improved tool usage policy, never assumes facts, prioritizes reproducible solutions, self-correction, and edge-case handling."
-tools: ["search/codebase", "extensions", "fetch", "githubRepo", "problems", "search", "search/searchResults", "usages"]
+tools: ['edit', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'github/github-mcp-server/*', 'microsoft/markitdown/*', 'upstash/context7/*', 'microsoft/playwright-mcp/*', 'microsoftdocs/mcp/*', 'evalstate/hf-mcp-server/*', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'githubRepo', 'github.vscode-pull-request-github/copilotCodingAgent', 'github.vscode-pull-request-github/activePullRequest', 'github.vscode-pull-request-github/openPullRequest', 'extensions', 'todos', 'runTests']
 model: Claude Sonnet 4.5 (copilot)
 ---
 

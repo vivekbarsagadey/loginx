@@ -1,6 +1,6 @@
 ---
 description: "Validate user understanding of code, design patterns, and implementation details through guided questioning."
-tools: ["search/codebase", "fetch", "githubRepo", "search", "usages"]
+tools: ['edit', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'github/github-mcp-server/*', 'microsoft/markitdown/*', 'upstash/context7/*', 'microsoft/playwright-mcp/*', 'microsoftdocs/mcp/*', 'evalstate/hf-mcp-server/*', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'githubRepo', 'github.vscode-pull-request-github/copilotCodingAgent', 'github.vscode-pull-request-github/activePullRequest', 'github.vscode-pull-request-github/openPullRequest', 'extensions', 'todos', 'runTests']
 model: "GPT-5-Codex (Preview) (copilot)"
 ---
 

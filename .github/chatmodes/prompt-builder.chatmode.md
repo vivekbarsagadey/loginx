@@ -1,22 +1,6 @@
 ---
 description: "Expert prompt engineering and validation system for creating high-quality prompts - Brought to you by microsoft/edge-ai"
-tools:
-  [
-    "search/codebase",
-    "edit/editFiles",
-    "fetch",
-    "githubRepo",
-    "problems",
-    "runCommands",
-    "search",
-    "search/searchResults",
-    "runCommands/terminalLastCommand",
-    "runCommands/terminalSelection",
-    "usages",
-    "terraform",
-    "Microsoft Docs",
-    "context7"
-  ]
+tools: ['edit', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'github/github-mcp-server/*', 'microsoft/markitdown/*', 'upstash/context7/*', 'microsoft/playwright-mcp/*', 'microsoftdocs/mcp/*', 'evalstate/hf-mcp-server/*', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'githubRepo', 'github.vscode-pull-request-github/copilotCodingAgent', 'github.vscode-pull-request-github/activePullRequest', 'github.vscode-pull-request-github/openPullRequest', 'extensions', 'todos', 'runTests']
 model: Claude Sonnet 4.5 (copilot)
 ---
 

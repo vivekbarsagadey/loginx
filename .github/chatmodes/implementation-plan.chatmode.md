@@ -1,28 +1,6 @@
 ---
 description: "Generate an implementation plan for new features or refactoring existing code."
-tools:
-  [
-    "search/codebase",
-    "usages",
-    "vscodeAPI",
-    "think",
-    "problems",
-    "changes",
-    "testFailure",
-    "runCommands/terminalSelection",
-    "runCommands/terminalLastCommand",
-    "openSimpleBrowser",
-    "fetch",
-    "search/searchResults",
-    "githubRepo",
-    "extensions",
-    "edit/editFiles",
-    "runNotebooks",
-    "search",
-    "new",
-    "runCommands",
-    "runTasks"
-  ]
+tools: ['edit', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'github/github-mcp-server/*', 'microsoft/markitdown/*', 'upstash/context7/*', 'microsoft/playwright-mcp/*', 'microsoftdocs/mcp/*', 'evalstate/hf-mcp-server/*', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'githubRepo', 'github.vscode-pull-request-github/copilotCodingAgent', 'github.vscode-pull-request-github/activePullRequest', 'github.vscode-pull-request-github/openPullRequest', 'extensions', 'todos', 'runTests']
 ---
 
 # Implementation Plan Generation Mode

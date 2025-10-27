@@ -39,3 +39,8 @@ yarn.lock
 # Generated files
 *.d.ts
 !env.d.ts
+
+# Markdown files in specific directories
+.github/**/*.md
+docs/**/*.md
+.vscode/**/*.md
