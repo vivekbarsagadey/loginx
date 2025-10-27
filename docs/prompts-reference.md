@@ -1,8 +1,8 @@
-# WhizFlow CMS - Important Prompts Reference
+# LoginX - Important Prompts Reference
 
 **Version**: 1.0  
 **Last Updated**: October 28, 2025  
-**Purpose**: Comprehensive collection of effective prompts for AI-assisted development in WhizFlow CMS
+**Purpose**: Comprehensive collection of effective prompts for AI-assisted development in LoginX mobile authentication app
 
 ---
 
@@ -11,23 +11,27 @@
 ### Project Lifecycle Phases
 
 **A. [Initiation Phase](#a-initiation-phase)** - Project Discovery & Requirements
+
 - Requirements Analysis & Business Research
 - Opportunity Assessment & Gap Analysis
 - Technical Debt Analysis
 
 **B. [Planning Phase](#b-planning-phase)** - Design & Planning
+
 - Architecture & Design Documents
 - Database Schema Design
 - Implementation Plan Creation
 - Plan Review & Updates
 
 **C. [Execution Phase](#c-execution-phase)** - Development & Implementation
+
 - Feature Development & CRUD Operations
 - Plan Implementation (Autonomous & Manual)
 - Refactoring & Code Optimization
 - Advanced Features (WebSockets, i18n, Feature Flags)
 
 **D. [Monitoring & Controlling Phase](#d-monitoring--controlling-phase)** - Quality & Performance
+
 - Code Review & Analysis
 - Testing & Quality Assurance
 - Debugging & Troubleshooting
@@ -35,6 +39,7 @@
 - Security Audits & Compliance
 
 **E. [Closure Phase](#e-closure-phase)** - Documentation & Handover
+
 - Technical Documentation
 - API Documentation
 - User Guides & Training Materials
@@ -42,15 +47,11 @@
 
 ### Cross-Phase Elements
 
-**[Governance & Risk Management](#cross-phase-governance--risk-management)**
+#### Governance & Risk Management
+
 - Status Updates & Progress Tracking
 - Emergency Issue Resolution
 - Change Management
-
-**[GitHub Prompts Integration](#github-prompts-integration)**
-- 20 Essential Pre-configured Prompts
-- Quick Reference Tables by Tier
-- Authority Levels & Usage Guidelines
 
 ### Quick References
 
@@ -58,6 +59,35 @@
 - [Quick Decision Tree](#quick-decision-tree)
 - [Authority Level Summary](#authority-level-summary)
 - [Recommended Workflows](#recommended-workflows)
+
+### Tools & Infrastructure
+
+**[Tools & MCP Integration](#tools--mcp-integration)**
+
+- Available Development Tools
+- Integrated MCP Servers
+- Tool Selection Guide
+- Advanced Tool Usage Patterns
+
+### LoginX Application Context
+
+**Technology Stack:**
+
+- React Native + Expo SDK 54
+- TypeScript (100% type-safe)
+- Firebase (Authentication + Firestore)
+- Expo Router (file-based routing)
+- React Hook Form + Zod validation
+
+**Core Features:**
+
+- Multi-step authentication flows
+- Biometric authentication (Face ID, Touch ID)
+- Two-factor authentication (2FA)
+- Profile management
+- Theme system (light/dark mode)
+- Internationalization (i18n)
+- Push notifications
 
 ---
 
@@ -74,7 +104,1326 @@
 
 ---
 
-# Project Lifecycle Phases
+## Tools & MCP Integration
+
+**Purpose**: Understand available development tools and MCP servers to enhance prompt effectiveness and enable advanced capabilities for LoginX mobile development.
+
+### Overview
+
+LoginX integrates multiple tools and MCP (Model Context Protocol) servers that significantly enhance AI-assisted mobile development. Understanding these tools is critical for:
+
+- **Crafting effective prompts** that leverage available capabilities
+- **Automating research and analysis** with web-based and documentation tools
+- **Real-time debugging** with React Native runtime inspection
+- **Enhanced codebase understanding** with semantic search and code analysis
+- **Mobile-specific testing** with device emulators and simulators
+
+---
+
+## A. Core Development Tools
+
+### 1. Codebase Analysis Tools
+
+#### `semantic_search` - Semantic Code Search
+
+**Use Case**: Find relevant code by meaning, not just text matching
+**When to Use**:
+
+- Looking for implementations of concepts (e.g., "authentication logic", "email validation")
+- Finding similar patterns across the codebase
+- Understanding how features are implemented
+
+**Example Prompts**:
+
+```
+Use semantic_search to find all authentication implementation patterns
+
+Search codebase for Firebase action patterns similar to user.action.ts
+
+Find examples of React Native screens with Expo Router
+```
+
+**In Plan Review Prompt**:
+
+```
+Tools to Use:
+- semantic_search for finding new components
+```
+
+---
+
+#### `grep_search` - Fast Text Search
+
+**Use Case**: Fast exact text or regex matching across files  
+**When to Use**:
+
+- Finding exact function/class names
+- Searching for specific strings or patterns
+- Getting overview of file contents
+- Regex-based code searches
+
+**Example Prompts**:
+
+```
+Use grep_search to find all usages of "useEmailStore"
+
+Search for TODO comments in email module using grep_search
+
+Find all components using "use client" directive
+```
+
+**Pattern Variations**:
+
+```bash
+# Search with regex
+grep_search: 'function|method|class' in actions/
+
+# Search in specific files
+grep_search: 'createEmail' in actions/email/
+```
+
+---
+
+#### `file_search` - Glob Pattern File Discovery
+
+**Use Case**: Find files by name patterns  
+**When to Use**:
+
+- Locating files by extension or naming convention
+- Finding test files, configuration files, or specific modules
+- Discovering file structure
+
+**Example Prompts**:
+
+```
+Use file_search to find all *.action.ts files in actions/
+
+Locate all test files matching **/*.test.tsx
+
+Find all Firebase config files in the project
+```
+
+**Pattern Examples**:
+
+```bash
+**/*.action.ts          # All action files
+app/**/page.tsx         # All page files
+__tests__/**/*.test.*   # All test files
+```
+
+---
+
+#### `read_file` - File Content Reading
+
+**Use Case**: Read specific files or file sections  
+**When to Use**:
+
+- Reading source code for analysis
+- Checking implementation details
+- Reading large files in chunks (offset/limit)
+
+**Example Prompts**:
+
+```
+Read actions/user.action.ts to understand the standardized pattern
+
+Read firebase-config.ts to understand Firebase initialization
+
+Read app/(auth)/login.tsx to analyze the screen structure
+```
+
+**Advanced Usage**:
+
+```bash
+# Read large files in chunks
+read_file(offset=1000, limit=500)
+
+# Read specific sections
+read_file(filePath, offset=line_start, limit=num_lines)
+```
+
+---
+
+#### `list_dir` - Directory Listing
+
+**Use Case**: List contents of directories  
+**When to Use**:
+
+- Exploring directory structure
+- Finding all files in a module
+- Understanding folder organization
+
+**Example Prompts**:
+
+```
+List contents of app/(auth)/ to understand structure
+
+Show all files in components/themed-*/ directory
+
+List subdirectories in app/ for available route groups
+```
+
+---
+
+#### `list_code_usages` - Symbol References
+
+**Use Case**: Find all usages of functions, classes, variables  
+**When to Use**:
+
+- Understanding how a function is used across codebase
+- Finding all references before refactoring
+- Checking implementation patterns
+
+**Example Prompts**:
+
+```
+Find all usages of login function
+
+List all components using themed components
+
+Show all references to User type
+```
+
+---
+
+### 2. Testing & Quality Tools
+
+#### `runTests` - Test Execution
+
+**Use Case**: Run unit tests with coverage reporting  
+**When to Use**:
+
+- Validating changes with existing tests
+- Collecting test coverage
+- Running specific test files or suites
+
+**Example Prompts**:
+
+```
+Run tests for authentication module and report coverage
+
+Execute tests in __tests__/actions/user/ directory
+
+Run tests with coverage for actions/user.action.ts
+```
+
+**Coverage Options**:
+
+```bash
+mode: "run"        # Normal test execution
+mode: "coverage"   # Collect coverage data
+coverageFiles: []  # Specific files for detailed coverage
+```
+
+---
+
+#### `get_errors` - Compile & Lint Errors
+
+**Use Case**: Get TypeScript and linting errors  
+**When to Use**:
+
+- Checking errors after code changes
+- Validating file-specific issues
+- Pre-commit error checking
+
+**Example Prompts**:
+
+```
+Check errors in actions/user.action.ts
+
+Get all TypeScript errors in app/(auth)/ directory
+
+Validate linting issues across the project
+```
+
+---
+
+### 3. Terminal & Execution Tools
+
+#### `run_in_terminal` - Command Execution
+
+**Use Case**: Execute shell commands in persistent terminal  
+**When to Use**:
+
+- Running build commands
+- Database operations
+- Package management
+- Git operations
+
+**Example Prompts**:
+
+```
+Run pnpm tsc --noEmit to check TypeScript errors
+
+Execute pnpm test to run test suite
+
+Run pnpm lint for code quality validation
+```
+
+**Background Processes**:
+
+```bash
+isBackground: true   # For long-running tasks (servers)
+isBackground: false  # For commands with output
+```
+
+---
+
+#### `get_terminal_output` - Retrieve Terminal Output
+
+**Use Case**: Get output from background terminal commands  
+**When to Use**:
+
+- Checking server logs
+- Retrieving background command output
+- Monitoring long-running processes
+
+---
+
+## B. Integrated MCP Servers
+
+### 1. GitHub MCP Server (`mcp_github_*`)
+
+**Purpose**: Comprehensive GitHub platform integration  
+**Authority**: Full GitHub operations (repos, issues, PRs, code search)
+
+#### Key Capabilities
+
+**Repository Operations**:
+
+```bash
+# Search repositories
+mcp_github_github_search_repositories: "expo react-native authentication"
+
+# Get repository details
+mcp_github_github_get_file_contents: owner/repo, path
+
+# Create repositories
+mcp_github_github_create_repository: name, description
+```
+
+**Issue Management**:
+
+```bash
+# Search issues
+mcp_github_github_search_issues: "is:open label:bug"
+
+# Create issues
+mcp_github_github_create_issue: owner, repo, title, body
+
+# Get issue details
+mcp_github_github_get_issue: owner, repo, issue_number
+```
+
+**Pull Request Operations**:
+
+```bash
+# List PRs
+mcp_github_github_list_pull_requests: owner, repo
+
+# Create PRs
+mcp_github_github_create_pull_request: owner, repo, title, head, base
+
+# Review PRs
+mcp_github_github_pull_request_review_write
+```
+
+**Code Search** (Fast & Precise):
+
+```bash
+# Search code across GitHub
+mcp_github_github_search_code: "useFormContext language:TypeScript"
+
+# Organization-specific search
+mcp_github_github_search_code: "auth org:vercel"
+```
+
+**Example Prompts**:
+
+```
+Use GitHub MCP to search for React Native biometric authentication examples
+
+Create GitHub issue for passwordless authentication feature implementation
+
+Search GitHub code for "Firebase auth react-native" patterns
+```
+
+---
+
+### 2. Next.js MCP Server (`mcp_next-devtools_*`)
+
+> **Note**: This MCP server is for Next.js web applications. LoginX is a React Native mobile app, so most Next.js-specific features won't apply. However, the browser automation capabilities may still be useful for testing web-based OAuth flows or documentation sites.
+
+**Purpose**: Runtime inspection and diagnostics for Next.js development server  
+**Authority**: Next.js runtime queries, browser automation, upgrades
+
+#### Key Capabilities
+
+**Runtime Inspection** (`nextjs_runtime`):
+
+```bash
+# Discover running dev servers
+action: 'discover_servers'
+
+# List available MCP tools
+action: 'list_tools'
+
+# Call specific tools
+action: 'call_tool', toolName: 'get_errors'
+```
+
+**Available Runtime Tools**:
+
+- `get_errors` - Runtime errors and diagnostics
+- `get_routes` - All available routes
+- `get_logs` - Server logs
+- `clear_cache` - Clear Next.js cache
+- `get_component_tree` - Component hierarchy
+- `get_build_status` - Build diagnostics
+
+**Browser Automation** (`browser_eval`):
+
+```bash
+# Start browser
+action: 'start'
+
+# Navigate and test
+action: 'navigate', url: 'http://localhost:3000'
+
+# Take screenshots
+action: 'screenshot'
+
+# Get console messages
+action: 'console_messages'
+```
+
+**Next.js Upgrades**:
+
+```bash
+# Upgrade to Next.js 16
+mcp_next-devtools_upgrade_nextjs_16
+
+# Enable Cache Components
+mcp_next-devtools_enable_cache_components
+```
+
+**Next.js Documentation Search**:
+
+```bash
+# Search Next.js official docs
+mcp_next-devtools_nextjs_docs
+```
+
+**Example Prompts**:
+
+```
+Use Next.js MCP to check current runtime errors in development server
+
+Query Next.js runtime for all available routes and their structure
+
+Use browser automation to test email list page at localhost:3000
+
+Check Next.js documentation for Server Actions best practices
+```
+
+**Integration in Prompts**:
+
+```
+Tools to Use:
+- Next.js MCP for latest patterns
+- nextjs_runtime to check for runtime errors
+```
+
+---
+
+### 3. Microsoft Docs MCP Server (`mcp_microsoftdocs_*`)
+
+**Purpose**: Official Microsoft and Azure documentation access  
+**Authority**: Microsoft Learn, Azure docs, code samples
+
+#### Key Capabilities
+
+**Documentation Search**:
+
+```bash
+# Semantic search across Microsoft docs
+mcp_microsoftdocs_microsoft_docs_search: query
+
+# Fetch complete documentation pages
+mcp_microsoftdocs_microsoft_docs_fetch: url
+
+# Search code samples
+mcp_microsoftdocs_microsoft_code_sample_search: query, language
+```
+
+**Example Prompts**:
+
+```
+Search Microsoft Docs for Azure Functions best practices
+
+Fetch complete tutorial from https://learn.microsoft.com/en-us/azure/...
+
+Find TypeScript code samples for Azure Blob Storage integration
+```
+
+**Workflow Pattern**:
+
+```
+1. microsoft_docs_search (quick overview)
+2. microsoft_docs_fetch (detailed content)
+3. microsoft_code_sample_search (practical examples)
+```
+
+---
+
+### 4. Hugging Face MCP Server (`mcp_evalstate_hf-_*`)
+
+**Purpose**: ML models, datasets, and research papers discovery  
+**Authority**: Hugging Face Hub search and documentation
+
+#### Key Capabilities
+
+**Model Search**:
+
+```bash
+# Search models
+mcp_evalstate_hf-_model_search: query, limit, sort
+
+# Get model details
+mcp_evalstate_hf-_hub_repo_details: repo_ids
+```
+
+**Dataset Search**:
+
+```bash
+# Search datasets
+mcp_evalstate_hf-_dataset_search: query, tags, sort
+```
+
+**Paper Search**:
+
+```bash
+# Search research papers
+mcp_evalstate_hf-_paper_search: query, results_limit
+```
+
+**Documentation Access**:
+
+```bash
+# Search Hugging Face docs
+mcp_evalstate_hf-_hf_doc_search: query, product
+
+# Fetch doc pages
+mcp_evalstate_hf-_hf_doc_fetch: doc_url
+```
+
+**Example Prompts**:
+
+```
+Search Hugging Face for text generation models with 70B+ parameters
+
+Find datasets for customer sentiment analysis
+
+Search research papers about Retrieval-Augmented Generation (RAG)
+```
+
+---
+
+### 5. Browser Automation (Playwright MCP - `mcp_microsoft_pla_*`)
+
+**Purpose**: Web browser automation and testing  
+**Authority**: Browser control, screenshots, form interactions
+
+#### Key Capabilities
+
+**Navigation & Interaction**:
+
+```bash
+# Navigate
+mcp_microsoft_pla_browser_navigate: url
+
+# Click elements
+mcp_microsoft_pla_browser_click: element, ref
+
+# Type text
+mcp_microsoft_pla_browser_type: text, ref
+
+# Fill forms
+mcp_microsoft_pla_browser_fill_form: fields
+```
+
+**Page Analysis**:
+
+```bash
+# Take screenshots
+mcp_microsoft_pla_browser_take_screenshot: filename, fullPage
+
+# Get page snapshot
+mcp_microsoft_pla_browser_snapshot
+
+# Console messages
+mcp_microsoft_pla_browser_console_messages
+
+# Network requests
+mcp_microsoft_pla_browser_network_requests
+```
+
+**Example Prompts**:
+
+```
+Use browser automation to navigate to localhost:3000/email and test the email list
+
+Take screenshot of department page in mobile viewport (375x667)
+
+Fill email compose form and submit, then capture any console errors
+```
+
+**Critical for Next.js Testing**:
+
+```
+When verifying pages in Next.js projects, use browser automation instead of curl
+because:
+- Renders JavaScript and detects runtime errors
+- Captures hydration issues
+- Verifies full user experience
+- Gets console errors via console_messages
+```
+
+---
+
+### 6. Context7 Library Docs (Upstash MCP - `mcp_upstash_conte_*`)
+
+**Purpose**: Up-to-date library documentation retrieval  
+**Authority**: npm packages, frameworks, libraries
+
+#### Key Capabilities
+
+**Library Search**:
+
+```bash
+# Resolve library ID
+mcp_upstash_conte_resolve-library-id: libraryName
+
+# Get library docs
+mcp_upstash_conte_get-library-docs: context7CompatibleLibraryID, topic
+```
+
+**Example Prompts**:
+
+```
+Get Context7 documentation for React Hook Form
+
+Search library documentation for Prisma query optimization
+
+Fetch Tailwind CSS documentation for responsive design patterns
+```
+
+**Integration in Prompts**:
+
+```
+Tools to Use:
+- Context7 for library documentation
+```
+
+---
+
+### 7. Web Content Fetcher (`fetch_webpage`)
+
+**Purpose**: Fetch and summarize web page content  
+**Authority**: Public web pages
+
+**Use Case**: Research industry best practices, competitor analysis
+
+**Example Prompts**:
+
+```
+Fetch and analyze https://stripe.com/docs/webhooks for webhook implementation
+
+Research Next.js 15 Server Actions from official blog posts
+
+Extract content from competitor product pages for feature comparison
+```
+
+---
+
+## C. Tool Selection Guide
+
+### When to Use Which Tool
+
+#### For Codebase Understanding
+
+```
+1. semantic_search    → Find concepts and patterns
+2. grep_search        → Exact text/regex matching
+3. file_search        → Locate files by pattern
+4. read_file          → Read specific files
+5. list_code_usages   → Find symbol references
+```
+
+#### For External Research
+
+```
+1. fetch_webpage             → Web content
+2. GitHub MCP (search_code)  → GitHub code examples
+3. Microsoft Docs MCP        → Microsoft/Azure docs
+4. Context7 MCP              → Library documentation
+5. Hugging Face MCP          → ML models/datasets
+6. Next.js MCP (docs)        → Next.js documentation
+```
+
+#### For Runtime & Testing
+
+```
+1. Next.js MCP (runtime)     → Runtime diagnostics
+2. Browser Automation        → UI testing, screenshots
+3. runTests                  → Execute test suites
+4. get_errors                → Compile/lint errors
+5. run_in_terminal           → Commands & builds
+```
+
+#### For Project Operations
+
+```
+1. GitHub MCP         → Issues, PRs, repositories
+2. run_in_terminal    → Git, database, builds
+3. get_errors         → Quality checks
+```
+
+---
+
+## D. Advanced Tool Usage Patterns
+
+### Pattern 1: Comprehensive Research
+
+**Prompt Template**:
+
+```
+Research [topic] using multiple sources:
+
+1. Web Research:
+   - Use fetch_webpage to analyze industry articles
+   - Search competitor solutions
+
+2. Code Examples:
+   - GitHub MCP code search for implementations
+   - Context7 for library best practices
+
+3. Official Documentation:
+   - Microsoft Docs MCP for Azure/Microsoft patterns
+   - Next.js MCP for framework guidelines
+
+4. Codebase Analysis:
+   - semantic_search for existing patterns
+   - grep_search for specific implementations
+
+Provide comprehensive analysis with references.
+```
+
+**Example**:
+
+```
+@ba Research email threading implementations using:
+- Web research for Gmail/Outlook threading algorithms
+- GitHub code search for open-source examples
+- Next.js docs for Server Components patterns
+- Codebase semantic_search for existing email patterns
+```
+
+---
+
+### Pattern 2: Plan Review with Infrastructure Discovery
+
+**Prompt Template**:
+
+```
+Review [plan-file] using comprehensive tool analysis:
+
+1. Codebase Discovery:
+   - semantic_search: Find new hooks/components/utilities
+   - file_search: Discover new infrastructure files
+   - grep_search: Check for pattern updates
+
+2. Documentation Updates:
+   - Next.js MCP: Latest framework patterns
+   - Context7: Updated library APIs
+   - Microsoft Docs: Azure service updates
+
+3. Runtime Verification:
+   - Next.js MCP runtime: Check current routes
+   - Browser automation: Test existing pages
+   - get_errors: Validate current state
+
+Update plan with findings and new approaches.
+```
+
+**Example**:
+
+```
+@plan-review-and-update review plan/in-progress/email-refactor-1.md
+
+Use these tools:
+- semantic_search for new email-related components
+- Next.js MCP for Server Component patterns
+- Context7 for React Hook Form v8 updates
+- grep_search for existing useEmailStore usage
+```
+
+---
+
+### Pattern 3: Debugging with Multi-Tool Analysis
+
+**Prompt Template**:
+
+```
+Debug [issue] using systematic tool analysis:
+
+1. Runtime Inspection:
+   - Next.js MCP runtime: Get current errors
+   - Browser automation: Reproduce issue
+   - Console logs: Capture error messages
+
+2. Code Analysis:
+   - grep_search: Find error-related code
+   - list_code_usages: Check function references
+   - read_file: Examine implementation
+
+3. Testing:
+   - runTests: Check failing tests
+   - get_errors: TypeScript/lint issues
+
+4. Documentation:
+   - Context7: Library API verification
+   - Next.js MCP docs: Framework best practices
+
+Provide root cause and fix.
+```
+
+**Example**:
+
+```
+@problem-solver Debug email list not rendering on mobile
+
+Steps:
+1. Use Next.js MCP runtime to check for runtime errors
+2. Browser automation to test on mobile viewport
+3. grep_search for responsive design patterns
+4. read_file to examine component implementation
+5. runTests to verify component tests
+```
+
+---
+
+### Pattern 4: Implementation with Reference Discovery
+
+**Prompt Template**:
+
+```
+Implement [feature] using reference-based approach:
+
+1. Find Similar Patterns:
+   - semantic_search: Existing similar implementations
+   - list_code_usages: How patterns are used
+   - GitHub MCP: Industry examples
+
+2. Get Best Practices:
+   - Next.js MCP docs: Framework patterns
+   - Context7: Library documentation
+   - Microsoft Docs: Cloud integration patterns
+
+3. Verify Infrastructure:
+   - file_search: Available utilities
+   - grep_search: Reusable components
+   - read_file: Implementation details
+
+4. Test & Validate:
+   - runTests: Execute test suite
+   - get_errors: Check TypeScript
+   - Browser automation: UI validation
+
+Implement following discovered patterns.
+```
+
+**Example**:
+
+```
+@developer Implement email threading feature
+
+Research phase:
+- semantic_search: Find existing threading patterns
+- GitHub MCP: Search for "email conversation threading react"
+- Context7: React Hook Form for thread filters
+- Next.js MCP docs: Server Actions with mutations
+
+Implementation:
+- Follow discovered patterns from semantic_search
+- Use utilities from file_search results
+- Test with runTests and browser automation
+```
+
+---
+
+## E. Tool Integration in Prompts
+
+### Example 1: Business Analysis with Web Research
+
+**Enhanced BA Prompt**:
+
+```
+@ba Analyze business requirements for [feature]
+
+Research & Analysis:
+1. Web Research (use fetch_webpage):
+   - Industry best practices from competitor sites
+   - Market trends from industry reports
+   - Regulatory requirements
+
+2. Technical Research:
+   - GitHub MCP: Code examples and patterns
+   - Microsoft Docs: Azure service capabilities
+   - Context7: Available libraries
+
+3. Codebase Analysis:
+   - semantic_search: Existing similar features
+   - grep_search: Current implementation patterns
+
+Provide comprehensive BRSD with sources.
+```
+
+---
+
+### Example 2: Plan Review with Full Discovery
+
+**Enhanced Plan Review Prompt**:
+
+```
+@plan-review-and-update review [plan-file]
+
+Discovery Process:
+1. Codebase Changes:
+   - semantic_search: New components since plan creation
+   - file_search: New utility files
+   - grep_search: Updated patterns
+
+2. Framework Updates:
+   - Next.js MCP docs: New App Router features
+   - Context7: Library version changes
+   - Microsoft Docs: Azure service updates
+
+3. Runtime Verification:
+   - Next.js MCP runtime: Current routes and structure
+   - Browser automation: Test existing functionality
+   - get_errors: Current TypeScript/lint status
+
+Update plan with:
+- New components to leverage
+- Deprecated approaches to avoid
+- Updated implementation strategies
+```
+
+---
+
+### Example 3: Implementation with Real-Time Verification
+
+**Enhanced Developer Prompt**:
+
+```
+@developer Implement [feature]
+
+Implementation Process:
+1. Research Phase:
+   - semantic_search: Find reference implementations
+   - GitHub MCP: External examples
+   - Context7: Library documentation
+
+2. Development:
+   - Implement following discovered patterns
+   - Use utilities from file_search
+
+3. Verification:
+   - get_errors: TypeScript validation
+   - runTests: Execute test suite
+   - Browser automation: UI testing
+   - Next.js MCP runtime: Check for runtime errors
+
+4. Documentation:
+   - Generate JSDoc comments
+   - Create usage examples
+
+Provide implementation with test results.
+```
+
+---
+
+## F. Tool-Enhanced Prompt Examples
+
+### Comprehensive Feature Development
+
+```
+Implement email threading feature with comprehensive tool usage:
+
+Phase 1: Research (Tools)
+- fetch_webpage: Research Gmail/Outlook threading algorithms
+- GitHub MCP: Search "email conversation threading"
+- semantic_search: Find existing email patterns in codebase
+- Context7: React Query and React Hook Form docs
+
+Phase 2: Design
+- @architect: Design architecture with research findings
+- @data-architect: Design schema with Prisma patterns
+
+Phase 3: Implementation
+- @developer: Implement with reference patterns
+- Tools during dev:
+  * file_search: Locate reusable utilities
+  * grep_search: Find component patterns
+  * read_file: Examine implementations
+
+Phase 4: Validation
+- runTests: Execute test suite
+- get_errors: TypeScript/lint checks
+- Browser automation: UI testing
+- Next.js MCP runtime: Runtime diagnostics
+
+Phase 5: Documentation
+- @documentation-knowledge: Generate comprehensive docs
+```
+
+---
+
+### Emergency Debugging with Full Toolkit
+
+```
+@problem-solver Debug production issue: Email attachments failing
+
+Investigation Toolkit:
+1. Runtime Analysis:
+   - Next.js MCP runtime: Get current errors
+   - Browser automation: Reproduce issue
+   - Console logs from browser_console_messages
+
+2. Code Investigation:
+   - grep_search: Find attachment-related code
+   - list_code_usages: Track attachment functions
+   - read_file: Examine implementations
+   - semantic_search: Find similar patterns
+
+3. External Research:
+   - GitHub MCP: Search for known issues
+   - Context7: Library bug reports
+   - fetch_webpage: Stack Overflow solutions
+
+4. Validation:
+   - get_errors: Check for TypeScript issues
+   - runTests: Verify test coverage
+   - Browser automation: Test fix
+
+Provide root cause, fix, and prevention strategy.
+```
+
+---
+
+## G. Quick Tool Reference Table
+
+| Tool Category | Tool Name | Primary Use | Example |
+|--------------|-----------|-------------|---------|
+| **Codebase** | semantic_search | Concept-based code search | Find "authentication patterns" |
+| | grep_search | Exact text/regex search | Find all "useEmailStore" |
+| | file_search | File pattern matching | Locate all *.action.ts |
+| | read_file | Read file contents | Read specific files |
+| | list_dir | Directory listing | List folder contents |
+| | list_code_usages | Symbol references | Find all usages of function |
+| **Testing** | runTests | Execute tests | Run test suite with coverage |
+| | get_errors | Compile/lint errors | Check TypeScript errors |
+| **Terminal** | run_in_terminal | Execute commands | Run build/database commands |
+| | get_terminal_output | Retrieve output | Get background command output |
+| **GitHub** | search_code | GitHub code search | Find code examples |
+| | search_repositories | Find repos | Discover projects |
+| | *_issue,*_pull_request | Issue/PR management | Create/manage issues and PRs |
+| **Next.js** | nextjs_runtime | Runtime inspection | Get routes, errors, logs |
+| | browser_eval | Browser automation | Test UI, screenshots |
+| | nextjs_docs | Documentation | Search Next.js docs |
+| | upgrade_nextjs_16 | Framework upgrade | Upgrade Next.js version |
+| **Microsoft** | docs_search | Doc search | Find Microsoft docs |
+| | docs_fetch | Fetch full docs | Get complete tutorials |
+| | code_sample_search | Find code samples | TypeScript examples |
+| **Hugging Face** | model_search | Find ML models | Search models by task |
+| | dataset_search | Find datasets | Search training data |
+| | paper_search | Research papers | Find ML research |
+| **Browser** | navigate, click, type | Browser control | Automate interactions |
+| | screenshot | Capture pages | Take screenshots |
+| | console_messages | Get console logs | Debug JavaScript errors |
+| **Context7** | resolve-library-id | Find library | Resolve package ID |
+| | get-library-docs | Get docs | Fetch library documentation |
+| **Web** | fetch_webpage | Fetch content | Research web articles |
+
+---
+
+## H. Best Practices for Tool Usage
+
+### 1. Always Specify Tools in Complex Prompts
+
+**✅ Good**:
+
+```
+@plan-review-and-update review plan/email-refactor-1.md
+
+Tools to Use:
+- semantic_search for new components
+- file_search for infrastructure updates
+- Next.js MCP for latest patterns
+- Context7 for library docs
+```
+
+**❌ Bad**:
+
+```
+Review plan and update it
+# No tool guidance - less effective
+```
+
+---
+
+### 2. Combine Tools for Comprehensive Analysis
+
+**✅ Good**:
+
+```
+Research email threading using:
+1. fetch_webpage (industry patterns)
+2. GitHub MCP (code examples)
+3. semantic_search (internal patterns)
+4. Context7 (library docs)
+```
+
+**❌ Bad**:
+
+```
+Research email threading
+# Single-source research - incomplete
+```
+
+---
+
+### 3. Use Runtime Tools for Verification
+
+**✅ Good**:
+
+```
+After implementation:
+- runTests (test suite)
+- get_errors (TypeScript/lint)
+- Next.js MCP runtime (runtime errors)
+- Browser automation (UI testing)
+```
+
+**❌ Bad**:
+
+```
+Implement feature
+# No verification step
+```
+
+---
+
+### 4. Leverage MCP for Latest Information
+
+**✅ Good**:
+
+```
+Use Next.js MCP docs to get latest Server Actions patterns
+Use Context7 for React Hook Form v8 API changes
+Use Microsoft Docs MCP for Azure Functions best practices
+```
+
+**❌ Bad**:
+
+```
+Implement Server Actions
+# May use outdated patterns
+```
+
+---
+
+## I. Tool Authority & Limitations
+
+### Tool Capabilities
+
+| Tool | Can Do | Cannot Do |
+|------|--------|-----------|
+| **semantic_search** | Find code by meaning | Execute code |
+| **grep_search** | Exact text search | Understand context |
+| **file_search** | Locate files | Read file contents |
+| **read_file** | Read files | Modify files |
+| **GitHub MCP** | Search, create issues/PRs | Access private repos (without auth) |
+| **Next.js MCP** | Runtime inspection | Modify running server |
+| **Browser Automation** | Test UI, screenshots | Run without dev server |
+| **Context7** | Get library docs | Install packages |
+| **Microsoft Docs** | Official docs | Access internal docs |
+
+### When Tools Are Not Available
+
+**Fallback Strategies**:
+
+```
+If Next.js MCP unavailable:
+→ Use run_in_terminal with dev server commands
+
+If GitHub MCP unavailable:
+→ Use manual GitHub web interface
+
+If Browser Automation unavailable:
+→ Use manual testing or Cypress E2E tests
+
+If Context7 unavailable:
+→ Use fetch_webpage for official documentation sites
+```
+
+---
+
+## J. Integration with GitHub Prompts
+
+### GitHub Prompts Using Tools
+
+**Prompts with Built-in Tool Usage**:
+
+1. **@plan-review-and-update**:
+   - semantic_search, file_search, grep_search
+   - Next.js MCP, Context7
+
+2. **@ba**:
+   - fetch_webpage (web research)
+   - GitHub MCP (code examples)
+   - semantic_search (codebase)
+
+3. **@code-auditor**:
+   - grep_search, semantic_search
+   - get_errors, runTests
+
+4. **@developer**:
+   - semantic_search (patterns)
+   - file_search (utilities)
+   - read_file (reference code)
+
+5. **@problem-solver**:
+   - Next.js MCP runtime
+   - Browser automation
+   - grep_search, list_code_usages
+
+6. **@data-architect**:
+   - read_file (existing schemas)
+   - grep_search (Prisma patterns)
+   - Next.js MCP (database insights)
+
+---
+
+## K. Advanced Use Cases
+
+### Use Case 1: Multi-Source Research
+
+```
+Create comprehensive research report for [feature]:
+
+Sources:
+1. Web Research (fetch_webpage):
+   - Competitor implementations
+   - Industry best practices
+   - Academic papers
+
+2. Code Research (GitHub MCP):
+   - Open-source implementations
+   - Popular libraries
+   - Community solutions
+
+3. Official Documentation:
+   - Next.js MCP (framework)
+   - Microsoft Docs MCP (Azure/Microsoft)
+   - Context7 (libraries)
+
+4. Internal Analysis (semantic_search):
+   - Existing patterns
+   - Similar implementations
+   - Reusable components
+
+Synthesize findings with citations.
+```
+
+---
+
+### Use Case 2: Real-Time Development Feedback
+
+```
+Implement [feature] with continuous verification:
+
+Development Loop:
+1. Write code
+2. get_errors (TypeScript validation)
+3. runTests (test execution)
+4. Next.js MCP runtime (runtime check)
+5. Browser automation (UI test)
+6. Iterate if issues found
+
+Continuous Quality:
+- TypeScript errors: ZERO
+- Test coverage: 80%+
+- Runtime errors: NONE
+- UI functionality: VERIFIED
+```
+
+---
+
+### Use Case 3: Plan Optimization with Discovery
+
+```
+Optimize [plan] with comprehensive discovery:
+
+Discovery Process:
+1. Codebase Evolution:
+   - semantic_search: New patterns (last 30 days)
+   - file_search: New infrastructure
+   - grep_search: Updated conventions
+
+2. External Updates:
+   - Next.js MCP docs: Framework changes
+   - Context7: Library updates (check package.json)
+   - GitHub MCP: Industry trends
+
+3. Runtime Reality Check:
+   - Next.js MCP runtime: Current routes
+   - get_errors: Existing issues
+   - Browser automation: Current UI state
+
+Update plan to:
+- Leverage new infrastructure
+- Adopt latest patterns
+- Avoid deprecated approaches
+- Align with current codebase state
+```
+
+---
+
+## Summary: Tools Make Prompts Powerful
+
+**Key Takeaways**:
+
+1. **Specify Tools**: Always mention which tools to use in complex prompts
+2. **Combine Sources**: Use multiple tools for comprehensive results
+3. **Verify Continuously**: Use runtime and testing tools for validation
+4. **Stay Updated**: Leverage MCP servers for latest documentation
+5. **Research Thoroughly**: Web + Code + Docs + Codebase = Complete picture
+
+**Tool-Enhanced Workflow**:
+
+```
+Research → Design → Implement → Verify → Document
+   ↓         ↓         ↓          ↓         ↓
+ Tools     Tools     Tools     Tools     Tools
+```
+
+**Remember**: Tools are force multipliers for prompts. The more effectively you use them, the better your development outcomes.
+
+---
+
+## Project Lifecycle Phases
 
 ---
 
@@ -90,6 +1439,7 @@
 **Use Case**: Gather requirements through comprehensive research including web-based market analysis, competitor research, and industry best practices.
 
 **Prompt**:
+
 ```
 Analyze business requirements for [feature/module]:
 
@@ -102,6 +1452,13 @@ Research & Analysis:
 6. Document process flows and workflows
 7. Perform gap analysis (internal and external)
 
+Tools to Use:
+- fetch_webpage for industry research and competitor analysis
+- GitHub MCP search_code for implementation examples
+- semantic_search for existing internal patterns
+- Context7 for library documentation
+- Microsoft Docs MCP for enterprise best practices
+
 Provide:
 - Comprehensive BRSD with market intelligence
 - Process flow diagrams
@@ -111,12 +1468,13 @@ Provide:
 ```
 
 **Examples**:
+
 ```bash
-@ba analyze business requirements for email automation workflows
+@ba analyze business requirements for passwordless authentication flow
 
-@ba research industry best practices for department hierarchy management
+@ba research industry best practices for biometric authentication on mobile
 
-Analyze business requirements for customer relationship management module with focus on sales pipeline automation
+Analyze business requirements for social login integration (Google, Apple) with focus on privacy compliance
 ```
 
 ---
@@ -129,6 +1487,7 @@ Analyze business requirements for customer relationship management module with f
 **Use Case**: Identify incomplete implementations, TODO comments, and technical debt before starting new work.
 
 **Prompt**:
+
 ```
 Analyze technical debt and incomplete work in [module/codebase]:
 
@@ -140,6 +1499,12 @@ Analysis Areas:
 5. Deprecated dependencies
 6. Code quality issues
 
+Tools to Use:
+- grep_search for finding TODO comments and incomplete patterns
+- file_search for locating all relevant files
+- semantic_search for understanding implementation context
+- read_file for examining specific code sections
+
 Provide:
 - Comprehensive TODO inventory
 - Prioritized action plans (Critical/High/Medium/Low)
@@ -149,12 +1514,13 @@ Provide:
 ```
 
 **Examples**:
+
 ```bash
 @todo-manager scan codebase for TODO comments and incomplete implementations
 
-@todo-manager analyze technical debt in department module before starting refactor
+@todo-manager analyze technical debt in authentication module before starting refactor
 
-Analyze technical debt and incomplete work in app/core/ and actions/core/
+Analyze technical debt and incomplete work in app/(auth)/ and components/auth/
 ```
 
 ---
@@ -167,6 +1533,7 @@ Analyze technical debt and incomplete work in app/core/ and actions/core/
 **Use Case**: Proactive bug discovery and quality assessment before planning new features.
 
 **Prompt**:
+
 ```
 Perform comprehensive code audit of [module/feature]:
 
@@ -179,6 +1546,13 @@ Audit Checklist:
 6. Edge cases and error handling
 7. Multi-tenant data isolation
 
+Tools to Use:
+- grep_search for scanning code patterns and vulnerabilities
+- semantic_search for understanding code context
+- get_errors for TypeScript and linting issues
+- runTests for existing test coverage
+- read_file for detailed code examination
+
 Provide:
 - Structured bug report in docs/bugs/BUGS.md
 - Severity ratings (Critical/High/Medium/Low)
@@ -187,12 +1561,13 @@ Provide:
 ```
 
 **Examples**:
+
 ```bash
-@code-auditor audit email module for potential bugs and code quality issues
+@code-auditor audit authentication module for potential bugs and code quality issues
 
-@code-auditor scan department module for TypeScript errors and logical flaws before refactor
+@code-auditor scan profile management for TypeScript errors and logical flaws before refactor
 
-Perform comprehensive code audit of actions/crm/ for security and performance issues
+Perform comprehensive code audit of actions/ for security and performance issues
 ```
 
 ---
@@ -209,6 +1584,7 @@ Perform comprehensive code audit of actions/crm/ for security and performance is
 **Use Case**: Create technical specifications and architecture diagrams WITHOUT writing code.
 
 **Prompt**:
+
 ```
 Design architecture for [feature/module]:
 
@@ -226,55 +1602,70 @@ Deliverables:
 7. Scalability strategy
 8. Technology stack recommendations
 
+Tools to Use:
+- semantic_search for finding existing architectural patterns
+- Next.js MCP docs for framework best practices
+- Context7 for library documentation
+- read_file for examining current architecture
+
 Note: NO CODE IMPLEMENTATION - Design documents only
 ```
 
 **Examples**:
+
 ```bash
-@architect design architecture for email threading and conversation grouping
+@architect design architecture for passwordless email magic link authentication
 
-@architect create technical specification for department hierarchy system
+@architect create technical specification for biometric authentication system
 
-Design architecture for real-time notification system with WebSocket support
+Design architecture for real-time notification system with Firebase Cloud Messaging
 ```
 
 ---
 
-### 🗄️ Database Schema Design
+### 🗄️ Firebase Schema Design
 
 **GitHub Prompt**: `@data-architect` (Database Architect)  
-**Authority**: ✅ Database & Migration Code
+**Authority**: ✅ Firestore Schema & Security Rules
 
-**Use Case**: Design Prisma schemas, migrations, and query optimization strategies.
+**Use Case**: Design Firestore collections, security rules, and data structure optimization.
 
 **Prompt**:
+
 ```
-Design Prisma schema for [entity/feature]:
+Design Firestore schema for [entity/feature]:
 
 Requirements:
 - [List data requirements]
 - [List relationships]
 
 Deliverables:
-1. Prisma model definitions in prisma/schema/[module].prisma
-2. Relationships (1:1, 1:N, N:M) with proper foreign keys
-3. Indexes for query performance
-4. Multi-tenant isolation (tenantId, organizationId)
-5. Soft delete support (deletedAt, deletedBy)
-6. Audit fields (createdAt, updatedAt, createdBy, updatedBy)
-7. Migration script
-8. Seed data for testing
+1. Firestore collection structure in firestore.rules
+2. Document schema with field definitions
+3. Security rules for data access control
+4. Indexes for query performance
+5. User-based data isolation (userId)
+6. Timestamp fields (createdAt, updatedAt)
+7. Data validation rules
+8. Example documents for testing
 
-Follow existing schema patterns (core.prisma, crm.prisma).
+Tools to Use:
+- read_file for examining existing firestore.rules patterns
+- semantic_search for finding similar data models
+- Context7 for Firebase best practices
+- grep_search for existing Firestore query patterns
+
+Follow existing Firebase patterns (firebase-config.ts).
 ```
 
 **Examples**:
+
 ```bash
-@data-architect design schema for email threading with conversation relationships
+@data-architect design schema for user profile with preferences and settings
 
-@data-architect optimize department queries for hierarchical data
+@data-architect optimize session queries for multi-device tracking
 
-Design Prisma schema for customer relationship management with opportunity tracking
+Design Firestore schema for notification management with read/unread status
 ```
 
 ---
@@ -287,6 +1678,7 @@ Design Prisma schema for customer relationship management with opportunity track
 **Use Case**: Transform requirements and architecture into detailed, executable implementation plans.
 
 **Prompt**:
+
 ```
 Create implementation plan for [feature/module]:
 
@@ -306,6 +1698,13 @@ Plan Structure:
 8. Success metrics
 9. Timeline estimates
 
+Tools to Use:
+- semantic_search for finding reusable components
+- file_search for discovering existing utilities
+- grep_search for understanding current patterns
+- Context7 for library best practices
+- Next.js MCP docs for framework patterns
+
 Research:
 - Analyze existing codebase for reusable components
 - Research industry best practices
@@ -313,12 +1712,13 @@ Research:
 ```
 
 **Examples**:
+
 ```bash
-@implementation-plan create plan for implementing email threading and conversation grouping
+@implementation-plan create plan for implementing biometric authentication flow
 
-@implementation-plan design plan for department hierarchy management
+@implementation-plan design plan for multi-factor authentication (2FA)
 
-Create implementation plan for CRM sales pipeline automation based on requirements document
+Create implementation plan for push notification system based on requirements document
 ```
 
 ---
@@ -331,12 +1731,13 @@ Create implementation plan for CRM sales pipeline automation based on requiremen
 **Use Case**: Review existing plans and update based on new infrastructure, components, or changed requirements.
 
 **Prompt**:
+
 ```
 Review and update [plan-file-path]:
 
 Review Checklist:
 1. Is the plan still relevant?
-2. Are there new WhizFlow components/hooks that can be used?
+2. Are there new LoginX components/hooks that can be used?
 3. Are tasks clearly defined with acceptance criteria?
 4. Are there missing tasks or features?
 5. Is the priority correct?
@@ -357,12 +1758,13 @@ Provide:
 ```
 
 **Examples**:
+
 ```bash
-@plan-review-and-update review plan/in-progress/refactor-email-module-1.md
+@plan-review-and-update review plan/in-progress/refactor-auth-module-1.md
 
-@plan-review-and-update update plan/in-progress/department-refactor-1.md with new components
+@plan-review-and-update update plan/in-progress/biometric-auth-1.md with new components
 
-Review and update plan/in-progress/crm-pipeline-1.md based on new React Server Components
+Review and update plan/in-progress/push-notifications-1.md based on new Firebase features
 ```
 
 ---
@@ -379,6 +1781,7 @@ Review and update plan/in-progress/crm-pipeline-1.md based on new React Server C
 **Use Case**: Execute entire implementation plans automatically with status updates and quality checks.
 
 **Prompt**:
+
 ```
 Implement plan/in-progress/[plan-file-name].md
 
@@ -388,6 +1791,13 @@ Requirements:
 3. Run tests and compilation checks after each task
 4. Verify zero TypeScript errors and linting issues
 5. Move plan to completed/ folder when finished
+
+Tools to Use:
+- get_errors for TypeScript and linting validation
+- runTests for test execution after each task
+- Next.js MCP runtime for checking runtime errors
+- semantic_search for finding reference implementations
+- read_file for understanding existing patterns
 
 Execution Process:
 - Phase by phase completion
@@ -399,13 +1809,14 @@ Note: This prompt has FULL IMPLEMENTATION AUTHORITY and will execute WITHOUT con
 ```
 
 **Examples**:
-```bash
-@plan-implementor implement plan/in-progress/refactor-email-module-1.md
 
-@plan-implementor implement plan/in-progress/department-refactor-1.md
+```bash
+@plan-implementor implement plan/in-progress/refactor-auth-module-1.md
+
+@plan-implementor implement plan/in-progress/biometric-auth-1.md
 
 # With GitHub Coding Agent (creates PR)
-@plan-implementor implement plan/in-progress/crm-pipeline-1.md
+@plan-implementor implement plan/in-progress/push-notifications-1.md
 #github-pull-request_copilot-coding-agent
 ```
 
@@ -419,6 +1830,7 @@ Note: This prompt has FULL IMPLEMENTATION AUTHORITY and will execute WITHOUT con
 **Use Case**: Implement specific features, components, and full-stack functionality.
 
 **Prompt**:
+
 ```
 Implement [feature-name] with the following requirements:
 
@@ -426,30 +1838,37 @@ Requirements:
 - [List functional requirements]
 
 Structure:
-1. Database schema in prisma/schema/[module].prisma (if needed)
-2. Server actions in actions/[module]/[feature].action.ts
-3. Pages in app/[module]/[feature]/ with proper routing
-4. Components in app/[module]/[feature]/_components/
+1. Firebase integration in firebase-config.ts (if needed)
+2. Actions in actions/[module]/[feature].action.ts
+3. Screens in app/[module]/[feature]/ with Expo Router
+4. Components in components/[module]/[feature]/
 5. Types in types/[module]/[feature].ts
-6. Validation in validations/[module]/[feature].ts
-7. Zustand store in stores/[module]/ (UI state only)
+6. Validation schemas with Zod
+7. i18n translations in i18n/locales/
+
+Tools to Use:
+- semantic_search for finding reference implementations
+- read_file for examining existing patterns
+- file_search for locating reusable utilities
+- Context7 for library API documentation (React Native, Expo)
 
 Use:
-- Existing form components from components/forms/
+- Existing themed components from components/themed-*
 - Custom hooks from hooks/
-- React Query for server state
-- Server Components and Server Actions
+- Firebase for backend state
+- React Native components
 
-Include comprehensive tests and JSDoc documentation.
+Include comprehensive accessibility support and JSDoc documentation.
 ```
 
 **Examples**:
+
 ```bash
-@developer implement email threading feature with conversation view
+@developer implement biometric authentication with Face ID/Touch ID support
 
-@developer create department CRUD with multi-view support (table, tree, kanban)
+@developer create profile editing screen with photo upload and form validation
 
-Implement customer opportunity management with sales pipeline visualization
+Implement push notification management with Firebase Cloud Messaging integration
 ```
 
 ---
@@ -458,29 +1877,35 @@ Implement customer opportunity management with sales pipeline visualization
 
 **Use Case**: Improve existing code quality, performance, and maintainability.
 
-#### Convert to Server Components
+#### Convert to TypeScript Strict Mode
 
 **Prompt**:
+
 ```
-Convert [component-path] from Client Component to Server Component:
+Convert [component-path] to use strict TypeScript:
 
 Process:
-1. Move data fetching to Server Component
-2. Extract interactive elements to separate client components
-3. Add proper Suspense boundaries with loading skeletons
-4. Create error.tsx with error boundary
-5. Generate metadata for SEO
-6. Ensure proper streaming and progressive rendering
+1. Add explicit types for all props and state
+2. Remove any 'any' types - use proper types or 'unknown'
+3. Add JSDoc comments with @param and @returns
+4. Ensure all functions have return types
+5. Add proper error handling with typed errors
+6. Use type guards for runtime type checking
 
-Keep only necessary interactivity in client components.
-Follow Next.js 15 App Router patterns.
+Tools to Use:
+- read_file for examining current implementation
+- semantic_search for finding TypeScript patterns
+- get_errors for TypeScript validation
+
+Target: Zero TypeScript errors with strict mode enabled
 ```
 
-#### Optimize Large Component
+#### Optimize React Native Component
 
 **Prompt**:
+
 ```
-Optimize [component-path] for performance:
+Optimize [component-path] for mobile performance:
 
 Optimization Steps:
 1. Split into smaller, focused components
@@ -488,63 +1913,82 @@ Optimization Steps:
 3. Use useMemo/useCallback for expensive operations
 4. Implement code splitting with dynamic imports
 5. Replace props drilling with Context or composition
-6. Add virtual scrolling if rendering large lists
-7. Measure before/after with React DevTools Profiler
+6. Add FlatList virtualization if rendering large lists
+7. Optimize images with expo-image
+8. Measure before/after with React DevTools Profiler
 
-Target: Reduce render time by 50%+ and bundle size by 30%+
+Tools to Use:
+- read_file for analyzing current component
+- semantic_search for performance optimization patterns
+
+Target: Reduce render time by 50%+ and improve list scrolling performance
 ```
 
 #### Refactor to Standard Pattern
 
 **Prompt**:
+
 ```
 Refactor actions/[module]/[file].action.ts to standard pattern:
 
-Follow department.action.ts pattern:
-- [ ] Import utilities from @/lib/actions
-- [ ] Define [Entity]Filters extending TenantBaseFilters
-- [ ] Create includeRelationships() function
-- [ ] Implement buildFilters() using filter helpers
-- [ ] Export typed CRUD operations (fetch*, create*, update*, remove*)
-- [ ] Add analytics operations (statistics, trends)
-- [ ] Wrap with withErrorHandling
-- [ ] Zero `any` types
-- [ ] Add revalidation tags
+Follow user.action.ts pattern:
+- [ ] Import Firebase utilities
+- [ ] Define proper TypeScript types
+- [ ] Create error handling wrappers
+- [ ] Implement CRUD operations (get*, create*, update*, delete*)
+- [ ] Add proper error messages
+- [ ] Wrap with try-catch blocks
+- [ ] Zero 'any' types
+- [ ] Add JSDoc documentation
+
+Tools to Use:
+- read_file for examining standard pattern (user.action.ts)
+- semantic_search for understanding action patterns
+- grep_search for finding usage patterns
+- get_errors for TypeScript validation
 
 Maintain backward compatibility.
 ```
 
 **Examples**:
+
 ```bash
-@developer convert app/email/[id]/page.tsx to Server Component
+@developer convert app/(auth)/login.tsx to strict TypeScript mode
 
-@developer optimize app/core/departments/_view/table-view.tsx for 1000+ rows
+@developer optimize components/ui/notification-list.tsx for 1000+ notifications
 
-Refactor actions/crm/opportunity.action.ts to follow standardized pattern
+Refactor actions/setting.action.ts to follow standardized Firebase pattern
 ```
 
 ---
 
 ### 🎨 Advanced Features Implementation
 
-#### Real-Time Features (WebSockets)
+#### Push Notifications (Firebase Cloud Messaging)
 
 **Prompt**:
+
 ```
-Implement real-time [feature] using WebSockets:
+Implement push notifications using Firebase Cloud Messaging:
 
 Implementation:
-1. Extend existing WebSocket infrastructure (hooks/use-websocket.ts)
-2. Create endpoint in app/api/ws/[feature]/route.ts
-3. Implement event broadcasting
-4. Handle connection lifecycle (connect, disconnect, reconnect)
-5. Add authentication/authorization for connections
-6. Implement client hook: use[Feature]WebSocket
-7. Handle offline/online transitions
-8. Add rate limiting
+1. Configure Firebase Cloud Messaging in firebase-config.ts
+2. Create notification handler in hooks/use-push-notifications.tsx
+3. Implement permission requests (iOS/Android)
+4. Handle notification lifecycle (received, opened, dismissed)
+5. Add notification categories and actions
+6. Implement notification history storage
+7. Handle deep linking from notifications
+8. Add notification settings UI
 9. Write integration tests
 
-Ensure graceful degradation when WebSockets unavailable.
+Tools to Use:
+- read_file for examining existing notification infrastructure
+- semantic_search for notification implementation patterns
+- Context7 for expo-notifications documentation
+- runTests for integration testing
+
+Ensure proper permission handling for iOS and Android.
 ```
 
 #### Internationalization (i18n)
@@ -553,49 +1997,60 @@ Ensure graceful degradation when WebSockets unavailable.
 **Authority**: ✅ i18n & Localization Code
 
 **Prompt**:
+
 ```
 Add internationalization support to [module/component]:
 
 Implementation:
 1. Extract hardcoded strings to i18n/locales/[lang]/[module].json
-2. Use next-intl patterns from existing setup
+2. Use i18n-js patterns from existing setup
 3. Support RTL languages (Arabic, Hebrew)
 4. Format dates/numbers/currency based on locale
 5. Add language switcher UI
 6. Create translation management workflow
 7. Test with multiple languages
 
-Support: English (en), Spanish (es), French (fr), German (de)
+Tools to Use:
+- grep_search for finding hardcoded strings
+- read_file for examining existing i18n patterns
+- semantic_search for i18n implementation examples
+- Context7 for i18n-js documentation
+
+Support: English (en), Spanish (es), Hindi (hi)
 ```
 
-#### Feature Flags
+#### Deep Linking
 
 **Prompt**:
+
 ```
-Implement feature flags for [feature]:
+Implement deep linking for [feature]:
 
 Implementation:
-1. Add flags to lib/feature-flags.ts
-2. Create flag definitions with defaults
-3. Implement flag checks in components/actions
-4. Add flag override UI in admin panel
-5. Support user-based and organization-based flags
-6. Add A/B testing capability
-7. Implement flag analytics
-8. Create migration plan (flag → permanent code)
+1. Configure URL schemes in app.config.ts
+2. Add linking configuration to navigation
+3. Implement deep link handlers
+4. Add universal links (iOS) and app links (Android)
+5. Handle authentication state in deep links
+6. Add deep link testing
+7. Create deep link documentation
 
-Flags needed:
-- enable[Feature]: boolean
-- [feature]Variant: 'a' | 'b' (if A/B testing)
+Tools to Use:
+- read_file for examining existing linking configuration
+- semantic_search for deep linking patterns
+- Context7 for expo-linking documentation
+
+Support both custom schemes and https URLs.
 ```
 
 **Examples**:
+
 ```bash
-@developer implement real-time email notifications using WebSockets
+@developer implement push notifications with Firebase Cloud Messaging and local scheduling
 
-@i18n-specialist add Arabic language support with RTL layout to dashboard
+@i18n-specialist add French and German language support with proper RTL handling
 
-Implement feature flags for new CRM pipeline visualization with A/B testing
+Implement deep linking for password reset and email verification flows
 ```
 
 ---
@@ -609,6 +2064,7 @@ Implement feature flags for new CRM pipeline visualization with A/B testing
 **Use Case**: Verify task completion and update implementation status.
 
 **Prompt**:
+
 ```
 Review [plan-file-path] and update implementation status:
 
@@ -627,6 +2083,7 @@ Provide progress summary and blocking issues.
 ```
 
 **Examples**:
+
 ```bash
 Review plan/in-progress/refactor-departments-1.md and update status
 
@@ -642,18 +2099,19 @@ Review all email module tasks and update plan/in-progress/refactor-email-1.md
 **Use Case**: Comprehensive code review for quality, security, and performance.
 
 **Prompt**:
+
 ```
 Review [file-or-directory] for:
 
 Review Checklist:
-1. Adherence to WhizFlow patterns (.github/copilot-instructions.md)
+1. Adherence to LoginX patterns (.github/instructions/*.instructions.md)
 2. TypeScript type safety (zero `any` types)
 3. Security vulnerabilities (XSS, injection, authentication)
-4. Performance issues (N+1 queries, large bundles)
+4. Performance issues (React Native optimizations, large bundles)
 5. Accessibility compliance (WCAG 2.1 AA)
 6. Testing coverage gaps
 7. Error handling completeness
-8. Multi-tenant data isolation
+8. Firebase security rules validation
 
 Provide:
 - Specific issues with line numbers
@@ -662,6 +2120,7 @@ Provide:
 ```
 
 **Examples**:
+
 ```bash
 Review app/core/departments/ for code quality and security
 
@@ -680,6 +2139,7 @@ Comprehensive review of email module before production release
 **Use Case**: Systematic debugging with focus on UI/UX issues and regression prevention.
 
 **Prompt**:
+
 ```
 Debug the following issue in [component/feature]:
 
@@ -694,6 +2154,13 @@ Investigation Process:
 6. Test thoroughly
 7. Add regression tests
 
+Tools to Use:
+- Next.js MCP runtime for runtime diagnostics and error inspection
+- Browser automation for UI testing and reproduction
+- grep_search for finding related code
+- get_errors for TypeScript and linting issues
+- runTests for validation
+
 Focus Areas:
 - UI/UX issues (layout, responsive design, components)
 - Runtime errors and bugs
@@ -707,6 +2174,7 @@ Provide:
 ```
 
 **Examples**:
+
 ```bash
 @problem-solver the email list is not rendering on mobile devices
 
@@ -725,6 +2193,7 @@ Debug runtime error: "Cannot read property 'name' of undefined" in opportunity d
 **Use Case**: Targeted fixes for identified bugs with comprehensive testing.
 
 **Prompt**:
+
 ```
 Fix the following bug: [Bug description]
 
@@ -737,6 +2206,13 @@ Fix Process:
 6. Create comprehensive test cases
 7. Verify no regression
 
+Tools to Use:
+- get_errors for TypeScript and linting issues
+- runTests for test execution and validation
+- Next.js MCP runtime for runtime error checking
+- grep_search for finding related code patterns
+- semantic_search for understanding code context
+
 Provide:
 - Code fix with explanation
 - Test cases for validation
@@ -744,6 +2220,7 @@ Provide:
 ```
 
 **Examples**:
+
 ```bash
 @bug-fix resolve email attachment upload failing for files > 10MB
 
@@ -762,6 +2239,7 @@ Fix bug: Department hierarchy not displaying correctly for deeply nested structu
 **Use Case**: Emergency situation with multiple issues - comprehensive scan and fix.
 
 **Prompt**:
+
 ```
 Fix all possible issues in [project/module]:
 
@@ -782,6 +2260,7 @@ Provide:
 ```
 
 **Examples**:
+
 ```bash
 @fix-my-project check and fix all issues in the email module
 
@@ -800,6 +2279,7 @@ Fix all possible issues in app/crm/ before deployment
 #### Comprehensive Test Suite
 
 **Prompt**:
+
 ```
 Create comprehensive tests for [component/action/feature]:
 
@@ -824,6 +2304,12 @@ Test Coverage:
    - Memory leak detection
    - Render performance
 
+Tools to Use:
+- runTests for test execution and coverage
+- get_errors for TypeScript validation
+- semantic_search for finding test patterns
+- read_file for examining existing tests
+
 Target: 80%+ coverage (statements, branches, functions, lines)
 Follow Vitest + React Testing Library patterns.
 ```
@@ -831,6 +2317,7 @@ Follow Vitest + React Testing Library patterns.
 #### E2E Testing
 
 **Prompt**:
+
 ```
 Create E2E tests for [user-workflow] using Cypress:
 
@@ -846,6 +2333,7 @@ Example: User login → Navigate to CRM → Create opportunity → Update stage 
 ```
 
 **Examples**:
+
 ```bash
 @testers create comprehensive test suite for email module
 
@@ -864,6 +2352,7 @@ Create E2E tests for complete CRM sales pipeline workflow from lead to closed de
 #### Security Audit
 
 **Prompt**:
+
 ```
 Perform comprehensive security audit of [module/feature]:
 
@@ -877,6 +2366,13 @@ Security Checklist:
 7. Rate limiting gaps
 8. Insecure dependencies (npm audit)
 
+Tools to Use:
+- grep_search for finding security vulnerabilities
+- semantic_search for understanding security patterns
+- get_errors for compile-time security checks
+- run_in_terminal for npm audit and security scans
+- read_file for examining sensitive code
+
 Provide:
 - Severity rating (Critical/High/Medium/Low)
 - Affected files with line numbers
@@ -888,6 +2384,7 @@ Provide:
 #### Apply Sanitization
 
 **Prompt**:
+
 ```
 Apply HTML sanitization to [component] using DOMPurify:
 
@@ -904,6 +2401,7 @@ Replace all dangerouslySetInnerHTML instances.
 ```
 
 **Examples**:
+
 ```bash
 @security-compliance audit email module for security vulnerabilities and GDPR compliance
 
@@ -920,6 +2418,7 @@ Apply DOMPurify sanitization to email body rendering in app/email/[id]/page.tsx
 **Authority**: ✅ Performance Optimization Code
 
 **Prompt**:
+
 ```
 Optimize performance of [component/feature]:
 
@@ -933,6 +2432,13 @@ Optimization Areas:
 7. Caching strategies implementation
 8. Code splitting and lazy loading
 
+Tools to Use:
+- Next.js MCP runtime for performance diagnostics
+- Browser automation for performance testing
+- semantic_search for optimization patterns
+- read_file for analyzing current implementation
+- run_in_terminal for bundle analysis
+
 Provide:
 - Before/after performance metrics
 - Bottleneck identification
@@ -941,6 +2447,7 @@ Provide:
 ```
 
 **Examples**:
+
 ```bash
 @performance-optimization optimize email list rendering for 1000+ emails
 
@@ -963,6 +2470,7 @@ Optimize CRM dashboard loading time - currently 5+ seconds
 #### API Documentation
 
 **Prompt**:
+
 ```
 Generate comprehensive API documentation for [module]:
 
@@ -982,6 +2490,7 @@ Follow TypeDoc patterns from typedoc.json config.
 #### Feature Documentation
 
 **Prompt**:
+
 ```
 Create comprehensive documentation for [feature]:
 
@@ -1004,12 +2513,13 @@ Documentation:
    - Testing strategy
    - Deployment notes
 
-Follow WhizFlow documentation standards.
+Follow LoginX documentation standards.
 ```
 
 **Examples**:
+
 ```bash
-@documentation-knowledge create comprehensive documentation for email module API
+@documentation-knowledge create comprehensive documentation for authentication module API
 
 @documentation-knowledge generate user guide for department management
 
@@ -1021,6 +2531,7 @@ Create complete documentation for CRM opportunity pipeline including user workfl
 ### 📝 Architecture Decision Records (ADRs)
 
 **Prompt**:
+
 ```
 Create ADR for [decision] in docs/architecture/adr-[number]-[title].md:
 
@@ -1056,6 +2567,7 @@ ADR Format:
 ```
 
 **Example**:
+
 ```
 Create ADR for decision to use React Server Components for email module in docs/architecture/adr-015-email-rsc-migration.md
 ```
@@ -1089,6 +2601,7 @@ Create ADR for decision to use React Server Components for email module in docs/
 **Use Case**: Track and mitigate risks throughout project lifecycle.
 
 **Prompt**:
+
 ```
 Analyze risks for [project/feature]:
 
@@ -1112,6 +2625,7 @@ Provide risk matrix and mitigation roadmap.
 #### Issue Escalation
 
 **Prompt**:
+
 ```
 Escalate critical issue: [Issue description]
 
@@ -1134,6 +2648,7 @@ Provide executive summary for stakeholders.
 **Use Case**: Formal evaluation and approval of changes to project scope or design.
 
 **Prompt**:
+
 ```
 Evaluate change request for [feature/module]:
 
@@ -1161,6 +2676,7 @@ Provide change impact report for stakeholders.
 #### Status Report Generation
 
 **Prompt**:
+
 ```
 Generate project status report for [project/sprint]:
 
@@ -1201,6 +2717,7 @@ Format for [technical team / management / executive] audience.
 **Purpose**: Identify potential projects and align with business strategy before formal initiation.
 
 **Prompt**:
+
 ```
 Conduct opportunity assessment for [idea/requirement]:
 
@@ -1241,6 +2758,7 @@ Provide opportunity assessment report for leadership.
 **Purpose**: Handover to operations, ensure maintenance and support readiness.
 
 **Prompt**:
+
 ```
 Create transition plan for [project/feature]:
 
@@ -1284,6 +2802,7 @@ Provide transition readiness report.
 **Purpose**: Measure ROI, satisfaction, and process improvements after deployment.
 
 **Prompt**:
+
 ```
 Conduct post-implementation review for [project/feature]:
 
@@ -1331,6 +2850,7 @@ Provide post-implementation report with actionable recommendations.
 **Overview**: 20 essential specialized prompts in `.github/prompts/` for expert-level tasks. These prompts have been battle-tested and optimized for specific development scenarios.
 
 **Authority Levels**:
+
 - ✅ **Full Code**: Complete implementation authority
 - 🔧 **Limited Code**: Specific code type only (tests, database, docs)  
 - ❌ **No Code**: Analysis, planning, design only
@@ -1340,36 +2860,42 @@ Provide post-implementation report with actionable recommendations.
 ### Tier 1: Core Development (6 Essential Prompts)
 
 #### `@plan-implementor` (Plan Executor)
+
 **Authority**: ✅ Full Code - Zero Confirmation  
 **Lifecycle**: **C. Execution**, D. Monitoring  
 **Use When**: You have a complete implementation plan and want autonomous execution  
 **Example**: `@plan-implementor implement plan/in-progress/refactor-email-module-1.md`
 
 #### `@developer` (Full-Stack Developer)
+
 **Authority**: ✅ Full Code  
 **Lifecycle**: **C. Execution**  
 **Use When**: Implementing specific features or full-stack functionality  
 **Example**: `@developer implement email threading feature with conversation view`
 
 #### `@problem-solver` (Debugging Specialist)
+
 **Authority**: ✅ Diagnostic & Fix Code  
 **Lifecycle**: **D. Monitoring & Controlling**  
 **Use When**: Investigating and fixing UI/UX bugs, runtime errors, or user experience issues  
 **Example**: `@problem-solver the email list is not rendering on mobile devices`
 
 #### `@fix-my-project` (Emergency Fixer)
+
 **Authority**: ✅ Comprehensive Fix  
 **Lifecycle**: **D. Monitoring & Controlling** (Emergency)  
 **Use When**: Project is broken with multiple issues - need comprehensive scan and fix  
 **Example**: `@fix-my-project check and fix all issues in the email module`
 
 #### `@bug-fix` (Bug Fix Engineer)
+
 **Authority**: ✅ Bug Fix Code  
 **Lifecycle**: **D. Monitoring & Controlling**  
 **Use When**: Targeted fix for a specific identified bug  
 **Example**: `@bug-fix resolve email attachment upload failing for files > 10MB`
 
 #### `@testers` (QA Engineer)
+
 **Authority**: ✅ Test Code Only  
 **Lifecycle**: **D. Monitoring & Controlling**  
 **Use When**: Creating comprehensive test suites, E2E tests, accessibility tests  
@@ -1380,24 +2906,28 @@ Provide post-implementation report with actionable recommendations.
 ### Tier 2: Planning & Architecture (4 Planning Prompts)
 
 #### `@implementation-plan` (Plan Generator)
+
 **Authority**: ❌ No Code - Planning Only  
 **Lifecycle**: **B. Planning**  
 **Use When**: Creating detailed implementation plans from requirements  
 **Example**: `@implementation-plan create plan for implementing email threading`
 
 #### `@plan-review-and-update` (Plan Reviewer)
+
 **Authority**: ❌ No Code - Analysis Only  
 **Lifecycle**: **B. Planning**, D. Monitoring  
 **Use When**: Reviewing existing plans and updating based on new infrastructure  
 **Example**: `@plan-review-and-update review plan/in-progress/refactor-email-module-1.md`
 
 #### `@architect` (System Architect)
+
 **Authority**: ❌ No Code - Design Only (CRITICAL)  
 **Lifecycle**: **B. Planning**  
 **Use When**: Creating technical specifications and architecture diagrams WITHOUT code  
 **Example**: `@architect design architecture for email threading and conversation grouping`
 
 #### `@data-architect` (Database Architect)
+
 **Authority**: ✅ Database & Migration Code  
 **Lifecycle**: **B. Planning**  
 **Use When**: Designing Prisma schemas, migrations, and query optimization  
@@ -1408,36 +2938,42 @@ Provide post-implementation report with actionable recommendations.
 ### Tier 3: Specialized Expertise (6 Specialized Prompts)
 
 #### `@ui-ux` (UI/UX Specialist)
+
 **Authority**: ✅ UI/UX Code  
 **Lifecycle**: **C. Execution**  
 **Use When**: Implementing responsive design, accessibility, or UI components  
 **Example**: `@ui-ux implement responsive email list with mobile-first design`
 
 #### `@api-integration` (API Integration Specialist)
+
 **Authority**: ✅ Integration Code  
 **Lifecycle**: **C. Execution**  
 **Use When**: Integrating external APIs (Gmail, Outlook, Slack, etc.)  
 **Example**: `@api-integration implement Gmail API integration for email sync`
 
 #### `@dev-ops-engineer` (DevOps Engineer)
+
 **Authority**: ✅ Infrastructure Code  
 **Lifecycle**: **E. Closure**, Cross-Phase  
 **Use When**: CI/CD pipelines, Docker, Kubernetes, deployment automation  
 **Example**: `@dev-ops-engineer create Docker multi-stage build for email module`
 
 #### `@i18n-specialist` (i18n Specialist)
+
 **Authority**: ✅ i18n & Localization Code  
 **Lifecycle**: **C. Execution**  
 **Use When**: Adding internationalization support, translations, RTL layouts  
 **Example**: `@i18n-specialist add Arabic language support with RTL layout to email module`
 
 #### `@security-compliance` (Security Engineer)
+
 **Authority**: ✅ Security & Compliance Code  
 **Lifecycle**: **D. Monitoring & Controlling**  
 **Use When**: Security audits, vulnerability fixes, GDPR/SOX compliance  
 **Example**: `@security-compliance audit email module for security vulnerabilities`
 
 #### `@performance-optimization` (Performance Engineer)
+
 **Authority**: ✅ Performance Optimization Code  
 **Lifecycle**: **D. Monitoring & Controlling**  
 **Use When**: Optimizing performance, reducing bundle size, query optimization  
@@ -1448,24 +2984,28 @@ Provide post-implementation report with actionable recommendations.
 ### Tier 4: Analysis & Knowledge (4 Analysis Prompts)
 
 #### `@code-auditor` (Quality Auditor)
+
 **Authority**: ❌ No Code - Analysis Only  
 **Lifecycle**: **A. Initiation**, D. Monitoring  
 **Use When**: Proactive bug discovery before planning new features  
 **Example**: `@code-auditor audit email module for potential bugs and code quality issues`
 
 #### `@ba` (Business Analyst)
+
 **Authority**: ❌ No Code - Analysis Only  
 **Lifecycle**: **A. Initiation**  
 **Use When**: Gathering requirements with web research and industry best practices  
 **Example**: `@ba analyze business requirements for email automation workflows`
 
 #### `@documentation-knowledge` (Documentation Specialist)
+
 **Authority**: ✅ Documentation Code  
 **Lifecycle**: **E. Closure**  
 **Use When**: Generating comprehensive documentation, API docs, user guides  
 **Example**: `@documentation-knowledge create comprehensive documentation for email module API`
 
 #### `@todo-manager` (Technical Debt Analyst)
+
 **Authority**: ❌ No Code - Analysis Only  
 **Lifecycle**: **A. Initiation**  
 **Use When**: Identifying incomplete implementations and technical debt  
@@ -1564,18 +3104,21 @@ Provide post-implementation report with actionable recommendations.
 ### GitHub Prompts vs Custom Prompts
 
 **When to Use GitHub Prompts**:
+
 - ✅ Specialized expertise needed (UI/UX, DevOps, Security, i18n)
 - ✅ Want zero-confirmation autonomous execution (`@plan-implementor`)
 - ✅ Need emergency comprehensive fixes (`@fix-my-project`)
 - ✅ Require analysis without code changes (`@ba`, `@code-auditor`)
 
 **When to Use Custom Prompts** (from sections 1-13):
+
 - ✅ Need flexible, customizable instructions
 - ✅ Want to combine multiple concerns in one request
-- ✅ Require specific WhizFlow patterns not covered by GitHub prompts
+- ✅ Require specific LoginX patterns not covered by GitHub prompts
 - ✅ Need granular control over implementation steps
 
 **Hybrid Approach** (Recommended):
+
 ```
 Use GitHub prompts for specialized tasks + Custom prompts for general workflows
 
@@ -1650,26 +3193,31 @@ START: What do I need to do?
 ### 🎯 Most Used Combinations
 
 #### Combination 1: Full Feature Development
+
 ```bash
 @ba → @data-architect → @implementation-plan → @plan-implementor → @testers
 ```
 
 #### Combination 2: Quick Feature Addition
+
 ```bash
 @developer → @testers
 ```
 
 #### Combination 3: Emergency Fix
+
 ```bash
 @fix-my-project OR @problem-solver → @bug-fix → @testers
 ```
 
 #### Combination 4: Refactoring
+
 ```bash
 @code-auditor → @plan-review-and-update → @developer
 ```
 
 #### Combination 5: Security Hardening
+
 ```bash
 @security-compliance → @bug-fix → @testers
 ```
@@ -1679,12 +3227,14 @@ START: What do I need to do?
 ### 🔄 Prompt Workflow Patterns
 
 #### Pattern 1: Waterfall Approach (Structured Projects)
+
 ```
 A. Initiation → B. Planning → C. Execution → D. Monitoring → E. Closure
 @ba → @architect → @implementation-plan → @plan-implementor → @testers → @documentation-knowledge
 ```
 
 #### Pattern 2: Agile Sprint (Iterative Development)
+
 ```
 Sprint Planning: @ba + @plan-review-and-update
 Sprint Execution: @developer (iterative)
@@ -1693,6 +3243,7 @@ Sprint Retrospective: Update plan
 ```
 
 #### Pattern 3: Emergency Hotfix (Fast Response)
+
 ```
 Assess: @code-auditor
 Fix: @fix-my-project OR @problem-solver
@@ -1701,6 +3252,7 @@ Document: Update relevant docs
 ```
 
 #### Pattern 4: Technical Debt Cleanup (Maintenance)
+
 ```
 Discovery: @todo-manager + @code-auditor
 Planning: @plan-review-and-update
@@ -1807,6 +3359,7 @@ docs/**/*.md
 ### 1. Specificity Principles
 
 **✅ Good Prompt Examples**:
+
 ```
 Implement email threading feature with:
 - Conversation grouping by subject and participants
@@ -1818,6 +3371,7 @@ Implement email threading feature with:
 ```
 
 **❌ Bad Prompt Examples**:
+
 ```
 Add email threading                  # Too vague
 Make emails work better              # No actionable details
@@ -1829,6 +3383,7 @@ Fix email stuff                      # What stuff?
 ### 2. Context Provision
 
 **Always Include**:
+
 - **File Paths**: Exact paths to relevant files
 - **Line Numbers**: When referencing specific code
 - **Existing Patterns**: Reference similar implementations
@@ -1836,6 +3391,7 @@ Fix email stuff                      # What stuff?
 - **Success Criteria**: Measurable outcomes
 
 **Example**:
+
 ```
 Refactor actions/email/email.action.ts to follow department.action.ts pattern:
 
@@ -1857,6 +3413,7 @@ Success Criteria:
 ### 3. Incremental Changes
 
 **✅ Break Down Large Changes**:
+
 ```bash
 # Phase 1: Database Schema
 @data-architect design email threading schema
@@ -1875,6 +3432,7 @@ Success Criteria:
 ```
 
 **❌ Avoid Single Large Request**:
+
 ```
 Implement complete email threading feature with database, backend, frontend, tests, and documentation
 # Too much at once - hard to review and debug
@@ -1885,6 +3443,7 @@ Implement complete email threading feature with database, backend, frontend, tes
 ### 4. Multi-Perspective Requests
 
 **Ask for Alternatives**:
+
 ```
 Implement caching for email list with multiple approaches:
 
@@ -1904,6 +3463,7 @@ For each approach, provide:
 ### 5. Test-Driven Prompts
 
 **Always Include Testing**:
+
 ```
 Implement email search functionality:
 
@@ -1927,6 +3487,7 @@ Target: 85%+ code coverage
 ### 6. Reference-Based Prompts
 
 **Use Existing Code as Templates**:
+
 ```
 Create customer module following department module pattern:
 
@@ -1950,6 +3511,7 @@ Replicate:
 ### 7. Error Handling in Prompts
 
 **Specify Error Scenarios**:
+
 ```
 Implement email attachment upload with error handling:
 
@@ -1982,6 +3544,7 @@ Error Cases:
 ### 8. Performance-Conscious Prompts
 
 **Include Performance Targets**:
+
 ```
 Optimize email list rendering:
 
@@ -2013,6 +3576,7 @@ Measurement:
 ### 9. Accessibility-First Prompts
 
 **Specify Accessibility Requirements**:
+
 ```
 Create email compose form with full accessibility:
 
@@ -2036,6 +3600,7 @@ Testing:
 ### 10. Documentation-Inclusive Prompts
 
 **Request Documentation Automatically**:
+
 ```
 Implement email threading feature:
 
@@ -2059,6 +3624,7 @@ Documentation Deliverables:
 ## Prompt Template Library
 
 ### Template 1: Feature Implementation
+
 ```
 Implement [feature-name] with the following requirements:
 
@@ -2090,6 +3656,7 @@ Success Criteria:
 ```
 
 ### Template 2: Bug Fix
+
 ```
 Fix the following bug: [Bug description]
 
@@ -2121,6 +3688,7 @@ Testing:
 ```
 
 ### Template 3: Refactoring
+
 ```
 Refactor [component/file/module] for [reason]:
 
@@ -2170,6 +3738,7 @@ Success Criteria:
 **Review Process**: PR review required for prompt additions/changes
 
 **Contribution Guidelines**:
+
 1. Test prompts thoroughly before adding
 2. Include realistic examples
 3. Reference existing code patterns
@@ -2178,6 +3747,7 @@ Success Criteria:
 6. Ensure lifecycle phase mapping is correct
 
 **Version History**:
+
 - **v3.0** (2025-01-XX): Reorganized by Project Lifecycle phases (A-E) + Cross-Phase elements + GitHub Prompts integration
 - **v2.0** (2025-01-XX): Consolidated into single reference document, added 20 essential GitHub prompts
 - **v1.0** (2024-12-XX): Initial creation with custom prompts
@@ -2193,6 +3763,7 @@ Success Criteria:
 ## Appendix: Glossary
 
 **Project Lifecycle Phases** (PMI/PMBOK):
+
 - **A. Initiation**: Define project scope, assess feasibility, gather requirements
 - **B. Planning**: Create detailed roadmaps, design architecture, allocate resources
 - **C. Execution**: Implement plans, develop features, build deliverables
@@ -2200,16 +3771,18 @@ Success Criteria:
 - **E. Closure**: Finalize deliverables, document learnings, handover to operations
 
 **Authority Levels**:
+
 - **Full Code**: Can create, modify, and delete production code
 - **Limited Code**: Can only work with specific code types (tests, docs, database)
 - **No Code**: Analysis, planning, and design only - no code changes
 
-**WhizFlow Terminology**:
-- **Server Actions**: Next.js server-side functions for data mutations
-- **Multi-tenant**: Architecture supporting multiple organizations/tenants
-- **React Query**: Server state management library
-- **Prisma**: TypeScript-first ORM for database operations
-- **Zustand**: Lightweight state management (UI state only)
+**LoginX Terminology**:
+
+- **Actions**: Firebase operation functions for data mutations
+- **Themed Components**: Reusable UI components with theme support
+- **Firebase**: Backend-as-a-Service for authentication and data storage
+- **Expo Router**: File-based navigation system
+- **i18n**: Internationalization system for multi-language support
 
 ---
 
@@ -2217,6 +3790,7 @@ Success Criteria:
 Symptom: [Describe slow behavior]
 
 Analysis needed:
+
 1. Profile component renders (use React DevTools Profiler)
 2. Check for N+1 database queries
 3. Analyze bundle size (use webpack-bundle-analyzer)
@@ -2226,17 +3800,21 @@ Analysis needed:
 7. Check for unnecessary re-renders
 
 Provide:
+
 - Performance metrics (before/after)
 - Bottleneck identification
 - Optimization recommendations
 - Implementation priority
+
 ```
 
 ### 24. Fix TypeScript Errors
 
 **Prompt**:
 ```
+
 Fix all TypeScript errors in [file/directory]:
+
 1. Run type check: pnpm tsc --noEmit
 2. Identify root causes (not just `any` casts)
 3. Update types in types/[module]/
@@ -2246,6 +3824,7 @@ Fix all TypeScript errors in [file/directory]:
 7. Verify no runtime behavior changes
 
 Provide comprehensive type definitions and explanations.
+
 ```
 
 ---
@@ -2256,13 +3835,16 @@ Provide comprehensive type definitions and explanations.
 
 **Prompt**:
 ```
+
 Design architecture for new [module-name] module:
 
 Requirements:
+
 - [List functional requirements]
 - [List non-functional requirements: performance, scalability, security]
 
 Provide:
+
 1. Module structure (folders, files)
 2. Database schema (Prisma)
 3. API design (server actions)
@@ -2274,23 +3856,26 @@ Provide:
 9. Deployment considerations
 10. Migration plan if applicable
 
-Follow WhizFlow architecture patterns and create architecture diagram.
+Follow LoginX architecture patterns and create architecture diagram.
+
 ```
 
 ### 26. Refactor Module Structure
 
 **Prompt**:
 ```
+
 Refactor [module] to follow vertical slice architecture:
 
 Current issues:
+
 - [List problems: coupling, unclear boundaries, testing difficulties]
 
 Target structure:
 [module]/
 ├── [feature-1]/
 │   ├── _components/
-│   ├── _view/
+│   ├──_view/
 │   ├── page.tsx
 │   └── [id]/page.tsx
 ├── _shared/
@@ -2300,24 +3885,29 @@ Target structure:
 └── layout.tsx
 
 Provide:
+
 1. Migration plan (file moves, import updates)
 2. Breaking changes (if any)
 3. Testing strategy during migration
 4. Rollback plan
 5. Step-by-step execution instructions
+
 ```
 
 ### 27. Design API Contract
 
 **Prompt**:
 ```
+
 Design API contract for [feature]:
 
 Requirements:
+
 - [List operations needed]
 - [List data entities]
 
 Provide:
+
 1. Server action signatures with TypeScript types
 2. Request/response schemas (Zod)
 3. Error response format
@@ -2329,7 +3919,8 @@ Provide:
 9. API versioning approach
 10. OpenAPI specification
 
-Follow RESTful principles and WhizFlow patterns.
+Follow RESTful principles and LoginX patterns.
+
 ```
 
 ---
@@ -2340,13 +3931,16 @@ Follow RESTful principles and WhizFlow patterns.
 
 **Prompt**:
 ```
+
 Design Prisma schema for [entity/feature]:
 
 Requirements:
+
 - [List data requirements]
 - [List relationships]
 
 Provide:
+
 1. Prisma model definitions in prisma/schema/[module].prisma
 2. Relationships (1:1, 1:N, N:M) with proper foreign keys
 3. Indexes for query performance
@@ -2358,13 +3952,16 @@ Provide:
 9. Seed data for testing
 
 Follow existing schema patterns (core.prisma, crm.prisma reference).
+
 ```
 
 ### 29. Optimize Database Queries
 
 **Prompt**:
 ```
+
 Optimize database queries for [feature]:
+
 1. Identify N+1 query problems
 2. Add missing indexes
 3. Use select/include strategically
@@ -2374,22 +3971,27 @@ Optimize database queries for [feature]:
 7. Profile query performance
 
 Provide:
+
 - Query execution plans (EXPLAIN ANALYZE)
 - Before/after performance metrics
 - Index recommendations
 - Prisma query optimizations
+
 ```
 
 ### 30. Create Database Migration
 
 **Prompt**:
 ```
+
 Create Prisma migration for [change]:
 
 Changes needed:
+
 - [List schema changes]
 
 Steps:
+
 1. Update schema in prisma/schema/[module].prisma
 2. Generate migration: pnpm prisma migrate dev --name [descriptive-name]
 3. Create data migration script if needed (in scripts/migrations/)
@@ -2399,6 +4001,7 @@ Steps:
 7. Update seed scripts if needed
 
 Ensure backward compatibility with existing data.
+
 ```
 
 ---
@@ -2409,7 +4012,9 @@ Ensure backward compatibility with existing data.
 
 **Prompt**:
 ```
+
 Implement real-time [feature] using WebSockets:
+
 1. Extend existing WebSocket infrastructure (hooks/use-websocket.ts)
 2. Create WebSocket endpoint in app/api/ws/[feature]/route.ts
 3. Implement event broadcasting
@@ -2421,13 +4026,16 @@ Implement real-time [feature] using WebSockets:
 9. Write integration tests
 
 Use existing patterns and ensure graceful degradation.
+
 ```
 
 ### 32. Add Internationalization (i18n)
 
 **Prompt**:
 ```
+
 Add i18n support to [module/component]:
+
 1. Extract hardcoded strings to i18n/locales/[lang]/[module].json
 2. Use next-intl patterns from existing i18n setup
 3. Support RTL languages (Arabic, Hebrew)
@@ -2437,13 +4045,16 @@ Add i18n support to [module/component]:
 7. Update documentation
 
 Support: English (en), Spanish (es), French (fr), German (de) - add more as needed.
+
 ```
 
 ### 33. Implement Feature Flags
 
 **Prompt**:
 ```
+
 Implement feature flags for [feature]:
+
 1. Add flags to lib/feature-flags.ts
 2. Create flag definitions with default values
 3. Implement flag checks in components/actions
@@ -2454,8 +4065,10 @@ Implement feature flags for [feature]:
 8. Create migration plan (feature flag → permanent code)
 
 Flags needed:
+
 - enable[Feature]: boolean
 - [feature]Variant: 'a' | 'b' (if A/B testing)
+
 ```
 
 ---
@@ -2464,7 +4077,7 @@ Flags needed:
 
 ### Pre-existing Prompts from `.github/prompts`
 
-WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 prompts are highly useful** while 9 are redundant or have narrow use cases.
+LoginX uses specialized agent prompts for mobile authentication development. After comprehensive review, **20 prompts are highly useful** while 9 are redundant or have narrow use cases.
 
 ---
 
@@ -2549,18 +4162,21 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/developer.prompt.md` (169 lines)
 
 **When to Use**:
+
 - Implement specific features or tasks
 - Write production-ready code
 - Create components, pages, server actions
 - Need full-stack implementation (frontend + backend + tests)
 
 **Key Features**:
+
 - ✅ FULL CODE IMPLEMENTATION AUTHORITY
 - Production-ready code with comprehensive tests
 - React Server Components and Server Actions
 - MCP integration for best practices
 
 **Examples**:
+
 ```bash
 @developer implement email threading feature with conversation view
 
@@ -2574,12 +4190,14 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/problem-solver.prompt.md` (1143 lines)
 
 **When to Use**:
+
 - Something is broken and you don't know why
 - UI/UX issues (layout, responsive design, components)
 - Runtime errors or bugs
 - Need systematic debugging
 
 **Key Features**:
+
 - ✅ DIAGNOSTIC & FIX CODE AUTHORITY
 - **Primary focus: UI/UX issues**
 - **CRITICAL: Regression prevention** (validates no existing functionality broken)
@@ -2587,6 +4205,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - Systematic investigation
 
 **Examples**:
+
 ```bash
 @problem-solver the email list is not rendering on mobile devices
 
@@ -2600,12 +4219,14 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/fix-my-project.prompt.md` (210 lines)
 
 **When to Use**:
+
 - Multiple issues across the project
 - Emergency situation (build failing, app broken)
 - Need comprehensive issue detection
 - Want all critical issues fixed at once
 
 **Key Features**:
+
 - ✅ COMPREHENSIVE FIX AUTHORITY
 - Scans entire project for issues
 - Fixes critical bugs, security, performance problems
@@ -2613,6 +4234,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - Provides detailed fix report
 
 **Examples**:
+
 ```bash
 @fix-my-project check and fix all issues in the email module
 
@@ -2626,11 +4248,13 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/bug-fix.prompt.md` (1925 lines)
 
 **When to Use**:
+
 - Have specific bugs identified (from code-auditor or reports)
 - Need targeted, surgical fixes
 - Want comprehensive test coverage for fixes
 
 **Key Features**:
+
 - ✅ BUG FIX CODE IMPLEMENTATION
 - Targeted code fixes for root causes
 - Error handling and recovery mechanisms
@@ -2638,6 +4262,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - Comprehensive test cases for fixes
 
 **Examples**:
+
 ```bash
 @bug-fix resolve email attachment upload failing for files > 10MB
 
@@ -2651,12 +4276,14 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/testers.prompt.md` (1782 lines)
 
 **When to Use**:
+
 - Write comprehensive test suites
 - Create unit, integration, E2E tests
 - Test accessibility and performance
 - Bug reproduction and validation
 
 **Key Features**:
+
 - ✅ TEST CODE IMPLEMENTATION ONLY
 - **NOT AUTHORIZED for production code**
 - Unit, integration, E2E tests
@@ -2664,6 +4291,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - 80%+ coverage targets
 
 **Examples**:
+
 ```bash
 @testers create comprehensive test suite for email module
 
@@ -2677,11 +4305,13 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/implementation-plan.prompt.md` (696 lines)
 
 **When to Use**:
+
 - Create a new implementation plan from requirements
 - Need structured, executable roadmaps
 - Want industry best practices researched
 
 **Key Features**:
+
 - ❌ NO CODE IMPLEMENTATION
 - Systematic codebase analysis
 - Internet research for best practices
@@ -2689,6 +4319,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - Detailed task breakdowns with success criteria
 
 **Examples**:
+
 ```bash
 @implementation-plan create plan for implementing email threading and conversation grouping
 
@@ -2702,12 +4333,14 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/plan-review-and-update.prompt.md` (306 lines)
 
 **When to Use**:
+
 - Review existing plan relevance
 - Check if tasks are still needed
 - Update with new components/hooks/utilities
 - Optimize remaining work
 
 **Key Features**:
+
 - ❌ NO CODE IMPLEMENTATION
 - Codebase analysis using tools (semantic_search, file_search)
 - Status assessment (marked vs actually implemented)
@@ -2715,6 +4348,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - Update with new infrastructure
 
 **Examples**:
+
 ```bash
 @plan-review-and-update review plan/in-progress/refactor-email-module-1.md
 
@@ -2728,6 +4362,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/architect.prompt.md` (1262 lines)
 
 **When to Use**:
+
 - Design system architecture
 - Create technical specifications
 - Make architectural decisions
@@ -2735,6 +4370,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - **DO NOT use when you need code implementation**
 
 **Key Features**:
+
 - ❌ NO CODE IMPLEMENTATION (CRITICAL)
 - **"NOT AUTHORIZED to write code/tests/implementations"**
 - Creates technical design documents
@@ -2742,6 +4378,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - Writes implementation specifications
 
 **Examples**:
+
 ```bash
 @architect design architecture for email threading and conversation grouping
 
@@ -2755,12 +4392,14 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/data-architect.prompt.md` (637 lines)
 
 **When to Use**:
+
 - Design database schemas
 - Optimize database queries
 - Multi-tenant data strategies
 - Database migrations
 
 **Key Features**:
+
 - ✅ DATABASE & MIGRATION CODE IMPLEMENTATION
 - Design and modify Prisma schemas
 - Create database migrations
@@ -2769,6 +4408,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - MCP integration for database analysis
 
 **Examples**:
+
 ```bash
 @data-architect design schema for email threading with conversation relationships
 
@@ -2782,12 +4422,14 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/ui-ux.prompt.md` (407 lines)
 
 **When to Use**:
+
 - UI/UX design and implementation
 - Responsive design challenges
 - Accessibility requirements
 - Component library development
 
 **Key Features**:
+
 - ✅ UI/UX CODE IMPLEMENTATION
 - Build reusable component library (shadcn/ui)
 - Responsive design (Tailwind CSS)
@@ -2795,6 +4437,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - MCP integration for shadcn/ui components
 
 **Examples**:
+
 ```bash
 @ui-ux create responsive email list component with accessibility features
 
@@ -2808,12 +4451,14 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/api-integration.prompt.md` (1031 lines)
 
 **When to Use**:
+
 - Integrate external APIs
 - Build microservices
 - Create webhook systems
 - API architecture
 
 **Key Features**:
+
 - ✅ API & INTEGRATION CODE IMPLEMENTATION
 - REST and GraphQL APIs
 - Microservices communication
@@ -2821,6 +4466,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - API gateways and message queues
 
 **Examples**:
+
 ```bash
 @api-integration integrate Gmail API for email sync and OAuth flow
 
@@ -2834,12 +4480,14 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/dev-ops-engineer.prompt.md` (137 lines)
 
 **When to Use**:
+
 - Deployment and infrastructure
 - CI/CD pipeline setup
 - Monitoring and alerting
 - DevOps automation
 
 **Key Features**:
+
 - ✅ INFRASTRUCTURE CODE IMPLEMENTATION
 - Docker configurations and CI/CD pipelines
 - Monitoring and observability
@@ -2847,6 +4495,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - Infrastructure as Code
 
 **Examples**:
+
 ```bash
 @dev-ops-engineer setup CI/CD pipeline with automated testing and deployment
 
@@ -2860,12 +4509,14 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/i18n-specialist.prompt.md` (784 lines)
 
 **When to Use**:
+
 - Internationalization implementation
 - Multi-language support
 - RTL language support
 - Cultural adaptations
 
 **Key Features**:
+
 - ✅ I18N & LOCALIZATION CODE IMPLEMENTATION
 - Translation management systems
 - Locale-specific formatting (dates, numbers, currency)
@@ -2873,6 +4524,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - Dynamic language switching
 
 **Examples**:
+
 ```bash
 @i18n-specialist add Arabic language support with RTL layout
 
@@ -2886,12 +4538,14 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/security-compliance.prompt.md` (708 lines)
 
 **When to Use**:
+
 - Security audits
 - Compliance checks
 - Vulnerability assessment
 - Access control implementation
 
 **Key Features**:
+
 - ✅ SECURITY & COMPLIANCE CODE IMPLEMENTATION
 - Authentication and authorization
 - Access control policies (RBAC/ABAC)
@@ -2899,6 +4553,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - Security monitoring
 
 **Examples**:
+
 ```bash
 @security-compliance audit email module for security vulnerabilities and GDPR compliance
 
@@ -2912,12 +4567,14 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/performance-optimization.prompt.md` (1019 lines)
 
 **When to Use**:
+
 - Optimize performance
 - Identify bottlenecks
 - Implement caching
 - Performance testing
 
 **Key Features**:
+
 - ✅ PERFORMANCE OPTIMIZATION CODE IMPLEMENTATION
 - Caching strategies and invalidation
 - Performance monitoring and profiling
@@ -2925,6 +4582,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - Memory optimization
 
 **Examples**:
+
 ```bash
 @performance-optimization optimize email list rendering for 1000+ emails
 
@@ -2938,12 +4596,14 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/code-auditor.prompt.md` (892 lines)
 
 **When to Use**:
+
 - Code quality audits
 - Proactive bug discovery
 - Compliance checks
 - Quality metrics
 
 **Key Features**:
+
 - ❌ NO CODE IMPLEMENTATION
 - Comprehensive codebase inspection
 - Bug identification and documentation
@@ -2951,6 +4611,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - Security and performance analysis
 
 **Examples**:
+
 ```bash
 @code-auditor audit email module for potential bugs and code quality issues
 
@@ -2966,12 +4627,14 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/ba.prompt.md` (574 lines)
 
 **When to Use**:
+
 - Requirements analysis
 - Business process understanding
 - Web research for industry best practices
 - Gap analysis
 
 **Key Features**:
+
 - ❌ NO CODE IMPLEMENTATION
 - **Extensive web research capabilities** (market trends, competitors, regulations)
 - Business Requirements Summary Documents (BRSD)
@@ -2979,6 +4642,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - Process flow documentation
 
 **Examples**:
+
 ```bash
 @ba analyze business requirements for email automation workflows
 
@@ -2992,12 +4656,14 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/documentation-knowledge.prompt.md` (783 lines)
 
 **When to Use**:
+
 - Create documentation
 - API docs
 - User guides
 - Knowledge management
 
 **Key Features**:
+
 - ✅ DOCUMENTATION CODE IMPLEMENTATION
 - API documentation generation
 - Technical and user documentation
@@ -3005,6 +4671,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - Interactive learning experiences
 
 **Examples**:
+
 ```bash
 @documentation-knowledge create comprehensive documentation for email module API
 
@@ -3018,12 +4685,14 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 **File**: `.github/prompts/todo-manager.prompt.md` (394 lines)
 
 **When to Use**:
+
 - Track technical debt
 - Identify incomplete work
 - Prioritize technical improvements
 - Create action plans
 
 **Key Features**:
+
 - ❌ NO CODE IMPLEMENTATION
 - TODO comment discovery
 - Incomplete implementation detection
@@ -3031,6 +4700,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - Prioritized action plans
 
 **Examples**:
+
 ```bash
 @todo-manager scan codebase for TODO comments and incomplete implementations
 
@@ -3042,16 +4712,19 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 ## ⚠️ Prompts to Avoid (9 Redundant/Narrow Use)
 
 ### Duplicates (Don't Use)
+
 - ❌ `review-and-update-plan` - Use `plan-review-and-update` instead
 - ❌ `task` - Use `task-dev` or `ba` instead
 
 ### Narrow Use Cases
+
 - ⚠️ `tdd-dev` - Use `testers` for comprehensive testing
 - ⚠️ `product-manager` - Use `ba` for broader business analysis
 - ⚠️ `bi-analytics` - Use `data-architect` + `developer`
 - ⚠️ `workflow-business-process` - Use `developer` + `ba`
 
 ### Special Purpose
+
 - 🔵 `first-ask` - Requires Joyride extension
 - 🔵 `ai-prompt-engineering-safety-review` - For reviewing AI prompts
 - 🔵 `task-dev` - Requires task workflow (`docs/tasks/`)
@@ -3061,6 +4734,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 ## Recommended Workflows
 
 ### 🚀 **Workflow 1: Feature Development (Full Cycle)**
+
 ```bash
 # 1. Requirements Analysis
 @ba analyze requirements for email threading feature
@@ -3087,6 +4761,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 ---
 
 ### ⚡ **Workflow 2: Quick Feature Implementation**
+
 ```bash
 # Direct implementation without formal plan
 @developer implement email threading feature with conversation view
@@ -3101,6 +4776,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 ---
 
 ### 🐛 **Workflow 3: Bug Fixing**
+
 ```bash
 # 1. Audit for issues
 @code-auditor audit email module for bugs
@@ -3118,6 +4794,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 ---
 
 ### 🚨 **Workflow 4: Emergency Fix**
+
 ```bash
 # Comprehensive project fix
 @fix-my-project check and fix all issues in email module
@@ -3126,6 +4803,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 ---
 
 ### 📋 **Workflow 5: Plan Execution**
+
 ```bash
 # 1. Review plan
 @plan-review-and-update review plan/in-progress/refactor-email-1.md
@@ -3137,6 +4815,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 ---
 
 ### 🔒 **Workflow 6: Security Hardening**
+
 ```bash
 # 1. Security audit
 @security-compliance audit for vulnerabilities
@@ -3159,6 +4838,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 ## Authority Level Summary
 
 ### ✅ Full Code Implementation
+
 - `plan-implementor` (zero-confirmation)
 - `developer`
 - `bug-fix`
@@ -3172,11 +4852,13 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 - `documentation-knowledge`
 
 ### ✅ Limited Code Authority
+
 - `testers` - Test code only (NOT production code)
 - `problem-solver` - Diagnostic + fix code (UI/UX focus)
 - `fix-my-project` - Comprehensive fixes
 
 ### ❌ No Code Authority (Analysis/Documentation Only)
+
 - `architect` (design docs only)
 - `implementation-plan`
 - `plan-review-and-update`
@@ -3189,27 +4871,33 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 ## Quick Decision Tree
 
 **Need to implement a feature?**
+
 - → `developer` for direct implementation
 - → `implementation-plan` → `plan-implementor` for complex features
 
 **Something is broken?**
+
 - → `problem-solver` for debugging + UI/UX issues
 - → `bug-fix` for known bugs
 - → `fix-my-project` for emergency comprehensive fixes
 
 **Need tests?**
+
 - → `testers` (comprehensive QA)
 
 **Need architecture?**
+
 - → `architect` for design docs (NO CODE)
 - → `data-architect` for database design (WITH CODE)
 
 **Need analysis?**
+
 - → `ba` for business requirements + web research
 - → `code-auditor` for bug discovery
 - → `todo-manager` for technical debt tracking
 
 **Specialized needs?**
+
 - → `ui-ux` for UI components
 - → `api-integration` for external APIs
 - → `dev-ops-engineer` for deployment
@@ -3226,7 +4914,7 @@ WhizFlow CMS has 29 specialized agent prompts. After comprehensive review, **20 
 1. **Be Specific**: Reference exact file paths, line numbers, and requirements
 2. **Provide Context**: Include relevant background, constraints, and existing patterns
 3. **Set Clear Goals**: Define success criteria and expected outcomes
-4. **Reference Standards**: Point to WhizFlow architecture docs and existing examples
+4. **Reference Standards**: Point to LoginX architecture docs and existing examples
 5. **Request Testing**: Always include test requirements
 6. **Ask for Alternatives**: Request multiple solution approaches with tradeoffs
 7. **Incremental Changes**: Break large changes into smaller, manageable tasks
@@ -3300,12 +4988,12 @@ __tests__/**/*.test.tsx
 
 ---
 
-## Related Documentation
+## Additional Resources
 
-- [Architecture Guidelines](.github/instructions/architect.instructions.md)
-- [Next.js Patterns](.github/instructions/nextjs.instructions.md)
-- [UI/UX Standards](.github/instructions/ui-ux.instructions.md)
-- [Authentication](.github/instructions/auth-js.instructions.md)
+- [Development Guidelines](.github/instructions/rule.instructions.md)
+- [Design System](docs/DESIGN_SYSTEM.md)
+- [Constants Reference](docs/CONSTANTS_REFERENCE.md)
+- [Authentication Guide](docs/AUTHENTICATION_GUIDE.md)
 - [Database Patterns](.github/instructions/database-prisma.instructions.md)
 - [Testing Guidelines](.github/instructions/test-case.instructions.md)
 
@@ -3318,6 +5006,7 @@ __tests__/**/*.test.tsx
 **Review Process**: PR review required for prompt additions/changes
 
 **Contribution Guidelines**:
+
 1. Test prompts thoroughly before adding
 2. Include realistic examples
 3. Reference existing code patterns
