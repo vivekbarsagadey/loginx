@@ -421,7 +421,7 @@ You WILL:
 
 When finished, you WILL provide:
 
-- **Research Status**: [Verified/Missing/Updated]
-- **Planning Status**: [New/Continued]
+- **Research Status**: \[Verified/Missing/Updated]
+- **Planning Status**: \[New/Continued]
 - **Files Created**: List of planning files created
-- **Ready for Implementation**: [Yes/No] with assessment
+- **Ready for Implementation**: \[Yes/No] with assessment

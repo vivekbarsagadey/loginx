@@ -24,37 +24,59 @@ The LoginX project has a comprehensive custom hooks library with 80+ hooks organ
 ## 1. Requirements & Constraints
 
 - **REQ-001**: All refactoring must maintain 100% backward compatibility
+
 - **REQ-002**: No breaking changes to existing component APIs
+
 - **REQ-003**: All hooks must follow React hooks rules (only call at top level)
+
 - **REQ-004**: Performance improvements must be measurable (no premature optimization)
+
 - **REQ-005**: All changes must include proper TypeScript types
+
 - **REQ-006**: Maintain the existing hook categorization structure
+
 - **REQ-007**: Follow the project's rule.instructions.md guidelines
 
 - **SEC-001**: Hooks handling sensitive data must use secure storage utilities
+
 - **SEC-002**: Authentication state must remain synchronized across the app
+
 - **SEC-003**: No credentials or sensitive data in hook state without encryption
 
 - **PERF-001**: Reduce unnecessary re-renders by proper memoization
+
 - **PERF-002**: Use appropriate hook categories (don't mix concerns)
+
 - **PERF-003**: Lazy load hooks that depend on heavy dependencies
+
 - **PERF-004**: Minimize useEffect dependencies to prevent infinite loops
 
 - **CON-001**: Must work with React Native and Expo
+
 - **CON-002**: All hooks must support both iOS and Android
+
 - **CON-003**: Hooks must gracefully handle offline scenarios
+
 - **CON-004**: Must maintain current local-first architecture
 
 - **GUD-001**: One hook per concern (Single Responsibility Principle)
+
 - **GUD-002**: Hooks should be composable and reusable
+
 - **GUD-003**: Extract complex component logic into custom hooks
+
 - **GUD-004**: Keep hooks focused and under 200 lines
+
 - **GUD-005**: Provide clear JSDoc documentation for all public hooks
 
-- **PAT-001**: Follow the "hooks/[category]/use-[name].tsx" pattern
+- **PAT-001**: Follow the "hooks/\[category]/use-\[name].tsx" pattern
+
 - **PAT-002**: Export hooks from category index files
+
 - **PAT-003**: Use TypeScript interfaces for hook return types
+
 - **PAT-004**: Prefix boolean returns with "is" or "has"
+
 - **PAT-005**: Group related state and functions in return objects
 
 ## 2. Implementation Steps
@@ -465,7 +487,9 @@ Additionally:
    - `app/(auth)/register/index.tsx`: isSubmitting
 
 2. **setTimeout**: 6 remain in examples and verify-2fa (3 async waits, 3 examples)
+
 3. **Context Memoization**: AuthProvider fully memoized, but other providers need review
+
 4. **Form Management**: `useForm` from react-hook-form used, but custom `useForm` utility underutilized
 
 #### ❌ Critical Gaps (Not Implemented)
@@ -612,7 +636,7 @@ await new Promise((resolve) => setTimeout(resolve, 3000)); // line 123
 
 **Long-Term Vision:**
 
-- Achieve 90%+ hook adoption rate (currently ~40%)
+- Achieve 90%+ hook adoption rate (currently \~40%)
 - Maintain 80%+ test coverage for all hooks (currently <5%)
 - Establish automated hook usage metrics in CI/CD
 - Create interactive hook examples and playground

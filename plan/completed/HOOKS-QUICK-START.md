@@ -78,6 +78,7 @@ const handleSearch = useDebouncedCallback((text: string) => {
 
 1. **profile/edit.tsx** (14 useState calls)
    - Use `useFormState` or create custom `useProfileForm` hook
+
 2. **change-password.tsx** (9 useState calls)
    - Use `useFormState` with validation
 

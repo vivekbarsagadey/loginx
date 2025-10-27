@@ -218,7 +218,7 @@ Built-in state management with automatic persistence and recovery.
 - **Estimated Time**: 3-4 weeks
 - **Complexity**: High
 - **Impact**: High
-- **Lines of Code**: ~5,000
+- **Lines of Code**: \~5,000
 - **Test Coverage Goal**: 80%+
 - **Bundle Size Impact**: <2MB
 

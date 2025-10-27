@@ -332,7 +332,7 @@ This implementation plan addresses 18 critical security vulnerabilities and arch
 
 ### Alternative Approaches Considered
 
-- **ALT-001**: **Use Redux for state management instead of Context API** - Rejected due to added complexity and bundle size. Context API with proper memoization is sufficient for this app's scale. Redux would add ~50KB to bundle and require extensive refactoring.
+- **ALT-001**: **Use Redux for state management instead of Context API** - Rejected due to added complexity and bundle size. Context API with proper memoization is sufficient for this app's scale. Redux would add \~50KB to bundle and require extensive refactoring.
 
 - **ALT-002**: **Implement custom offline sync instead of local-first architecture** - Rejected. Local-first provides better UX and aligns with modern app expectations. Custom solution would require 6+ months of development and testing.
 
@@ -353,8 +353,8 @@ This implementation plan addresses 18 critical security vulnerabilities and arch
 ### External Dependencies
 
 - **DEP-001**: **Firebase SDK** (firebase@^12.3.0) - Authentication, Firestore, Cloud Functions
-- **DEP-002**: **@sentry/react-native** (~7.2.0) - Error tracking and performance monitoring
-- **DEP-003**: **expo-local-authentication** (~17.0.7) - Biometric authentication
+- **DEP-002**: **@sentry/react-native** (\~7.2.0) - Error tracking and performance monitoring
+- **DEP-003**: **expo-local-authentication** (\~17.0.7) - Biometric authentication
 - **DEP-004**: **@react-native-async-storage/async-storage** (2.2.0) - Persistent storage
 - **DEP-005**: **@react-native-community/netinfo** (^11.4.1) - Network status monitoring
 

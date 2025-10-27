@@ -1,7 +1,7 @@
 # LoginX Custom Hooks Reference
 
-**Version**: 1.0.0  
-**Last Updated**: October 19, 2025  
+**Version**: 1.0.0\
+**Last Updated**: October 19, 2025\
 **Total Hooks**: 40+
 
 ---
@@ -27,7 +27,7 @@ Located in `hooks/auth/`
 
 ### useAuthProvider
 
-**Purpose**: Main authentication state management  
+**Purpose**: Main authentication state management\
 **Returns**: `{ user, loading, login, logout, register, updateProfile }`
 
 ```typescript
@@ -39,7 +39,7 @@ if (!user) return <LoginScreen />;
 
 ### useEmailVerification
 
-**Purpose**: Email verification flow management  
+**Purpose**: Email verification flow management\
 **Returns**: `{ sendVerification, resendVerification, isVerified, loading }`
 
 ```typescript
@@ -52,7 +52,7 @@ if (!isVerified) {
 
 ### usePhoneVerification
 
-**Purpose**: Phone number verification with SMS  
+**Purpose**: Phone number verification with SMS\
 **Returns**: `{ sendCode, verifyCode, loading, error }`
 
 ```typescript
@@ -64,7 +64,7 @@ await verifyCode(code);
 
 ### use2FAProvider
 
-**Purpose**: Two-factor authentication management  
+**Purpose**: Two-factor authentication management\
 **Returns**: `{ is2FAEnabled, enable2FA, disable2FA, verify2FA }`
 
 ```typescript
@@ -76,7 +76,7 @@ await verify2FA(totpCode);
 
 ### useBiometric
 
-**Purpose**: Biometric authentication (FaceID/TouchID/Fingerprint)  
+**Purpose**: Biometric authentication (FaceID/TouchID/Fingerprint)\
 **Returns**: `{ authenticate, isAvailable, biometricType }`
 
 ```typescript
@@ -89,7 +89,7 @@ if (isAvailable) {
 
 ### useSocialAuth
 
-**Purpose**: Social authentication (Google, Apple)  
+**Purpose**: Social authentication (Google, Apple)\
 **Returns**: `{ signInWithGoogle, signInWithApple, loading }`
 
 ```typescript
@@ -100,7 +100,7 @@ await signInWithGoogle();
 
 ### useRegistrationFlow
 
-**Purpose**: Multi-step registration flow management  
+**Purpose**: Multi-step registration flow management\
 **Returns**: `{ currentStep, nextStep, prevStep, completeStep, data }`
 
 ```typescript
@@ -117,7 +117,7 @@ Located in `hooks/async/`
 
 ### useAsync
 
-**Purpose**: Generic async operation management  
+**Purpose**: Generic async operation management\
 **Returns**: `{ execute, loading, error, data }`
 
 ```typescript
@@ -130,7 +130,7 @@ useEffect(() => {
 
 ### useFetch
 
-**Purpose**: HTTP fetch wrapper with caching  
+**Purpose**: HTTP fetch wrapper with caching\
 **Returns**: `{ data, loading, error, refetch }`
 
 ```typescript
@@ -141,7 +141,7 @@ const { data, loading, refetch } = useFetch('/api/users');
 
 ### useInfiniteScroll
 
-**Purpose**: Infinite scroll/pagination  
+**Purpose**: Infinite scroll/pagination\
 **Returns**: `{ data, loading, loadMore, hasMore }`
 
 ```typescript
@@ -161,7 +161,7 @@ Located in `hooks/ui/`
 
 ### useClickOutside
 
-**Purpose**: Detect taps outside component (RN)  
+**Purpose**: Detect taps outside component (RN)\
 **Returns**: `RefObject<T>`
 
 ```typescript
@@ -176,7 +176,7 @@ const dropdownRef = useClickOutside<View>(() => {
 
 ### useLongPress
 
-**Purpose**: Long press with haptic feedback  
+**Purpose**: Long press with haptic feedback\
 **Returns**: `{ onPressIn, onPressOut }`
 
 ```typescript
@@ -192,7 +192,7 @@ const longPressHandlers = useLongPress({
 
 ### useKeyboard
 
-**Purpose**: Keyboard state tracking (RN)  
+**Purpose**: Keyboard state tracking (RN)\
 **Returns**: `{ isVisible, height, duration, easing }`
 
 ```typescript
@@ -205,7 +205,7 @@ const { isVisible, height } = useKeyboard();
 
 ### useScrollToTop
 
-**Purpose**: Scroll to top functionality  
+**Purpose**: Scroll to top functionality\
 **Returns**: `scrollToTop` function
 
 ```typescript
@@ -216,7 +216,7 @@ const scrollToTop = useScrollToTop(scrollViewRef);
 
 ### usePullToRefresh
 
-**Purpose**: Pull-to-refresh functionality  
+**Purpose**: Pull-to-refresh functionality\
 **Returns**: `{ refreshing, onRefresh }`
 
 ```typescript
@@ -229,7 +229,7 @@ const { refreshing, onRefresh } = usePullToRefresh(fetchData);
 
 ### useModal
 
-**Purpose**: Modal state management  
+**Purpose**: Modal state management\
 **Returns**: `{ isVisible, open, close, toggle }`
 
 ```typescript
@@ -241,7 +241,7 @@ const { isVisible, open, close } = useModal();
 
 ### useBottomSheet
 
-**Purpose**: Bottom sheet management  
+**Purpose**: Bottom sheet management\
 **Returns**: `{ isOpen, open, close, snapTo }`
 
 ```typescript
@@ -252,7 +252,7 @@ const { isOpen, open, snapTo } = useBottomSheet();
 
 ### useSwipeGesture
 
-**Purpose**: Swipe gesture detection  
+**Purpose**: Swipe gesture detection\
 **Returns**: `{ onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown }`
 
 ```typescript
@@ -265,7 +265,7 @@ const { onSwipeLeft, onSwipeRight } = useSwipeGesture();
 
 ### useHapticFeedback
 
-**Purpose**: Haptic feedback utilities  
+**Purpose**: Haptic feedback utilities\
 **Returns**: `{ light, medium, heavy, success, warning, error }`
 
 ```typescript
@@ -285,7 +285,7 @@ Located in `hooks/layout/`
 
 ### useResponsive
 
-**Purpose**: Responsive layout utilities  
+**Purpose**: Responsive layout utilities\
 **Returns**: `{ isPhone, isTablet, orientation, breakpoint, scale }`
 
 ```typescript
@@ -304,7 +304,7 @@ Located in `hooks/device/`
 
 ### useAppState
 
-**Purpose**: App foreground/background tracking  
+**Purpose**: App foreground/background tracking\
 **Returns**: `AppStateStatus` ('active' | 'background' | 'inactive')
 
 ```typescript
@@ -318,7 +318,7 @@ const appState = useAppState({
 
 ### useBattery
 
-**Purpose**: Battery level and charging state  
+**Purpose**: Battery level and charging state\
 **Returns**: `{ level, charging, available }`
 
 ```typescript
@@ -331,7 +331,7 @@ const { level, charging, available } = useBattery();
 
 ### useGeolocation
 
-**Purpose**: Location tracking with permissions  
+**Purpose**: Location tracking with permissions\
 **Returns**: `{ location, loading, error, permission }`
 
 ```typescript
@@ -347,7 +347,7 @@ const { location, permission } = useGeolocation({
 
 ### useNetworkStatus
 
-**Purpose**: Network connectivity monitoring  
+**Purpose**: Network connectivity monitoring\
 **Returns**: `{ isConnected, type, isInternetReachable }`
 
 ```typescript
@@ -358,7 +358,7 @@ const { isConnected, type } = useNetworkStatus();
 
 ### useAccessibility
 
-**Purpose**: Accessibility settings detection  
+**Purpose**: Accessibility settings detection\
 **Returns**: `{ screenReaderEnabled, reduceMotion, boldText }`
 
 ```typescript
@@ -376,7 +376,7 @@ Located in `hooks/theme/`
 
 ### useTheme
 
-**Purpose**: Current theme access  
+**Purpose**: Current theme access\
 **Returns**: `{ theme, colors, isDark }`
 
 ```typescript
@@ -389,7 +389,7 @@ const { colors, isDark } = useTheme();
 
 ### useThemeProvider
 
-**Purpose**: Theme management and switching  
+**Purpose**: Theme management and switching\
 **Returns**: `{ theme, setTheme, toggleTheme, systemTheme }`
 
 ```typescript
@@ -401,7 +401,7 @@ const { theme, setTheme, toggleTheme } = useThemeProvider();
 
 ### useThemedStyles
 
-**Purpose**: Theme-aware StyleSheet creation  
+**Purpose**: Theme-aware StyleSheet creation\
 **Returns**: Themed styles object
 
 ```typescript
@@ -415,7 +415,7 @@ const styles = useThemedStyles((colors) => ({
 
 ### useSystemTheme
 
-**Purpose**: System theme detection  
+**Purpose**: System theme detection\
 **Returns**: `'light' | 'dark'`
 
 ```typescript
@@ -431,7 +431,7 @@ useEffect(() => {
 
 ### useColorScheme
 
-**Purpose**: React Native color scheme hook wrapper  
+**Purpose**: React Native color scheme hook wrapper\
 **Returns**: `'light' | 'dark' | null`
 
 ```typescript
@@ -448,7 +448,7 @@ Located in `hooks/lifecycle/`
 
 ### useDeepCallback
 
-**Purpose**: Callback with deep dependency comparison  
+**Purpose**: Callback with deep dependency comparison\
 **Returns**: Memoized callback
 
 ```typescript
@@ -462,7 +462,7 @@ const handleUpdate = useDeepCallback(
 
 ### usePrevious
 
-**Purpose**: Access previous value  
+**Purpose**: Access previous value\
 **Returns**: Previous value of any type
 
 ```typescript
@@ -473,7 +473,7 @@ console.log(`Count changed from ${prevCount} to ${count}`);
 
 ### useUpdateEffect
 
-**Purpose**: useEffect that skips first render  
+**Purpose**: useEffect that skips first render\
 **Returns**: void
 
 ```typescript
@@ -485,7 +485,7 @@ useUpdateEffect(() => {
 
 ### useIsMounted
 
-**Purpose**: Check if component is mounted  
+**Purpose**: Check if component is mounted\
 **Returns**: `() => boolean`
 
 ```typescript
@@ -501,7 +501,7 @@ const fetchData = async () => {
 
 ### useBatchedState
 
-**Purpose**: Batch multiple state updates  
+**Purpose**: Batch multiple state updates\
 **Returns**: `[state, batchUpdate]`
 
 ```typescript
@@ -512,7 +512,7 @@ batchUpdate({ a: 10, b: 20 }); // Single render
 
 ### useCallbackRef
 
-**Purpose**: Stable callback ref  
+**Purpose**: Stable callback ref\
 **Returns**: Callback ref
 
 ```typescript
@@ -529,7 +529,7 @@ Located in `hooks/utility/`
 
 ### useToggle
 
-**Purpose**: Boolean state toggle  
+**Purpose**: Boolean state toggle\
 **Returns**: `[value, toggle, setValue]`
 
 ```typescript
@@ -541,7 +541,7 @@ const [isOpen, toggle, setIsOpen] = useToggle(false);
 
 ### useCounter
 
-**Purpose**: Counter with bounds  
+**Purpose**: Counter with bounds\
 **Returns**: `{ count, increment, decrement, set, reset, isMin, isMax }`
 
 ```typescript
@@ -558,7 +558,7 @@ const { count, increment, decrement, isMax } = useCounter({
 
 ### useList
 
-**Purpose**: Array manipulation utilities  
+**Purpose**: Array manipulation utilities\
 **Returns**: `{ list, push, pop, shift, unshift, removeAt, insertAt, ... }`
 
 ```typescript
@@ -571,7 +571,7 @@ const { list, push, removeAt, clear } = useList([1, 2, 3]);
 
 ### useMap
 
-**Purpose**: Map data structure management  
+**Purpose**: Map data structure management\
 **Returns**: `{ map, set, get, has, remove, clear, keys, values, entries, size }`
 
 ```typescript
@@ -583,7 +583,7 @@ const { map, set, get, remove, size } = useMap<string, User>();
 
 ### useErrorHandler
 
-**Purpose**: Error handling utilities  
+**Purpose**: Error handling utilities\
 **Returns**: `{ error, setError, clearError, handleError }`
 
 ```typescript
@@ -600,7 +600,7 @@ try {
 
 ### useNotificationCount
 
-**Purpose**: Notification badge count  
+**Purpose**: Notification badge count\
 **Returns**: `{ count, increment, decrement, reset }`
 
 ```typescript
@@ -612,7 +612,7 @@ const { count, increment } = useNotificationCount();
 
 ### useOnboardingProvider
 
-**Purpose**: Onboarding flow management  
+**Purpose**: Onboarding flow management\
 **Returns**: `{ hasCompletedOnboarding, completeOnboarding, resetOnboarding }`
 
 ```typescript
@@ -625,7 +625,7 @@ if (!hasCompletedOnboarding) {
 
 ### usePushNotifications
 
-**Purpose**: Push notification registration  
+**Purpose**: Push notification registration\
 **Returns**: `{ token, register, unregister, loading }`
 
 ```typescript
@@ -644,7 +644,7 @@ Located in `hooks/storage/`
 
 ### useLocalStorage
 
-**Purpose**: AsyncStorage wrapper with React state  
+**Purpose**: AsyncStorage wrapper with React state\
 **Returns**: `[value, setValue, loading, error]`
 
 ```typescript
@@ -657,7 +657,7 @@ if (loading) return <LoadingSpinner />;
 
 ### useSecureStorage
 
-**Purpose**: SecureStore wrapper for encrypted storage  
+**Purpose**: SecureStore wrapper for encrypted storage\
 **Returns**: `[value, setValue, loading, error]`
 
 ```typescript
@@ -668,7 +668,7 @@ await setToken(newToken); // Encrypted storage
 
 ### useAsyncStorage
 
-**Purpose**: Enhanced AsyncStorage with caching and TTL  
+**Purpose**: Enhanced AsyncStorage with caching and TTL\
 **Returns**: `[value, setValue, loading, error, clear]`
 
 ```typescript
@@ -689,7 +689,7 @@ Located in `hooks/timing/`
 
 ### useDebouncedCallback
 
-**Purpose**: Debounce callback execution  
+**Purpose**: Debounce callback execution\
 **Returns**: Debounced callback
 
 ```typescript
@@ -702,7 +702,7 @@ const debouncedSearch = useDebouncedCallback((query) => {
 
 ### useThrottledCallback
 
-**Purpose**: Throttle callback execution  
+**Purpose**: Throttle callback execution\
 **Returns**: Throttled callback
 
 ```typescript
@@ -715,7 +715,7 @@ const throttledScroll = useThrottledCallback((event) => {
 
 ### useInterval
 
-**Purpose**: Declarative setInterval  
+**Purpose**: Declarative setInterval\
 **Returns**: `{ start, stop, restart, isRunning }`
 
 ```typescript
@@ -728,7 +728,7 @@ const { start, stop, isRunning } = useInterval(() => {
 
 ### useTimeout
 
-**Purpose**: Declarative setTimeout  
+**Purpose**: Declarative setTimeout\
 **Returns**: `{ start, cancel, reset, isPending, isComplete }`
 
 ```typescript
@@ -992,13 +992,13 @@ function MyComponent() {
 
 ## Additional Resources
 
-- **React Hooks Documentation**: https://react.dev/reference/react
-- **React Native Hooks**: https://reactnative.dev/docs/hooks
-- **Expo Hooks**: https://docs.expo.dev/versions/latest/sdk/overview/
-- **Custom Hooks Guide**: https://react.dev/learn/reusing-logic-with-custom-hooks
+- **React Hooks Documentation**: <https://react.dev/reference/react>
+- **React Native Hooks**: <https://reactnative.dev/docs/hooks>
+- **Expo Hooks**: <https://docs.expo.dev/versions/latest/sdk/overview/>
+- **Custom Hooks Guide**: <https://react.dev/learn/reusing-logic-with-custom-hooks>
 
 ---
 
-_Last Updated: October 19, 2025_  
-_Version: 1.0.0_  
+_Last Updated: October 19, 2025_\
+_Version: 1.0.0_\
 _Maintained by: LoginX Team_

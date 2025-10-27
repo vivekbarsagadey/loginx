@@ -16,9 +16,9 @@ tags: [ui, ux, enhancement, user-experience, design-system, accessibility]
 
 This implementation plan addresses 23 identified UI/UX improvement opportunities across the LoginX application, based on comprehensive audit findings. The plan is structured in 3 phases over 6-8 weeks, prioritized by user impact and implementation complexity.
 
-**Audit Score:** 8.2/10 (Excellent)  
-**Target Score:** 9.5+/10 (World-Class)  
-**Expected User Impact:** +35% in usability metrics  
+**Audit Score:** 8.2/10 (Excellent)\
+**Target Score:** 9.5+/10 (World-Class)\
+**Expected User Impact:** +35% in usability metrics\
 **Total Estimated Effort:** 48-60 hours
 
 ---
@@ -350,27 +350,27 @@ This implementation plan addresses 23 identified UI/UX improvement opportunities
 
 ### Internal Dependencies
 
-**DEP-001**: `utils/error-classifier.ts` - Already exists, use for error message mapping  
-**DEP-002**: `components/themed-*` - Base themed components for consistency  
-**DEP-003**: `constants/theme.ts` - Design tokens for colors and spacing  
-**DEP-004**: `constants/animation.ts` - Animation duration constants  
-**DEP-005**: `i18n/` - Internationalization system for all text  
-**DEP-006**: `hooks/use-alert.tsx` - Alert system for user feedback  
-**DEP-007**: `hooks/use-form-submit.tsx` - Form submission handling  
+**DEP-001**: `utils/error-classifier.ts` - Already exists, use for error message mapping\
+**DEP-002**: `components/themed-*` - Base themed components for consistency\
+**DEP-003**: `constants/theme.ts` - Design tokens for colors and spacing\
+**DEP-004**: `constants/animation.ts` - Animation duration constants\
+**DEP-005**: `i18n/` - Internationalization system for all text\
+**DEP-006**: `hooks/use-alert.tsx` - Alert system for user feedback\
+**DEP-007**: `hooks/use-form-submit.tsx` - Form submission handling\
 **DEP-008**: `utils/analytics.ts` - Analytics tracking system
 
 ### External Dependencies (New)
 
-**DEP-009**: `react-native-reanimated` - Already installed, use for animations  
-**DEP-010**: `react-native-gesture-handler` - Already installed, use for swipe actions  
-**DEP-011**: `react-native-svg` - For SVG illustrations (check if installed)  
+**DEP-009**: `react-native-reanimated` - Already installed, use for animations\
+**DEP-010**: `react-native-gesture-handler` - Already installed, use for swipe actions\
+**DEP-011**: `react-native-svg` - For SVG illustrations (check if installed)\
 **DEP-012**: `lottie-react-native` - For complex animations (optional, evaluate bundle impact)
 
 ### Design Dependencies
 
-**DEP-013**: Empty state illustrations (5 needed: items, notifications, search, history, favorites)  
-**DEP-014**: Error state icons (10 needed: network, auth, validation, server, etc.)  
-**DEP-015**: Success animation assets (confetti, checkmark burst)  
+**DEP-013**: Empty state illustrations (5 needed: items, notifications, search, history, favorites)\
+**DEP-014**: Error state icons (10 needed: network, auth, validation, server, etc.)\
+**DEP-015**: Success animation assets (confetti, checkmark burst)\
 **DEP-016**: Loading animation variants (skeleton, spinner, progress)
 
 ---
@@ -379,42 +379,42 @@ This implementation plan addresses 23 identified UI/UX improvement opportunities
 
 ### New Files to Create
 
-**FILE-001**: `components/ui/empty-state.tsx` - Empty state component with illustration support  
-**FILE-002**: `components/ui/loading-state.tsx` - Unified loading state component  
-**FILE-003**: `components/ui/skeleton-loader.tsx` - Skeleton loader with variants  
-**FILE-004**: `components/ui/step-indicator.tsx` - Multi-step progress indicator  
-**FILE-005**: `components/ui/search-bar.tsx` - Search input with clear button  
-**FILE-006**: `components/ui/filter-chip.tsx` - Selectable filter chip  
-**FILE-007**: `components/ui/sort-button.tsx` - Sort dropdown button  
-**FILE-008**: `components/ui/swipeable-row.tsx` - Swipeable list item with actions  
-**FILE-009**: `components/ui/success-animation.tsx` - Success feedback animation  
-**FILE-010**: `components/ui/error-banner.tsx` - Error message with recovery actions  
-**FILE-011**: `hooks/use-unsaved-changes.tsx` - Hook for unsaved changes warning  
-**FILE-012**: `hooks/use-debounced-validation.tsx` - Debounced form validation hook  
-**FILE-013**: `utils/error-messages.ts` - Firebase error message mapping  
-**FILE-014**: `assets/illustrations/empty-states/` - Empty state SVG illustrations  
-**FILE-015**: `assets/illustrations/errors/` - Error state SVG illustrations  
+**FILE-001**: `components/ui/empty-state.tsx` - Empty state component with illustration support\
+**FILE-002**: `components/ui/loading-state.tsx` - Unified loading state component\
+**FILE-003**: `components/ui/skeleton-loader.tsx` - Skeleton loader with variants\
+**FILE-004**: `components/ui/step-indicator.tsx` - Multi-step progress indicator\
+**FILE-005**: `components/ui/search-bar.tsx` - Search input with clear button\
+**FILE-006**: `components/ui/filter-chip.tsx` - Selectable filter chip\
+**FILE-007**: `components/ui/sort-button.tsx` - Sort dropdown button\
+**FILE-008**: `components/ui/swipeable-row.tsx` - Swipeable list item with actions\
+**FILE-009**: `components/ui/success-animation.tsx` - Success feedback animation\
+**FILE-010**: `components/ui/error-banner.tsx` - Error message with recovery actions\
+**FILE-011**: `hooks/use-unsaved-changes.tsx` - Hook for unsaved changes warning\
+**FILE-012**: `hooks/use-debounced-validation.tsx` - Debounced form validation hook\
+**FILE-013**: `utils/error-messages.ts` - Firebase error message mapping\
+**FILE-014**: `assets/illustrations/empty-states/` - Empty state SVG illustrations\
+**FILE-015**: `assets/illustrations/errors/` - Error state SVG illustrations\
 **FILE-016**: `docs/UI_UX_IMPROVEMENTS.md` - Documentation of all improvements
 
 ### Files to Modify
 
-**FILE-017**: `components/themed-text-input.tsx` - Add loading, success, error states  
-**FILE-018**: `components/themed-button.tsx` - Enhance loading state with spinner  
-**FILE-019**: `app/(tabs)/items.tsx` - Add empty state, search, filter, swipe actions  
-**FILE-020**: `app/(tabs)/settings.tsx` - Add search, group settings  
-**FILE-021**: `app/(tabs)/index.tsx` - Add pull-to-refresh  
-**FILE-022**: `app/(auth)/register/index.tsx` - Enhanced progress indicator  
-**FILE-023**: `app/(auth)/register/step-1.tsx` - Real-time validation  
-**FILE-024**: `app/(auth)/register/step-2.tsx` - Real-time validation  
-**FILE-025**: `app/(auth)/login.tsx` - Real-time validation, better error messages  
-**FILE-026**: `app/profile/edit.tsx` - Unsaved changes warning, loading states  
-**FILE-027**: `app/feedback.tsx` - Character counter, real-time validation  
-**FILE-028**: `app/report-issue.tsx` - Character counter, real-time validation  
-**FILE-029**: `hooks/use-alert.tsx` - Support error recovery actions  
-**FILE-030**: `constants/theme.ts` - Add new color tokens if needed  
-**FILE-031**: `i18n/en.json` - Add translations for new messages  
-**FILE-032**: `i18n/es.json` - Add Spanish translations  
-**FILE-033**: `i18n/hi.json` - Add Hindi translations  
+**FILE-017**: `components/themed-text-input.tsx` - Add loading, success, error states\
+**FILE-018**: `components/themed-button.tsx` - Enhance loading state with spinner\
+**FILE-019**: `app/(tabs)/items.tsx` - Add empty state, search, filter, swipe actions\
+**FILE-020**: `app/(tabs)/settings.tsx` - Add search, group settings\
+**FILE-021**: `app/(tabs)/index.tsx` - Add pull-to-refresh\
+**FILE-022**: `app/(auth)/register/index.tsx` - Enhanced progress indicator\
+**FILE-023**: `app/(auth)/register/step-1.tsx` - Real-time validation\
+**FILE-024**: `app/(auth)/register/step-2.tsx` - Real-time validation\
+**FILE-025**: `app/(auth)/login.tsx` - Real-time validation, better error messages\
+**FILE-026**: `app/profile/edit.tsx` - Unsaved changes warning, loading states\
+**FILE-027**: `app/feedback.tsx` - Character counter, real-time validation\
+**FILE-028**: `app/report-issue.tsx` - Character counter, real-time validation\
+**FILE-029**: `hooks/use-alert.tsx` - Support error recovery actions\
+**FILE-030**: `constants/theme.ts` - Add new color tokens if needed\
+**FILE-031**: `i18n/en.json` - Add translations for new messages\
+**FILE-032**: `i18n/es.json` - Add Spanish translations\
+**FILE-033**: `i18n/hi.json` - Add Hindi translations\
 **FILE-034**: `docs/DESIGN_SYSTEM.md` - Document new components
 
 ---
@@ -587,15 +587,15 @@ This implementation plan addresses 23 identified UI/UX improvement opportunities
 
 ### Assumptions
 
-**ASSUMPTION-001**: Design team can provide 5 empty state illustrations within 1 week  
-**ASSUMPTION-002**: react-native-svg is already installed and working  
-**ASSUMPTION-003**: Error classification utility covers all Firebase error codes  
-**ASSUMPTION-004**: Current theme system supports new color tokens without breaking changes  
-**ASSUMPTION-005**: Analytics system can handle additional event tracking  
-**ASSUMPTION-006**: Existing form validation works with real-time onChange mode  
-**ASSUMPTION-007**: Users prefer real-time validation over onBlur validation  
-**ASSUMPTION-008**: Swipe gestures won't conflict with existing navigation gestures  
-**ASSUMPTION-009**: Bundle size impact will be acceptable (< 50KB)  
+**ASSUMPTION-001**: Design team can provide 5 empty state illustrations within 1 week\
+**ASSUMPTION-002**: react-native-svg is already installed and working\
+**ASSUMPTION-003**: Error classification utility covers all Firebase error codes\
+**ASSUMPTION-004**: Current theme system supports new color tokens without breaking changes\
+**ASSUMPTION-005**: Analytics system can handle additional event tracking\
+**ASSUMPTION-006**: Existing form validation works with real-time onChange mode\
+**ASSUMPTION-007**: Users prefer real-time validation over onBlur validation\
+**ASSUMPTION-008**: Swipe gestures won't conflict with existing navigation gestures\
+**ASSUMPTION-009**: Bundle size impact will be acceptable (< 50KB)\
 **ASSUMPTION-010**: Development can be completed in 6-8 weeks by 1-2 developers
 
 ---
@@ -915,6 +915,6 @@ All documentation and testing tasks are pending.
 
 ---
 
-**Document Status:** ✅ Complete and Ready for Implementation  
-**Next Action:** Review with team, create GitHub issues, begin Phase 1  
+**Document Status:** ✅ Complete and Ready for Implementation\
+**Next Action:** Review with team, create GitHub issues, begin Phase 1\
 **Estimated Total Effort:** 48-60 hours (1.5 months with 1 developer, 3 weeks with 2 developers)

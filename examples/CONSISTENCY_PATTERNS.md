@@ -1,6 +1,6 @@
 # Consistency Patterns Quick Reference
 
-**Principle:** Consistency = Predictability  
+**Principle:** Consistency = Predictability\
 Users learn the app faster when elements behave the same way everywhere.
 
 ---

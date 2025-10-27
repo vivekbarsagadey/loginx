@@ -2,7 +2,9 @@
 
 # Dependencies
 node_modules/
+**/node_modules/
 .pnpm-store/
+functions/node_modules/
 
 # Build outputs
 .expo/

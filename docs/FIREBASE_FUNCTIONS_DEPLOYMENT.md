@@ -1,7 +1,7 @@
 # Firebase Cloud Functions Deployment Guide
 
-**Last Updated:** October 14, 2025  
-**Author:** LoginX Development Team  
+**Last Updated:** October 14, 2025\
+**Author:** LoginX Development Team\
 **Status:** ✅ Ready for Deployment
 
 ---
@@ -110,10 +110,10 @@ firebase emulators:start
 **What This Does:**
 
 - Starts Firebase Emulator Suite
-- Functions: http://localhost:5001
-- Firestore: http://localhost:8080
-- Auth: http://localhost:9099
-- UI: http://localhost:4000
+- Functions: <http://localhost:5001>
+- Firestore: <http://localhost:8080>
+- Auth: <http://localhost:9099>
+- UI: <http://localhost:4000>
 
 **Emulator Testing Checklist:**
 
@@ -158,7 +158,7 @@ firebase deploy --only functions
 - `scheduledRateLimitCleanup` - Daily cleanup job
 - `getRateLimitStatus` - Admin debugging endpoint
 
-**Deployment Time:** ~3-5 minutes
+**Deployment Time:** \~3-5 minutes
 
 **Expected Output:**
 
@@ -354,6 +354,7 @@ firebase functions:log --only validateLogin --severity ERROR
 
 - Check Firestore indexes: Firebase Console → Firestore → Indexes
 - Increase timeout in `functions/src/index.ts`:
+
   ```typescript
   export const validateLogin = onCall({ timeoutSeconds: 60 }, async (request) => {
     // ...
@@ -395,24 +396,24 @@ firebase functions:log --only validateLogin --severity ERROR
 
 **Document Writes:**
 
-- Rate limit tracking: ~2 writes per auth attempt
+- Rate limit tracking: \~2 writes per auth attempt
 - 1M auth attempts = 2M writes = $3.60
 
 **Document Reads:**
 
-- Rate limit checks: ~1 read per auth attempt
+- Rate limit checks: \~1 read per auth attempt
 - 1M auth attempts = 1M reads = $0.36
 
 **Storage:**
 
-- Rate limit records: ~1KB per record
+- Rate limit records: \~1KB per record
 - 10,000 active rate limits = 10MB = $0.002
 
 **Estimated Monthly Cost for 1M auth attempts:**
 
 - **Cloud Functions:** $0 (free tier)
-- **Firestore:** ~$4
-- **Total:** ~$4/month
+- **Firestore:** \~$4
+- **Total:** \~$4/month
 
 ---
 
@@ -438,6 +439,7 @@ Never commit sensitive data:
 
 - Use `.env.local` for development
 - Use Firebase Secret Manager for production:
+
   ```powershell
   firebase functions:secrets:set API_KEY
   ```
@@ -596,10 +598,10 @@ npm install
 
 ### Getting Help
 
-1. **Firebase Status:** https://status.firebase.google.com/
-2. **Firebase Support:** https://firebase.google.com/support
+1. **Firebase Status:** <https://status.firebase.google.com/>
+2. **Firebase Support:** <https://firebase.google.com/support>
 3. **Stack Overflow:** Tag `firebase-functions`
-4. **GitHub Issues:** [Your repo]/issues
+4. **GitHub Issues:** \[Your repo]/issues
 
 ---
 

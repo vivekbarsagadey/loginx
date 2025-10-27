@@ -63,4 +63,4 @@ Use clear subgraphs to organize these layers, apply consistent color coding for 
 
 ## Context Template
 
-- **Epic PRD:** [The content of the Epic PRD markdown file]
+- **Epic PRD:** \[The content of the Epic PRD markdown file]

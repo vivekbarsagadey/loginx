@@ -1,0 +1,17 @@
+# Ignore node_modules directories recursively
+
+\*\*/node_modules/
+
+# Ignore build artifacts
+
+**/.expo/
+**/dist/
+\*\*/build/
+
+# Ignore version history
+
+\*\*/.history/
+
+# Ignore coverage reports
+
+\*\*/coverage/

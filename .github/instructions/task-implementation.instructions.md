@@ -25,9 +25,10 @@ Implementation progress MUST be tracked in a corresponding changes files located
 **Implement each task in the plan systematically:**
 
 1. **Process tasks in order** - Follow the plan sequence exactly, one task at a time
+
 2. **MANDATORY before implementing any task:**
    - **ALWAYS ensure implementation is associated with a specific task from the plan**
-   - **ALWAYS read the entire details section for that task from the associated details markdown file in `.copilot-tracking/details/**`\*\*
+   - \*\*ALWAYS read the entire details section for that task from the associated details markdown file in `.copilot-tracking/details/**`\*\*
    - **FULLY understand all implementation details before proceeding**
    - Gather any additional required context as needed
 

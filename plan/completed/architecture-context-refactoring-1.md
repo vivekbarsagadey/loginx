@@ -460,4 +460,4 @@ This plan addresses the identified gaps in LoginX's state management architectur
 - Phase 8-9: 2 days (Performance & Testing)
 - Phase 10: 1 day (Documentation)
 
-**Total: ~2 weeks of focused development**
+**Total: \~2 weeks of focused development**

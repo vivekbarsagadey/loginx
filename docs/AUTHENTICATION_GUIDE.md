@@ -1,7 +1,7 @@
 # LoginX Authentication Guide
 
-**Last Updated:** October 7, 2025  
-**Version:** 2.0  
+**Last Updated:** October 7, 2025\
+**Version:** 2.0\
 **Status:** ✅ Production Ready
 
 ---
@@ -1041,7 +1041,7 @@ ENABLE_LOGIN_EMAIL_PASSWORD="true"
    GOOGLE_WEB_CLIENT_ID="xxx.apps.googleusercontent.com"
    ```
 
-1. Build development version:
+2. Build development version:
 
    ```bash
    eas build --profile development --platform ios
@@ -1117,8 +1117,8 @@ sed -i 's/LOGIN_EMAIL_PASSWORD/ENABLE_LOGIN_EMAIL_PASSWORD/g;
 After migration:
 
 1. Clear cache: `npx expo start -c`
-1. Check console logs for configuration summary
-1. Verify authentication methods appear correctly in UI
+2. Check console logs for configuration summary
+3. Verify authentication methods appear correctly in UI
 
 ---
 
@@ -1227,6 +1227,6 @@ After migration:
 
 ---
 
-**Last Updated:** October 7, 2025  
-**Maintained By:** LoginX Team  
+**Last Updated:** October 7, 2025\
+**Maintained By:** LoginX Team\
 **Version:** 2.0

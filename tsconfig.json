@@ -24,9 +24,9 @@
     "exactOptionalPropertyTypes": false
   },
   "include": [
-    "**/*.ts", 
-    "**/*.tsx", 
-    "expo-env.d.ts", 
+    "**/*.ts",
+    "**/*.tsx",
+    "expo-env.d.ts",
     ".expo/types/**/*.ts",
     "types/**/*.ts",
     "types/**/*.d.ts",

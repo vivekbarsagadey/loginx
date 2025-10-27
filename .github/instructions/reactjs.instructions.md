@@ -5,7 +5,7 @@ applyTo: "**/*.jsx, **/*.tsx, **/*.js, **/*.ts, **/*.css, **/*.scss"
 
 # ReactJS Development Instructions
 
-Instructions for building high-quality ReactJS applications with modern patterns, hooks, and best practices following the official React documentation at https://react.dev.
+Instructions for building high-quality ReactJS applications with modern patterns, hooks, and best practices following the official React documentation at <https://react.dev>.
 
 ## Project Context
 

@@ -422,7 +422,7 @@ User-friendly security-related messages.
 | ✅     | `BIOMETRIC_LOCKED_OUT`    | 'Too many failed attempts. Try again later.'                       | Lockout notification      |
 | ✅     | `SESSION_EXPIRED`         | 'Your session has expired. Please log in again.'                   | Session timeout message   |
 | ✅     | `ACCOUNT_LOCKED`          | 'Account temporarily locked due to multiple failed login attempts' | Account lockout message   |
-| ✅     | `PASSWORD_REUSED`         | 'Please choose a password you haven\'t used recently'              | Password policy message   |
+| ✅     | `PASSWORD_REUSED`         | 'Please choose a password you haven't used recently'               | Password policy message   |
 | ✅     | `TWO_FA_REQUIRED`         | 'Two-factor authentication is required'                            | 2FA requirement message   |
 | ✅     | `TWO_FA_INVALID`          | 'Invalid two-factor authentication code'                           | 2FA error message         |
 
@@ -472,15 +472,15 @@ Secure storage keys for sensitive data encryption.
 
 File handling and storage limitations.
 
-| Status | Category        | Constant                   | Value                          | Purpose                    |
-| ------ | --------------- | -------------------------- | ------------------------------ | -------------------------- |
-| ✅     | **Size Limits** | `MAX_AVATAR_SIZE`          | 5242880                        | Max avatar file size (5MB) |
-| ✅     |                 | `MAX_DOCUMENT_SIZE`        | 10485760                       | Max document size (10MB)   |
-| ✅     |                 | `MAX_IMAGE_SIZE`           | 5242880                        | Max image file size (5MB)  |
-| ✅     | **Dimensions**  | `AVATAR_SIZE`              | 200                            | Avatar image size (200px)  |
-| ✅     |                 | `THUMBNAIL_SIZE`           | 100                            | Thumbnail size (100px)     |
-| ✅     | **File Types**  | `SUPPORTED_IMAGE_TYPES`    | ['jpg', 'jpeg', 'png', 'webp'] | Allowed image formats      |
-| ✅     |                 | `SUPPORTED_DOCUMENT_TYPES` | ['pdf', 'doc', 'docx', 'txt']  | Allowed document formats   |
+| Status | Category        | Constant                   | Value                           | Purpose                    |
+| ------ | --------------- | -------------------------- | ------------------------------- | -------------------------- |
+| ✅     | **Size Limits** | `MAX_AVATAR_SIZE`          | 5242880                         | Max avatar file size (5MB) |
+| ✅     |                 | `MAX_DOCUMENT_SIZE`        | 10485760                        | Max document size (10MB)   |
+| ✅     |                 | `MAX_IMAGE_SIZE`           | 5242880                         | Max image file size (5MB)  |
+| ✅     | **Dimensions**  | `AVATAR_SIZE`              | 200                             | Avatar image size (200px)  |
+| ✅     |                 | `THUMBNAIL_SIZE`           | 100                             | Thumbnail size (100px)     |
+| ✅     | **File Types**  | `SUPPORTED_IMAGE_TYPES`    | \['jpg', 'jpeg', 'png', 'webp'] | Allowed image formats      |
+| ✅     |                 | `SUPPORTED_DOCUMENT_TYPES` | \['pdf', 'doc', 'docx', 'txt']  | Allowed document formats   |
 
 ### DeviceConstants ✅
 
@@ -754,6 +754,6 @@ For complete hook documentation including:
 
 ---
 
-Last updated: October 19, 2025  
-Implementation status verified: October 19, 2025  
+Last updated: October 19, 2025\
+Implementation status verified: October 19, 2025\
 Hooks library added: October 19, 2025

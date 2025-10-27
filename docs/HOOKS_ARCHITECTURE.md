@@ -647,6 +647,6 @@ Some hooks depend on context providers being present:
 
 ---
 
-**Last Updated:** October 23, 2025  
-**Version:** 1.0  
+**Last Updated:** October 23, 2025\
+**Version:** 1.0\
 **Maintainer:** LoginX Development Team

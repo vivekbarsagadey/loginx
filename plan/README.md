@@ -146,6 +146,6 @@ Update status in `refactor-hooks-optimization-1.md` header:
 
 ---
 
-**Created**: October 19, 2025  
-**Owner**: Development Team  
+**Created**: October 19, 2025\
+**Owner**: Development Team\
 **Status**: Ready to start

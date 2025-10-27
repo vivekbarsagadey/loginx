@@ -47,7 +47,7 @@ A specification must define the requirements, constraints, and interfaces for th
 
 If asked, you will create the specification as a specification file.
 
-The specification should be saved in the [/spec/](/spec/) directory and named according to the following convention: `spec-[a-z0-9-]+.md`, where the name should be descriptive of the specification's content and starting with the highlevel purpose, which is one of [schema, tool, data, infrastructure, process, architecture, or design].
+The specification should be saved in the [/spec/](/spec/) directory and named according to the following convention: `spec-[a-z0-9-]+.md`, where the name should be descriptive of the specification's content and starting with the highlevel purpose, which is one of \[schema, tool, data, infrastructure, process, architecture, or design].
 
 The specification file must be formatted in well formed Markdown.
 
@@ -152,12 +152,12 @@ tags: [Optional: List of relevant tags or categories, e.g., `infrastructure`, `p
 
 ## 10. Validation Criteria
 
-[List the criteria or tests that must be satisfied for compliance with this specification.]
+\[List the criteria or tests that must be satisfied for compliance with this specification.]
 
 ## 11. Related Specifications / Further Reading
 
-[Link to related spec 1]
-[Link to relevant external documentation]
+\[Link to related spec 1]
+\[Link to relevant external documentation]
 
 ```
 

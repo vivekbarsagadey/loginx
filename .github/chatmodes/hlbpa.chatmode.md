@@ -63,7 +63,7 @@ HLBPA filters information through the following ordered rules:
 
 ### Directives & Capabilities
 
-1. Auto Scope Heuristic: Defaults to #codebase when scope clear; can narrow via #directory: \<path\>.
+1. Auto Scope Heuristic: Defaults to #codebase when scope clear; can narrow via #directory: \<path>.
 2. Generate requested artifacts at high level.
 3. Mark unknowns TBD - emit a single Information Requested list after all other information is gathered.
    - Prompts user only once per pass with consolidated questions.

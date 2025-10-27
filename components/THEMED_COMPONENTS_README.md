@@ -1,6 +1,6 @@
 # Themed Components - Quick Reference
 
-**Last Updated:** October 11, 2025  
+**Last Updated:** October 11, 2025\
 **Status:** ✅ Production Ready
 
 ## Overview
@@ -24,7 +24,7 @@ import { ThemedPressable } from "@/components/themed-pressable";
 </ThemedPressable>;
 ```
 
-**Variants:** card, row, button, minimal, none  
+**Variants:** card, row, button, minimal, none\
 **Use for:** Any pressable element that needs consistent interaction feedback
 
 ---
@@ -47,7 +47,7 @@ import { HStack, VStack } from '@/components/themed-stack';
 </VStack>
 ```
 
-**Spacing:** xs, sm, md, lg, xl, xxl, xxxl  
+**Spacing:** xs, sm, md, lg, xl, xxl, xxxl\
 **Use for:** Row/column layouts with consistent gaps
 
 ---
@@ -65,7 +65,7 @@ import { ThemedDivider } from '@/components/themed-divider';
 <ThemedDivider orientation="vertical" />
 ```
 
-**Orientations:** horizontal, vertical  
+**Orientations:** horizontal, vertical\
 **Use for:** Separating content sections
 
 ---
@@ -82,8 +82,8 @@ import { ThemedBadge, ThemedChip } from '@/components/themed-badge';
 <ThemedBadge variant="info" size="sm" outlined>New</ThemedBadge>
 ```
 
-**Variants:** success, warning, error, info, default, primary  
-**Sizes:** sm, md, lg  
+**Variants:** success, warning, error, info, default, primary\
+**Sizes:** sm, md, lg\
 **Use for:** Status indicators, labels, tags, chips
 
 ---
@@ -100,9 +100,9 @@ import { ThemedIconContainer } from '@/components/themed-icon-container';
 <ThemedIconContainer icon="edit" onPress={handleEdit} />
 ```
 
-**Sizes:** sm (32), md (48), lg (64), xl (80)  
-**Shapes:** circle, square, rounded  
-**Variants:** primary, success, warning, error, info, default  
+**Sizes:** sm (32), md (48), lg (64), xl (80)\
+**Shapes:** circle, square, rounded\
+**Variants:** primary, success, warning, error, info, default\
 **Use for:** App icons, feature icons, action buttons
 
 ---
@@ -161,10 +161,10 @@ import { ThemedSurface } from '@/components/themed-surface';
 </ThemedSurface>
 ```
 
-**Elevation:** 0-5 (automatic shadows)  
-**Variants:** surface, surface-variant  
-**Padding:** xs, sm, md, lg, xl, none  
-**BorderRadius:** sm, md, lg, xl, none  
+**Elevation:** 0-5 (automatic shadows)\
+**Variants:** surface, surface-variant\
+**Padding:** xs, sm, md, lg, xl, none\
+**BorderRadius:** sm, md, lg, xl, none\
 **Use for:** Cards, containers, panels
 
 ---
@@ -200,7 +200,7 @@ import { ThemedInfoBox } from '@/components/themed-info-box';
 </ThemedInfoBox>
 ```
 
-**Variants:** info, success, warning, error  
+**Variants:** info, success, warning, error\
 **Use for:** Alerts, messages, notifications, banners
 
 ---
@@ -218,8 +218,8 @@ import { ThemedLoadingSpinner } from '@/components/themed-loading-spinner';
 <ThemedLoadingSpinner size="large" text="Please wait..." centered />
 ```
 
-**Sizes:** small (20), medium (32), large (48)  
-**Variants:** primary, secondary, surface  
+**Sizes:** small (20), medium (32), large (48)\
+**Variants:** primary, secondary, surface\
 **Use for:** Loading states, progress indicators
 
 ---
@@ -302,11 +302,11 @@ ThemedIconContainer, ThemedBadge).
 
 ## Benefits
 
-✅ **Consistency** - Single source of truth for component styles  
-✅ **Maintainability** - Update once, fix everywhere  
-✅ **Developer Experience** - 40-60% less boilerplate code  
-✅ **Accessibility** - Built-in screen reader support  
-✅ **Performance** - Memoized for optimal rendering  
+✅ **Consistency** - Single source of truth for component styles\
+✅ **Maintainability** - Update once, fix everywhere\
+✅ **Developer Experience** - 40-60% less boilerplate code\
+✅ **Accessibility** - Built-in screen reader support\
+✅ **Performance** - Memoized for optimal rendering\
 ✅ **Type Safety** - Comprehensive TypeScript types
 
 ---
@@ -376,6 +376,6 @@ If you encounter issues or have suggestions:
 
 ---
 
-**Status:** ✅ All components production-ready  
-**Coverage:** 290+ repeated patterns replaced  
-**Impact:** ~3,000-4,500 lines of code saved
+**Status:** ✅ All components production-ready\
+**Coverage:** 290+ repeated patterns replaced\
+**Impact:** \~3,000-4,500 lines of code saved

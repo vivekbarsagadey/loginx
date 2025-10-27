@@ -1,6 +1,6 @@
 # Legal Compliance & Accessibility Guide
 
-**Last Updated:** October 7, 2025  
+**Last Updated:** October 7, 2025\
 **Version:** 1.0.0
 
 ## 📋 Table of Contents
@@ -936,25 +936,25 @@ All legal screens support multiple languages via i18n.
 
 ### Legal Resources
 
-- **GDPR Full Text:** https://gdpr-info.eu/
-- **CCPA Information:** https://oag.ca.gov/privacy/ccpa
+- **GDPR Full Text:** <https://gdpr-info.eu/>
+- **CCPA Information:** <https://oag.ca.gov/privacy/ccpa>
 - **ePrivacy Directive:**
-  https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:32002L0058
-- **WCAG Guidelines:** https://www.w3.org/WAI/WCAG21/quickref/
+  <https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:32002L0058>
+- **WCAG Guidelines:** <https://www.w3.org/WAI/WCAG21/quickref/>
 
 ### Development Resources
 
-- **React Native Accessibility:** https://reactnative.dev/docs/accessibility
-- **Expo Accessibility:** https://docs.expo.dev/guides/accessibility/
+- **React Native Accessibility:** <https://reactnative.dev/docs/accessibility>
+- **Expo Accessibility:** <https://docs.expo.dev/guides/accessibility/>
 - **i18n Best Practices:**
-  https://www.i18next.com/translation-function/essentials
+  <https://www.i18next.com/translation-function/essentials>
 
 ### Tools
 
-- **Contrast Checker:** https://webaim.org/resources/contrastchecker/
+- **Contrast Checker:** <https://webaim.org/resources/contrastchecker/>
 - **Screen Reader Testing:** Built-in VoiceOver (iOS), TalkBack (Android)
-- **GDPR Compliance Checker:** https://gdpr.eu/checklist/
-- **Legal Template Generator:** https://termsfeed.com/
+- **GDPR Compliance Checker:** <https://gdpr.eu/checklist/>
+- **Legal Template Generator:** <https://termsfeed.com/>
 
 ---
 
@@ -962,15 +962,15 @@ All legal screens support multiple languages via i18n.
 
 For legal compliance questions or assistance:
 
-- **Email:** privacy@whizit.co.in
-- **Legal Team:** legal@whizit.co.in
-- **Support:** support@whizit.co.in
-- **GitHub Issues:** https://github.com/vivekbarsagadey/loginx/issues
+- **Email:** <privacy@whizit.co.in>
+- **Legal Team:** <legal@whizit.co.in>
+- **Support:** <support@whizit.co.in>
+- **GitHub Issues:** <https://github.com/vivekbarsagadey/loginx/issues>
 
 ---
 
-**Document Version:** 1.0.0  
-**Last Updated:** October 7, 2025  
+**Document Version:** 1.0.0\
+**Last Updated:** October 7, 2025\
 **Next Review Date:** January 7, 2026
 
 ---
