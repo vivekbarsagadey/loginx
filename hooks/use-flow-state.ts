@@ -11,7 +11,7 @@ import { useCallback, useState } from 'react';
 /**
  * Create initial flow state
  */
-function createInitialState(config: FlowConfig, initialData: Record<string, any> = {}, resumeState?: FlowState): FlowState {
+function createInitialState(config: FlowConfig, initialData: Record<string, unknown> = {}, resumeState?: FlowState): FlowState {
   if (resumeState) {
     return {
       ...resumeState,
@@ -51,7 +51,7 @@ function calculateProgress(currentStepIndex: number, totalSteps: number): number
 /**
  * Hook for managing flow state
  */
-export function useFlowState(config: FlowConfig, initialData: Record<string, any> = {}, resumeState?: FlowState) {
+export function useFlowState(config: FlowConfig, initialData: Record<string, unknown> = {}, resumeState?: FlowState) {
   const [state, setState] = useState<FlowState>(() => createInitialState(config, initialData, resumeState));
 
   /**
@@ -69,7 +69,7 @@ export function useFlowState(config: FlowConfig, initialData: Record<string, any
   /**
    * Update flow data (user inputs)
    */
-  const updateData = useCallback((newData: Partial<Record<string, any>>) => {
+  const updateData = useCallback((newData: Partial<Record<string, unknown>>) => {
     setState((prevState) => ({
       ...prevState,
       data: {
@@ -93,7 +93,7 @@ export function useFlowState(config: FlowConfig, initialData: Record<string, any
   /**
    * Set a specific data value
    */
-  const setData = useCallback((key: string, value: any) => {
+  const setData = useCallback((key: string, value: unknown) => {
     setState((prevState) => ({
       ...prevState,
       data: {

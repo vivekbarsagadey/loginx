@@ -10,7 +10,7 @@ import { useCallback } from 'react';
 /**
  * Check if a step should be shown based on its condition
  */
-function shouldShowStep(step: StepConfig, data: Record<string, any>): boolean {
+function shouldShowStep(step: StepConfig, data: Record<string, unknown>): boolean {
   if (!step.condition) {
     return true;
   }
@@ -25,7 +25,7 @@ function shouldShowStep(step: StepConfig, data: Record<string, any>): boolean {
 /**
  * Find the next visible step index
  */
-function findNextVisibleStep(steps: StepConfig[], currentIndex: number, data: Record<string, any>): number {
+function findNextVisibleStep(steps: StepConfig[], currentIndex: number, data: Record<string, unknown>): number {
   for (let i = currentIndex + 1; i < steps.length; i++) {
     if (shouldShowStep(steps[i], data)) {
       return i;
@@ -37,7 +37,7 @@ function findNextVisibleStep(steps: StepConfig[], currentIndex: number, data: Re
 /**
  * Find the previous visible step index
  */
-function findPreviousVisibleStep(steps: StepConfig[], currentIndex: number, data: Record<string, any>): number {
+function findPreviousVisibleStep(steps: StepConfig[], currentIndex: number, data: Record<string, unknown>): number {
   for (let i = currentIndex - 1; i >= 0; i--) {
     if (shouldShowStep(steps[i], data)) {
       return i;
@@ -62,14 +62,17 @@ export function useFlowNavigation(config: FlowConfig, state: FlowState, updateSt
     }
 
     const nextStep = config.steps[nextIndex];
+    const currentStepId = state.currentStepId;
 
-    updateState({
+    // FIXED: Use functional update to avoid stale state issues with rapid clicks
+    updateState((prevState: FlowState) => ({
+      ...prevState,
       currentStepIndex: nextIndex,
       currentStepId: nextStep.id,
-      stepHistory: [...state.stepHistory, state.currentStepId],
-      completedSteps: state.completedSteps.includes(state.currentStepId) ? state.completedSteps : [...state.completedSteps, state.currentStepId],
-    });
-  }, [config.steps, state, updateState]);
+      stepHistory: [...prevState.stepHistory, currentStepId],
+      completedSteps: prevState.completedSteps.includes(currentStepId) ? prevState.completedSteps : [...prevState.completedSteps, currentStepId],
+    }));
+  }, [config.steps, state.currentStepIndex, state.data, state.currentStepId, updateState]);
 
   /**
    * Navigate to previous step

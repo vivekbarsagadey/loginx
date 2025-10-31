@@ -4,7 +4,7 @@
  */
 
 import * as admin from 'firebase-admin';
-import { HttpsError, onCall } from 'firebase-functions/v2/https';
+import { type CallableRequest, HttpsError, onCall } from 'firebase-functions/v2/https';
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { authRateLimit, cleanupExpiredRateLimits, emailVerificationRateLimit, passwordResetRateLimit } from './middleware/rate-limit';
 
@@ -15,8 +15,7 @@ admin.initializeApp();
  * TASK-010: Server-side rate limiting for signInWithEmailAndPassword
  * Validates login attempts and enforces rate limits
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const validateLogin = onCall(async (request: any) => {
+export const validateLogin = onCall(async (request: CallableRequest<{ email: string }>) => {
   try {
     // Apply rate limiting
     await authRateLimit(request);
@@ -47,10 +46,9 @@ export const validateLogin = onCall(async (request: any) => {
 
 /**
  * TASK-011: Server-side rate limiting for createUserWithEmailAndPassword
- * Validates registration attempts and enforces rate limits
+ * Validates registration and checks for duplicate emails
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const validateRegistration = onCall(async (request: any) => {
+export const validateRegistration = onCall(async (request: CallableRequest<{ email: string; displayName?: string }>) => {
   try {
     // Apply rate limiting
     await authRateLimit(request);
@@ -73,7 +71,7 @@ export const validateRegistration = onCall(async (request: any) => {
       }
     } catch (_error: unknown) {
       // User not found is expected - continue
-      const authError = error as { code?: string };
+      const authError = _error as { code?: string };
       if (authError.code !== 'auth/user-not-found') {
         throw _error;
       }
@@ -100,8 +98,7 @@ export const validateRegistration = onCall(async (request: any) => {
  * TASK-012: IP-based rate limiting using Firestore
  * Track login attempts by IP address
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const recordLoginAttempt = onCall(async (request: any) => {
+export const recordLoginAttempt = onCall(async (request: CallableRequest<{ email: string; success?: boolean }>) => {
   try {
     const { email, success } = request.data;
 
@@ -139,8 +136,7 @@ export const recordLoginAttempt = onCall(async (request: any) => {
 /**
  * Password reset rate limiting
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const validatePasswordReset = onCall(async (request: any) => {
+export const validatePasswordReset = onCall(async (request: CallableRequest<{ email: string }>) => {
   try {
     // Apply stricter rate limiting for password resets
     await passwordResetRateLimit(request);
@@ -176,8 +172,7 @@ export const validatePasswordReset = onCall(async (request: any) => {
 /**
  * Email verification rate limiting
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const validateEmailVerification = onCall(async (request: any) => {
+export const validateEmailVerification = onCall(async (request: CallableRequest<{ code: string }>) => {
   try {
     // Apply rate limiting for email verification
     await emailVerificationRateLimit(request);
@@ -219,8 +214,7 @@ export const scheduledRateLimitCleanup = onSchedule('0 2 * * *', async () => {
 /**
  * Get rate limit status for debugging (admin only)
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getRateLimitStatus = onCall(async (request: any) => {
+export const getRateLimitStatus = onCall(async (request: CallableRequest<{ collection?: string }>) => {
   try {
     // Verify admin authentication
     if (!request.auth) {
@@ -240,8 +234,7 @@ export const getRateLimitStatus = onCall(async (request: any) => {
 
     const snapshot = await db.collection(collection).limit(100).get();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const records = snapshot.docs.map((doc: any) => ({
+    const records = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));

@@ -37,6 +37,8 @@ export interface AnalyticsEventParams {
  */
 export function logAnalyticsEvent(event: AnalyticsEvent, params?: AnalyticsEventParams): void {
   if (__DEV__) {
+    // In development, log analytics events
+    // eslint-disable-next-line no-console
     console.log('[Analytics]', event, params);
   }
 
@@ -150,6 +152,8 @@ export function logFeatureUsed(featureName: string, screenName: string, addition
  */
 export function setAnalyticsUserProperties(properties: AnalyticsEventParams): void {
   if (__DEV__) {
+    // In development, log user properties
+    // eslint-disable-next-line no-console
     console.log('[Analytics] User Properties:', properties);
   }
 

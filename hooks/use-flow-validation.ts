@@ -4,13 +4,13 @@
  * Handles validation of steps and fields using Zod schemas and custom validators
  */
 
-import { type FlowConfig, type FlowState, type FormStepConfig } from '@/types/flow';
+import { type FlowConfig, type FlowState, type FormStepConfig, type SelectionStepConfig } from '@/types/flow';
 import { useCallback } from 'react';
 
 /**
  * Validate a single form field
  */
-async function validateFormField(fieldName: string, value: any, step: FormStepConfig): Promise<{ valid: boolean; error?: string }> {
+async function validateFormField(fieldName: string, value: unknown, step: FormStepConfig): Promise<{ valid: boolean; error?: string }> {
   // Find field configuration
   const field = step.fields.find((f) => f.name === fieldName);
   if (!field) {
@@ -26,8 +26,9 @@ async function validateFormField(fieldName: string, value: any, step: FormStepCo
   if (field.validation) {
     try {
       await field.validation.parseAsync(value);
-    } catch (_error: any) {
-      return { valid: false, error: _error.errors?.[0]?.message || 'Validation error' };
+    } catch (_error: unknown) {
+      const zodError = _error as { errors?: { message: string }[] };
+      return { valid: false, error: zodError.errors?.[0]?.message || 'Validation error' };
     }
   }
 
@@ -35,8 +36,9 @@ async function validateFormField(fieldName: string, value: any, step: FormStepCo
   if (field.asyncValidation) {
     try {
       await field.asyncValidation(value);
-    } catch (_error: any) {
-      return { valid: false, error: _error.message || 'Validation error' };
+    } catch (_error: unknown) {
+      const error = _error as Error;
+      return { valid: false, error: error.message || 'Validation error' };
     }
   }
 
@@ -46,7 +48,7 @@ async function validateFormField(fieldName: string, value: any, step: FormStepCo
 /**
  * Validate all fields in a form step
  */
-async function validateFormStep(step: FormStepConfig, data: Record<string, any>): Promise<{ valid: boolean; errors: Record<string, string> }> {
+async function validateFormStep(step: FormStepConfig, data: Record<string, unknown>): Promise<{ valid: boolean; errors: Record<string, string> }> {
   const errors: Record<string, string> = {};
 
   // Validate each field
@@ -68,7 +70,7 @@ async function validateFormStep(step: FormStepConfig, data: Record<string, any>)
   if (step.validationSchema && Object.keys(errors).length === 0) {
     try {
       // Extract field values
-      const fieldValues: Record<string, any> = {};
+      const fieldValues: Record<string, unknown> = {};
       for (const field of step.fields) {
         if (!field.condition || field.condition(data)) {
           fieldValues[field.name] = data[field.name];
@@ -76,10 +78,11 @@ async function validateFormStep(step: FormStepConfig, data: Record<string, any>)
       }
 
       await step.validationSchema.parseAsync(fieldValues);
-    } catch (_error: any) {
+    } catch (_error: unknown) {
       // Add schema validation errors
-      if (_error.errors) {
-        for (const err of _error.errors) {
+      const zodError = _error as { errors?: { path: string[]; message: string }[] };
+      if (zodError.errors) {
+        for (const err of zodError.errors) {
           const path = err.path.join('.');
           errors[path] = err.message;
         }
@@ -122,7 +125,7 @@ export function useFlowValidation(config: FlowConfig, state: FlowState, updateSt
 
       // For selection steps, check if required selection is made
       if (stepToValidate.type === 'selection') {
-        const selectionStep = stepToValidate as any;
+        const selectionStep = stepToValidate as SelectionStepConfig;
         if (selectionStep.required) {
           const value = state.data[stepToValidate.id];
           if (!value || (Array.isArray(value) && value.length === 0)) {
@@ -168,10 +171,11 @@ export function useFlowValidation(config: FlowConfig, state: FlowState, updateSt
             });
             return false;
           }
-        } catch (_error: any) {
+        } catch (_error: unknown) {
+          const error = _error as Error;
           updateState({
             validationErrors: {
-              [stepToValidate.id]: _error.message || 'Validation error',
+              [stepToValidate.id]: error.message || 'Validation error',
             },
           });
           return false;
@@ -192,7 +196,7 @@ export function useFlowValidation(config: FlowConfig, state: FlowState, updateSt
    * Validate a single field
    */
   const validateField = useCallback(
-    async (fieldName: string, value: any): Promise<boolean> => {
+    async (fieldName: string, value: unknown): Promise<boolean> => {
       const currentStep = config.steps[state.currentStepIndex];
 
       if (currentStep.type !== 'form') {
