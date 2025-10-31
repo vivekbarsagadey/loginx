@@ -8,6 +8,22 @@ import { type FlowConfig, type FlowState, type StepConfig } from '@/types/flow';
 import { useCallback } from 'react';
 
 /**
+ * Maximum number of steps to keep in navigation history
+ * Prevents memory leaks while maintaining enough for circular detection
+ */
+const MAX_HISTORY_LENGTH = 50;
+
+/**
+ * Trim history array to maximum length, keeping most recent entries
+ */
+function trimHistory(history: string[]): string[] {
+  if (history.length <= MAX_HISTORY_LENGTH) {
+    return history;
+  }
+  return history.slice(-MAX_HISTORY_LENGTH);
+}
+
+/**
  * Check if a step should be shown based on its condition
  */
 function shouldShowStep(step: StepConfig, data: Record<string, unknown>): boolean {
@@ -51,7 +67,7 @@ function findPreviousVisibleStep(steps: StepConfig[], currentIndex: number, data
  */
 export function useFlowNavigation(config: FlowConfig, state: FlowState, updateState: (updates: Partial<FlowState>) => void) {
   /**
-   * Navigate to next step
+   * Navigate to next step with circular dependency detection
    */
   const next = useCallback(async () => {
     const nextIndex = findNextVisibleStep(config.steps, state.currentStepIndex, state.data);
@@ -61,25 +77,56 @@ export function useFlowNavigation(config: FlowConfig, state: FlowState, updateSt
       return;
     }
 
+    // Check for circular navigation - if last 3 steps in history form a cycle
+    const recentHistory = state.stepHistory.slice(-3);
+    const nextStepId = config.steps[nextIndex].id;
+
+    if (recentHistory.length >= 2 && recentHistory.includes(nextStepId)) {
+      console.error(
+        `Circular navigation detected! Attempting to navigate to step "${nextStepId}" ` +
+          `which was recently visited. Recent history: ${recentHistory.join(' → ')} → ${nextStepId}. ` +
+          `This suggests step conditions are creating a navigation loop.`
+      );
+      // Stay on current step to prevent infinite loop
+      return;
+    }
+
     const nextStep = config.steps[nextIndex];
     const currentStepId = state.currentStepId;
+
+    // Add current step to history and trim if needed
+    const newHistory = trimHistory([...state.stepHistory, currentStepId]);
 
     updateState({
       currentStepIndex: nextIndex,
       currentStepId: nextStep.id,
-      stepHistory: [...state.stepHistory, currentStepId],
+      stepHistory: newHistory,
       completedSteps: state.completedSteps.includes(currentStepId) ? state.completedSteps : [...state.completedSteps, currentStepId],
     });
   }, [config.steps, state, updateState]);
 
   /**
-   * Navigate to previous step
+   * Navigate to previous step with circular dependency detection
    */
   const previous = useCallback(() => {
     const prevIndex = findPreviousVisibleStep(config.steps, state.currentStepIndex, state.data);
 
     if (prevIndex === state.currentStepIndex) {
       // No previous step
+      return;
+    }
+
+    // Check for circular navigation - if last 3 steps in history form a cycle
+    const recentHistory = state.stepHistory.slice(-3);
+    const prevStepId = config.steps[prevIndex].id;
+
+    if (recentHistory.length >= 2 && recentHistory.includes(prevStepId)) {
+      console.error(
+        `Circular navigation detected! Attempting to navigate back to step "${prevStepId}" ` +
+          `which was recently visited. Recent history: ${recentHistory.join(' → ')} → ${prevStepId}. ` +
+          `This suggests step conditions are creating a navigation loop.`
+      );
+      // Stay on current step to prevent infinite loop
       return;
     }
 
@@ -115,11 +162,14 @@ export function useFlowNavigation(config: FlowConfig, state: FlowState, updateSt
 
     const nextStep = config.steps[nextIndex];
 
+    // Add current step to history and trim if needed
+    const newHistory = trimHistory([...state.stepHistory, currentStep.id]);
+
     updateState({
       currentStepIndex: nextIndex,
       currentStepId: nextStep.id,
       skippedSteps,
-      stepHistory: [...state.stepHistory, currentStep.id],
+      stepHistory: newHistory,
     });
   }, [config, state, updateState]);
 
@@ -143,10 +193,13 @@ export function useFlowNavigation(config: FlowConfig, state: FlowState, updateSt
         return;
       }
 
+      // Add current step to history and trim if needed
+      const newHistory = trimHistory([...state.stepHistory, state.currentStepId]);
+
       updateState({
         currentStepIndex: stepIndex,
         currentStepId: stepId,
-        stepHistory: [...state.stepHistory, state.currentStepId],
+        stepHistory: newHistory,
       });
     },
     [config.steps, state, updateState]

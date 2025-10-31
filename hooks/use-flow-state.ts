@@ -9,6 +9,33 @@ import { type FlowConfig, type FlowState } from '@/types/flow';
 import { useCallback, useState } from 'react';
 
 /**
+ * Find the first visible step in the flow based on conditions
+ */
+function findFirstVisibleStep(config: FlowConfig, data: Record<string, unknown>): number {
+  for (let i = 0; i < config.steps.length; i++) {
+    const step = config.steps[i];
+    // Step is visible if it has no condition or condition returns true
+    if (!step.condition) {
+      return i;
+    }
+    try {
+      if (step.condition(data)) {
+        return i;
+      }
+    } catch (_error: unknown) {
+      console.error(`Error evaluating condition for step ${step.id}:`, _error);
+      // If condition throws, treat step as visible (fail-safe)
+      return i;
+    }
+  }
+
+  // Critical: No visible steps found - this should be caught in flow validation
+  // But as a fail-safe, return 0 and log error
+  console.error('CRITICAL: No visible steps found in flow. All steps have false conditions.');
+  return 0;
+}
+
+/**
  * Create initial flow state
  */
 function createInitialState(config: FlowConfig, initialData: Record<string, unknown> = {}, resumeState?: FlowState): FlowState {
@@ -19,11 +46,19 @@ function createInitialState(config: FlowConfig, initialData: Record<string, unkn
     };
   }
 
+  // Find first visible step instead of blindly using index 0
+  const initialStepIndex = findFirstVisibleStep(config, initialData);
+  const initialStep = config.steps[initialStepIndex];
+
+  if (!initialStep) {
+    throw new Error('Flow configuration error: No steps defined');
+  }
+
   return {
-    currentStepIndex: 0,
-    currentStepId: config.steps[0]?.id || '',
+    currentStepIndex: initialStepIndex,
+    currentStepId: initialStep.id,
     totalSteps: config.steps.length,
-    progress: 0,
+    progress: calculateProgress(initialStepIndex, config.steps.length),
     stepHistory: [],
     completedSteps: [],
     skippedSteps: [],

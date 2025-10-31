@@ -74,6 +74,7 @@
     "passwordless",
     "pbxuser",
     "perspectivev",
+    "Prefs",
     "Pressable",
     "quis",
     "rankby",
@@ -108,8 +109,16 @@
     "yourapp",
     "yourcompany",
     "yourkey",
+    "yoyo",
     "हिन्दी"
   ],
   "flagWords": [],
-  "enabledLanguageIds": ["typescript", "typescriptreact", "javascript", "javascriptreact", "json", "jsonc"]
+  "enabledLanguageIds": [
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact",
+    "json",
+    "jsonc"
+  ]
 }

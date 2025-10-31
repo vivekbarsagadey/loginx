@@ -9,6 +9,7 @@
  */
 
 import { type FlowConfig, type FlowContextValue, type FlowState, type StepConfig } from '@/types/flow';
+import { validateAndLogFlowConfig } from '@/utils/flow-validator';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useFlowNavigation } from './use-flow-navigation';
 import { useFlowPersistence } from './use-flow-persistence';
@@ -20,7 +21,7 @@ import { useFlowValidation } from './use-flow-validation';
  */
 export interface UseFlowEngineOptions {
   /** Initial data to populate the flow */
-  initialData?: Record<string, any>;
+  initialData?: Record<string, unknown>;
 
   /** Resume from a saved state */
   resumeState?: FlowState;
@@ -35,9 +36,9 @@ export interface UseFlowEngineOptions {
   autoSaveInterval?: number;
 
   /** Callbacks */
-  onComplete?: (data: Record<string, any>) => void | Promise<void>;
-  onSkip?: (data: Record<string, any>) => void | Promise<void>;
-  onAbandonment?: (data: Record<string, any>, currentStep: string) => void | Promise<void>;
+  onComplete?: (data: Record<string, unknown>) => void | Promise<void>;
+  onSkip?: (data: Record<string, unknown>) => void | Promise<void>;
+  onAbandonment?: (data: Record<string, unknown>, currentStep: string) => void | Promise<void>;
   onError?: (error: Error, stepId?: string) => void | Promise<void>;
 }
 
@@ -72,8 +73,16 @@ export function useFlowEngine(config: FlowConfig, options: UseFlowEngineOptions 
     onError,
   } = options;
 
+  // Validate flow configuration in development mode only
+  if (__DEV__) {
+    const isValid = validateAndLogFlowConfig(config, initialData);
+    if (!isValid) {
+      console.warn('Flow configuration has errors. Flow may not work as expected.');
+    }
+  }
+
   // Initialize state management
-  const { state, updateState, updateData, getData, setData, clearData, resetState } = useFlowState(config, initialData, resumeState);
+  const { state, updateState, updateData, getData, setData, clearData } = useFlowState(config, initialData, resumeState);
 
   // Initialize navigation
   const { next, previous, skip, jumpTo, complete, canGoBack, canGoNext, canSkip } = useFlowNavigation(config, state, updateState);
@@ -98,7 +107,7 @@ export function useFlowEngine(config: FlowConfig, options: UseFlowEngineOptions 
     if (enableAnalytics && config.analytics?.trackStepView) {
       config.onStepView?.(currentStep.id, state.data);
     }
-  }, [currentStep.id, enableAnalytics, config.analytics?.trackStepView, config.onStepView, state.data]);
+  }, [currentStep.id, enableAnalytics, config, state.data]);
 
   // Auto-save state periodically
   useEffect(() => {
@@ -243,7 +252,7 @@ export function useFlowEngine(config: FlowConfig, options: UseFlowEngineOptions 
       onError?.(_error as Error, currentStep.id);
       throw _error;
     }
-  }, [validateStep, complete, clearState, enableAnalytics, enablePersistence, config.analytics, config.onComplete, onComplete, state.data, currentStep.id, onError]);
+  }, [validateStep, complete, clearState, enableAnalytics, enablePersistence, config, onComplete, state.data, currentStep.id, onError]);
 
   // Create context value
   const contextValue: FlowContextValue = useMemo(
