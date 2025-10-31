@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         debugLog('[Auth] Auth state changed:', user ? `User: ${user.uid}` : 'No user');
 
         if (user) {
-          // Apply any pending profile data from onboarding
+          // Apply unknown pending profile data from onboarding
           try {
             await applyPendingProfileData(user);
           } catch (_error: unknown) {
@@ -126,7 +126,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Don't fail logout if storage clearing fails
       }
 
-      // Clear any pending profile data on logout
+      // Clear unknown pending profile data on logout
       try {
         await clearPendingProfile();
         debugLog('[Auth] Cleared pending profile data on logout');

@@ -209,7 +209,7 @@ export default function DialogExamplesScreen() {
       <BottomSheet visible={bottomSheet.visible} onClose={bottomSheet.hide} title="Bottom Sheet Example">
         <View>
           <ThemedText type="body" style={styles.sheetText}>
-            This is a bottom sheet. You can put any custom content here.
+            This is a bottom sheet. You can put unknown custom content here.
           </ThemedText>
           <ThemedButton
             title="Option 1"

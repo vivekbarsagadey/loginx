@@ -14,7 +14,7 @@ export interface FlowValidationError {
 }
 
 /**
- * Validate a flow configuration and return any errors or warnings
+ * Validate a flow configuration and return unknown errors or warnings
  */
 export function validateFlowConfig(config: FlowConfig, initialData: Record<string, unknown> = {}): FlowValidationError[] {
   const errors: FlowValidationError[] = [];

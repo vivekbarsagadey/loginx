@@ -49,7 +49,7 @@ export function isFatalError(_error: unknown): boolean {
     return false;
   }
 
-  return FATAL_ERROR_CODES.includes((_error as any).code as (typeof FATAL_ERROR_CODES)[number]);
+  return FATAL_ERROR_CODES.includes((_error as unknown).code as (typeof FATAL_ERROR_CODES)[number]);
 }
 
 /**
@@ -73,11 +73,11 @@ const isFirebaseError = (_error: unknown): boolean => {
   if (!hasErrorCode(_error)) {
     return false;
   }
-  return (_error as any).code.startsWith(FIREBASE_AUTH_PREFIX) || (_error as any).code.startsWith(FIRESTORE_PREFIX) || (_error as any).code.startsWith(STORAGE_PREFIX);
+  return (_error as unknown).code.startsWith(FIREBASE_AUTH_PREFIX) || (_error as unknown).code.startsWith(FIRESTORE_PREFIX) || (_error as unknown).code.startsWith(STORAGE_PREFIX);
 };
 
 /**
- * Get detailed error information from any error type
+ * Get detailed error information from unknown error type
  * Enhanced with Firebase error message mapping and error classification
  * @param error - Error object (unknown type for safety)
  * @returns Structured error information with fatal flag

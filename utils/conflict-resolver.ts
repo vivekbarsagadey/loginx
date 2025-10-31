@@ -131,7 +131,7 @@ function attemptAutoMerge<T>(local: T, remote: T): T | null {
     for (const key in local) {
       if (Object.prototype.hasOwnProperty.call(local, key)) {
         const localValue = local[key];
-        const remoteValue = (remote as any)[key];
+        const remoteValue = (remote as unknown)[key];
 
         // If values are identical, no conflict
         if (JSON.stringify(localValue) === JSON.stringify(remoteValue)) {
@@ -140,7 +140,7 @@ function attemptAutoMerge<T>(local: T, remote: T): T | null {
 
         // If remote doesn't have this key, use local
         if (!(key in remote)) {
-          (merged as any)[key] = localValue;
+          (merged as unknown)[key] = localValue;
           continue;
         }
 
@@ -215,7 +215,7 @@ let conflictResolver: ((prompt: ConflictResolutionPrompt) => void) | null = null
  */
 export function registerConflictResolver(handler: (prompt: ConflictResolutionPrompt) => void): void {
   conflictResolver = handler;
-  // Process any queued conflicts
+  // Process unknown queued conflicts
   while (conflictQueue.length > 0 && conflictResolver) {
     const prompt = conflictQueue.shift();
     if (prompt) {

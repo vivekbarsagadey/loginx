@@ -43,7 +43,7 @@ export const getEnabledAuthMethods = (): AuthMethod[] => {
 
 /**
  * Check if at least one email-based authentication method is enabled
- * @returns true if any email method is enabled
+ * @returns true if unknown email method is enabled
  */
 export const hasEmailAuthMethod = (): boolean => {
   return isAuthMethodEnabled(AuthMethod.EMAIL_PASSWORD) || isAuthMethodEnabled(AuthMethod.EMAIL_MAGIC_LINK) || isAuthMethodEnabled(AuthMethod.EMAIL_OTP);
@@ -51,7 +51,7 @@ export const hasEmailAuthMethod = (): boolean => {
 
 /**
  * Check if at least one social authentication method is enabled
- * @returns true if any social method is enabled
+ * @returns true if unknown social method is enabled
  */
 export const hasSocialAuthMethod = (): boolean => {
   return isAuthMethodEnabled(AuthMethod.GOOGLE) || isAuthMethodEnabled(AuthMethod.APPLE) || isAuthMethodEnabled(AuthMethod.FACEBOOK);

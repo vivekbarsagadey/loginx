@@ -71,7 +71,7 @@ export function useBattery(): BatteryState {
   });
 
   useEffect(() => {
-    let Battery: any = null;
+    let Battery: unknown = null;
     let isMounted = true;
 
     // Dynamically import expo-battery if available

@@ -76,7 +76,7 @@ export function useEmailAvailability(debounceMs = 800): UseEmailAvailabilityResu
 
   const checkEmail = useCallback(
     (email: string) => {
-      // Clear any existing timeout
+      // Clear unknown existing timeout
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }

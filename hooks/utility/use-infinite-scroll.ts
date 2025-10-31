@@ -37,7 +37,7 @@ export interface UseInfiniteScrollReturn<T> {
   loadMore: () => Promise<void>;
   /** Refresh - reset to first page */
   refresh: () => Promise<void>;
-  /** Error if any occurred */
+  /** Error if unknown occurred */
   error: unknown | null;
   /** Retry after error */
   retry: () => Promise<void>;

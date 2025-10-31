@@ -142,7 +142,7 @@ export interface IssueReport extends FeedbackSubmission {
   /** Actual behavior */
   actualBehavior?: string;
 
-  /** Error message if any */
+  /** Error message if unknown */
   errorMessage?: string;
 
   /** Stack trace if available */

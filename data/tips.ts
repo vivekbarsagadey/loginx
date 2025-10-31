@@ -37,7 +37,7 @@ export const securityTips: Tip[] = [
   {
     id: 'sec_tip_3',
     title: 'Review Login Activity',
-    description: 'Regularly check your login history for any suspicious activity.',
+    description: 'Regularly check your login history for unknown suspicious activity.',
     icon: 'time-outline',
     category: 'security',
     priority: 'medium',
@@ -141,7 +141,7 @@ export const privacyTips: Tip[] = [
   {
     id: 'priv_tip_2',
     title: 'Download Your Data',
-    description: 'You can download a copy of all your data at any time.',
+    description: 'You can download a copy of all your data at unknown time.',
     icon: 'download-outline',
     category: 'privacy',
     priority: 'medium',

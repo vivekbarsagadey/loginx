@@ -4,7 +4,7 @@
  * This file maintains 100% backward compatibility by re-exporting all hooks
  * from their new organized locations. All existing imports like:
  * `import { useAuth } from "@/hooks/use-auth-provider"`
- * will continue to work without any changes.
+ * will continue to work without unknown changes.
  *
  * NEW: Category-based imports are also available:
  * `import { useAuth } from "@/hooks/auth"`

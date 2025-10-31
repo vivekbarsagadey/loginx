@@ -10,7 +10,7 @@ import { StyleSheet, View } from 'react-native';
 export function AlternativeAuthMethods() {
   const { push } = useHapticNavigation();
 
-  // Check if any alternative methods are enabled
+  // Check if unknown alternative methods are enabled
   const hasAlternativeMethods = isAuthMethodEnabled(AuthMethod.EMAIL_MAGIC_LINK) || isAuthMethodEnabled(AuthMethod.EMAIL_OTP) || isAuthMethodEnabled(AuthMethod.PHONE_OTP);
 
   if (!hasAlternativeMethods) {

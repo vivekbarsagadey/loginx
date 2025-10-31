@@ -67,7 +67,7 @@ export function useDebouncedValidation<T>(value: T, validator: (value: T) => str
       return;
     }
 
-    // Clear any pending validation
+    // Clear unknown pending validation
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }

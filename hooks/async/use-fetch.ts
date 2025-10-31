@@ -7,11 +7,11 @@ export interface UseFetchOptions extends RequestInit {
   /** Skip automatic execution on mount */
   manual?: boolean;
   /** Callback on successful fetch */
-  onSuccess?: (data: any) => void;
+  onSuccess?: (data: unknown) => void;
   /** Callback on error */
   onError?: (error: Error) => void;
   /** Transform response data before setting state */
-  transform?: (data: any) => any;
+  transform?: (data: unknown) => unknown;
   /** Retry configuration */
   retry?: {
     count: number;
@@ -82,7 +82,7 @@ export interface UseFetchReturn<T> extends UseFetchState<T> {
  * @param options - Fetch options and hook configuration
  * @returns Object with data, loading state, and control functions
  */
-export function useFetch<T = any>(url: string, options: UseFetchOptions = {}): UseFetchReturn<T> {
+export function useFetch<T = unknown>(url: string, options: UseFetchOptions = {}): UseFetchReturn<T> {
   const { manual = false, onSuccess, onError, transform, retry, debounce, ...fetchOptions } = options;
 
   const [state, setState] = useState<UseFetchState<T>>({
@@ -137,7 +137,7 @@ export function useFetch<T = any>(url: string, options: UseFetchOptions = {}): U
         return;
       }
 
-      // Cancel any existing request
+      // Cancel unknown existing request
       cancel();
 
       // Create new abort controller

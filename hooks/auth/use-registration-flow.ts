@@ -29,7 +29,7 @@ interface UseRegistrationFlowProps<T extends Record<string, unknown>> {
    * If not provided, uses project's registration diagnostics (LoginX mode)
    */
   logger?: {
-    logStateChange: (component: string, field: string, oldValue: any, newValue: any) => void;
+    logStateChange: (component: string, field: string, oldValue: unknown, newValue: unknown) => void;
   };
 }
 

@@ -12,7 +12,7 @@ export type ConnectionType = 'wifi' | 'cellular' | 'bluetooth' | 'ethernet' | 'w
  * Network state information
  */
 export interface NetworkState {
-  /** Whether device is connected to any network */
+  /** Whether device is connected to unknown network */
   isConnected: boolean;
   /** Type of network connection */
   connectionType: ConnectionType;

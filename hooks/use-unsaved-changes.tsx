@@ -197,7 +197,7 @@ export function useUnsavedChanges(options: UseUnsavedChangesOptions) {
  * );
  * ```
  */
-export function useFormUnsavedChanges<T extends Record<string, any>>(initialValues: T, currentValues: T, onSave?: () => void | Promise<void>) {
+export function useFormUnsavedChanges<T extends Record<string, unknown>>(initialValues: T, currentValues: T, onSave?: () => void | Promise<void>) {
   const hasChanges = JSON.stringify(initialValues) !== JSON.stringify(currentValues);
 
   return useUnsavedChanges({

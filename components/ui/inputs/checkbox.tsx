@@ -80,7 +80,7 @@ export function Checkbox({ checked, onCheckedChange, label, disabled = false, in
 export interface CheckboxGroupProps {
   /** Array of checkbox items */
   items: { checked: boolean; label: string; value: string }[];
-  /** Called when any checkbox changes */
+  /** Called when unknown checkbox changes */
   onChange: (value: string, checked: boolean) => void;
   /** Disabled state for entire group */
   disabled?: boolean;

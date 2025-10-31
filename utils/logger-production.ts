@@ -50,10 +50,10 @@ interface LoggerConfig {
  * Interface for external logging services (Sentry, DataDog, etc.)
  */
 interface ExternalLogger {
-  debug?: (message: string, context?: Record<string, any>) => void;
-  info?: (message: string, context?: Record<string, any>) => void;
-  warn?: (message: string, context?: Record<string, any>) => void;
-  error?: (message: string, _error?: Error, context?: Record<string, any>) => void;
+  debug?: (message: string, context?: Record<string, unknown>) => void;
+  info?: (message: string, context?: Record<string, unknown>) => void;
+  warn?: (message: string, context?: Record<string, unknown>) => void;
+  error?: (message: string, _error?: Error, context?: Record<string, unknown>) => void;
 }
 
 /**
@@ -63,7 +63,7 @@ interface LogEntry {
   level: keyof typeof LogLevel;
   message: string;
   timestamp?: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   error?: Error;
 }
 
@@ -150,9 +150,9 @@ class ProductionLogger {
   }
 
   /**
-   * Redact PII from any value (string, object, array)
+   * Redact PII from unknown value (string, object, array)
    */
-  private redactValue(value: any): any {
+  private redactValue(value: unknown): unknown {
     if (typeof value === 'string') {
       return this.redactPII(value);
     }
@@ -172,7 +172,7 @@ class ProductionLogger {
       }
 
       // Recursively redact object properties
-      const redacted: Record<string, any> = {};
+      const redacted: Record<string, unknown> = {};
       for (const [key, val] of Object.entries(value)) {
         redacted[key] = this.redactValue(val);
       }
@@ -199,12 +199,12 @@ class ProductionLogger {
     // Message
     parts.push(entry.message);
 
-    // Context (if any)
+    // Context (if unknown)
     if (entry.context) {
       parts.push(JSON.stringify(entry.context, null, 2));
     }
 
-    // Error stack (if any)
+    // Error stack (if unknown)
     if (entry.error && entry.error.stack && !this.config.redactPII) {
       parts.push(`\nStack: ${entry.error.stack}`);
     }
@@ -215,14 +215,14 @@ class ProductionLogger {
   /**
    * Log a message at the specified level
    */
-  private log(level: LogLevel, levelName: keyof typeof LogLevel, message: string, contextOrError?: Record<string, any> | Error): void {
+  private log(level: LogLevel, levelName: keyof typeof LogLevel, message: string, contextOrError?: Record<string, unknown> | Error): void {
     // Suppress logs below minimum level
     if (level < this.config.minLevel) {
       return;
     }
 
     // Prepare log entry
-    let context: Record<string, any> | undefined;
+    let context: Record<string, unknown> | undefined;
     let error: Error | undefined;
 
     if (contextOrError instanceof Error) {
@@ -288,28 +288,28 @@ class ProductionLogger {
   /**
    * Log debug message (only in development)
    */
-  debug(message: string, context?: Record<string, any>): void {
+  debug(message: string, context?: Record<string, unknown>): void {
     this.log(LogLevel.DEBUG, 'DEBUG', message, context);
   }
 
   /**
    * Log info message
    */
-  info(message: string, context?: Record<string, any>): void {
+  info(message: string, context?: Record<string, unknown>): void {
     this.log(LogLevel.INFO, 'INFO', message, context);
   }
 
   /**
    * Log warning message
    */
-  warn(message: string, context?: Record<string, any>): void {
+  warn(message: string, context?: Record<string, unknown>): void {
     this.log(LogLevel.WARN, 'WARN', message, context);
   }
 
   /**
    * Log error message
    */
-  error(message: string, _errorOrContext?: Error | Record<string, any>): void {
+  error(message: string, _errorOrContext?: Error | Record<string, unknown>): void {
     this.log(LogLevel.ERROR, 'ERROR', message, _errorOrContext);
   }
 }

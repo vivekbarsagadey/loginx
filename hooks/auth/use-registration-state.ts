@@ -27,14 +27,14 @@ export interface UseRegistrationStateDependencies {
   /** Function to sanitize general user input */
   sanitizeUserInput: (input: string, maxLength: number) => string;
   /** Function to create user profile in database */
-  createUserProfile: (userId: string, profileData: any) => Promise<void>;
+  createUserProfile: (userId: string, profileData: unknown) => Promise<void>;
   /** Function to show error messages to user */
   showError: (error: unknown) => void;
   /** Optional logger for debugging */
   logger?: {
-    log: (...args: any[]) => void;
-    warn: (...args: any[]) => void;
-    error: (...args: any[]) => void;
+    log: (...args: unknown[]) => void;
+    warn: (...args: unknown[]) => void;
+    error: (...args: unknown[]) => void;
   };
 }
 
@@ -252,7 +252,7 @@ export function useRegistrationState(options: UseRegistrationStateOptions = {}) 
    */
   const goNext = async () => {
     const currentFields = steps[currentStep]?.fields || [];
-    const isValid = await trigger(currentFields as any);
+    const isValid = await trigger(currentFields as unknown);
 
     if (isValid && currentStep < steps.length - 1) {
       setCurrentStep((prev) => prev + 1);

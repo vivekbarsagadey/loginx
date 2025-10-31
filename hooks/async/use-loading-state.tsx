@@ -68,7 +68,7 @@ export function useLoadingState(options: UseLoadingStateOptions = {}) {
   return {
     /** Whether an operation is currently loading */
     loading,
-    /** Current error, if any */
+    /** Current error, if unknown */
     error,
     /** Execute an async operation with loading state management */
     execute,

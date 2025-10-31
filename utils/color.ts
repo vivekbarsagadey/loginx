@@ -41,7 +41,7 @@ export function hexToRgba(hex: string, opacity: number): string {
 }
 
 /**
- * Adds opacity to any color (hex or named color)
+ * Adds opacity to unknown color (hex or named color)
  * For hex colors, converts to rgba
  * For other colors, wraps in a View with opacity style
  *

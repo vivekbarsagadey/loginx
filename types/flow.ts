@@ -140,9 +140,9 @@ export interface AnimationConfig {
   preset?: 'gentle' | 'bouncy' | 'stiff' | 'quick' | 'smooth' | 'slow';
   duration?: number;
   delay?: number;
-  from?: Record<string, any>;
-  to?: Record<string, any>;
-  keyframes?: Record<string, any>[];
+  from?: Record<string, unknown>;
+  to?: Record<string, unknown>;
+  keyframes?: Record<string, unknown>[];
   loop?: boolean;
   yoyo?: boolean;
   stagger?: number;
@@ -177,11 +177,11 @@ export interface BaseStepConfig {
   // Theme customization (single or multiple themes)
   theme?: StepTheme;
   themes?: { [themeName: string]: StepTheme };
-  activeTheme?: string | ((flowData: any, userPrefs: any) => string);
+  activeTheme?: string | ((flowData: unknown, userPrefs: unknown) => string);
 
   // Visual variant
   variant?: string;
-  variants?: { [variantName: string]: any };
+  variants?: { [variantName: string]: unknown };
 
   // Animations
   animation?: AnimationConfig;
@@ -219,14 +219,14 @@ export interface BaseStepConfig {
   condition?: (data: Record<string, unknown>) => boolean;
 
   // Validation
-  validation?: z.ZodSchema<any>;
+  validation?: z.ZodSchema<unknown>;
   validate?: (data: Record<string, unknown>) => Promise<{ valid: boolean; error?: string }>;
 
   // Buttons
   primaryButton?: {
     label: string;
-    action?: 'next' | 'skip' | 'complete' | 'custom' | ((data: any) => void);
-    disabled?: boolean | ((data: any) => boolean);
+    action?: 'next' | 'skip' | 'complete' | 'custom' | ((data: unknown) => void);
+    disabled?: boolean | ((data: unknown) => boolean);
     loading?: boolean;
     haptic?: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error';
     icon?: string;
@@ -235,7 +235,7 @@ export interface BaseStepConfig {
 
   secondaryButton?: {
     label: string;
-    action?: 'back' | 'skip' | 'custom' | ((data: any) => void);
+    action?: 'back' | 'skip' | 'custom' | ((data: unknown) => void);
     icon?: string;
     style?: 'primary' | 'secondary' | 'outlined' | 'text';
   };
@@ -274,7 +274,7 @@ export interface DisplayStepConfig extends BaseStepConfig {
 
   // Video support
   video?: {
-    source: any;
+    source: unknown;
     autoPlay?: boolean;
     loop?: boolean;
     controls?: boolean;
@@ -321,14 +321,14 @@ export interface FormFieldConfig {
   icon?: string;
 
   // Validation
-  validation?: z.ZodSchema<any>;
+  validation?: z.ZodSchema<unknown>;
   validateOnBlur?: boolean;
   validateOnChange?: boolean;
-  asyncValidation?: (value: any) => Promise<void>;
+  asyncValidation?: (value: unknown) => Promise<void>;
 
   // Value configuration
-  defaultValue?: any;
-  value?: any;
+  defaultValue?: unknown;
+  value?: unknown;
   min?: number;
   max?: number;
   minLength?: number;
@@ -336,7 +336,7 @@ export interface FormFieldConfig {
   pattern?: RegExp;
 
   // Options for select/radio/checkbox
-  options?: { id: string; label: string; value?: any; disabled?: boolean }[] | string[];
+  options?: { id: string; label: string; value?: unknown; disabled?: boolean }[] | string[];
 
   // File upload configuration
   acceptedFormats?: string[];
@@ -353,7 +353,7 @@ export interface FormFieldConfig {
   autoCorrect?: boolean;
 
   // Conditional display
-  condition?: (data: Record<string, any>) => boolean;
+  condition?: (data: Record<string, unknown>) => boolean;
 
   // Visual
   secure?: boolean;
@@ -388,7 +388,7 @@ export interface FormStepConfig extends BaseStepConfig {
   type: 'form';
   variant?: FormVariant;
   fields: FormFieldConfig[];
-  validationSchema?: z.ZodSchema<any>;
+  validationSchema?: z.ZodSchema<unknown>;
 
   // Form submission
   onSubmit?: (data: Record<string, unknown>) => Promise<{ success: boolean; error?: string }>;
@@ -403,7 +403,7 @@ export interface FormStepConfig extends BaseStepConfig {
   integration?: {
     provider: 'stripe' | 'paypal' | 'custom';
     publishableKey?: string;
-    config?: Record<string, any>;
+    config?: Record<string, unknown>;
   };
 }
 
@@ -500,7 +500,7 @@ export interface ActionStepConfig extends BaseStepConfig {
   type: 'action';
 
   // Action to execute
-  action: () => Promise<any>;
+  action: () => Promise<unknown>;
 
   // Loading state
   loadingTitle?: string;
@@ -564,12 +564,21 @@ export interface InfoStepConfig extends BaseStepConfig {
 }
 
 /**
+ * Props for custom step components
+ */
+export interface CustomComponentProps {
+  data: Record<string, unknown>;
+  onUpdate: (data: Partial<Record<string, unknown>>) => void;
+  [key: string]: unknown;
+}
+
+/**
  * Custom step - Use custom component
  */
 export interface CustomStepConfig extends BaseStepConfig {
   type: 'custom';
-  component: React.ComponentType<any>;
-  props?: Record<string, any>;
+  component: React.ComponentType<CustomComponentProps>;
+  props?: Record<string, unknown>;
 }
 
 /**
@@ -623,7 +632,7 @@ export interface ExperimentConfig {
     [variantId: string]: Partial<StepConfig>;
   };
   selectVariant: (userId: string) => string;
-  onComplete?: (variant: string, data: any) => void;
+  onComplete?: (variant: string, data: unknown) => void;
 }
 
 /**
@@ -647,7 +656,7 @@ export interface FlowConfig {
   // Theme (global for flow, can be overridden per step)
   theme?: StepTheme;
   themes?: { [themeName: string]: StepTheme };
-  activeTheme?: string | ((flowData: any, userPrefs: any) => string);
+  activeTheme?: string | ((flowData: unknown, userPrefs: unknown) => string);
 
   // Animations (global for flow)
   animations?: {
@@ -676,7 +685,7 @@ export interface FlowConfig {
   onAbandonment?: (data: Record<string, unknown>, currentStep: string) => Promise<void>;
   onError?: (error: Error, stepId?: string) => Promise<{ handled: boolean }>;
   onStepView?: (stepId: string, data: Record<string, unknown>) => void;
-  onSubmit?: (data: Record<string, unknown>) => Promise<any>;
+  onSubmit?: (data: Record<string, unknown>) => Promise<unknown>;
 
   // A/B Testing
   experiments?: {
@@ -687,7 +696,7 @@ export interface FlowConfig {
   brands?: {
     [brandId: string]: StepTheme;
   };
-  activeBrand?: string | ((flowData: any) => string);
+  activeBrand?: string | ((flowData: unknown) => string);
 
   // Responsive breakpoints
   breakpoints?: {
@@ -777,6 +786,11 @@ export interface FlowContextValue {
 // ============================================================================
 
 /**
+ * User preferences type for theming and customization
+ */
+export type UserPreferences = Record<string, string | number | boolean>;
+
+/**
  * Props for FlowContainer component
  */
 export interface FlowContainerProps {
@@ -789,7 +803,7 @@ export interface FlowContainerProps {
 
   // Customization
   theme?: 'light' | 'dark' | 'system' | string;
-  userPreferences?: Record<string, any>;
+  userPreferences?: UserPreferences;
   brandId?: string;
 
   // Experiment tracking
@@ -845,7 +859,7 @@ export const flowConfigSchema = z.object({
   progressIndicator: z.enum(['dots', 'stepper', 'bar', 'circular', 'none']),
   showHeader: z.boolean().optional(),
   showSkip: z.boolean().optional(),
-  steps: z.array(z.any()).min(1),
+  steps: z.array(z.unknown()).min(1),
   persistState: z.boolean().optional(),
   persistenceKey: z.string().optional(),
 });

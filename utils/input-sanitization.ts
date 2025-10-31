@@ -335,8 +335,8 @@ export function sanitizeFirestoreValue(value: string): string {
  * Batch sanitize an object's string values
  * Useful for sanitizing form data
  */
-export function sanitizeObject<T extends Record<string, any>>(obj: T, sanitizer: (value: string) => string = sanitizeText): T {
-  const sanitized: any = {};
+export function sanitizeObject<T extends Record<string, unknown>>(obj: T, sanitizer: (value: string) => string = sanitizeText): T {
+  const sanitized: unknown = {};
 
   for (const [key, value] of Object.entries(obj)) {
     if (typeof value === 'string') {

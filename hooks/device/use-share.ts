@@ -140,7 +140,7 @@ export function useShare(): UseShareReturn {
       }
 
       // Prepare share options
-      const shareOptions: any = {
+      const shareOptions: unknown = {
         message: content.message,
         url: content.url,
         title: content.title,

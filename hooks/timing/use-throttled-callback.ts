@@ -23,7 +23,7 @@ import { useCallback, useRef } from 'react';
  *
  * @example
  * // Scroll handler with 100ms throttle
- * const throttledScroll = useThrottledCallback((event: any) => {
+ * const throttledScroll = useThrottledCallback((event: unknown) => {
  *   handleScroll(event);
  * }, 100);
  *

@@ -174,7 +174,7 @@ class WeakCache<K extends object, V> {
  * Global weak cache registry
  */
 class WeakCacheRegistry {
-  private caches: Map<string, WeakCache<any, any>> = new Map();
+  private caches: Map<string, WeakCache<unknown, unknown>> = new Map();
 
   /**
    * Create or get a weak cache

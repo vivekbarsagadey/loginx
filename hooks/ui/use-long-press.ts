@@ -159,7 +159,7 @@ export function useLongPress(options: UseLongPressOptions = {}): UseLongPressHan
     isLongPressRef.current = false;
     onPressInCallback?.();
 
-    // Clear any existing timer
+    // Clear unknown existing timer
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }

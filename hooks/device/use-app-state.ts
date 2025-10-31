@@ -25,7 +25,7 @@ export interface UseAppStateOptions {
   onBackground?: () => void;
 
   /**
-   * Callback on any state change
+   * Callback on unknown state change
    */
   onChange?: (state: AppStateStatus) => void;
 }

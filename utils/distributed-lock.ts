@@ -11,7 +11,7 @@ import { logger } from './logger-production';
 interface LockInfo {
   lockId: string;
   ownerId: string;
-  acquiredAt: any; // Firestore Timestamp
+  acquiredAt: unknown; // Firestore Timestamp
   expiresAt: number; // Unix timestamp
 }
 

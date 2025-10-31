@@ -37,7 +37,7 @@ export interface GeolocationState {
   location: LocationCoordinates | null;
   /** Loading state */
   loading: boolean;
-  /** Error message if any */
+  /** Error message if unknown */
   error: string | null;
   /** Permission status */
   permission: 'granted' | 'denied' | 'undetermined';
@@ -130,9 +130,9 @@ export function useGeolocation(options: UseGeolocationOptions = {}): Geolocation
       return;
     }
 
-    let Location: any = null;
+    let Location: unknown = null;
     let isMounted = true;
-    let subscription: any = null;
+    let subscription: unknown = null;
 
     const loadLocation = async () => {
       try {
@@ -170,7 +170,7 @@ export function useGeolocation(options: UseGeolocationOptions = {}): Geolocation
               accuracy: enableHighAccuracy ? Location.Accuracy.High : Location.Accuracy.Balanced,
               distanceInterval: 10, // Update every 10 meters
             },
-            (loc: any) => {
+            (loc: unknown) => {
               if (isMounted) {
                 setState({
                   location: {
