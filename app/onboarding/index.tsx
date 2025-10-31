@@ -8,6 +8,8 @@ import { AccessibilityInfo, type FlatList, Platform, StyleSheet, useWindowDimens
 import Animated, { Extrapolation, interpolate, runOnJS, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useMultiStepFlow } from '@/hooks/use-multi-step-flow';
+
 import { BiometricSlide } from '@/components/onboarding/biometric-slide';
 import { CompletionSlide } from '@/components/onboarding/completion-slide';
 import { Features } from '@/components/onboarding/features';
@@ -41,7 +43,37 @@ const SLIDES = [
 export default function Onboarding() {
   const r = useRouter();
   const { setOnboardingCompleted, trackSlideCompletion, trackSlideStart, getLastIncompleteSlide, markRecoveryComplete, canSkipSlide } = useOnboarding();
-  const [i, setI] = useState(0);
+
+  // Use the multi-step flow hook
+  const {
+    currentStep,
+    isFirstStep,
+    isLastStep,
+    goNext: nextStep,
+    goBack: prevStep,
+  } = useMultiStepFlow({
+    totalSteps: SLIDES.length,
+    initialStep: 0,
+    onComplete: () => {
+      setOnboardingCompleted(true);
+      r.replace('/(auth)/login');
+    },
+    onStepChange: async (step) => {
+      const slideId = SLIDES[step].key;
+      await trackSlideStart(slideId);
+
+      // Haptic feedback for slide changes
+      if (Platform.OS === 'ios') {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      }
+
+      // Announce slide change for accessibility
+      if (accessibilityEnabled) {
+        AccessibilityInfo.announceForAccessibility(`${i18n.t('onb.accessibility.slideAnnouncement', { current: step + 1, total: SLIDES.length })}`);
+      }
+    },
+  });
+
   const [slideTransitioning, setSlideTransitioning] = useState(false);
   const [accessibilityEnabled, setAccessibilityEnabled] = useState(false);
   const [isRecoveredSession, setIsRecoveredSession] = useState(false);
@@ -78,23 +110,12 @@ export default function Onboarding() {
   // Handle slide change with enhanced tracking
   const handleSlideChange = useCallback(
     async (newIndex: number) => {
-      if (newIndex !== i && newIndex >= 0 && newIndex < SLIDES.length) {
-        setI(newIndex);
-        const slideId = SLIDES[newIndex].key;
-        await trackSlideStart(slideId);
-
-        // Haptic feedback for slide changes
-        if (Platform.OS === 'ios') {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        }
-
-        // Announce slide change for accessibility
-        if (accessibilityEnabled) {
-          AccessibilityInfo.announceForAccessibility(`${i18n.t('onb.accessibility.slideAnnouncement', { current: newIndex + 1, total: SLIDES.length })}`);
-        }
+      if (newIndex !== currentStep && newIndex >= 0 && newIndex < SLIDES.length) {
+        // The onStepChange callback in useMultiStepFlow will handle tracking
+        // Just update the scroll position
       }
     },
-    [i, trackSlideStart, accessibilityEnabled]
+    [currentStep]
   );
 
   // Initialize accessibility and crash recovery
@@ -108,7 +129,7 @@ export default function Onboarding() {
       if (lastSlide) {
         const slideIndex = SLIDES.findIndex((s) => s.key === lastSlide);
         if (slideIndex > 0) {
-          setI(slideIndex);
+          // Recovery will be handled by scrolling to the index
           setIsRecoveredSession(true);
           ref.current?.scrollToIndex({ index: slideIndex, animated: false });
 
@@ -125,27 +146,27 @@ export default function Onboarding() {
 
   // Update animations when slide changes with enhanced effects
   useEffect(() => {
-    slideProgress.value = withSpring(i, { damping: 15, stiffness: 150 });
-    progressBarWidth.value = withTiming((i / (SLIDES.length - 1)) * 100, { duration: 400 });
+    slideProgress.value = withSpring(currentStep, { damping: 15, stiffness: 150 });
+    progressBarWidth.value = withTiming((currentStep / (SLIDES.length - 1)) * 100, { duration: 400 });
 
     // Enhanced slide transitions
     slideScale.value = withSpring(1, { damping: 20 });
     slideOpacity.value = withTiming(1, { duration: 200 });
 
     // Hide skip button on completion slide or non-skippable slides
-    const currentSlide = SLIDES[i];
-    if (i === SLIDES.length - 1 || !canSkipSlide(currentSlide?.key || '')) {
+    const currentSlide = SLIDES[currentStep];
+    if (isLastStep || !canSkipSlide(currentSlide?.key || '')) {
       skipButtonOpacity.value = withTiming(0, { duration: AnimationDurations.MEDIUM });
     } else {
       skipButtonOpacity.value = withTiming(1, { duration: AnimationDurations.MEDIUM });
     }
 
     // Mark recovery complete if this is a recovered session
-    if (isRecoveredSession && i > 0) {
+    if (isRecoveredSession && currentStep > 0) {
       markRecoveryComplete();
       setIsRecoveredSession(false);
     }
-  }, [i, slideProgress, progressBarWidth, skipButtonOpacity, slideScale, slideOpacity, canSkipSlide, isRecoveredSession, markRecoveryComplete]);
+  }, [currentStep, isLastStep, slideProgress, progressBarWidth, skipButtonOpacity, slideScale, slideOpacity, canSkipSlide, isRecoveredSession, markRecoveryComplete]);
 
   // Enhanced Animated styles with parallax and micro-interactions
   const skipButtonAnimatedStyle = useAnimatedStyle(() => ({
@@ -184,7 +205,7 @@ export default function Onboarding() {
     }
 
     // Track completion of current slide with enhanced analytics
-    const currentSlide = SLIDES[i];
+    const currentSlide = SLIDES[currentStep];
     if (currentSlide) {
       await trackSlideCompletion(currentSlide.key);
     }
@@ -197,30 +218,30 @@ export default function Onboarding() {
       slideScale.value = withSpring(1, { damping: 20 });
     });
 
-    if (i < SLIDES.length - 1) {
-      ref.current?.scrollToIndex({ index: i + 1, animated: true });
-      // setI will be handled by scroll handler
+    if (!isLastStep) {
+      ref.current?.scrollToIndex({ index: currentStep + 1, animated: true });
+      nextStep(); // Use the hook's navigation
     } else {
       // Final completion with enhanced feedback
       if (accessibilityEnabled) {
         AccessibilityInfo.announceForAccessibility(i18n.t('onb.accessibility.onboardingComplete'));
       }
 
-      setOnboardingCompleted(true);
-      r.replace('/(auth)/login');
+      nextStep(); // This will call onComplete callback
     }
 
     // Reset transition state after animation
     forwardTransitionTimeout.start();
   };
+
   const back = async () => {
-    if (slideTransitioning || i <= 0) {
+    if (slideTransitioning || isFirstStep) {
       return;
     }
 
     setSlideTransitioning(true);
-    ref.current?.scrollToIndex({ index: i - 1, animated: true });
-    setI(i - 1);
+    ref.current?.scrollToIndex({ index: currentStep - 1, animated: true });
+    prevStep(); // Use the hook's navigation
 
     backwardTransitionTimeout.start();
   };
@@ -313,13 +334,13 @@ export default function Onboarding() {
             accessible={true}
             accessibilityRole="progressbar"
             accessibilityLabel={i18n.t('onb.accessibility.progress', {
-              current: i + 1,
+              current: currentStep + 1,
               total: SLIDES.length,
             })}
             accessibilityValue={{
               min: 0,
               max: SLIDES.length,
-              now: i + 1,
+              now: currentStep + 1,
             }}
           >
             <Animated.View style={[styles.progressFill, { backgroundColor: colors.primary }, progressBarAnimatedStyle]} />
@@ -327,8 +348,8 @@ export default function Onboarding() {
 
           <View style={styles.indicatorsContainer} accessible={true} accessibilityRole="tablist" accessibilityLabel={i18n.t('onb.accessibility.slideIndicators')}>
             {SLIDES.map((slide, idx) => {
-              const isActive = idx === i;
-              const isCompleted = idx < i;
+              const isActive = idx === currentStep;
+              const isCompleted = idx < currentStep;
 
               return (
                 <Animated.View
@@ -354,14 +375,14 @@ export default function Onboarding() {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          {i > 0 && (
+          {!isFirstStep && (
             <ThemedPressable onPress={back} style={[styles.backButton, { backgroundColor: colors.surface }]}>
               <ThemedText style={styles.buttonText}>{i18n.t('onb.cta.back')}</ThemedText>
             </ThemedPressable>
           )}
-          <ThemedPressable onPress={next} style={[styles.nextButton, { backgroundColor: colors.primary, flex: i > 0 ? 2 : 1 }]}>
+          <ThemedPressable onPress={next} style={[styles.nextButton, { backgroundColor: colors.primary, flex: !isFirstStep ? 2 : 1 }]}>
             <ThemedText type="inverse" style={styles.buttonText}>
-              {i < SLIDES.length - 1 ? i18n.t('onb.cta.next') : i18n.t('onb.cta.start')}
+              {!isLastStep ? i18n.t('onb.cta.next') : i18n.t('onb.cta.start')}
             </ThemedText>
           </ThemedPressable>
         </View>
