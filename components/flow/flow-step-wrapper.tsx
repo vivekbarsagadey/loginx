@@ -22,7 +22,7 @@ import { ThemedText } from '@/components/themed-text';
 /**
  * Flow data type - supports strings, numbers, booleans, and null values
  */
-export type FlowData = Record<string, string | number | boolean | null | undefined>;
+export type FlowData = Record<string, unknown>;
 
 /**
  * User preferences type for theme customization
@@ -53,10 +53,10 @@ export function FlowStepWrapper({ step, data, onUpdate, theme: _theme, userPrefe
 
       case 'form':
         // TypeScript knows step is FormStepConfig here
-        // Convert FlowData (with null/undefined) to FormStep's stricter type
+        // Convert FlowData (with unknown) to FormStep's stricter type
         const formData: Record<string, string | number | boolean> = {};
         for (const [key, value] of Object.entries(data)) {
-          if (value !== null && value !== undefined) {
+          if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
             formData[key] = value;
           }
         }

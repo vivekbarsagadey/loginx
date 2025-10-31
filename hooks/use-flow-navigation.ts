@@ -64,15 +64,13 @@ export function useFlowNavigation(config: FlowConfig, state: FlowState, updateSt
     const nextStep = config.steps[nextIndex];
     const currentStepId = state.currentStepId;
 
-    // FIXED: Use functional update to avoid stale state issues with rapid clicks
-    updateState((prevState: FlowState) => ({
-      ...prevState,
+    updateState({
       currentStepIndex: nextIndex,
       currentStepId: nextStep.id,
-      stepHistory: [...prevState.stepHistory, currentStepId],
-      completedSteps: prevState.completedSteps.includes(currentStepId) ? prevState.completedSteps : [...prevState.completedSteps, currentStepId],
-    }));
-  }, [config.steps, state.currentStepIndex, state.data, state.currentStepId, updateState]);
+      stepHistory: [...state.stepHistory, currentStepId],
+      completedSteps: state.completedSteps.includes(currentStepId) ? state.completedSteps : [...state.completedSteps, currentStepId],
+    });
+  }, [config.steps, state, updateState]);
 
   /**
    * Navigate to previous step

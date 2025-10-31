@@ -216,11 +216,11 @@ export interface BaseStepConfig {
   allowBack?: boolean;
 
   // Conditional rendering
-  condition?: (data: Record<string, any>) => boolean;
+  condition?: (data: Record<string, unknown>) => boolean;
 
   // Validation
   validation?: z.ZodSchema<any>;
-  validate?: (data: Record<string, any>) => Promise<{ valid: boolean; error?: string }>;
+  validate?: (data: Record<string, unknown>) => Promise<{ valid: boolean; error?: string }>;
 
   // Buttons
   primaryButton?: {
@@ -391,12 +391,12 @@ export interface FormStepConfig extends BaseStepConfig {
   validationSchema?: z.ZodSchema<any>;
 
   // Form submission
-  onSubmit?: (data: Record<string, any>) => Promise<{ success: boolean; error?: string }>;
+  onSubmit?: (data: Record<string, unknown>) => Promise<{ success: boolean; error?: string }>;
 
   // Auto-complete support
   autoComplete?: {
     service: 'google-places' | 'custom';
-    onSelect?: (value: any) => Record<string, any>;
+    onSelect?: (value: unknown) => Record<string, unknown>;
   };
 
   // Integration with external services
@@ -432,7 +432,7 @@ export interface SelectionOption {
   reviewCount?: number;
 
   // Conditional display
-  condition?: (data: Record<string, any>) => boolean;
+  condition?: (data: Record<string, unknown>) => boolean;
 }
 
 /**
@@ -443,7 +443,7 @@ export interface SelectionStepConfig extends BaseStepConfig {
   variant?: SelectionVariant;
 
   // Options (can be static or loaded dynamically)
-  options: SelectionOption[] | ((data: Record<string, any>) => Promise<SelectionOption[]>);
+  options: SelectionOption[] | ((data: Record<string, unknown>) => Promise<SelectionOption[]>);
 
   // Selection mode
   multiple?: boolean;
@@ -671,12 +671,12 @@ export interface FlowConfig {
   analytics?: AnalyticsConfig;
 
   // Handlers
-  onComplete?: (data: Record<string, any>) => Promise<{ success: boolean; error?: string }>;
-  onSkip?: (data: Record<string, any>) => Promise<{ success: boolean }>;
-  onAbandonment?: (data: Record<string, any>, currentStep: string) => Promise<void>;
+  onComplete?: (data: Record<string, unknown>) => Promise<{ success: boolean; error?: string }>;
+  onSkip?: (data: Record<string, unknown>) => Promise<{ success: boolean }>;
+  onAbandonment?: (data: Record<string, unknown>, currentStep: string) => Promise<void>;
   onError?: (error: Error, stepId?: string) => Promise<{ handled: boolean }>;
-  onStepView?: (stepId: string, data: Record<string, any>) => void;
-  onSubmit?: (data: Record<string, any>) => Promise<any>;
+  onStepView?: (stepId: string, data: Record<string, unknown>) => void;
+  onSubmit?: (data: Record<string, unknown>) => Promise<any>;
 
   // A/B Testing
   experiments?: {
@@ -718,7 +718,7 @@ export interface FlowState {
   skippedSteps: string[];
 
   // Data
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 
   // UI state
   loading: boolean;
@@ -750,14 +750,14 @@ export interface FlowContextValue {
   complete: () => Promise<void>;
 
   // Data management
-  updateData: (data: Partial<Record<string, any>>) => void;
-  getData: (key: string) => any;
-  setData: (key: string, value: any) => void;
+  updateData: (data: Partial<Record<string, unknown>>) => void;
+  getData: (key: string) => unknown;
+  setData: (key: string, value: unknown) => void;
   clearData: () => void;
 
   // Validation
   validateStep: (stepId?: string) => Promise<boolean>;
-  validateField: (fieldName: string, value: any) => Promise<boolean>;
+  validateField: (fieldName: string, value: unknown) => Promise<boolean>;
 
   // State persistence
   saveState: () => Promise<void>;
@@ -783,9 +783,9 @@ export interface FlowContainerProps {
   flow: FlowConfig;
 
   // Handlers
-  onComplete?: (data: Record<string, any>) => void;
-  onSkip?: (data: Record<string, any>) => void;
-  onAbandonment?: (data: Record<string, any>, currentStep: string) => void;
+  onComplete?: (data: Record<string, unknown>) => void;
+  onSkip?: (data: Record<string, unknown>) => void;
+  onAbandonment?: (data: Record<string, unknown>, currentStep: string) => void;
 
   // Customization
   theme?: 'light' | 'dark' | 'system' | string;
@@ -796,7 +796,7 @@ export interface FlowContainerProps {
   onExperimentView?: (experimentId: string, variant: string) => void;
 
   // Initial data
-  initialData?: Record<string, any>;
+  initialData?: Record<string, unknown>;
 
   // Resume state
   resumeState?: FlowState;
@@ -812,8 +812,8 @@ export interface FlowContainerProps {
  */
 export interface StepRendererProps<T extends StepConfig = StepConfig> {
   step: T;
-  data: Record<string, any>;
-  onUpdate: (data: Partial<Record<string, any>>) => void;
+  data: Record<string, unknown>;
+  onUpdate: (data: Partial<Record<string, unknown>>) => void;
   onNext: () => Promise<void>;
   onBack: () => void;
   onSkip: () => Promise<void>;
@@ -825,8 +825,8 @@ export interface StepRendererProps<T extends StepConfig = StepConfig> {
  */
 export interface CustomStepProps {
   step: CustomStepConfig;
-  data: Record<string, any>;
-  onUpdate: (data: Partial<Record<string, any>>) => void;
+  data: Record<string, unknown>;
+  onUpdate: (data: Partial<Record<string, unknown>>) => void;
   context: FlowContextValue;
 }
 
