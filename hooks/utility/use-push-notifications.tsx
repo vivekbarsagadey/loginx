@@ -137,9 +137,27 @@ export const usePushNotifications = (uid?: string) => {
         // Update user document with push token
         if (token && uid) {
           const userDocRef = doc(firestore, 'users', uid);
-          updateDoc(userDocRef, { expoPushToken: token }).catch((_error) => {
-            console.error('[Error]', _error);
-          });
+          import('@/utils/retry')
+            .then(({ withRetry }) =>
+              withRetry(
+                () => updateDoc(userDocRef, { expoPushToken: token }),
+                {
+                  maxRetries: 3,
+                  initialDelay: 1000,
+                  shouldRetry: (_error: unknown) => {
+                    // Retry on network errors, not on permission errors
+                    if (typeof _error === 'object' && _error !== null && 'code' in _error) {
+                      const code = (_error as { code: string }).code;
+                      return !code.startsWith('permission-denied');
+                    }
+                    return true;
+                  },
+                }
+              )
+            )
+            .catch((_error) => {
+              console.error('[Error]', _error);
+            });
         }
       })
       .catch((_error) => {
