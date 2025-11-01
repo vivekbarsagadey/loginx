@@ -131,7 +131,7 @@ function attemptAutoMerge<T>(local: T, remote: T): T | null {
     for (const key in local) {
       if (Object.prototype.hasOwnProperty.call(local, key)) {
         const localValue = local[key];
-        const remoteValue = (remote as unknown)[key];
+        const remoteValue = remote[key];
 
         // If values are identical, no conflict
         if (JSON.stringify(localValue) === JSON.stringify(remoteValue)) {
@@ -140,7 +140,7 @@ function attemptAutoMerge<T>(local: T, remote: T): T | null {
 
         // If remote doesn't have this key, use local
         if (!(key in remote)) {
-          (merged as unknown)[key] = localValue;
+          merged[key] = localValue;
           continue;
         }
 

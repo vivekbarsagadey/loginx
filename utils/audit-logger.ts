@@ -39,15 +39,30 @@ export async function logAuditEvent(entry: Omit<AuditLogEntry, 'timestamp'>): Pr
 
     const auditLogsRef = collection(firestore, 'audit_logs');
 
-    await addDoc(auditLogsRef, {
-      ...entry,
-      timestamp: serverTimestamp(),
-    });
+    const { withRetry } = await import('@/utils/retry');
+    await withRetry(
+      () =>
+        addDoc(auditLogsRef, {
+          ...entry,
+          timestamp: serverTimestamp(),
+        }),
+      {
+        maxRetries: 3,
+        initialDelay: 1000,
+        shouldRetry: (_error: unknown) => {
+          // Retry on network errors, not on permission/validation errors
+          if (typeof _error === 'object' && _error !== null && 'code' in _error) {
+            const code = (_error as { code: string }).code;
+            return !code.startsWith('permission-denied') && !code.startsWith('invalid-argument');
+          }
+          return true;
+        },
+      }
+    );
 
     logger.log('Audit event logged:', entry.eventType);
   } catch (_error: unknown) {
     logger.error('Failed to log audit event:', _error);
-    // Don't throw - audit logging should not block user actions
   }
 }
 

@@ -240,7 +240,7 @@ class ProductionLogger {
       level: levelName,
       message: redactedMessage,
       timestamp: this.config.includeTimestamp ? new Date().toISOString() : undefined,
-      context: redactedContext,
+      context: redactedContext as Record<string, unknown> | undefined,
       error: redactedError,
     };
 
@@ -265,8 +265,8 @@ class ProductionLogger {
     }
 
     // Send to external logger if configured
-    if (this.config.externalLogger) {
-      const externalContext = { ...redactedContext, timestamp: entry.timestamp };
+    if (this.config.externalLogger && redactedContext) {
+      const externalContext = { ...(redactedContext as Record<string, unknown>), timestamp: entry.timestamp };
 
       switch (level) {
         case LogLevel.DEBUG:

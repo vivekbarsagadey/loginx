@@ -140,7 +140,14 @@ export function useShare(): UseShareReturn {
       }
 
       // Prepare share options
-      const shareOptions: unknown = {
+      const shareOptions: {
+        message?: string;
+        url?: string;
+        title?: string;
+        dialogTitle?: string;
+        subject?: string;
+        excludedActivityTypes?: string[];
+      } = {
         message: content.message,
         url: content.url,
         title: content.title,
@@ -161,7 +168,7 @@ export function useShare(): UseShareReturn {
       }
 
       // Perform share
-      const result = await RNShare.share(shareOptions);
+      const result = await RNShare.share(shareOptions as Parameters<typeof RNShare.share>[0]);
 
       let shareResult: ShareResult;
 
