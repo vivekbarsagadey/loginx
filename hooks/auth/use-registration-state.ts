@@ -252,7 +252,7 @@ export function useRegistrationState(options: UseRegistrationStateOptions = {}) 
    */
   const goNext = async () => {
     const currentFields = steps[currentStep]?.fields || [];
-    const isValid = await trigger(currentFields as unknown);
+    const isValid = await trigger(currentFields.length > 0 ? currentFields : undefined);
 
     if (isValid && currentStep < steps.length - 1) {
       setCurrentStep((prev) => prev + 1);

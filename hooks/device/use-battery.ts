@@ -9,6 +9,20 @@
 
 import { useEffect, useState } from 'react';
 
+// Dynamic import type for expo-battery
+interface BatteryModule {
+  getBatteryLevelAsync: () => Promise<number>;
+  getBatteryStateAsync: () => Promise<number>;
+  addBatteryLevelListener: (callback: (event: { batteryLevel: number }) => void) => { remove: () => void };
+  addBatteryStateListener: (callback: (event: { batteryState: number }) => void) => { remove: () => void };
+  BatteryState: {
+    UNKNOWN: number;
+    UNPLUGGED: number;
+    CHARGING: number;
+    FULL: number;
+  };
+}
+
 /**
  * Battery state information
  */
@@ -71,7 +85,7 @@ export function useBattery(): BatteryState {
   });
 
   useEffect(() => {
-    let Battery: unknown = null;
+    let Battery: BatteryModule | null = null;
     let isMounted = true;
 
     // Dynamically import expo-battery if available
@@ -79,9 +93,9 @@ export function useBattery(): BatteryState {
       try {
         // @ts-ignore - Optional dependency, may not be installed
         // eslint-disable-next-line import/no-unresolved
-        Battery = await import('expo-battery');
+        Battery = (await import('expo-battery')) as BatteryModule;
 
-        if (!isMounted) {
+        if (!isMounted || !Battery) {
           return;
         }
 
@@ -106,11 +120,12 @@ export function useBattery(): BatteryState {
         });
 
         // Subscribe to battery state changes
+        const BatteryRef = Battery;
         const stateSubscription = Battery.addBatteryStateListener(({ batteryState }: { batteryState: number }) => {
-          if (isMounted) {
+          if (isMounted && BatteryRef) {
             setBatteryState((prev) => ({
               ...prev,
-              charging: batteryState === Battery.BatteryState.CHARGING || batteryState === Battery.BatteryState.FULL,
+              charging: batteryState === BatteryRef.BatteryState.CHARGING || batteryState === BatteryRef.BatteryState.FULL,
             }));
           }
         });
