@@ -13,7 +13,7 @@ import type { FormStepConfig, StepRendererProps } from '@/types/flow';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
-export function FormStepRenderer({ step, data, onUpdate }: StepRendererProps<FormStepConfig>) {
+export function FormStepRenderer({ step, data, onUpdate, onNext: _onNext, onBack: _onBack, onSkip: _onSkip, context: _context }: StepRendererProps<FormStepConfig>) {
   const handleFieldChange = (fieldName: string, value: unknown) => {
     onUpdate({ [fieldName]: value });
   };

@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
 
-export function DisplayStepRenderer({ step }: StepRendererProps<DisplayStepConfig>) {
+export function DisplayStepRenderer({ step, data: _data, onUpdate: _onUpdate, onNext: _onNext, onBack: _onBack, onSkip: _onSkip, context: _context }: StepRendererProps<DisplayStepConfig>) {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <ThemedView style={styles.header}>
