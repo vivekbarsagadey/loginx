@@ -5,6 +5,9 @@
  * but before each test file is executed.
  */
 
+// Define global __DEV__ variable for tests
+global.__DEV__ = process.env.NODE_ENV !== 'production';
+
 // Mock Expo modules
 jest.mock('expo-font', () => ({
   loadAsync: jest.fn().mockResolvedValue(undefined),

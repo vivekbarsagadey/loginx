@@ -49,7 +49,7 @@ export function isFatalError(_error: unknown): boolean {
     return false;
   }
 
-  return FATAL_ERROR_CODES.includes((_error as unknown).code as (typeof FATAL_ERROR_CODES)[number]);
+  return FATAL_ERROR_CODES.includes(_error.code as (typeof FATAL_ERROR_CODES)[number]);
 }
 
 /**
@@ -73,7 +73,7 @@ const isFirebaseError = (_error: unknown): boolean => {
   if (!hasErrorCode(_error)) {
     return false;
   }
-  return (_error as unknown).code.startsWith(FIREBASE_AUTH_PREFIX) || (_error as unknown).code.startsWith(FIRESTORE_PREFIX) || (_error as unknown).code.startsWith(STORAGE_PREFIX);
+  return _error.code.startsWith(FIREBASE_AUTH_PREFIX) || _error.code.startsWith(FIRESTORE_PREFIX) || _error.code.startsWith(STORAGE_PREFIX);
 };
 
 /**

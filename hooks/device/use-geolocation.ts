@@ -9,6 +9,43 @@
 
 import { useEffect, useState } from 'react';
 
+// Dynamic import types for expo-location
+interface LocationCoords {
+  latitude: number;
+  longitude: number;
+  altitude: number | null;
+  accuracy: number | null;
+  altitudeAccuracy: number | null;
+  heading: number | null;
+  speed: number | null;
+}
+
+interface LocationObject {
+  coords: LocationCoords;
+  timestamp: number;
+}
+
+interface LocationSubscription {
+  remove: () => void;
+}
+
+interface LocationModule {
+  requestForegroundPermissionsAsync: () => Promise<{ status: string }>;
+  watchPositionAsync: (
+    options: { accuracy: number; distanceInterval: number },
+    callback: (location: LocationObject) => void
+  ) => Promise<LocationSubscription>;
+  getCurrentPositionAsync: (options: { accuracy: number }) => Promise<LocationObject>;
+  Accuracy: {
+    Lowest: number;
+    Low: number;
+    Balanced: number;
+    High: number;
+    Highest: number;
+    BestForNavigation: number;
+  };
+}
+
 /**
  * Location coordinates
  */
@@ -130,15 +167,15 @@ export function useGeolocation(options: UseGeolocationOptions = {}): Geolocation
       return;
     }
 
-    let Location: unknown = null;
+    let Location: LocationModule | null = null;
     let isMounted = true;
-    let subscription: unknown = null;
+    let subscription: LocationSubscription | null = null;
 
     const loadLocation = async () => {
       try {
-        Location = await import('expo-location');
+        Location = (await import('expo-location')) as unknown as LocationModule;
 
-        if (!isMounted) {
+        if (!isMounted || !Location) {
           return;
         }
 
@@ -163,14 +200,14 @@ export function useGeolocation(options: UseGeolocationOptions = {}): Geolocation
 
         setState((prev) => ({ ...prev, permission: 'granted' }));
 
-        if (watch) {
+        if (watch && Location) {
           // Watch position continuously
           subscription = await Location.watchPositionAsync(
             {
               accuracy: enableHighAccuracy ? Location.Accuracy.High : Location.Accuracy.Balanced,
-              distanceInterval: 10, // Update every 10 meters
+              distanceInterval: 10,
             },
-            (loc: unknown) => {
+            (loc: LocationObject) => {
               if (isMounted) {
                 setState({
                   location: {
@@ -189,7 +226,7 @@ export function useGeolocation(options: UseGeolocationOptions = {}): Geolocation
               }
             }
           );
-        } else {
+        } else if (Location) {
           // Get current position once
           const loc = await Location.getCurrentPositionAsync({
             accuracy: enableHighAccuracy ? Location.Accuracy.High : Location.Accuracy.Balanced,
@@ -228,7 +265,7 @@ export function useGeolocation(options: UseGeolocationOptions = {}): Geolocation
 
     return () => {
       isMounted = false;
-      if (subscription) {
+      if (subscription && 'remove' in subscription) {
         subscription.remove();
       }
     };

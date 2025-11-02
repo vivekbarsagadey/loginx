@@ -2,6 +2,7 @@ import { Colors } from '@/constants/theme';
 import { firestore } from '@/firebase-config';
 import { Config } from '@/utils/config';
 import { addNotification } from '@/utils/notification-storage';
+import { withRetry } from '@/utils/retry';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
@@ -137,7 +138,21 @@ export const usePushNotifications = (uid?: string) => {
         // Update user document with push token
         if (token && uid) {
           const userDocRef = doc(firestore, 'users', uid);
-          updateDoc(userDocRef, { expoPushToken: token }).catch((_error) => {
+          withRetry(
+            () => updateDoc(userDocRef, { expoPushToken: token }),
+            {
+              maxRetries: 3,
+              initialDelay: 1000,
+              shouldRetry: (_error: unknown) => {
+                // Retry on network errors, not on permission errors
+                if (typeof _error === 'object' && _error !== null && 'code' in _error) {
+                  const code = (_error as { code: string }).code;
+                  return !code.startsWith('permission-denied');
+                }
+                return true;
+              },
+            }
+          ).catch((_error) => {
             console.error('[Error]', _error);
           });
         }
