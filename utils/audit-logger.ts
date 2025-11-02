@@ -5,6 +5,7 @@
  */
 
 import { firestore, isFirestoreReady } from '@/firebase-config';
+import { withRetry } from '@/utils/retry';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { createLogger } from './debug';
 import { SecurityEventType } from './monitoring';
@@ -39,7 +40,6 @@ export async function logAuditEvent(entry: Omit<AuditLogEntry, 'timestamp'>): Pr
 
     const auditLogsRef = collection(firestore, 'audit_logs');
 
-    const { withRetry } = await import('@/utils/retry');
     await withRetry(
       () =>
         addDoc(auditLogsRef, {
