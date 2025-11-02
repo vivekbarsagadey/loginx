@@ -40,7 +40,6 @@ export const onboardingFlowConfig: FlowConfig = {
       icon: 'rocket',
       iconColor: '#007AFF',
       variant: 'hero',
-      image: require('@/assets/images/onboarding/welcome.png'),
       primaryButton: {
         label: "Let's Start",
         action: 'next',
@@ -216,7 +215,6 @@ export const onboardingFlowConfig: FlowConfig = {
       icon: 'finger-print',
       iconColor: '#5856D6',
       variant: 'hero',
-      image: require('@/assets/images/onboarding/biometric.png'),
       skippable: true,
       primaryButton: {
         label: 'Enable Biometric',
@@ -334,12 +332,11 @@ export const onboardingFlowConfig: FlowConfig = {
         },
         {
           name: 'avatar',
-          label: 'Profile Picture',
-          type: 'image-upload',
+          label: 'Profile Picture URL',
+          type: 'url',
           optional: true,
-          placeholder: 'Upload a profile picture',
-          acceptedFormats: ['image/jpeg', 'image/png'],
-          maxFileSize: 5 * 1024 * 1024, // 5MB
+          placeholder: 'https://example.com/avatar.jpg',
+          helperText: 'Optional: Enter URL to your profile picture',
         },
       ],
       primaryButton: {
@@ -362,7 +359,6 @@ export const onboardingFlowConfig: FlowConfig = {
       icon: 'checkmark-circle',
       iconColor: '#34C759',
       variant: 'hero',
-      image: require('@/assets/images/onboarding/completion.png'),
       primaryButton: {
         label: "Let's Go!",
         action: 'complete',

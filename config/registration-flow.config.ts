@@ -60,13 +60,11 @@ export const registrationFlowConfig: FlowConfig = {
         },
         {
           name: 'photoURL',
-          label: 'Profile Photo',
-          type: 'image-upload',
+          label: 'Profile Photo URL',
+          type: 'url',
           optional: true,
-          placeholder: 'Upload a profile photo',
-          helperText: 'Optional: Add a profile photo',
-          acceptedFormats: ['image/jpeg', 'image/png'],
-          maxFileSize: 5 * 1024 * 1024, // 5MB
+          placeholder: 'https://example.com/photo.jpg',
+          helperText: 'Optional: Enter URL to your profile photo',
         },
         {
           name: 'referralCode',
@@ -139,7 +137,6 @@ export const registrationFlowConfig: FlowConfig = {
           required: true,
           placeholder: 'Enter a strong password',
           secure: true,
-          showStrengthMeter: true,
           helperText: 'Must be at least 8 characters with uppercase, lowercase, number, and special character',
           validation: z
             .string()
@@ -246,11 +243,10 @@ export const registrationFlowConfig: FlowConfig = {
         {
           name: 'phoneNumber',
           label: 'Phone Number',
-          type: 'phone',
+          type: 'text',
           optional: true,
           placeholder: '+1 (555) 123-4567',
           helperText: 'Optional: Used for two-factor authentication',
-          countryCodePicker: true,
           validation: z.string().max(20, 'Phone number is too long').optional().or(z.literal('')),
         },
       ],
