@@ -9,6 +9,7 @@ import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/layout';
 import { useThemeColors } from '@/hooks/use-theme-colors';
 import type { SelectionOption, SelectionStepConfig, StepRendererProps } from '@/types/flow';
+import { debugError } from '@/utils/debug';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -29,7 +30,7 @@ export function SelectionStepRenderer({ step, data, onUpdate, onNext: _onNext, o
           const dynamicOptions = await step.options(data);
           setOptions(dynamicOptions);
         } catch (_error: unknown) {
-          console.error('Failed to load options:', _error);
+          debugError('Failed to load options:', _error);
           setOptions([]);
         } finally {
           setLoading(false);
