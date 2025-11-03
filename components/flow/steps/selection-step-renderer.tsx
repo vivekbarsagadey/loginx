@@ -133,7 +133,7 @@ export function SelectionStepRenderer({ step, data, onUpdate, onNext: _onNext, o
                   </View>
                 )}
                 {option.badge && (
-                  <View style={[styles.badge, { backgroundColor: colors.secondary }]}>
+                  <View style={[styles.badge, { backgroundColor: colors.info }]}>
                     <ThemedText type="caption" style={{ color: colors['on-primary'] }}>
                       {option.badge}
                     </ThemedText>

@@ -62,13 +62,12 @@ export const createRegistrationSchema = (validatePassword: (password: string) =>
         .min(8, 'Password must be at least 8 characters long.')
         .max(128, 'Password is too long')
         .refine(
-          (password) => {
+          (password: string) => {
             const result = validatePassword(password);
             return result.isValid;
           },
-          (password) => {
-            const result = validatePassword(password);
-            return { message: result.errors[0] || 'Password does not meet requirements.' };
+          {
+            message: 'Password must contain uppercase, lowercase, number, and special character.',
           }
         ),
       confirmPassword: z.string(),
@@ -252,7 +251,8 @@ export function useRegistrationState(options: UseRegistrationStateOptions = {}) 
    */
   const goNext = async () => {
     const currentFields = steps[currentStep]?.fields || [];
-    const isValid = await trigger(currentFields as unknown);
+    // Type assertion is safe here as fields are defined in the steps configuration
+    const isValid = await trigger(currentFields as Parameters<typeof trigger>[0]);
 
     if (isValid && currentStep < steps.length - 1) {
       setCurrentStep((prev) => prev + 1);

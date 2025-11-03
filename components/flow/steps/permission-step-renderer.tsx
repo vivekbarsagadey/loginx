@@ -185,7 +185,7 @@ export function PermissionStepRenderer({ step, data: _data, onUpdate, onNext, on
       )}
 
       <ThemedView style={styles.actions}>
-        <ThemedButton title={requesting ? 'Requesting...' : 'Grant Permissions'} onPress={handleGrantPermissions} disabled={requesting} leftIcon="checkmark-circle" style={styles.grantButton} />
+        <ThemedButton title={requesting ? 'Requesting...' : 'Grant Permissions'} onPress={handleGrantPermissions} disabled={requesting} style={styles.grantButton} />
         {step.skippable && <ThemedButton title="Skip for Now" onPress={handleSkipPermissions} variant="secondary" disabled={requesting} style={styles.skipButton} />}
       </ThemedView>
 

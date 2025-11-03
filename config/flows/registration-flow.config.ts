@@ -37,13 +37,12 @@ const step2Schema = z
       .min(8, 'Password must be at least 8 characters long.')
       .max(128, 'Password is too long')
       .refine(
-        (password) => {
+        (password: string) => {
           const result = validatePassword(password);
           return result.isValid;
         },
-        (password) => {
-          const result = validatePassword(password);
-          return { message: result.errors[0] || 'Password does not meet requirements.' };
+        {
+          message: 'Password must contain uppercase, lowercase, number, and special character.',
         }
       ),
     confirmPassword: z.string(),

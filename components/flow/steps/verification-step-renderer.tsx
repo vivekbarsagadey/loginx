@@ -34,7 +34,9 @@ export function VerificationStepRenderer({ step, data: _data, onUpdate, onNext, 
   const handleCodeChange = (value: string, index: number) => {
     // Only allow single digit
     const digit = value.slice(-1);
-    if (!/^\d*$/.test(digit)) return;
+    if (!/^\d*$/.test(digit)) {
+      return;
+    }
 
     const newCode = [...code];
     newCode[index] = digit;
@@ -98,7 +100,9 @@ export function VerificationStepRenderer({ step, data: _data, onUpdate, onNext, 
   );
 
   const handleResend = async () => {
-    if (resendTimer > 0 || !step.onResend) return;
+    if (resendTimer > 0 || !step.onResend) {
+      return;
+    }
 
     setVerifying(true);
     setError(null);
@@ -183,15 +187,7 @@ export function VerificationStepRenderer({ step, data: _data, onUpdate, onNext, 
         </ThemedText>
       )}
 
-      {!step.autoSubmit && (
-        <ThemedButton
-          title={verifying ? 'Verifying...' : 'Verify'}
-          onPress={() => handleVerify()}
-          disabled={verifying || code.some((d) => !d)}
-          style={styles.verifyButton}
-          leftIcon={verifying ? undefined : 'checkmark-circle'}
-        />
-      )}
+      {!step.autoSubmit && <ThemedButton title={verifying ? 'Verifying...' : 'Verify'} onPress={() => handleVerify()} disabled={verifying || code.some((d) => !d)} style={styles.verifyButton} />}
 
       {verifying && <ActivityIndicator size="large" color={colors.primary} style={styles.loader} />}
 
@@ -202,7 +198,7 @@ export function VerificationStepRenderer({ step, data: _data, onUpdate, onNext, 
               Resend code in {resendTimer}s
             </ThemedText>
           ) : (
-            <ThemedButton title="Resend Code" onPress={handleResend} variant="secondary" disabled={verifying} leftIcon="refresh" />
+            <ThemedButton title="Resend Code" onPress={handleResend} variant="secondary" disabled={verifying} />
           )}
         </ThemedView>
       )}

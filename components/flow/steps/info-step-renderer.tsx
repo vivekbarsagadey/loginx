@@ -25,7 +25,9 @@ export function InfoStepRenderer({ step, data: _data, onUpdate, onNext, onBack: 
   // Load content from URL if provided
   useEffect(() => {
     async function loadContent() {
-      if (!step.contentUrl) return;
+      if (!step.contentUrl) {
+        return;
+      }
 
       setLoading(true);
       setError(null);
@@ -98,7 +100,7 @@ export function InfoStepRenderer({ step, data: _data, onUpdate, onNext, onBack: 
         <ThemedText type="body" style={styles.errorMessage}>
           {error}
         </ThemedText>
-        <ThemedButton title="Try Again" onPress={() => window.location.reload()} variant="secondary" leftIcon="refresh" style={styles.retryButton} />
+        <ThemedButton title="Try Again" onPress={() => window.location.reload()} variant="secondary" style={styles.retryButton} />
       </ThemedView>
     );
   }
@@ -154,18 +156,12 @@ export function InfoStepRenderer({ step, data: _data, onUpdate, onNext, onBack: 
 
       {step.requireAcknowledgment && (
         <ThemedView style={styles.acknowledgmentContainer}>
-          <ThemedButton
-            title={step.acknowledgmentText || 'I have read and agree'}
-            onPress={handleAcknowledge}
-            variant={acknowledged ? 'primary' : 'secondary'}
-            leftIcon={acknowledged ? 'checkmark-circle' : 'ellipse-outline'}
-            style={styles.acknowledgmentButton}
-          />
+          <ThemedButton title={step.acknowledgmentText || 'I have read and agree'} onPress={handleAcknowledge} variant={acknowledged ? 'primary' : 'secondary'} style={styles.acknowledgmentButton} />
         </ThemedView>
       )}
 
       <ThemedView style={styles.actions}>
-        <ThemedButton title="Continue" onPress={handleContinue} disabled={!canContinue} leftIcon="arrow-forward" style={styles.continueButton} />
+        <ThemedButton title="Continue" onPress={handleContinue} disabled={!canContinue} style={styles.continueButton} />
       </ThemedView>
     </ThemedView>
   );
