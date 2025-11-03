@@ -14,6 +14,8 @@ export * from './layout';
 export * from './routes';
 export * from './security';
 export * from './storage';
+export * from './storage-keys-extended';
 export * from './style-utils';
 export * from './theme';
+export * from './timings';
 export * from './validation';

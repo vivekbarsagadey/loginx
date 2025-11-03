@@ -213,13 +213,28 @@ class RequestDeduplicator {
 const requestDeduplicator = new RequestDeduplicator();
 
 // Auto cleanup every 5 minutes
+let cleanupIntervalId: ReturnType<typeof setInterval> | undefined;
+
 if (typeof setInterval !== 'undefined') {
-  setInterval(
+  cleanupIntervalId = setInterval(
     () => {
       requestDeduplicator.cleanupStale();
     },
     5 * 60 * 1000
   );
+}
+
+/**
+ * Cleanup function for app shutdown
+ * Call this when unmounting root app component or on app close
+ */
+export function cleanupRequestDeduplicator(): void {
+  if (cleanupIntervalId) {
+    clearInterval(cleanupIntervalId);
+    cleanupIntervalId = undefined;
+  }
+  requestDeduplicator.cancelAll();
+  requestDeduplicator.clearStats();
 }
 
 export { requestDeduplicator };

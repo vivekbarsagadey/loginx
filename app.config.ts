@@ -130,8 +130,10 @@ export default {
       cacheTtl: process.env.CACHE_TTL || '3600',
 
       // Security & Encryption
-      jwtSecret: process.env.JWT_SECRET,
-      aesEncryptionKey: process.env.AES_ENCRYPTION_KEY,
+      // Note: JWT and AES encryption are handled by Firebase Auth and expo-secure-store
+      // Firebase Auth automatically generates and manages JWT tokens
+      // expo-secure-store provides hardware-backed encryption (no custom AES key needed)
+      // If custom encryption is needed, implement server-side only (Firebase Functions)
 
       // Feature Flags
       enableBiometricAuth: process.env.ENABLE_BIOMETRIC_AUTH === 'true',

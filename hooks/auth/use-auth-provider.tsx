@@ -1,6 +1,6 @@
 import { auth } from '@/firebase-config';
 import { clearAuthState, saveAuthState } from '@/utils/auth-persistence';
-import { debugError, debugLog } from '@/utils/debug';
+import { debugError, debugLog, debugWarn } from '@/utils/debug';
 import { showError } from '@/utils/error';
 import { applyPendingProfileData, clearPendingProfile } from '@/utils/pending-profile';
 import { clearAuthTimestamp, saveAuthTimestamp } from '@/utils/re-authentication'; // TASK-079/080: Import session timeout functions
@@ -50,7 +50,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           try {
             await applyPendingProfileData(user);
           } catch (_error: unknown) {
-            // Silently fail - profile can be updated later
+            // Profile can be updated later, but log in debug mode for troubleshooting
+            debugWarn('[Auth] Failed to apply pending profile data', _error);
           }
 
           // Save authentication state for persistence

@@ -60,13 +60,11 @@ export const Config = {
   },
 
   // Security & Encryption
-  // NOTE: These are for future backend/custom implementation
-  // Firebase Auth handles JWT automatically (no custom JWT needed)
-  // expo-secure-store provides hardware-backed encryption (no custom AES needed)
-  security: {
-    jwtSecret: extra.jwtSecret as string, // Reserved for custom backend JWT if needed
-    aesEncryptionKey: extra.aesEncryptionKey as string, // Reserved for additional encryption if needed
-  },
+  // NOTE: Removed jwtSecret and aesEncryptionKey from client-side config
+  // Firebase Auth handles JWT tokens automatically (no custom JWT needed)
+  // expo-secure-store provides hardware-backed encryption (no custom AES key needed)
+  // If custom encryption is required, implement server-side only (Firebase Functions)
+  security: {},
 
   // Feature Flags
   features: {
