@@ -111,6 +111,7 @@ export function createDebugger(namespace: string) {
     info: (message: string, ...args: readonly unknown[]) => debugInfo(`[${namespace}] ${message}`, ...args),
     warn: (message: string, ...args: readonly unknown[]) => debugWarn(`[${namespace}] ${message}`, ...args),
     error: (message: string, _error?: Error | unknown) => debugError(`[${namespace}] ${message}`, _error),
+    debug: (message: string, ...args: readonly unknown[]) => debugLog(`[${namespace}] ${message}`, ...args),
     group: (label: string, callback: () => void) => debugGroup(`[${namespace}] ${label}`, callback),
     time: <T>(label: string, fn: () => T) => debugTime(`[${namespace}] ${label}`, fn),
     object: (label: string, obj: unknown) => debugObject(`[${namespace}] ${label}`, obj),
