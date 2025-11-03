@@ -118,7 +118,9 @@ export function ActionStepRenderer({ step, data: _data, onUpdate, onNext, onBack
                 {error.message}
               </ThemedText>
             )}
-            {step.retry?.enabled && (!step.retry.maxAttempts || retryCount < step.retry.maxAttempts) && <ThemedButton title="Retry" onPress={handleRetry} variant="secondary" leftIcon="refresh" style={styles.retryButton} />}
+            {step.retry?.enabled && (!step.retry.maxAttempts || retryCount < step.retry.maxAttempts) && (
+              <ThemedButton title="Retry" onPress={handleRetry} variant="secondary" leftIcon="refresh" style={styles.retryButton} />
+            )}
             {step.retry?.maxAttempts && (
               <ThemedText type="caption" style={styles.retryCount}>
                 Attempts: {retryCount}/{step.retry.maxAttempts}

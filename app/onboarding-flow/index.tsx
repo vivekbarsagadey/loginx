@@ -20,7 +20,7 @@ export default function OnboardingScreen() {
 
   const handleComplete = async (data: Record<string, unknown>) => {
     logger.info('Onboarding complete with data:', Object.keys(data));
-    
+
     // Store user preferences from personalization step
     if (data.personalize) {
       logger.info('User preferences:', data.personalize);
@@ -44,7 +44,7 @@ export default function OnboardingScreen() {
 
   const handleSkip = async (data: Record<string, unknown>) => {
     logger.info('Onboarding skipped with data:', Object.keys(data));
-    
+
     // Mark onboarding as completed even when skipped
     setOnboardingCompleted(true);
 

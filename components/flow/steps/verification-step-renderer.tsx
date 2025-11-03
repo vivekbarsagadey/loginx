@@ -12,7 +12,7 @@ import { useThemeColors } from '@/hooks/use-theme-colors';
 import type { StepRendererProps, VerificationStepConfig } from '@/types/flow';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, TextInput } from 'react-native';
 
 export function VerificationStepRenderer({ step, data: _data, onUpdate, onNext, onBack: _onBack, onSkip: _onSkip, context: _context }: StepRendererProps<VerificationStepConfig>) {
   const colors = useThemeColors();
@@ -184,7 +184,13 @@ export function VerificationStepRenderer({ step, data: _data, onUpdate, onNext, 
       )}
 
       {!step.autoSubmit && (
-        <ThemedButton title={verifying ? 'Verifying...' : 'Verify'} onPress={() => handleVerify()} disabled={verifying || code.some((d) => !d)} style={styles.verifyButton} leftIcon={verifying ? undefined : 'checkmark-circle'} />
+        <ThemedButton
+          title={verifying ? 'Verifying...' : 'Verify'}
+          onPress={() => handleVerify()}
+          disabled={verifying || code.some((d) => !d)}
+          style={styles.verifyButton}
+          leftIcon={verifying ? undefined : 'checkmark-circle'}
+        />
       )}
 
       {verifying && <ActivityIndicator size="large" color={colors.primary} style={styles.loader} />}
