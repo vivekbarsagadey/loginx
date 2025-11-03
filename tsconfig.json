@@ -9,23 +9,15 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "isolatedModules": true,
-    "lib": [
-      "es2022",
-      "dom",
-      "dom.iterable"
-    ],
+    "lib": ["es2022", "dom", "dom.iterable"],
     "target": "es2022",
     "module": "esnext",
     "declaration": false,
     "ignoreDeprecations": "5.0",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     },
-    "types": [
-      "react-native"
-    ],
+    "types": ["react-native"],
     "noErrorTruncation": true,
     "forceConsistentCasingInFileNames": true,
     "exactOptionalPropertyTypes": false
@@ -43,14 +35,5 @@
     "components/**/*.ts",
     "components/**/*.tsx"
   ],
-  "exclude": [
-    "node_modules",
-    "tests/**/*",
-    "functions/**/*",
-    "scripts/**/*",
-    "**/*.test.ts",
-    "**/*.test.tsx",
-    "**/*.spec.ts",
-    "**/*.spec.tsx"
-  ]
+  "exclude": ["node_modules", "tests/**/*", "functions/**/*", "scripts/**/*", "**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"]
 }

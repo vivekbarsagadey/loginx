@@ -38,7 +38,7 @@ export function SelectionStepRenderer({ step, data, onUpdate, onNext: _onNext, o
     }
 
     loadOptions();
-  }, [step.options, data]);
+  }, [step, step.options, data]);
 
   // Get selected values
   const selectedValues = Array.isArray(data[step.id]) ? (data[step.id] as string[]) : data[step.id] ? [String(data[step.id])] : [];

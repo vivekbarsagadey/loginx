@@ -233,7 +233,7 @@ class ProductionLogger {
 
     // Redact PII
     const redactedMessage = this.redactPII(message);
-    const redactedContext = context ? this.redactValue(context) : undefined;
+    const redactedContext = context ? (this.redactValue(context) as Record<string, unknown>) : undefined;
     const redactedError = error ? (this.redactValue(error) as Error) : undefined;
 
     const entry: LogEntry = {
@@ -266,7 +266,10 @@ class ProductionLogger {
 
     // Send to external logger if configured
     if (this.config.externalLogger) {
-      const externalContext = { ...redactedContext, timestamp: entry.timestamp };
+      const externalContext: Record<string, unknown> = {
+        ...(redactedContext || {}),
+        timestamp: entry.timestamp,
+      };
 
       switch (level) {
         case LogLevel.DEBUG:

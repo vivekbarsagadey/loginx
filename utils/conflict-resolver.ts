@@ -84,14 +84,23 @@ export function resolveConflictAutomatically<T>(conflict: ConflictData<T>, strat
       };
 
     case 'merge':
-      // Attempt automatic merge for simple objects
-      const merged = attemptAutoMerge(conflict.local, conflict.remote);
-      if (merged) {
-        return {
-          resolved: true,
-          data: merged,
-          strategy,
-        };
+      // Only attempt automatic merge for plain objects
+      if (
+        typeof conflict.local === 'object' &&
+        conflict.local !== null &&
+        typeof conflict.remote === 'object' &&
+        conflict.remote !== null &&
+        !Array.isArray(conflict.local) &&
+        !Array.isArray(conflict.remote)
+      ) {
+        const merged = attemptAutoMerge(conflict.local as Record<string, unknown>, conflict.remote as Record<string, unknown>);
+        if (merged) {
+          return {
+            resolved: true,
+            data: merged as T,
+            strategy,
+          };
+        }
       }
       // Merge failed, fall back to manual
       return {
@@ -118,20 +127,20 @@ export function resolveConflictAutomatically<T>(conflict: ConflictData<T>, strat
  * @param remote - Remote data
  * @returns Merged data or null if merge not possible
  */
-function attemptAutoMerge<T>(local: T, remote: T): T | null {
+function attemptAutoMerge<T extends Record<string, unknown>>(local: T, remote: T): T | null {
   // Only attempt merge for plain objects
   if (typeof local !== 'object' || typeof remote !== 'object' || local === null || remote === null) {
     return null;
   }
 
   try {
-    const merged = { ...remote }; // Start with remote as base
+    const merged = { ...remote } as T; // Start with remote as base
 
     // Overlay local changes that don't conflict
     for (const key in local) {
       if (Object.prototype.hasOwnProperty.call(local, key)) {
         const localValue = local[key];
-        const remoteValue = (remote as unknown)[key];
+        const remoteValue = remote[key];
 
         // If values are identical, no conflict
         if (JSON.stringify(localValue) === JSON.stringify(remoteValue)) {
@@ -140,7 +149,7 @@ function attemptAutoMerge<T>(local: T, remote: T): T | null {
 
         // If remote doesn't have this key, use local
         if (!(key in remote)) {
-          (merged as unknown)[key] = localValue;
+          merged[key] = localValue;
           continue;
         }
 

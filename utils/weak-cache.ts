@@ -174,16 +174,17 @@ class WeakCache<K extends object, V> {
  * Global weak cache registry
  */
 class WeakCacheRegistry {
-  private caches: Map<string, WeakCache<unknown, unknown>> = new Map();
+  private caches: Map<string, WeakCache<object, unknown>> = new Map();
 
   /**
    * Create or get a weak cache
    */
   getCache<K extends object, V>(name: string): WeakCache<K, V> {
     if (!this.caches.has(name)) {
-      this.caches.set(name, new WeakCache<K, V>(name));
+      const newCache = new WeakCache<K, V>(name);
+      this.caches.set(name, newCache as unknown as WeakCache<object, unknown>);
     }
-    return this.caches.get(name)!;
+    return this.caches.get(name) as unknown as WeakCache<K, V>;
   }
 
   /**

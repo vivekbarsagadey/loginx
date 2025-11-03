@@ -139,9 +139,18 @@ export function useShare(): UseShareReturn {
         throw new Error('Either message or url must be provided');
       }
 
-      // Prepare share options
-      const shareOptions: unknown = {
-        message: content.message,
+      // Prepare share options - message is required by React Native Share
+      const shareMessage = content.message || content.url || content.title || '';
+
+      const shareOptions: {
+        message: string;
+        url?: string;
+        title?: string;
+        dialogTitle?: string;
+        subject?: string;
+        excludedActivityTypes?: string[];
+      } = {
+        message: shareMessage,
         url: content.url,
         title: content.title,
       };

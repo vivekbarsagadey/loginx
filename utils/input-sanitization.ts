@@ -336,7 +336,7 @@ export function sanitizeFirestoreValue(value: string): string {
  * Useful for sanitizing form data
  */
 export function sanitizeObject<T extends Record<string, unknown>>(obj: T, sanitizer: (value: string) => string = sanitizeText): T {
-  const sanitized: unknown = {};
+  const sanitized: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(obj)) {
     if (typeof value === 'string') {
@@ -344,7 +344,7 @@ export function sanitizeObject<T extends Record<string, unknown>>(obj: T, saniti
     } else if (Array.isArray(value)) {
       sanitized[key] = value.map((item) => (typeof item === 'string' ? sanitizer(item) : item));
     } else if (value && typeof value === 'object') {
-      sanitized[key] = sanitizeObject(value, sanitizer);
+      sanitized[key] = sanitizeObject(value as Record<string, unknown>, sanitizer);
     } else {
       sanitized[key] = value;
     }

@@ -9,6 +9,37 @@
 
 import { useEffect, useState } from 'react';
 
+// Type definitions for expo-location (optional dependency)
+interface LocationModule {
+  requestForegroundPermissionsAsync: () => Promise<{ status: string }>;
+  getCurrentPositionAsync: (options: { accuracy: number }) => Promise<LocationObject>;
+  watchPositionAsync: (options: { accuracy: number; distanceInterval: number }, callback: (location: LocationObject) => void) => Promise<LocationSubscription>;
+  Accuracy: {
+    Lowest: number;
+    Low: number;
+    Balanced: number;
+    High: number;
+    Highest: number;
+    BestForNavigation: number;
+  };
+}
+
+interface LocationObject {
+  coords: {
+    latitude: number;
+    longitude: number;
+    altitude: number | null;
+    accuracy: number | null;
+    altitudeAccuracy: number | null;
+    heading: number | null;
+    speed: number | null;
+  };
+}
+
+interface LocationSubscription {
+  remove: () => void;
+}
+
 /**
  * Location coordinates
  */
@@ -130,15 +161,16 @@ export function useGeolocation(options: UseGeolocationOptions = {}): Geolocation
       return;
     }
 
-    let Location: unknown = null;
+    let Location: LocationModule | null = null;
     let isMounted = true;
-    let subscription: unknown = null;
+    let subscription: LocationSubscription | null = null;
 
     const loadLocation = async () => {
       try {
-        Location = await import('expo-location');
+        // @ts-ignore - Optional dependency, may not be installed
+        Location = (await import('expo-location')) as LocationModule;
 
-        if (!isMounted) {
+        if (!isMounted || !Location) {
           return;
         }
 
@@ -170,7 +202,7 @@ export function useGeolocation(options: UseGeolocationOptions = {}): Geolocation
               accuracy: enableHighAccuracy ? Location.Accuracy.High : Location.Accuracy.Balanced,
               distanceInterval: 10, // Update every 10 meters
             },
-            (loc: unknown) => {
+            (loc: LocationObject) => {
               if (isMounted) {
                 setState({
                   location: {

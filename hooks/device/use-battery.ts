@@ -9,6 +9,20 @@
 
 import { useEffect, useState } from 'react';
 
+// Type definitions for expo-battery (optional dependency)
+interface BatteryModule {
+  getBatteryLevelAsync: () => Promise<number>;
+  getBatteryStateAsync: () => Promise<number>;
+  addBatteryLevelListener: (callback: (event: { batteryLevel: number }) => void) => { remove: () => void };
+  addBatteryStateListener: (callback: (event: { batteryState: number }) => void) => { remove: () => void };
+  BatteryState: {
+    UNKNOWN: number;
+    UNPLUGGED: number;
+    CHARGING: number;
+    FULL: number;
+  };
+}
+
 /**
  * Battery state information
  */
@@ -71,25 +85,25 @@ export function useBattery(): BatteryState {
   });
 
   useEffect(() => {
-    let Battery: unknown = null;
+    let Battery: BatteryModule | null = null;
     let isMounted = true;
 
     // Dynamically import expo-battery if available
-    const loadBattery = async () => {
+    const loadBattery = async (): Promise<(() => void) | undefined> => {
       try {
-        // @ts-ignore - Optional dependency, may not be installed
+        // @ts-expect-error - Optional dependency, may not be installed
         // eslint-disable-next-line import/no-unresolved
-        Battery = await import('expo-battery');
+        Battery = (await import('expo-battery')) as BatteryModule;
 
-        if (!isMounted) {
-          return;
+        if (!isMounted || !Battery) {
+          return undefined;
         }
 
         // Get initial battery state
         const [level, state] = await Promise.all([Battery.getBatteryLevelAsync(), Battery.getBatteryStateAsync()]);
 
-        if (!isMounted) {
-          return;
+        if (!isMounted || !Battery) {
+          return undefined;
         }
 
         setBatteryState({
@@ -105,12 +119,15 @@ export function useBattery(): BatteryState {
           }
         });
 
+        // Store reference for closure
+        const batteryRef = Battery;
+
         // Subscribe to battery state changes
         const stateSubscription = Battery.addBatteryStateListener(({ batteryState }: { batteryState: number }) => {
           if (isMounted) {
             setBatteryState((prev) => ({
               ...prev,
-              charging: batteryState === Battery.BatteryState.CHARGING || batteryState === Battery.BatteryState.FULL,
+              charging: batteryState === batteryRef.BatteryState.CHARGING || batteryState === batteryRef.BatteryState.FULL,
             }));
           }
         });
@@ -128,6 +145,7 @@ export function useBattery(): BatteryState {
             available: false,
           });
         }
+        return undefined;
       }
     };
 
@@ -135,7 +153,11 @@ export function useBattery(): BatteryState {
 
     return () => {
       isMounted = false;
-      cleanup.then((cleanupFn) => cleanupFn?.());
+      cleanup
+        .then((cleanupFn) => cleanupFn?.())
+        .catch(() => {
+          // Ignore cleanup errors
+        });
     };
   }, []);
 
